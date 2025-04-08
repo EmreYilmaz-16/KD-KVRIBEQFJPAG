@@ -152,6 +152,12 @@ FOR JSON PATH
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.offer_id#</cfoutput>">
 
   <script>
+// script.js - Ayrılmış JavaScript dosyası
+// Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
+// Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
+// Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
+// Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
+var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
 
