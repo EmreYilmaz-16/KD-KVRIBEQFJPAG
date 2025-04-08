@@ -25,11 +25,12 @@
 
             
             <!-- Process each offer -->
+            <cfset ix=1>
             <cfloop array="#offers.payload#" item="offer">
                 <cfset var products = offer.products>
 
                 <!-- Process each product -->
-                <cfloop array="#products#" item="product" index="ix">
+                <cfloop array="#products#" item="product">
                     <!-- Delete existing rows for the product -->
                     <cfquery name="DEL" datasource="#dsn3#">
                         DELETE FROM PBS_SELECTED_ROWS WHERE WRK_ROW_ID = '#product.wrkRowId#'
@@ -48,6 +49,14 @@
                             #offers.offer_id#
                         )
                     </cfquery>
+                    <cfscript>
+                        "attributes.price#ix#" = product.price;
+                        "attributes.price_other#ix#" = product.priceOther;
+                        "attributes.tax#ix#" = product.tax;
+                        "attributes.amount#ix#"= product.quantity;
+                        "attributes.indirim1#ix#"= product.discount1;
+                        "attributes.other_money_#ix#"= product.otherMoney;
+                    </cfscript>
                 </cfloop>
             </cfloop>
 
@@ -77,6 +86,7 @@
 
             <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
             <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset MONEYARRRR=arrayNew(1)>
             <cfquery name="getMoneyext" datasource="#dsn3#">
                 SELECT 
              (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
@@ -92,6 +102,10 @@
         <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
         <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
         <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+          
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
         <cfset ibnm=ibnm+1>
     </cfloop>
     <cfset attributes.KUR_SAY=ibnm>
@@ -130,6 +144,8 @@
 
             <!-- Set success response -->
             <cfset response.res = "success">
+            <cfset response.message = "Purchase offers saved successfully.">
+            <cfset response.data = attributes>
         <cfcatch>
             <!-- Handle errors -->
             <cfset response.res = "error">
