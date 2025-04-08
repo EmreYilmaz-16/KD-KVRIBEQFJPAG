@@ -1,5 +1,6 @@
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
     <cfset dsn3="w3Qa_1">
+    <cfset dsn="w3Qa">
 
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
@@ -51,7 +52,7 @@
 
             <!-- Retrieve related internal demand data -->
             <cfquery name="GETIDEMAND" datasource="#dsn3#">
-                SELECT FROM_COMPANY_ID
+                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID
                 FROM w3Qa_1.INTERNALDEMAND
                 WHERE INTERNAL_ID IN (
                     SELECT I_ID
@@ -75,8 +76,39 @@
 
             <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
             <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+             <cfset ibnm=1>
+    <cfloop query="getMoneyext">
+        <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+        <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+        <cfset ibnm=ibnm+1>
+    </cfloop>
+    <cfset attributes.KUR_SAY=ibnm>
 
-
+<cfset attributes.offer_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.ship_date=now()>
+<cfset attributes.finishdate=now()>
+<cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.OFFER_DESCRIPTION="">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset FactPBS=FormData.OrderHeader.FACT>
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset attributes.price_catid="">
+<cfset attributes.sales_emp_id=session.ep.userid>
+<cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
 
 
             <!-- Set success response -->
