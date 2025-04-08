@@ -325,7 +325,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ payload, offer_id }) // Include offer_id in the payload
+    body: JSON.stringify({ payload, offer_id,session_variables }) // Include offer_id in the payload
   })
   .then(response => response.json())
   .then(data => {
