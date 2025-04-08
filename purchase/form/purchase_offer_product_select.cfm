@@ -214,7 +214,7 @@ uniqueProducts.forEach(productName => {
 
     if (product) {
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${productName}|${product.IS_SELECTED || 0}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${productName}|${product.IS_SELECTED || 0}`;
 
       const priceDisplay = product.DISCOUNT_1 > 0
         ? `<div class="tooltip"><span class="price-original">${product.PRICE.toFixed(2)} TL</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -277,7 +277,7 @@ uniqueProducts.forEach(productName => {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -292,6 +292,8 @@ function updateOutput() {
       quantity: parseFloat(quantity),
       netPrice: parseFloat(netPrice),
       tax: parseFloat(tax),
+      priceOther: parseFloat(priceOther),
+      otherMoney:otherMoney,
 
     });
   });
