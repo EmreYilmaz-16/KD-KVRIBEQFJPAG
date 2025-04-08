@@ -1,0 +1,365 @@
+<cf_box title="Satınalma Seçim Ekranı">
+
+
+  <style>
+    td.selectable {
+      cursor: pointer;
+      transition: background-color 0.2s;
+      position: relative;
+    }
+    td.no-data {
+      background-color: #f8f9fa !important;
+      color: #adb5bd;
+    }
+    .product-name {
+      background-color: #f1f3f5;
+      font-weight: bold;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
+    th.sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    pre {
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .price-original {
+      color: red;
+      text-decoration: line-through;
+    }
+    .net-price {
+      color: green;
+      font-weight: bold;
+    }
+    .check-icon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 1.2rem;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: max-content;
+      background-color: #343a40;
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 5px;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.75rem;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+   /* .net-price.low { color: green; font-weight: bold; }
+    .net-price.medium { color: orange; font-weight: bold; }
+    .net-price.high { color: red; font-weight: bold; }*/
+  </style>
+</head>
+<body class="bg-light">
+  <div class="">
+    <div class="">
+      <div class="card-body">
+        
+        <div class="table-responsive">
+          <cf_grid_list  class="table table-bordered align-middle text-center" id="price-table"></cf_grid_list>
+        </div>
+        <div class="mt-4 text-end">
+            <button class="btn btn-success" id="send-btn3">Kaydet</button>
+            <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
+          <button class="btn btn-success" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+          
+        </div>
+
+
+    <div class="card mt-4 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">En İyi Fiyatı Veren Tedarikçi</h5>
+      <p id="best-supplier" class="fw-bold text-primary">Henüz belirlenmedi.</p>
+    </div>
+  </div>
+
+  <div class="card mt-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Seçilen Veriler (JSON)</h5>
+        <pre id="output">[]</pre>
+      </div>
+    </div>
+
+   
+  </div>
+  <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
+SELECT (
+SELECT 
+    C.FULLNAME,
+    C.COMPANY_ID,
+    (
+        SELECT 
+            PRODUCT_NAME,
+            CAST(PRICE AS DECIMAL(18,2)) AS PRICE,
+            PRODUCT_ID,
+            WRK_ROW_ID,
+            CAST(DISCOUNT_1 AS DECIMAL(18,2)) AS DISCOUNT_1,
+            CAST(QUANTITY AS DECIMAL(18,2)) AS QUANTITY,
+            CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18,2)) AS NET_PRICE,
+            CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED
+        FROM 
+            #DSN3#.OFFER_ROW 
+        WHERE 
+            OFFER_ID = O.OFFER_ID
+        FOR JSON PATH
+    ) AS URUNLER
+FROM 
+    #DSN3#.OFFER AS O
+LEFT JOIN 
+    #DSN#.COMPANY AS C 
+    ON C.COMPANY_ID = TRY_CAST(REPLACE(O.OFFER_TO, ',', '') AS INT)
+WHERE 
+    O.OFFER_ID IN (
+        SELECT 
+            OFFER_ID 
+        FROM 
+            #DSN3#.OFFER_ROW 
+        WHERE 
+            WRK_ROW_RELATION_ID IN (
+                SELECT WRK_ROW_ID 
+                FROM #DSN3#.OFFER_ROW 
+                WHERE OFFER_ID = 23
+            )
+    )
+FOR JSON PATH
+) AS QRESULT
+
+  </cfquery>
+
+  <script>
+    const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+// script.js - Ayrılmış JavaScript dosyası
+
+const table = document.getElementById('price-table');
+const output = document.getElementById('output');
+const selectedCells = new Map();
+
+const productSet = new Set();
+data.forEach(supplier => {
+  supplier.URUNLER.forEach(product => {
+    productSet.add(product.PRODUCT_NAME);
+  });
+});
+const uniqueProducts = Array.from(productSet);
+
+const headerRow = document.createElement('tr');
+headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th>`;
+data.forEach(supplier => {
+  const th = document.createElement('th');
+  th.className = "sticky-header bg-success text-white";
+  th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
+  headerRow.appendChild(th);
+});
+const thead = document.createElement('thead');
+const tbody = document.createElement('tbody');
+thead.appendChild(headerRow);
+table.appendChild(thead);
+
+const cellElements = {};
+
+uniqueProducts.forEach(productName => {
+  const row = document.createElement('tr');
+  const productCell = document.createElement('td');
+  productCell.textContent = productName;
+  productCell.className = 'product-name';
+  row.appendChild(productCell);
+
+  cellElements[productName] = [];
+
+  let lowestNetPrice = Infinity;
+  data.forEach(supplier => {
+    const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
+    if (product && product.NET_PRICE < lowestNetPrice) {
+      lowestNetPrice = product.NET_PRICE;
+    }
+  });
+
+  data.forEach(supplier => {
+    const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
+    const cell = document.createElement('td');
+
+    if (product) {
+     // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}|${product.IS_SELECTED || 0}`;
+
+      const priceDisplay = product.DISCOUNT_1 > 0
+        ? `<div class="tooltip"><span class="price-original">${product.PRICE.toFixed(2)} TL</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
+        : `<div><strong>${product.PRICE.toFixed(2)} TL</strong></div>`;
+
+      let netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL</div>`;
+      if (product.NET_PRICE === lowestNetPrice) {
+        netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL</div>`;
+        cell.title = 'En iyi teklif';
+      }
+
+      cell.innerHTML = `
+  ${priceDisplay}
+  ${netPriceHtml}
+  <div class="text-muted small">Iskonto: ${product.DISCOUNT_1}%</div>
+  <div class="text-muted small">Adet: ${product.QUANTITY}</div>
+  ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Sisteme kayıtlı</div>' : ''}
+`;
+
+      cell.classList.add('selectable');
+      cell.dataset.key = cellKey;
+      cell.dataset.product = productName;
+
+      cell.addEventListener('click', () => {
+        cellElements[productName].forEach(c => {
+          const icon = c.querySelector('div.check-icon');
+          if (icon) icon.remove();
+        });
+        const checkIcon = document.createElement('div');
+        checkIcon.className = 'check-icon text-success';
+        checkIcon.innerHTML = '✔️';
+        cell.appendChild(checkIcon);
+        selectedCells.set(productName, cellKey);
+        updateOutput();
+        updateBestSupplier();
+        
+      });
+
+      cellElements[productName].push(cell);
+      if (product.IS_SELECTED === 1) {
+  const checkIcon = document.createElement('div');
+  checkIcon.className = 'check-icon text-success';
+  checkIcon.innerHTML = '✔️';
+  cell.appendChild(checkIcon);
+  selectedCells.set(productName, cellKey);
+}
+    } else {
+      cell.className = 'no-data';
+      cell.textContent = "-";
+    }
+
+    row.appendChild(cell);
+  });
+  tbody.appendChild(row)
+  table.appendChild(tbody);
+
+  
+});
+
+function updateOutput() {
+  const grouped = {};
+  selectedCells.forEach((key, productName) => {
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice] = key.split('|');
+    if (!grouped[companyId]) {
+      grouped[companyId] = {
+        companyId: parseInt(companyId),
+        products: []
+      };
+    }
+    grouped[companyId].products.push({
+      productId: parseInt(productId),
+      price: parseFloat(price),
+      wrkRowId,
+      discount1: parseFloat(discount1),
+      quantity: parseFloat(quantity),
+      netPrice: parseFloat(netPrice)
+    });
+  });
+  const groupedArray = Object.values(grouped);
+  output.textContent = JSON.stringify(groupedArray, null, 2);
+  return groupedArray;
+}
+
+function updateBestSupplier() {
+  const supplierTotals = {};
+  data.forEach(supplier => {
+    const productNames = supplier.URUNLER.map(p => p.PRODUCT_NAME);
+    const hasAllProducts = uniqueProducts.every(pName => productNames.includes(pName));
+    if (!hasAllProducts) return;
+    let total = 0;
+    supplier.URUNLER.forEach(product => {
+      if (product.NET_PRICE > 0) {
+        total += product.NET_PRICE;
+      }
+    });
+    if (total > 0) {
+      supplierTotals[supplier.FULLNAME] = total;
+    }
+  });
+  const [bestSupplierName, bestTotal] = Object.entries(supplierTotals).sort((a, b) => a[1] - b[1])[0] || ["Belirlenemedi", 0];
+  document.getElementById('best-supplier').textContent = `En iyi fiyat veren tedarikçi: ${bestSupplierName} (Toplam: ${bestTotal.toFixed(2)} TL)`;
+}
+
+document.getElementById('send-btn').addEventListener('click', () => {
+ /* const payload = updateOutput();
+  console.log("Sunucuya gönderilecek veri:", payload);
+  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.res === "success") {
+      alert("İşlem başarılı!");
+    } else if (data.res === "error") {
+      alert("Bir hata oluştu!");
+    }
+  })
+  .catch(error => {
+    console.error("Hata:", error);
+    alert("Sunucuya bağlanırken bir hata oluştu!");
+  });*/
+
+  const payload = updateOutput(); // Ensure payload is generated correctly
+  console.log("Sunucuya gönderilecek veri:", payload);
+
+  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', { // Correct endpoint
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ payload }) // Wrap payload in an object
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.RES === "success") {
+      alert("İşlem başarılı!");
+    } else if (data.RES === "error") {
+      alert("Bir hata oluştu!");
+    }
+  })
+  .catch(error => {
+    console.error("Hata:", error);
+    alert("Sunucuya bağlanırken bir hata oluştu!");
+  });
+});
+
+updateBestSupplier();
+
+
+</script>
+
+
+
+</cf_box>
