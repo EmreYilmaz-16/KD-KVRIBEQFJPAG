@@ -310,38 +310,16 @@ function updateBestSupplier() {
 }
 
 document.getElementById('send-btn').addEventListener('click', () => {
- /* const payload = updateOutput();
-  console.log("Sunucuya gönderilecek veri:", payload);
-  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.res === "success") {
-      alert("İşlem başarılı!");
-    } else if (data.res === "error") {
-      alert("Bir hata oluştu!");
-    }
-  })
-  .catch(error => {
-    console.error("Hata:", error);
-    alert("Sunucuya bağlanırken bir hata oluştu!");
-  });*/
-
   const payload = updateOutput(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
-  var offer_id=document.getElementById("offer_id").value;
+  var offer_id = document.getElementById("offer_id").value;
 
   fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', { // Correct endpoint
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ payload }) // Wrap payload in an object
+    body: JSON.stringify({ payload, offer_id }) // Include offer_id in the payload
   })
   .then(response => response.json())
   .then(data => {
