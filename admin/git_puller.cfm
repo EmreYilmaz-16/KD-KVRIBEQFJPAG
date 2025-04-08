@@ -19,9 +19,9 @@ errorvariable="local.err">
     <cfset local.out = replace(local.out, chr(4), "", "all")>
     <cfset local.out = replace(local.out, chr(5), "", "all")>
     <cfset local.out = replace(local.out, chr(6), "", "all")>       
-    <cfdump var="##local.out##" label="Git Output" />
-    <cfdump var="##local.err##" label="Git Error" />
-    
+    <cfdump var="#local.out#" label="Git Output" />
+    <cfdump var="#local.err#" label="Git Error" />
+
     <cfset st=left(local.out,findNoCase("it_is_runing", local.out))>
  
 <cfset git =findNoCase("pull",st)>
