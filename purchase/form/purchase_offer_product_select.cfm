@@ -115,6 +115,8 @@ SELECT
         SELECT 
             PRODUCT_NAME,
             CAST(PRICE AS DECIMAL(18,2)) AS PRICE,
+            CAST(PRICE_OTHER AS DECIMAL(18,2)) AS PRICE_OTHER,
+            OTHER_MONEY,
             PRODUCT_ID,
             WRK_ROW_ID,
             CAST(DISCOUNT_1 AS DECIMAL(18,2)) AS DISCOUNT_1,

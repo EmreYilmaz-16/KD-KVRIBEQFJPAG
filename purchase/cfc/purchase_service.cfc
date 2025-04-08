@@ -23,12 +23,13 @@
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
+            
             <!-- Process each offer -->
             <cfloop array="#offers.payload#" item="offer">
                 <cfset var products = offer.products>
 
                 <!-- Process each product -->
-                <cfloop array="#products#" item="product">
+                <cfloop array="#products#" item="product" index="ix">
                     <!-- Delete existing rows for the product -->
                     <cfquery name="DEL" datasource="#dsn3#">
                         DELETE FROM PBS_SELECTED_ROWS WHERE WRK_ROW_ID = '#product.wrkRowId#'
@@ -111,6 +112,20 @@
 <cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
 <cfset attributes.project_head="">
 <cfset attributes.project_id="">
+<cfscript>
+    DISCOUNT_TOTAL=0;
+    GROSS_TOTAL=0;
+    SUBNETTOTAL=0;
+    SUBTAXTOTAL=0;
+    SUBTOTAL=0;
+    TAX_TOTAL=0;
+    TOTAL_WITHOUT_KDV=0;
+    TOTAL_WITH_KDV=0;
+    BASKET_NET_TOTAL=0;
+    BASKET_NET_TOTAL_=0;
+    BASKET_TAX_TOTAL=0;
+    BASKET_TAX_TOTAL_=0;
+</cfscript>
 
 
             <!-- Set success response -->
