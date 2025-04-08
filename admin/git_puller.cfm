@@ -8,7 +8,21 @@ errorvariable="local.err">
 
 <cf_box title="Gİt">
 <cfoutput>
- <cfset st=left(local.out,findNoCase("it_is_runing", local.out))>
+    
+    <cfset local.out = replace(local.out, chr(13), "", "all")>
+    <cfset local.out = replace(local.out, chr(10), "", "all")>
+    <cfset local.out = replace(local.out, chr(9), "", "all")>
+    <cfset local.out = replace(local.out, chr(0), "", "all")>
+    <cfset local.out = replace(local.out, chr(1), "", "all")>
+    <cfset local.out = replace(local.out, chr(2), "", "all")>
+    <cfset local.out = replace(local.out, chr(3), "", "all")>
+    <cfset local.out = replace(local.out, chr(4), "", "all")>
+    <cfset local.out = replace(local.out, chr(5), "", "all")>
+    <cfset local.out = replace(local.out, chr(6), "", "all")>       
+    <cfdump var="##local.out##" label="Git Output" />
+    <cfdump var="##local.err##" label="Git Error" />
+    
+    <cfset st=left(local.out,findNoCase("it_is_runing", local.out))>
  
 <cfset git =findNoCase("pull",st)>
 <cfset stlen =len(st)>
