@@ -15,7 +15,7 @@ errorvariable="local.err">
 <cfset stgit=stlen-git >
 <div class="alert alert-success">
 <code>Git Durumu</code>
-<cfset listem=mid(st,git+4,stgit-18)>
+<cfset listem=mid(st,git+4,stgit)>
 <cfloop list="#listem#" item="it" delimiters="|">
 <code>#it#</code> <br>
 </cfloop>
