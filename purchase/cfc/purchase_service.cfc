@@ -103,12 +103,14 @@
 <cfset attributes.OFFER_DESCRIPTION="">
 <cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
 <cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
-<cfset FactPBS=FormData.OrderHeader.FACT>
+<cfset FactPBS="purchase.purchase_offer_selector">
 <cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
 <cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
 <cfset attributes.price_catid="">
 <cfset attributes.sales_emp_id=session.ep.userid>
 <cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
+<cfset attributes.project_head="">
+<cfset attributes.project_id="">
 
 
             <!-- Set success response -->

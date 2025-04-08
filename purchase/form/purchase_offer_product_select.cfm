@@ -118,6 +118,7 @@ SELECT
             PRODUCT_ID,
             WRK_ROW_ID,
             CAST(DISCOUNT_1 AS DECIMAL(18,2)) AS DISCOUNT_1,
+            CAST(TAX AS DECIMAL(18,2)) AS TAX,
             CAST(QUANTITY AS DECIMAL(18,2)) AS QUANTITY,
             CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18,2)) AS NET_PRICE,
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED
@@ -211,7 +212,7 @@ uniqueProducts.forEach(productName => {
 
     if (product) {
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}|${product.IS_SELECTED || 0}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${productName}|${product.IS_SELECTED || 0}`;
 
       const priceDisplay = product.DISCOUNT_1 > 0
         ? `<div class="tooltip"><span class="price-original">${product.PRICE.toFixed(2)} TL</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -274,7 +275,7 @@ uniqueProducts.forEach(productName => {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -287,7 +288,9 @@ function updateOutput() {
       wrkRowId,
       discount1: parseFloat(discount1),
       quantity: parseFloat(quantity),
-      netPrice: parseFloat(netPrice)
+      netPrice: parseFloat(netPrice),
+      tax: parseFloat(tax),
+
     });
   });
   const groupedArray = Object.values(grouped);
