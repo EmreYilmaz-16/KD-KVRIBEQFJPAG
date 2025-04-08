@@ -71,7 +71,10 @@
                     )
                 )
             </cfquery>
+<cfset session=offers.session_variables>
 
+            <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
 
 
 
