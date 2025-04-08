@@ -59,7 +59,7 @@
                     </cfscript>
                 </cfloop>
             </cfloop>
-
+            <cfset attributes.rows_=ix>
             <!-- Retrieve related internal demand data -->
             <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID
@@ -140,6 +140,65 @@
     BASKET_TAX_TOTAL=0;
     BASKET_TAX_TOTAL_=0;
 </cfscript>
+<CFLOOP from="1" to="#attributes.rows_#" index="ix">
+    <cfset PRICE=evaluate("attributes.price#ix#")>
+    <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+    <cfset TAX=evaluate("attributes.tax#ix#")>
+    <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+    <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+    <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+    <cfscript>
+     SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+            return item.MONEY == OTHER_MONEY;
+        })[1];
+    OLD_SATIR_KUR= SATIR_KUR;
+    </cfscript>
+
+    <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+    <cfset ox=structNew()>
+    <cfset ox.PRICE=PRICE>
+    <cfset ox.PRICE_=PR_HESAP>
+    <cfscript>
+        dp=PRICE-(PRICE*DISCOUNT)/100;  
+        dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+
+        TUTAR=dp*AMOUNT;
+        TUTAR_=dp_*AMOUNT;
+
+        TX=(TUTAR*TAX)/100
+        TX_=(TUTAR_*TAX)/100
+        ox.DP=dp;
+        ox.DP_=dp_;
+        ox.TUTAR=TUTAR;
+        ox.TUTAR_=TUTAR_;
+        OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+        OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+        ox.TX=TX;
+        ox.TX_=TX_;
+        BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+        BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+        BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+        BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+
+        "attributes.other_money_value_#ix#"=ox.OTM_V_;
+        "attributes.price#ix#"=ox.PRICE_;
+    </cfscript>
+    
+
+
+    
+
+
+
+</CFLOOP>
+<cfdump var="#BASKET_TAX_TOTAL#"><BR>
+<cfdump var="#BASKET_TAX_TOTAL_#"><BR>
+<cfdump var="#BASKET_NET_TOTAL#"><BR>
+<cfdump var="#BASKET_NET_TOTAL_#"><BR>
+<cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
+<cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
+<cfset attributes.PRICE=BASKET_NET_TOTAL_>
+
 
 
             <!-- Set success response -->
