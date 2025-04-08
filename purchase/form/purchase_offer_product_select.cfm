@@ -142,13 +142,14 @@ WHERE
             WRK_ROW_RELATION_ID IN (
                 SELECT WRK_ROW_ID 
                 FROM #DSN3#.OFFER_ROW 
-                WHERE OFFER_ID = 23
+                WHERE OFFER_ID = #attributes.offer_id#
             )
     )
 FOR JSON PATH
 ) AS QRESULT
 
   </cfquery>
+  <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.offer_id#</cfoutput>">
 
   <script>
     const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
@@ -333,6 +334,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
 
   const payload = updateOutput(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
+  var offer_id=document.getElementById("offer_id").value;
 
   fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', { // Correct endpoint
     method: 'POST',
@@ -363,3 +365,4 @@ updateBestSupplier();
 
 
 </cf_box>
+
