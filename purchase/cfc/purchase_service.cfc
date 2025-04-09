@@ -56,23 +56,21 @@
                         select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
                     </cfquery>
                     <cfscript>
-                        "attributes.price#ix#" = product.price;
-                        "attributes.price_other#ix#" = product.priceOther;
-                        "attributes.tax#ix#" = product.tax;
-                        "attributes.amount#ix#"= product.quantity;
-                        "attributes.indirim1#ix#"= product.discount1;
-                        "attributes.other_money_#ix#"= product.otherMoney;
-                        "attributes.product_id#ix#"=product.productId;
-                        "attributes.stock_id#ix#"=product.stockId;
-                        "attributes.amount#ix#"=product.quantity;
-                        "attributes.unit#ix#"=getUnit.MAIN_UNIT;
-                        "attributes.unit_id#ix#"=getUnit.PRODUCT_UNIT_ID;
-    
-                        "attributes.product_name#ix#"=product.product_name>                        
-                        "attributes.other_money_value_#ix#"=(product.priceOther*product.quantity)-((product.priceOther*product.quantity)*product.discount1)/100;
-                        "attributes.description#ix#"="";
-                        "attributes.wrk_row_id#ix#"="PBS#session.ep.userid##dateFormat(now(),"yyyymmdd")##timeFormat(now(),"hhmmnnl")#";
-                        "attributes.wrk_row_relation_id#ix#"=product.wrkRowId;
+                        attributes["price#ix#"] = product.price;
+                        attributes["price_other#ix#"] = product.priceOther;
+                        attributes["tax#ix#"] = product.tax;
+                        attributes["amount#ix#"] = product.quantity;
+                        attributes["indirim1#ix#"] = product.discount1;
+                        attributes["other_money_#ix#"] = product.otherMoney;
+                        attributes["product_id#ix#"] = product.productId;
+                        attributes["stock_id#ix#"] = product.stockId;
+                        attributes["unit#ix#"] = getUnit.MAIN_UNIT;
+                        attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
+                        attributes["product_name#ix#"] = product.product_name;
+                        attributes["other_money_value_#ix#"] = (product.priceOther * product.quantity) - ((product.priceOther * product.quantity) * product.discount1) / 100;
+                        attributes["description#ix#"] = "";
+                        attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+                        attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
                     </cfscript>
                 </cfloop>
             </cfloop>
