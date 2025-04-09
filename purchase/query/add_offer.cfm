@@ -1,5 +1,5 @@
 
-<cf_xml_page_edit fuseact="sales.form_add_offer">
+
 <cfif form.active_company neq session.ep.company_id>
 	<script type="text/javascript">
 		alert("<cf_get_lang no ='588.İşlemin Şirketi İle Aktif Şirketiniz Farklı Çalıştığınız Şirketi Kontrol Ediniz'>!");
