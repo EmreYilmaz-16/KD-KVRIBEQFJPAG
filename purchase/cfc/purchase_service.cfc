@@ -66,7 +66,7 @@
                         attributes["stock_id#ix#"] = product.stockId;
                         attributes["unit#ix#"] = getUnit.MAIN_UNIT;
                         attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
-                        attributes["product_name#ix#"] = product.product_name;
+                        attributes["product_name#ix#"] = product.productName;
                         attributes["other_money_value_#ix#"] = (product.priceOther * product.quantity) - ((product.priceOther * product.quantity) * product.discount1) / 100;
                         attributes["description#ix#"] = "";
                         attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
