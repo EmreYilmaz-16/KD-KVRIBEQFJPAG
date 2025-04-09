@@ -248,6 +248,7 @@
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
+<cfset workcube_mode=0>
 <cfinclude template="../query/add_offer.cfm">
 
 
