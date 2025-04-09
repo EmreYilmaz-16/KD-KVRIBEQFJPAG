@@ -443,13 +443,8 @@
 			<cfset row_id = I>
 			<cfset ACTION_TYPE_ID = 1>
 			<cfset attributes.product_id = evaluate("attributes.product_id#i#")>
-			<cfif not len(attributes.project_head) >
-				<cfinclude template="save_virtual_production_orders.cfm">
-			</cfif>
-			<cfinclude template="add_price_offer.cfm">			
-			<cfif evaluate("attributes.is_karma#i#") eq 1>
-				<cfinclude template="addKarmaProducts.cfm">
-			</cfif>
+			
+			
 		</cfloop>
 
 		<cfscript>
