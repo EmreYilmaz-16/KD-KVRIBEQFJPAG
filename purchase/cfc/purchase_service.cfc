@@ -118,6 +118,10 @@
              </cfquery>
              <cfset ibnm=1>
     <cfloop query="getMoneyext">
+        <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+        <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
         <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
         <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
         <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
