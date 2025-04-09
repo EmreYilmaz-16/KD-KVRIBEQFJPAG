@@ -72,6 +72,7 @@
                         attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
                         attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
                         attributes["is_virtual#ix#"] = 0;
+                        attributes["SHELF_CODE#ix#"] = "";
                     </cfscript>
                 </cfloop>
             </cfloop>
