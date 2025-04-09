@@ -106,7 +106,7 @@
 
    
   </div>
-  <cfdump var="#application#">
+  <cfdump var="#workcube_mode#">
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT (
 SELECT 
