@@ -73,6 +73,7 @@
                         attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
                         attributes["is_virtual#ix#"] = 0;
                         attributes["SHELF_CODE#ix#"] = "";
+                        attributes["OFFER_ROW_CURRENCY#ix#"] = "";
                     </cfscript>
                 </cfloop>
             </cfloop>
