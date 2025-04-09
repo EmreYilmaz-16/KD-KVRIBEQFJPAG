@@ -244,7 +244,10 @@
 
 
 </CFLOOP>
-
+<cfquery name="get_offer_number" datasource="#dsn3#">
+    EXEC GET_PAPER_NUMBER 1
+</cfquery>
+<cfset paper_fulbs=get_offer_number.PAPER_NO>
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
