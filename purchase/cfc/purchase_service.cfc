@@ -258,7 +258,7 @@
         <cfcatch>
             <!-- Handle errors -->
             <cfset response.res = "error">
-            <cfset response.message = cfcatch.message>
+            <cfset response.message = cfcatch>
             <cflog file="purchaseService" text="Error: #cfcatch.message#" type="error">
         </cfcatch>
         </cftry>
