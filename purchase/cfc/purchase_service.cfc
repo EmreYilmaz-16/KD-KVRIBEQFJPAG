@@ -247,6 +247,7 @@
 
 
 </CFLOOP>
+<cfset wrk_eval = application.functions.wrk_eval>
 <cfquery name="get_offer_number" datasource="#dsn3#">
     EXEC GET_PAPER_NUMBER 1
 </cfquery>
