@@ -118,6 +118,7 @@ SELECT
             CAST(PRICE_OTHER AS DECIMAL(18,2)) AS PRICE_OTHER,
             OTHER_MONEY,
             PRODUCT_ID,
+            STOCK_ID,
             WRK_ROW_ID,
             CAST(DISCOUNT_1 AS DECIMAL(18,2)) AS DISCOUNT_1,
             CAST(TAX AS DECIMAL(18,2)) AS TAX,
@@ -214,7 +215,7 @@ uniqueProducts.forEach(productName => {
 
     if (product) {
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${productName}|${product.IS_SELECTED || 0}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0}`;
 
       const priceDisplay = product.DISCOUNT_1 > 0
         ? `<div class="tooltip"><span class="price-original">${product.PRICE.toFixed(2)} TL</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -277,7 +278,7 @@ uniqueProducts.forEach(productName => {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -286,6 +287,7 @@ function updateOutput() {
     }
     grouped[companyId].products.push({
       productId: parseInt(productId),
+      stockId: parseInt(stockId),
       price: parseFloat(price),
       wrkRowId,
       discount1: parseFloat(discount1),

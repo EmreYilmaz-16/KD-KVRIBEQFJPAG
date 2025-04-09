@@ -62,7 +62,8 @@
             <cfset attributes.rows_=ix>
             <!-- Retrieve related internal demand data -->
             <cfquery name="GETIDEMAND" datasource="#dsn3#">
-                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID
+                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
                 FROM w3Qa_1.INTERNALDEMAND
                 WHERE INTERNAL_ID IN (
                     SELECT I_ID
@@ -82,6 +83,7 @@
                     )
                 )
             </cfquery>
+            <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
 <cfset session=offers.session_variables>
 
             <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
@@ -126,6 +128,42 @@
 <cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
 <cfset attributes.project_head="">
 <cfset attributes.project_id="">
+<cfset attributes.process_stage="20">
+<cfquery name="getcc" datasource="#dsn#">
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+</cfquery>
+<cfquery name="GETCOMPANY" datasource="#dsn#">
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+</cfquery>
+<cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
+<cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
+<cfset attributes.ship_method_id=getcc.SHIP_METHOD_ID>
+<cfset attributes.ship_method=getcc.SHIP_METHOD_ID>
+<cfset attributes.pay_method=getcc.REVMETHOD_ID>
+<cfset attributes.card_paymethod_id="">
+
+<cfset attributes.ship_address=GETCOMPANY.COMPANY_ADDRESS>
+<cfset attributes.ship_address_id=-1>
+<cfset attributes.city_id=GETCOMPANY.CITY>
+<cfset attributes.county_id=GETCOMPANY.COUNTY>
+
+<CFSET attributes.ship_address_city_id=GETCOMPANY.CITY>
+<CFSET attributes.ship_address_county_id=GETCOMPANY.COUNTY>
+
+<cfset attributes.commission_rate="">
+
+<cfset attributes.sales_add_option="">
+<cfset attributes.offer_head="Teklifimiz">
+<cfset attributes.offer_detail="">
+<cfset attributes.offer_detail="">
+<cfset attributes.basket_money=getcc.MONEY>
+<cfset attributes.basket_rate1=IDEMAND.PARA[1].RATE1>
+<cfset attributes.basket_rate2=IDEMAND.PARA[1].RATE2>
+<cfset attributes.ref_member_type ="">
+<cfset attributes.consumer_id="">
+<cfset attributes.reserved=1>
+
+
 <cfscript>
     DISCOUNT_TOTAL=0;
     GROSS_TOTAL=0;
@@ -191,10 +229,7 @@
 
 
 </CFLOOP>
-<cfdump var="#BASKET_TAX_TOTAL#"><BR>
-<cfdump var="#BASKET_TAX_TOTAL_#"><BR>
-<cfdump var="#BASKET_NET_TOTAL#"><BR>
-<cfdump var="#BASKET_NET_TOTAL_#"><BR>
+
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
