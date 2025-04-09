@@ -19,7 +19,7 @@
 
             <!-- Extract offers from payload -->
             <cfset var offers = arguments.payload>
-
+            <cfset session=offers.session_variables>
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
@@ -99,7 +99,7 @@
                 )
             </cfquery>
             <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
-<cfset session=offers.session_variables>
+
 
             <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
             <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
