@@ -106,6 +106,7 @@
 
    
   </div>
+  <cfdump var="#caller#">
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT (
 SELECT 
