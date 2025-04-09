@@ -25,7 +25,7 @@
 
             
             <!-- Process each offer -->
-            <cfset ix=1>
+            <cfset ix=0>
             <cfloop array="#offers.payload#" item="offer">
                 <cfset var products = offer.products>
 
@@ -56,6 +56,7 @@
                         select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
                     </cfquery>
                     <cfscript>
+                        ix=ix+1;
                         attributes["price#ix#"] = product.price;
                         attributes["price_other#ix#"] = product.priceOther;
                         attributes["tax#ix#"] = product.tax;
@@ -74,7 +75,7 @@
                         attributes["is_virtual#ix#"] = 0;
                         attributes["SHELF_CODE#ix#"] = "";
                         attributes["OFFER_ROW_CURRENCY#ix#"] = "";
-                        ix=ix+1;
+                        
                     </cfscript>
                 </cfloop>
             </cfloop>
