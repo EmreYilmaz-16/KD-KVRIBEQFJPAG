@@ -48,7 +48,7 @@
 
 		<cfquery name="ADD_OFFER" datasource="#DSN3#" result="GET_MAX_OFFER">
 			INSERT INTO 
-				PBS_OFFER 
+				OFFER 
 			(
 				PARTNER_ID,
 				COMPANY_ID,
@@ -206,7 +206,7 @@
 			</cfif>
 			<cfquery name="ADD_OFFER_ROW" datasource="#DSN3#">
 				INSERT INTO
-					PBS_OFFER_ROW
+					OFFER_ROW
 				(
 					OFFER_ID,
 					PRODUCT_ID,
@@ -287,7 +287,7 @@
 					IS_VIRTUAL,
 					SHELF_CODE,
 					DESCRIPTION,
-					PBS_OFFER_ROW_CURRENCY
+					OFFER_ROW_CURRENCY
 					<cfif isdefined('attributes.row_exp_center_id#i#') and len(evaluate("attributes.row_exp_center_id#i#")) and isdefined('attributes.row_exp_center_name#i#') and len(evaluate("attributes.row_exp_center_name#i#"))>,EXPENSE_CENTER_ID</cfif>
 					<cfif isdefined('attributes.row_exp_item_id#i#') and len(evaluate("attributes.row_exp_item_id#i#")) and isdefined('attributes.row_exp_item_name#i#') and len(evaluate("attributes.row_exp_item_name#i#"))>,EXPENSE_ITEM_ID</cfif>
 					<cfif isdefined('attributes.row_activity_id#i#') and len(evaluate("attributes.row_activity_id#i#"))>,ACTIVITY_TYPE_ID</cfif>
@@ -415,7 +415,7 @@
 					#evaluate('attributes.is_virtual#i#')#,
 					'#evaluate('attributes.SHELF_CODE#i#')#',
 					<cfif isdefined('attributes.description#i#') and len(evaluate('attributes.description#i#'))>'#evaluate('attributes.description#i#')#'<cfelse>NULL</cfif>,
-					'#evaluate('attributes.PBS_OFFER_ROW_CURRENCY#i#')#'
+					'#evaluate('attributes.OFFER_ROW_CURRENCY#i#')#'
 					<cfif isDefined('attributes.converted_sid#i#') and len(evaluate("attributes.converted_sid#i#"))>,#evaluate("attributes.converted_sid#i#")#</cfif>
 					<cfif isdefined('attributes.row_exp_center_id#i#') and len(evaluate("attributes.row_exp_center_id#i#")) and isdefined('attributes.row_exp_center_name#i#') and len(evaluate("attributes.row_exp_center_name#i#"))>,<cfqueryparam cfsqltype="cf_sql_integer" value="#evaluate('attributes.row_exp_center_id#i#')#"></cfif>
 				<cfif isdefined('attributes.row_exp_item_id#i#') and len(evaluate("attributes.row_exp_item_id#i#")) and isdefined('attributes.row_exp_item_name#i#') and len(evaluate("attributes.row_exp_item_name#i#"))>,<cfqueryparam cfsqltype="cf_sql_integer" value="#evaluate('attributes.row_exp_item_id#i#')#"></cfif>
@@ -436,7 +436,7 @@
  
 			<!--- urun asortileri --->			
 			<cfquery name="GET_MAX_OFFER_ROW" datasource="#DSN3#">
-				SELECT MAX(OFFER_ROW_ID) AS OFFER_ROW_ID FROM PBS_OFFER_ROW
+				SELECT MAX(OFFER_ROW_ID) AS OFFER_ROW_ID FROM OFFER_ROW
 			</cfquery>
 	
 			<cfset attributes.ROW_MAIN_ID = get_max_offer_row.offer_row_id>
@@ -492,7 +492,7 @@
 			case 1: fnc_table_name="INVOICE_MONEY"; fnc_dsn_name="#dsn2#";break;
 			case 2: fnc_table_name="SHIP_MONEY"; fnc_dsn_name="#dsn2#"; break;
 			case 3: fnc_table_name="ORDER_MONEY"; fnc_dsn_name="#dsn3#"; break;
-			case 4: fnc_table_name="PBS_OFFER_MONEY"; fnc_dsn_name="#dsn3#"; break;
+			case 4: fnc_table_name="OFFER_MONEY"; fnc_dsn_name="#dsn3#"; break;
 			case 5: fnc_table_name="SERVICE_MONEY"; fnc_dsn_name="#dsn3#";break;
 			case 6: fnc_table_name="STOCK_FIS_MONEY"; fnc_dsn_name="#dsn2#"; break;
 			case 7: fnc_table_name="INTERNALDEMAND_MONEY"; fnc_dsn_name="#dsn3#"; break;
