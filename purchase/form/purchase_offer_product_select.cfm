@@ -296,6 +296,7 @@ function updateOutput() {
       tax: parseFloat(tax),
       priceOther: parseFloat(priceOther),
       otherMoney:otherMoney,
+      productName: productName,
 
     });
   });

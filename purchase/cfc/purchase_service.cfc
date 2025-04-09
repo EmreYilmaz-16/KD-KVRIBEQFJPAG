@@ -49,6 +49,12 @@
                             #offers.offer_id#
                         )
                     </cfquery>
+                    <cfquery name="getStockInfo" datasource="#dsn3#">
+                        SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
+                    </cfquery>
+                      <cfquery name="getUnit" datasource="#dsn3#">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                    </cfquery>
                     <cfscript>
                         "attributes.price#ix#" = product.price;
                         "attributes.price_other#ix#" = product.priceOther;
@@ -56,6 +62,13 @@
                         "attributes.amount#ix#"= product.quantity;
                         "attributes.indirim1#ix#"= product.discount1;
                         "attributes.other_money_#ix#"= product.otherMoney;
+                        "attributes.product_id#ix#"=product.productId;
+                        "attributes.stock_id#ix#"=product.stockId;
+                        "attributes.amount#ix#"=product.quantity;
+                        "attributes.unit#ix#"=getUnit.MAIN_UNIT;
+                        "attributes.unit_id#ix#"=getUnit.PRODUCT_UNIT_ID;
+    
+    
                     </cfscript>
                 </cfloop>
             </cfloop>
