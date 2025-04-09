@@ -68,7 +68,11 @@
                         "attributes.unit#ix#"=getUnit.MAIN_UNIT;
                         "attributes.unit_id#ix#"=getUnit.PRODUCT_UNIT_ID;
     
-    
+                        "attributes.product_name#ix#"=product.product_name>                        
+                        "attributes.other_money_value_#ix#"=(product.priceOther*product.quantity)-((product.priceOther*product.quantity)*product.discount1)/100;
+                        "attributes.description#ix#"="";
+                        "attributes.wrk_row_id#ix#"="PBS#session.ep.userid##dateFormat(now(),"yyyymmdd")##timeFormat(now(),"hhmmnnl")#";
+                        "attributes.wrk_row_relation_id#ix#"=product.wrkRowId;
                     </cfscript>
                 </cfloop>
             </cfloop>
@@ -246,7 +250,7 @@
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
-
+<cfinclude template="../query/add_offer.cfm">
 
 
             <!-- Set success response -->
