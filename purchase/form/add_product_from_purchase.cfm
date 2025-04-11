@@ -1,6 +1,6 @@
 <cfdump var="#attributes#">
 <cfquery name="getOfferRows" datasource="#dsn3#">
-    SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID#
+    SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>#attributes.wrkRowId# 
 </cfquery>
 
 <div class="row">
