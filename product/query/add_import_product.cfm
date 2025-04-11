@@ -155,6 +155,7 @@
 <cfquery name="GET_UNITS_" datasource="#DSN1#">
 	SELECT UNIT_ID,UNIT FROM #dsn#.SETUP_UNIT WHERE UNIT = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(birim)#"> 
 </cfquery>
+<cfdump var="#GET_UNITS_#">
 <cfquery name="GET_UNITS_DEFAULT" datasource="#DSN1#">
 	SELECT UNIT_ID,UNIT FROM #dsn#.SETUP_UNIT WHERE UNIT_ID=1
 </cfquery>
