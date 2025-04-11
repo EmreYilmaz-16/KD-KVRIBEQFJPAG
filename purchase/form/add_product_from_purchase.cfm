@@ -80,11 +80,7 @@
 							<div class="form-group" id="item-short_code_name">
 								<label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
 								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
-									<cfif is_related_model_brand eq 1>
-										<cfset deger = "brand_id">
-									<cfelse>
-										<cfset deger = "">
-									</cfif>
+									
 									<cf_wrkProductModel
 										returnInputValue="short_code_id,short_code_name,short_code"
 										returnQueryValue="MODEL_ID,MODEL_NAME,MODEL_CODE"
