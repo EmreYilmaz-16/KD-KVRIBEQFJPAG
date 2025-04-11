@@ -49,7 +49,7 @@
         <cfquery name="getOfferRows" datasource="#dsn3#">
             SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
         </cfquery>
-        <cfform method="post" action="">
+        <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
             <input type="hidden" name="wrkRowId" value="#attributes.wrkRowId#">
             <input type="hidden" name="is_submit" value="1">
             <div class="row">
@@ -138,6 +138,7 @@
     </div>
 </cf_box>
 <cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
+    <cfdump var="#attributes#">
     <cfset attributes.product_name = attributes.product_name>
     <cfset attributes.alternatif = attributes.alternatif>
     <cfset attributes.oem_no = []>
