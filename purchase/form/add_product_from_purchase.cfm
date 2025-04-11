@@ -32,6 +32,14 @@
         align-items: center !important;
     }
 </style>
+<cfscript>
+    brand_name = ""
+				brand_id = ""
+				brand_code = ""
+				short_code = ""
+				short_code_name = ""
+				short_code_id = ""
+</cfscript>
 
 <cf_box title="Yeni Ürün Ekle">
     <div style="height:100vh">
