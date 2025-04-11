@@ -30,7 +30,7 @@
                 <div class="col col-4">
                     <input type="hidden" name="oem_satir" value="0">
                     
-                    <cf_box title="Oem No" add_href="OemSatirEkle()" add_href2="OemSatirEkle()">
+                    <cf_box title="Oem No"  add_href2="OemSatirEkle()">
                         <cf_grid_list id="oemgrid">
                         </cf_grid_list>   
                     </cf_box> 
