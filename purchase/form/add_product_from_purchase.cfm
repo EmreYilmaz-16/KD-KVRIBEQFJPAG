@@ -1,4 +1,3 @@
-
 <cf_box title="Yeni Ürün Ekle">
     <div style="height:100vh">
         <cfquery name="getOfferRows" datasource="#dsn3#">
@@ -50,10 +49,35 @@
     var input=document.createElement("input");    
     input.id="oem_"+ix;
     input.name="oem_"+ix;
-    document.getElementById("oemgrid").appendChild(input)
+    var div=document.createElement("div");
+    div.className="form-group";
+    div.appendChild(input);
+    var tr=document.createElement("tr");
+    tr.id="oemtr_"+ix;
+    tr.className="oemtr";
+    tr.appendChild(div);
+
+    document.getElementById("oemgrid").appendChild(tr)
+
 
     
     console.log(ix)
     
 }
+    function OemSatirSil() {
+        var ix = document.getElementsByName("oem_satir")[0].value;
+        ix = parseInt(ix) - 1;
+        document.getElementsByName("oem_satir")[0].value = ix;
+        var tr = document.getElementById("oemtr_" + (ix + 1));
+        tr.parentNode.removeChild(tr);
+
+        // Reassign IDs and names for remaining rows
+        var rows = document.querySelectorAll("#oemgrid .oemtr");
+        for (var i = 0; i < rows.length; i++) {
+            var input = rows[i].querySelector("input");
+            input.id = "oem_" + (i + 1);
+            input.name = "oem_" + (i + 1);
+            rows[i].id = "oemtr_" + (i + 1);
+        }
+    }
 </script>
