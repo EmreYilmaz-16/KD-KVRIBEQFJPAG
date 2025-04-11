@@ -17,10 +17,11 @@
                 </div>
                 <div class="col col-4">
                     <cf_box title="Alternatif Ürün Seç">
-                        <ul>
+                        <ul class="list-group">
                         <cfoutput query="getOfferRows">
-                            <li>
-                                <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#"> #PRODUCT_NAME#
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>#PRODUCT_NAME#</span>
+                                <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#">
                             </li>
                         </cfoutput>
                         </ul>
