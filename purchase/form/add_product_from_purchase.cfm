@@ -58,6 +58,7 @@
         input.className = "form-control";
         input.id = "oem_" + ix;
         input.name = "oem_" + ix;
+        input.placeholder = "OEM No " + ix;
 
         var inputGroupAddon = document.createElement("div");
         inputGroupAddon.className = "input-group-addon";
