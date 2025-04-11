@@ -59,8 +59,21 @@
     <cfinclude template="../../Product/query/add_import_product.cfm">
     <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
     <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
- <!------->
+    <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.unit_id>
     
+ <cfquery name="INSERT_ALTERNATIVES" datasource="#DSN3#">
+    <cfloop list="#arguments.ALTERNATIVES#" item="it">
+        GO
+        INSERT INTO w3Qa_1.ALTERNATIVE_PRODUCTS(PRODUCT_ID,STOCK_ID,ALTERNATIVE_PRODUCT_ID) VALUES (#RECORDED_PRODUCT_ID#,#RECORDED_STOCK_ID#,listGetAt(it,2,"-"))
+    </cfloop>
+ </cfquery>
+<cfquery name="INSER_OEM_NO" datasource="#DSN3#">
+    <cfloop array="#arguments.OEM_NO_ARR#" item="it">
+        GO
+        INSERT INTO w3Qa_product.STOCKS_BARCODES(STOCK_ID,BARCODE,UNIT_ID) VALUES (#RECORDED_STOCK_ID#,'#it#',#RECORDED_UNIT_ID#)
+        
+    </cfloop>
+</cfquery>
 
     <cfset ReturnData.STATUS=1>
     <cfset ReturnData.MESSAGE="Ürün Oluşturuldu">

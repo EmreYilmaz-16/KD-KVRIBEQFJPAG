@@ -57,8 +57,11 @@
     <cfargument name="ALTERNATIVES"> 
         */
         ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif);
+        ProductInserResult=deserializeJSON(ProductInserResult);
         writeDump(var=ProductInserResult, format="html", label="ProductInserResult", abort=true);
+
     </cfscript>
+    
     <cfabort>
 <cfelse>
     <cfscript>
@@ -164,7 +167,7 @@
                                     <cfoutput query="getOfferRows">
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span>#PRODUCT_NAME#</span>
-                                            <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#">
+                                            <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#-#PRODUCT_ID#-#STOCK_ID#">
                                         </li>
                                     </cfoutput>
                                 </ul>
