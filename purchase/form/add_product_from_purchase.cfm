@@ -31,8 +31,9 @@
                     <input type="hidden" name="oem_satir" value="0">
                     
                     <cf_box title="Oem No"  add_href="javascript:OemSatirEkle()">
-                        <cf_grid_list id="oemgrid">
-                        </cf_grid_list>   
+                        <cf_big_list >
+                            <tbody id="oemgrid"></tbody>
+                        </cf_big_list>   
                     </cf_box> 
                 </table>
                 </div>
@@ -40,3 +41,19 @@
         </cfform>
     </div>
 </cf_box>
+
+<script>
+    function  OemSatirEkle() {
+     var ix=document.getElementsByName("oem_satir")[0].value
+    ix=parseInt(ix)+1;
+    document.getElementsByName("oem_satir")[0].value=ix;
+    var input=document.createElement("input");    
+    input.id="oem_"+ix;
+    input.name="oem_"+ix;
+    document.getElementById("oemgrid").appendChild(input)
+
+    
+    console.log(ix)
+    
+}
+</script>
