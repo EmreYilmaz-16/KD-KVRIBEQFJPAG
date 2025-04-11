@@ -42,28 +42,37 @@
 </cf_box>
 
 <script>
-    function  OemSatirEkle() {
-     var ix=document.getElementsByName("oem_satir")[0].value
-    ix=parseInt(ix)+1;
-    document.getElementsByName("oem_satir")[0].value=ix;
-    var input=document.createElement("input");    
-    input.id="oem_"+ix;
-    input.name="oem_"+ix;
-    var div=document.createElement("div");
-    div.className="form-group";
-    div.appendChild(input);
-    var tr=document.createElement("tr");
-    tr.id="oemtr_"+ix;
-    tr.className="oemtr";
-    tr.appendChild(div);
+    function OemSatirEkle() {
+        var ix = document.getElementsByName("oem_satir")[0].value;
+        ix = parseInt(ix) + 1;
+        document.getElementsByName("oem_satir")[0].value = ix;
 
-    document.getElementById("oemgrid").appendChild(tr)
+        var input = document.createElement("input");
+        input.id = "oem_" + ix;
+        input.name = "oem_" + ix;
 
+        var deleteIcon = document.createElement("i");
+        deleteIcon.className = "fa fa-trash";
+        deleteIcon.style.cursor = "pointer";
+        deleteIcon.onclick = function () {
+            OemSatirSilRow(ix);
+        };
 
-    
-    console.log(ix)
-    
-}
+        var div = document.createElement("div");
+        div.className = "form-group";
+        div.appendChild(input);
+        div.appendChild(deleteIcon);
+
+        var tr = document.createElement("tr");
+        tr.id = "oemtr_" + ix;
+        tr.className = "oemtr";
+        tr.appendChild(div);
+
+        document.getElementById("oemgrid").appendChild(tr);
+
+        console.log(ix);
+    }
+
     function OemSatirSil() {
         var ix = document.getElementsByName("oem_satir")[0].value;
         ix = parseInt(ix) - 1;
@@ -79,5 +88,22 @@
             input.name = "oem_" + (i + 1);
             rows[i].id = "oemtr_" + (i + 1);
         }
+    }
+
+    function OemSatirSilRow(rowId) {
+        var tr = document.getElementById("oemtr_" + rowId);
+        tr.parentNode.removeChild(tr);
+
+        // Reassign IDs and names for remaining rows
+        var rows = document.querySelectorAll("#oemgrid .oemtr");
+        for (var i = 0; i < rows.length; i++) {
+            var input = rows[i].querySelector("input");
+            input.id = "oem_" + (i + 1);
+            input.name = "oem_" + (i + 1);
+            rows[i].id = "oemtr_" + (i + 1);
+        }
+
+        // Update the hidden input value
+        document.getElementsByName("oem_satir")[0].value = rows.length;
     }
 </script>
