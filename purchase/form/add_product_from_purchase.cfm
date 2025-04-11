@@ -40,6 +40,9 @@
 				short_code_name = ""
 				short_code_id = ""
 </cfscript>
+<cfquery name="GET_OUR_COMPANY_INFO" datasource="#DSN#">
+    SELECT IS_BRAND_TO_CODE,IS_BARCOD_REQUIRED,IS_WATALOGY_INTEGRATED FROM OUR_COMPANY_INFO WHERE COMP_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#session.ep.company_id#">
+</cfquery>
 
 <cf_box title="Yeni Ürün Ekle">
     <div style="height:100vh">
