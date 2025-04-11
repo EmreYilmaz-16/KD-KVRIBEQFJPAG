@@ -39,6 +39,8 @@
             SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
         </cfquery>
         <cfform method="post" action="">
+            <input type="hidden" name="wrkRowId" value="#attributes.wrkRowId#">
+            <input type="hidden" name="is_submit" value="1">
             <div class="row">
                 <!-- Yeni Ürün -->
                 <div class="col col-4">
@@ -48,6 +50,45 @@
                                 <label for="product_name">Ürün Adı</label>
                                 <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
                             </div>
+                            <div class="form-group" id="item-brand_name">
+								<label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='58847.Marka'></label>
+								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+									<cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
+									<cf_wrkProductBrand
+									returnInputValue="brand_id,brand_name,brand_code"
+									returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
+									width="120"
+									compenent_name="getProductBrand"               
+									boxwidth="300"
+									boxheight="150"
+									is_internet="1"
+									brand_code="1"
+									brand_ID="#brand_id#">
+								</div>
+							</div>					
+							<div class="form-group" id="item-short_code_name">
+								<label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
+								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+									<cfif is_related_model_brand eq 1>
+										<cfset deger = "brand_id">
+									<cfelse>
+										<cfset deger = "">
+									</cfif>
+									<cf_wrkProductModel
+										returnInputValue="short_code_id,short_code_name,short_code"
+										returnQueryValue="MODEL_ID,MODEL_NAME,MODEL_CODE"
+										width="120"
+										fieldName="short_code_name"
+										fieldid="short_code_id"
+										fieldcode="short_code"
+										control_field_id="#deger#"
+										control_field_name="brand_name"
+										compenent_name="getProductModel"               
+										boxwidth="300"
+										boxheight="150"  
+										model_ID="#short_code_id#">
+								</div>
+							</div>
                         </div>
                     </cf_box>
                 </div>
@@ -89,6 +130,21 @@
         
     </div>
 </cf_box>
+<cfif isDefined(attributes.is_submit) and attributes.is_submit eq 1>
+    <cfset attributes.product_name = attributes.product_name>
+    <cfset attributes.alternatif = attributes.alternatif>
+    <cfset attributes.oem_no = []>
+    <cfset oem_satir = attributes.oem_satir>
+
+    <cfloop from="1" to="#oem_satir#" index="i">
+        <cfset arrayAppend(attributes.oem_no, attributes["oem_" & i])>
+    </cfloop>
+
+    <cfinclude template="../query/add_product_from_purchase_result.cfm">
+    <cfabort>
+</cfif>
+
+
 
 <script>
     function OemSatirEkle() {
