@@ -48,6 +48,8 @@
         document.getElementsByName("oem_satir")[0].value = ix;
 
         var input = document.createElement("input");
+        input.type="text";
+        input.className = "form-control";
         input.id = "oem_" + ix;
         input.name = "oem_" + ix;
 
