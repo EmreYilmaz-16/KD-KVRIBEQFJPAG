@@ -46,6 +46,18 @@
     </cfloop>
 
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
+    <cfscript>
+        /*
+          <cfargument name="PRODUCT_NAME">
+    <cfargument name="PRODUCT_CATID">
+    <cfargument name="BRAND_ID">
+    <cfargument name="SHORT_CODE_ID">
+    <cfargument name="SHORT_CODE">
+    <cfargument name="BIRIM">
+    <cfargument name="ALTERNATIVES"> 
+        */
+        CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no);
+    </cfscript>
     <cfabort>
 <cfelse>
     <cfscript>
@@ -132,6 +144,7 @@
                                     <label class=""><cf_get_lang dictionary_id='57636.Birim'>*</label>
                                     <div class=""> 
                                         <select name="unit_id" id="unit_id" required>
+
                                         <cfoutput query="get_unit">
                                             <option value="#unit_id#,#unit#"<cfif main_unit_id eq unit_id>selected</cfif>>#unit#</option>
                                         </cfoutput>
