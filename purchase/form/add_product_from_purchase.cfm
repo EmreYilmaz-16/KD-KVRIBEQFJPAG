@@ -92,7 +92,7 @@
 										fieldName="short_code_name"
 										fieldid="short_code_id"
 										fieldcode="short_code"
-										control_field_id="#deger#"
+										control_field_id="brand_id"
 										control_field_name="brand_name"
 										compenent_name="getProductModel"               
 										boxwidth="300"
