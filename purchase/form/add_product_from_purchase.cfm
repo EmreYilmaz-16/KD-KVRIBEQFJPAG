@@ -137,7 +137,7 @@
         
     </div>
 </cf_box>
-<cfif isDefined(attributes.is_submit) and attributes.is_submit eq 1>
+<cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
     <cfset attributes.product_name = attributes.product_name>
     <cfset attributes.alternatif = attributes.alternatif>
     <cfset attributes.oem_no = []>
