@@ -58,6 +58,22 @@
     <cfquery name="GET_OUR_COMPANY_INFO" datasource="#DSN#">
         SELECT IS_BRAND_TO_CODE,IS_BARCOD_REQUIRED,IS_WATALOGY_INTEGRATED FROM OUR_COMPANY_INFO WHERE COMP_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#session.ep.company_id#">
     </cfquery>
+    <cfquery name="GET_UNIT" datasource="#DSN#">
+        SELECT 
+            CASE
+                WHEN LEN(SLI.ITEM) > 0 THEN SLI.ITEM
+                ELSE UNIT
+            END AS UNIT,
+            UNIT_ID 
+        FROM 
+            SETUP_UNIT
+            LEFT JOIN SETUP_LANGUAGE_INFO SLI ON SLI.UNIQUE_COLUMN_ID = SETUP_UNIT.UNIT_ID
+            AND SLI.COLUMN_NAME = <cfqueryparam cfsqltype="cf_sql_varchar" value="UNIT">
+            AND SLI.TABLE_NAME = <cfqueryparam cfsqltype="cf_sql_varchar" value="SETUP_UNIT">
+            AND SLI.LANGUAGE = <cfqueryparam cfsqltype="cf_sql_varchar" value="#session.ep.language#">
+        ORDER BY UNIT  
+    </cfquery>
+    
     
     <cf_box title="Yeni Ürün Ekle">
         <div style="height:100vh">
@@ -111,6 +127,16 @@
                                             model_ID="#short_code_id#">
                                     </div>
                                 </div>
+                                <div class="form-group" id="item-unit_id">
+                                    <label class=""><cf_get_lang dictionary_id='57636.Birim'>*</label>
+                                    <div class=""> 
+                                        <select name="unit_id" id="unit_id">
+                                        <cfoutput query="get_unit">
+                                            <option value="#unit_id#,#unit#"<cfif main_unit_id eq unit_id>selected</cfif>>#unit#</option>
+                                        </cfoutput>
+                                        </select>
+                                    </div>
+                                </div>	
                             </div>
                         </cf_box>
                     </div>
