@@ -47,28 +47,34 @@
         ix = parseInt(ix) + 1;
         document.getElementsByName("oem_satir")[0].value = ix;
 
+        var inputGroup = document.createElement("div");
+        inputGroup.className = "input-group mb-3";
+
         var input = document.createElement("input");
-        input.type="text";
+        input.type = "text";
         input.className = "form-control";
         input.id = "oem_" + ix;
         input.name = "oem_" + ix;
 
-        var deleteIcon = document.createElement("i");
-        deleteIcon.className = "fa fa-trash";
-        deleteIcon.style.cursor = "pointer";
-        deleteIcon.onclick = function () {
+        var inputGroupAddon = document.createElement("div");
+        inputGroupAddon.className = "input-group-append";
+
+        var deleteButton = document.createElement("button");
+        deleteButton.className = "btn btn-danger";
+        deleteButton.type = "button";
+        deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
+        deleteButton.onclick = function () {
             OemSatirSilRow(ix);
         };
 
-        var div = document.createElement("div");
-        div.className = "form-group";
-        div.appendChild(input);
-        div.appendChild(deleteIcon);
+        inputGroupAddon.appendChild(deleteButton);
+        inputGroup.appendChild(input);
+        inputGroup.appendChild(inputGroupAddon);
 
         var tr = document.createElement("tr");
         tr.id = "oemtr_" + ix;
         tr.className = "oemtr";
-        tr.appendChild(div);
+        tr.appendChild(inputGroup);
 
         document.getElementById("oemgrid").appendChild(tr);
 
