@@ -57,6 +57,8 @@
     
    
     <cfinclude template="../../Product/query/add_import_product.cfm">
+    <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
+    <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
  <!------->
     
 
