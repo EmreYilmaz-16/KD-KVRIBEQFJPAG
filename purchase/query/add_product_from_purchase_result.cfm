@@ -55,9 +55,9 @@
     </cfscript>
     <cfset attributes.HIERARCHY =GETPCAT.HIERARCHY>
     
-    <!---
+   
     <cfinclude template="../../Product/query/add_import_product.cfm">
----->
+ <!------->
     
 
     <cfset ReturnData.STATUS=1>
