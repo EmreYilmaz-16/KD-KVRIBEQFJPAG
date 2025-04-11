@@ -59,7 +59,7 @@
     <cfinclude template="../../Product/query/add_import_product.cfm">
     <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
     <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
-    <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.unit_id>
+    <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.MAX_UNIT>
     
  <cfquery name="INSERT_ALTERNATIVES" datasource="#DSN3#">
     <cfloop list="#arguments.ALTERNATIVES#" item="it">
