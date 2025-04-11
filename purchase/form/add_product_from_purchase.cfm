@@ -56,7 +56,7 @@
     <cfargument name="BIRIM">
     <cfargument name="ALTERNATIVES"> 
         */
-        CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no);
+        ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no);
     </cfscript>
     <cfabort>
 <cfelse>
