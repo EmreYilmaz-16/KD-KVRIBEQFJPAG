@@ -43,10 +43,10 @@
                 <!-- Yeni Ürün -->
                 <div class="col col-4">
                     <cf_box title="Yeni Ürün">
-                        <div style="height:100vh">
+                        <div style="height:40vh">
                             <div class="form-group">
                                 <label for="product_name">Ürün Adı</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" value="#attributes.productName#">
+                                <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
                             </div>
                         </div>
                     </cf_box>
@@ -55,7 +55,7 @@
                 <!-- Alternatif Ürün Seç -->
                 <div class="col col-4">
                     <cf_box title="Alternatif Ürün Seç">
-                        <div style="height:100vh">
+                        <div style="height:40vh">
                             <ul class="list-group">
                                 <cfoutput query="getOfferRows">
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -72,7 +72,7 @@
                 <div class="col col-4">
                     <input type="hidden" name="oem_satir" value="0">
                     <cf_box title="Oem No" add_href="javascript:OemSatirEkle()">
-                        <div style="height:100vh">
+                        <div style="height:40vh">
                             <cf_big_list>
                                 <tbody id="oemgrid"></tbody>
                             </cf_big_list>
