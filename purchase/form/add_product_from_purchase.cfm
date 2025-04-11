@@ -1,4 +1,5 @@
 
+<cf_box title="Yeni Ürün Ekle">
 <cfquery name="getOfferRows" datasource="#dsn3#">
     SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
 </cfquery>
@@ -33,3 +34,4 @@
 </div>
 </div>
 </cfform>
+</cf_box>
