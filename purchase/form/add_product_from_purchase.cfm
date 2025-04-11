@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col">
 <cf_box title="Yeni Ürün">
-    <cf_box_content>
+    
         <cfform method="post" action="">
             <cfoutput>
             <div class="form-group">
@@ -17,7 +17,7 @@
             </cfoutput>
         </cfform>
 
-    </cf_box_content>
+    
 </cf_box>
 </div>
 <div class="col">
