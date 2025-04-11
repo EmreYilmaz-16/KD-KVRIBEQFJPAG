@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div class="row">
-            <div class="col col-12">
+            <div class="col col-12" style="display: flex;justify-content: end;">
                 <input type="submit" class="btn btn-primary" value="Kaydet">
             </div>
             </div>
