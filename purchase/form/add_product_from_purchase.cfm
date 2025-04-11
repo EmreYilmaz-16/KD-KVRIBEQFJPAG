@@ -47,6 +47,9 @@
         ix = parseInt(ix) + 1;
         document.getElementsByName("oem_satir")[0].value = ix;
 
+        var formGroup = document.createElement("div");
+        formGroup.className = "form-group";
+
         var inputGroup = document.createElement("div");
         inputGroup.className = "input-group mb-3";
 
@@ -71,10 +74,12 @@
         inputGroup.appendChild(input);
         inputGroup.appendChild(inputGroupAddon);
 
+        formGroup.appendChild(inputGroup);
+
         var tr = document.createElement("tr");
         tr.id = "oemtr_" + ix;
         tr.className = "oemtr";
-        tr.appendChild(inputGroup);
+        tr.appendChild(formGroup);
 
         document.getElementById("oemgrid").appendChild(tr);
 
