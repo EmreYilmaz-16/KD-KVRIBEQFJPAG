@@ -60,11 +60,11 @@
         input.name = "oem_" + ix;
 
         var inputGroupAddon = document.createElement("div");
-        inputGroupAddon.className = "input-group-append";
+        inputGroupAddon.className = "input-group-text";
 
-        var deleteButton = document.createElement("button");
-        deleteButton.className = "btn btn-danger";
-        deleteButton.type = "button";
+        var deleteButton = document.createElement("span");
+        //deleteButton.className = "btn btn-danger";
+       // deleteButton.type = "button";
         deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
         deleteButton.onclick = function () {
             OemSatirSilRow(ix);
