@@ -62,8 +62,8 @@
                                 <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
                             </div>
                             <div class="form-group" id="item-brand_name">
-								<label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='58847.Marka'></label>
-								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+								<label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
+								<div class=""> 
 									<cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
 									<cf_wrkProductBrand
 									returnInputValue="brand_id,brand_name,brand_code"
@@ -78,8 +78,8 @@
 								</div>
 							</div>					
 							<div class="form-group" id="item-short_code_name">
-								<label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
-								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+								<label ><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
+								<div > 
 									
 									<cf_wrkProductModel
 										returnInputValue="short_code_id,short_code_name,short_code"
