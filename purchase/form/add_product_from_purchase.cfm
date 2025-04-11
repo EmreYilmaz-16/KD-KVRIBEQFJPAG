@@ -4,7 +4,7 @@
 </cfquery>
 
 <div class="row">
-    <div class="col">
+    <div class="col-4">
 <cf_box title="Yeni Ürün">
     
         <cfform method="post" action="">
@@ -20,7 +20,7 @@
     
 </cf_box>
 </div>
-<div class="col">
+<div class="col-4">
     <cf_box title="Alternatif Ürün Seç">
         <ul>
         <cfoutput query="getOfferRows">
