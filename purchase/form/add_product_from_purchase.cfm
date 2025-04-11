@@ -80,7 +80,13 @@
                     </cf_box>
                 </div>
             </div>
+            <div class="row">
+            <div class="col col-12">
+                <input type="submit" class="btn btn-primary" value="Kaydet">
+            </div>
+            </div>
         </cfform>
+        
     </div>
 </cf_box>
 
