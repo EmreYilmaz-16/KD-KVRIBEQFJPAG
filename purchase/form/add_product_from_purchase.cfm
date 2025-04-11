@@ -1,3 +1,38 @@
+<style>
+    .list-group {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .d-flex {
+        display: flex !important;
+    }
+
+    .justify-content-between {
+        justify-content: space-between !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+</style>
+
 <cf_box title="Yeni Ürün Ekle">
     <div style="height:100vh">
         <cfquery name="getOfferRows" datasource="#dsn3#">
@@ -41,6 +76,7 @@
         </cfform>
     </div>
 </cf_box>
+
 
 <script>
     function OemSatirEkle() {
