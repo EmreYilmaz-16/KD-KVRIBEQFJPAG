@@ -60,7 +60,7 @@
         input.name = "oem_" + ix;
 
         var inputGroupAddon = document.createElement("div");
-        inputGroupAddon.className = "input-group-text";
+        inputGroupAddon.className = "input-group-append";
 
         var deleteButton = document.createElement("span");
         //deleteButton.className = "btn btn-danger";
