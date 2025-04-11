@@ -32,111 +32,7 @@
         align-items: center !important;
     }
 </style>
-<cfscript>
-    brand_name = ""
-				brand_id = ""
-				brand_code = ""
-				short_code = ""
-				short_code_name = ""
-				short_code_id = ""
-</cfscript>
-<cfquery name="GET_OUR_COMPANY_INFO" datasource="#DSN#">
-    SELECT IS_BRAND_TO_CODE,IS_BARCOD_REQUIRED,IS_WATALOGY_INTEGRATED FROM OUR_COMPANY_INFO WHERE COMP_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#session.ep.company_id#">
-</cfquery>
 
-<cf_box title="Yeni Ürün Ekle">
-    <div style="height:100vh">
-        <cfquery name="getOfferRows" datasource="#dsn3#">
-            SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
-        </cfquery>
-        <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
-            <input type="hidden" name="wrkRowId" value="#attributes.wrkRowId#">
-            <input type="hidden" name="is_submit" value="1">
-            <div class="row">
-                <!-- Yeni Ürün -->
-                <div class="col col-4">
-                    <cf_box title="Yeni Ürün">
-                        <div style="height:40vh">
-                            <div class="form-group">
-                                <label for="product_name">Ürün Adı</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
-                            </div>
-                            <div class="form-group" id="item-brand_name">
-								<label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
-								<div class=""> 
-									<cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
-									<cf_wrkProductBrand
-									returnInputValue="brand_id,brand_name,brand_code"
-									returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
-									width="120"
-									compenent_name="getProductBrand"               
-									boxwidth="300"
-									boxheight="150"
-									is_internet="1"
-									brand_code="1"
-									brand_ID="#brand_id#">
-								</div>
-							</div>					
-							<div class="form-group" id="item-short_code_name">
-								<label ><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
-								<div > 
-									
-									<cf_wrkProductModel
-										returnInputValue="short_code_id,short_code_name,short_code"
-										returnQueryValue="MODEL_ID,MODEL_NAME,MODEL_CODE"
-										width="120"
-										fieldName="short_code_name"
-										fieldid="short_code_id"
-										fieldcode="short_code"
-										control_field_id="brand_id"
-										control_field_name="brand_name"
-										compenent_name="getProductModel"               
-										boxwidth="300"
-										boxheight="150"  
-										model_ID="#short_code_id#">
-								</div>
-							</div>
-                        </div>
-                    </cf_box>
-                </div>
-
-                <!-- Alternatif Ürün Seç -->
-                <div class="col col-4">
-                    <cf_box title="Alternatif Ürün Seç">
-                        <div style="height:40vh">
-                            <ul class="list-group">
-                                <cfoutput query="getOfferRows">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>#PRODUCT_NAME#</span>
-                                        <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#">
-                                    </li>
-                                </cfoutput>
-                            </ul>
-                        </div>
-                    </cf_box>
-                </div>
-
-                <!-- OEM No -->
-                <div class="col col-4">
-                    <input type="hidden" name="oem_satir" value="0">
-                    <cf_box title="Oem No" add_href="javascript:OemSatirEkle()">
-                        <div style="height:40vh">
-                            <cf_big_list>
-                                <tbody id="oemgrid"></tbody>
-                            </cf_big_list>
-                        </div>
-                    </cf_box>
-                </div>
-            </div>
-            <div class="row">
-            <div class="col col-12" style="display: flex;justify-content: end;">
-                <input type="submit" class="btn btn-primary" value="Kaydet">
-            </div>
-            </div>
-        </cfform>
-        
-    </div>
-</cf_box>
 <cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
     <cfdump var="#attributes#">
     <cfset attributes.product_name = attributes.product_name>
@@ -150,6 +46,112 @@
 
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
     <cfabort>
+<cfelse>
+    <cfscript>
+        brand_name = ""
+                    brand_id = ""
+                    brand_code = ""
+                    short_code = ""
+                    short_code_name = ""
+                    short_code_id = ""
+    </cfscript>
+    <cfquery name="GET_OUR_COMPANY_INFO" datasource="#DSN#">
+        SELECT IS_BRAND_TO_CODE,IS_BARCOD_REQUIRED,IS_WATALOGY_INTEGRATED FROM OUR_COMPANY_INFO WHERE COMP_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#session.ep.company_id#">
+    </cfquery>
+    
+    <cf_box title="Yeni Ürün Ekle">
+        <div style="height:100vh">
+            <cfquery name="getOfferRows" datasource="#dsn3#">
+                SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
+            </cfquery>
+            <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+                <input type="hidden" name="wrkRowId" value="#attributes.wrkRowId#">
+                <input type="hidden" name="is_submit" value="1">
+                <div class="row">
+                    <!-- Yeni Ürün -->
+                    <div class="col col-4">
+                        <cf_box title="Yeni Ürün">
+                            <div style="height:40vh">
+                                <div class="form-group">
+                                    <label for="product_name">Ürün Adı</label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
+                                </div>
+                                <div class="form-group" id="item-brand_name">
+                                    <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
+                                    <div class=""> 
+                                        <cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
+                                        <cf_wrkProductBrand
+                                        returnInputValue="brand_id,brand_name,brand_code"
+                                        returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
+                                        width="120"
+                                        compenent_name="getProductBrand"               
+                                        boxwidth="300"
+                                        boxheight="150"
+                                        is_internet="1"
+                                        brand_code="1"
+                                        brand_ID="#brand_id#">
+                                    </div>
+                                </div>					
+                                <div class="form-group" id="item-short_code_name">
+                                    <label ><cf_get_lang dictionary_id='58225.Model'><cfif get_our_company_info.is_brand_to_code> </cfif></label>
+                                    <div > 
+                                        
+                                        <cf_wrkProductModel
+                                            returnInputValue="short_code_id,short_code_name,short_code"
+                                            returnQueryValue="MODEL_ID,MODEL_NAME,MODEL_CODE"
+                                            width="120"
+                                            fieldName="short_code_name"
+                                            fieldid="short_code_id"
+                                            fieldcode="short_code"
+                                            control_field_id="brand_id"
+                                            control_field_name="brand_name"
+                                            compenent_name="getProductModel"               
+                                            boxwidth="300"
+                                            boxheight="150"  
+                                            model_ID="#short_code_id#">
+                                    </div>
+                                </div>
+                            </div>
+                        </cf_box>
+                    </div>
+    
+                    <!-- Alternatif Ürün Seç -->
+                    <div class="col col-4">
+                        <cf_box title="Alternatif Ürün Seç">
+                            <div style="height:40vh">
+                                <ul class="list-group">
+                                    <cfoutput query="getOfferRows">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>#PRODUCT_NAME#</span>
+                                            <input type="checkbox" name="alternatif" value="#WRK_ROW_ID#">
+                                        </li>
+                                    </cfoutput>
+                                </ul>
+                            </div>
+                        </cf_box>
+                    </div>
+    
+                    <!-- OEM No -->
+                    <div class="col col-4">
+                        <input type="hidden" name="oem_satir" value="0">
+                        <cf_box title="Oem No" add_href="javascript:OemSatirEkle()">
+                            <div style="height:40vh">
+                                <cf_big_list>
+                                    <tbody id="oemgrid"></tbody>
+                                </cf_big_list>
+                            </div>
+                        </cf_box>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col col-12" style="display: flex;justify-content: end;">
+                    <input type="submit" class="btn btn-primary" value="Kaydet">
+                </div>
+                </div>
+            </cfform>
+            
+        </div>
+    </cf_box>
 </cfif>
 
 
