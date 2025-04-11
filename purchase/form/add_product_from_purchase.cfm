@@ -1,13 +1,13 @@
-<cfdump var="#attributes#">
+
 <cfquery name="getOfferRows" datasource="#dsn3#">
     SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
 </cfquery>
-
+<cfform method="post" action="">
 <div class="row">
-    <div class="col col-4">
+    <div class="col col-3">
 <cf_box title="Yeni Ürün">
     
-        <cfform method="post" action="">
+        
             <cfoutput>
             <div class="form-group">
                 <label for="product_name">Ürün Adı</label>
@@ -15,12 +15,12 @@
             </div>
             
             </cfoutput>
-        </cfform>
+        
 
     
 </cf_box>
 </div>
-<div class="col col-4">
+<div class="col col-9">
     <cf_box title="Alternatif Ürün Seç">
         <ul>
         <cfoutput query="getOfferRows">
@@ -32,3 +32,4 @@
     </cf_box> 
 </div>
 </div>
+</cfform>
