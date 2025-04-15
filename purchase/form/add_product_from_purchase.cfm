@@ -1,4 +1,6 @@
 <cfparam name="main_unit_id" default="0">
+<cfparam name="tax_purchase" default="20">
+<cfparam name="tax_s" default="20">
 <style>
     .list-group {
         padding: 0;
@@ -46,6 +48,10 @@
     </cfloop>
 
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
+    <cfquery name="GET_KDV" datasource="#DSN2#">
+        SELECT TAX_ID, TAX FROM SETUP_TAX ORDER BY TAX
+    </cfquery>
+    
     <cfscript>
         /*
           <cfargument name="PRODUCT_NAME">
@@ -152,6 +158,26 @@
                                         <cfoutput query="get_unit">
                                             <option value="#unit_id#,#unit#"<cfif main_unit_id eq unit_id>selected</cfif>>#unit#</option>
                                         </cfoutput>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="item-tax_purchase">
+                                    <label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='37631.Alis KDV'>*</label>
+                                    <div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+                                        <select name="tax_purchase" id="tax_purchase">
+                                            <cfoutput query="get_kdv">
+                                                <option value="#tax#"<cfif tax_purchase eq tax>selected</cfif>>#tax#</option>
+                                            </cfoutput>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="item-tax">
+                                    <label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='37916.Satış KDV'>*</label>
+                                    <div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+                                        <select name="tax" id="tax">
+                                            <cfoutput query="get_kdv">
+                                                <option value="#tax#"<cfif tax_s eq tax>selected</cfif>>#tax#</option>
+                                            </cfoutput>
                                         </select>
                                     </div>
                                 </div>	
