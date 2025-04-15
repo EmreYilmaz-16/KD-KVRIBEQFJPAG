@@ -74,7 +74,10 @@
         writeDump(var=ProductInserResult, format="html", label="ProductInserResult", abort=true);
 
     </cfscript>
-    
+    <script>
+        window.opener.location.reload(true);
+        window.close();
+    </script>
     <cfabort>
 <cfelse>
     <cfscript>
