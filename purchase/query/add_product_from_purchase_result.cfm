@@ -62,13 +62,15 @@
     <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
     <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
     <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.MAX_UNIT>
-    
+<cfif listLen(arguments.ALTERNATIVES)>
  <cfquery name="INSERT_ALTERNATIVES" datasource="#DSN3#">
     <cfloop list="#arguments.ALTERNATIVES#" item="it">
         
         INSERT INTO w3Qa_1.ALTERNATIVE_PRODUCTS(PRODUCT_ID,STOCK_ID,ALTERNATIVE_PRODUCT_ID) VALUES (#RECORDED_PRODUCT_ID#,#RECORDED_STOCK_ID#,#listGetAt(it,2,"-")#);
     </cfloop>
  </cfquery>
+</cfif> 
+<cfif arrayLen(arguments.OEM_NO_ARR)>
 <cfquery name="INSER_OEM_NO" datasource="#DSN3#">
     <cfloop array="#arguments.OEM_NO_ARR#" item="it">
         
@@ -76,6 +78,7 @@
         
     </cfloop>
 </cfquery>
+</cfif>
 
     <cfset ReturnData.STATUS=1>
     <cfset ReturnData.MESSAGE="Ürün Oluşturuldu">
