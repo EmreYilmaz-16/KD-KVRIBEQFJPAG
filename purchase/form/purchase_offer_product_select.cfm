@@ -241,9 +241,7 @@ uniqueProducts.forEach(productName => {
 `;
 
 if (product.IS_SATINALMA===1) {
-  $("#send-btn").prop("disabled", true);
-}
-  
+  $("#send-btn").hide();
 }
       cell.classList.add('selectable');
       cell.dataset.key = cellKey;
