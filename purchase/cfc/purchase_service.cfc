@@ -270,7 +270,7 @@
 
         <cfset var result = []>
 
-        <cfquery name="qAlt" datasource="your_datasource_name">
+        <cfquery name="qAlt" datasource="#dsn3#">
             SELECT ALTERNATIVE_PRODUCT_ID as ALTERNATIF_PRODUCT_ID
             FROM w3Qa_1.ALTERNATIVE_PRODUCTS
             WHERE PRODUCT_ID = <cfqueryparam value="#arguments.product_id#" cfsqltype="cf_sql_varchar">
