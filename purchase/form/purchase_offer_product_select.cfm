@@ -236,10 +236,15 @@ uniqueProducts.forEach(productName => {
   <div class="text-muted small">Iskonto: ${product.DISCOUNT_1}%</div>
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
   ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Sisteme kayıtlı </div>' : ''}
-  ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">🚩 Satınalma Teklifinde</div>' : ''}
+  ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">🚩 Satış Teklifinde Teklifinde</div>' : ''}
   
 `;
 
+if (product.IS_SATINALMA===1) {
+  $("#send-btn").prop("disabled", true);
+}
+  
+}
       cell.classList.add('selectable');
       cell.dataset.key = cellKey;
       cell.dataset.product = productName;
