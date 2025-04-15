@@ -44,7 +44,7 @@ $(document).ready(function () {
         // <ul> içine <li> ekle
         $ul.append($li);
     });
-    });
+    
     
     // Bilgi gösterme fonksiyonu
     function showProductAlert(index, data) {
