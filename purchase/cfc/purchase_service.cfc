@@ -265,7 +265,8 @@
         <cfreturn response>
     </cffunction>
 
-    <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST">
+    <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST" returnFormat="json">
+
         <cfargument name="product_id" type="string" required="true">
 
         <cfset var result = []>
