@@ -125,7 +125,8 @@ SELECT
             CAST(TAX AS DECIMAL(18,2)) AS TAX,
             CAST(QUANTITY AS DECIMAL(18,2)) AS QUANTITY,
             CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18,2)) AS NET_PRICE,
-            CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED
+            CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED,
+            CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.OFFER_ROW WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SATINALMA
         FROM 
             #DSN3#.OFFER_ROW 
         WHERE 
@@ -216,7 +217,7 @@ uniqueProducts.forEach(productName => {
 
     if (product) {
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0 }|${product.IS_SATINALMA || 0}`;
 
       const priceDisplay = product.DISCOUNT_1 > 0
         ? `<div class="tooltip"><span class="price-original">${product.PRICE.toFixed(2)} TL</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -234,6 +235,7 @@ uniqueProducts.forEach(productName => {
   <div class="text-muted small">Iskonto: ${product.DISCOUNT_1}%</div>
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
   ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Sisteme kayıtlı</div>' : ''}
+  ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">✅ Teklife kayıtlı</div>' : ''}
 `;
 
       cell.classList.add('selectable');
@@ -279,7 +281,7 @@ uniqueProducts.forEach(productName => {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -298,6 +300,7 @@ function updateOutput() {
       priceOther: parseFloat(priceOther),
       otherMoney:otherMoney,
       productName: productName,
+      isSatinalma: parseInt(isSatinalma),
 
     });
   });
