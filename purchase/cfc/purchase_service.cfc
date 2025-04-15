@@ -1,7 +1,7 @@
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
     <cfset dsn3="w3Qa_1">
     <cfset dsn="w3Qa">
-    
+
 
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
@@ -263,5 +263,23 @@
         </cftry>
 
         <cfreturn response>
+    </cffunction>
+
+    <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST">
+        <cfargument name="product_id" type="string" required="true">
+
+        <cfset var result = []>
+
+        <cfquery name="qAlt" datasource="your_datasource_name">
+            SELECT ALTERNATIVE_PRODUCT_ID as ALTERNATIF_PRODUCT_ID
+            FROM w3Qa_1.ALTERNATIVE_PRODUCTS
+            WHERE PRODUCT_ID = <cfqueryparam value="#arguments.product_id#" cfsqltype="cf_sql_varchar">
+        </cfquery>
+
+        <cfloop query="qAlt">
+            <cfset arrayAppend(result, qAlt.ALTERNATIF_PRODUCT_ID)>
+        </cfloop>
+
+        <cfreturn result>
     </cffunction>
 </cfcomponent>
