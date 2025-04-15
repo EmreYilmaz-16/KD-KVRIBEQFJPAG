@@ -9,6 +9,7 @@
     <cfargument name="ALTERNATIVES">    
     <cfargument name="tax_purchase">
     <cfargument name="tax_sales">
+    <cfargument name="OFFER_WRK_ROW_ID">
 <cftry>
     <cfquery name="GETPCAT" datasource="#DSN#_product">
         SELECT * FROM PRODUCT_CAT WHERE PRODUCT_CATID=#arguments.PRODUCT_CATID#
@@ -62,6 +63,8 @@
     <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
     <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
     <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.MAX_UNIT>
+
+
 <cfif listLen(arguments.ALTERNATIVES)>
  <cfquery name="INSERT_ALTERNATIVES" datasource="#DSN3#">
     <cfloop list="#arguments.ALTERNATIVES#" item="it">

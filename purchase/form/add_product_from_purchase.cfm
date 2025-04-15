@@ -67,7 +67,8 @@
     <cfargument name="BIRIM">
     <cfargument name="ALTERNATIVES"> 
         */
-        ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax);
+        writeDump(var=attributes, format="html", label="attributes", abort=true);
+        ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId);
         ProductInserResult=deserializeJSON(ProductInserResult);
         writeDump(var=ProductInserResult, format="html", label="ProductInserResult", abort=true);
 
@@ -109,7 +110,7 @@
                 SELECT * FROM OFFER_ROW WHERE OFFER_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#'
             </cfquery>
             <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
-                <input type="hidden" name="wrkRowId" value="#attributes.wrkRowId#">
+                <input type="hidden" name="wrkRowId" value="<CFOUTPUT>#attributes.wrkRowId#</CFOUTPUT>">
                 <input type="hidden" name="is_submit" value="1">
                 <div class="row">
                     <!-- Yeni Ürün -->

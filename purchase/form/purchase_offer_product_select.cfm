@@ -247,6 +247,7 @@ uniqueProducts.forEach(productName => {
 
 if (product.IS_SATINALMA===1) {
   $("#send-btn").hide();
+  $("#send-btn3").hide();
 }
 if (!rowHasSatinalma) {
   cell.classList.add('selectable');
