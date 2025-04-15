@@ -41,7 +41,11 @@
 <cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
     <cfdump var="#attributes#">
     <cfset attributes.product_name = attributes.product_name>
+    <cfif isDefined("attributes.alternatif")>
     <cfset attributes.alternatif = attributes.alternatif>
+    <cfelse>
+    <cfset attributes.alternatif = "">
+</cfif>
     <cfset attributes.oem_no = []>
     <cfset oem_satir = attributes.oem_satir>
 
