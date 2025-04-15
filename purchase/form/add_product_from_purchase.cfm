@@ -53,7 +53,7 @@
         <cfset arrayAppend(attributes.oem_no, attributes["oem_" & i])>
     </cfloop>
 
-<cfdump var="#attributes#" abort="true">
+
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
  
     
