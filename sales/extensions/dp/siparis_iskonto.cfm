@@ -59,12 +59,17 @@ $.ajax({
     data: { product_id: productId },
     dataType: "json",
     success: function(response) {
+       console.log(response)
         if (Array.isArray(response)) {
             const randomColor = getRandomColor();
             $("#tblBasket tbody").children().each(function(i, otherRow) {
-                const otherProductId = $(otherRow).find("[name='product_id']").val();
+                const otherProductId = parseInt($(otherRow).find("[name='product_id']").val());
+                //console.log(otherProductId)
                 if (response.includes(otherProductId)) {
+                  console.warn("oms")
                     $(otherRow).css("background-color", randomColor);
+                    $($row).css("background-color", randomColor);
+                    console.log(otherRow)
                 }
             });
         }
