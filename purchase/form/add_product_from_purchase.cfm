@@ -75,8 +75,12 @@
 
     </cfscript>
     <script>
-        window.opener.location.reload(true);
-        window.close();
+        if (window.opener) {
+            window.opener.location.reload(true);
+            window.close();
+        } else {
+            console.error("No opener window found.");
+        }
     </script>
     <cfabort>
 <cfelse>
