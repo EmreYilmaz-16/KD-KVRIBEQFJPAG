@@ -42,7 +42,12 @@ $(document).ready(function () {
         const $li = $("<li>").append($link);
     
         // <ul> içine <li> ekle
-        $ul.append($li);
+            if(productId =="1055"){
+                $ul.append($li);
+            }else{
+             //   $ul.append($link);
+            }
+        
     });
     
     
