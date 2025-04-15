@@ -25,6 +25,9 @@ $(document).ready(function () {
         // 2. hücreyi (Al sütunu) al
         const $cell = $row.children().eq(1);
     
+        // Hücredeki <ul> etiketini bul
+        const $ul = $cell.find("ul");
+    
         // <a> ve <i> etiketlerini oluştur
         const $icon = $("<i>").addClass("fa fa-plus");
         const $link = $("<a>")
@@ -35,8 +38,12 @@ $(document).ready(function () {
                 showProductAlert(index, productData);
             });
     
-        // Hücreye ekle
-        $cell.append($link);
+        // <li> etiketi oluştur ve linki içine ekle
+        const $li = $("<li>").append($link);
+    
+        // <ul> içine <li> ekle
+        $ul.append($li);
+    });
     });
     
     // Bilgi gösterme fonksiyonu
@@ -60,3 +67,4 @@ $(document).ready(function () {
     }
 })
 </script>
+
