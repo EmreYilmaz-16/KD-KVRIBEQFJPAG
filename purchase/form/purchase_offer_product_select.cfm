@@ -275,7 +275,7 @@ if (!rowHasSatinalma) {
   }
 } else {
   cell.style.pointerEvents = 'none';
-  cell.style.opacity = '0.4';
+  cell.style.opacity = '0.8';
   cell.title = 'Bu ürün için satın alma yapılmış. Seçim yapılamaz.';
 }
       cell.dataset.product = productName;
