@@ -227,7 +227,7 @@ uniqueProducts.forEach(productName => {
       let netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL</div>`;
       if (product.NET_PRICE === lowestNetPrice) {
         netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL</div>`;
-        cell.title = 'En iyi teklif';
+        cell.title = 'En iyi teklif'+product.WRK_ROW_ID;
       }
 
       cell.innerHTML = `
@@ -235,8 +235,8 @@ uniqueProducts.forEach(productName => {
   ${netPriceHtml}
   <div class="text-muted small">Iskonto: ${product.DISCOUNT_1}%</div>
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
-  ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Sisteme kayıtlı</div>' : ''}
-  ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">✅ Teklife kayıtlı</div>' : ''}
+  ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Sisteme kayıtlı </div>' : ''}
+  
 `;
 
       cell.classList.add('selectable');
