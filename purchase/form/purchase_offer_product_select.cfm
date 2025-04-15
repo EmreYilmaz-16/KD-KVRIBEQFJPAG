@@ -242,6 +242,10 @@ uniqueProducts.forEach(productName => {
 
 if (product.IS_SATINALMA===1) {
   $("#send-btn").hide();
+  cell.classList.add('disabled');
+  cell.style.pointerEvents = 'none';
+  cell.style.opacity = '0.4';
+  cell.title = 'Bu ürün zaten satın alınmış. Seçim yapılamaz.';
 }
       cell.classList.add('selectable');
       cell.dataset.key = cellKey;
