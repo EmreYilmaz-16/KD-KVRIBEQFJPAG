@@ -196,6 +196,11 @@ table.appendChild(thead);
 const cellElements = {};
 
 uniqueProducts.forEach(productName => {
+  const rowHasSatinalma = data.some(supplier => {
+    const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
+    return p?.IS_SATINALMA === 1;
+  })
+
   const row = document.createElement('tr');
   const productCell = document.createElement('td');
   productCell.textContent = productName;
@@ -242,13 +247,37 @@ uniqueProducts.forEach(productName => {
 
 if (product.IS_SATINALMA===1) {
   $("#send-btn").hide();
-  cell.classList.add('disabled');
+}
+if (!rowHasSatinalma) {
+  cell.classList.add('selectable');
+  cell.dataset.key = cellKey;
+
+  cell.addEventListener('click', () => {
+    cellElements[productName].forEach(c => {
+      const icon = c.querySelector('div.check-icon');
+      if (icon) icon.remove();
+    });
+    const checkIcon = document.createElement('div');
+    checkIcon.className = 'check-icon text-success';
+    checkIcon.innerHTML = '✔️';
+    cell.appendChild(checkIcon);
+    selectedCells.set(productName, cellKey);
+    updateOutput();
+    updateBestSupplier();
+  });
+
+  if (product.IS_SELECTED === 1) {
+    const checkIcon = document.createElement('div');
+    checkIcon.className = 'check-icon text-success';
+    checkIcon.innerHTML = '✔️';
+    cell.appendChild(checkIcon);
+    selectedCells.set(productName, cellKey);
+  }
+} else {
   cell.style.pointerEvents = 'none';
   cell.style.opacity = '0.4';
-  cell.title = 'Bu ürün zaten satın alınmış. Seçim yapılamaz.';
+  cell.title = 'Bu ürün için satın alma yapılmış. Seçim yapılamaz.';
 }
-      cell.classList.add('selectable');
-      cell.dataset.key = cellKey;
       cell.dataset.product = productName;
 
       cell.addEventListener('click', () => {
