@@ -7,6 +7,8 @@
     <cfargument name="BIRIM">
     <cfargument name="OEM_NO_ARR">
     <cfargument name="ALTERNATIVES">    
+    <cfargument name="tax_purchase">
+    <cfargument name="tax_sales">
 <cftry>
     <cfquery name="GETPCAT" datasource="#DSN#_product">
         SELECT * FROM PRODUCT_CAT WHERE PRODUCT_CATID=#arguments.PRODUCT_CATID#
@@ -18,8 +20,8 @@
         urun_adi=UrunAdi; 
         detail=''; 
         detail_2='';
-        satis_kdv=20;
-        ALIS_KDV=20;
+        satis_kdv=arguments.tax_sales;
+        ALIS_KDV=arguments.tax_purchase;
         is_inventory=1;
         is_production=0;
         is_sales=1;
