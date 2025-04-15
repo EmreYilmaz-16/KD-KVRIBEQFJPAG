@@ -35,7 +35,9 @@
         align-items: center !important;
     }
 </style>
-
+<cfquery name="GET_KDV" datasource="#DSN2#">
+    SELECT TAX_ID, TAX FROM SETUP_TAX ORDER BY TAX
+</cfquery>
 <cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
     <cfdump var="#attributes#">
     <cfset attributes.product_name = attributes.product_name>
@@ -48,9 +50,7 @@
     </cfloop>
 
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
-    <cfquery name="GET_KDV" datasource="#DSN2#">
-        SELECT TAX_ID, TAX FROM SETUP_TAX ORDER BY TAX
-    </cfquery>
+ 
     
     <cfscript>
         /*
