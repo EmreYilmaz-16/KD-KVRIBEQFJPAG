@@ -144,6 +144,13 @@ SELECT
             CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18,2)) AS NET_PRICE,
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED,
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.OFFER_ROW AS TTTTTTT WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SATINALMA
+            ,ISNULL((
+				SELECT * FROM (
+				SELECT PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS WHERE PRODUCT_ID=OFFER_ROW.PRODUCT_ID OR ALTERNATIVE_PRODUCT_ID=OFFER_ROW.PRODUCT_ID
+				UNION ALL
+				SELECT ALTERNATIVE_PRODUCT_ID PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS WHERE PRODUCT_ID=OFFER_ROW.PRODUCT_ID OR ALTERNATIVE_PRODUCT_ID=OFFER_ROW.PRODUCT_ID
+				) AS TABLO
+			FOR JSON PATH),'[]') AS ALTERNATIFLER
         FROM 
             #DSN3#.OFFER_ROW 
         WHERE 
@@ -211,6 +218,25 @@ thead.appendChild(headerRow);
 table.appendChild(thead);
 
 const cellElements = {};
+const alternativeGroups = {};
+
+data.forEach(supplier => {
+  supplier.URUNLER.forEach(product => {
+    const baseId = product.PRODUCT_ID;
+    const altIds = (product.ALTERNATIFLER || []).map(a => a.PRODUCT_ID);
+    const allIds = [baseId, ...altIds];
+
+    // Bu gruptan herhangi birine atanmış renk var mı?
+    let existingColor = allIds.find(id => alternativeGroups[id]);
+
+    const groupColor = existingColor ? alternativeGroups[existingColor] : getRandomColor();
+
+    allIds.forEach(id => {
+      alternativeGroups[id] = groupColor;
+    });
+  });
+})
+
 
 uniqueProducts.forEach(productName => {
   const rowHasSatinalma = data.some(supplier => {
@@ -384,6 +410,14 @@ function updateBestSupplier() {
   const [bestSupplierName, bestTotal] = Object.entries(supplierTotals).sort((a, b) => a[1] - b[1])[0] || ["Belirlenemedi", 0];
   document.getElementById('best-supplier').textContent = `En iyi fiyat veren tedarikçi: ${bestSupplierName} (Toplam: ${bestTotal.toFixed(2)} TL)`;
 }
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 document.getElementById('send-btn').addEventListener('click', () => {
   const payload = updateOutput(); // Ensure payload is generated correctly
@@ -412,7 +446,10 @@ document.getElementById('send-btn').addEventListener('click', () => {
   });
 });
 
+
+
 updateBestSupplier();
+
 
 
 </script>
