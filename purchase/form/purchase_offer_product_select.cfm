@@ -450,7 +450,7 @@ try {
   const currency = MONEYARRRR.find(c => c.MONEY === otherMoney);
   const rate1 = parseFloat(currency?.RATE1 || 1);
   const rate2 = parseFloat(currency?.RATE2 || 1);
-  convertedsalePriceOther = (parseFloat(salePrice) * rate2) / rate1;
+  convertedsalePriceOther = (parseFloat(salePrice) * rate1) / rate2;
 } catch (e) {
   console.error("Hata:", e);
   convertedPriceOther = 0;
