@@ -6,7 +6,7 @@
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
-<cfdump var="#arguments.payload#" label="Payload" abort="true">
+
         <cftry>
             <!-- Deserialize JSON payload if it's a string -->
             <cfif isJSON(arguments.payload)>
@@ -62,8 +62,8 @@
                     </cfquery>
                     <cfscript>
                         ix=ix+1;
-                        attributes["price#ix#"] = product.price;
-                        attributes["price_other#ix#"] = product.priceOther;
+                        attributes["price#ix#"] = product.salePrice;
+                        attributes["price_other#ix#"] = product.convertedsalePriceOther;
                         attributes["tax#ix#"] = product.tax;
                         attributes["amount#ix#"] = product.quantity;
                         attributes["indirim1#ix#"] = product.discount1;
@@ -73,7 +73,7 @@
                         attributes["unit#ix#"] = getUnit.MAIN_UNIT;
                         attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
                         attributes["product_name#ix#"] = product.productName;
-                        attributes["other_money_value_#ix#"] = (product.priceOther * product.quantity) - ((product.priceOther * product.quantity) * product.discount1) / 100;
+                        attributes["other_money_value_#ix#"] = (product.convertedsalePriceOther * product.quantity) - ((product.convertedsalePriceOther * product.quantity) * product.discount1) / 100;
                         attributes["description#ix#"] = "";
                         attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
                         attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
