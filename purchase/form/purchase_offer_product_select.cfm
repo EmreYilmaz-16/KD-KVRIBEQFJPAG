@@ -505,13 +505,13 @@ function updateBestSupplier() {
   document.getElementById('best-supplier').textContent = `En iyi fiyat veren tedarikçi: ${bestSupplierName} (Toplam: ${bestTotal.toFixed(2)} TL)`;
 }
 
-function setMarjAllRows(el) {
+window.setMarjAllRows = function(el) {
   const newMarj = parseFloat(el.value) || 0;
   document.querySelectorAll('td input[type="number"]').forEach(input => {
     input.value = newMarj;
     input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
   });
-}
+};
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
