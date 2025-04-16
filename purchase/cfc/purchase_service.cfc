@@ -6,7 +6,7 @@
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
-<cfdump var="#arguments.payload#" label="Payload" abort="true">
+
         <cftry>
             <!-- Deserialize JSON payload if it's a string -->
             <cfif isJSON(arguments.payload)>
@@ -42,12 +42,16 @@
                         INSERT INTO PBS_SELECTED_ROWS (
                             WRK_ROW_ID,
                             PRICE,
-                            OFFER_ID
+                            OFFER_ID,
+                            PRODUCT_MARJ,
+                            SALE_PRICE
                         )
                         VALUES (
                             '#product.wrkRowId#',
                             #product.netPrice#,
-                            #offers.offer_id#
+                            #offers.offer_id#,
+                            #product.productMarj#,
+                            #product.salePrice#
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
