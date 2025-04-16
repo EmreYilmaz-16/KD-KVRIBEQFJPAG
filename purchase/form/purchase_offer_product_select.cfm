@@ -409,24 +409,22 @@ if (!rowHasSatinalma) {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma,productName] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
         products: []
       };
     }
+    const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName)?.parentElement.querySelector('input');
     
-    let marjInputEl = document.querySelector(`tr:has(td.product-name:contains("${productName}")) input`);
-let salePrice = 0;
-let productMarj = 0;
+    let productMarj = 0;
+    let salePrice = 0;
 
-if (marjInputEl) {
-  productMarj = parseFloat(marjInputEl.value) || 0;
-  const net = parseFloat(netPrice);
-  salePrice = net + (net * productMarj / 100);
-}
-
+    if (marjInput) {
+      productMarj = parseFloat(marjInput.value) || 0;
+      salePrice = parseFloat(netPrice) + (parseFloat(netPrice) * productMarj / 100);
+    }
     grouped[companyId].products.push({
       productId: parseInt(productId),
       stockId: parseInt(stockId),
@@ -441,7 +439,7 @@ if (marjInputEl) {
       productName: productName,
       isSatinalma: parseInt(isSatinalma),
       productMarj: productMarj,
-      salePrice: parseFloat(salePrice.toFixed(2)),
+      salePrice: parseFloat(salePrice.toFixed(2))
 
     });
   });
