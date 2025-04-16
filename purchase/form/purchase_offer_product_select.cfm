@@ -74,6 +74,17 @@
     .net-price.high { color: red; font-weight: bold; }*/
   </style>
 </head>
+<CFSET OFFER_STAGE="0">
+  <cfquery name="getrelofferID" datasource="#DSN3#">
+    SELECT * FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID #attributes.offer_id#
+  </cfquery>
+  <CFIF getrelofferID.recordCount>
+    <cfquery name="GETRELATEDOFFER" datasource="#DSN3#">
+      SELECT * FROM w3Qa_1.OFFER WHERE  OFFER_ID = #getrelofferID.SALE_OFFER_ID#
+    </cfquery>
+    <CFSET OFFER_STAGE=GETRELATEDOFFER.OFFER_STAGE>
+  </CFIF>
+
 <body class="bg-light">
   <div class="">
     <div class="">
@@ -85,7 +96,9 @@
         <div class="mt-4 text-end">
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
             <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
-          <button class="btn btn-success" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+         <CFIF OFFER_STAGE EQ 256>
+            <button class="btn btn-success" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+          </CFIF>
           
         </div>
 
@@ -106,7 +119,8 @@
 
    
   </div>
-  <cfdump var="#workcube_mode#">
+  
+
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT (
 SELECT 
