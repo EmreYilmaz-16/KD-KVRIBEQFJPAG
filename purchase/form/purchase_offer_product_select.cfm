@@ -184,6 +184,25 @@ FOR JSON PATH
   
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.offer_id#</cfoutput>">
 
+  <cfset MONEYARRRR=arrayNew(1)>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+        
+    <cfloop query="getMoneyext">
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
+        
+    </cfloop>
+
+
   <script>
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
@@ -192,6 +211,7 @@ FOR JSON PATH
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+    const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
 
 const table = document.getElementById('price-table');
