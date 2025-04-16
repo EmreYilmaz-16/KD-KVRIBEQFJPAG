@@ -254,7 +254,14 @@ uniqueProducts.forEach(productName => {
   productCell.className = 'product-name';
   row.appendChild(productCell);
 
-  const slpInfo = (data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.SLP || [])[0] || {};
+  let slpInfo = {};
+for (const supplier of data) {
+  const match = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName && p.SLP && p.SLP.length > 0);
+  if (match) {
+    slpInfo = match.SLP[0];
+    break;
+  }
+}
 const marjCell = document.createElement('td');
 marjCell.textContent = slpInfo.PRODUCT_MARJ != null ? `%${slpInfo.PRODUCT_MARJ}` : "-";
 const salePriceCell = document.createElement('td');
