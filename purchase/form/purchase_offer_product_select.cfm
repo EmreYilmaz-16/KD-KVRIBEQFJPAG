@@ -452,6 +452,7 @@ try {
   const rate2 = parseFloat(currency?.RATE2 || 1);
   convertedPriceOther = (parseFloat(price) * rate2) / rate1;
 } catch (e) {
+  console.error("Hata:", e);
   convertedPriceOther = 0;
 }
     grouped[companyId].products.push({
