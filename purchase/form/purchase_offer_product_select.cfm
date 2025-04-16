@@ -76,7 +76,7 @@
 </head>
 <CFSET OFFER_STAGE="0">
   <cfquery name="getrelofferID" datasource="#DSN3#">
-    SELECT * FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID #attributes.offer_id#
+    SELECT * FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID= #attributes.offer_id#
   </cfquery>
   <CFIF getrelofferID.recordCount>
     <cfquery name="GETRELATEDOFFER" datasource="#DSN3#">
