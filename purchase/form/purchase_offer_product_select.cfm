@@ -263,9 +263,31 @@ for (const supplier of data) {
   }
 }
 const marjCell = document.createElement('td');
-marjCell.textContent = slpInfo.PRODUCT_MARJ != null ? `%${slpInfo.PRODUCT_MARJ}` : "-";
+const marjInput = document.createElement('input');
+marjInput.type = 'number';
+marjInput.value = slpInfo.PRODUCT_MARJ || 0;
+marjInput.className = 'form-control form-control-sm';
+marjInput.style.width = '80px';
+marjCell.appendChild(marjInput);
+
 const salePriceCell = document.createElement('td');
-salePriceCell.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)} ₺` : "-";
+const salePriceSpan = document.createElement('span');
+salePriceSpan.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)} ₺` : "-";
+salePriceCell.appendChild(salePriceSpan);
+
+// input değişince hesapla
+marjInput.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  if (!selectedKey) return;
+
+  const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice] = selectedKey.split('|');
+  const net = parseFloat(netPrice);
+  const marj = parseFloat(marjInput.value);
+  if (!isNaN(net) && !isNaN(marj)) {
+    const calculatedSalePrice = net + (net * marj / 100);
+    salePriceSpan.textContent = `${calculatedSalePrice.toFixed(2)} ₺`;
+  }
+});
 row.appendChild(marjCell);
 row.appendChild(salePriceCell);
 
@@ -387,13 +409,24 @@ if (!rowHasSatinalma) {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma,productName] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
         products: []
       };
     }
+    
+    let marjInputEl = document.querySelector(`tr:has(td.product-name:contains("${productName}")) input`);
+let salePrice = 0;
+let productMarj = 0;
+
+if (marjInputEl) {
+  productMarj = parseFloat(marjInputEl.value) || 0;
+  const net = parseFloat(netPrice);
+  salePrice = net + (net * productMarj / 100);
+}
+
     grouped[companyId].products.push({
       productId: parseInt(productId),
       stockId: parseInt(stockId),
@@ -407,6 +440,8 @@ function updateOutput() {
       otherMoney:otherMoney,
       productName: productName,
       isSatinalma: parseInt(isSatinalma),
+      productMarj: productMarj,
+      salePrice: parseFloat(salePrice.toFixed(2)),
 
     });
   });
