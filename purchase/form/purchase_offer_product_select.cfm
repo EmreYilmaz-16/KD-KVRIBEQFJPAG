@@ -288,6 +288,11 @@ uniqueProducts.forEach(productName => {
   ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-warning fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}    
 `;
 
+const bgColor = alternativeGroups[product.PRODUCT_ID];
+if (bgColor) {
+  cell.style.backgroundColor = bgColor;
+}
+
 if (product.IS_SATINALMA===1) {
   $("#send-btn").hide();
   $("#send-btn3").hide();
