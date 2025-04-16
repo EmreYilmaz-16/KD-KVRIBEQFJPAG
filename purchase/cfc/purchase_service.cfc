@@ -1,4 +1,4 @@
-<cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
+﻿<cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
     <cfset dsn3="w3Qa_1">
     <cfset dsn="w3Qa">
 
@@ -249,6 +249,17 @@
 <cfset workcube_mode=0>
 <cfinclude template="../query/add_offer.cfm">
 
+
+<cfquery name="INSREL" datasource="#dsn3#">
+INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+    SALE_OFFER_ID,
+   PURCHASE_OFFER_ID
+)
+VALUES(
+    #offers.offer_id#,
+    #get_max_offer.max_id#
+)
+</cfquery>
 
             <!-- Set success response -->
             <cfset response.res = "success">
