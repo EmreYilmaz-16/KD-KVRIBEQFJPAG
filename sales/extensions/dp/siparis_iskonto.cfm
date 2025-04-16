@@ -7,7 +7,7 @@
         <cfif listFind(valueList(gets.CAU_POSITION_ID),session.ep.POSITION_CODE)> 
         var btn=document.createElement("button")
 btn.setAttribute("type","button")
-btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=sales.emptypopup_add_offer_discount_pbs&offer_id=<cfoutput>#attributes.offer_id#</cfoutput>","page_display")')
+btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=sales.emptypopup_add_offer_discount_pbs&offer_id=<cfoutput>#attributes.offer_id#</cfoutput>","horizantal")')
 btn.innerText="İskonto Gir"
 btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
 document.getElementById("workcube_button").appendChild(btn)
