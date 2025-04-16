@@ -228,7 +228,12 @@ const uniqueProducts = Array.from(productSet);
 
 const headerRow = document.createElement('tr');
 headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th>`;
-headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Marj (%)</th>`;
+headerRow.innerHTML += `
+  <th class="sticky-header bg-info text-white">
+    Marj (%)<br>
+    <input id="global-marj-input" type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
+  </th>
+`;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (₺)</th>`;
 data.forEach(supplier => {
   const th = document.createElement('th');
@@ -423,6 +428,21 @@ if (!rowHasSatinalma) {
   tbody.appendChild(row)
   table.appendChild(tbody);
 
+  if (!window._marjInputInitialized) {
+  window._marjInputInitialized = true;
+
+  const globalInput = document.getElementById('global-marj-input');
+  if (globalInput) {
+    globalInput.addEventListener('input', () => {
+      const newMarj = parseFloat(globalInput.value) || 0;
+
+      document.querySelectorAll('td input[type="number"]').forEach(input => {
+        input.value = newMarj;
+        input.dispatchEvent(new Event('input'));
+      });
+    });
+  }
+}
   
 });
 
@@ -533,6 +553,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
     alert("Sunucuya bağlanırken bir hata oluştu!");
   });
 });
+
 
 
 
