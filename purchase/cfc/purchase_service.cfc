@@ -249,6 +249,9 @@
 <cfset workcube_mode=0>
 <cfinclude template="../query/add_offer.cfm">
 
+<cfquery name="DELREL" datasource="#dsn3#">
+DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+</cfquery>
 
 <cfquery name="INSREL" datasource="#dsn3#">
 INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
