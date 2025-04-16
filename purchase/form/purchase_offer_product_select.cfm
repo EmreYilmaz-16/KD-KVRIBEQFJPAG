@@ -231,7 +231,7 @@ headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&u
 headerRow.innerHTML += `
   <th class="sticky-header bg-info text-white">
     Marj (%)<br>
-    <input id="global-marj-input" type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
+    <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
 `;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (₺)</th>`;
@@ -505,19 +505,13 @@ function updateBestSupplier() {
   document.getElementById('best-supplier').textContent = `En iyi fiyat veren tedarikçi: ${bestSupplierName} (Toplam: ${bestTotal.toFixed(2)} TL)`;
 }
 
-setTimeout(() => {
-  const globalInput = document.getElementById('global-marj-input');
-  if (!globalInput) return;
-
-  globalInput.addEventListener('input', () => {
-    const newMarj = parseFloat(globalInput.value) || 0;
-
-    document.querySelectorAll('td input[type="number"]').forEach(input => {
-      input.value = newMarj;
-      input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
-    });
+function setMarjAllRows(el) {
+  const newMarj = parseFloat(el.value) || 0;
+  document.querySelectorAll('td input[type="number"]').forEach(input => {
+    input.value = newMarj;
+    input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
   });
-}, 0);
+}
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
