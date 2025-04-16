@@ -255,9 +255,9 @@ INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
     SALE_OFFER_ID,
    PURCHASE_OFFER_ID
 )
-VALUES(
-    #offers.offer_id#,
-    #get_max_offer.max_id#
+VALUES(    
+    #get_max_offer.max_id#,
+    #offers.offer_id#
 )
 </cfquery>
 
