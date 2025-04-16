@@ -69,6 +69,9 @@
       visibility: visible;
       opacity: 1;
     }
+    .flex-list .small, .ui-table-list .small {
+    width: auto;
+}
    /* .net-price.low { color: green; font-weight: bold; }
     .net-price.medium { color: orange; font-weight: bold; }
     .net-price.high { color: red; font-weight: bold; }*/
