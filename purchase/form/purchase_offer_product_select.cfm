@@ -146,7 +146,7 @@ SELECT
 
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.OFFER_ROW AS TTTTTTT WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SATINALMA
             ,ISNULL((
-				SELECT * FROM (
+				SELECT CAST(PRODUCT_MARJ  AS DECIMAL(18,2)) AS PRODUCT_MARJ ,CAST(SALE_PRICE  AS DECIMAL(18,2)) AS SALE_PRICE  FROM (
 				SELECT PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS WHERE PRODUCT_ID=OFFER_ROW.PRODUCT_ID OR ALTERNATIVE_PRODUCT_ID=OFFER_ROW.PRODUCT_ID
 				UNION ALL
 				SELECT ALTERNATIVE_PRODUCT_ID PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS WHERE PRODUCT_ID=OFFER_ROW.PRODUCT_ID OR ALTERNATIVE_PRODUCT_ID=OFFER_ROW.PRODUCT_ID
@@ -258,6 +258,8 @@ const marjCell = document.createElement('td');
 marjCell.textContent = slpInfo.PRODUCT_MARJ != null ? `%${slpInfo.PRODUCT_MARJ}` : "-";
 const salePriceCell = document.createElement('td');
 salePriceCell.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)} ₺` : "-";
+console.warn(marjCell);
+console.warn(salePriceCell);
 row.appendChild(marjCell);
 row.appendChild(salePriceCell);
 
