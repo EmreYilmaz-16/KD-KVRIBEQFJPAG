@@ -445,6 +445,15 @@ function updateOutput() {
       productMarj = parseFloat(marjInput.value) || 0;
       salePrice = parseFloat(netPrice) + (parseFloat(netPrice) * productMarj / 100);
     }
+    let convertedPriceOther = 0;
+try {
+  const currency = currencies.find(c => c.MONEY === otherMoney);
+  const rate1 = parseFloat(currency?.RATE1 || 1);
+  const rate2 = parseFloat(currency?.RATE2 || 1);
+  convertedPriceOther = (parseFloat(price) * rate2) / rate1;
+} catch (e) {
+  convertedPriceOther = 0;
+}
     grouped[companyId].products.push({
       productId: parseInt(productId),
       stockId: parseInt(stockId),
@@ -459,7 +468,8 @@ function updateOutput() {
       productName: productName,
       isSatinalma: parseInt(isSatinalma),
       productMarj: productMarj,
-      salePrice: parseFloat(salePrice.toFixed(2))
+      salePrice: parseFloat(salePrice.toFixed(2)),
+      convertedPriceOther: parseFloat(convertedPriceOther.toFixed(2)),
 
     });
   });
