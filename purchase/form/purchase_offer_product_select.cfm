@@ -143,6 +143,7 @@ SELECT
             CAST(QUANTITY AS DECIMAL(18,2)) AS QUANTITY,
             CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18,2)) AS NET_PRICE,
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.PBS_SELECTED_ROWS WHERE WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SELECTED,
+
             CASE WHEN (SELECT COUNT(*) FROM w3Qa_1.OFFER_ROW AS TTTTTTT WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID)>0 THEN 1 ELSE 0 END AS IS_SATINALMA
             ,ISNULL((
 				SELECT * FROM (
@@ -206,6 +207,8 @@ const uniqueProducts = Array.from(productSet);
 
 const headerRow = document.createElement('tr');
 headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th>`;
+headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Marj (%)</th>`;
+headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (₺)</th>`;
 data.forEach(supplier => {
   const th = document.createElement('th');
   th.className = "sticky-header bg-success text-white";
@@ -249,6 +252,14 @@ uniqueProducts.forEach(productName => {
   productCell.textContent = productName;
   productCell.className = 'product-name';
   row.appendChild(productCell);
+
+  const slpInfo = (data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.SLP || [])[0] || {};
+const marjCell = document.createElement('td');
+marjCell.textContent = slpInfo.PRODUCT_MARJ != null ? `%${slpInfo.PRODUCT_MARJ}` : "-";
+const salePriceCell = document.createElement('td');
+salePriceCell.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)} ₺` : "-";
+row.appendChild(marjCell);
+row.appendChild(salePriceCell);
 
   cellElements[productName] = [];
 
