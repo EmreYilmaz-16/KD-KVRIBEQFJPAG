@@ -428,21 +428,7 @@ if (!rowHasSatinalma) {
   tbody.appendChild(row)
   table.appendChild(tbody);
 
-  if (!window._marjInputInitialized) {
-  window._marjInputInitialized = true;
-
-  const globalInput = document.getElementById('global-marj-input');
-  if (globalInput) {
-    globalInput.addEventListener('input', () => {
-      const newMarj = parseFloat(globalInput.value) || 0;
-
-      document.querySelectorAll('td input[type="number"]').forEach(input => {
-        input.value = newMarj;
-        input.dispatchEvent(new Event('input'));
-      });
-    });
-  }
-}
+  
   
 });
 
@@ -518,6 +504,21 @@ function updateBestSupplier() {
   const [bestSupplierName, bestTotal] = Object.entries(supplierTotals).sort((a, b) => a[1] - b[1])[0] || ["Belirlenemedi", 0];
   document.getElementById('best-supplier').textContent = `En iyi fiyat veren tedarikçi: ${bestSupplierName} (Toplam: ${bestTotal.toFixed(2)} TL)`;
 }
+
+setTimeout(() => {
+  const globalInput = document.getElementById('global-marj-input');
+  if (!globalInput) return;
+
+  globalInput.addEventListener('input', () => {
+    const newMarj = parseFloat(globalInput.value) || 0;
+
+    document.querySelectorAll('td input[type="number"]').forEach(input => {
+      input.value = newMarj;
+      input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
+    });
+  });
+}, 0);
+
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
   let color = '#';
