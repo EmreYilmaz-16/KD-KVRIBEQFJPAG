@@ -259,9 +259,7 @@ uniqueProducts.forEach(productName => {
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
   ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Seçili </div>' : ''}
   ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">🚩 Satış Teklifinde</div>' : ''}
-  ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-warning fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}
-  
-  
+  ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-warning fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}    
 `;
 
 if (product.IS_SATINALMA===1) {
