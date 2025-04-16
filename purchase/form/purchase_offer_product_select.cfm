@@ -447,7 +447,7 @@ function updateOutput() {
     }
     let convertedsalePriceOther = 0;
 try {
-  const currency = currencies.find(c => c.MONEY === otherMoney);
+  const currency = MONEYARRRR.find(c => c.MONEY === otherMoney);
   const rate1 = parseFloat(currency?.RATE1 || 1);
   const rate2 = parseFloat(currency?.RATE2 || 1);
   convertedsalePriceOther = (parseFloat(salePrice) * rate2) / rate1;
