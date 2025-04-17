@@ -13,10 +13,10 @@ SELECT
     S.STOCK_ID,
     PC.PRODUCT_CAT,
     PC.PRODUCT_CATID,
-    PB.BRAND_NAME,
-    PB.BRAND_ID,
-    PBM.MODEL_NAME,
-    PBM.MODEL_ID
+    ISNULL(PB.BRAND_NAME,"Marka Yok") AS BRAND_NAME,
+    ISNULL(PB.BRAND_ID,0) AS BRAND_ID,
+    ISNULL(PBM.MODEL_NAME,"Model Yok") AS MODEL_NAME,
+    ISNULL(PBM.MODEL_ID,0) AS MODEL_ID,
 FROM 
     w3Qa_1.OFFER_ROW AS ORR
 LEFT JOIN 
@@ -83,7 +83,7 @@ WHERE
     <tbody>
       <cfoutput query="qResults">
         <tr>
-          <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE#">#OFFER_PRODUCT_NAME#</td>
+          <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE# #STOCK_PRODUCT_NAME#">#OFFER_PRODUCT_NAME#</td>
           <td>#STOCK_PRODUCT_NAME#</td>
           <td data-category="#PRODUCT_CAT#">#PRODUCT_CAT#</td>
           <td data-brand="#BRAND_NAME#">#BRAND_NAME#</td>
