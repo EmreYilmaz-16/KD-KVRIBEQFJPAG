@@ -1,4 +1,4 @@
-<cf_box title="Teklif Oluştur" class="col-md-12">
+<cf_box title="Teklif Oluştur">
 Burası Orası
 
 <cfdump var="#attributes#">
