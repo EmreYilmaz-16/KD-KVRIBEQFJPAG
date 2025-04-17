@@ -214,7 +214,8 @@ WHERE
     company_ids: companyIds,
     for_offer_id: forOfferId,
     partner_ids: partnerIds,
-    ref_no: refNo
+    ref_no: refNo,
+    session: sessionData
   };
 
   // AJAX Gönderimi
