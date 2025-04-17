@@ -1,5 +1,5 @@
 <cf_box title="Teklif Oluştur">
-Burası Orası
+
 
 <cfdump var="#attributes#">
 
@@ -142,7 +142,8 @@ WHERE
   
     // Tüm checkbox'ları seç/kaldır
     $("#selectAll").on("change", function () {
-      $(".rowCheckbox").prop("checked", $(this).is(":checked"));
+        const isChecked = $(this).is(":checked");
+  $("#productTable tbody tr:visible .rowCheckbox").prop("checked", isChecked);
     });
   
     // AJAX Gönderimi
