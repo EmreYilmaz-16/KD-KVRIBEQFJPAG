@@ -356,7 +356,7 @@ row.appendChild(salePriceCell);
 
 const bgColor = alternativeGroups[product.PRODUCT_ID];
 if (bgColor) {
-  cell.style.backgroundColor = bgColor;
+  //cell.style.backgroundColor = bgColor;
 }
 
 if (product.IS_SATINALMA===1) {

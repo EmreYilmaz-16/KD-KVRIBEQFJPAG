@@ -316,7 +316,7 @@ VALUES(
         
 
 
-        <cfreturn arguments.products>
+        <cfreturn products>
 
 
 
