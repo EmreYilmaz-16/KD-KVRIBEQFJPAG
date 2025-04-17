@@ -8,6 +8,7 @@ SELECT
     ORR.QUANTITY,
     ORR.WRK_ROW_ID,
     S.PRODUCT_NAME AS STOCK_PRODUCT_NAME,
+    S.PRODUCT_CODE,
     S.PRODUCT_ID,
     S.STOCK_ID,
     PC.PRODUCT_CAT,
@@ -82,7 +83,7 @@ WHERE
     <tbody>
       <cfoutput query="qResults">
         <tr>
-          <td data-name="#PRODUCT_NAME# #PRODUCT_CODE#">#PRODUCT_NAME#</td>
+          <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE#">#OFFER_PRODUCT_NAME#</td>
           <td>#STOCK_PRODUCT_NAME#</td>
           <td data-category="#PRODUCT_CAT#">#PRODUCT_CAT#</td>
           <td data-brand="#BRAND_NAME#">#BRAND_NAME#</td>
