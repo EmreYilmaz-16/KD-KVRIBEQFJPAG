@@ -140,3 +140,46 @@ WHERE
     $("#filterKeyword").on("keyup", filterTable);
   </script>
   
+  <script>
+    // Tümünü seç / kaldır
+    $("#selectAll").on("change", function () {
+      $(".rowCheckbox").prop("checked", $(this).is(":checked"));
+    });
+  
+    // Seçilenleri gönder
+    $("#sendSelected").on("click", function () {
+      const selected = [];
+  
+      $(".rowCheckbox:checked").each(function () {
+        const $cb = $(this);
+        selected.push({
+          product_id: $cb.data("productid"),
+          product_name: $cb.data("productname"),
+          stock_id: $cb.data("stockid"),
+          brand: $cb.data("brand"),
+          model: $cb.data("model"),
+          category: $cb.data("category")
+        });
+      });
+  
+      if (selected.length === 0) {
+        alert("Lütfen en az bir ürün seçiniz.");
+        return;
+      }
+  
+      // AJAX Gönderimi
+      $.ajax({
+        url: "/api/saveSelectedProducts.cfm", // Senin CFML endpoint'in
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ products: selected }),
+        success: function (response) {
+          alert("Seçilen ürünler başarıyla gönderildi!");
+          console.log(response);
+        },
+        error: function (xhr) {
+          alert("Hata oluştu: " + xhr.statusText);
+        }
+      });
+    });
+  </script>
