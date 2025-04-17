@@ -75,7 +75,7 @@ WHERE
   
   <!-- Bootstrap Tablo -->
   <div class="container mb-5">
-    <table id="productTable" class="table table-bordered table-hover mt-3 align-middle">
+    <cf_grid_list id="productTable" class="table table-bordered table-hover mt-3 align-middle">
       <thead class="table-dark">
         <tr>
           <th style="width:40px;"><input type="checkbox" id="selectAll"></th>
@@ -107,7 +107,7 @@ WHERE
           </tr>
         </cfoutput>
       </tbody>
-    </table>
+    </cf_grid_list>
   </div>
   
   <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
