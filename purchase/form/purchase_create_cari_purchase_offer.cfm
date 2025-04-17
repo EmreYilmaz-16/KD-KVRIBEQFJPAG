@@ -142,9 +142,13 @@ WHERE
   
     // Tüm checkbox'ları seç/kaldır
     $("#selectAll").on("change", function () {
-        const isChecked = $(this).is(":checked");
-  $("#productTable tbody tr:visible .rowCheckbox").prop("checked", isChecked);
-    });
+  const isChecked = $(this).is(":checked");
+
+  // Önce tüm görünen <tr>’leri seç, sonra onların içindeki checkbox’ları işaretle
+  $("#productTable tbody tr").filter(":visible").each(function () {
+    $(this).find(".rowCheckbox").prop("checked", isChecked);
+  });
+});
   
     // AJAX Gönderimi
     $("#sendSelected").on("click", function () {
