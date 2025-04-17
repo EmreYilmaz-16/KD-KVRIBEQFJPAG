@@ -87,7 +87,8 @@ WHERE
           <td>
             <input type="checkbox" class="rowCheckbox"
               data-productid="#PRODUCT_ID#"
-              data-productname="#PRODUCT_NAME#"
+              data-productname="#OFFER_PRODUCT_NAME#"
+              data-productname2="#STOCK_PRODUCT_NAME#"
               data-stockid="#STOCK_ID#"
               data-brand="#BRAND_NAME#"
               data-model="#MODEL_NAME#"
@@ -158,7 +159,8 @@ WHERE
           stock_id: $cb.data("stockid"),
           brand: $cb.data("brand"),
           model: $cb.data("model"),
-          category: $cb.data("category")
+          category: $cb.data("category"),
+            product_name2: $cb.data("productname2")
         });
       });
   
