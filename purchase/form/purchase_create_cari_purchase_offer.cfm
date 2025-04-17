@@ -31,10 +31,14 @@ LEFT JOIN
 WHERE 
     ORR.OFFER_ID = 81;
 </cfquery>
+<cfquery name="GETOFFER" datasource="#DSN3#">
+    SELECT * FROM OFFER WHERE OFFER_ID = #attributes.for_offer_id#
+</cfquery>
 <cfoutput>
     <input type="hidden" id="company_ids" value="#attributes.company_ids#">
     <input type="hidden" id="for_offer_id" value="#attributes.for_offer_id#">
     <input type="hidden" id="partner_ids" value="#attributes.partner_ids#">
+    <input type="hidden" id="ref_no" value="#GETOFFER.REF_NO#">
 </cfoutput>
 <!-- Bootstrap Filtre Alanı -->
 <div class="container my-4">
@@ -188,7 +192,7 @@ WHERE
         product_name2: cb.dataset.productname2,
         quantity: cb.dataset.quantity,
         wrkRowId: cb.dataset.wrkrowid
-        
+
     });
   });
 
@@ -201,17 +205,19 @@ WHERE
   const companyIds = document.getElementById("company_ids")?.value || "";
   const forOfferId = document.getElementById("for_offer_id")?.value || "";
   const partnerIds = document.getElementById("partner_ids")?.value || "";
+  const refNo = document.getElementById("ref_no")?.value || "";
 
   // Gönderilecek veri paketi
   const payload = {
     products: selected,
     company_ids: companyIds,
     for_offer_id: forOfferId,
-    partner_ids: partnerIds
+    partner_ids: partnerIds,
+    ref_no: refNo
   };
 
   // AJAX Gönderimi
-  fetch("/api/saveSelectedProducts.cfm", {
+  fetch("/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOffer", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)

@@ -301,4 +301,12 @@ VALUES(
 
         <cfreturn result>
     </cffunction>
+
+    <cffunction name="savePurchaseOffer" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+
+        <cfset var response = {}>
+        <cfset arguments.payload = getHTTPRequestData().content>
+        <cfdump var="#arguments.payload#">
+    </cffunction>
+
 </cfcomponent>
