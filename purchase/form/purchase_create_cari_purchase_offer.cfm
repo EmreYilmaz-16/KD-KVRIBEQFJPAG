@@ -102,7 +102,9 @@ WHERE
                 data-brand="#BRAND_NAME#"
                 data-model="#MODEL_NAME#"
                 data-category="#PRODUCT_CAT#"
-                data-productname2="#STOCK_PRODUCT_NAME#">
+                data-productname2="#STOCK_PRODUCT_NAME#"
+                data-quantity="#QUANTITY#"
+                data-wrkRowId="#WRK_ROW_ID#">
             </td>
             <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE# #STOCK_PRODUCT_NAME#">#STOCK_PRODUCT_NAME#</td>
             <td>#STOCK_PRODUCT_NAME#</td>
@@ -182,7 +184,11 @@ WHERE
       stock_id: cb.dataset.stockid,
       brand: cb.dataset.brand,
       model: cb.dataset.model,
-      category: cb.dataset.category
+      category: cb.dataset.category,
+        product_name2: cb.dataset.productname2,
+        quantity: cb.dataset.quantity,
+        wrkRowId: cb.dataset.wrkrowid
+        
     });
   });
 
