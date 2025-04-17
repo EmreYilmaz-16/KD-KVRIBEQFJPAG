@@ -31,7 +31,11 @@ LEFT JOIN
 WHERE 
     ORR.OFFER_ID = 81;
 </cfquery>
-
+<cfoutput>
+    <input type="hidden" id="company_ids" value="#attributes.company_ids#">
+    <input type="hidden" id="for_offer_id" value="#attributes.for_offer_id#">
+    <input type="hidden" id="partner_ids" value="#attributes.partner_ids#">
+</cfoutput>
 <!-- Bootstrap Filtre Alanı -->
 <div class="container my-4">
     <div style="display:flex" class="row g-3 align-items-end">
@@ -168,39 +172,54 @@ WHERE
     
       // Seçilenleri gönder
       sendButton.addEventListener("click", function () {
-        const selected = [];
-    
-        document.querySelectorAll(".rowCheckbox:checked").forEach(cb => {
-          selected.push({
-            product_id: cb.dataset.productid,
-            product_name: cb.dataset.productname,
-            stock_id: cb.dataset.stockid,
-            brand: cb.dataset.brand,
-            model: cb.dataset.model,
-            category: cb.dataset.category
-          });
-        });
-    
-        if (selected.length === 0) {
-          alert("Lütfen en az bir ürün seçiniz.");
-          return;
-        }
-    
-        // AJAX Gönderimi
-        fetch("/api/saveSelectedProducts.cfm", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ products: selected })
-        })
-        .then(res => res.json())
-        .then(data => {
-          alert("Başarıyla gönderildi!");
-          console.log(data);
-        })
-        .catch(error => {
-          alert("Hata oluştu: " + error.message);
-        });
-      });
+  const selected = [];
+
+  // Seçili ürünleri topla
+  document.querySelectorAll(".rowCheckbox:checked").forEach(cb => {
+    selected.push({
+      product_id: cb.dataset.productid,
+      product_name: cb.dataset.productname,
+      stock_id: cb.dataset.stockid,
+      brand: cb.dataset.brand,
+      model: cb.dataset.model,
+      category: cb.dataset.category
+    });
+  });
+
+  if (selected.length === 0) {
+    alert("Lütfen en az bir ürün seçiniz.");
+    return;
+  }
+
+  // Hidden input'lardan ek verileri al
+  const companyIds = document.getElementById("company_ids")?.value || "";
+  const forOfferId = document.getElementById("for_offer_id")?.value || "";
+  const partnerIds = document.getElementById("partner_ids")?.value || "";
+
+  // Gönderilecek veri paketi
+  const payload = {
+    products: selected,
+    company_ids: companyIds,
+    for_offer_id: forOfferId,
+    partner_ids: partnerIds
+  };
+
+  // AJAX Gönderimi
+  fetch("/api/saveSelectedProducts.cfm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert("Başarıyla gönderildi!");
+      console.log(data);
+    })
+    .catch(error => {
+      alert("Hata oluştu: " + error.message);
+    });
+});
+
     });
     </script>
 </cf_box>
