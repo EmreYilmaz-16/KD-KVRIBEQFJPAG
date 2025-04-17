@@ -113,79 +113,99 @@ WHERE
   
   <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
   <script>
-    // Filtreleme fonksiyonu
-    function filterTable() {
-      const cat = $("#filterCategory").val().toLowerCase();
-      const brand = $("#filterBrand").val().toLowerCase();
-      const model = $("#filterModel").val().toLowerCase();
-      const keyword = $("#filterKeyword").val().toLowerCase();
-  
-      $("#productTable tbody tr").each(function () {
-        const $row = $(this);
-        const rowCat = $row.find("td[data-category]").data("category")?.toLowerCase();
-        const rowBrand = $row.find("td[data-brand]").data("brand")?.toLowerCase();
-        const rowModel = $row.find("td[data-model]").data("model")?.toLowerCase();
-        const rowNameCode = $row.find("td[data-name]").data("name")?.toLowerCase();
-  
-        const matchCat = !cat || rowCat === cat;
-        const matchBrand = !brand || rowBrand === brand;
-        const matchModel = !model || rowModel === model;
-        const matchKeyword = !keyword || rowNameCode.includes(keyword);
-  
-        $row.toggle(matchCat && matchBrand && matchModel && matchKeyword);
-      });
-    }
-  
-    // Etkinleştirme
-    $("#filterCategory, #filterBrand, #filterModel").on("change", filterTable);
-    $("#filterKeyword").on("keyup", filterTable);
-  
-    // Tüm checkbox'ları seç/kaldır
-    $("#selectAll").on("change", function () {
-  const isChecked = $(this).is(":checked");
-
-  // Önce tüm görünen <tr>’leri seç, sonra onların içindeki checkbox’ları işaretle
-  $("#productTable tbody tr").filter(":visible").each(function () {
-    $(this).find(".rowCheckbox").prop("checked", isChecked);
-  });
-});
-  
-    // AJAX Gönderimi
-    $("#sendSelected").on("click", function () {
-      const selected = [];
-        console.log("Selected products: ", selected);
-      $(".rowCheckbox:checked").each(function () {
-        const $cb = $(this);
-        selected.push({
-          product_id: $cb.data("productid"),
-          product_name: $cb.data("productname"),
-          stock_id: $cb.data("stockid"),
-          brand: $cb.data("brand"),
-          model: $cb.data("model"),
-          category: $cb.data("category"),
-            product_name2: $cb.data("productname2")
+    document.addEventListener("DOMContentLoaded", function () {
+      const filterCategory = document.getElementById("filterCategory");
+      const filterBrand = document.getElementById("filterBrand");
+      const filterModel = document.getElementById("filterModel");
+      const filterKeyword = document.getElementById("filterKeyword");
+      const selectAll = document.getElementById("selectAll");
+      const sendButton = document.getElementById("sendSelected");
+    
+      const filterTable = () => {
+        const cat = filterCategory.value.toLowerCase();
+        const brand = filterBrand.value.toLowerCase();
+        const model = filterModel.value.toLowerCase();
+        const keyword = filterKeyword.value.toLowerCase();
+    
+        const rows = document.querySelectorAll("#productTable tbody tr");
+    
+        rows.forEach(row => {
+          const rowCat = (row.querySelector("td[data-category]")?.dataset.category || "").toLowerCase();
+          const rowBrand = (row.querySelector("td[data-brand]")?.dataset.brand || "").toLowerCase();
+          const rowModel = (row.querySelector("td[data-model]")?.dataset.model || "").toLowerCase();
+          const rowNameCode = (row.querySelector("td[data-name]")?.dataset.name || "").toLowerCase();
+    
+          const matchCat = !cat || rowCat === cat;
+          const matchBrand = !brand || rowBrand === brand;
+          const matchModel = !model || rowModel === model;
+          const matchKeyword = !keyword || rowNameCode.includes(keyword);
+    
+          if (matchCat && matchBrand && matchModel && matchKeyword) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+    
+        // SelectAll checkbox'ını sıfırla
+        selectAll.checked = false;
+        document.querySelectorAll(".rowCheckbox").forEach(cb => cb.checked = false);
+      };
+    
+      // Filtre olayları
+      filterCategory.addEventListener("change", filterTable);
+      filterBrand.addEventListener("change", filterTable);
+      filterModel.addEventListener("change", filterTable);
+      filterKeyword.addEventListener("keyup", filterTable);
+    
+      // Tümünü seç (sadece görünenler)
+      selectAll.addEventListener("change", function () {
+        const isChecked = this.checked;
+        const rows = document.querySelectorAll("#productTable tbody tr");
+    
+        rows.forEach(row => {
+          if (row.offsetParent !== null) { // sadece görünen satır
+            const cb = row.querySelector(".rowCheckbox");
+            if (cb) cb.checked = isChecked;
+          }
         });
       });
-  
-      if (selected.length === 0) {
-        alert("Lütfen en az bir ürün seçin.");
-        return;
-      }
-  
-      $.ajax({
-        url: "/api/saveSelectedProducts.cfm", // CFML endpoint
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ products: selected }),
-        success: function (response) {
-          alert("Başarıyla gönderildi!");
-          console.log(response);
-        },
-        error: function (xhr) {
-          alert("Hata: " + xhr.statusText);
+    
+      // Seçilenleri gönder
+      sendButton.addEventListener("click", function () {
+        const selected = [];
+    
+        document.querySelectorAll(".rowCheckbox:checked").forEach(cb => {
+          selected.push({
+            product_id: cb.dataset.productid,
+            product_name: cb.dataset.productname,
+            stock_id: cb.dataset.stockid,
+            brand: cb.dataset.brand,
+            model: cb.dataset.model,
+            category: cb.dataset.category
+          });
+        });
+    
+        if (selected.length === 0) {
+          alert("Lütfen en az bir ürün seçiniz.");
+          return;
         }
+    
+        // AJAX Gönderimi
+        fetch("/api/saveSelectedProducts.cfm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ products: selected })
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert("Başarıyla gönderildi!");
+          console.log(data);
+        })
+        .catch(error => {
+          alert("Hata oluştu: " + error.message);
+        });
       });
     });
-  </script>
-  
+    </script>
 </cf_box>
