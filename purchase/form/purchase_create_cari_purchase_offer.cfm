@@ -122,35 +122,30 @@ WHERE
       const sendButton = document.getElementById("sendSelected");
     
       const filterTable = () => {
-        const cat = filterCategory.value.toLowerCase();
-        const brand = filterBrand.value.toLowerCase();
-        const model = filterModel.value.toLowerCase();
-        const keyword = filterKeyword.value.toLowerCase();
-    
-        const rows = document.querySelectorAll("#productTable tbody tr");
-    
-        rows.forEach(row => {
-          const rowCat = (row.querySelector("td[data-category]")?.dataset.category || "").toLowerCase();
-          const rowBrand = (row.querySelector("td[data-brand]")?.dataset.brand || "").toLowerCase();
-          const rowModel = (row.querySelector("td[data-model]")?.dataset.model || "").toLowerCase();
-          const rowNameCode = (row.querySelector("td[data-name]")?.dataset.name || "").toLowerCase();
-    
-          const matchCat = !cat || rowCat === cat;
-          const matchBrand = !brand || rowBrand === brand;
-          const matchModel = !model || rowModel === model;
-          const matchKeyword = !keyword || rowNameCode.includes(keyword);
-    
-          if (matchCat && matchBrand && matchModel && matchKeyword) {
-            row.style.display = "";
-          } else {
-            row.style.display = "none";
-          }
-        });
-    
-        // SelectAll checkbox'ını sıfırla
-        selectAll.checked = false;
-        document.querySelectorAll(".rowCheckbox").forEach(cb => cb.checked = false);
-      };
+  const cat = filterCategory.value.toLowerCase();
+  const brand = filterBrand.value.toLowerCase();
+  const model = filterModel.value.toLowerCase();
+  const keyword = filterKeyword.value.toLowerCase();
+
+  const rows = document.querySelectorAll("#productTable tbody tr");
+
+  rows.forEach(row => {
+    const rowCat = (row.querySelector("td[data-category]")?.dataset.category || "").toLowerCase();
+    const rowBrand = (row.querySelector("td[data-brand]")?.dataset.brand || "").toLowerCase();
+    const rowModel = (row.querySelector("td[data-model]")?.dataset.model || "").toLowerCase();
+    const rowNameCode = (row.querySelector("td[data-name]")?.dataset.name || "").toLowerCase();
+
+    const matchCat = !cat || rowCat === cat;
+    const matchBrand = !brand || rowBrand === brand;
+    const matchModel = !model || rowModel === model;
+    const matchKeyword = !keyword || rowNameCode.includes(keyword);
+
+    row.style.display = (matchCat && matchBrand && matchModel && matchKeyword) ? "" : "none";
+  });
+
+  // SelectAll checkbox'ı görünürdeki her şey seçili değilse sıfırlanabilir, ama bu opsiyonel:
+  selectAll.checked = false; // Sadece "görünen tümünü seç" davranışı için uygundur
+};
     
       // Filtre olayları
       filterCategory.addEventListener("change", filterTable);
