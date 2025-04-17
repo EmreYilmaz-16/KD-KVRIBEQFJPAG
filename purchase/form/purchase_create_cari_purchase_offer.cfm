@@ -31,83 +31,88 @@ WHERE
     ORR.OFFER_ID = 81;
 </cfquery>
 
-<!-- Filtre Alanları -->
-<div class="row mb-3">
-    <div class="col-md-3">
-      <label>Kategori</label>
-      <select id="filterCategory" class="form-control">
-        <option value="">Tümü</option>
-        <cfoutput query="qResults" group="PRODUCT_CATID">
-          <option value="#PRODUCT_CAT#">#PRODUCT_CAT#</option>
-        </cfoutput>
-      </select>
+<!-- Bootstrap Filtre Alanı -->
+<div class="container my-4">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label for="filterCategory" class="form-label">Kategori</label>
+        <select id="filterCategory" class="form-select">
+          <option value="">Tümü</option>
+          <cfoutput query="qResults" group="PRODUCT_CATID">
+            <option value="#PRODUCT_CAT#">#PRODUCT_CAT#</option>
+          </cfoutput>
+        </select>
+      </div>
+  
+      <div class="col-md-3">
+        <label for="filterBrand" class="form-label">Marka</label>
+        <select id="filterBrand" class="form-select">
+          <option value="">Tümü</option>
+          <cfoutput query="qResults" group="BRAND_ID">
+            <option value="#BRAND_NAME#">#BRAND_NAME#</option>
+          </cfoutput>
+        </select>
+      </div>
+  
+      <div class="col-md-3">
+        <label for="filterModel" class="form-label">Model</label>
+        <select id="filterModel" class="form-select">
+          <option value="">Tümü</option>
+          <cfoutput query="qResults" group="MODEL_ID">
+            <option value="#MODEL_NAME#">#MODEL_NAME#</option>
+          </cfoutput>
+        </select>
+      </div>
+  
+      <div class="col-md-3">
+        <label for="filterKeyword" class="form-label">Anahtar Kelime</label>
+        <input type="text" id="filterKeyword" class="form-control" placeholder="Ürün adı veya kodu...">
+      </div>
     </div>
   
-    <div class="col-md-3">
-      <label>Marka</label>
-      <select id="filterBrand" class="form-control">
-        <option value="">Tümü</option>
-        <cfoutput query="qResults" group="BRAND_ID">
-          <option value="#BRAND_NAME#">#BRAND_NAME#</option>
-        </cfoutput>
-      </select>
-    </div>
-  
-    <div class="col-md-3">
-      <label>Model</label>
-      <select id="filterModel" class="form-control">
-        <option value="">Tümü</option>
-        <cfoutput query="qResults" group="MODEL_ID">
-          <option value="#MODEL_NAME#">#MODEL_NAME#</option>
-        </cfoutput>
-      </select>
-    </div>
-  
-    <div class="col-md-3">
-      <label>Ürün Ara</label>
-      <input type="text" id="filterKeyword" class="form-control" placeholder="Ürün adı veya kodu...">
+    <div class="mt-4 text-end">
+      <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
     </div>
   </div>
   
-  <!-- Tablo -->
-  <table id="productTable" class="table table-bordered table-striped">
-    <thead class="bg-dark text-white">
-      <tr>
-        <th><input type="checkbox" id="selectAll"></th> <!-- Tümünü Seç -->
-        <th>Ürün Adı</th>
-        <th>Stok Adı</th>
-        <th>Kategori</th>
-        <th>Marka</th>
-        <th>Model</th>
-      </tr>
-    </thead>
-    <tbody>
-      <cfoutput query="qResults">
+  <!-- Bootstrap Tablo -->
+  <div class="container mb-5">
+    <table id="productTable" class="table table-bordered table-hover mt-3 align-middle">
+      <thead class="table-dark">
         <tr>
-          <td>
-            <input type="checkbox" class="rowCheckbox"
-              data-productid="#PRODUCT_ID#"
-              data-productname="#OFFER_PRODUCT_NAME#"
-              data-productname2="#STOCK_PRODUCT_NAME#"
-              data-stockid="#STOCK_ID#"
-              data-brand="#BRAND_NAME#"
-              data-model="#MODEL_NAME#"
-              data-category="#PRODUCT_CAT#"
-            >
-          </td>
-          <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE# #STOCK_PRODUCT_NAME#">#OFFER_PRODUCT_NAME#</td>
-          <td>#STOCK_PRODUCT_NAME#</td>
-          <td data-category="#PRODUCT_CAT#">#PRODUCT_CAT#</td>
-          <td data-brand="#BRAND_NAME#">#BRAND_NAME#</td>
-          <td data-model="#MODEL_NAME#">#MODEL_NAME#</td>
+          <th style="width:40px;"><input type="checkbox" id="selectAll"></th>
+          <th>Ürün Adı</th>
+          <th>Stok Adı</th>
+          <th>Kategori</th>
+          <th>Marka</th>
+          <th>Model</th>
         </tr>
-      </cfoutput>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <cfoutput query="qResults">
+          <tr>
+            <td>
+              <input type="checkbox" class="form-check-input rowCheckbox"
+                data-productid="#PRODUCT_ID#"
+                data-productname="#OFFER_PRODUCT_NAME#"
+                data-stockid="#STOCK_ID#"
+                data-brand="#BRAND_NAME#"
+                data-model="#MODEL_NAME#"
+                data-category="#PRODUCT_CAT#"
+                data-productname2="#STOCK_PRODUCT_NAME#">
+            </td>
+            <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE# #STOCK_PRODUCT_NAME#">#STOCK_PRODUCT_NAME#</td>
+            <td>#STOCK_PRODUCT_NAME#</td>
+            <td data-category="#PRODUCT_CAT#">#PRODUCT_CAT#</td>
+            <td data-brand="#BRAND_NAME#">#BRAND_NAME#</td>
+            <td data-model="#MODEL_NAME#">#MODEL_NAME#</td>
+          </tr>
+        </cfoutput>
+      </tbody>
+    </table>
+  </div>
   
   <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
-  
-  
   <script>
     // Filtreleme fonksiyonu
     function filterTable() {
@@ -118,39 +123,33 @@ WHERE
   
       $("#productTable tbody tr").each(function () {
         const $row = $(this);
-        const rowCat = $row.find("td[data-category]").data("category").toLowerCase();
-        const rowBrand = $row.find("td[data-brand]").data("brand").toLowerCase();
-        const rowModel = $row.find("td[data-model]").data("model").toLowerCase();
-        const rowNameCode = $row.find("td[data-name]").data("name").toLowerCase();
+        const rowCat = $row.find("td[data-category]").data("category")?.toLowerCase();
+        const rowBrand = $row.find("td[data-brand]").data("brand")?.toLowerCase();
+        const rowModel = $row.find("td[data-model]").data("model")?.toLowerCase();
+        const rowNameCode = $row.find("td[data-name]").data("name")?.toLowerCase();
   
         const matchCat = !cat || rowCat === cat;
         const matchBrand = !brand || rowBrand === brand;
         const matchModel = !model || rowModel === model;
         const matchKeyword = !keyword || rowNameCode.includes(keyword);
   
-        if (matchCat && matchBrand && matchModel && matchKeyword) {
-          $row.show();
-        } else {
-          $row.hide();
-        }
+        $row.toggle(matchCat && matchBrand && matchModel && matchKeyword);
       });
     }
   
-    // Olay dinleyicileri
+    // Etkinleştirme
     $("#filterCategory, #filterBrand, #filterModel").on("change", filterTable);
     $("#filterKeyword").on("keyup", filterTable);
-  </script>
   
-  <script>
-    // Tümünü seç / kaldır
+    // Tüm checkbox'ları seç/kaldır
     $("#selectAll").on("change", function () {
       $(".rowCheckbox").prop("checked", $(this).is(":checked"));
     });
   
-    // Seçilenleri gönder
+    // AJAX Gönderimi
     $("#sendSelected").on("click", function () {
       const selected = [];
-  
+        console.log("Selected products: ", selected);
       $(".rowCheckbox:checked").each(function () {
         const $cb = $(this);
         selected.push({
@@ -165,23 +164,23 @@ WHERE
       });
   
       if (selected.length === 0) {
-        alert("Lütfen en az bir ürün seçiniz.");
+        alert("Lütfen en az bir ürün seçin.");
         return;
       }
-  console.log(selected);
-      // AJAX Gönderimi
+  
       $.ajax({
-        url: "/api/saveSelectedProducts.cfm", // Senin CFML endpoint'in
+        url: "/api/saveSelectedProducts.cfm", // CFML endpoint
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({ products: selected }),
         success: function (response) {
-          alert("Seçilen ürünler başarıyla gönderildi!");
+          alert("Başarıyla gönderildi!");
           console.log(response);
         },
         error: function (xhr) {
-          alert("Hata oluştu: " + xhr.statusText);
+          alert("Hata: " + xhr.statusText);
         }
       });
     });
   </script>
+  
