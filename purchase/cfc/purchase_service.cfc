@@ -306,8 +306,11 @@ VALUES(
 
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
+        <cfset jsonData = toString(getHttpRequestData().content)>
+        <cfset cleanData = CharsetDecode(jsonData, "utf-8")>
+        <cfset arguments.payload=deserializeJSON(cleanData)>
         <cfdump var="#arguments.payload#">
-        <cfreturn deserializeJSON(arguments.payload)>
+        <cfreturn deserializeJSON(cleanData)>
     </cffunction>
 
 </cfcomponent>
