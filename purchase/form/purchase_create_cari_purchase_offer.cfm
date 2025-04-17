@@ -168,7 +168,7 @@ WHERE
         alert("Lütfen en az bir ürün seçiniz.");
         return;
       }
-  
+  console.log(selected);
       // AJAX Gönderimi
       $.ajax({
         url: "/api/saveSelectedProducts.cfm", // Senin CFML endpoint'in
