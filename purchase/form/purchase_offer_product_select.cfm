@@ -442,7 +442,7 @@ function updateOutput() {
         products: []
       };
     }
-    const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName)?.parentElement.querySelector('input');
+    const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');
     
     let productMarj = 0;
     let salePrice = 0;
