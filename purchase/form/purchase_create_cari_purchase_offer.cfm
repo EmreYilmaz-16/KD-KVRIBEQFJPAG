@@ -1,3 +1,4 @@
+<cf_box title="Teklif Oluştur" class="col-md-12">
 Burası Orası
 
 <cfdump var="#attributes#">
@@ -182,3 +183,4 @@ WHERE
     });
   </script>
   
+</cf_box>
