@@ -123,6 +123,7 @@ WHERE
   
   <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
   <script>
+  var sessionData="<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>";
     document.addEventListener("DOMContentLoaded", function () {
       const filterCategory = document.getElementById("filterCategory");
       const filterBrand = document.getElementById("filterBrand");
