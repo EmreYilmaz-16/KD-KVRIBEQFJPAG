@@ -304,13 +304,11 @@ VALUES(
 
     <cffunction name="savePurchaseOffer" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
 
-        <cfset var response = {}>
-        <cfset arguments.payload = getHTTPRequestData().content>
+        <cfset var response = {}>        
         <cfset jsonData = toString(getHttpRequestData().content)>
         <cfset cleanData = CharsetDecode(jsonData, "utf-8")>
-        <cfset arguments.payload=deserializeJSON(cleanData)>
-        <cfdump var="#arguments.payload#">
-        <cfreturn deserializeJSON(cleanData)>
+        <cfset arguments.payload=deserializeJSON(cleanData)>        
+        <cfreturn arguments.payload>
     </cffunction>
 
 </cfcomponent>
