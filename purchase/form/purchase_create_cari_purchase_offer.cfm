@@ -219,7 +219,7 @@ WHERE
   // AJAX Gönderimi
   fetch("/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOffer", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
     body: JSON.stringify(payload)
   })
     .then(res => res.json())
