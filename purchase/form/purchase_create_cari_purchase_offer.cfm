@@ -73,6 +73,7 @@ WHERE
   <table id="productTable" class="table table-bordered table-striped">
     <thead class="bg-dark text-white">
       <tr>
+        <th><input type="checkbox" id="selectAll"></th> <!-- Tümünü Seç -->
         <th>Ürün Adı</th>
         <th>Stok Adı</th>
         <th>Kategori</th>
@@ -83,6 +84,16 @@ WHERE
     <tbody>
       <cfoutput query="qResults">
         <tr>
+          <td>
+            <input type="checkbox" class="rowCheckbox"
+              data-productid="#PRODUCT_ID#"
+              data-productname="#PRODUCT_NAME#"
+              data-stockid="#STOCK_ID#"
+              data-brand="#BRAND_NAME#"
+              data-model="#MODEL_NAME#"
+              data-category="#PRODUCT_CAT#"
+            >
+          </td>
           <td data-name="#OFFER_PRODUCT_NAME# #PRODUCT_CODE# #STOCK_PRODUCT_NAME#">#OFFER_PRODUCT_NAME#</td>
           <td>#STOCK_PRODUCT_NAME#</td>
           <td data-category="#PRODUCT_CAT#">#PRODUCT_CAT#</td>
@@ -92,6 +103,9 @@ WHERE
       </cfoutput>
     </tbody>
   </table>
+  
+  <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
+  
   
   <script>
     // Filtreleme fonksiyonu
