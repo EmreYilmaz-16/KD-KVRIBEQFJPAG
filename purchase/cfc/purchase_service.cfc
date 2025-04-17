@@ -307,7 +307,7 @@ VALUES(
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
         <cfdump var="#arguments.payload#">
-        <cfreturn arguments.payload>
+        <cfreturn deserializeJSON(arguments.payload)>
     </cffunction>
 
 </cfcomponent>
