@@ -34,7 +34,7 @@ WHERE
 <!-- Bootstrap Filtre Alanı -->
 <div class="container my-4">
     <div class="row g-3 align-items-end">
-      <div class="col-md-3">
+      <div class="form-group">
         <label for="filterCategory" class="form-label">Kategori</label>
         <select id="filterCategory" class="form-select">
           <option value="">Tümü</option>
@@ -44,7 +44,7 @@ WHERE
         </select>
       </div>
   
-      <div class="col-md-3">
+      <div class="form-group">
         <label for="filterBrand" class="form-label">Marka</label>
         <select id="filterBrand" class="form-select">
           <option value="">Tümü</option>
@@ -54,7 +54,7 @@ WHERE
         </select>
       </div>
   
-      <div class="col-md-3">
+      <div class="form-group">
         <label for="filterModel" class="form-label">Model</label>
         <select id="filterModel" class="form-select">
           <option value="">Tümü</option>
@@ -64,15 +64,13 @@ WHERE
         </select>
       </div>
   
-      <div class="col-md-3">
+      <div class="form-group">
         <label for="filterKeyword" class="form-label">Anahtar Kelime</label>
         <input type="text" id="filterKeyword" class="form-control" placeholder="Ürün adı veya kodu...">
       </div>
     </div>
   
-    <div class="mt-4 text-end">
-      <button id="sendSelected" class="btn btn-primary">Seçilenleri Gönder</button>
-    </div>
+
   </div>
   
   <!-- Bootstrap Tablo -->
