@@ -33,7 +33,7 @@ WHERE
 
 <!-- Bootstrap Filtre Alanı -->
 <div class="container my-4">
-    <div class="row g-3 align-items-end">
+    <div style="display:flex" class="row g-3 align-items-end">
       <div class="form-group">
         <label for="filterCategory" class="form-label">Kategori</label>
         <select id="filterCategory" class="form-select">
