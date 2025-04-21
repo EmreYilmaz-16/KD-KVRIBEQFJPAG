@@ -264,10 +264,19 @@ WHERE ORR.OFFER_ID = #attributes.for_offer_id#
   const partnerIds = document.getElementById("partner_ids")?.value || "";
   const refNo = document.getElementById("ref_no")?.value || "";
 
+  const payload = {
+    products: selected,
+    company_ids: companyIds,
+    for_offer_id: forOfferId,
+    partner_ids: partnerIds,
+    ref_no: refNo,
+    session: sessionData
+  };
+
       fetch('/api/sendProducts.cfc?method=submitSelected', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wrkRowIds: selected })
+        body: JSON.stringify({ payload })
       })
       .then(res => res.json())
       .then(data => {
