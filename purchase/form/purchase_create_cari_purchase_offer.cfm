@@ -205,8 +205,8 @@ WHERE ORR.OFFER_ID = 81
 <cfoutput>
 
     <meta charset="utf-8">
-    <title>Teklif Ürünleri ve Alternatifleri</title>
     
+    <cf_box title="Teklif Ürünleri ve Alternatifleri" class="container my-4">
 
 
 <h2>Teklifteki Ürünler ve Alternatifleri</h2>
@@ -338,7 +338,7 @@ WHERE ORR.OFFER_ID = 81
   </cfif>
 </cffunction>
 </cfoutput>
-
+</cf_box>
 <cfabort>
 <cf_box title="Teklif Oluştur">
 
