@@ -315,9 +315,19 @@ VALUES(
             SELECT * FROM OFFER_ROW WHERE OFFER_ID=#arguments.payload.payload.for_offer_id#
         </cfquery>
 
+        <cfloop  query="getOffer">
+            <CFSET "PID_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_ID>
+            <CFSET "SID_#getOffer.WRK_ROW_ID#"=getOffer.STOCK_ID>
+            <cfset "PRODUCT_NAME_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_NAME>
+            <cfset "PRODUCT_UNIT_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_UNIT_ID>
+            
+        </cfloop>
+        <cfset ix=1>
         <cfloop array="#products#" item="product">
             <cfset wrkRowId=product>
-            <cfdump var="#wrkRowId#">
+            <CFSET "attributes.product_id_#ix#"=evaluate("PID_#wrkRowId#")>
+            <CFSET "attributes.stock_id_#ix#"=evaluate("SID_#wrkRowId#")>
+
         </cfloop>
 
             
