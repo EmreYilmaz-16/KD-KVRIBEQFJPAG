@@ -20,6 +20,7 @@ SELECT
     ALT_ORR.PRODUCT_ID AS ALT_PRODUCT_ID,
     ALT_ORR.PRODUCT_NAME AS ALT_PRODUCT_NAME,
     ALT_ORR.WRK_ROW_ID AS ALT_WRK_ROW_ID,
+    ALT_ORR.QUANTITY AS ALT_QUANTITY,
     ISNULL(ALT_PC.PRODUCT_CAT, 'Kategori Yok') AS ALT_PRODUCT_CAT,
     ISNULL(ALT_PC.PRODUCT_CATID, 0) AS ALT_PRODUCT_CATID,
     ISNULL(ALT_PB.BRAND_NAME, 'Marka Yok') AS ALT_BRAND_NAME,
@@ -241,7 +242,7 @@ function sendSelected() {
                   <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
                   <td><span class="badge #getBadgeClass(alt.BRAND_NAME)#">#alt.BRAND_NAME#</span></td>
                   <td><span class="badge #getBadgeClass(alt.MODEL_NAME)#">#alt.MODEL_NAME#</span></td>
-                  <td>#item.main.QUANTITY#</td>
+                  <td>#alt.QUANTITY#</td>
               </tr>
           </cfloop>
       <cfelse>
