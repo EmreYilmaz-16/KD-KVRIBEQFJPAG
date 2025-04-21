@@ -273,7 +273,7 @@ WHERE ORR.OFFER_ID = #attributes.for_offer_id#
     session: sessionData
   };
 
-      fetch('/api/sendProducts.cfc?method=submitSelected', {
+      fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOffer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ payload })
