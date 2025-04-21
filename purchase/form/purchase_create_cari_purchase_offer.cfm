@@ -111,6 +111,14 @@ WHERE ORR.OFFER_ID = 81
   h2 { color: #333; }
   .filter-box { margin-bottom: 20px; }
   .filter-box input { padding: 8px; margin-right: 10px; width: 200px; }
+  .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+        .badge-default { background-color: #ccc; color: #000; }
+        .badge-blue { background-color: #007bff; color: white; }
+        .badge-green { background-color: #28a745; color: white; }
+        .badge-yellow { background-color: #ffc107; color: black; }
+        .badge-gray { background-color: #6c757d; color: white; }
+
+        .hidden { display: none; }
 </style>
 
 <!--- HTML Çıktısı --->
@@ -173,9 +181,9 @@ WHERE ORR.OFFER_ID = 81
       <tr class="main-row">
           <td>#item.main.PRODUCT_ID#</td>
           <td>#item.main.PRODUCT_NAME#</td>
-          <td>#item.main.PRODUCT_CAT#</td>
-          <td>#item.main.BRAND_NAME#</td>
-          <td>#item.main.MODEL_NAME#</td>
+          <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
+          <td><span class="badge #getBadgeClass(item.main.BRAND_NAME)#">#item.main.BRAND_NAME#</span></td>
+          <td><span class="badge #getBadgeClass(item.main.MODEL_NAME)#">#item.main.MODEL_NAME#</span></td>
           <td>#item.main.WRK_ROW_ID#</td>
       </tr>
 
@@ -184,9 +192,9 @@ WHERE ORR.OFFER_ID = 81
               <tr class="alt-row">
                   <td>#alt.PRODUCT_ID#</td>
                   <td>↳ #alt.PRODUCT_NAME#</td>
-                  <td>#alt.PRODUCT_CAT#</td>
-                  <td>#alt.BRAND_NAME#</td>
-                  <td>#alt.MODEL_NAME#</td>
+                  <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
+                  <td><span class="badge #getBadgeClass(alt.BRAND_NAME)#">#alt.BRAND_NAME#</span></td>
+                  <td><span class="badge #getBadgeClass(alt.MODEL_NAME)#">#alt.MODEL_NAME#</span></td>
                   <td>#alt.WRK_ROW_ID#</td>
               </tr>
           </cfloop>
@@ -198,7 +206,13 @@ WHERE ORR.OFFER_ID = 81
   </cfif>
 </cfloop>
 </table>
-
+<script>
+  function toggleAlternatives(groupId) {
+      document.querySelectorAll('.alt-of-' + groupId).forEach(function(row) {
+          row.classList.toggle('hidden');
+      });
+  }
+</script>
 
 </cfoutput>
 
