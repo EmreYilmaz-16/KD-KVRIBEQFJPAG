@@ -75,21 +75,18 @@ WHERE ORR.OFFER_ID = 81
         })>
     </cfif>
 </cfloop>
-
-<cfoutput>
-<html>
 <head>
-    <style>
-        body { font-family: Arial; padding: 20px; background-color: #f5f5f5; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { padding: 10px; border: 1px solid #ccc; }
-        th { background-color: #007bff; color: white; }
-        .alt { background-color: #e9f7ef; }
-        .no-alt { color: #999; font-style: italic; }
-        h3 { margin-top: 40px; color: #333; }
-    </style>
+  <style>
+      body { font-family: Arial; padding: 20px; background-color: #f5f5f5; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+      th, td { padding: 10px; border: 1px solid #ccc; }
+      th { background-color: #007bff; color: white; }
+      .alt { background-color: #e9f7ef; }
+      .no-alt { color: #999; font-style: italic; }
+      h3 { margin-top: 40px; color: #333; }
+  </style>
 </head>
-<body>
+<cfoutput>
 
 <h2>Teklif Ürünleri ve Alternatifleri</h2>
 
@@ -132,8 +129,7 @@ WHERE ORR.OFFER_ID = 81
 
 </cfloop>
 
-</body>
-</html>
+
 </cfoutput>
 
 <cfabort>
