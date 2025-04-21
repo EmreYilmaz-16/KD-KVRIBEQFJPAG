@@ -308,15 +308,16 @@ VALUES(
         <cfset arguments.payload = getHTTPRequestData().content>
         <cfdump var="#arguments.payload#">
         <cfset arguments.payload = deserializeJSON(arguments.payload)>
-        <cfset session=arguments.payload.session>
-        <cfset var products = arguments.payload.products>
+        
+        <!----<cfset session=arguments.payload.session>
+        <cfset var products = arguments.payload.products>---->
 
 
 
         
 
 
-        <cfreturn products>
+        <cfreturn arguments>
 
 
 
