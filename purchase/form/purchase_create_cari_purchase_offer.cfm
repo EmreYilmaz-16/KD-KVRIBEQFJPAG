@@ -109,7 +109,37 @@ WHERE ORR.OFFER_ID = 81
   tr.alt-row { background-color: #f1fff1; }
   tr.no-alt td { font-style: italic; color: #999; text-align: center; }
   h2 { color: #333; }
+  .filter-box { margin-bottom: 20px; }
+  .filter-box input { padding: 8px; margin-right: 10px; width: 200px; }
 </style>
+<script>
+  function filterTable() {
+    const nameFilter = document.getElementById("filter-name").value.toLowerCase();
+    const categoryFilter = document.getElementById("filter-cat").value.toLowerCase();
+    const brandFilter = document.getElementById("filter-brand").value.toLowerCase();
+    const modelFilter = document.getElementById("filter-model").value.toLowerCase();
+
+    const rows = document.querySelectorAll("#jQcM0O0 tr:not(:first-child)");
+
+    rows.forEach(row => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length === 0) return; // boş satır
+
+      const name = cells[1].innerText.toLowerCase();
+      const category = cells[2].innerText.toLowerCase();
+      const brand = cells[3].innerText.toLowerCase();
+      const model = cells[4].innerText.toLowerCase();
+
+      const match =
+        name.includes(nameFilter) &&
+        category.includes(categoryFilter) &&
+        brand.includes(brandFilter) &&
+        model.includes(modelFilter);
+
+      row.style.display = match ? "" : "none";
+    });
+  }
+</script>
 <!--- HTML Çıktısı --->
 <cfoutput>
 <html>
@@ -121,7 +151,12 @@ WHERE ORR.OFFER_ID = 81
 <body>
 
 <h2>Teklifteki Ürünler ve Alternatifleri</h2>
-
+<div class="filter-box">
+  <input type="text" id="filter-name" onkeyup="filterTable()" placeholder="Ürün Adı Filtrele">
+  <input type="text" id="filter-cat" onkeyup="filterTable()" placeholder="Kategori Filtrele">
+  <input type="text" id="filter-brand" onkeyup="filterTable()" placeholder="Marka Filtrele">
+  <input type="text" id="filter-model" onkeyup="filterTable()" placeholder="Model Filtrele">
+</div>
 <table biglist class="big_list" align="center" id="jQcM0O0">
   <tr>
       <th>Ürün ID</th>
