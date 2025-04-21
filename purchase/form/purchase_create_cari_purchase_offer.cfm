@@ -31,50 +31,42 @@ WHERE ORR.OFFER_ID = 81
 <cfset grouped = StructNew()>
 <cfset excludedProducts = []>
 
+
 <cfloop query="getOfferProducts">
-    <cfset pid = getOfferProducts.PRODUCT_ID>
-    <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
+  <cfset pid = getOfferProducts.PRODUCT_ID>
+  <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
 
-    <!--- Ana ürün ilk kez karşılaşılıyorsa ekle --->
-    <cfif NOT StructKeyExists(grouped, pid)>
-        <cfset grouped[pid] = {
-            "main": {
-                "PRODUCT_ID": pid,
-                "PRODUCT_NAME": getOfferProducts.PRODUCT_NAME,
-                "WRK_ROW_ID": getOfferProducts.WRK_ROW_ID,
-                "QUANTITY": getOfferProducts.QUANTITY
-            },
-            "alts": []
-        }>
-    </cfif>
+  <cfif NOT StructKeyExists(grouped, pid)>
+      <cfset grouped[pid] = {
+          "main": {
+              "PRODUCT_ID": pid,
+              "PRODUCT_NAME": getOfferProducts.PRODUCT_NAME,
+              "WRK_ROW_ID": getOfferProducts.WRK_ROW_ID,
+              "QUANTITY": getOfferProducts.QUANTITY
+          },
+          "alts": []
+      }>
+  </cfif>
 
-    <!--- Alternatif varsa ve kendisi değilse --->
-    <cfif Len(altId) AND altId NEQ pid>
+  <cfif Len(altId) AND altId NEQ pid>
+      <cfset exists = false>
+      <cfloop array="#grouped[pid].alts#" index="existingAlt">
+          <cfif existingAlt.PRODUCT_ID EQ altId>
+              <cfset exists = true>
+              <cfbreak>
+          </cfif>
+      </cfloop>
 
-        <cfset exists = false>
-        <cfloop array="#grouped[pid].alts#" index="existingAlt">
-            <cfif existingAlt.PRODUCT_ID EQ altId>
-                <cfset exists = true>
-                <cfbreak>
-            </cfif>
-        </cfloop>
-
-        <cfif NOT exists>
-            <cfset ArrayAppend(grouped[pid].alts, {
-                "PRODUCT_ID": altId,
-                "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
-                "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
-            })>
-
-            <!--- Bu ürün başka ürünün alternatifi, ana satırda gösterilmesin --->
-            <cfif NOT ArrayContains(excludedProducts, altId)>
-                <cfset ArrayAppend(excludedProducts, altId)>
-            </cfif>
-        </cfif>
-
-    </cfif>
-
+      <cfif NOT exists>
+          <cfset ArrayAppend(grouped[pid].alts, {
+              "PRODUCT_ID": altId,
+              "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
+              "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
+          })>
+      </cfif>
+  </cfif>
 </cfloop>
+
 <style>
   body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
