@@ -1,109 +1,140 @@
-<cfquery name="getOfferProductsWithAlts"  datasource="#DSN3#">
-  SELECT 
+<cfsetting enablecfoutputonly="true">
+
+
+<!--- Ürün ve alternatifleri çek --->
+<cfquery name="getOfferProductsWithAlts" datasource="#DSN3#">
+SELECT 
     ORR.WRK_ROW_ID,
     ORR.OFFER_ID,
-    ORR.PRODUCT_ID AS PRODUCT_ID,
-    ORR.PRODUCT_NAME AS PRODUCT_NAME,
+    ORR.PRODUCT_ID AS MAIN_PRODUCT_ID,
+    ORR.PRODUCT_NAME AS MAIN_PRODUCT_NAME,
     ORR.QUANTITY,
-    
+
     S.PRODUCT_NAME AS STOCK_PRODUCT_NAME,
     S.PRODUCT_CODE,
     S.STOCK_ID,
-    
+
     ISNULL(PC.PRODUCT_CAT, 'Kategori Yok') AS PRODUCT_CAT,
     ISNULL(PC.PRODUCT_CATID, 0) AS PRODUCT_CATID,
-    
+
     ISNULL(PB.BRAND_NAME, 'Marka Yok') AS BRAND_NAME,
     ISNULL(PB.BRAND_ID, 0) AS BRAND_ID,
-    
+
     ISNULL(PBM.MODEL_NAME, 'Model Yok') AS MODEL_NAME,
     ISNULL(PBM.MODEL_ID, 0) AS MODEL_ID,
 
-    -- Alternatif Ürün Bilgileri
-    ALT.PRODUCT_ID AS ALTERNATIVE_PRODUCT_ID ,
+    ALT.PRODUCT_ID AS ALT_PRODUCT_ID,
     ALT.PRODUCT_NAME AS ALT_PRODUCT_NAME,
-    ALT_BRAND.BRAND_NAME AS ALT_BRAND_NAME,
-    ALT_MODEL.MODEL_NAME AS ALT_MODEL_NAME
+    ISNULL(ALT_BRAND.BRAND_NAME, 'Marka Yok') AS ALT_BRAND_NAME,
+    ISNULL(ALT_MODEL.MODEL_NAME, 'Model Yok') AS ALT_MODEL_NAME
 
-FROM 
-    w3Qa_1.OFFER_ROW AS ORR
+FROM w3Qa_1.OFFER_ROW AS ORR
+LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID = ORR.STOCK_ID
+LEFT JOIN w3Qa_1.PRODUCT_CAT AS PC ON PC.PRODUCT_CATID = S.PRODUCT_CATID
+LEFT JOIN w3Qa_1.PRODUCT_BRANDS AS PB ON PB.BRAND_ID = S.BRAND_ID
+LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL AS PBM ON PBM.MODEL_ID = S.SHORT_CODE_ID
 
-LEFT JOIN 
-    w3Qa_1.STOCKS AS S ON S.STOCK_ID = ORR.STOCK_ID
-LEFT JOIN 
-    w3Qa_1.PRODUCT_CAT AS PC ON PC.PRODUCT_CATID = S.PRODUCT_CATID
-LEFT JOIN 
-    w3Qa_1.PRODUCT_BRANDS AS PB ON PB.BRAND_ID = S.BRAND_ID
-LEFT JOIN 
-    w3Qa_product.PRODUCT_BRANDS_MODEL AS PBM ON PBM.MODEL_ID = S.SHORT_CODE_ID
-
--- ALTERNATİF ÜRÜN ID'LERİNİ BİRLEŞTİR
 LEFT JOIN (
     SELECT PRODUCT_ID, ALTERNATIVE_PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS
     UNION
     SELECT ALTERNATIVE_PRODUCT_ID AS PRODUCT_ID, PRODUCT_ID AS ALTERNATIVE_PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS
 ) AS AP ON AP.PRODUCT_ID = ORR.PRODUCT_ID
 
--- ALTERNATİF ÜRÜNLERİN DETAYLARI
 LEFT JOIN w3Qa_1.STOCKS AS ALT ON ALT.PRODUCT_ID = AP.ALTERNATIVE_PRODUCT_ID
 LEFT JOIN w3Qa_1.PRODUCT_BRANDS AS ALT_BRAND ON ALT_BRAND.BRAND_ID = ALT.BRAND_ID
 LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL AS ALT_MODEL ON ALT_MODEL.MODEL_ID = ALT.SHORT_CODE_ID
 
-WHERE 
-    ORR.OFFER_ID = 81
+WHERE ORR.OFFER_ID = 81
 </cfquery>
 
+<!--- Struct ve Array ile gruplama --->
+<cfset groupedProducts = StructNew()>
+
 <cfloop query="getOfferProductsWithAlts">
+    <cfset mainId = MAIN_PRODUCT_ID>
+    <cfif NOT StructKeyExists(groupedProducts, mainId)>
+        <cfset groupedProducts[mainId] = {
+            "productInfo": {
+                "PRODUCT_ID": MAIN_PRODUCT_ID,
+                "PRODUCT_NAME": MAIN_PRODUCT_NAME,
+                "QUANTITY": QUANTITY,
+                "BRAND_NAME": BRAND_NAME,
+                "MODEL_NAME": MODEL_NAME,
+                "WRK_ROW_ID": WRK_ROW_ID
+            },
+            "alternatives": []
+        }>
+    </cfif>
 
-  <!--- Ana ürün ID --->
-  <cfset mainProductId = getOfferProductsWithAlts.PRODUCT_ID>
-
-  <!--- Alternatif ürün ID (iki yönden biri olabilir) --->
-  <cfset altProductId = 
-      (Len(getOfferProductsWithAlts.ALTERNATIVE_PRODUCT_ID)) ? 
-      getOfferProductsWithAlts.ALTERNATIVE_PRODUCT_ID : 
-      getOfferProductsWithAlts.ALT_FOR_THIS>
-
-  <!--- Eğer ürün bu struct'a daha önce eklenmediyse --->
-  <cfif NOT StructKeyExists(groupedProducts, mainProductId)>
-      <cfset groupedProducts[mainProductId] = {
-          "mainProduct": {
-              "PRODUCT_ID": getOfferProductsWithAlts.PRODUCT_ID,
-              "PRODUCT_NAME": getOfferProductsWithAlts.OFFER_PRODUCT_NAME,
-              "QUANTITY": getOfferProductsWithAlts.QUANTITY,
-              "WRK_ROW_ID": getOfferProductsWithAlts.WRK_ROW_ID,
-              "BRAND_NAME": getOfferProductsWithAlts.BRAND_NAME,
-              "MODEL_NAME": getOfferProductsWithAlts.MODEL_NAME
-          },
-          "alternatives": []
-      }>
-  </cfif>
-
-  <!--- Eğer alternatif varsa array'e ekle --->
-  <cfif Len(altProductId)>
-      <cfset ArrayAppend(groupedProducts[mainProductId].alternatives, altProductId)>
-  </cfif>
-
+    <cfif Len(ALT_PRODUCT_ID)>
+        <cfset ArrayAppend(groupedProducts[mainId].alternatives, {
+            "ALT_PRODUCT_ID": ALT_PRODUCT_ID,
+            "ALT_PRODUCT_NAME": ALT_PRODUCT_NAME,
+            "ALT_BRAND_NAME": ALT_BRAND_NAME,
+            "ALT_MODEL_NAME": ALT_MODEL_NAME
+        })>
+    </cfif>
 </cfloop>
+
 <cfoutput>
-<cfloop collection="#groupedProducts#" item="productKey">
-  <cfset item = groupedProducts[productKey]>
-  <h4>#item.mainProduct.PRODUCT_NAME# (Adet: #item.mainProduct.QUANTITY#)</h4>
-  <cfif ArrayLen(item.alternatives)>
-      <ul>
-          <cfloop array="#item.alternatives#" index="altId">
-              <li>Alternatif Ürün ID: #altId#</li>
-          </cfloop>
-      </ul>
-  <cfelse>
-      <p><i>Alternatif ürün yok</i></p>
-  </cfif>
-  <hr>
+<html>
+<head>
+    <style>
+        body { font-family: Arial; padding: 20px; background-color: #f5f5f5; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 10px; border: 1px solid #ccc; }
+        th { background-color: #007bff; color: white; }
+        .alt { background-color: #e9f7ef; }
+        .no-alt { color: #999; font-style: italic; }
+        h3 { margin-top: 40px; color: #333; }
+    </style>
+</head>
+<body>
+
+<h2>Teklif Ürünleri ve Alternatifleri</h2>
+
+<cfloop collection="#groupedProducts#" item="productId">
+    <cfset item = groupedProducts[productId]>
+    <cfset info = item.productInfo>
+    
+    <h3>#info.PRODUCT_NAME# (Adet: #info.QUANTITY#)</h3>
+    
+    <table>
+        <tr>
+            <th>Ürün ID</th>
+            <th>Ürün Adı</th>
+            <th>Marka</th>
+            <th>Model</th>
+        </tr>
+
+        <tr>
+            <td>#info.PRODUCT_ID#</td>
+            <td>#info.PRODUCT_NAME#</td>
+            <td>#info.BRAND_NAME#</td>
+            <td>#info.MODEL_NAME#</td>
+        </tr>
+
+        <cfif ArrayLen(item.alternatives)>
+            <cfloop array="#item.alternatives#" index="alt">
+                <tr class="alt">
+                    <td>#alt.ALT_PRODUCT_ID#</td>
+                    <td>#alt.ALT_PRODUCT_NAME#</td>
+                    <td>#alt.ALT_BRAND_NAME#</td>
+                    <td>#alt.ALT_MODEL_NAME#</td>
+                </tr>
+            </cfloop>
+        <cfelse>
+            <tr>
+                <td colspan="4" class="no-alt">Alternatif ürün bulunamadı.</td>
+            </tr>
+        </cfif>
+    </table>
+
 </cfloop>
+
+</body>
+</html>
 </cfoutput>
-
-
-
 
 <cfabort>
 <cf_box title="Teklif Oluştur">
