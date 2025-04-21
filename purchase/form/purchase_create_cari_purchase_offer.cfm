@@ -267,7 +267,7 @@ WHERE ORR.OFFER_ID = 81
   </script>
 </div>
 <button onclick="sendSelected()" style="margin-bottom:20px;">✅ Seçilenleri Gönder</button>
-<table>
+<table class="table table-bordered table-hover mt-3 align-middle">
   <tr>
     <th><input type="checkbox" onclick="toggleAll(this)"></th>
     <th>Ürün ID</th>
