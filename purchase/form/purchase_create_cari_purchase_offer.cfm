@@ -206,7 +206,7 @@ WHERE ORR.OFFER_ID = 81
 
     <meta charset="utf-8">
     
-    <cf_box title="Teklif Ürünleri ve Alternatifleri" class="container my-4">
+    <cf_box title="Teklif Ürünleri ve Alternatifleri" >
 
 
 <h2>Teklifteki Ürünler ve Alternatifleri</h2>
