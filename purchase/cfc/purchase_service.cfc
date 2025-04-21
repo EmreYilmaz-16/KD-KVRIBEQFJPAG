@@ -311,6 +311,9 @@ VALUES(
         
         <cfset session=arguments.payload.payload.session>
         <cfset var products = arguments.payload.payload.products>
+        <cfquery name="getOffer" datasource="#dsn3#">
+            SELECT * FROM OFFER_ROW WHERE OFFER_ID=#arguments.for_offer_id#
+        </cfquery>
 
         <cfloop array="#products#" item="product">
             <cfset wrkRowId=product>
