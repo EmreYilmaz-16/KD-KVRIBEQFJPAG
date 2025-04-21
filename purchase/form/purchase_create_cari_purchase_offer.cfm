@@ -117,7 +117,15 @@ WHERE ORR.OFFER_ID = 81
         .badge-green { background-color: #28a745; color: white; }
         .badge-yellow { background-color: #ffc107; color: black; }
         .badge-gray { background-color: #6c757d; color: white; }
-
+        .alt-indicator {
+    font-size: 11px;
+    color: #007bff;
+    font-weight: normal;
+    margin-left: 8px;
+    background: #e6f0ff;
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
         .hidden { display: none; }
 </style>
 
@@ -180,7 +188,9 @@ WHERE ORR.OFFER_ID = 81
 
       <tr class="main-row" onclick="toggleAlternatives('#productId#')">
           <td>#item.main.PRODUCT_ID#</td>
-          <td>#item.main.PRODUCT_NAME#</td>
+          <td>#item.main.PRODUCT_NAME# <cfif ArrayLen(item.alts)>
+            <span class="alt-indicator">🔽 Alternatif (#ArrayLen(item.alts)#)</span>
+          </cfif></td>
           <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
           <td><span class="badge #getBadgeClass(item.main.BRAND_NAME)#">#item.main.BRAND_NAME#</span></td>
           <td><span class="badge #getBadgeClass(item.main.MODEL_NAME)#">#item.main.MODEL_NAME#</span></td>
