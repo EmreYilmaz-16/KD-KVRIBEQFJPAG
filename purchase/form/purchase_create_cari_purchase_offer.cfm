@@ -104,34 +104,103 @@ WHERE ORR.OFFER_ID = 81
 </cfloop>
 
 <style>
-  body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-  th, td { border: 1px solid #ccc; padding: 12px; }
-  th { background-color: #007bff; color: white; }
-  tr.main-row { background-color: #e0f7ff; font-weight: bold; }
-  tr.alt-row { background-color: #f1fff1; }
-  tr.no-alt td { font-style: italic; color: #999; text-align: center; }
-  h2 { color: #333; }
-  .filter-box { margin-bottom: 20px; }
-  .filter-box input { padding: 8px; margin-right: 10px; width: 200px; }
-  .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
-        .badge-default { background-color: #ccc; color: #000; }
-        .badge-blue { background-color: #007bff; color: white; }
-        .badge-green { background-color: #28a745; color: white; }
-        .badge-yellow { background-color: #ffc107; color: black; }
-        .badge-gray { background-color: #6c757d; color: white; }
-        .alt-indicator {
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+    color: #eee;
+    padding: 30px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 0 10px #0ff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2b2d42;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,255,255,0.2);
+  }
+
+  th, td {
+    padding: 14px 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+  }
+
+  th {
+    background-color: #00adb5;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  tr:hover {
+    background-color: #3a3d5c;
+    transition: 0.3s;
+  }
+
+  tr.main-row {
+    background-color: #222831;
+    font-weight: bold;
+    cursor: pointer;
+    border-left: 4px solid #00adb5;
+  }
+
+  tr.alt-row {
+    background-color: #393e46;
+    border-left: 4px solid #6fffe9;
+  }
+
+  tr.selected-row {
+    background-color: #144d4d !important;
+    box-shadow: 0 0 10px #0ff inset;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
     font-size: 11px;
-    color: #007bff;
-    font-weight: normal;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .badge-blue { background-color: #3a86ff; }
+  .badge-green { background-color: #06d6a0; }
+  .badge-yellow { background-color: #ffbe0b; color: #333; }
+  .badge-gray { background-color: #6c757d; }
+
+  .alt-indicator {
+    font-size: 11px;
+    color: #00f0ff;
+    background: #1a2a3a;
+    padding: 3px 6px;
     margin-left: 8px;
-    background: #e6f0ff;
-    padding: 2px 6px;
     border-radius: 5px;
   }
-        .hidden { display: none; }
-</style>
 
+  .collapse-icon {
+    float: right;
+    color: #ccc;
+    margin-right: 10px;
+    transition: transform 0.2s;
+  }
+
+  .hidden { display: none; }
+
+  .no-alt td {
+    text-align: center;
+    font-style: italic;
+    color: #aaa;
+  }
+</style>
 <!--- HTML Çıktısı --->
 <cfoutput>
 
@@ -147,121 +216,110 @@ WHERE ORR.OFFER_ID = 81
   <input type="text" id="filter-brand" onkeyup="filterTable()" placeholder="Marka Filtrele">
   <input type="text" id="filter-model" onkeyup="filterTable()" placeholder="Model Filtrele">
   <script>
-    function filterTable() {
-      const nameFilter = document.getElementById("filter-name").value.toLowerCase();
-      const categoryFilter = document.getElementById("filter-cat").value.toLowerCase();
-      const brandFilter = document.getElementById("filter-brand").value.toLowerCase();
-      const modelFilter = document.getElementById("filter-model").value.toLowerCase();
-  
-      const rows = document.querySelectorAll("##jQcM0O0 tr:not(:first-child)");
-  
-      rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        if (cells.length === 0) return; // boş satır
-  
-        const name = cells[1].innerText.toLowerCase();
-        const category = cells[2].innerText.toLowerCase();
-        const brand = cells[3].innerText.toLowerCase();
-        const model = cells[4].innerText.toLowerCase();
-  
-        const match =
-          name.includes(nameFilter) &&
-          category.includes(categoryFilter) &&
-          brand.includes(brandFilter) &&
-          model.includes(modelFilter);
-  
-        row.style.display = match ? "" : "none";
+    function toggleAlternatives(groupId, el) {
+      document.querySelectorAll('.alt-of-' + groupId).forEach(row => {
+        row.classList.toggle('hidden');
+      });
+
+      // Collapse simgesi değişsin
+      const icon = el.querySelector('.collapse-icon');
+      if (icon.innerText === '▼') {
+        icon.innerText = '▲';
+      } else {
+        icon.innerText = '▼';
+      }
+    }
+
+    function toggleAll(source) {
+      const checkboxes = document.querySelectorAll('.product-check');
+      checkboxes.forEach(cb => {
+        cb.checked = source.checked;
+        cb.closest('tr').classList.toggle('selected-row', cb.checked);
       });
     }
-    function toggleAll(source) {
-  const checkboxes = document.querySelectorAll('.product-check');
-  checkboxes.forEach(cb => cb.checked = source.checked);
-}
-function sendSelected() {
-  const selected = [];
-  document.querySelectorAll('.product-check:checked').forEach(cb => {
-    selected.push(cb.value);
-  });
 
-  if (selected.length === 0) {
-    alert("Lütfen en az bir ürün seçin.");
-    return;
-  }
+    function sendSelected() {
+      const selected = [];
+      document.querySelectorAll('.product-check:checked').forEach(cb => {
+        selected.push(cb.value);
+      });
 
-  fetch('/api/sendProducts.cfc?method=submitSelected', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ wrkRowIds: selected })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert("Web servise başarıyla gönderildi!");
-    console.log(data);
-  })
-  .catch(err => {
-    alert("Bir hata oluştu!");
-    console.error(err);
-  });
-}
+      if (selected.length === 0) {
+        alert("Seçim yapmadın dostum 😅");
+        return;
+      }
+
+      fetch('/api/sendProducts.cfc?method=submitSelected', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wrkRowIds: selected })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("Gönderildi! 😎");
+        console.log(data);
+      })
+      .catch(err => {
+        alert("Hata! 🚨");
+        console.error(err);
+      });
+    }
   </script>
 </div>
 <button onclick="sendSelected()" style="margin-bottom:20px;">✅ Seçilenleri Gönder</button>
-<table biglist class="big_list" align="center" id="jQcM0O0">
+<table>
   <tr>
-    <th><input type="checkbox" id="checkAll" onclick="toggleAll(this)"></th>
-      <th>Ürün ID</th>
-      <th>Ürün Adı</th>
-      <th>Kategori</th>
-        <th>Marka</th>
-        <th>Model</th>
-      <th>Miktar</th>
+    <th><input type="checkbox" onclick="toggleAll(this)"></th>
+    <th>Ürün ID</th>
+    <th>Ürün Adı</th>
+    <th>Kategori</th>
+    <th>Marka</th>
+    <th>Model</th>
+    <th>WRK_ROW_ID</th>
   </tr>
 
-<cfloop collection="#grouped#" item="productId">
-  <cfif NOT ArrayContains(excludedProducts, productId)>
+  <cfloop collection="#grouped#" item="productId">
+    <cfif NOT ArrayContains(excludedProducts, productId)>
       <cfset item = grouped[productId]>
 
-      <tr class="main-row" onclick="toggleAlternatives('#productId#')">
+      <!-- Ana Ürün -->
+      <tr class="main-row" onclick="toggleAlternatives('#productId#', this)">
         <td><input type="checkbox" class="product-check" value="#item.main.WRK_ROW_ID#"></td>
-          <td>#item.main.PRODUCT_ID#</td>
-          <td>#item.main.PRODUCT_NAME# <cfif ArrayLen(item.alts)>
+        <td>#item.main.PRODUCT_ID#</td>
+        <td>
+          #item.main.PRODUCT_NAME#
+          <cfif ArrayLen(item.alts)>
             <span class="alt-indicator">🔽 Alternatif (#ArrayLen(item.alts)#)</span>
-          </cfif></td>
-          <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
-          <td><span class="badge #getBadgeClass(item.main.BRAND_NAME)#">#item.main.BRAND_NAME#</span></td>
-          <td><span class="badge #getBadgeClass(item.main.MODEL_NAME)#">#item.main.MODEL_NAME#</span></td>
-          <td>#item.main.QUANTITY#</td>
+          </cfif>
+        </td>
+        <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
+        <td><span class="badge #getBadgeClass(item.main.BRAND_NAME)#">#item.main.BRAND_NAME#</span></td>
+        <td><span class="badge #getBadgeClass(item.main.MODEL_NAME)#">#item.main.MODEL_NAME#</span></td>
+        <td>#item.main.WRK_ROW_ID# <span class="collapse-icon">▼</span></td>
       </tr>
 
+      <!-- Alternatifler -->
       <cfif ArrayLen(item.alts)>
-          <cfloop array="#item.alts#" index="alt">
-            <tr class="alt-row alt-of-#productId# hidden">
-              <td><input type="checkbox" class="product-check" value="#alt.WRK_ROW_ID#"></td>
-                  <td>#alt.PRODUCT_ID#</td>
-                  <td>↳ #alt.PRODUCT_NAME#</td>
-                  <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
-                  <td><span class="badge #getBadgeClass(alt.BRAND_NAME)#">#alt.BRAND_NAME#</span></td>
-                  <td><span class="badge #getBadgeClass(alt.MODEL_NAME)#">#alt.MODEL_NAME#</span></td>
-                  <td>#alt.QUANTITY#</td>
-              </tr>
-          </cfloop>
+        <cfloop array="#item.alts#" index="alt">
+          <tr class="alt-row alt-of-#productId# hidden">
+            <td><input type="checkbox" class="product-check" value="#alt.WRK_ROW_ID#"></td>
+            <td>#alt.PRODUCT_ID#</td>
+            <td>↳ #alt.PRODUCT_NAME#</td>
+            <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
+            <td><span class="badge #getBadgeClass(alt.BRAND_NAME)#">#alt.BRAND_NAME#</span></td>
+            <td><span class="badge #getBadgeClass(alt.MODEL_NAME)#">#alt.MODEL_NAME#</span></td>
+            <td>#alt.WRK_ROW_ID#</td>
+          </tr>
+        </cfloop>
       <cfelse>
         <tr class="no-alt alt-of-#productId# hidden">
-              <td colspan="3">Bu ürün için teklif içinde alternatif bulunamadı.</td>
-          </tr>
+          <td colspan="7">🛑 Alternatif ürün bulunamadı</td>
+        </tr>
       </cfif>
-  </cfif>
-</cfloop>
+    </cfif>
+  </cfloop>
 </table>
-<script>
-  function toggleAlternatives(groupId) {
-      document.querySelectorAll('.alt-of-' + groupId).forEach(function(row) {
-          row.classList.toggle('hidden');
-      });
-  }
-</script>
+
 <cffunction name="getBadgeClass" access="public" returntype="string">
   <cfargument name="label" type="string" required="true">
 
