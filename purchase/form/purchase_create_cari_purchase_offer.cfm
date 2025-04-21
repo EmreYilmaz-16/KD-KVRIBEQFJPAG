@@ -1,7 +1,7 @@
 <cfsetting enablecfoutputonly="true">
+<cfset DSN3 = "senin_datasource_adin"> <!--- kendi DSN adınla değiştir --->
 
-
-<!--- SQL: Aynı teklifte yer alan alternatif ürünleri grupla --->
+<!--- SQL: Teklif ürünlerini ve aynı teklifteki alternatiflerini getir --->
 <cfquery name="getOfferProducts" datasource="#DSN3#">
 SELECT 
     ORR.PRODUCT_ID,
@@ -28,15 +28,16 @@ LEFT JOIN w3Qa_1.OFFER_ROW ALT_ORR ON ALT_ORR.PRODUCT_ID = AP.ALTERNATIVE_PRODUC
 WHERE ORR.OFFER_ID = 81
 </cfquery>
 
-<!--- CFML'de Struct ve Array ile grupla --->
+<!--- Struct ve Array ile gruplama --->
 <cfset grouped = StructNew()>
+<cfset excludedProducts = []> <!--- Alternatif olarak gösterilen ürünler --->
 
 <cfloop query="getOfferProducts">
 
     <cfset pid = getOfferProducts.PRODUCT_ID>
     <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
 
-    <!--- Ana ürün daha önce eklenmediyse --->
+    <!--- Ana ürün daha önce eklenmediyse oluştur --->
     <cfif NOT StructKeyExists(grouped, pid)>
         <cfset grouped[pid] = {
             "main": {
@@ -52,41 +53,53 @@ WHERE ORR.OFFER_ID = 81
     <!--- Alternatif varsa ve kendisi değilse ekle --->
     <cfif Len(altId) AND altId NEQ pid>
 
-      <cfset exists = false>
-      <cfloop array="#grouped[pid].alts#" index="existingAlt">
-          <cfif existingAlt.PRODUCT_ID EQ altId>
-              <cfset exists = true>
-              <cfbreak>
-          </cfif>
-      </cfloop>
-  
-      <cfif NOT exists>
-          <cfset ArrayAppend(grouped[pid].alts, {
-              "PRODUCT_ID": altId,
-              "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
-              "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
-          })>
-      </cfif>
-  
-  </cfif>
+        <!--- Aynı alternatif daha önce eklendiyse tekrar ekleme --->
+        <cfset exists = false>
+        <cfloop array="#grouped[pid].alts#" index="existingAlt">
+            <cfif existingAlt.PRODUCT_ID EQ altId>
+                <cfset exists = true>
+                <cfbreak>
+            </cfif>
+        </cfloop>
+
+        <cfif NOT exists>
+            <cfset ArrayAppend(grouped[pid].alts, {
+                "PRODUCT_ID": altId,
+                "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
+                "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
+            })>
+
+            <!--- Bu ürün alternatif olarak listelendi, artık ana ürün olarak gösterilmesin --->
+            <cfif NOT ArrayContains(excludedProducts, altId)>
+                <cfset ArrayAppend(excludedProducts, altId)>
+            </cfif>
+        </cfif>
+
+    </cfif>
 
 </cfloop>
+
+<!--- Alternatif olarak listelenen ürünleri temizle --->
+<cfloop array="#excludedProducts#" index="eid">
+    <cfif StructKeyExists(grouped, eid)>
+        <cfset StructDelete(grouped, eid)>
+    </cfif>
+</cfloop>
 <style>
-  body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-  th, td { border: 1px solid #ccc; padding: 10px; }
+  body { font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 30px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+  th, td { border: 1px solid #ccc; padding: 12px; }
   th { background-color: #007bff; color: white; }
-  tr.main-row { background-color: #e0f0ff; font-weight: bold; }
-  tr.alt-row { background-color: #f0fff0; }
-  tr.no-alt td { font-style: italic; color: #888; text-align: center; }
+  tr.main-row { background-color: #e0f7ff; font-weight: bold; }
+  tr.alt-row { background-color: #f1fff1; }
+  tr.no-alt td { font-style: italic; color: #999; text-align: center; }
   h2 { color: #333; }
 </style>
-<!--- HTML çıktısı --->
+<!--- HTML çıktı --->
 <cfoutput>
 
     <meta charset="utf-8">
     <title>Teklif Ürünleri ve Alternatifleri</title>
- 
 
 
 <h2>Teklifteki Ürünler ve Aynı Teklifteki Alternatifleri</h2>
