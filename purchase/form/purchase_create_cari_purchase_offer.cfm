@@ -104,7 +104,7 @@ WHERE ORR.OFFER_ID = 81
 
 <h2>Teklifteki Ürünler ve Aynı Teklifteki Alternatifleri</h2>
 
-<table>
+<cf_grid_list>
     <tr>
         <th>Ürün ID</th>
         <th>Ürün Adı</th>
@@ -134,7 +134,7 @@ WHERE ORR.OFFER_ID = 81
     </cfif>
 </cfloop>
 
-</table>
+</cf_grid_list>
 
 
 </cfoutput>
