@@ -317,7 +317,7 @@ VALUES(
         
 
 
-        <cfreturn arguments.payload>
+        <cfreturn arguments.payload.payload>
 
 
 
