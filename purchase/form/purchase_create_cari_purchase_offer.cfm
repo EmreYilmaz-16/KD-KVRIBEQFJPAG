@@ -170,10 +170,44 @@ WHERE ORR.OFFER_ID = 81
         row.style.display = match ? "" : "none";
       });
     }
+    function toggleAll(source) {
+  const checkboxes = document.querySelectorAll('.product-check');
+  checkboxes.forEach(cb => cb.checked = source.checked);
+}
+function sendSelected() {
+  const selected = [];
+  document.querySelectorAll('.product-check:checked').forEach(cb => {
+    selected.push(cb.value);
+  });
+
+  if (selected.length === 0) {
+    alert("Lütfen en az bir ürün seçin.");
+    return;
+  }
+
+  fetch('/api/sendProducts.cfc?method=submitSelected', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ wrkRowIds: selected })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Web servise başarıyla gönderildi!");
+    console.log(data);
+  })
+  .catch(err => {
+    alert("Bir hata oluştu!");
+    console.error(err);
+  });
+}
   </script>
 </div>
+<button onclick="sendSelected()" style="margin-bottom:20px;">✅ Seçilenleri Gönder</button>
 <table biglist class="big_list" align="center" id="jQcM0O0">
   <tr>
+    <th><input type="checkbox" id="checkAll" onclick="toggleAll(this)"></th>
       <th>Ürün ID</th>
       <th>Ürün Adı</th>
       <th>Kategori</th>
@@ -187,6 +221,7 @@ WHERE ORR.OFFER_ID = 81
       <cfset item = grouped[productId]>
 
       <tr class="main-row" onclick="toggleAlternatives('#productId#')">
+        <td><input type="checkbox" class="product-check" value="#item.main.WRK_ROW_ID#"></td>
           <td>#item.main.PRODUCT_ID#</td>
           <td>#item.main.PRODUCT_NAME# <cfif ArrayLen(item.alts)>
             <span class="alt-indicator">🔽 Alternatif (#ArrayLen(item.alts)#)</span>
@@ -200,6 +235,7 @@ WHERE ORR.OFFER_ID = 81
       <cfif ArrayLen(item.alts)>
           <cfloop array="#item.alts#" index="alt">
             <tr class="alt-row alt-of-#productId# hidden">
+              <td><input type="checkbox" class="product-check" value="#alt.WRK_ROW_ID#"></td>
                   <td>#alt.PRODUCT_ID#</td>
                   <td>↳ #alt.PRODUCT_NAME#</td>
                   <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
