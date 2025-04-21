@@ -51,15 +51,24 @@ WHERE ORR.OFFER_ID = 81
 
     <!--- Alternatif varsa ve kendisi değilse ekle --->
     <cfif Len(altId) AND altId NEQ pid>
-        <!--- Aynı alternatif tekrar gelmesin diye kontrol edelim --->
-        <cfif NOT ListFindNoCase(ArrayToList(grouped[pid].alts, ","), altId)>
-            <cfset ArrayAppend(grouped[pid].alts, {
-                "PRODUCT_ID": altId,
-                "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
-                "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
-            })>
-        </cfif>
-    </cfif>
+
+      <cfset exists = false>
+      <cfloop array="#grouped[pid].alts#" index="existingAlt">
+          <cfif existingAlt.PRODUCT_ID EQ altId>
+              <cfset exists = true>
+              <cfbreak>
+          </cfif>
+      </cfloop>
+  
+      <cfif NOT exists>
+          <cfset ArrayAppend(grouped[pid].alts, {
+              "PRODUCT_ID": altId,
+              "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
+              "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
+          })>
+      </cfif>
+  
+  </cfif>
 
 </cfloop>
 <style>
