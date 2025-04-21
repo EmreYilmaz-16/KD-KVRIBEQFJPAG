@@ -311,9 +311,10 @@ VALUES(
         
         <cfset session=arguments.payload.payload.session>
         <cfset var products = arguments.payload.payload.products>
-        <cfquery name="getOffer" datasource="#dsn3#">
+        <cfquery name="getOffer" datasource="#dsn3#" result="RES">
             SELECT * FROM OFFER_ROW
             LEFT JOIN  #dsn3#.PRODUCT_UNIT AS PU ON PU.PRODUCT_ID=OFFER_ROW.PRODUCT_ID AND IS_MAIN=1
+            LEFT JOIN #dsn3#.STOCKS AS P ON P.PRODUCT_ID=OFFER_ROW.PRODUCT_ID
              WHERE OFFER_ID=#arguments.payload.payload.for_offer_id#
         </cfquery>
 
@@ -332,6 +333,29 @@ VALUES(
             <CFSET "attributes.product_name_#ix#"=evaluate("PRODUCT_NAME_#wrkRowId#")>
             <CFSET "attributes.product_unit_#ix#"=evaluate("PRODUCT_UNIT_#wrkRowId#")>
 
+        <!---    <cfscript>
+                ix=ix+1;
+                attributes["price#ix#"] = 0;
+                attributes["price_other#ix#"] = 0;
+                attributes["tax#ix#"] = ;
+                attributes["amount#ix#"] = product.quantity;
+                attributes["indirim1#ix#"] = product.discount1;
+                attributes["other_money_#ix#"] = product.otherMoney;
+                attributes["product_id#ix#"] = product.productId;
+                attributes["stock_id#ix#"] = product.stockId;
+                attributes["unit#ix#"] = getUnit.MAIN_UNIT;
+                attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
+                attributes["product_name#ix#"] = product.productName;
+                attributes["other_money_value_#ix#"] = (product.convertedsalePriceOther * product.quantity) - ((product.convertedsalePriceOther * product.quantity) * product.discount1) / 100;
+                attributes["description#ix#"] = "";
+                attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+                attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
+                attributes["is_virtual#ix#"] = 0;
+                attributes["SHELF_CODE#ix#"] = "";
+                attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+                
+            </cfscript>--->
+
         </cfloop>
 
             
@@ -340,7 +364,7 @@ VALUES(
         
 
 
-        <cfreturn attributes>
+        <cfreturn RES>
 
 
 
