@@ -312,7 +312,9 @@ VALUES(
         <cfset session=arguments.payload.payload.session>
         <cfset var products = arguments.payload.payload.products>
         <cfquery name="getOffer" datasource="#dsn3#">
-            SELECT * FROM OFFER_ROW WHERE OFFER_ID=#arguments.payload.payload.for_offer_id#
+            SELECT * FROM OFFER_ROW
+            LEFT JOIN  #dsn3#.PRODUCT_UNIT AS PU where PU.PRODUCT_ID=OFFER_ROW.PRODUCT_ID
+             WHERE OFFER_ID=#arguments.payload.payload.for_offer_id#
         </cfquery>
 
         <cfloop  query="getOffer">
