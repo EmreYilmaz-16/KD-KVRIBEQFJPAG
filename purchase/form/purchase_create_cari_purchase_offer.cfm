@@ -45,8 +45,17 @@ LEFT JOIN w3Qa_1.PRODUCT_CAT ALT_PC ON ALT_PC.PRODUCT_CATID = ALT_S.PRODUCT_CATI
 LEFT JOIN w3Qa_1.PRODUCT_BRANDS ALT_PB ON ALT_PB.BRAND_ID = ALT_S.BRAND_ID
 LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL ALT_PBM ON ALT_PBM.MODEL_ID = ALT_S.SHORT_CODE_ID
 
-WHERE ORR.OFFER_ID = 81
+WHERE ORR.OFFER_ID = #attributes.for_offer_id#
 </cfquery>
+<cfquery name="GETOFFER" datasource="#DSN3#">
+  SELECT * FROM OFFER WHERE OFFER_ID = #attributes.for_offer_id#
+</cfquery>
+<cfoutput>
+  <input type="hidden" id="company_ids" value="#attributes.company_ids#">
+  <input type="hidden" id="for_offer_id" value="#attributes.for_offer_id#">
+  <input type="hidden" id="partner_ids" value="#attributes.partner_ids#">
+  <input type="hidden" id="ref_no" value="#GETOFFER.REF_NO#">
+</cfoutput>
 
 <!--- Veri gruplama --->
 <cfset grouped = StructNew()>
