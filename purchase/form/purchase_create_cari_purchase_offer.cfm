@@ -31,41 +31,46 @@ WHERE ORR.OFFER_ID = 81
 <cfset grouped = StructNew()>
 <cfset excludedProducts = []>
 
-
 <cfloop query="getOfferProducts">
-  <cfset pid = getOfferProducts.PRODUCT_ID>
-  <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
+    <cfset pid = getOfferProducts.PRODUCT_ID>
+    <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
 
-  <cfif NOT StructKeyExists(grouped, pid)>
-      <cfset grouped[pid] = {
-          "main": {
-              "PRODUCT_ID": pid,
-              "PRODUCT_NAME": getOfferProducts.PRODUCT_NAME,
-              "WRK_ROW_ID": getOfferProducts.WRK_ROW_ID,
-              "QUANTITY": getOfferProducts.QUANTITY
-          },
-          "alts": []
-      }>
-  </cfif>
+    <!-- Ana ürün grubu oluştur -->
+    <cfif NOT StructKeyExists(grouped, pid)>
+        <cfset grouped[pid] = {
+            "main": {
+                "PRODUCT_ID": pid,
+                "PRODUCT_NAME": getOfferProducts.PRODUCT_NAME,
+                "WRK_ROW_ID": getOfferProducts.WRK_ROW_ID,
+                "QUANTITY": getOfferProducts.QUANTITY
+            },
+            "alts": []
+        }>
+    </cfif>
 
-  <cfif Len(altId) AND altId NEQ pid>
-      <cfset exists = false>
-      <cfloop array="#grouped[pid].alts#" index="existingAlt">
-        <cfset arrayAppend(excludedProducts, existingAlt.PRODUCT_ID)>
-          <cfif existingAlt.PRODUCT_ID EQ altId>
-              <cfset exists = true>
-              <cfbreak>
-          </cfif>
-      </cfloop>
+    <!-- Alternatif varsa -->
+    <cfif Len(altId) AND altId NEQ pid>
+        <cfset exists = false>
+        <cfloop array="#grouped[pid].alts#" index="existingAlt">
+            <cfif existingAlt.PRODUCT_ID EQ altId>
+                <cfset exists = true>
+                <cfbreak>
+            </cfif>
+        </cfloop>
 
-      <cfif NOT exists>
-          <cfset ArrayAppend(grouped[pid].alts, {
-              "PRODUCT_ID": altId,
-              "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
-              "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
-          })>
-      </cfif>
-  </cfif>
+        <cfif NOT exists>
+            <cfset ArrayAppend(grouped[pid].alts, {
+                "PRODUCT_ID": altId,
+                "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
+                "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID
+            })>
+
+            <!-- Alternatif olarak zaten gösterilecek, ana ürün olarak yazılmasın -->
+            <cfif NOT ArrayContains(excludedProducts, altId)>
+                <cfset ArrayAppend(excludedProducts, altId)>
+            </cfif>
+        </cfif>
+    </cfif>
 </cfloop>
 
 <style>
@@ -90,39 +95,40 @@ WHERE ORR.OFFER_ID = 81
 
 <h2>Teklifteki Ürünler ve Alternatifleri</h2>
 
-<cf_big_list>
-    <tr>
-        <th>Ürün ID</th>
-        <th>Ürün Adı</th>
-        <th>WRK_ROW_ID</th>
-    </tr>
+<table biglist class="big_list" align="center" id="jQcM0O0">
+  <tr>
+      <th>Ürün ID</th>
+      <th>Ürün Adı</th>
+      <th>WRK_ROW_ID</th>
+  </tr>
 
 <cfloop collection="#grouped#" item="productId">
-    <cfif NOT ArrayContains(excludedProducts, productId)> <!-- Sadece ana olarak yazılmamış olanları göster -->
-        <cfset item = grouped[productId]>
-        <tr class="main-row">
-            <td>#item.main.PRODUCT_ID#</td>
-            <td>#item.main.PRODUCT_NAME#</td>
-            <td>#item.main.WRK_ROW_ID#</td>
-        </tr>
+  <cfif NOT ArrayContains(excludedProducts, productId)>
+      <cfset item = grouped[productId]>
 
-        <cfif ArrayLen(item.alts)>
-            <cfloop array="#item.alts#" index="alt">
-                <tr class="alt-row">
-                    <td>#alt.PRODUCT_ID#</td>
-                    <td>↳ #alt.PRODUCT_NAME#</td>
-                    <td>#alt.WRK_ROW_ID#</td>
-                </tr>
-            </cfloop>
-        <cfelse>
-            <tr class="no-alt">
-                <td colspan="3">Bu ürün için teklif içinde alternatif bulunamadı.</td>
-            </tr>
-        </cfif>
-    </cfif>
+      <tr class="main-row">
+          <td>#item.main.PRODUCT_ID#</td>
+          <td>#item.main.PRODUCT_NAME#</td>
+          <td>#item.main.WRK_ROW_ID#</td>
+      </tr>
+
+      <cfif ArrayLen(item.alts)>
+          <cfloop array="#item.alts#" index="alt">
+              <tr class="alt-row">
+                  <td>#alt.PRODUCT_ID#</td>
+                  <td>↳ #alt.PRODUCT_NAME#</td>
+                  <td>#alt.WRK_ROW_ID#</td>
+              </tr>
+          </cfloop>
+      <cfelse>
+          <tr class="no-alt">
+              <td colspan="3">Bu ürün için teklif içinde alternatif bulunamadı.</td>
+          </tr>
+      </cfif>
+  </cfif>
 </cfloop>
+</table>
 
-</cf_big_list>
 
 </body>
 </html>
