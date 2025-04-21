@@ -1,5 +1,5 @@
 <cfsetting enablecfoutputonly="true">
-<cfset DSN3 = "senin_datasource_adin"> <!--- Kendi DSN adını yaz buraya --->
+
 
 <cfquery name="getOfferProducts" datasource="#DSN3#">
 SELECT 
