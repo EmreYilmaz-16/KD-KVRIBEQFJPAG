@@ -127,6 +127,34 @@ WHERE ORR.OFFER_ID = 81
   <input type="text" id="filter-cat" onkeyup="filterTable()" placeholder="Kategori Filtrele">
   <input type="text" id="filter-brand" onkeyup="filterTable()" placeholder="Marka Filtrele">
   <input type="text" id="filter-model" onkeyup="filterTable()" placeholder="Model Filtrele">
+  <script>
+    function filterTable() {
+      const nameFilter = document.getElementById("filter-name").value.toLowerCase();
+      const categoryFilter = document.getElementById("filter-cat").value.toLowerCase();
+      const brandFilter = document.getElementById("filter-brand").value.toLowerCase();
+      const modelFilter = document.getElementById("filter-model").value.toLowerCase();
+  
+      const rows = document.querySelectorAll("##jQcM0O0 tr:not(:first-child)");
+  
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length === 0) return; // boş satır
+  
+        const name = cells[1].innerText.toLowerCase();
+        const category = cells[2].innerText.toLowerCase();
+        const brand = cells[3].innerText.toLowerCase();
+        const model = cells[4].innerText.toLowerCase();
+  
+        const match =
+          name.includes(nameFilter) &&
+          category.includes(categoryFilter) &&
+          brand.includes(brandFilter) &&
+          model.includes(modelFilter);
+  
+        row.style.display = match ? "" : "none";
+      });
+    }
+  </script>
 </div>
 <table biglist class="big_list" align="center" id="jQcM0O0">
   <tr>
@@ -173,34 +201,7 @@ WHERE ORR.OFFER_ID = 81
 
 
 </cfoutput>
-<script>
-  function filterTable() {
-    const nameFilter = document.getElementById("filter-name").value.toLowerCase();
-    const categoryFilter = document.getElementById("filter-cat").value.toLowerCase();
-    const brandFilter = document.getElementById("filter-brand").value.toLowerCase();
-    const modelFilter = document.getElementById("filter-model").value.toLowerCase();
 
-    const rows = document.querySelectorAll("#jQcM0O0 tr:not(:first-child)");
-
-    rows.forEach(row => {
-      const cells = row.querySelectorAll("td");
-      if (cells.length === 0) return; // boş satır
-
-      const name = cells[1].innerText.toLowerCase();
-      const category = cells[2].innerText.toLowerCase();
-      const brand = cells[3].innerText.toLowerCase();
-      const model = cells[4].innerText.toLowerCase();
-
-      const match =
-        name.includes(nameFilter) &&
-        category.includes(categoryFilter) &&
-        brand.includes(brandFilter) &&
-        model.includes(modelFilter);
-
-      row.style.display = match ? "" : "none";
-    });
-  }
-</script>
 <cfabort>
 <cf_box title="Teklif Oluştur">
 
