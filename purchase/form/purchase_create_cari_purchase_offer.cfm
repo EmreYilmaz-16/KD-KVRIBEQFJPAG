@@ -85,7 +85,7 @@ WHERE
   </cfif>
 
 </cfloop>
-
+<cfoutput>
 <cfloop collection="#groupedProducts#" item="productKey">
   <cfset item = groupedProducts[productKey]>
   <h4>#item.mainProduct.PRODUCT_NAME# (Adet: #item.mainProduct.QUANTITY#)</h4>
