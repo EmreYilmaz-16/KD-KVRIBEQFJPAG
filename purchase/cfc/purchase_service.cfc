@@ -320,13 +320,15 @@ VALUES(
             <CFSET "SID_#getOffer.WRK_ROW_ID#"=getOffer.STOCK_ID>
             <cfset "PRODUCT_NAME_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_NAME>
             <cfset "PRODUCT_UNIT_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_UNIT_ID>
-            
+
         </cfloop>
         <cfset ix=1>
         <cfloop array="#products#" item="product">
             <cfset wrkRowId=product>
             <CFSET "attributes.product_id_#ix#"=evaluate("PID_#wrkRowId#")>
             <CFSET "attributes.stock_id_#ix#"=evaluate("SID_#wrkRowId#")>
+            <CFSET "attributes.product_name_#ix#"=evaluate("PRODUCT_NAME_#wrkRowId#")>
+            <CFSET "attributes.product_unit_#ix#"=evaluate("PRODUCT_UNIT_#wrkRowId#")>
 
         </cfloop>
 
@@ -336,7 +338,7 @@ VALUES(
         
 
 
-        <cfreturn arguments>
+        <cfreturn attributes>
 
 
 
