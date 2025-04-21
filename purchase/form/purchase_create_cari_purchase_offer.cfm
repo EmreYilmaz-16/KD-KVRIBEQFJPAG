@@ -90,7 +90,9 @@ WHERE ORR.OFFER_ID = 81
                 "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID,
                 "PRODUCT_CAT": getOfferProducts.ALT_PRODUCT_CAT,
                 "BRAND_NAME": getOfferProducts.ALT_BRAND_NAME,
-                "MODEL_NAME": getOfferProducts.ALT_MODEL_NAME
+                "MODEL_NAME": getOfferProducts.ALT_MODEL_NAME,
+                "QUANTITY": getOfferProducts.ALT_QUANTITY
+                
             })>
 
             <!-- Alternatif olarak zaten gösterilecek, ana ürün olarak yazılmasın -->
