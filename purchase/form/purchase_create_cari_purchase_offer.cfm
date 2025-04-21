@@ -213,7 +213,23 @@ WHERE ORR.OFFER_ID = 81
       });
   }
 </script>
+<cffunction name="getBadgeClass" access="public" returntype="string">
+  <cfargument name="label" type="string" required="true">
 
+  <cfset label = Trim(LCase(arguments.label))>
+
+  <cfif label EQ "marka yok" OR label EQ "model yok" OR label EQ "kategori yok">
+      <cfreturn "badge-gray">
+  <cfelseif label CONTAINS "yedek">
+      <cfreturn "badge-green">
+  <cfelseif label CONTAINS "bosch">
+      <cfreturn "badge-blue">
+  <cfelseif label CONTAINS "model">
+      <cfreturn "badge-yellow">
+  <cfelse>
+      <cfreturn "badge-default">
+  </cfif>
+</cffunction>
 </cfoutput>
 
 <cfabort>
