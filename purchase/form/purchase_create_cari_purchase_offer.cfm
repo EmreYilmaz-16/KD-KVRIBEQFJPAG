@@ -1,5 +1,175 @@
-<cfsetting enablecfoutputonly="true">
 
+<cfsetting enablecfoutputonly="true">
+<cfsetting enablecfoutputonly="true">
+<cfset DSN3 = "senin_datasource_adin"> <!--- DSN adını kendi projene göre değiştir --->
+
+<!--- SQL: Teklif ürünleri ve teklif içindeki alternatifleri detaylarıyla çek --->
+<cfquery name="getOfferProducts" datasource="#DSN3#">
+SELECT 
+    ORR.PRODUCT_ID,
+    ORR.PRODUCT_NAME,
+    ORR.WRK_ROW_ID,
+    ORR.QUANTITY,
+    ORR.OFFER_ID,
+
+    ISNULL(PC.PRODUCT_CAT, 'Kategori Yok') AS PRODUCT_CAT,
+    ISNULL(PC.PRODUCT_CATID, 0) AS PRODUCT_CATID,
+    ISNULL(PB.BRAND_NAME, 'Marka Yok') AS BRAND_NAME,
+    ISNULL(PB.BRAND_ID, 0) AS BRAND_ID,
+    ISNULL(PBM.MODEL_NAME, 'Model Yok') AS MODEL_NAME,
+    ISNULL(PBM.MODEL_ID, 0) AS MODEL_ID,
+
+    ALT_ORR.PRODUCT_ID AS ALT_PRODUCT_ID,
+    ALT_ORR.PRODUCT_NAME AS ALT_PRODUCT_NAME,
+    ALT_ORR.WRK_ROW_ID AS ALT_WRK_ROW_ID,
+
+    ISNULL(ALT_PC.PRODUCT_CAT, 'Kategori Yok') AS ALT_PRODUCT_CAT,
+    ISNULL(ALT_PC.PRODUCT_CATID, 0) AS ALT_PRODUCT_CATID,
+    ISNULL(ALT_PB.BRAND_NAME, 'Marka Yok') AS ALT_BRAND_NAME,
+    ISNULL(ALT_PB.BRAND_ID, 0) AS ALT_BRAND_ID,
+    ISNULL(ALT_PBM.MODEL_NAME, 'Model Yok') AS ALT_MODEL_NAME,
+    ISNULL(ALT_PBM.MODEL_ID, 0) AS ALT_MODEL_ID
+
+FROM w3Qa_1.OFFER_ROW ORR
+LEFT JOIN w3Qa_1.STOCKS S ON S.STOCK_ID = ORR.STOCK_ID
+LEFT JOIN w3Qa_1.PRODUCT_CAT PC ON PC.PRODUCT_CATID = S.PRODUCT_CATID
+LEFT JOIN w3Qa_1.PRODUCT_BRANDS PB ON PB.BRAND_ID = S.BRAND_ID
+LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL PBM ON PBM.MODEL_ID = S.SHORT_CODE_ID
+
+LEFT JOIN (
+    SELECT PRODUCT_ID, ALTERNATIVE_PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS
+    UNION
+    SELECT ALTERNATIVE_PRODUCT_ID AS PRODUCT_ID, PRODUCT_ID AS ALTERNATIVE_PRODUCT_ID FROM w3Qa_1.ALTERNATIVE_PRODUCTS
+) AS AP ON AP.PRODUCT_ID = ORR.PRODUCT_ID
+
+LEFT JOIN w3Qa_1.OFFER_ROW ALT_ORR ON ALT_ORR.PRODUCT_ID = AP.ALTERNATIVE_PRODUCT_ID
+    AND ALT_ORR.OFFER_ID = ORR.OFFER_ID
+LEFT JOIN w3Qa_1.STOCKS ALT_S ON ALT_S.STOCK_ID = ALT_ORR.STOCK_ID
+LEFT JOIN w3Qa_1.PRODUCT_CAT ALT_PC ON ALT_PC.PRODUCT_CATID = ALT_S.PRODUCT_CATID
+LEFT JOIN w3Qa_1.PRODUCT_BRANDS ALT_PB ON ALT_PB.BRAND_ID = ALT_S.BRAND_ID
+LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL ALT_PBM ON ALT_PBM.MODEL_ID = ALT_S.SHORT_CODE_ID
+
+WHERE ORR.OFFER_ID = 81
+</cfquery>
+
+<!--- CFML tarafında gruplama ve filtreleme --->
+<cfset grouped = StructNew()>
+<cfset excludedProducts = []>
+
+<cfloop query="getOfferProducts">
+    <cfset pid = getOfferProducts.PRODUCT_ID>
+    <cfset altId = getOfferProducts.ALT_PRODUCT_ID>
+
+    <cfif NOT StructKeyExists(grouped, pid)>
+        <cfset grouped[pid] = {
+            "main": {
+                "PRODUCT_ID": pid,
+                "PRODUCT_NAME": getOfferProducts.PRODUCT_NAME,
+                "WRK_ROW_ID": getOfferProducts.WRK_ROW_ID,
+                "QUANTITY": getOfferProducts.QUANTITY,
+                "PRODUCT_CAT": getOfferProducts.PRODUCT_CAT,
+                "BRAND_NAME": getOfferProducts.BRAND_NAME,
+                "MODEL_NAME": getOfferProducts.MODEL_NAME
+            },
+            "alts": []
+        }>
+    </cfif>
+
+    <cfif Len(altId) AND altId NEQ pid>
+        <cfset exists = false>
+        <cfloop array="#grouped[pid].alts#" index="existingAlt">
+            <cfif existingAlt.PRODUCT_ID EQ altId>
+                <cfset exists = true>
+                <cfbreak>
+            </cfif>
+        </cfloop>
+
+        <cfif NOT exists>
+            <cfset ArrayAppend(grouped[pid].alts, {
+                "PRODUCT_ID": altId,
+                "PRODUCT_NAME": getOfferProducts.ALT_PRODUCT_NAME,
+                "WRK_ROW_ID": getOfferProducts.ALT_WRK_ROW_ID,
+                "PRODUCT_CAT": getOfferProducts.ALT_PRODUCT_CAT,
+                "BRAND_NAME": getOfferProducts.ALT_BRAND_NAME,
+                "MODEL_NAME": getOfferProducts.ALT_MODEL_NAME
+            })>
+
+            <cfif NOT ArrayContains(excludedProducts, altId)>
+                <cfset ArrayAppend(excludedProducts, altId)>
+            </cfif>
+        </cfif>
+    </cfif>
+</cfloop>
+<style>
+  body { font-family: Arial; padding: 30px; background: #f9f9f9; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+  th, td { border: 1px solid #ccc; padding: 10px; }
+  th { background-color: #007bff; color: white; }
+  .main-row { background-color: #e0f7ff; font-weight: bold; }
+  .alt-row { background-color: #f0fff0; }
+  .no-alt { font-style: italic; text-align: center; color: #888; }
+</style>
+<!--- HTML çıktı --->
+<cfoutput>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Teklif Ürünleri</title>
+
+</head>
+<body>
+
+<h2>Teklif Ürünleri ve Alternatifleri (Marka / Model / Kategori ile)</h2>
+
+<table>
+    <tr>
+        <th>Ürün ID</th>
+        <th>Ürün Adı</th>
+        <th>Kategori</th>
+        <th>Marka</th>
+        <th>Model</th>
+        <th>WRK_ROW_ID</th>
+    </tr>
+
+<cfloop collection="#grouped#" item="productId">
+    <cfif NOT ArrayContains(excludedProducts, productId)>
+        <cfset item = grouped[productId]>
+
+        <tr class="main-row">
+            <td>#item.main.PRODUCT_ID#</td>
+            <td>#item.main.PRODUCT_NAME#</td>
+            <td>#item.main.PRODUCT_CAT#</td>
+            <td>#item.main.BRAND_NAME#</td>
+            <td>#item.main.MODEL_NAME#</td>
+            <td>#item.main.WRK_ROW_ID#</td>
+        </tr>
+
+        <cfif ArrayLen(item.alts)>
+            <cfloop array="#item.alts#" index="alt">
+                <tr class="alt-row">
+                    <td>#alt.PRODUCT_ID#</td>
+                    <td>↳ #alt.PRODUCT_NAME#</td>
+                    <td>#alt.PRODUCT_CAT#</td>
+                    <td>#alt.BRAND_NAME#</td>
+                    <td>#alt.MODEL_NAME#</td>
+                    <td>#alt.WRK_ROW_ID#</td>
+                </tr>
+            </cfloop>
+        <cfelse>
+            <tr class="no-alt">
+                <td colspan="6">Bu ürün için teklif içinde alternatif bulunamadı.</td>
+            </tr>
+        </cfif>
+    </cfif>
+</cfloop>
+
+</table>
+
+</body>
+</html>
+</cfoutput>
+
+<cfabort>
 
 <cfquery name="getOfferProducts" datasource="#DSN3#">
 SELECT 
