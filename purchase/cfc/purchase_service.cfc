@@ -309,15 +309,21 @@ VALUES(
         <cfdump var="#arguments.payload#">
         <cfset arguments.payload = deserializeJSON(arguments.payload)>
         
-        <!----<cfset session=arguments.payload.session>
-        <cfset var products = arguments.payload.products>---->
+        <cfset session=arguments.payload.payload.session>
+        <cfset var products = arguments.payload.payload.products>
 
+        <cfloop array="#products#" item="product">
+            <cfset wrkRowId=product>
+            <cfdump var="#wrkRowId#">
+        </cfloop>
+
+            
 
 
         
 
 
-        <cfreturn arguments.payload.payload>
+        <cfreturn arguments>
 
 
 
