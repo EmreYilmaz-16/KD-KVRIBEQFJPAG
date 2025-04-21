@@ -51,6 +51,7 @@ WHERE ORR.OFFER_ID = 81
   <cfif Len(altId) AND altId NEQ pid>
       <cfset exists = false>
       <cfloop array="#grouped[pid].alts#" index="existingAlt">
+        <cfset arrayAppend(excludedProducts, existingAlt.PRODUCT_ID)>
           <cfif existingAlt.PRODUCT_ID EQ altId>
               <cfset exists = true>
               <cfbreak>
