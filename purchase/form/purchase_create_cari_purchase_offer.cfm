@@ -225,6 +225,7 @@ WHERE ORR.OFFER_ID = #attributes.for_offer_id#
   <input type="text" id="filter-brand" onkeyup="filterTable()" placeholder="Marka Filtrele">
   <input type="text" id="filter-model" onkeyup="filterTable()" placeholder="Model Filtrele">
   <script>
+    var sessionData=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>;
     function toggleAlternatives(groupId, el) {
       document.querySelectorAll('.alt-of-' + groupId).forEach(row => {
         row.classList.toggle('hidden');
@@ -257,6 +258,11 @@ WHERE ORR.OFFER_ID = #attributes.for_offer_id#
         alert("Seçim yapmadın dostum 😅");
         return;
       }
+
+      const companyIds = document.getElementById("company_ids")?.value || "";
+  const forOfferId = document.getElementById("for_offer_id")?.value || "";
+  const partnerIds = document.getElementById("partner_ids")?.value || "";
+  const refNo = document.getElementById("ref_no")?.value || "";
 
       fetch('/api/sendProducts.cfc?method=submitSelected', {
         method: 'POST',
