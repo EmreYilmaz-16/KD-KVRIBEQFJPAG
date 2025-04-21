@@ -1,7 +1,7 @@
 
 <cfsetting enablecfoutputonly="true">
-<cfsetting enablecfoutputonly="true">
-<cfset DSN3 = "senin_datasource_adin"> <!--- DSN adını kendi projene göre değiştir --->
+
+
 
 <!--- SQL: Teklif ürünleri ve teklif içindeki alternatifleri detaylarıyla çek --->
 <cfquery name="getOfferProducts" datasource="#DSN3#">
