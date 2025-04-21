@@ -319,7 +319,7 @@ WHERE ORR.OFFER_ID = 81
     </cfif>
   </cfloop>
 </table>
-
+</cf_box>
 <cffunction name="getBadgeClass" access="public" returntype="string">
   <cfargument name="label" type="string" required="true">
 
@@ -338,7 +338,7 @@ WHERE ORR.OFFER_ID = 81
   </cfif>
 </cffunction>
 </cfoutput>
-</cf_box>
+
 <cfabort>
 <cf_box title="Teklif Oluştur">
 
