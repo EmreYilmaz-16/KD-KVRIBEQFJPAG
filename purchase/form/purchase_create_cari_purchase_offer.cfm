@@ -213,7 +213,7 @@ function sendSelected() {
       <th>Kategori</th>
         <th>Marka</th>
         <th>Model</th>
-      <th>WRK_ROW_ID</th>
+      <th>Miktar</th>
   </tr>
 
 <cfloop collection="#grouped#" item="productId">
@@ -229,7 +229,7 @@ function sendSelected() {
           <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
           <td><span class="badge #getBadgeClass(item.main.BRAND_NAME)#">#item.main.BRAND_NAME#</span></td>
           <td><span class="badge #getBadgeClass(item.main.MODEL_NAME)#">#item.main.MODEL_NAME#</span></td>
-          <td>#item.main.WRK_ROW_ID#</td>
+          <td>#item.main.QUANTITY#</td>
       </tr>
 
       <cfif ArrayLen(item.alts)>
@@ -241,7 +241,7 @@ function sendSelected() {
                   <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
                   <td><span class="badge #getBadgeClass(alt.BRAND_NAME)#">#alt.BRAND_NAME#</span></td>
                   <td><span class="badge #getBadgeClass(alt.MODEL_NAME)#">#alt.MODEL_NAME#</span></td>
-                  <td>#alt.WRK_ROW_ID#</td>
+                  <td>#item.main.QUANTITY#</td>
               </tr>
           </cfloop>
       <cfelse>
