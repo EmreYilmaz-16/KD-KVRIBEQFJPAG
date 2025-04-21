@@ -126,6 +126,9 @@ WHERE ORR.OFFER_ID = 81
   <tr>
       <th>Ürün ID</th>
       <th>Ürün Adı</th>
+      <th>Kategori</th>
+        <th>Marka</th>
+        <th>Model</th>
       <th>WRK_ROW_ID</th>
   </tr>
 
@@ -136,6 +139,9 @@ WHERE ORR.OFFER_ID = 81
       <tr class="main-row">
           <td>#item.main.PRODUCT_ID#</td>
           <td>#item.main.PRODUCT_NAME#</td>
+          <td>#item.main.PRODUCT_CAT#</td>
+          <td>#item.main.BRAND_NAME#</td>
+          <td>#item.main.MODEL_NAME#</td>
           <td>#item.main.WRK_ROW_ID#</td>
       </tr>
 
@@ -144,6 +150,9 @@ WHERE ORR.OFFER_ID = 81
               <tr class="alt-row">
                   <td>#alt.PRODUCT_ID#</td>
                   <td>↳ #alt.PRODUCT_NAME#</td>
+                  <td>#alt.PRODUCT_CAT#</td>
+                  <td>#alt.BRAND_NAME#</td>
+                  <td>#alt.MODEL_NAME#</td>
                   <td>#alt.WRK_ROW_ID#</td>
               </tr>
           </cfloop>
