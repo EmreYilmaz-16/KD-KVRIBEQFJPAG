@@ -178,7 +178,7 @@ WHERE ORR.OFFER_ID = 81
   <cfif NOT ArrayContains(excludedProducts, productId)>
       <cfset item = grouped[productId]>
 
-      <tr class="main-row">
+      <tr class="main-row" onclick="toggleAlternatives('#productId#')">
           <td>#item.main.PRODUCT_ID#</td>
           <td>#item.main.PRODUCT_NAME#</td>
           <td><span class="badge #getBadgeClass(item.main.PRODUCT_CAT)#">#item.main.PRODUCT_CAT#</span></td>
@@ -189,7 +189,7 @@ WHERE ORR.OFFER_ID = 81
 
       <cfif ArrayLen(item.alts)>
           <cfloop array="#item.alts#" index="alt">
-              <tr class="alt-row">
+            <tr class="alt-row alt-of-#productId# hidden">
                   <td>#alt.PRODUCT_ID#</td>
                   <td>↳ #alt.PRODUCT_NAME#</td>
                   <td><span class="badge #getBadgeClass(alt.PRODUCT_CAT)#">#alt.PRODUCT_CAT#</span></td>
@@ -199,7 +199,7 @@ WHERE ORR.OFFER_ID = 81
               </tr>
           </cfloop>
       <cfelse>
-          <tr class="no-alt">
+        <tr class="no-alt alt-of-#productId# hidden">
               <td colspan="3">Bu ürün için teklif içinde alternatif bulunamadı.</td>
           </tr>
       </cfif>
