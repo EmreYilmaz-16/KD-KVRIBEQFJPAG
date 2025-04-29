@@ -22,8 +22,11 @@
     </cffunction>
 
     <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="POST">
-        <cfargument name="message" type="string" required="true">
-    
+        <cfargument name="message" type="string" default="">
+        <cfsavecontent variable="test1">
+            <cfdump var="#getHTTPRequestData()#">
+          </cfsavecontent>
+          <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\saveMessage.html" output="#test1#"></cffile>
         <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
         <cfset var result = "Gelen mesaj: " & arguments.message>
     
