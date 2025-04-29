@@ -12,7 +12,7 @@
           </cfsavecontent>
           <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\SaveSaleMarjToOffer.html" output="#test1#"></cffile>
         
-        <cfloop array="#arguments.payload.marj#" item="it"></cfloop>
+        <cfloop array="#arguments.payload.MarjArray#" item="it"></cfloop>
         <cfreturn arguments.payload>
     </cffunction>
 </cfcomponent>
