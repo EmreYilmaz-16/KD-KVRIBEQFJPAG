@@ -27,17 +27,36 @@
         <cfif id eq 1>
             <cfquery name="getMessage" datasource="#dsn3#">
                 SELECT MARJ_ORAN_PBS MSG FROM OFFER_ROW WHERE WRK_ROW_ID = '#arguments.wrk_row_id#'
-            </cfquery>
-                
+            </cfquery>                
         <cfelse>
             <cfquery name="getMessage" datasource="#dsn3#">
                 SELECT PRICE_PBS MSG FROM OFFER_ROW WHERE WRK_ROW_ID = '#arguments.wrk_row_id#'
             </cfquery>
         </cfif>
-
         <cfcontent type="text/plain; charset=utf-8">
-
-        <cfoutput>Gelen mesaj: #getMessage.MSG#</cfoutput>
+        <cfoutput>#getMessage.MSG#</cfoutput>
     </cffunction>
     
+    <cffunction name="getOfferMarjs" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+        <cfargument name="offerId" type="numeric" required="true" default="11">
+
+        <cfquery name="getOfferMarjs" datasource="#dsn3#">
+            select MARJ_ORAN_PBS,PRICE_PBS,WRK_ROW_ID from w3Qa_1.OFFER_ROW where OFFER_ID=#arguments.offer_id#
+        </cfquery>
+
+        <cfset var result = []>
+        <cfset var row = {}>
+        <cfset var i = 1>
+        <cfloop query="getOfferMarjs">
+            <cfset row = {}>
+            <cfset row.MARJ_ORAN_PBS = getOfferMarjs.MARJ_ORAN_PBS>
+            <cfset row.PRICE_PBS = getOfferMarjs.PRICE_PBS>
+            <cfset row.WRK_ROW_ID = getOfferMarjs.WRK_ROW_ID>
+            <cfset arrayAppend(result, row)>
+        </cfloop>
+        <cfset var response = {}>
+        <cfset response.status = "success">
+        <cfset response.data = result>
+        <cfset response.message = "Data retrieved successfully.">
+    </cffunction>
 </cfcomponent>

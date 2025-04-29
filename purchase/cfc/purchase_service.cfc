@@ -368,6 +368,7 @@ VALUES(
 <cfset attributes.deliverdate=now()>
 <cfset attributes.ship_date=now()>
 <cfset attributes.finishdate=now()>
+<cfset company_ids=",#arguments.payload.payload.company_ids#,">
 
 <!-------------
 <cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
