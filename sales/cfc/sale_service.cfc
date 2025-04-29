@@ -15,7 +15,7 @@
         <cfloop array="#arguments.payload.MarjArray#" item="it">
             <cfquery name="Up" datasource="#dsn3#">
                 UPDATE OFFER_ROW SET MARJ_ORAN_PBS =<cfif len(it.MARJ)>#it.MARJ#<cfelse>0</cfif>,PRICE_PBS=<cfif len(it.PRICE)>#it.PRICE#<cfelse>0</cfif>
-                WHERE WRK_ROW_ID = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#it.WRK_ROW_ID#">
+                WHERE WRK_ROW_ID = '#it.WRK_ROW_ID#'
             </cfquery>
         </cfloop>
         <cfreturn arguments.payload>
