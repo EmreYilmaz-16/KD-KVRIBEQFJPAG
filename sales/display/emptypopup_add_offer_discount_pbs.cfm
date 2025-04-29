@@ -42,7 +42,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     SELECT DISTINCT MODEL_NAME FROM getofferrow
 </cfquery>
 
-    <cf_big_list id="tablo1">
+    <table id="tablo1">
 <thead>
 <tr>
     <th>Ürün Kodu</th>
@@ -114,7 +114,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
 </tr>
 </cfloop>
 </tbody>
-</cf_big_list>
+</table>
 <button type="button" onclick="iskontoyaz()" class=" ui-wrk-btn ui-wrk-btn-success">İskontoları Ekle</button>
 </cfoutput>
 
