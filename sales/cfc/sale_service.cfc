@@ -30,10 +30,8 @@
           </cfsavecontent>
           <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\saveMessage.html" output="#test1#"></cffile>
         <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
-        <cfset var result = {
-            "message" = "Gelen mesaj: #arguments.message#"
-        }>
+      
     
-        <cfreturn arguments.result>
+        <cfreturn arguments>
     </cffunction>
 </cfcomponent>
