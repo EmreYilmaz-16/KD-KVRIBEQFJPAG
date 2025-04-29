@@ -26,11 +26,14 @@
         <cfargument name="message" type="string" default="">
         <cfsavecontent variable="test1">
             <cfdump var="#getHTTPRequestData()#">
+            <cfdump var="#arguments#">
           </cfsavecontent>
           <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\saveMessage.html" output="#test1#"></cffile>
         <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
-        <cfset var result = "Gelen mesaj: " & arguments.message>
+        <cfset var result = {
+            "message" = "Gelen mesaj: #arguments.message#"
+        }>
     
-        <cfreturn result>
+        <cfoutput>#serializeJSON(result)#</cfoutput>
     </cffunction>
 </cfcomponent>
