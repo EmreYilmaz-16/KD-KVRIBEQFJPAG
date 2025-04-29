@@ -38,8 +38,14 @@
     </cffunction>
     
     <cffunction name="getOfferMarjs" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-        <cfargument name="offerId" type="numeric" required="true" default="11">
+        <cfargument name="offerId" type="numeric" required="true" default="">
 
+        <cfsavecontent variable="test1">
+            <cfdump var="#arguments#">
+            <cfdump var="#getHTTPRequestData()#">
+          </cfsavecontent>
+          <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\getOfferMarjsgetOfferMarjs.html" output="#test1#"></cffile>
+<cfabort>
         <cfquery name="getOfferMarjs" datasource="#dsn3#">
             select MARJ_ORAN_PBS,PRICE_PBS,WRK_ROW_ID from w3Qa_1.OFFER_ROW where OFFER_ID=#arguments.offer_id#
         </cfquery>
