@@ -23,14 +23,8 @@
 
     <cffunction name="saveMessage" access="remote" returntype="void" output="true" httpMethod="GET">
         <cfargument name="message" type="string" required="true">
-    
-        <!-- Content-Type ayarla -->
-        <cfcontent type="text/plain; charset=utf-8">
-        
-        <!--- Çıktı üret --->
-        <cfoutput>
-            Gelen mesaj: #arguments.message#
-        </cfoutput>
+        <cfcontent type="text/plain; charset=utf-8">            
+        <cfoutput>Gelen mesaj: #arguments.message#</cfoutput>
     </cffunction>
     
 </cfcomponent>
