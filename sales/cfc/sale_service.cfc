@@ -21,7 +21,7 @@
         <cfreturn arguments.payload>
     </cffunction>
 
-    <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="POST">
+    <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="GET">
         
         <cfargument name="message" type="string" default="">
         <cfsavecontent variable="test1">
