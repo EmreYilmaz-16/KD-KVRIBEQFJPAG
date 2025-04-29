@@ -108,8 +108,8 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="#MARJ_ORAN_PBS#">
     </td>
     <td>
-        <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE_PBS#">
-        <input type="hidden" data-row_id="#WRK_ROW_ID#" class="price_hidden" name="price_hidden" value="#PRICE#">
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE_PBS+(PRICE_PBS*MARJ_ORAN_PBS/100)#">
+        <input type="hidden" data-row_id="#WRK_ROW_ID#" class="price_hidden" name="price_hidden" value="#PRICE_PBS#">
     </td>
 </tr>
 </cfloop>
