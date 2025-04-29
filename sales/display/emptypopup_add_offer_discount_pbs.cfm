@@ -69,10 +69,10 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         <option value="#PRODUCT_CAT#">#PRODUCT_CAT#</option>
     </cfloop>
     </select></th>
-    <th><input type="text" name="iskonto_1" placeholder="İskonto 1" ></th>
-    <th><input type="text" name="iskonto_2" placeholder="İskonto 2"></th>
-    <th><input type="text" name="iskonto_3" placeholder="İskonto 3" ></th>
-    <th><input type="text" name="marj" placeholder="Marj" ></th>
+    <th style="width:5%"><input type="text" name="iskonto_1" placeholder="İskonto 1" ></th>
+    <th style="width:5%"><input type="text" name="iskonto_2" placeholder="İskonto 2"></th>
+    <th style="width:5%"><input type="text" name="iskonto_3" placeholder="İskonto 3" ></th>
+    <th style="width:5%"><input type="text" name="marj" placeholder="Marj" ></th>
     <th>Marj Sonrası Fiyat</th>
 </tr>
 </thead>
