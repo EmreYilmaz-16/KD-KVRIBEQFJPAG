@@ -44,7 +44,7 @@
             <cfdump var="#arguments#">
             <cfdump var="#getHTTPRequestData()#">
           </cfsavecontent>
-          <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\getOfferMarjsgetOfferMarjs.html" output="#test1#"></cffile>
+          <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\getOfferMarjs.html" output="#test1#"></cffile>
 
         <cfquery name="getOfferMarjs" datasource="#dsn3#">
             select MARJ_ORAN_PBS,PRICE_PBS,WRK_ROW_ID from w3Qa_1.OFFER_ROW where OFFER_ID=#arguments.OFFERID#
