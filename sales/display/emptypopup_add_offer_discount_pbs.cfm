@@ -261,6 +261,7 @@ for(let i=0;i<rows.length;i++){
     window.opener.basket.items[ix].INDIRIM1=d1;
     window.opener.basket.items[ix].INDIRIM2=d2;
     window.opener.basket.items[ix].INDIRIM3=d3;
+    d4=d4.replace("TL","").replace(".","").replace(",",".")
     window.opener.basket.items[ix].PRICE=d4;
     
 }
