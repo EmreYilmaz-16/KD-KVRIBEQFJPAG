@@ -22,9 +22,22 @@
     </cffunction>
 
     <cffunction name="saveMessage" access="remote" returntype="void" output="true" httpMethod="GET">
-        <cfargument name="message" type="string" required="true">
-        <cfcontent type="text/plain; charset=utf-8">            
-        <cfoutput>Gelen mesaj: #arguments.message#</cfoutput>
+        <cfargument name="wrk_row_id" type="string" required="true">
+        <cfargument name="id" type="string" required="false" default="0">
+        <cfif id eq 1>
+            <cfquery name="getMessage" datasource="#dsn3#">
+                SELECT MARJ_ORAN_PBS MSG FROM OFFER_ROW WHERE WRK_ROW_ID = '#arguments.wrk_row_id#'
+            </cfquery>
+                
+        <cfelse>
+            <cfquery name="getMessage" datasource="#dsn3#">
+                SELECT PRICE_PBS MSG FROM OFFER_ROW WHERE WRK_ROW_ID = '#arguments.wrk_row_id#'
+            </cfquery>
+        </cfif>
+
+        <cfcontent type="text/plain; charset=utf-8">
+
+        <cfoutput>Gelen mesaj: #getMessage.MSG#</cfoutput>
     </cffunction>
     
 </cfcomponent>
