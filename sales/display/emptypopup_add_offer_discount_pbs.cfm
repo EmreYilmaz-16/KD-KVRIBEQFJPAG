@@ -319,8 +319,8 @@ for(let i=0;i<rows.length;i++){
         DISCOUNT_1:d1,
         DISCOUNT_2:d2,
         DISCOUNT_3:d3,
-        PRICE:d4,
-        MARJ:d5
+        PRICE:filterNum(d4),
+        MARJ:filterNum(d5)
         
     });
     window.opener.basket.items[ix].INDIRIM1=d1;
