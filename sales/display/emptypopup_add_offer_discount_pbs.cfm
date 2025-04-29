@@ -160,7 +160,7 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
                 if( priceInput) {
                     var price=priceInput.innerText.replace("TL","").replace(".","").replace(",",".")
                     var new_price=Number(price)*(1+Number(value)/100)
-                    afterMarjInput.value=new_price.toFixed(2)+" TL"
+                    afterMarjInput.value=new_price.toFixed(2)
                 }
                 if (discountInput) {
                     discountInput.value = value;
