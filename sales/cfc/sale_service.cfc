@@ -32,6 +32,6 @@
         <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
       
     
-        <cfreturn arguments>
+        <cfreturn "Gelen mesaj: #arguments.message#">
     </cffunction>
 </cfcomponent>
