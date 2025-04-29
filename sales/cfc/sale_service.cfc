@@ -64,5 +64,11 @@
         <cfset response.status = "success">
         <cfset response.data = result>
         <cfset response.message = "Data retrieved successfully.">
+        <cfset response.code = 200> 
+        <cfset response.total = getOfferMarjs.recordCount>
+        <cfset response.page = 1>
+        <cfset response.perPage = 10>
+        <cfset response.lastPage = 1>
+        <cfreturn response>
     </cffunction>
 </cfcomponent>
