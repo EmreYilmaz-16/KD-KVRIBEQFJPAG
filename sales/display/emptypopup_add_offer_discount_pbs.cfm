@@ -76,7 +76,7 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount3" name="discount3" value="#DISCOUNT_3#">
     </td>
     <td>
-        <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" name="marj" value="">
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="">
     </td>
     <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE#">
@@ -169,6 +169,32 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
         }
         
     }
+    $(".marj").on("change", function (e) {
+    const value = this.value;
+    const row = this.closest("tr"); // Daha temiz ve güvenli erişim
+
+    const discountInput = row.querySelector(".marj");
+    const priceInput = row.querySelector(".price");
+    const afterMarjInput = row.querySelector(".after_marj");
+
+    if (priceInput && afterMarjInput) {
+        let priceRaw = priceInput.value || priceInput.innerText;
+        let cleanedPrice = priceRaw.replace("TL", "").replace(/\./g, "").replace(",", ".");
+        let price = parseFloat(cleanedPrice);
+
+        let marj = parseFloat(value);
+        if (!isNaN(price) && !isNaN(marj)) {
+            let newPrice = price * (1 + marj / 100);
+            afterMarjInput.value = commaSplit(newPrice);
+        } else {
+            console.warn("Geçersiz fiyat veya marj:", price, marj);
+        }
+    }
+
+    if (discountInput) {
+        discountInput.value = value;
+    }
+});
     
     // Add event listeners to select boxes and discount inputs
     document.addEventListener('DOMContentLoaded', function() {
