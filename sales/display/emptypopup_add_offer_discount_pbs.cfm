@@ -358,7 +358,7 @@ const offerId = url.searchParams.get('offer_id');
       .then(res => res.json())
       .then(data => {
         alert("Gönderildi! 😎");
-        window.opener.location.VeriAlVeYaz(offerId);
+        window.opener.VeriAlVeYaz(offerId);
         console.log(data);
       })
       .catch(err => {
