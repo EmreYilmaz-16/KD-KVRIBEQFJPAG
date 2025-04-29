@@ -12,7 +12,9 @@ btn.innerText="İskonto Gir"
 btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
 document.getElementById("workcube_button").appendChild(btn)
 </cfif>
-alternatifkontrol();;;
+alternatifkontrol();
+VeriAlVeYaz(getParameterByName('offer_id'));
+        
 
 
 
