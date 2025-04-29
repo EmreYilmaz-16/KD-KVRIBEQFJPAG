@@ -341,6 +341,21 @@ for (let index = 0; index < window.opener.basket.items.length; index++) {
 }
 
 function SaveMarjToDb() {
-    console.log(MarjArray)
+    console.log(MarjArray);
+    const payload = { MarjArray }; // Define the payload variable using MarjArray or any other required data
+    fetch('/AddOns/Partner/sale/cfc/sale_service.cfc?method=savePurchaseOffer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("Gönderildi! 😎");
+        console.log(data);
+      })
+      .catch(err => {
+        alert("Hata! 🚨");
+        console.error(err);
+      });
 }
 </script>
