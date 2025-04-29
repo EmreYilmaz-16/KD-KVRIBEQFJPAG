@@ -20,4 +20,13 @@
         </cfloop>
         <cfreturn arguments.payload>
     </cffunction>
+
+    <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="POST">
+        <cfargument name="message" type="string" required="true">
+    
+        <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
+        <cfset var result = "Gelen mesaj: " & arguments.message>
+    
+        <cfreturn result>
+    </cffunction>
 </cfcomponent>
