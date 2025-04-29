@@ -6,6 +6,6 @@
     <cffunction name="SaveSaleMarjToOffer" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset arguments.payload = getHTTPRequestData().content>        
         <cfset arguments.payload = deserializeJSON(arguments.payload)>
-        <cfreturn type="struct" value="#arguments.payload#">
+        <cfreturn arguments.payload>
     </cffunction>
 </cfcomponent>
