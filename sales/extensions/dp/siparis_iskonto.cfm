@@ -92,4 +92,75 @@ function getRandomColor() {
     }
     return color;
 }
+
+
+function VeriAlVeYaz(offerId){
+fetch('/AddOns/Partner/sales/cfc/sale_service.cfc?method=getOfferMarjs&offerid='+offerId, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+
+}).then(res => res.json()).then(data => {
+    $('td[yeni_eklendi]').remove();
+    $('th[yeni_eklendi]').remove();
+    BaslikOlustur();
+    console.log(data)
+    var trElements = document.querySelectorAll('tr[basketitem]');
+    for (let i = 0; i < trElements.length; i++) {
+        SatirOlustur(i,data.DATA,trElements[i])
+    }
+}).catch(err => {console.error(err);});
+}
+function BaslikOlustur(){
+    
+    var theadTr = document.querySelector('thead[basketthead] tr');
+    var ths = theadTr.querySelectorAll('th');
+    var newTh = document.createElement('th');
+        newTh.setAttribute('nowrap', 'nowrap'); // diğerleri gibi olsun diye
+        newTh.style.minWidth = "90px"; // istersen sabit genişlik de verebilirsin
+        newTh.innerHTML = '<span>Marj Oranı</span>'; // başlık ismi burada
+        newTh.setAttribute("YENI_EKLENDI","")
+
+        var newTh2 = document.createElement('th');
+        newTh2.setAttribute('nowrap', 'nowrap'); // diğerleri gibi olsun diye
+        newTh2.style.minWidth = "90px"; // istersen sabit genişlik de verebilirsin
+        newTh2.innerHTML = '<span>+Fiyat</span>'; // başlık ismi burada
+        newTh2.setAttribute("YENI_EKLENDI","")
+        // 3. th'den sonra ekle (yani th[2] den sonra)
+        if (ths[7]) {
+            ths[7].after(newTh);
+            newTh.after(newTh2);
+        }
+}
+function SatirOlustur(i,data,row){
+    var tr = row;
+    var WRK_ROW_ID = tr.querySelector('#wrk_row_id').value;
+    var ROW_INDEX = data.findIndex(p => p.WRK_ROW_ID == WRK_ROW_ID)
+    var PRICE=data[ROW_INDEX].PRICE_PBS
+    var MARJ=data[ROW_INDEX].MARJ_ORAN_PBS
+    
+    var tds = tr.querySelectorAll('td');
+    var newTd = document.createElement('td');
+    newTd.innerHTML = '<div>'+MARJ+'%</div>';
+    newTd.setAttribute("YENI_EKLENDI","")
+    var newTd2 = document.createElement('td');
+    newTd2.innerHTML = '<div YENI_EKLENDI>'+PRICE+'</div>';
+    newTd2.setAttribute("YENI_EKLENDI","")
+     if (tds[7]) {
+                tds[7].after(newTd);
+                newTd.after(newTd2)
+            }
+    /*console.table(
+        {
+            WRK_ROW_ID,
+            ROW_INDEX,
+            PRICE,
+            MARJ
+        }
+    )*/
+  
+}
+    
+
+
+
 </script>

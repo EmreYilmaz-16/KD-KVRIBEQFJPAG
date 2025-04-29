@@ -107,6 +107,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     </td>
     <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE#">
+        <input type="hidden" data-row_id="#WRK_ROW_ID#" class="price_hidden" name="price_hidden" value="#PRICE#">
     </td>
 </tr>
 </cfloop>
@@ -312,6 +313,7 @@ for(let i=0;i<rows.length;i++){
     var d3=$(Row).find("input[name='discount3']").val()
     var d4=$(Row).find("input[name='after_marj']").val()
     var d5=$(Row).find("input[name='marj']").val()
+    var d6=$(Row).find("input[name='price_hidden']").val()
     
     //console.log(d1)
     MarjArray.push({
@@ -319,7 +321,7 @@ for(let i=0;i<rows.length;i++){
         DISCOUNT_1:d1,
         DISCOUNT_2:d2,
         DISCOUNT_3:d3,
-        PRICE:filterNum(d4),
+        PRICE:filterNum(d6),
         MARJ:filterNum(d5)
         
     });
@@ -337,11 +339,16 @@ for (let index = 0; index < window.opener.basket.items.length; index++) {
     window.opener.hesapla("indirim2",index)
     window.opener.hesapla("indirim3",index)
     
-}    
+} 
+SaveMarjToDb();   
 }
 
 function SaveMarjToDb() {
     console.log(MarjArray);
+    const url = new URL(window.location.href);
+
+// Extract offer_id
+const offerId = url.searchParams.get('offer_id');
     const payload = { MarjArray }; // Define the payload variable using MarjArray or any other required data
     fetch('/AddOns/Partner/sales/cfc/sale_service.cfc?method=SaveSaleMarjToOffer', {
         method: 'POST',
@@ -351,6 +358,7 @@ function SaveMarjToDb() {
       .then(res => res.json())
       .then(data => {
         alert("Gönderildi! 😎");
+        window.opener.location.VeriAlVeYaz(offerId);
         console.log(data);
       })
       .catch(err => {
