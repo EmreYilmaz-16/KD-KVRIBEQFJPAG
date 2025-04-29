@@ -133,9 +133,9 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
             const row = rows[i];
             
             // Get the marka and kategori values from the row
-            const markaCell = row.cells[3].textContent;
-            const modelCell = row.cells[4].textContent;
-            const kategoriCell = row.cells[5].textContent;
+            const markaCell = row.cells[5].textContent;
+            const modelCell = row.cells[6].textContent;
+            const kategoriCell = row.cells[7].textContent;
             
             // Determine if row should be visible based on filters
             const markaMatch = selectedMarka === '' || markaCell === selectedMarka;
