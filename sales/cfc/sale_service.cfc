@@ -34,6 +34,6 @@
             "message" = "Gelen mesaj: #arguments.message#"
         }>
     
-        <cfoutput>#serializeJSON(result)#</cfoutput>
+        <cfreturn arguments.result>
     </cffunction>
 </cfcomponent>
