@@ -299,6 +299,7 @@ return true;
 </cf_box>
 
 <script>
+var MarjArray=[];
 function iskontoyaz(){
     var rows=document.getElementById("tablo1").children[1].children
 for(let i=0;i<rows.length;i++){
@@ -310,7 +311,18 @@ for(let i=0;i<rows.length;i++){
     var d2=$(Row).find("input[name='discount2']").val()
     var d3=$(Row).find("input[name='discount3']").val()
     var d4=$(Row).find("input[name='after_marj']").val()
+    var d5=$(Row).find("input[name='marj']").val()
+    
     //console.log(d1)
+    MarjArray.push({
+        WRK_ROW_ID:WrkRowId,
+        DISCOUNT_1:d1,
+        DISCOUNT_2:d2,
+        DISCOUNT_3:d3,
+        PRICE:d4,
+        MARJ:d5
+        
+    });
     window.opener.basket.items[ix].INDIRIM1=d1;
     window.opener.basket.items[ix].INDIRIM2=d2;
     window.opener.basket.items[ix].INDIRIM3=d3;
@@ -326,5 +338,9 @@ for (let index = 0; index < window.opener.basket.items.length; index++) {
     window.opener.hesapla("indirim3",index)
     
 }    
+}
+
+function SaveMarjToDb() {
+    console.log(MarjArray)
 }
 </script>
