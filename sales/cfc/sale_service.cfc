@@ -21,17 +21,16 @@
         <cfreturn arguments.payload>
     </cffunction>
 
-    <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="GET">
-        
-        <cfargument name="message" type="string" default="">
-        <cfsavecontent variable="test1">
-            <cfdump var="#getHTTPRequestData()#">
-            <cfdump var="#arguments#">
-          </cfsavecontent>
-          <cffile action="write" file = "C:\w3Dosya\w3Qa\AddOns\Partner\ServisLogs\saveMessage.html" output="#test1#"></cffile>
-        <!--- Mesajı işleyebilirsin, şimdilik sadece geleni geri döndüreceğiz --->
-      
+    <cffunction name="saveMessage" access="remote" returntype="void" output="true" httpMethod="GET">
+        <cfargument name="message" type="string" required="true">
     
-        <cfreturn "Gelen mesaj: #arguments.message#">
+        <!-- Content-Type ayarla -->
+        <cfcontent type="text/plain; charset=utf-8">
+        
+        <!--- Çıktı üret --->
+        <cfoutput>
+            Gelen mesaj: #arguments.message#
+        </cfoutput>
     </cffunction>
+    
 </cfcomponent>
