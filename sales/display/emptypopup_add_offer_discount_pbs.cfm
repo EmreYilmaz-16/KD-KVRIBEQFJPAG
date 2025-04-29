@@ -47,6 +47,8 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
     <th><input type="text" name="iskonto_1" placeholder="İskonto 1" ></th>
     <th><input type="text" name="iskonto_2" placeholder="İskonto 2"></th>
     <th><input type="text" name="iskonto_3" placeholder="İskonto 3" ></th>
+    <th><input type="text" name="marj" placeholder="Marj" ></th>
+    <th>Marj Sonrası Fiyat</th>
 </tr>
 </thead>
 <tbody>
@@ -58,7 +60,7 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
     <td>
         #QUANTITY#
     </td>
-    <td>
+    <td name="PriceArea" class="price">
         #PRICE#
     </td>
     <td name="BrandArea">#BRAND_NAME#</td>
@@ -72,6 +74,12 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
     </td>
     <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount3" name="discount3" value="#DISCOUNT_3#">
+    </td>
+    <td>
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" name="marj" value="">
+    </td>
+    <td>
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE#">
     </td>
 </tr>
 </cfloop>
@@ -135,6 +143,32 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
             }
         }
     }
+    function applyMarjToVisibleRows(discountNumber, value) {
+        const rows = Array.from(document.querySelectorAll('#tablo1 tbody tr'));
+        if(!MarkaModelKontrol()){
+            return false;
+        }
+        // Start from index 1 to skip the header/filter row
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            
+            // Check if the row is visible
+            if (row.style.display !== 'none') {
+                const discountInput = row.querySelector(`.marj`);
+                const priceInput = row.querySelector(`.price`);
+                const afterMarjInput = row.querySelector(`.after_marj`);
+                if( priceInput) {
+                    var price=priceInput.innerText.replace("TL","").replace(".","").replace(",",".")
+                    var new_price=Number(price)*(1+Number(value)/100)
+                    afterMarjInput.value=new_price.toFixed(2)+" TL"
+                }
+                if (discountInput) {
+                    discountInput.value = value;
+                }
+            }
+        }
+        
+    }
     
     // Add event listeners to select boxes and discount inputs
     document.addEventListener('DOMContentLoaded', function() {
@@ -150,6 +184,7 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
         const discount1Input = document.querySelector('input[name="iskonto_1"]');
         const discount2Input = document.querySelector('input[name="iskonto_2"]');
         const discount3Input = document.querySelector('input[name="iskonto_3"]');
+        const marjInput = document.querySelector('input[name="marj"]');
         
         
         discount1Input.addEventListener('input', function() {
@@ -164,6 +199,9 @@ WHERE ORR.OFFER_ID=#attributes.OFFER_ID#
             applyDiscountToVisibleRows(3, this.value);
         });
         
+        marjInput.addEventListener('input', function() {
+            applyMarjToVisibleRows(3, this.value);
+        });
         // Initial filtering (in case a value is pre-selected)
         filterTable();
     });

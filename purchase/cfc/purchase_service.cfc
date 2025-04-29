@@ -242,6 +242,7 @@
 
 
 </CFLOOP>
+
 <cfset wrk_eval = application.functions.wrk_eval>
 <cfquery name="get_offer_number" datasource="#dsn3#">
     EXEC GET_PAPER_NUMBER 1
@@ -311,6 +312,7 @@ VALUES(
         
         <cfset session=arguments.payload.payload.session>
         <cfset var products = arguments.payload.payload.products>
+        <cfset var company_id = arguments.payload.payload.company_ids>
         <cfquery name="getOffer" datasource="#dsn3#" result="RES">
             SELECT * FROM OFFER_ROW
             LEFT JOIN  #dsn3#.PRODUCT_UNIT AS PU ON PU.PRODUCT_ID=OFFER_ROW.PRODUCT_ID AND IS_MAIN=1
@@ -322,43 +324,166 @@ VALUES(
             <CFSET "PID_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_ID>
             <CFSET "SID_#getOffer.WRK_ROW_ID#"=getOffer.STOCK_ID>
             <cfset "PRODUCT_NAME_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_NAME>
-            <cfset "PRODUCT_UNIT_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_UNIT_ID>
-
+            <cfset "PRODUCT_UNIT_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_UNIT>
+            <cfset "PRODUCT_UNIT_ID_#getOffer.WRK_ROW_ID#"=getOffer.PRODUCT_UNIT_ID>
+            <CFSET "TAX_PURCHASE_#getOffer.WRK_ROW_ID#"=getOffer.TAX_PURCHASE>
+            <cfset "QUANTITY_#getOffer.WRK_ROW_ID#"=getOffer.QUANTITY>
+            <CFSET "OTHER_MONEY_#getOffer.WRK_ROW_ID#"=getOffer.OTHER_MONEY>
         </cfloop>
-        <cfset ix=1>
+        <cfset ix=0>
         <cfloop array="#products#" item="product">
             <cfset wrkRowId=product>
-            <CFSET "attributes.product_id_#ix#"=evaluate("PID_#wrkRowId#")>
-            <CFSET "attributes.stock_id_#ix#"=evaluate("SID_#wrkRowId#")>
-            <CFSET "attributes.product_name_#ix#"=evaluate("PRODUCT_NAME_#wrkRowId#")>
-            <CFSET "attributes.product_unit_#ix#"=evaluate("PRODUCT_UNIT_#wrkRowId#")>
-
-        <!---    <cfscript>
+            <cfscript>
                 ix=ix+1;
+                attributes["product_id#ix#"] = evaluate("PID_#wrkRowId#");
+                attributes["stock_id#ix#"] = evaluate("SID_#wrkRowId#");
+                attributes["product_name#ix#"] = evaluate("PRODUCT_NAME_#wrkRowId#");
+                attributes["unit#ix#"] = evaluate("PRODUCT_UNIT_#wrkRowId#");
+                attributes["unit_id#ix#"] = evaluate("PRODUCT_UNIT_ID_#wrkRowId#");
                 attributes["price#ix#"] = 0;
                 attributes["price_other#ix#"] = 0;
-                attributes["tax#ix#"] = ;
-                attributes["amount#ix#"] = product.quantity;
-                attributes["indirim1#ix#"] = product.discount1;
-                attributes["other_money_#ix#"] = product.otherMoney;
-                attributes["product_id#ix#"] = product.productId;
-                attributes["stock_id#ix#"] = product.stockId;
-                attributes["unit#ix#"] = getUnit.MAIN_UNIT;
-                attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
-                attributes["product_name#ix#"] = product.productName;
-                attributes["other_money_value_#ix#"] = (product.convertedsalePriceOther * product.quantity) - ((product.convertedsalePriceOther * product.quantity) * product.discount1) / 100;
+                attributes["tax#ix#"] = evaluate("TAX_PURCHASE_#wrkRowId#");
+                attributes["amount#ix#"] = evaluate("QUANTITY_#wrkRowId#");
+                attributes["indirim1#ix#"] = 0;
+                attributes["other_money_#ix#"] = evaluate("OTHER_MONEY_#wrkRowId#");
+                attributes["other_money_value_#ix#"] = 0;
                 attributes["description#ix#"] = "";
                 attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
-                attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
+                attributes["wrk_row_relation_id#ix#"] = product;
                 attributes["is_virtual#ix#"] = 0;
                 attributes["SHELF_CODE#ix#"] = "";
                 attributes["OFFER_ROW_CURRENCY#ix#"] = "";
-                
-            </cfscript>--->
+
+
+            </cfscript>
+            
 
         </cfloop>
+        <cfset attributes.rows_=ix>
+        <cfquery name="GETCOMPANY" datasource="#dsn#">
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#company_id#
+        </cfquery>
 
-            
+<cfset attributes.offer_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.ship_date=now()>
+<cfset attributes.finishdate=now()>
+
+<!-------------
+<cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.OFFER_DESCRIPTION="">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset FactPBS="purchase.purchase_offer_selector">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset attributes.price_catid="">
+<cfset attributes.sales_emp_id=session.ep.userid>
+<cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
+<cfset attributes.project_head="">
+<cfset attributes.project_id="">
+<cfset attributes.process_stage="20">
+<cfquery name="getcc" datasource="#dsn#">
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+</cfquery>
+<cfquery name="GETCOMPANY" datasource="#dsn#">
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+</cfquery>
+<cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
+<cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
+<cfset attributes.ship_method_id=getcc.SHIP_METHOD_ID>
+<cfset attributes.ship_method=getcc.SHIP_METHOD_ID>
+<cfset attributes.pay_method=getcc.REVMETHOD_ID>
+<cfset attributes.card_paymethod_id="">
+
+<cfset attributes.ship_address=GETCOMPANY.COMPANY_ADDRESS>
+<cfset attributes.ship_address_id=-1>
+<cfset attributes.city_id=GETCOMPANY.CITY>
+<cfset attributes.county_id=GETCOMPANY.COUNTY>
+
+<CFSET attributes.ship_address_city_id=GETCOMPANY.CITY>
+<CFSET attributes.ship_address_county_id=GETCOMPANY.COUNTY>
+
+<cfset attributes.commission_rate="">
+
+<cfset attributes.sales_add_option="">
+<cfset attributes.offer_head="Teklifimiz">
+<cfset attributes.offer_detail="">
+<cfset attributes.offer_detail="">
+<cfset attributes.basket_money=getcc.MONEY>
+<cfset attributes.basket_rate1=IDEMAND.PARA[1].RATE1>
+<cfset attributes.basket_rate2=IDEMAND.PARA[1].RATE2>
+<cfset attributes.ref_member_type ="">
+<cfset attributes.consumer_id="">
+<cfset attributes.reserved=1>
+---------->
+
+<cfscript>
+    DISCOUNT_TOTAL=0;
+    GROSS_TOTAL=0;
+    SUBNETTOTAL=0;
+    SUBTAXTOTAL=0;
+    SUBTOTAL=0;
+    TAX_TOTAL=0;
+    TOTAL_WITHOUT_KDV=0;
+    TOTAL_WITH_KDV=0;
+    BASKET_NET_TOTAL=0;
+    BASKET_NET_TOTAL_=0;
+    BASKET_TAX_TOTAL=0;
+    BASKET_TAX_TOTAL_=0;
+</cfscript>
+<CFLOOP from="1" to="#attributes.rows_#" index="ix">
+    <cfset PRICE=evaluate("attributes.price#ix#")>
+    <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+    <cfset TAX=evaluate("attributes.tax#ix#")>
+    <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+    <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+    <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+    <cfscript>
+     SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+            return item.MONEY == OTHER_MONEY;
+        })[1];
+    OLD_SATIR_KUR= SATIR_KUR;
+    </cfscript>
+
+    <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+    <cfset ox=structNew()>
+    <cfset ox.PRICE=PRICE>
+    <cfset ox.PRICE_=PR_HESAP>
+    <cfscript>
+        dp=PRICE-(PRICE*DISCOUNT)/100;  
+        dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+
+        TUTAR=dp*AMOUNT;
+        TUTAR_=dp_*AMOUNT;
+
+        TX=(TUTAR*TAX)/100
+        TX_=(TUTAR_*TAX)/100
+        ox.DP=dp;
+        ox.DP_=dp_;
+        ox.TUTAR=TUTAR;
+        ox.TUTAR_=TUTAR_;
+        OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+        OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+        ox.TX=TX;
+        ox.TX_=TX_;
+        BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+        BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+        BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+        BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+
+        "attributes.other_money_value_#ix#"=ox.OTM_V_;
+        "attributes.price#ix#"=ox.PRICE_;
+    </cfscript>
+    
+
+
+    
+
+
+
+</CFLOOP>
+
 
 
         
