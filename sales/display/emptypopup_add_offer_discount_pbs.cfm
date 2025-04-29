@@ -42,7 +42,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     SELECT DISTINCT MODEL_NAME FROM getofferrow
 </cfquery>
 
-    <table id="tablo1">
+    <cf_grid_list id="tablo1">
 <thead>
 <tr>
     <th>Ürün Kodu</th>
@@ -95,16 +95,16 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     <td name="BrandArea">#BRAND_NAME#</td>
     <td name="ModelArea">#MODEL_NAME#</td>
     <td>#PRODUCT_CAT#</td>
-    <td style="width:5%">
+    <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount1" name="discount1" value="#DISCOUNT_1#">
     </td>
-    <td style="width:5%">
+    <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount2" name="discount2" value="#DISCOUNT_2#">
     </td>
-    <td style="width:5%">
+    <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount3" name="discount3" value="#DISCOUNT_3#">
     </td>
-    <td style="width:5%">
+    <td>
         <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="#MARJ_ORAN_PBS#">
     </td>
     <td>
@@ -114,7 +114,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
 </tr>
 </cfloop>
 </tbody>
-</table>
+</cf_grid_list>
 <button type="button" onclick="iskontoyaz()" class=" ui-wrk-btn ui-wrk-btn-success">İskontoları Ekle</button>
 </cfoutput>
 
