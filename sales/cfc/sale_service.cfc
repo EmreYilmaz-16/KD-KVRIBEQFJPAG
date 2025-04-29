@@ -7,5 +7,7 @@
         <cfset arguments.payload = getHTTPRequestData().content>        
         <cfset arguments.payload = deserializeJSON(arguments.payload)>
         <cfreturn arguments.payload>
+        <cfloop array="#arguments.payload#" item="it"></cfloop>
+
     </cffunction>
 </cfcomponent>
