@@ -22,6 +22,7 @@
     </cffunction>
 
     <cffunction name="saveMessage" access="remote" returntype="string" output="false" httpMethod="POST">
+        <cfcontent type="application/json; charset=utf-8">
         <cfargument name="message" type="string" default="">
         <cfsavecontent variable="test1">
             <cfdump var="#getHTTPRequestData()#">
