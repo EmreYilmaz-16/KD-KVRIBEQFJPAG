@@ -256,14 +256,17 @@ for(let i=0;i<rows.length;i++){
     var d1=$(Row).find("input[name='discount1']").val()
     var d2=$(Row).find("input[name='discount2']").val()
     var d3=$(Row).find("input[name='discount3']").val()
+    var d4=$(Row).find("input[name='after_marj']").val()
     //console.log(d1)
     window.opener.basket.items[ix].INDIRIM1=d1;
     window.opener.basket.items[ix].INDIRIM2=d2;
     window.opener.basket.items[ix].INDIRIM3=d3;
+    window.opener.basket.items[ix].PRICE=d3;
     
 }
 
 for (let index = 0; index < window.opener.basket.items.length; index++) {
+    window.opener.hesapla("price",index)
     window.opener.hesapla("indirim1",index)
     window.opener.hesapla("indirim2",index)
     window.opener.hesapla("indirim3",index)
