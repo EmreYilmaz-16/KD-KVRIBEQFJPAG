@@ -90,7 +90,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         #QUANTITY#
     </td>
     <td name="PriceArea" class="price">
-        #PRICE#
+        #PRICE_PBS#
     </td>
     <td name="BrandArea">#BRAND_NAME#</td>
     <td name="ModelArea">#MODEL_NAME#</td>
