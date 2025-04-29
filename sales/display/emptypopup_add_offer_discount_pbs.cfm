@@ -95,16 +95,16 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     <td name="BrandArea">#BRAND_NAME#</td>
     <td name="ModelArea">#MODEL_NAME#</td>
     <td>#PRODUCT_CAT#</td>
-    <td>
+    <td style="width:5%">
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount1" name="discount1" value="#DISCOUNT_1#">
     </td>
-    <td>
+    <td style="width:5%">
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount2" name="discount2" value="#DISCOUNT_2#">
     </td>
-    <td>
+    <td style="width:5%">
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount3" name="discount3" value="#DISCOUNT_3#">
     </td>
-    <td>
+    <td style="width:5%">
         <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="#MARJ_ORAN_PBS#">
     </td>
     <td>
