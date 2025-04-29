@@ -260,6 +260,14 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         });
         // Initial filtering (in case a value is pre-selected)
         filterTable();
+
+        $("#tablo1 > thead > tr > th > div > input[type=text]").css("width", "50px");
+$("#tablo1 > tbody > tr > td > input").css("width","50px")
+
+$("#tablo1 > thead > tr > th > div > input[type=text]").each(function() {
+    this.style.setProperty("background-color", "white", "important");
+    
+});
     });
 
     function MarkaModelKontrol() {
