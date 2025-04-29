@@ -10,6 +10,8 @@ SELECT ORR.WRK_ROW_ID
 	,ORR.DISCOUNT_1
 	,ORR.DISCOUNT_2
 	,ORR.DISCOUNT_3
+    ,MARJ_ORAN_PBS
+    ,ISNULL(PRICE_PBS,PRICE) AS PRICE_PBS
 	,(
 		SELECT TOP 1 BARCODE
 		FROM w3Qa_product.STOCKS_BARCODES AS S
@@ -103,10 +105,10 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         <input type="text" data-row_id="#WRK_ROW_ID#" class="discount3" name="discount3" value="#DISCOUNT_3#">
     </td>
     <td>
-        <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="">
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="marj" onchange="satirHesaplaB(this)" name="marj" value="#MARJ_ORAN_PBS#">
     </td>
     <td>
-        <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE#">
+        <input type="text" data-row_id="#WRK_ROW_ID#" class="after_marj" name="after_marj" value="#PRICE_PBS#">
         <input type="hidden" data-row_id="#WRK_ROW_ID#" class="price_hidden" name="price_hidden" value="#PRICE#">
     </td>
 </tr>
