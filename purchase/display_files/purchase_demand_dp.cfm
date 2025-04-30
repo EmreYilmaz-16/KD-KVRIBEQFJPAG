@@ -62,7 +62,7 @@ btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
         console.log("Index:", index);
         console.log("Product Data:", data);
     
-          const url = new URL(window.location.origin + "/index.cfm?fuseaction=product.product.emptypopup_add_product_from_purchase_demand");
+          const url = new URL(window.location.origin + "/index.cfm?fuseaction=product.emptypopup_add_product_from_purchase_demand");
         const params = new URLSearchParams(window.location.search);
         var offer_id=params.get("id")
         // Veriyi query string olarak ekle (encode ederek)
