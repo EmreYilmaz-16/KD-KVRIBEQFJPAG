@@ -3,12 +3,10 @@
 $(document).ready(function () {
     var btn=document.createElement("button")
 btn.setAttribute("type","button")
-btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector&offer_id=<cfoutput>#attributes.offer_id#</cfoutput>","page_display")')
+btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector&offer_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
 btn.innerText="Ürün Seç"
 btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
-<!-----<cfif len(qPurchaseOffer.INTERNALDEMAND_ID)>
-document.getElementById("workcube_button").appendChild(btn)
-</cfif>----->
+
 
 // Sepet tablosundaki tüm <tr> satırlarını gez
     $("#tblBasket tbody").children().each(function(index, row) {
