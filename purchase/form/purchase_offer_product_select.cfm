@@ -248,7 +248,7 @@ WHERE INTERNALDEMAND_ID=12
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
-    const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+    var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
     data=mergeCompanies(data);
     const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
