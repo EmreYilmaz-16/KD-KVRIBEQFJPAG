@@ -125,7 +125,7 @@
   
 
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
-SELECT * FROM (
+SELECT ( SELECT * FROM (
 SELECT C.FULLNAME, C.COMPANY_ID, OFFER_ID,
 (
     
@@ -195,7 +195,7 @@ WHERE INTERNALDEMAND_ID=12
 )
 ) AS T FOR JSON PATH
 
-
+)AS QRESULT
 
 
   </cfquery>
