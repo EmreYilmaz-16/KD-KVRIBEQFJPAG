@@ -1,0 +1,279 @@
+[
+    {
+        "FULLNAME": "ÇAĞMER OTOM.YED.PRÇ.NAK.İNŞ.TURZ.SAN.TİC.LTD.ŞTİ.",
+        "COMPANY_ID": 19,
+        "URUNLER": [
+            {
+                "PRODUCT_NAME": "A ürünü",
+                "PRICE": 2000.00,
+                "PRICE_OTHER": 1290.32,
+                "OTHER_MONEY": "USD",
+                "PRODUCT_ID": 1071,
+                "STOCK_ID": 1074,
+                "WRK_ROW_ID": "WRK1342025041061326061492661",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 5.00,
+                "NET_PRICE": 2000.00,
+                "IS_SELECTED": 1,
+                "IS_SATINALMA": 1,
+                "SLP": [
+                    {
+                        "PRODUCT_MARJ": 21.00,
+                        "SALE_PRICE": 2420.00
+                    }
+                ],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "B ürünü",
+                "PRICE": 3000.00,
+                "PRICE_OTHER": 1000.00,
+                "OTHER_MONEY": "EUR",
+                "PRODUCT_ID": 1072,
+                "STOCK_ID": 1075,
+                "WRK_ROW_ID": "WRK2142025041061326061522872",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 8.00,
+                "NET_PRICE": 3000.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "124 DSC 12 430 MM VOLANT ",
+                "PRICE": 0.00,
+                "PRICE_OTHER": 0.00,
+                "OTHER_MONEY": "USD",
+                "PRODUCT_ID": 708,
+                "STOCK_ID": 713,
+                "WRK_ROW_ID": "WRK2x3164202515535587sT",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 1.00,
+                "NET_PRICE": 0.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": [
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 708
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "FULLNAME": "ESER TİC.ve SAN.LTD.ŞTİ.",
+        "COMPANY_ID": 8,
+        "URUNLER": [
+            {
+                "PRODUCT_NAME": "A ürünü",
+                "PRICE": 2500.00,
+                "PRICE_OTHER": 2500.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1071,
+                "STOCK_ID": 1074,
+                "WRK_ROW_ID": "WRK1212025041061331199512561",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 5.00,
+                "NET_PRICE": 2500.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "B ürünü",
+                "PRICE": 3500.00,
+                "PRICE_OTHER": 3500.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1072,
+                "STOCK_ID": 1075,
+                "WRK_ROW_ID": "WRK27202504106133119953262",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 8.00,
+                "NET_PRICE": 3500.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "D ürünü",
+                "PRICE": 4000.00,
+                "PRICE_OTHER": 4000.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1074,
+                "STOCK_ID": 1077,
+                "WRK_ROW_ID": "WRK4392025041061331199602184",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 15.00,
+                "NET_PRICE": 4000.00,
+                "IS_SELECTED": 1,
+                "IS_SATINALMA": 1,
+                "SLP": [
+                    {
+                        "PRODUCT_MARJ": 20.00,
+                        "SALE_PRICE": 4800.00
+                    }
+                ],
+                "ALTERNATIFLER": [
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 711
+                    },
+                    {
+                        "PRODUCT_ID": 708
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "FULLNAME": "KAÇMAZLAR MOTORLU ARAÇLAR SAN.VE TİC.LTD.ŞTİ.",
+        "COMPANY_ID": 31,
+        "URUNLER": [
+            {
+                "PRODUCT_NAME": "A ürünü",
+                "PRICE": 2500.00,
+                "PRICE_OTHER": 2500.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1071,
+                "STOCK_ID": 1074,
+                "WRK_ROW_ID": "WRK1512025041061333306522421",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 5.00,
+                "NET_PRICE": 2500.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "B ürünü",
+                "PRICE": 3000.00,
+                "PRICE_OTHER": 3000.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1072,
+                "STOCK_ID": 1075,
+                "WRK_ROW_ID": "WRK2112025041061333306542982",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 8.00,
+                "NET_PRICE": 3000.00,
+                "IS_SELECTED": 1,
+                "IS_SATINALMA": 1,
+                "SLP": [
+                    {
+                        "PRODUCT_MARJ": 22.00,
+                        "SALE_PRICE": 3660.00
+                    }
+                ],
+                "ALTERNATIFLER": []
+            },
+            {
+                "PRODUCT_NAME": "C ürünü",
+                "PRICE": 3500.00,
+                "PRICE_OTHER": 3500.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1073,
+                "STOCK_ID": 1076,
+                "WRK_ROW_ID": "WRK3582025041061333306572343",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 11.00,
+                "NET_PRICE": 3500.00,
+                "IS_SELECTED": 1,
+                "IS_SATINALMA": 1,
+                "SLP": [
+                    {
+                        "PRODUCT_MARJ": 23.00,
+                        "SALE_PRICE": 4305.00
+                    }
+                ],
+                "ALTERNATIFLER": [
+                    {
+                        "PRODUCT_ID": 1073
+                    },
+                    {
+                        "PRODUCT_ID": 1060
+                    }
+                ]
+            },
+            {
+                "PRODUCT_NAME": "D ürünü",
+                "PRICE": 4500.00,
+                "PRICE_OTHER": 4500.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 1074,
+                "STOCK_ID": 1077,
+                "WRK_ROW_ID": "WRK4212025041061333306602304",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 15.00,
+                "NET_PRICE": 4500.00,
+                "IS_SELECTED": 0,
+                "IS_SATINALMA": 0,
+                "SLP": [],
+                "ALTERNATIFLER": [
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 711
+                    },
+                    {
+                        "PRODUCT_ID": 708
+                    }
+                ]
+            },
+            {
+                "PRODUCT_NAME": "124 DC 12 VOLANT ",
+                "PRICE": 4000.00,
+                "PRICE_OTHER": 4000.00,
+                "OTHER_MONEY": "TL",
+                "PRODUCT_ID": 711,
+                "STOCK_ID": 716,
+                "WRK_ROW_ID": "WRK5212025041061333306632555",
+                "DISCOUNT_1": 0.00,
+                "TAX": 20.00,
+                "QUANTITY": 1.00,
+                "NET_PRICE": 4000.00,
+                "IS_SELECTED": 1,
+                "IS_SATINALMA": 1,
+                "SLP": [
+                    {
+                        "PRODUCT_MARJ": 0.00,
+                        "SALE_PRICE": 0.00
+                    }
+                ],
+                "ALTERNATIFLER": [
+                    {
+                        "PRODUCT_ID": 1074
+                    },
+                    {
+                        "PRODUCT_ID": 711
+                    }
+                ]
+            }
+        ]
+    }
+]
