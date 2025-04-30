@@ -223,6 +223,25 @@ WHERE INTERNALDEMAND_ID=12
 
 
   <script>
+  function mergeCompanies(data) {
+  const result = [];
+
+  data.forEach(entry => {
+    const existing = result.find(c => c.COMPANY_ID === entry.COMPANY_ID);
+
+    if (existing) {
+      existing.URUNLER = existing.URUNLER.concat(entry.URUNLER);
+    } else {
+      result.push({
+        FULLNAME: entry.FULLNAME,
+        COMPANY_ID: entry.COMPANY_ID,
+        URUNLER: [...entry.URUNLER]
+      });
+    }
+  });
+
+  return result;
+}
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
 // Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
@@ -230,6 +249,7 @@ WHERE INTERNALDEMAND_ID=12
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     const data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+    data=mergeCompanies(data);
     const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
 
