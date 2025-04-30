@@ -201,7 +201,7 @@ WHERE INTERNALDEMAND_ID=#attributes.internal_id#
 
   </cfquery>
   
-  <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.offer_id#</cfoutput>">
+  <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 
   <cfset MONEYARRRR=arrayNew(1)>
             <cfquery name="getMoneyext" datasource="#dsn3#">
