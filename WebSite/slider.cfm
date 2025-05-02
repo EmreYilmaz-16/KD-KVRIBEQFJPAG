@@ -56,23 +56,31 @@
         <h3>Slider Yönetimi</h3>
        <form method="post" enctype="multipart/form-data" class="row g-3 bg-white p-4 shadow-sm rounded mb-4">
     <div class="col-md-6">
+        <div class="form-group">
         <label class="form-label">Görsel Yükle</label>
         <input type="file" name="imageFile" accept="image/*" class="form-control" required>
     </div>
+    </div>
     <div class="col-md-6">
+        <div class="form-group">
         <label class="form-label">Başlık</label>
         <input type="text" name="title" class="form-control" required>
+        </div>
     </div>
     <div class="col-12">
+        <div class="form-group">
         <label class="form-label">Açıklama</label>
         <textarea name="description" class="form-control" rows="2" required></textarea>
+        </div>
     </div>
     <div class="col-md-4">
+        <div class="form-group">
         <label class="form-label">Aktif Mi?</label>
         <select name="is_active" class="form-select">
             <option value="1" selected>Evet</option>
             <option value="0">Hayır</option>
         </select>
+        </div>
     </div>
     <div class="col-md-8 d-flex align-items-end justify-content-end">
         <button type="submit" name="submit" class="btn btn-primary px-4">Ekle</button>
