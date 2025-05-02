@@ -80,7 +80,7 @@
 </form>
 
         <h5>Mevcut Slider Kayıtları</h5>
-        <table class="table table-striped table-hover bg-white shadow-sm">
+        <cf_grid_list class="table table-striped table-hover bg-white shadow-sm">
             <thead class="table-primary">
                 <tr>
                     <th>ID</th>
@@ -106,7 +106,7 @@
                     </tr>
                 </cfoutput>
             </tbody>
-        </table>
+        </cf_grid_list>
 
         
     </div>
