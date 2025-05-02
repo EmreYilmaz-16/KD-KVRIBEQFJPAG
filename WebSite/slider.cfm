@@ -1,4 +1,4 @@
-
+<cf_box title="slider Yönetimi">
 
 
 
@@ -110,3 +110,5 @@
 
         
     </div>
+
+</cf_box>
