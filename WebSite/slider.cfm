@@ -33,7 +33,7 @@
             <cfqueryparam value="#form.is_active#" cfsqltype="cf_sql_bit">
         )
     </cfquery>
-    <cflocation url="#request.self#">
+    <cflocation url="#request.self#?fuseaction=#attributes.fuseaction#">
 </cfif>
 
 
@@ -42,7 +42,7 @@
     <cfquery datasource="#dsn#">
         DELETE FROM erp_slider WHERE id = <cfqueryparam value="#url.delete_id#" cfsqltype="cf_sql_integer">
     </cfquery>
-    <cflocation url="#request.self#">
+    <cflocation url="#request.self#?fuseaction=#attributes.fuseaction#">
 </cfif>
 
 <!-- Mevcut kayıtları getir -->
@@ -100,7 +100,7 @@
                         <td>#description#</td>
                         <td><cfif is_active>✅<cfelse>❌</cfif></td>
                         <td>
-                            <a href="admin_slider.cfm?delete_id=#id#" class="btn btn-sm btn-danger"
+                            <a href="#request.self#?fuseaction=#attributes.fuseaction#&delete_id=#id#" class="btn btn-sm btn-danger"
                                 onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
                         </td>
                     </tr>
