@@ -327,23 +327,25 @@ marjInput.style.width = '80px';
 marjCell.appendChild(marjInput);
 
 const salePriceCell = document.createElement('td');
-const salePriceSpan = document.createElement('span');
-salePriceSpan.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)}` : "-";
-salePriceCell.appendChild(salePriceSpan);
+const salePriceInput = document.createElement('input');
+salePriceInput.type = 'text';
+salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2) : "";
+salePriceInput.className = 'form-control form-control-sm sale-price-input';
+salePriceInput.style.width = '100px';
+salePriceInput.dataset.product = productName;
+
+salePriceCell.appendChild(salePriceInput);
 
 // input değişince hesapla
 marjInput.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
-  if (!selectedKey) return;
-
-  const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice] = selectedKey.split('|');
-  const net = parseFloat(netPrice);
+  const net = parseFloat(selectedCells.get(productName)?.split('|')[6]);
   const marj = parseFloat(marjInput.value);
   if (!isNaN(net) && !isNaN(marj)) {
     const calculatedSalePrice = net + (net * marj / 100);
-    salePriceSpan.textContent = `${calculatedSalePrice.toFixed(2)} ₺`;
+    salePriceInput.value = calculatedSalePrice.toFixed(2);
   }
 });
+
 row.appendChild(marjCell);
 row.appendChild(salePriceCell);
 
@@ -474,14 +476,18 @@ function updateOutput() {
       };
     }
     const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');
-    
-    let productMarj = 0;
-    let salePrice = 0;
+const salePriceInput = document.querySelector(`input.sale-price-input[data-product="${productName}"]`);
 
-    if (marjInput) {
-      productMarj = parseFloat(marjInput.value) || 0;
-      salePrice = parseFloat(netPrice) + (parseFloat(netPrice) * productMarj / 100);
-    }
+let productMarj = 0;
+let salePrice = 0;
+
+if (marjInput) {
+  productMarj = parseFloat(marjInput.value) || 0;
+}
+
+if (salePriceInput) {
+  salePrice = parseFloat(salePriceInput.value) || 0;
+}
     let convertedsalePriceOther = 0;
 try {
   const currency = MONEYARRRR.find(c => c.MONEY === otherMoney);
