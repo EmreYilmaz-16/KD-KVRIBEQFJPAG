@@ -328,7 +328,7 @@ marjCell.appendChild(marjInput);
 
 const salePriceCell = document.createElement('td');
 const salePriceSpan = document.createElement('span');
-salePriceSpan.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)} ₺` : "-";
+salePriceSpan.textContent = slpInfo.SALE_PRICE != null ? `${slpInfo.SALE_PRICE.toFixed(2)}` : "-";
 salePriceCell.appendChild(salePriceSpan);
 
 // input değişince hesapla
@@ -585,6 +585,29 @@ document.getElementById('send-btn').addEventListener('click', () => {
 
 updateBestSupplier();
 
+
+
+$(document).on("click", "#price-table > tbody > tr > td > span", function () {
+  var $span = $(this);
+  var currentValue = $span.text();
+  var $input = $("<input type='text' class='price-editor'>").val(currentValue);
+
+  $span.replaceWith($input);
+  $input.focus();
+
+  $input.on("blur", function () {
+    var newValue = $input.val();
+    var $newSpan = $("<span>").text(commaSplit(newValue));
+    $input.replaceWith($newSpan);
+  });
+
+  // İsteğe bağlı: Enter tuşuna basıldığında da blur çalışsın
+  $input.on("keydown", function (e) {
+    if (e.key === "Enter") {
+      $(this).blur();
+    }
+  });
+});
 
 
 </script>
