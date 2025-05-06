@@ -597,6 +597,7 @@ $(document).on("click", "#price-table > tbody > tr > td > span", function () {
 
   $input.on("blur", function () {
     var newValue = $input.val();
+    input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
     var $newSpan = $("<span>").text(commaSplit(newValue));
     $input.replaceWith($newSpan);
   });
