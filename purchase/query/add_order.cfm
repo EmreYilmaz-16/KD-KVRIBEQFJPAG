@@ -2,7 +2,7 @@
 <cfif attributes.active_company neq session.ep.company_id>
 	<script type="text/javascript">
 		alert("<cf_get_lang no ='213.İşlemin Şirketi İle Aktif Şirketiniz Farklı Çalıştığınız Şirketi Kontrol Ediniz'>!");
-		window.location.href='<cfoutput>#request.self#?fuseaction=#my_url_action#</cfoutput>';
+		window.location.href='<cfoutput>/index.cfm?fuseaction=#my_url_action#</cfoutput>';
 	</script>
 	<cfabort>
 </cfif>
@@ -610,7 +610,7 @@
 		action_table='ORDERS'
 		action_column='ORDER_ID'
 		action_id='#GET_ORDER.ORDER_ID#'
-		action_page='#request.self#?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#' 
+		action_page='/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#' 
 		warning_description='#getLang('','Sipariş',57611)# : #paper_full#'>
 
 	<cfif isdefined("attributes.process_cat") and len(attributes.process_cat)>
@@ -620,7 +620,7 @@
 			action_table="ORDER"
 			action_column="ORDER_ID"
 			is_action_file = 1
-			action_page='#request.self#?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#'
+			action_page='/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#'
 			action_file_name='#get_type.action_file_name#'
 			action_db_type = '#dsn3#'
 			is_template_action_file = '#get_type.action_file_from_template#'>
@@ -635,7 +635,7 @@
 	</cfscript>
 </cfif>
 <cfif not isdefined("last_xml_import_pur")><!--- importtan gelmiyorsa--->
-	<cfset return_adress = "#request.self#?fuseaction=purchase.list_order&event=upd&order_id=#first_order_id_pur#">
+	<cfset return_adress = "/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#first_order_id_pur#">
 	<script type="text/javascript">
 		window.location.href="<cfoutput>#return_adress#</cfoutput>";
 	</script>
