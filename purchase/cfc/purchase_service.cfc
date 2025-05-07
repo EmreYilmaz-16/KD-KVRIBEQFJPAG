@@ -645,7 +645,7 @@ VALUES(
         </cfloop>
     
         <!--- Şirket bazlı loop başlat --->
-        <cfloop query="getSelectedRows" group="COMPANY_ID">
+        <cfoutput query="getSelectedRows" group="COMPANY_ID">
             <cfset var ix = 0>
             <cfset var rows_ = 0>
             <cfset var BASKET_NET_TOTAL = 0>
@@ -655,7 +655,7 @@ VALUES(
             <cfset var nowTS = now()>
     
             <!--- Ürünleri dön --->
-            <cfloop query="getSelectedRows">
+            <cfoutput query="getSelectedRows">
                 <cfif getSelectedRows.COMPANY_ID EQ getSelectedRows.COMPANY_ID_currentrow>
                     <cfset ix++>
                     <cfset otherMoney = getSelectedRows.OTHER_MONEY>
