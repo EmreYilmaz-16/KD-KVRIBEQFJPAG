@@ -703,6 +703,10 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset attributes.CONSUMER_ID ="">
 <cfset attributes.CONSUMER_NAME ="">
 <cfset attributes.ORDER_HEAD  ="Siparişimiz">
+<cfset attributes.ORDER_DETAIL ="">
+<cfset attributes.ORDER_DESCRIPTION ="">
+<cfset attributes.ORDER_HEAD  ="Siparişimiz">
+<cfset attributes.ORDER_DETAIL ="">
 <cfset attributes.order_date=now()>
 <cfset attributes.deliverdate=now()>
 <cfscript>
