@@ -775,6 +775,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset attributes.deliverdate=now()>
 <cfset attributes.PUBLISHDATE =now()>
 <cfset attributes.deliverdate=now()>
+<cfset attributes.SHIP_METHOD_ID=2>
+<cfset attributes.SHIP_METHOD="kargo">
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
