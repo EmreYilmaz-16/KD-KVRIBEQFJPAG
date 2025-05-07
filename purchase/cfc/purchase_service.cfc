@@ -761,6 +761,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 </cfloop>
 <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
 <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+<cfset attributes.process_stage="67">
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
