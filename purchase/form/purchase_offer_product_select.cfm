@@ -132,6 +132,7 @@ SELECT PRODUCT_NAME
 	, CAST(TAX AS DECIMAL(18, 2)) AS TAX
 	, CAST(QUANTITY AS DECIMAL(18, 2)) AS QUANTITY
 	, CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18, 2)) AS NET_PRICE
+  ,CASE WHEN (SELECT (SELECT COUNT(*) FROM w3Qa_1.ORDER_ROW WHERE WRK_ROW_RELATION_ID=OFR2.WRK_ROW_ID) FROM w3Qa_1.OFFER_ROW OFR2 WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID) >0	THEN 1 ELSE 0 END AS SNT_S
 	, CASE 
 		WHEN (
 				SELECT COUNT(*)
@@ -384,6 +385,7 @@ row.appendChild(salePriceCell);
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
   ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Seçili </div>' : ''}
   ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">🚩 Satış Teklifinde</div>' : ''}
+  ${product.SNT_S === 1 ? '<div class="text-danger fw-bold small">💵 S.Alma Oluştu</div>' : ''}
   ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-warning fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}    
 `;
 
