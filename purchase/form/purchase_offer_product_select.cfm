@@ -586,7 +586,32 @@ document.getElementById('send-btn').addEventListener('click', () => {
   });
 });
 
+document.getElementById('send-btn3').addEventListener('click', () => {
+  const payload = updateOutput(); // Ensure payload is generated correctly
+  console.log("Sunucuya gönderilecek veri:", payload);
+  var offer_id = document.getElementById("offer_id").value;
 
+  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelectorOnly', { // Correct endpoint
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ payload, offer_id,session_variables }) // Include offer_id in the payload
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.RES === "success") {
+      alert("İşlem başarılı!");
+      window.location.reload(); // Refresh the page to see changes;
+    } else if (data.RES === "error") {
+      alert("Bir hata oluştu!");
+    }
+  })
+  .catch(error => {
+    console.error("Hata:", error);
+    alert("Sunucuya bağlanırken bir hata oluştu!");
+  });
+});
 
 
 updateBestSupplier();
