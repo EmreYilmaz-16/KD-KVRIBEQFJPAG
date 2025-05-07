@@ -664,12 +664,17 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 
 
     </cfscript>
+    
 </cfloop>
-<cfdump var="#attributes#">
+<cfset attributes.rows_=ix>
+        <cfquery name="GETCOMPANY" datasource="#dsn#">
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
+        </cfquery>
+<cfdump var="#GETCOMPANY#">
 <cfscript>
     structClear(attributes);
 </cfscript>
-<cfdump var="#attributes#">
+
 </cfloop>
 
 
