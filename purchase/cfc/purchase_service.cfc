@@ -791,6 +791,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <CFSET attributes.DELIVER_LOC_ID =1>
 <CFSET attributes.DELIVER_DEPT_NAME ="2">
 <CFSET attributes.BASKET_MONEY  ="TL">
+<CFSET attributes.BASKET_RATE1   =1>
+<CFSET attributes.BASKET_RATE2   =1>
 
 <cfinclude template="../query/add_order.cfm">
 
