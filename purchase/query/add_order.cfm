@@ -562,6 +562,8 @@
 			</cfquery>
 		</cfif>
 	<cfscript>
+	
+		
 		basket_kur_ekle(action_id:GET_ORDER.ORDER_ID,table_type_id:3,process_type:0,basket_money_db:new_dsn3_group_pur);
 		/*if(not isdefined("is_from_import") or not isdefined("add_reserve_row"))//importdan geliyorsa fonksiyon tanımlanmasın
 			include('add_order_row_reserved_stock.cfm','\V16/objects\functions'); //rezerve edilen satırlar icin ORDER_ROW_RESERVED'a kayıt atıyor.*/
@@ -571,11 +573,7 @@
 			/*
 			if(not isdefined("is_from_import") or not isdefined("add_internaldemand_row_relation"))//importdan geliyorsa fonksiyon tanımlanmasın
 				include('add_internaldemand_relation.cfm','\V16/objects\functions'); */
-			add_internaldemand_row_relation(
-				to_related_action_id:GET_ORDER.ORDER_ID,
-				to_related_action_type:0,
-				action_status:0
-				);
+			
 		}
 		if(isdefined('attributes.pro_material_id_list') and len(attributes.pro_material_id_list)) //proje malzeme planı ile baglantısı olusturuluyor
 		{/*
