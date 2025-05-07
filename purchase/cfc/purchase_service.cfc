@@ -666,6 +666,10 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
     </cfscript>
 </cfloop>
 <cfdump var="#attributes#">
+<cfscript>
+    structClear(attributes);
+</cfscript>
+<cfdump var="#attributes#">
 </cfloop>
 
 
