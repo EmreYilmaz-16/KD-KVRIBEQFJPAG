@@ -698,7 +698,7 @@ VALUES(
                     <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
                     <cfset attributes["wrk_row_relation_id#ix#"] = getSelectedRows.WRK_ROW_ID>
                 </cfif>
-            </cfloop>
+            </cfoutput>
     
             <cfset attributes.rows_ = ix>
     
@@ -758,7 +758,7 @@ VALUES(
             <cfscript>
                 structClear(attributes);
             </cfscript>
-        </cfloop>
+        </cfoutput>
     </cffunction>
 
 <!--------------
