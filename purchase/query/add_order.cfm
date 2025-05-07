@@ -598,7 +598,7 @@
     <cfset attributes.info_id = my_result.IDENTITYCOL>
     <cfset attributes.is_upd = 0>
     <cfset attributes.info_type_id = -12>
-    <cfinclude template="../../objects/query/add_info_plus2.cfm">
+
     <!---Ek Bilgiler--->
 	<cf_workcube_process 
 		is_upd='1' 
