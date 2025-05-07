@@ -92,21 +92,25 @@
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
             <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
          <cfquery name="getOfferStage" datasource="#DSN3#">
+SELECT OFFER_ID,OFFER_STAGE,SUM(SS) SS FROM (
 SELECT 
 	DISTINCT
 	ORR_SATIS_TEKLIFI.OFFER_ID,
-	O_SATIS_TEKLIFI.OFFER_STAGE
-
+	O_SATIS_TEKLIFI.OFFER_STAGE,
+	(SELECT COUNT(*) FROM w3Qa_1.ORDER_ROW WHERE WRK_ROW_RELATION_ID=ORR_SATIS_TEKLIFI.WRK_ROW_ID)	AS SS
 FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
 LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
 LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
 LEFT JOIN w3Qa_1.OFFER AS O_SATIS_TEKLIFI ON O_SATIS_TEKLIFI.OFFER_ID=ORR_SATIS_TEKLIFI.OFFER_ID
 WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
 SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.internal_id#)
+) AS T GROUP BY OFFER_ID,OFFER_STAGE
+
 </cfquery>
 
-            <CFIF getOfferStage.OFFER_STAGE EQ 256>
-            <button class="btn btn-success" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+            <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
+            <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+          
           </CFIF>
           
         </div>
@@ -655,6 +659,21 @@ if(SFRFIYAT>0){
 }else{
     return true;
 }
+}
+function SatinalmaSiparis(params) {
+  $.ajax({
+    url: '/AddOns/Partner/purchase/cfc/purchase_Service.cfc?method=SAVEORDER_gpt&internal_id='+params,
+    type: 'GET',
+    
+    success: function (response) {
+      // Başarılı yanıt alındığında yapılacak işlemler
+      console.log(response);
+    },
+    error: function (error) {
+      // Hata durumunda yapılacak işlemler
+      console.error(error);
+    }
+  });
 }
 
 
