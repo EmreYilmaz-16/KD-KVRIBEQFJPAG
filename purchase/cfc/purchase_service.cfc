@@ -636,6 +636,12 @@ WHERE WRK_ROW_RELATION_ID IN (
 </cfquery>
 
 <cfloop query="getSelectedRows" group="COMPANY_ID">
+<cfdump var="#getSelectedRows.COMPANY_ID#">
+</cfloop>
+
+
+<!--------------------
+<cfloop query="getSelectedRows" group="COMPANY_ID">
 
     <cfset ix=0>
     <cfloop >
@@ -734,7 +740,7 @@ WHERE WRK_ROW_RELATION_ID IN (
 </cfloop>
 
 
-
+------------------>
 
 
 </cffunction>
