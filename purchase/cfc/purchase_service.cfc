@@ -909,6 +909,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 				ACTION_ID=#arguments.action_id#
 		</cfquery>
 	</cfif>
+    <cfdump var="#attributes#">
 	<cfloop from="1" to="#attributes.kur_say#" index="fnc_i">
 		<cfquery name="add_money_obj_bskt" datasource="#arguments.transaction_dsn#">
 			INSERT INTO #arguments.action_table_dsn_alias##fnc_table_name# 
