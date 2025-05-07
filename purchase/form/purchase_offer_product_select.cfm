@@ -602,7 +602,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
   .then(data => {
     if (data.RES === "success") {
       alert("İşlem başarılı!");
-     // window.location.reload(); // Refresh the page to see changes;
+      window.location.reload(); // Refresh the page to see changes;
     } else if (data.RES === "error") {
       alert("Bir hata oluştu!");
     }
