@@ -651,7 +651,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
              </cfquery>
              <cfset ibnm=1>
     <cfloop query="getMoneyext">
-        <cfset MONEYARRRR=arrayNew(1)>
+       
         <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
 
 
@@ -668,6 +668,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
     </cfloop>
     <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
 <cfloop query="getSelectedRows" group="COMPANY_ID">
+    <cfset MONEYARRRR=arrayNew(1)>
 <cfdump var="#getSelectedRows.COMPANY_ID#">
 <cfset ix=0>
 <cfloop>
