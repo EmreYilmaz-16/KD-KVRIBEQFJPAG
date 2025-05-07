@@ -12,11 +12,6 @@ btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
 document.getElementById("workcube_button").appendChild(btn)
 </cfif>
 
-var SanalVarmi=window.basket.items.findIndex(p=>p.PRODUCT_ID==1055)
-
-if(SanalVarmi>-1){
-alert("Sanal ürün sepetinizde mevcut. Lütfen sepetinizi kontrol ediniz.");
-}
 
 // Sepet tablosundaki tüm <tr> satırlarını gez
     $("#tblBasket tbody").children().each(function(index, row) {
