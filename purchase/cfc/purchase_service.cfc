@@ -667,7 +667,7 @@ WHERE WRK_ROW_RELATION_ID IN (
         <cfquery name="GETCOMPANY" datasource="#dsn#">
             select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
         </cfquery>
-    </cfloop>
+    
     <cfset attributes.order_date=now()>
     <cfset attributes.deliverdate=now()>
     <cfscript>
@@ -727,7 +727,7 @@ WHERE WRK_ROW_RELATION_ID IN (
             "attributes.other_money_value_#ix#"=ox.OTM_V_;
             "attributes.price#ix#"=ox.PRICE_;
         </cfscript>
-
+    </cfloop>
 
 <cfdump var="#attributes#">
 
