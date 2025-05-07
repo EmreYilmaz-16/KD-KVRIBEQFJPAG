@@ -1,4 +1,4 @@
-<cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
+<cfcomponent displayname="SaleService" output="false" hint="Handles sale-related operations">
     <cfset dsn3="w3Qa_1">
     <cfset dsn="w3Qa">
 

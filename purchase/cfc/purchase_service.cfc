@@ -1,7 +1,55 @@
-﻿<cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
+﻿<!-----
+/**
+ * PurchaseService Component
+ * Handles purchase-related operations.
+ *
+ * Functions:
+ * 1. savePurchaseOfferSelector
+ *    - Saves selected purchase offers.
+ *    - Access: Remote
+ *    - Return Type: Struct (JSON)
+ *    - HTTP Method: POST
+ *    - Parameters:
+ *        - payload: JSON payload containing purchase offer data.
+ *    - Returns: A response struct with success or error details.
+ *
+ * 2. savePurchaseOfferSelectorOnly
+ *    - Saves selected purchase offers without additional processing.
+ *    - Access: Remote
+ *    - Return Type: Struct (JSON)
+ *    - HTTP Method: POST
+ *    - Parameters:
+ *        - payload: JSON payload containing purchase offer data.
+ *    - Returns: A response struct with success or error details.
+ *
+ * 3. getByProductId
+ *    - Retrieves alternative product IDs for a given product ID.
+ *    - Access: Remote
+ *    - Return Type: Array (JSON)
+ *    - HTTP Method: POST
+ *    - Parameters:
+ *        - product_id: String (Required) - The ID of the product.
+ *    - Returns: An array of alternative product IDs.
+ *
+ * 4. savePurchaseOffer
+ *    - Saves purchase offers based on provided payload.
+ *    - Access: Remote
+ *    - Return Type: Struct (JSON)
+ *    - HTTP Method: POST
+ *    - Parameters:
+ *        - payload: JSON payload containing purchase offer data.
+ *    - Returns: A response struct with success or error details.
+ *
+ * Notes:
+ * - The component uses multiple database queries to process and save purchase offers.
+ * - Error handling is implemented using <cftry> and <cfcatch>.
+ * - Logs are written to the "purchaseService" log file for debugging and error tracking.
+ */
+------>
+<cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
     <cfset dsn3="w3Qa_1">
     <cfset dsn="w3Qa">
-
+    <cfset wrk_eval = application.functions.wrk_eval>
 
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
@@ -243,7 +291,7 @@
 
 </CFLOOP>
 
-<cfset wrk_eval = application.functions.wrk_eval>
+
 <cfquery name="get_offer_number" datasource="#dsn3#">
     EXEC GET_PAPER_NUMBER 1
 </cfquery>
@@ -477,56 +525,6 @@ VALUES(
 <cfset attributes.ship_date=now()>
 <cfset attributes.finishdate=now()>
 <cfset company_ids=",#arguments.payload.payload.company_ids#,">
-
-<!-------------
-<cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
-<cfset attributes.OFFER_DESCRIPTION="">
-<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
-<cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
-<cfset FactPBS="purchase.purchase_offer_selector">
-<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
-<cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
-<cfset attributes.price_catid="">
-<cfset attributes.sales_emp_id=session.ep.userid>
-<cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
-<cfset attributes.project_head="">
-<cfset attributes.project_id="">
-<cfset attributes.process_stage="20">
-<cfquery name="getcc" datasource="#dsn#">
-    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
-</cfquery>
-<cfquery name="GETCOMPANY" datasource="#dsn#">
-  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
-</cfquery>
-<cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
-<cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
-<cfset attributes.ship_method_id=getcc.SHIP_METHOD_ID>
-<cfset attributes.ship_method=getcc.SHIP_METHOD_ID>
-<cfset attributes.pay_method=getcc.REVMETHOD_ID>
-<cfset attributes.card_paymethod_id="">
-
-<cfset attributes.ship_address=GETCOMPANY.COMPANY_ADDRESS>
-<cfset attributes.ship_address_id=-1>
-<cfset attributes.city_id=GETCOMPANY.CITY>
-<cfset attributes.county_id=GETCOMPANY.COUNTY>
-
-<CFSET attributes.ship_address_city_id=GETCOMPANY.CITY>
-<CFSET attributes.ship_address_county_id=GETCOMPANY.COUNTY>
-
-<cfset attributes.commission_rate="">
-
-<cfset attributes.sales_add_option="">
-<cfset attributes.offer_head="Teklifimiz">
-<cfset attributes.offer_detail="">
-<cfset attributes.offer_detail="">
-<cfset attributes.basket_money=getcc.MONEY>
-<cfset attributes.basket_rate1=IDEMAND.PARA[1].RATE1>
-<cfset attributes.basket_rate2=IDEMAND.PARA[1].RATE2>
-<cfset attributes.ref_member_type ="">
-<cfset attributes.consumer_id="">
-<cfset attributes.reserved=1>
----------->
-
 <cfscript>
     DISCOUNT_TOTAL=0;
     GROSS_TOTAL=0;
@@ -604,5 +602,142 @@ VALUES(
 
 
     </cffunction>
+
+<cffunction name="SAVEORDER">
+    <cfargument name="internal_id" type="numeric" required="true">
+<cfquery name="getSelectedRows" datasource="#dsn3#">
+
+    SELECT O.COMPANY_ID
+	,ORR.PRODUCT_ID
+	,ORR.STOCK_ID
+	,ORR.PRODUCT_NAME
+	,ORR.PRODUCT_NAME2
+	,ORR.PRICE
+	,ORR.QUANTITY
+	,ORR.WRK_ROW_ID
+	,ORR.WRK_ROW_RELATION_ID
+	,ORR.OTHER_MONEY
+	,ORR.PRICE_OTHER
+	,ORR.MARJ_ORAN_PBS
+	,ORR.PRICE_PBS
+	,ORR.OLD_PRICE
+    ,ORR.UNIT
+    ,ORR.UNIT_ID
+    ,ORR.TAX
+    ,ORR.OTHER_MONEY_VALUE
+FROM w3Qa_1.OFFER_ROW AS ORR
+INNER JOIN w3Qa_1.OFFER AS O ON O.OFFER_ID = ORR.OFFER_ID
+WHERE WRK_ROW_RELATION_ID IN (
+		SELECT WRK_ROW_ID
+		FROM w3Qa_1.PBS_SELECTED_ROWS
+		WHERE OFFER_ID = #arguments.internal_id#
+		)
+        ORDER BY COMPANY_ID
+</cfquery>
+
+<cfloop query="getSelectedRows" group="COMPANY_ID">
+
+    <cfset ix=0>
+    <cfloop >
+        <cfset wrkRowId=product>
+        <cfscript>
+            ix=ix+1;
+            attributes["product_id#ix#"] = PRODUCT_ID;
+            attributes["stock_id#ix#"] = STOCK_ID;
+            attributes["product_name#ix#"] = PRODUCT_NAME;
+            attributes["unit#ix#"] = UNIT;
+            attributes["unit_id#ix#"] = UNIT_ID;
+            attributes["price#ix#"] = PRICE;
+            attributes["price_other#ix#"] = PRICE_OTHER;
+            attributes["tax#ix#"] = TAX;
+            attributes["amount#ix#"] = QUANTITY;
+            attributes["indirim1#ix#"] = 0;
+            attributes["other_money_#ix#"] = OTHER_MONEY;
+            attributes["other_money_value_#ix#"] = OTHER_MONEY_VALUE;
+            attributes["description#ix#"] = "";
+            attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+            attributes["wrk_row_relation_id#ix#"] = WRK_ROW_ID;
+            attributes["is_virtual#ix#"] = 0;
+            attributes["SHELF_CODE#ix#"] = "";
+            attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+
+
+        </cfscript>
+        <cfset attributes.rows_=ix>
+        <cfquery name="GETCOMPANY" datasource="#dsn#">
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
+        </cfquery>
+    </cfloop>
+    <cfset attributes.order_date=now()>
+    <cfset attributes.deliverdate=now()>
+    <cfscript>
+        DISCOUNT_TOTAL=0;
+        GROSS_TOTAL=0;
+        SUBNETTOTAL=0;
+        SUBTAXTOTAL=0;
+        SUBTOTAL=0;
+        TAX_TOTAL=0;
+        TOTAL_WITHOUT_KDV=0;
+        TOTAL_WITH_KDV=0;
+        BASKET_NET_TOTAL=0;
+        BASKET_NET_TOTAL_=0;
+        BASKET_TAX_TOTAL=0;
+        BASKET_TAX_TOTAL_=0;
+    </cfscript>
+    <CFLOOP from="1" to="#attributes.rows_#" index="ix">
+        <cfset PRICE=evaluate("attributes.price#ix#")>
+        <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+        <cfset TAX=evaluate("attributes.tax#ix#")>
+        <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+        <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+        <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+        <cfscript>
+         SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+                return item.MONEY == OTHER_MONEY;
+            })[1];
+        OLD_SATIR_KUR= SATIR_KUR;
+        </cfscript>
+    
+        <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+        <cfset ox=structNew()>
+        <cfset ox.PRICE=PRICE>
+        <cfset ox.PRICE_=PR_HESAP>
+        <cfscript>
+            dp=PRICE-(PRICE*DISCOUNT)/100;  
+            dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+    
+            TUTAR=dp*AMOUNT;
+            TUTAR_=dp_*AMOUNT;
+    
+            TX=(TUTAR*TAX)/100
+            TX_=(TUTAR_*TAX)/100
+            ox.DP=dp;
+            ox.DP_=dp_;
+            ox.TUTAR=TUTAR;
+            ox.TUTAR_=TUTAR_;
+            OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+            OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+            ox.TX=TX;
+            ox.TX_=TX_;
+            BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+            BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+            BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+            BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+    
+            "attributes.other_money_value_#ix#"=ox.OTM_V_;
+            "attributes.price#ix#"=ox.PRICE_;
+        </cfscript>
+
+
+<cfdump var="#attributes#">
+
+</cfloop>
+
+
+
+
+
+</cffunction>
+
 
 </cfcomponent>
