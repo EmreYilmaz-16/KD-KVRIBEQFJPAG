@@ -796,6 +796,22 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <CFSET attributes.BASKET_RATE2   =1>
 <cfset attributes.kur_say=arrayLen(MONEYARRRR)>
 <CFSET attributes.internaldemand_id_list=",#arguments.internal_id#,">
+<cfset ibnm=1>
+<cfloop query="getMoneyext">
+    <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+    <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+    <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+    <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+    <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+    <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+      
+    <cfscript>
+        arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+    </cfscript>
+    <cfset ibnm=ibnm+1>
+</cfloop>
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
