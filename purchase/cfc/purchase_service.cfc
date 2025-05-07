@@ -636,7 +636,33 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 	
         ORDER BY COMPANY_ID
 </cfquery>
+<cfset MONEYARRRR=arrayNew(1)>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+             <cfset ibnm=1>
+    <cfloop query="getMoneyext">
+        <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
 
+
+        <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+        <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+        <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+          
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
+        <cfset ibnm=ibnm+1>
+    </cfloop>
+    <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
 <cfloop query="getSelectedRows" group="COMPANY_ID">
 <cfdump var="#getSelectedRows.COMPANY_ID#">
 <cfset ix=0>
@@ -687,6 +713,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
     BASKET_TAX_TOTAL=0;
     BASKET_TAX_TOTAL_=0;
 </cfscript>
+
 <CFLOOP from="1" to="#attributes.rows_#" index="ix">
     <cfset PRICE=evaluate("attributes.price#ix#")>
     <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
@@ -731,6 +758,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
         "attributes.price#ix#"=ox.PRICE_;
     </cfscript>
 </cfloop>
+
 <cfdump var="#attributes#">
 <cfscript>
     structClear(attributes);
