@@ -639,6 +639,33 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 
 <cfloop query="getSelectedRows" group="COMPANY_ID">
 <cfdump var="#getSelectedRows.COMPANY_ID#">
+<cfset ix=0>
+<cfloop>
+    <cfscript>
+        ix=ix+1;
+        attributes["product_id#ix#"] = PRODUCT_ID;
+        attributes["stock_id#ix#"] = STOCK_ID;
+        attributes["product_name#ix#"] = PRODUCT_NAME;
+        attributes["unit#ix#"] = UNIT;
+        attributes["unit_id#ix#"] = UNIT_ID;
+        attributes["price#ix#"] = PRICE;
+        attributes["price_other#ix#"] = PRICE_OTHER;
+        attributes["tax#ix#"] = TAX;
+        attributes["amount#ix#"] = QUANTITY;
+        attributes["indirim1#ix#"] = 0;
+        attributes["other_money_#ix#"] = OTHER_MONEY;
+        attributes["other_money_value_#ix#"] = OTHER_MONEY_VALUE;
+        attributes["description#ix#"] = "";
+        attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+        attributes["wrk_row_relation_id#ix#"] = WRK_ROW_ID;
+        attributes["is_virtual#ix#"] = 0;
+        attributes["SHELF_CODE#ix#"] = "";
+        attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+
+
+    </cfscript>
+</cfloop>
+<cfdump var="#attributes#">
 </cfloop>
 
 
@@ -648,29 +675,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
     <cfset ix=0>
     <cfloop >
         <cfset wrkRowId=product>
-        <cfscript>
-            ix=ix+1;
-            attributes["product_id#ix#"] = PRODUCT_ID;
-            attributes["stock_id#ix#"] = STOCK_ID;
-            attributes["product_name#ix#"] = PRODUCT_NAME;
-            attributes["unit#ix#"] = UNIT;
-            attributes["unit_id#ix#"] = UNIT_ID;
-            attributes["price#ix#"] = PRICE;
-            attributes["price_other#ix#"] = PRICE_OTHER;
-            attributes["tax#ix#"] = TAX;
-            attributes["amount#ix#"] = QUANTITY;
-            attributes["indirim1#ix#"] = 0;
-            attributes["other_money_#ix#"] = OTHER_MONEY;
-            attributes["other_money_value_#ix#"] = OTHER_MONEY_VALUE;
-            attributes["description#ix#"] = "";
-            attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
-            attributes["wrk_row_relation_id#ix#"] = WRK_ROW_ID;
-            attributes["is_virtual#ix#"] = 0;
-            attributes["SHELF_CODE#ix#"] = "";
-            attributes["OFFER_ROW_CURRENCY#ix#"] = "";
-
-
-        </cfscript>
+        
         <cfset attributes.rows_=ix>
         <cfquery name="GETCOMPANY" datasource="#dsn#">
             select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
