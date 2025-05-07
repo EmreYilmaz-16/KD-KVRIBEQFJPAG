@@ -24,7 +24,7 @@
 </cfif>
 <cfif not isdefined("new_dsn3_group_pur")><cfset new_dsn3_group_pur = dsn3></cfif>
 <cfif not isdefined("is_from_import") and not isdefined("add_relation_rows")><!--- İmportta fonksiyonlar kendi sayfasında çağrılıyor --->
-	<cfinclude template="../../objects/functions/add_relation_rows.cfm"><!--- sip,irs,fat satırlarının birbiri ile ilişkileri.. --->
+	<cfinclude template="/v16/objects/functions/add_relation_rows.cfm"><!--- sip,irs,fat satırlarının birbiri ile ilişkileri.. --->
 </cfif>
 <cfif isdefined("attributes.deliverdate") and isdate(attributes.deliverdate)>
 	<cf_date tarih = "attributes.deliverdate">
