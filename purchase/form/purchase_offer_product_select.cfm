@@ -560,6 +560,9 @@ function getRandomColor() {
 }
 
 document.getElementById('send-btn').addEventListener('click', () => {
+  if(!sifirKontrl()){
+    return;
+  }
   const payload = updateOutput(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
