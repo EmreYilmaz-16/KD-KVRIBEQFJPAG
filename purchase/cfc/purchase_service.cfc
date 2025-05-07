@@ -797,6 +797,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset attributes.kur_say=arrayLen(MONEYARRRR)>
 <CFSET attributes.internaldemand_id_list=",#arguments.internal_id#,">
 <cfset ibnm=1>
+<cfdump var="#getMoneyext#">
 <cfloop query="getMoneyext">
     <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
 
