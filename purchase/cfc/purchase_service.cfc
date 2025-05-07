@@ -655,7 +655,7 @@ VALUES(
             <cfset var nowTS = now()>
     
             <!--- Ürünleri dön --->
-            <cfloop query="getSelectedRows">
+            <cfloop >
                 <cfif getSelectedRows.COMPANY_ID EQ getSelectedRows.COMPANY_ID_currentrow>
                     <cfset ix++>
                     <cfset otherMoney = getSelectedRows.OTHER_MONEY>
