@@ -639,7 +639,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 	
         ORDER BY COMPANY_ID
 </cfquery>
-<cfset MONEYARRRR=arrayNew(1)>
+
             <cfquery name="getMoneyext" datasource="#dsn3#">
                 SELECT 
              (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
@@ -651,6 +651,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
              </cfquery>
              <cfset ibnm=1>
     <cfloop query="getMoneyext">
+        <cfset MONEYARRRR=arrayNew(1)>
         <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
 
 
