@@ -603,7 +603,7 @@ VALUES(
 
     </cffunction>
 
-<cffunction name="SAVEORDER">
+<cffunction name="SAVEORDER" access="remote">
     <cfargument name="internal_id" type="numeric" required="true">
 <cfquery name="getSelectedRows" datasource="#dsn3#">
 
