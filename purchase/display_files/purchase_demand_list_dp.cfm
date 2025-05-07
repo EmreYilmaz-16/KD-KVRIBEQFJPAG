@@ -20,6 +20,10 @@ function SanalKontrol() {
                 var match = onclickAttr && onclickAttr.match(/pid=(\d+)/);
                 if (match && parseInt(match[1]) === 1055) {
                     SanalCount++;
+                    $row.css({
+                    "background-color": "rgba(255, 0, 0, 0.2)",  // saydam kırmızı
+                    "transition": "background-color 0.5s"
+                });
                 }
             }
         }
