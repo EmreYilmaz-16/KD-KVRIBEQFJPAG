@@ -50,6 +50,7 @@
     <cfset dsn3="w3Qa_1">
     <cfset dsn="w3Qa">
     <cfset wrk_eval = application.functions.wrk_eval>
+    <cfset workcube_mode=0>
 
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
@@ -299,7 +300,7 @@
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
-<cfset workcube_mode=0>
+
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
