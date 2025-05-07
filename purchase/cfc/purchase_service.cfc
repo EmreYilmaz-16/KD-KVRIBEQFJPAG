@@ -697,7 +697,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
         <cfquery name="GETCOMPANY" datasource="#dsn#">
             select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
         </cfquery>
-<cfdump var="#GETCOMPANY#">
+<cfset attributes.company_id=getSelectedRows.COMPANY_ID>
 <cfset attributes.order_date=now()>
 <cfset attributes.deliverdate=now()>
 <cfscript>
