@@ -385,8 +385,8 @@ row.appendChild(salePriceCell);
   <div class="text-muted small">Adet: ${product.QUANTITY}</div>
   ${product.IS_SELECTED === 1 ? '<div class="text-primary fw-bold small">✅ Seçili </div>' : ''}
   ${product.IS_SATINALMA === 1 ? '<div class="text-danger fw-bold small">🚩 Satış Teklifinde</div>' : ''}
-  ${product.SNT_S === 1 ? '<div class="text-danger fw-bold small">💵 S.Alma Oluştu</div>' : ''}
-  ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-success fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}    
+  ${product.SNT_S === 1 ? '<div class="text-success fw-bold small">💵 S.Alma Oluştu</div>' : ''}
+  ${product.IS_SATINALMA === 0 && product.IS_SELECTED === 1 ? '<div class="text-warning fw-bold small">⚠️Satış Teklifinden Kaldırıldı</div>' : ''}    
 `;
 
 const bgColor = alternativeGroups[product.PRODUCT_ID];
