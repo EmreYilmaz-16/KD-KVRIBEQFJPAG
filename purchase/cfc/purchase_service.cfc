@@ -645,7 +645,7 @@ VALUES(
         </cfloop>
     
         <!--- Şirket bazlı loop başlat --->
-        <cfoutput query="getSelectedRows" group="COMPANY_ID">
+        <cfloop query="getSelectedRows" group="COMPANY_ID">
             <cfset var ix = 0>
             <cfset var rows_ = 0>
             <cfset var BASKET_NET_TOTAL = 0>
@@ -655,8 +655,8 @@ VALUES(
             <cfset var nowTS = now()>
     
             <!--- Ürünleri dön --->
-            <cfoutput >
-                <cfif getSelectedRows.COMPANY_ID EQ getSelectedRows.COMPANY_ID_currentrow>
+            <cfloop >
+                <cfif 1 eq 1>
                     <cfset ix++>
                     <cfset otherMoney = getSelectedRows.OTHER_MONEY>
                     <cfset satirKur = structKeyExists(kurMap, otherMoney) ? kurMap[otherMoney] : {RATE1=1, RATE2=1}>
@@ -698,7 +698,7 @@ VALUES(
                     <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
                     <cfset attributes["wrk_row_relation_id#ix#"] = getSelectedRows.WRK_ROW_ID>
                 </cfif>
-            </cfoutput>
+            </cfloop>
     
             <cfset attributes.rows_ = ix>
     
@@ -760,7 +760,7 @@ VALUES(
             <cfscript>
                 structClear(attributes);
             </cfscript>
-        </cfoutput>
+        </cfloop>
     </cffunction>
 
 <!--------------
