@@ -611,6 +611,7 @@ VALUES(
 SELECT 
 	
 	TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) COMPANY_ID
+    ,TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) PARTNER_ID
 	,ORR_SATIS_TEKLIFI.PRODUCT_ID
 	,ORR_SATIS_TEKLIFI.STOCK_ID
 	,ORR_SATIS_TEKLIFI.PRODUCT_NAME
@@ -698,6 +699,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
             select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
         </cfquery>
 <cfset attributes.company_id=getSelectedRows.COMPANY_ID>
+<cfset attributes.PARTNER_ID =getSelectedRows.PARTNER_ID >
 <cfset attributes.order_date=now()>
 <cfset attributes.deliverdate=now()>
 <cfscript>
