@@ -777,6 +777,13 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset attributes.deliverdate=now()>
 <cfset attributes.SHIP_METHOD_ID=2>
 <cfset attributes.SHIP_METHOD="kargo">
+<cfquery name="get_offer_number" datasource="#dsn3#">
+    EXEC GET_PAPER_NUMBER 1
+</cfquery>
+<cfset paper_fulbs=get_offer_number.PAPER_NO>
+<cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
+<cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
+<cfset attributes.PRICE=BASKET_NET_TOTAL_>
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
