@@ -733,7 +733,7 @@ VALUES(
             <cfset attributes.BASKET_MONEY = "TL">
             <cfset attributes.BASKET_RATE1 = 1>
             <cfset attributes.BASKET_RATE2 = 1>
-            <cfset attributes.kur_say = arrayLen(getMoneyext)>
+            <cfset attributes.kur_say = getMoneyext.recordCount>
             <cfset attributes.internaldemand_id_list = ",#arguments.internal_id#,">
             <cfset attributes.process_stage = "67">
     
