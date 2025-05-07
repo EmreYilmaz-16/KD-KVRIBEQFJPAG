@@ -13,7 +13,7 @@
 	</script>
 	<cfabort>
 </cfif>
-<cf_xml_page_edit fuseact="purchase.detail_order">
+
 <cf_date tarih = "attributes.basket_due_value_date_">
 <cf_date tarih = "attributes.order_date">
 <!--- irsaliye tarihine gore ortalama vade tarihi --->
