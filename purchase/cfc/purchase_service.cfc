@@ -48,6 +48,7 @@
 ------>
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
     <cfset dsn3="w3Qa_1">
+    <cfset DSN3_ALIAS =dsn3>
     <cfset dsn="w3Qa">
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
