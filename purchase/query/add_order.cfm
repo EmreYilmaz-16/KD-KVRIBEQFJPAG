@@ -611,7 +611,7 @@
 		action_column='ORDER_ID'
 		action_id='#GET_ORDER.ORDER_ID#'
 		action_page='/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#' 
-		warning_description='#getLang('','Sipariş',57611)# : #paper_full#'>
+		warning_description='Sipariş : #paper_full#'>
 
 	<cfif isdefined("attributes.process_cat") and len(attributes.process_cat)>
 		<cf_workcube_process_cat 
