@@ -616,6 +616,26 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 
 updateBestSupplier();
 
+function sifirKontrl(){
+  var SFRFIYAT=0;
+var SFRMarj=0;
+for(let i=0;i<mx.length;i++){
+    var my=mx[i].products;
+    for(let j=0;j<my.length;j++){
+        var p=my[j].salePrice
+        if(p==0){
+           SFRFIYAT++ 
+        }
+    }
+}
+
+if(SFRFIYAT>0){
+   var stk= confirm("Fiyat Girilmemiş Ürünler Var Devam Etmek İstiyormusunuz")
+    return stk;
+}else{
+    return true;
+}
+}
 
 
 $(document).on("click", "#price-table > tbody > tr > td > span", function () {
@@ -640,6 +660,7 @@ $(document).on("click", "#price-table > tbody > tr > td > span", function () {
     }
   });
 });
+
 
 
 </script>
