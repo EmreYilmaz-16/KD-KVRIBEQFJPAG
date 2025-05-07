@@ -604,6 +604,164 @@ VALUES(
 
 
     </cffunction>
+    <cffunction name="SAVEORDER_gpt" access="remote" returntype="void">
+        <cfargument name="internal_id" type="numeric" required="true">
+    
+        <cfset var dsn = "w3Qa">
+        <cfset var dsn3 = "w3Qa_1">
+        <cfset var attributes = {}>
+    
+        <!--- Teklif satırlarını çek --->
+        <cfquery name="getSelectedRows" datasource="#dsn3#">
+            SELECT 
+                TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) AS COMPANY_ID,
+                TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) AS PARTNER_ID,
+                ORR_SATIS_TEKLIFI.*
+            FROM OFFER_ROW AS ORR_SATIS_TEKLIFI
+            LEFT JOIN OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+            LEFT JOIN OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
+            WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
+                SELECT WRK_ROW_ID FROM PBS_SELECTED_ROWS WHERE OFFER_ID = <cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer">)
+            ORDER BY COMPANY_ID
+        </cfquery>
+    
+        <!--- Kur bilgilerini çek --->
+        <cfquery name="getMoneyext" datasource="#dsn3#">
+            SELECT 
+                SM.MONEY,
+                (SELECT TOP 1 RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY = SM.MONEY ORDER BY MONEY_HISTORY_ID DESC) AS RATE1,
+                (SELECT TOP 1 EFFECTIVE_SALE FROM #dsn#.MONEY_HISTORY WHERE MONEY = SM.MONEY ORDER BY MONEY_HISTORY_ID DESC) AS RATE2
+            FROM #dsn#.SETUP_MONEY AS SM
+            WHERE SM.PERIOD_ID = <cfqueryparam value="#session.ep.period_id#" cfsqltype="cf_sql_integer">
+        </cfquery>
+    
+        <!--- Kur Struct Oluştur (KurMap) --->
+        <cfset var kurMap = structNew()>
+        <cfloop query="getMoneyext">
+            <cfset kurMap[getMoneyext.MONEY] = {
+                RATE1 = getMoneyext.RATE1,
+                RATE2 = getMoneyext.RATE2
+            }>
+        </cfloop>
+    
+        <!--- Şirket bazlı loop başlat --->
+        <cfloop query="getSelectedRows" group="COMPANY_ID">
+            <cfset var ix = 0>
+            <cfset var rows_ = 0>
+            <cfset var BASKET_NET_TOTAL = 0>
+            <cfset var BASKET_NET_TOTAL_ = 0>
+            <cfset var BASKET_TAX_TOTAL = 0>
+            <cfset var BASKET_TAX_TOTAL_ = 0>
+            <cfset var nowTS = now()>
+    
+            <!--- Ürünleri dön --->
+            <cfloop query="getSelectedRows">
+                <cfif getSelectedRows.COMPANY_ID EQ getSelectedRows.COMPANY_ID_currentrow>
+                    <cfset ix++>
+                    <cfset otherMoney = getSelectedRows.OTHER_MONEY>
+                    <cfset satirKur = structKeyExists(kurMap, otherMoney) ? kurMap[otherMoney] : {RATE1=1, RATE2=1}>
+    
+                    <cfset PRICE_OTHER = getSelectedRows.PRICE_OTHER>
+                    <cfset PRICE = getSelectedRows.PRICE>
+                    <cfset AMOUNT = getSelectedRows.QUANTITY>
+                    <cfset TAX = getSelectedRows.TAX>
+                    <cfset DISCOUNT = 0>
+                    <cfset PR_HESAP = PRICE_OTHER * satirKur.RATE2>
+    
+                    <cfset dp = PRICE - ((PRICE * DISCOUNT) / 100)>
+                    <cfset dp_ = PR_HESAP - ((PR_HESAP * DISCOUNT) / 100)>
+                    <cfset TUTAR = dp * AMOUNT>
+                    <cfset TUTAR_ = dp_ * AMOUNT>
+                    <cfset TX = (TUTAR * TAX) / 100>
+                    <cfset TX_ = (TUTAR_ * TAX) / 100>
+    
+                    <!--- Toplamları güncelle --->
+                    <cfset BASKET_TAX_TOTAL += TX>
+                    <cfset BASKET_TAX_TOTAL_ += TX_>
+                    <cfset BASKET_NET_TOTAL += TUTAR + TX>
+                    <cfset BASKET_NET_TOTAL_ += TUTAR_ + TX_>
+    
+                    <!--- Attributes içine yerleştir --->
+                    <cfset attributes["product_id#ix#"] = getSelectedRows.PRODUCT_ID>
+                    <cfset attributes["stock_id#ix#"] = getSelectedRows.STOCK_ID>
+                    <cfset attributes["product_name#ix#"] = getSelectedRows.PRODUCT_NAME>
+                    <cfset attributes["unit#ix#"] = getSelectedRows.UNIT>
+                    <cfset attributes["unit_id#ix#"] = getSelectedRows.UNIT_ID>
+                    <cfset attributes["price#ix#"] = PR_HESAP>
+                    <cfset attributes["price_other#ix#"] = PRICE_OTHER>
+                    <cfset attributes["tax#ix#"] = TAX>
+                    <cfset attributes["amount#ix#"] = AMOUNT>
+                    <cfset attributes["indirim1#ix#"] = DISCOUNT>
+                    <cfset attributes["other_money_#ix#"] = otherMoney>
+                    <cfset attributes["other_money_value_#ix#"] = TUTAR_ / satirKur.RATE2>
+                    <cfset attributes["description#ix#"] = "">
+                    <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
+                    <cfset attributes["wrk_row_relation_id#ix#"] = getSelectedRows.WRK_ROW_ID>
+                </cfif>
+            </cfloop>
+    
+            <cfset attributes.rows_ = ix>
+    
+            <!--- Şirket Bilgilerini Ekle --->
+            <cfquery name="GETCOMPANY" datasource="#dsn#">
+                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY
+                FROM COMPANY
+                WHERE COMPANY_ID = <cfqueryparam value="#getSelectedRows.COMPANY_ID#" cfsqltype="cf_sql_integer">
+            </cfquery>
+    
+            <cfset attributes.company_id = getSelectedRows.COMPANY_ID>
+            <cfset attributes.PARTNER_ID = getSelectedRows.PARTNER_ID>
+            <cfset attributes.ORDER_HEAD = "Siparişimiz">
+            <cfset attributes.ORDER_DESCRIPTION = "">
+            <cfset attributes.ORDER_DETAIL = "">
+            <cfset attributes.order_date = nowTS>
+            <cfset attributes.deliverdate = nowTS>
+            <cfset attributes.PUBLISHDATE = nowTS>
+            <cfset attributes.SHIP_METHOD_ID = 2>
+            <cfset attributes.SHIP_METHOD = "kargo">
+    
+            <cfset attributes.BASKET_NET_TOTAL = BASKET_NET_TOTAL_>
+            <cfset attributes.BASKET_TAX_TOTAL = BASKET_TAX_TOTAL_>
+            <cfset attributes.BASKET_GROSS_TOTAL = BASKET_NET_TOTAL_ - BASKET_TAX_TOTAL_>
+            <cfset attributes.BASKET_DISCOUNT_TOTAL = 0>
+            <cfset attributes.PRICE = BASKET_NET_TOTAL_>
+    
+            <cfset attributes.ACTIVE_COMPANY = session.ep.company_id>
+            <cfset attributes.DELIVER_DEPT_ID = 2>
+            <cfset attributes.DELIVER_LOC_ID = 1>
+            <cfset attributes.DELIVER_DEPT_NAME = "2">
+            <cfset attributes.BASKET_MONEY = "TL">
+            <cfset attributes.BASKET_RATE1 = 1>
+            <cfset attributes.BASKET_RATE2 = 1>
+            <cfset attributes.kur_say = arrayLen(getMoneyext)>
+            <cfset attributes.internaldemand_id_list = ",#arguments.internal_id#,">
+            <cfset attributes.process_stage = "67">
+    
+            <!--- Kur bilgilerini tekrar setle --->
+            <cfloop query="getMoneyext" index="i">
+                <cfset attributes["txt_rate1_#i#"] = RATE1>
+                <cfset attributes["txt_rate2_#i#"] = RATE2>
+                <cfset attributes["hidden_rd_money_#i#"] = MONEY>
+                <cfset attributes["_hidden_rd_money_#i#"] = MONEY>
+            </cfloop>
+    
+            <!--- Kağıt numarası üret --->
+            <cfquery name="get_offer_number" datasource="#dsn3#">
+                EXEC GET_PAPER_NUMBER 1
+            </cfquery>
+            <cfset attributes.PAPER_NO = get_offer_number.PAPER_NO>
+    
+            <!--- Siparişi oluştur --->
+            <cfinclude template="../query/add_order.cfm">
+    
+            <!--- Temizle --->
+            <cfscript>
+                structClear(attributes);
+            </cfscript>
+        </cfloop>
+    </cffunction>
+
+
 
 <cffunction name="SAVEORDER" access="remote">
     <cfargument name="internal_id" type="numeric" required="true">
