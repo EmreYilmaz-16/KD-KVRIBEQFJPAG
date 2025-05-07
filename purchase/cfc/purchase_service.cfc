@@ -697,6 +697,7 @@ VALUES(
                     <cfset attributes["description#ix#"] = "">
                     <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
                     <cfset attributes["wrk_row_relation_id#ix#"] = getSelectedRows.WRK_ROW_ID>
+                    <CFSET attributes["row_nettotal#ix#"] = PR_HESAP*AMOUNT>
                 </cfif>
             </cfloop>
     
