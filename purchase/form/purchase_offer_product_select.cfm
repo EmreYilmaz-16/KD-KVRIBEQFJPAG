@@ -673,6 +673,9 @@ function SatinalmaSiparis(params) {
       // Hata durumunda yapılacak işlemler
       console.error(error);
     }
+  }).always(function() {
+    // Her durumda çalışacak kod (başarılı veya hata)
+    console.log("İşlem tamamlandı.");
   });
 }
 
