@@ -655,7 +655,7 @@ VALUES(
             <cfset var nowTS = now()>
     
             <!--- Ürünleri dön --->
-            <cfloop >
+            <cfloop query="getSelectedRows">
                 <cfif getSelectedRows.COMPANY_ID EQ getSelectedRows.COMPANY_ID_currentrow>
                     <cfset ix++>
                     <cfset otherMoney = getSelectedRows.OTHER_MONEY>
@@ -761,7 +761,7 @@ VALUES(
         </cfloop>
     </cffunction>
 
-
+<!--------------
 
 <cffunction name="SAVEORDER" access="remote">
     <cfargument name="internal_id" type="numeric" required="true">
@@ -1010,6 +1010,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 
 
 </cffunction>
+
+------------>
 <cffunction name="basket_kur_ekle">
 	<cfargument name="action_id" required="true">
 	<cfargument name="table_type_id" required="true">
