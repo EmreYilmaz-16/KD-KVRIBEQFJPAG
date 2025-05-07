@@ -617,6 +617,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 updateBestSupplier();
 
 function sifirKontrl(){
+  var mx=updateOutput()
   var SFRFIYAT=0;
 var SFRMarj=0;
 for(let i=0;i<mx.length;i++){
