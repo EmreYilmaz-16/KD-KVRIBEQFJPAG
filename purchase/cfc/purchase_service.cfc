@@ -700,6 +700,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
         </cfquery>
 <cfset attributes.company_id=getSelectedRows.COMPANY_ID>
 <cfset attributes.PARTNER_ID =getSelectedRows.PARTNER_ID >
+<cfset attributes.CONSUMER_ID ="">
+<cfset attributes.CONSUMER_NAME ="">
 <cfset attributes.order_date=now()>
 <cfset attributes.deliverdate=now()>
 <cfscript>
