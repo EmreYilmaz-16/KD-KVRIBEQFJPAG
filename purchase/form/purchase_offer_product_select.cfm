@@ -91,7 +91,21 @@
         <div class="mt-4 text-end">
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
             <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
-         <CFIF OFFER_STAGE EQ 256>
+         <cfquery name="getOfferStage" datasource="#DSN3#">
+SELECT 
+	DISTINCT
+	ORR_SATIS_TEKLIFI.OFFER_ID,
+	O_SATIS_TEKLIFI.OFFER_STAGE
+
+FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
+LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
+LEFT JOIN w3Qa_1.OFFER AS O_SATIS_TEKLIFI ON O_SATIS_TEKLIFI.OFFER_ID=ORR_SATIS_TEKLIFI.OFFER_ID
+WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
+SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.interdemand_id#)
+</cfquery>
+
+            <CFIF getOfferStage.OFFER_STAGE EQ 256>
             <button class="btn btn-success" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
           </CFIF>
           
