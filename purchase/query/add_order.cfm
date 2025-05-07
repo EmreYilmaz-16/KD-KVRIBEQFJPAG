@@ -629,14 +629,4 @@
 </cflock>
 <cfif isdefined('xml_import_pur')><cfset last_xml_import_pur = xml_import_pur></cfif>
 <cfif isdefined('is_from_import')><cfset last_xml_import_pur = is_from_import></cfif>
-<cfif isdefined("last_order_id_pur") and not isdefined("last_xml_import_pur")>
-	<cfscript>
-		add_company_related_action(action_id:last_order_id_pur,action_type:2);
-	</cfscript>
-</cfif>
-<cfif not isdefined("last_xml_import_pur")><!--- importtan gelmiyorsa--->
-	<cfset return_adress = "/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#first_order_id_pur#">
-	<script type="text/javascript">
-		window.location.href="<cfoutput>#return_adress#</cfoutput>";
-	</script>
-</cfif>
+
