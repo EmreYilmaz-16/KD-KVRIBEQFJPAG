@@ -481,8 +481,8 @@
 			<cfset row_id = i>
 			<cfset ACTION_TYPE_ID = 2>
 			<cfset attributes.product_id = evaluate("attributes.product_id#i#")>
-			<cfinclude template="add_assortment_textile_js.cfm">
-			<cfinclude template="add_department_information.cfm">
+			
+			
 			<!--- //  urun asortileri --->			
 
 				<!--- bütçe rezerve kontrolü --->
