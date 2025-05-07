@@ -771,6 +771,10 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
 <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
 <cfset attributes.process_stage="67">
+<cfset attributes.order_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.PUBLISHDATE =now()>
+<cfset attributes.deliverdate=now()>
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
