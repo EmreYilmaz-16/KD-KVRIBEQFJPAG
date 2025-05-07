@@ -711,6 +711,8 @@ VALUES(
     
             <cfset attributes.company_id = getSelectedRows.COMPANY_ID>
             <cfset attributes.PARTNER_ID = getSelectedRows.PARTNER_ID>
+            <cfset attributes.CONSUMER_ID ="">
+<cfset attributes.CONSUMER_NAME ="">
             <cfset attributes.ORDER_HEAD = "Siparişimiz">
             <cfset attributes.ORDER_DESCRIPTION = "">
             <cfset attributes.ORDER_DETAIL = "">
