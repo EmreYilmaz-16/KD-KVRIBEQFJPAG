@@ -784,6 +784,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
+<cfset attributes.BASKET_DISCOUNT_TOTAL=0>
 <cfinclude template="../query/add_order.cfm">
 
 <cfscript>
