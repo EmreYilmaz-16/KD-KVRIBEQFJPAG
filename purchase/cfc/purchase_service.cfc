@@ -686,7 +686,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
         attributes["wrk_row_relation_id#ix#"] = WRK_ROW_ID;
         attributes["is_virtual#ix#"] = 0;
         attributes["SHELF_CODE#ix#"] = "";
-        attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+        attributes["ORDER_ROW_CURRENCY#ix#"] = "-1";
 
 
     </cfscript>
@@ -759,7 +759,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
     </cfscript>
 </cfloop>
 
-<cfdump var="#attributes#">
+<cfinclude template="../query/add_order.cfm">
+
 <cfscript>
     structClear(attributes);
 </cfscript>
