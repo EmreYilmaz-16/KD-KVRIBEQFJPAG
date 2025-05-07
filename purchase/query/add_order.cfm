@@ -563,7 +563,7 @@
 		</cfif>
 	<cfscript>
 	
-		
+		attributes.kur_say=3;
 		basket_kur_ekle(action_id:GET_ORDER.ORDER_ID,table_type_id:3,process_type:0,basket_money_db:new_dsn3_group_pur);
 		/*if(not isdefined("is_from_import") or not isdefined("add_reserve_row"))//importdan geliyorsa fonksiyon tanımlanmasın
 			include('add_order_row_reserved_stock.cfm','\V16/objects\functions'); //rezerve edilen satırlar icin ORDER_ROW_RESERVED'a kayıt atıyor.*/
