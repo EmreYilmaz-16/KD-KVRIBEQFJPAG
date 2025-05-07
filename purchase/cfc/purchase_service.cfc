@@ -739,13 +739,13 @@ VALUES(
     
             <!--- Kur bilgilerini tekrar setle --->
             <cfset i=1>
-            <cfoutput query="getMoneyext" >
+            <cfloop query="getMoneyext" >
                 <cfset attributes["txt_rate1_#i#"] = RATE1>
                 <cfset attributes["txt_rate2_#i#"] = RATE2>
                 <cfset attributes["hidden_rd_money_#i#"] = MONEY>
                 <cfset attributes["_hidden_rd_money_#i#"] = MONEY>
                 <cfset i=i+1>
-            </cfoutput>
+            </cfloop>
     
             <!--- Kağıt numarası üret --->
             <cfquery name="get_offer_number" datasource="#dsn3#">
