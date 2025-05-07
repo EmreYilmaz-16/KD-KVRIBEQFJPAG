@@ -826,6 +826,90 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 
 
 </cffunction>
-
+<cffunction name="basket_kur_ekle">
+	<cfargument name="action_id" required="true">
+	<cfargument name="table_type_id" required="true">
+	<cfargument name="process_type" required="true">
+	<cfargument name="basket_money_db" type="string" default="">
+	<cfargument name="transaction_dsn">
+	<!---
+		by : Arzu BT 20031211
+		notes : Basket_money tablosuna islemlere gore kur bilgilerini kaydeder.
+		process_type:1 upd 0 add
+		transaction_dsn : kullanılan sayfa içinde table dan farklı dsn tanımı olduğu durumlarda kullanılan dsn gönderilir.
+		usage :
+			invoice:1
+			ship:2
+			order:3
+			offer:4
+			servis:5
+			stock_fis:6
+			internmal_demand:7
+			prroduct_catalog 8
+			sale_quote:9
+			subscription:13
+		revisions : javascript version ergün koçak 20040209
+		kullanim:
+		<cfscript>
+			basket_kur_ekle(action_id:MY_ID,table_type_id:1,process_type:0);
+		</cfscript>		
+	--->
+	<cfscript>
+		switch (arguments.table_type_id){
+			case 1: fnc_table_name="INVOICE_MONEY"; fnc_dsn_name="#dsn2#";break;
+			case 2: fnc_table_name="SHIP_MONEY"; fnc_dsn_name="#dsn2#"; break;
+			case 3: fnc_table_name="ORDER_MONEY"; fnc_dsn_name="#dsn3#"; break;
+			case 4: fnc_table_name="OFFER_MONEY"; fnc_dsn_name="#dsn3#"; break;
+			case 5: fnc_table_name="SERVICE_MONEY"; fnc_dsn_name="#dsn3#";break;
+			case 6: fnc_table_name="STOCK_FIS_MONEY"; fnc_dsn_name="#dsn2#"; break;
+			case 7: fnc_table_name="INTERNALDEMAND_MONEY"; fnc_dsn_name="#dsn3#"; break;
+			case 8: fnc_table_name="CATALOG_MONEY"; fnc_dsn_name="#dsn3#"; break;
+			case 10: fnc_table_name="SHIP_INTERNAL_MONEY"; fnc_dsn_name="#dsn2#"; break;	
+			case 11: fnc_table_name="PAYROLL_MONEY"; fnc_dsn_name="#dsn2#"; break;
+			case 12: fnc_table_name="VOUCHER_PAYROLL_MONEY"; fnc_dsn_name="#dsn2#"; break;
+			case 13: fnc_table_name="SUBSCRIPTION_CONTRACT_MONEY"; fnc_dsn_name="#dsn3#"; break;			
+			case 14: fnc_table_name="PRO_MATERIAL_MONEY"; fnc_dsn_name="#dsn#"; break;
+		}
+		if(len(arguments.basket_money_db))fnc_dsn_name = "#arguments.basket_money_db#";
+	</cfscript>
+	<cfif not (isdefined('arguments.transaction_dsn') and len(arguments.transaction_dsn))>
+		<cfset arguments.transaction_dsn = fnc_dsn_name>
+		<cfset arguments.action_table_dsn_alias = ''>
+	<cfelse>
+		<cfset arguments.action_table_dsn_alias = '#fnc_dsn_name#.'>
+	</cfif>
+	<cfif arguments.process_type eq 1>
+		<cfquery name="del_money_obj_bskt" datasource="#arguments.transaction_dsn#">
+			DELETE FROM 
+				#arguments.action_table_dsn_alias##fnc_table_name#
+			WHERE 
+				ACTION_ID=#arguments.action_id#
+		</cfquery>
+	</cfif>
+	<cfloop from="1" to="#attributes.kur_say#" index="fnc_i">
+		<cfquery name="add_money_obj_bskt" datasource="#arguments.transaction_dsn#">
+			INSERT INTO #arguments.action_table_dsn_alias##fnc_table_name# 
+			(
+				ACTION_ID,
+				MONEY_TYPE,
+				RATE2,
+				RATE1,
+				IS_SELECTED
+			)
+			VALUES
+			(
+				#arguments.action_id#,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#wrk_eval('attributes.hidden_rd_money_#fnc_i#')#">,
+				#evaluate("attributes.txt_rate2_#fnc_i#")#,
+				#evaluate("attributes.txt_rate1_#fnc_i#")#,
+				<cfif evaluate("attributes.hidden_rd_money_#fnc_i#") is attributes.BASKET_MONEY>
+					1
+				<cfelse>
+					0
+				</cfif>					
+			)
+		</cfquery>
+	</cfloop>
+</cffunction>
 
 </cfcomponent>
