@@ -201,7 +201,7 @@
     
                     <!-- Alternatif Ürün Seç -->
                     <div class="col col-4">
-                        <cf_box title="Alternatif Ürün Seç">
+                        <cf_box title="Alternatif Ürün Seç" style="display:none;">
                             <div style="height:40vh">
                                 <ul class="list-group">
                                     <cfoutput query="getOfferRows">
