@@ -200,7 +200,7 @@
                     </div>
     
                     <!-- Alternatif Ürün Seç -->
-                    <div class="col col-4">
+                    <div class="col col-4" style="display:none">
                         <cf_box title="Alternatif Ürün Seç">
                             <div style="height:40vh">
                                 <ul class="list-group">
