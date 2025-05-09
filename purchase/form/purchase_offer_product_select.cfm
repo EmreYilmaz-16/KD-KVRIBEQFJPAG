@@ -451,7 +451,7 @@ row.appendChild(salePriceCell);
       const cmqurrency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
       const cmqrate1 = parseFloat(cmqurrency?.RATE1 || 1);
       const cmqrate2 = parseFloat(cmqurrency?.RATE2 || 1);
-      const cmqconvertedPrice = (parseFloat(product.NET_PRICE) * cmqrate2) / cmqrate1;
+      const cmqconvertedPrice = (parseFloat(product.NET_PRICE) / cmqrate2) * cmqrate1;
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
       const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${DEMAND_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0 }|${product.IS_SATINALMA || 0}`;
 
