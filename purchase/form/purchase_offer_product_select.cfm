@@ -748,7 +748,7 @@ for(let i=0;i<mx.length;i++){
 }
 
 if(SFRFIYAT>0){
-    alert("Marj Girilmemiş Ürünler Var Devam Etmek İstiyormusunuz")
+    alert("Marj Girilmemiş Ürünler Var; Lütfen Kontrol Edin!")
     return false;
 }else{
     return true;
