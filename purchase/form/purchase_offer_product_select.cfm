@@ -412,11 +412,16 @@ salePriceInput.addEventListener('change', () => {
   const rate2 = parseFloat(currency?.RATE2 || 1);
 
   const convertedSalePrice = (salePrice * rate2) / rate1;
-  var sm=convertedSalePrice/(netPrice*100)
+  //var sm=convertedSalePrice/(netPrice*100)
+  var smx=convertedSalePrice-netPrice
+  var smx2=smx/netPrice;
+  var smx3=smx2*100
 console.table(
   {
     convertedSalePrice,
-    sm,
+    smx,
+    smx2,
+    smx3,
     salePrice,
     netPrice
   }
