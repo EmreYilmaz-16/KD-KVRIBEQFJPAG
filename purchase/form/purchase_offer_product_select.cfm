@@ -108,7 +108,12 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 
 </cfquery>
 
-<cfdump var="#getOfferStage#">
+<cfif getOfferStage.recordCount>
+<cfelse>
+  <cfquery name="upos" datasource="#dsn3#">
+    UPDATE w3Qa_1.PBS_SELECTED_ROWS SET IS_OS=1 WHERE OFFER_ID=#attributes.internal_id#
+  </cfquery>
+</cfif>
             <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
             <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
           
