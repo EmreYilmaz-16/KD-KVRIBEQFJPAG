@@ -324,6 +324,11 @@ uniqueProducts.forEach(productName => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
     return p?.IS_SATINALMA === 1;
   })
+  
+  const rowHasOS = data.some(supplier => {
+    const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
+    return p?.IS_OS === 0;
+  })
 
   const row = document.createElement('tr');
   const productCell = document.createElement('td');
