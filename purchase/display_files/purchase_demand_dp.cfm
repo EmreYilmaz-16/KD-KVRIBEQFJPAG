@@ -6,7 +6,7 @@ btn.setAttribute("type","button")
 btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector&offer_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
 btn.innerText="Ürün Seç"
 btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
-
+SanallariIsaretle();
 
 // Sepet tablosundaki tüm <tr> satırlarını gez
     $("#tblBasket tbody").children().each(function(index, row) {
@@ -75,6 +75,19 @@ btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
     
         // Yeni pencereyi aç
         windowopen(url.toString(), "adminTv");
+    }
+
+    function SanallariIsaretle() {
+        //var rows=$("#tblBasket tr[basketitem]")
+var rows=document.querySelectorAll("#tblBasket tr[basketitem]")
+rows.forEach(function (row) {
+  //console.log(row)
+    var pid=row.querySelector("input[id='product_id']").value
+    console.log(pid)
+    if(parseInt(pid)==1055){
+        $(row).css("background","#ffa50069")
+    }
+})
     }
 })
 </script>
