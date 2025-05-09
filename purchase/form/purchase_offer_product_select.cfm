@@ -740,7 +740,7 @@ var SFRMarj=0;
 for(let i=0;i<mx.length;i++){
     var my=mx[i].products;
     for(let j=0;j<my.length;j++){
-        var p=my[j].salePrice
+        var p=my[j].productMarj
         if(p==0){
            SFRFIYAT++ 
         }
