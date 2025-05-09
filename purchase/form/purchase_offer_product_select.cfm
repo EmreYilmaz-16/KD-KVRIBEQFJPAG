@@ -586,6 +586,7 @@ try {
 
 function updateBestSupplier() {
   const supplierTotals = {};
+  console.log(data);
   data.forEach(supplier => {
     const productNames = supplier.URUNLER.map(p => p.PRODUCT_NAME);
     const hasAllProducts = uniqueProducts.every(pName => productNames.includes(pName));
