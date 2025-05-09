@@ -402,7 +402,18 @@ marjInput.addEventListener('input', () => {
     salePriceInput.value = converted.toFixed(2);
   }
 });
+salePriceInput.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
+  const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
+  const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+  const rate1 = parseFloat(currency?.RATE1 || 1);
+  const rate2 = parseFloat(currency?.RATE2 || 1);
 
+  const convertedSalePrice = (salePrice * rate2) / rate1;
+  convertedSalePrice/(ww_data[3].URUNLER[0].NET_PRICE*100)
+console.log("satişmarji=",convertedSalePrice);
+});
 
 row.appendChild(marjCell);
 row.appendChild(salePriceCell);
