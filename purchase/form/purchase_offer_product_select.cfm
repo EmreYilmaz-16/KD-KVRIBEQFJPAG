@@ -402,7 +402,7 @@ marjInput.addEventListener('input', () => {
     salePriceInput.value = converted.toFixed(2);
   }
 });
-salePriceInput.addEventListener('input', () => {
+salePriceInput.addEventListener('change', () => {
   const selectedKey = selectedCells.get(productName);
   const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
   const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
