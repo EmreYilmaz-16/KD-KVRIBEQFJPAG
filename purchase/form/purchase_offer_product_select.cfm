@@ -406,7 +406,7 @@ salePriceInput.addEventListener('change', () => {
   const selectedKey = selectedCells.get(productName);
   const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
   const otherMoney = selectedKey?.split('|')[9]; 
-  const netPrice = selectedKey?.split('|')[6]; // 9. index = OTHER_MONEY
+  const netPrice = parseFloat(selectedKey?.split('|')[6]); // 9. index = OTHER_MONEY
   const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
   const rate1 = parseFloat(currency?.RATE1 || 1);
   const rate2 = parseFloat(currency?.RATE2 || 1);
