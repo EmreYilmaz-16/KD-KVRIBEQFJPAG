@@ -298,7 +298,7 @@ headerRow.innerHTML += `
     <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
 `;
-headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (₺)</th>`;
+headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
 data.forEach(supplier => {
   const th = document.createElement('th');
   th.className = "sticky-header bg-success text-white";
