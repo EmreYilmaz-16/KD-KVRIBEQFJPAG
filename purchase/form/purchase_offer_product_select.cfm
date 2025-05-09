@@ -107,6 +107,12 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 ) AS T GROUP BY OFFER_ID,OFFER_STAGE
 
 </cfquery>
+<cfquery name="GETDEMAND_MONEY">
+  SELECT OTHER_MONEY FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.internal_id#
+</cfquery>
+<script>
+  var DEMAND_MONEY = '<cfoutput>#GETDEMAND_MONEY.OTHER_MONEY#</cfoutput>';
+</script>
 
 <cfif getOfferStage.recordCount>
 <cfelse>
