@@ -323,7 +323,7 @@ uniqueProducts.forEach(productName => {
   const rowHasSatinalma = data.some(supplier => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
     return p?.IS_SATINALMA === 1;
-  })
+  });
   
   const rowHasOS = data.some(supplier => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
@@ -432,7 +432,7 @@ if (product.IS_SATINALMA===1) {
   $("#send-btn").hide();
   $("#send-btn3").hide();
 }
-if (!rowHasSatinalma) {
+if (!rowHasSatinalma && !rowHasOS) {
   cell.classList.add('selectable');
   cell.dataset.key = cellKey;
 
