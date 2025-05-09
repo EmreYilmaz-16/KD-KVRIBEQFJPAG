@@ -327,7 +327,7 @@ uniqueProducts.forEach(productName => {
   
   const rowHasOS = data.some(supplier => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
-    return p?.IS_OS === 0;
+    return p?.IS_OS === false;
   })
 
   const row = document.createElement('tr');
