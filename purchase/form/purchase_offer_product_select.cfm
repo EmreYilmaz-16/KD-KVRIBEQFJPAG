@@ -420,7 +420,7 @@ if(product.IS_OS===false){
   console.log("Ürün Satış Teklifine Dönmüşmüş",product.PRODUCT_NAME,product.IS_OS);
 }
 if(rowHasOS){
-  console.log("Ürün Satış Teklifine Dönmüşmüş",product.PRODUCT_NAME,product.IS_OS);
+  console.log("Satırda  Satış Teklifine Dönmüşmüş Ürün Var",product.PRODUCT_NAME,product.IS_OS);
 }
 
 const bgColor = alternativeGroups[product.PRODUCT_ID];
