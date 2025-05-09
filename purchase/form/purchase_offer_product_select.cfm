@@ -373,7 +373,7 @@ salePriceInput.style.width = '100px';
 salePriceInput.dataset.product = productName;
 
 salePriceCell.appendChild(salePriceInput);
-
+/*
 // input değişince hesapla
 marjInput.addEventListener('input', () => {
   const net = parseFloat(selectedCells.get(productName)?.split('|')[6]);
@@ -382,7 +382,27 @@ marjInput.addEventListener('input', () => {
     const calculatedSalePrice = net + (net * marj / 100);
     salePriceInput.value = calculatedSalePrice.toFixed(2);
   }
+});*/
+marjInput.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  const net = parseFloat(selectedKey?.split('|')[6]);
+  const marj = parseFloat(marjInput.value);
+
+  if (!isNaN(net) && !isNaN(marj)) {
+    const calculatedSalePrice = net + (net * marj / 100);
+
+    // Kur bilgisi için diğerMoney ve ilgili döviz kurları
+    const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
+    const currency = MONEYARRRR.find(c => c.MONEY === otherMoney);
+    const rate1 = parseFloat(currency?.RATE1 || 1);
+    const rate2 = parseFloat(currency?.RATE2 || 1);
+
+    const converted = (calculatedSalePrice * rate1) / rate2;
+
+    salePriceInput.value = converted.toFixed(2);
+  }
 });
+
 
 row.appendChild(marjCell);
 row.appendChild(salePriceCell);
@@ -538,7 +558,7 @@ function updateOutput() {
       };
     }
     const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');
-const salePriceInput = document.querySelector(`input.sale-price-input[data-product="${productName}"]`);
+    const salePriceInput = document.querySelector(`input.sale-price-input[data-product="${productName}"]`);
 
 let productMarj = 0;
 let salePrice = 0;
