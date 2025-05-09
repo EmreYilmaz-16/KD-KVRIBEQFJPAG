@@ -411,8 +411,14 @@ salePriceInput.addEventListener('change', () => {
   const rate2 = parseFloat(currency?.RATE2 || 1);
 
   const convertedSalePrice = (salePrice * rate2) / rate1;
-  convertedSalePrice/(ww_data[3].URUNLER[0].NET_PRICE*100)
-console.log("satişmarji=",convertedSalePrice);
+  var sm=convertedSalePrice/(ww_data[3].URUNLER[0].NET_PRICE*100)
+console.table(
+  {
+    convertedSalePrice,
+    sm,
+    salePrice,
+  }
+)
 });
 
 row.appendChild(marjCell);
