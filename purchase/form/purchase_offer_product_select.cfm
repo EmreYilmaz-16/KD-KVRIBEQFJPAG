@@ -416,6 +416,7 @@ salePriceInput.addEventListener('change', () => {
   var smx=convertedSalePrice-netPrice
   var smx2=smx/netPrice;
   var smx3=smx2*100
+  smx3=smx3.toFixed(2)
 console.table(
   {
     convertedSalePrice,
