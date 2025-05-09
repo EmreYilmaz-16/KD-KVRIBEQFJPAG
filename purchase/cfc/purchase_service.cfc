@@ -94,14 +94,16 @@
                             PRICE,
                             OFFER_ID,
                             PRODUCT_MARJ,
-                            SALE_PRICE
+                            SALE_PRICE,
+                            IS_OS
                         )
                         VALUES (
                             '#product.wrkRowId#',
                             #product.netPrice#,
                             #offers.offer_id#,
                             #product.productMarj#,
-                            #product.salePrice#
+                            #product.salePrice#,
+                            0
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
