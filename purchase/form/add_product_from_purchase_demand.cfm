@@ -122,7 +122,7 @@
                 <input type="hidden" name="is_submit" value="1">
                 <div class="row">
                     <!-- Yeni Ürün -->
-                    <div class="col col-4">
+                    <div class="col col-8">
                         <cf_box title="Yeni Ürün">
                             <div style="height:40vh">
                                 <div class="form-group">
@@ -200,8 +200,8 @@
                     </div>
     
                     <!-- Alternatif Ürün Seç -->
-                    <div class="col col-4">
-                        <cf_box title="Alternatif Ürün Seç" style="display:none;">
+                    <div class="col col-4" style="display:none;">
+                        <cf_box title="Alternatif Ürün Seç" >
                             <div style="height:40vh">
                                 <ul class="list-group">
                                     <cfoutput query="getOfferRows">
