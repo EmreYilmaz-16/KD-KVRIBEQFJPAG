@@ -114,18 +114,18 @@
                     </cfquery>
                     <cfscript>
                         ix=ix+1;
-                        attributes["price#ix#"] = product.salePrice;
-                        attributes["price_other#ix#"] = product.convertedsalePriceOther;
+                        attributes["price#ix#"] = product.convertedsalePriceOther;
+                        attributes["price_other#ix#"] = product.salePrice;
                         attributes["tax#ix#"] = product.tax;
                         attributes["amount#ix#"] = product.quantity;
                         attributes["indirim1#ix#"] = product.discount1;
-                        attributes["other_money_#ix#"] = product.otherMoney;
+                        attributes["other_money_#ix#"] = product.demandMoney;
                         attributes["product_id#ix#"] = product.productId;
                         attributes["stock_id#ix#"] = product.stockId;
                         attributes["unit#ix#"] = getUnit.MAIN_UNIT;
                         attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
                         attributes["product_name#ix#"] = product.productName;
-                        attributes["other_money_value_#ix#"] = (product.convertedsalePriceOther * product.quantity) - ((product.convertedsalePriceOther * product.quantity) * product.discount1) / 100;
+                        attributes["other_money_value_#ix#"] = (product.salePrice * product.quantity) - ((product.salePrice * product.quantity) * product.discount1) / 100;
                         attributes["description#ix#"] = "";
                         attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
                         attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
