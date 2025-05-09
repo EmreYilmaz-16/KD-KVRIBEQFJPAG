@@ -442,7 +442,7 @@ if (!rowHasSatinalma) {
     updateBestSupplier();
   });
 
-  if (product.IS_SELECTED === 1 || product.IS_OS===false) {
+  if (product.IS_SELECTED === 1 || product.IS_OS===true) {
     const checkIcon = document.createElement('div');
     checkIcon.className = 'check-icon text-success';
     checkIcon.innerHTML = '✔️';
