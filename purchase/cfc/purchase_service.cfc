@@ -355,7 +355,9 @@ VALUES(
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
-            
+            <cfquery name="DEL" datasource="#dsn3#">
+                DELETE FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#'
+            </cfquery>
             <!-- Process each offer -->
             <cfset ix=0>
             <cfloop array="#offers.payload#" item="offer">
@@ -364,9 +366,7 @@ VALUES(
                 <!-- Process each product -->
                 <cfloop array="#products#" item="product">
                     <!-- Delete existing rows for the product -->
-                    <cfquery name="DEL" datasource="#dsn3#">
-                        DELETE FROM PBS_SELECTED_ROWS WHERE WRK_ROW_ID = '#product.wrkRowId#'
-                    </cfquery>
+                   
 
                     <!-- Insert new rows for the product -->
                     <cfquery name="INS" datasource="#dsn3#">
