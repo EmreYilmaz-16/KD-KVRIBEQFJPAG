@@ -411,6 +411,16 @@ row.appendChild(salePriceCell);
   : ''}  
 `;
 
+if(product.IS_SATINALMA === 0){
+  console.log("Satınalma Yok",product.PRODUCT_ID,product.IS_SATINALMA);
+  if(product.IS_SELECTED===1){
+    console.log("Seçili",product.PRODUCT_ID,product.IS_SATINALMA);
+    if(product.IS_OS===0){
+      console.log("Seçili ve Satış Teklifinde Yok",product.PRODUCT_ID,product.IS_SATINALMA);
+    }
+  }
+}
+
 const bgColor = alternativeGroups[product.PRODUCT_ID];
 if (bgColor) {
   //cell.style.backgroundColor = bgColor;
