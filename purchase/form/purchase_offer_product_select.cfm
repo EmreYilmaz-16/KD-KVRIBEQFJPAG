@@ -411,7 +411,7 @@ row.appendChild(salePriceCell);
   : ''}  
 `;
 
-if(product.IS_OS===0){
+if(product.IS_OS===false){
   console.log("Ürün Satış Teklifine Dönmüşmüş",product.PRODUCT_NAME,product.IS_OS);
 }
 
