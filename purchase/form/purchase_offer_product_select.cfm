@@ -748,7 +748,7 @@ for(let i=0;i<mx.length;i++){
 }
 
 if(SFRFIYAT>0){
-   var stk= confirm("Fiyat Girilmemiş Ürünler Var Devam Etmek İstiyormusunuz")
+    alert("Fiyat Girilmemiş Ürünler Var Devam Etmek İstiyormusunuz")
     return false;
 }else{
     return true;
