@@ -417,6 +417,8 @@ if(product.IS_SATINALMA === 0){
     console.log("Seçili",product.PRODUCT_ID,product.IS_SATINALMA);
     if(product.IS_OS===0){
       console.log("Seçili ve Satış Teklifinde Yok",product.PRODUCT_ID,product.IS_SATINALMA);
+    }else{
+      console.log("Seçili ve Satış Teklifinde Var",product.PRODUCT_ID,product.IS_SATINALMA);
     }
   }
 }
