@@ -262,6 +262,7 @@ WHERE INTERNALDEMAND_ID=#attributes.internal_id#
 var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
     data=mergeCompanies(data);
+    var ww_data=data;
     const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
 
