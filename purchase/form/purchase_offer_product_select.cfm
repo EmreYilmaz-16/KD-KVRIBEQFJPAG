@@ -393,7 +393,7 @@ marjInput.addEventListener('input', () => {
 
     // Kur bilgisi için diğerMoney ve ilgili döviz kurları
     const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
-    const currency = MONEYARRRR.find(c => c.MONEY === otherMoney);
+    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
     const rate1 = parseFloat(currency?.RATE1 || 1);
     const rate2 = parseFloat(currency?.RATE2 || 1);
 
