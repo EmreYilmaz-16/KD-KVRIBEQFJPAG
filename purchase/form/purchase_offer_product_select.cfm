@@ -449,11 +449,17 @@ if (!rowHasSatinalma) {
 
   if (product.IS_SELECTED === 1) {
     if(product.IS_OS===true){
+      if(!rowHasOS){
       const checkIcon = document.createElement('div');
       checkIcon.className = 'check-icon text-success';
       checkIcon.innerHTML = '✔️';
       cell.appendChild(checkIcon);
-      selectedCells.set(productName, cellKey);
+      selectedCells.set(productName, cellKey);}
+    }else{
+      cell.style.pointerEvents = 'none';
+      cell.style.opacity = '0.8';
+      cell.title = 'Bu ürün için satın alma yapılmış. Seçim yapılamaz.';
+    }
     }else{
       cell.style.pointerEvents = 'none';
       cell.style.opacity = '0.8';
