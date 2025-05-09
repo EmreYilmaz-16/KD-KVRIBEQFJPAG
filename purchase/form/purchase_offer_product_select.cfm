@@ -423,7 +423,7 @@ row.appendChild(salePriceCell);
 
     if (product) {
      // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0 }|${product.IS_SATINALMA || 0}`;
+      const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${DEMAND_MONEY}|${product.STOCK_ID}|${productName}|${product.IS_SELECTED || 0 }|${product.IS_SATINALMA || 0}`;
 
       const priceDisplay = product.DISCOUNT_1 > 0
         ? `<div class="tooltip"><span class="price-original">${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -550,7 +550,7 @@ if (!rowHasSatinalma && !rowHasOS) {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,stockId,isSatinalma] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -596,6 +596,7 @@ try {
       productMarj: productMarj,
       salePrice: parseFloat(salePrice.toFixed(2)),
       convertedsalePriceOther: parseFloat(convertedsalePriceOther.toFixed(2)),
+      demandMoney: demandMoney,
 
     });
   });
