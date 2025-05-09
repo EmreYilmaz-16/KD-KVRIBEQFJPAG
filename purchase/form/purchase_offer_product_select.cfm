@@ -455,7 +455,7 @@ if (!rowHasSatinalma) {
       checkIcon.innerHTML = '✔️';
       cell.appendChild(checkIcon);
       selectedCells.set(productName, cellKey);}
-    }else{
+    else{
       cell.style.pointerEvents = 'none';
       cell.style.opacity = '0.8';
       cell.title = 'Bu ürün için satın alma yapılmış. Seçim yapılamaz.';
