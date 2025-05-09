@@ -418,6 +418,7 @@ console.table(
     convertedSalePrice,
     sm,
     salePrice,
+    netPrice
   }
 )
 });
