@@ -1,4 +1,4 @@
-<cf_box title="Satınalma Seçim Ekranı">
+﻿<cf_box title="Satınalma Seçim Ekranı">
 
 
   <style>
@@ -684,7 +684,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
   fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', { // Correct endpoint
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify({ payload, offer_id,session_variables }) // Include offer_id in the payload
   })
@@ -748,8 +748,8 @@ for(let i=0;i<mx.length;i++){
 }
 
 if(SFRFIYAT>0){
-    alert("Marj Girilmemiş Ürünler Var; Lütfen Kontrol Edin!")
-    return false;
+   var fx= confirm("Marj Girilmemiş Ürünler Var; Lütfen Kontrol Edin!")
+    return fx;
 }else{
     return true;
 }
