@@ -31,7 +31,7 @@ LEFT JOIN w3Qa_product.PRODUCT_BRANDS AS PB ON PB.BRAND_ID = P.BRAND_ID
 LEFT JOIN w3Qa_product.PRODUCT_BRANDS_MODEL AS PBM ON PBM.MODEL_ID = P.SHORT_CODE_ID
 WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
 </cfquery>
-<cfdump var="#getofferrow#">
+<cfdump var="#getofferrow#" abort="true">
 <cfoutput>
 <cfquery name="GETPB" dbtype="query">
     SELECT DISTINCT BRAND_NAME FROM getofferrow
