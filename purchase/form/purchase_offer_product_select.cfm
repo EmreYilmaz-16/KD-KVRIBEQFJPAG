@@ -600,7 +600,7 @@ if (!rowHasSatinalma && !rowHasOS) {
 function updateOutput() {
   const grouped = {};
   selectedCells.forEach((key, productName) => {
-    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma,yyy,xxx,oemNo,zzz] = key.split('|');
+    const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma,yyy,xxx,oemNo,selectInfoExtra] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
         companyId: parseInt(companyId),
@@ -650,7 +650,7 @@ try {
       oemNo: oemNo,
       xxx:xxx,
       yyy:yyy,
-      zzz:zzz,
+      selectInfoExtra:selectInfoExtra,
 
     });
   });
