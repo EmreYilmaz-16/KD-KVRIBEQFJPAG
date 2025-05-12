@@ -625,7 +625,8 @@ SELECT
     TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) AS COMPANY_ID,
     TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) AS PARTNER_ID,
     ORR_SATIS_TEKLIFI.*,
-	PSR.OFFER_ID
+	PSR.OFFER_ID,
+    PSR.BASKET_EXTRA_INFO
     --PSR.SOME_COLUMN_1, -- Kullanmak istediğin PBS_SELECTED_ROWS alanlarını buraya ekle
     --PSR.SOME_COLUMN_2
 FROM w3Qa_1. PBS_SELECTED_ROWS AS PSR
@@ -636,7 +637,7 @@ LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI
 LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI 
     ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
 WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer">  ORDER BY COMPANY_ID
-
+AND PSR.BASKET_EXTRA_INFO <>3
 
         </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
