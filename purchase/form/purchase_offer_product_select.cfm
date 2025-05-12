@@ -351,6 +351,22 @@ uniqueProducts.forEach(productName => {
   productCell.className = 'product-name';
   row.appendChild(productCell);
 
+  console.log("Ürün Adı",productName);
+ 
+  const codeCell = document.createElement('td');
+  codeCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.PRODUCT_CODE_2 || "";
+  codeCell.className = 'product-code';
+  row.appendChild(codeCell);
+
+   const oemCell = document.createElement('td');
+  const oemInput = document.createElement('input');
+  oemInput.type = 'text';
+  oemInput.value = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
+  oemInput.className = 'form-control form-control-sm';
+  oemInput.style.width = '80px';
+  oemCell.appendChild(oemInput);
+  row.appendChild(oemCell);
+
   let slpInfo = {};
 for (const supplier of data) {
   const match = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName && p.SLP && p.SLP.length > 0);
