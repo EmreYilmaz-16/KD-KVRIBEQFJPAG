@@ -360,12 +360,8 @@ uniqueProducts.forEach(productName => {
   row.appendChild(codeCell);
 
    const oemCell = document.createElement('td');
-  const oemInput = document.createElement('input');
-  oemInput.type = 'text';
-  oemInput.value = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
-  oemInput.className = 'form-control form-control-sm';
-  oemInput.style.width = '80px';
-  oemCell.appendChild(oemInput);
+    oemCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
+  oemCell.className = 'product-oem';  
   row.appendChild(oemCell);
 
   let slpInfo = {};
