@@ -95,7 +95,8 @@
                             OFFER_ID,
                             PRODUCT_MARJ,
                             SALE_PRICE,
-                            IS_OS
+                            IS_OS,
+                            BASKET_EXTRA_INFO
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -103,7 +104,8 @@
                             #offers.offer_id#,
                             #product.productMarj#,
                             #product.salePrice#,
-                            0
+                            0,
+                            #product.selectInfoExtra#
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
@@ -378,7 +380,8 @@ VALUES(
                             OFFER_ID,
                             PRODUCT_MARJ,
                             SALE_PRICE,
-                            IS_OS
+                            IS_OS,
+                            BASKET_EXTRA_INFO
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -386,7 +389,8 @@ VALUES(
                             #offers.offer_id#,
                             #product.productMarj#,
                             #product.salePrice#,
-                            1
+                            1,
+                            #product.selectInfoExtra#
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
@@ -617,6 +621,25 @@ VALUES(
     
         <!--- Teklif satırlarını çek --->
         <cfquery name="getSelectedRows" datasource="#dsn3#">
+SELECT 
+    TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) AS COMPANY_ID,
+    TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) AS PARTNER_ID,
+    ORR_SATIS_TEKLIFI.*,
+	PSR.OFFER_ID
+    --PSR.SOME_COLUMN_1, -- Kullanmak istediğin PBS_SELECTED_ROWS alanlarını buraya ekle
+    --PSR.SOME_COLUMN_2
+FROM w3Qa_1. PBS_SELECTED_ROWS AS PSR
+INNER JOIN w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI 
+    ON PSR.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI 
+    ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI 
+    ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
+WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer">  ORDER BY COMPANY_ID
+
+
+        </cfquery>
+        <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
             SELECT 
                 TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) AS COMPANY_ID,
                 TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) AS PARTNER_ID,
@@ -627,7 +650,7 @@ VALUES(
             WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
                 SELECT WRK_ROW_ID FROM PBS_SELECTED_ROWS WHERE OFFER_ID = <cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer">)
             ORDER BY COMPANY_ID
-        </cfquery>
+        </cfquery>----->
     
         <!--- Kur bilgilerini çek --->
         <cfquery name="getMoneyext" datasource="#dsn3#">
