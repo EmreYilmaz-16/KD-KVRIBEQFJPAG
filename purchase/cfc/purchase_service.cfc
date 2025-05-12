@@ -134,6 +134,7 @@
                         attributes["is_virtual#ix#"] = 0;
                         attributes["SHELF_CODE#ix#"] = "";
                         attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+                        attributes["detail_info_extra#ix#"] = product.oemNo;
                         
                     </cfscript>
                 </cfloop>
