@@ -355,10 +355,21 @@ uniqueProducts.forEach(productName => {
 
   console.log("Ürün Adı",productName);
  
-  const codeCell = document.createElement('td');
-  codeCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.PRODUCT_CODE_2 || "";
-  codeCell.className = 'product-code';
-  row.appendChild(codeCell);
+ const codeCell = document.createElement('td');
+
+// Tüm şirketlerde ürünü ara
+let productCode = "";
+for (const supplier of data) {
+  const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
+  if (product && product.PRODUCT_CODE_2) {
+    productCode = product.PRODUCT_CODE_2;
+    break; // İlk bulduğunda döngüyü kır
+  }
+}
+
+codeCell.textContent = productCode || "N/A"; // Eğer bulunamazsa "N/A" yaz
+codeCell.className = 'product-code';
+row.appendChild(codeCell);
   // OEM No
   const oemCell = document.createElement('td');
 
