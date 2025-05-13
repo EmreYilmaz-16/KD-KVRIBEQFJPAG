@@ -615,7 +615,7 @@ VALUES(
     </cffunction>
     <cffunction name="SAVEORDER_gpt" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfargument name="internal_id" type="numeric" required="true">
-    
+      <cfset var response = {}>
         <cfset var dsn = "w3Qa">
         <cfset var dsn3 = "w3Qa_1">
         <cfset var attributes = {}>
@@ -804,6 +804,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cflog file="purchaseService" text="Error: #cfcatch.message#" type="error">
         </cfcatch>
         </cftry>
+        <cfreturn response>
     </cffunction>
 
 <!--------------
