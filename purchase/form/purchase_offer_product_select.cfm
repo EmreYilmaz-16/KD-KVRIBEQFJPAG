@@ -359,7 +359,8 @@ uniqueProducts.forEach(productName => {
   codeCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.PRODUCT_CODE_2 || "";
   codeCell.className = 'product-code';
   row.appendChild(codeCell);
-
+  // OEM No
+  console.log(data[0].URUNLER)
    const oemCell = document.createElement('td');
     oemCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
   oemCell.className = 'product-oem';  
