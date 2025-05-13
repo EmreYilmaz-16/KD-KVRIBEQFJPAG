@@ -361,6 +361,7 @@ uniqueProducts.forEach(productName => {
   row.appendChild(codeCell);
   // OEM No
   console.log(data[0].URUNLER)
+  console.log(data)
    const oemCell = document.createElement('td');
     oemCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
   oemCell.className = 'product-oem';  
