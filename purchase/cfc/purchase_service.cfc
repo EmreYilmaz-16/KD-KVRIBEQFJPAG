@@ -619,7 +619,7 @@ VALUES(
         <cfset var dsn = "w3Qa">
         <cfset var dsn3 = "w3Qa_1">
         <cfset var attributes = {}>
-    
+    <cftry>
         <!--- Teklif satırlarını çek --->
         <cfquery name="getSelectedRows" datasource="#dsn3#">
 SELECT 
@@ -793,6 +793,17 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
                 structClear(attributes);
             </cfscript>
         </cfloop>
+         <!-- Set success response -->
+            <cfset response.res = "success">
+            <cfset response.message = "Purchase Orders saved successfully.">
+            <cfset response.data = attributes>
+        <cfcatch>
+            <!-- Handle errors -->
+            <cfset response.res = "error">
+            <cfset response.message = cfcatch>
+            <cflog file="purchaseService" text="Error: #cfcatch.message#" type="error">
+        </cfcatch>
+        </cftry>
     </cffunction>
 
 <!--------------
