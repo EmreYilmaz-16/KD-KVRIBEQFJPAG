@@ -817,7 +817,7 @@ function SatinalmaSiparis(params) {
     console.log("İşlem tamamlandı.");
   });*/
 
-  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&internal_id'+params, { // Correct endpoint
+  fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&internal_id='+params, { // Correct endpoint
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
