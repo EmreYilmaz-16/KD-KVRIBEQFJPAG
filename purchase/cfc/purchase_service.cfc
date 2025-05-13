@@ -613,7 +613,7 @@ VALUES(
 
 
     </cffunction>
-    <cffunction name="SAVEORDER_gpt" access="remote" returntype="void">
+    <cffunction name="SAVEORDER_gpt" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfargument name="internal_id" type="numeric" required="true">
     
         <cfset var dsn = "w3Qa">
