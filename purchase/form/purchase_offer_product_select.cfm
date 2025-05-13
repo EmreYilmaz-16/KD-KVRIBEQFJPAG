@@ -360,12 +360,21 @@ uniqueProducts.forEach(productName => {
   codeCell.className = 'product-code';
   row.appendChild(codeCell);
   // OEM No
-  console.log(data[0].URUNLER)
-  console.log(data)
-   const oemCell = document.createElement('td');
-    oemCell.textContent = data[0].URUNLER.find(p => p.PRODUCT_NAME === productName)?.OEM_NO || "";
-  oemCell.className = 'product-oem';  
-  row.appendChild(oemCell);
+  const oemCell = document.createElement('td');
+
+// Tüm şirketlerde ürünü ara
+let oemNo = "";
+for (const supplier of data) {
+  const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
+  if (product && product.OEM_NO) {
+    oemNo = product.OEM_NO;
+    break; // İlk bulduğunda döngüyü kır
+  }
+}
+
+oemCell.textContent = oemNo || "N/A"; // Eğer bulunamazsa "N/A" yaz
+oemCell.className = 'product-oem';
+row.appendChild(oemCell);
 
   let slpInfo = {};
 for (const supplier of data) {
