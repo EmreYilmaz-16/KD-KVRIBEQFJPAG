@@ -515,7 +515,8 @@ row.appendChild(salePriceCell);
   ${product.SNT_S === 1 ? '<div class="text-success fw-bold small">💵 S.Alma Oluştu</div>' : ''}
   ${((product.IS_SATINALMA === 0 && product.IS_SELECTED === 1) && product.IS_OS === false)
   ? '<div class="text-warning fw-bold small">⚠️ Satış Teklifinden Kaldırıldı</div>'
-  : ''}  
+  : ''}
+  ${product.BASKET_INFO_TYPE ? `<div class="text-info fw-bold small"> ${product.BASKET_INFO_TYPE}</div>` : ''}  
 `;
 
 if(product.IS_OS===false){
