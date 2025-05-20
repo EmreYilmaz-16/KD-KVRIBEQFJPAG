@@ -220,9 +220,9 @@ else if(ShowType=="3"){
     if(ty>0){html+=`<span class="">🧾 Satış Faturası: ✅</span> |`}else{html+=`<span class="">🧾 Satış Faturası: ❌</span> |`}
 }
 else if(ShowType=="4"){
-     html += `<div class="sub-section">`;
+     html += `<div class="sub-section ui-scroll">`;
     html+=`<table class='ui-table-list ui-form'><thead>
-        <tr><th colspan="3">Teklif</th><th>Sipariş</th></tr>
+        <tr><th colspan="3">Teklif</th><th colspan="2">Sipariş</th></tr>
         <tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th><th>Sipariş No</th><th>Sipariş Tarihi</th></tr></thead>`
     html+="<tbody>";
     satis.ALISLAR.forEach(alis => {
