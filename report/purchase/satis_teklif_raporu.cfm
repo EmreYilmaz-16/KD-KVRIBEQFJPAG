@@ -158,6 +158,9 @@ else if(ShowType=="1"){
 else if(ShowType=="2"){
     html += `<div class="offer-block col col-6" style="width: 100%;margin-left:5px">`;
 }
+else if(ShowType=="3"){
+    html += `<div class="offer-block ">`;
+}
 
 
     
