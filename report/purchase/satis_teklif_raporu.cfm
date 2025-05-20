@@ -122,7 +122,12 @@ Object.values(grouped).forEach(demand => {
     });
     html += `</div>`;
 
-    html += `<div class="mt-2">📝 Satış Siparişi: <strong>${satis.SIPARIS_NO}</strong> <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
+    if(satis.SIPARIS_NO) {
+      html += `<div class="mt-2">➤ <span class="text-success">Satış Siparişi:</span> ${satis.SIPARIS_NO} <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
+    }else {
+      html += `<div class="mt-2">➤ <span class="text-danger">Satış Siparişi Yok</span></div>`;
+    }
+    //html += `<div class="mt-2">📝 Satış Siparişi: <strong>${satis.SIPARIS_NO}</strong> <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
     html += `</div>`;
   });
 
