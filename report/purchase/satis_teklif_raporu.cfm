@@ -122,7 +122,7 @@ Object.values(grouped).forEach(demand => {
     satis.ALISLAR.forEach(alis => {
       html += `<div>➤ Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small class="text-muted">(${new Date(alis.TARIH).toLocaleDateString()})</small></a>`;
       if (alis.SIPARIS_NO) {
-        html += ` → <span class="text-success">Sipariş: ${alis.SIPARIS_NO}</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'> <small class="text-muted">(${new Date(alis.SIPARIS_TARIH).toLocaleDateString()})</small></a>`;
+        html += ` → <span class="text-success">Sipariş: ${alis.SIPARIS_NO}</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'> <small class="text-muted">(${new Date(alis.SIPARIS_TARIH).toLocaleDateString()})</small></a>`;
       }
       html += `</div>`;
     });
