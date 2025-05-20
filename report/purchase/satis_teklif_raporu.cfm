@@ -167,6 +167,8 @@ else if(ShowType=="2"){
 }
 else if(ShowType=="3"){
     html += `<div class="offer-block ">`;
+}else if(ShowType=="4"){
+    html += `<div class="offer-block ">`;
 }
 
 
