@@ -133,7 +133,7 @@ data.forEach(row => {
   ) {
   grouped[demandId].SATIS[satisId].FATURALAR.push({
     NO: row.SATIS_FATURA_NO,
-    TARIH: row.SATIS_FATURA_TARIHI,        
+    FATURA_TARIH: row.SATIS_FATURA_TARIHI,        
     SATIS_FATURA_ID: row.SATIS_FATURA_ID,
     SATIS_FATURA_PERIOD: row.SATIS_FATURA_PERIOD
     
@@ -201,7 +201,7 @@ else if(ShowType=="2"){
     if(satis.SIPARIS_NO) {
       html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
       satis.FATURALAR.forEach(fatura => {
-        html += `<div class="mt-2"> <span class="text-success">🧾 Fatura:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_invoice&event=upd&invoice_id=${fatura.SATIS_FATURA_ID}"'> ${fatura.NO} <small class="text-muted"></small></a>`;
+        html += `<div class="mt-2"> <span class="text-success">🧾 Fatura:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=invoice.form_add_bill&event=upd&iid=${fatura.SATIS_FATURA_ID}"'> ${fatura.NO} <small class="text-muted">📅${new Date(fatura.FATURA_TARIH).toLocaleDateString()} </small></a>`;
         if (fatura.SATIS_FATURA_PERIOD) {
           html += ` <small class="text-muted">(${fatura.SATIS_FATURA_PERIOD})</small>`;
         }
