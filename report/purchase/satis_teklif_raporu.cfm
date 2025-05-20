@@ -230,7 +230,7 @@ else if(ShowType=="4"){
     });
     html+="</tbody>";
     html+="</table>";
-    html += `</div>`;
+    
 }
 
     html += `</div>`;
