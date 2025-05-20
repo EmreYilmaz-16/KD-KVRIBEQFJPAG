@@ -126,6 +126,14 @@ data.forEach(row => {
     SIPARIS_ID: row.ALIS_SIPARIS_ID,
     ID: row.ALIS_TEKLIF_ID
   });
+
+  grouped[demandId].SATIS[satisId].FATURALAR.push({
+    NO: row.SATIS_FATURA_NO,
+    TARIH: row.SATIS_FATURA_TARIHI,        
+    SATIS_FATURA_ID: row.SATIS_FATURA_ID,
+    SATIS_FATURA_PERIOD: row.SATIS_FATURA_PERIOD
+    
+  });
 });
 
 // HTML Oluştur
@@ -183,6 +191,13 @@ else if(ShowType=="2"){
 
     if(satis.SIPARIS_NO) {
       html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
+      satis.FATURALAR.forEach(fatura => {
+        html += `<div class="mt-2"> <span class="text-success">🧾 Fatura:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_invoice&event=upd&invoice_id=${fatura.SATIS_FATURA_ID}"'> ${fatura.NO} <small class="text-muted"></small></a>`;
+        if (fatura.SATIS_FATURA_PERIOD) {
+          html += ` <small class="text-muted">(${fatura.SATIS_FATURA_PERIOD})</small>`;
+        }
+        html += `</div>`;
+      });
     }else {
       html += `<div class="mt-2"> <span class="text-danger">📝 Satış Siparişi Yok</span></div>`;
     }
