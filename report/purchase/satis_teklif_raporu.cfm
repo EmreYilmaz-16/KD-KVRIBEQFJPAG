@@ -202,15 +202,15 @@ else if(ShowType=="2"){
 }
 else if(ShowType=="3"){
     html += `<div class="sub-section">`;
-    if(satis){html+=`<span class="">📄 Satış Teklifi: ✅</span>`}else{html+=`<span class="">📄 Satış Teklifi: ❌</span>`}
-    if(satis.ALISLAR){html+=`<span class="">📥 Alış Teklifi: ✅</span>`}else{html+=`<span class="">📥 Alış Teklifi: ❌</span>`}
+    if(satis){html+=`<span class="">📄 Satış Teklifi: ✅</span> |`}else{html+=`<span class="">📄 Satış Teklifi: ❌</span> |`}
+    if(satis.ALISLAR){html+=`<span class="">📥 Alış Teklifi: ✅</span> |`}else{html+=`<span class="">📥 Alış Teklifi: ❌</span> |`}
     var ty=0;
     satis.ALISLAR.forEach(alis => {if (alis.SIPARIS_NO) {ty++;}    });
-    if(ty>0){html+=`<span class="">📬 Alış Siparişi: ✅</span>`}else{html+=`<span class="">📬 Alış Siparişi: ❌</span>`}
-    if(satis.SIPARIS_NO) {html+=`<span class="">📝 Satış Siparişi: ✅</span>`}else{html+=`<span class="">📝 Satış  Siparişi: ❌</span>`}
+    if(ty>0){html+=`<span class="">📬 Alış Siparişi: ✅</span> |`}else{html+=`<span class="">📬 Alış Siparişi: ❌</span> |`}
+    if(satis.SIPARIS_NO) {html+=`<span class="">📝 Satış Siparişi: ✅</span> |`}else{html+=`<span class="">📝 Satış  Siparişi: ❌</span> |`}
     var ty=0;
     satis.FATURALAR.forEach(alis => {if (alis.SATIS_FATURA_ID) {ty++;}    });
-    if(ty>0){html+=`<span class="">🧾 Satış Faturası: ✅</span>`}else{html+=`<span class="">🧾 Satış Faturası: ❌</span>`}
+    if(ty>0){html+=`<span class="">🧾 Satış Faturası: ✅</span> |`}else{html+=`<span class="">🧾 Satış Faturası: ❌</span> |`}
 }
 
     html += `</div>`;
