@@ -180,7 +180,7 @@ else if(ShowType=="3"){
 if(ShowType=="0"){
     html += `<div class="sub-section">`;
     satis.ALISLAR.forEach(alis => {
-      html += `<div>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} - ${alis.FIRMA} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
+      html += `<div style='border-bottom:0.1px solid #80808021'>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} - ${alis.FIRMA} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
       if (alis.SIPARIS_NO) {
         html += ` → <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
       }
