@@ -25,6 +25,9 @@
       font-weight: bold;
       color: #0056b3;
     }
+    .col-6 {
+    width: 48.9% !important;
+    }
   </style>
 <cfquery name="getData" datasource="#dsn3#">
   SELECT (
