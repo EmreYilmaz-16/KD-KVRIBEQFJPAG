@@ -136,7 +136,7 @@ else{
         satis.ALISLAR.forEach(alis => {
       html += `<div class="col col-3 card" style="display:flex !important;justify-content:space-evenly;text-align:center;padding:5px !important;padding-top:5px !important;flex-direction:column;margin-left:5px">📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small style="display:block" class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
       if (alis.SIPARIS_NO) {
-        html += ` → <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
+        html += ` <hr> <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
       }
       html += `</div>`;
     });
