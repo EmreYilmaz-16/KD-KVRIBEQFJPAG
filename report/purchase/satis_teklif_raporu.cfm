@@ -226,7 +226,7 @@ else if(ShowType=="4"){
         <tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th><th>Sipariş No</th><th>Sipariş Tarihi</th></tr></thead>`
     html+="<tbody>";
     satis.ALISLAR.forEach(alis => {
-      html += `<tr><td>${alis.NO}</td><td>${new Date(alis.TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td><td>${alis.SIPARIS_NO ? alis.SIPARIS_NO :""} </td></tr>`;
+      html += `<tr><td>${alis.NO}</td><td>${new Date(alis.TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td><td>${alis.SIPARIS_NO ? alis.SIPARIS_NO :""} </td><td>${alis.SIPARIS_NO ? new Date(alis.SIPARIS_TARIH).toLocaleDateString() :""} </td></tr>`;
     });
     html+="</tbody>";
     html+="</table>";
