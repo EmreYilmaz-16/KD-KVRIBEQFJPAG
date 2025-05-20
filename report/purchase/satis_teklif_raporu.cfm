@@ -215,7 +215,7 @@ else if(ShowType=="3"){
 
     html += `</div>`;
 
-    if(satis.SIPARIS_NO) {
+    if(satis.SIPARIS_NO && ShowType!="3") {
       html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
       satis.FATURALAR.forEach(fatura => {
         html += `<div class="mt-2"> <span class="text-success">🧾 Fatura:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=invoice.form_add_bill&event=upd&iid=${fatura.SATIS_FATURA_ID}"'> ${fatura.NO} <small class="text-muted">📅${new Date(fatura.FATURA_TARIH).toLocaleDateString()} </small></a>`;
