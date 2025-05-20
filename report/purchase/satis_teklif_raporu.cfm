@@ -22,7 +22,7 @@
       color: #0056b3;
     }
   </style>
-<cfquery name="getData" datasource="#application.datasource#">
+<cfquery name="getData" datasource="#dsn3#">
   SELECT (
 SELECT 
     SATIS_TEKLIFI.OFFER_NUMBER AS SATIS_TEKLIF_NO, 
