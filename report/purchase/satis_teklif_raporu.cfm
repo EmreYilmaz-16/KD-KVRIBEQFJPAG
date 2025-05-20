@@ -69,7 +69,7 @@ WHERE SATIS_TEKLIFI_SATIRLARI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID FOR JS
 
 <div class="container">
   <h3 class="mb-4">Talep Bazlı Teklif & Sipariş İlişkileri</h3>
-  <div id="output"></div>
+  <div id="output" <cfif attributes.show_type eq 2>style="display:flex;flex-wrap:wrap"</cfif>></div>
 </div>
 
 <script>
@@ -116,7 +116,7 @@ data.forEach(row => {
 let html = "";
 Object.values(grouped).forEach(demand => {
  if(demand.INTERNAL_NUMBER){
-    html += `<div class="offer-block">`;
+    html += `<div class="offer-block ${ShowType=="2" ? "col col-6" : ""}" >`;
   html += `<div class="mb-2"><span  class="section-title">📦 Talep:</span><a href="javascript://"  onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${demand.INTERNAL_ID}"'>${demand.INTERNAL_NUMBER} –👤  ${demand.KIME} (${demand.NICKNAME})</a> </div>`;
 
   Object.values(demand.SATIS).forEach(satis => {
@@ -141,7 +141,10 @@ else if(ShowType=="1"){
       html += `</div>`;
     });
 }
-    html += `</div>`;
+else if(ShowType=="2"){
+
+}
+   
 
     if(satis.SIPARIS_NO) {
       html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
