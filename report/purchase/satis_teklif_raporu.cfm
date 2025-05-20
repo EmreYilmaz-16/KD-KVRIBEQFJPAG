@@ -174,9 +174,7 @@ else if(ShowType=="3"){
   html += `<div class="mb-2"><span  class="section-title">📦 Talep:</span><a href="javascript://"  onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${demand.INTERNAL_ID}"'>${demand.INTERNAL_NUMBER} –👤  ${demand.KIME} (${demand.NICKNAME})</a> </div>`;
 
   Object.values(demand.SATIS).forEach(satis => {
-   if(ShowType!="3"){
-    html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${satis.ID}"'> ${satis.NO} <small class="text-muted">📅 ${new Date(satis.TARIH).toLocaleDateString()}</small></a>`;
-    }
+  
 if(ShowType=="0"){
     html += `<div class="sub-section">`;
     satis.ALISLAR.forEach(alis => {
@@ -234,6 +232,10 @@ else if(ShowType=="4"){
 }
 
     html += `</div>`;
+
+     if(ShowType!="3"){
+    html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${satis.ID}"'> ${satis.NO} <small class="text-muted">📅 ${new Date(satis.TARIH).toLocaleDateString()}</small></a>`;
+    }
 
     if(satis.SIPARIS_NO ) {
      if(ShowType!="3"){
