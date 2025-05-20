@@ -219,6 +219,16 @@ else if(ShowType=="3"){
     satis.FATURALAR.forEach(alis => {if (alis.SATIS_FATURA_ID) {ty++;}    });
     if(ty>0){html+=`<span class="">🧾 Satış Faturası: ✅</span> |`}else{html+=`<span class="">🧾 Satış Faturası: ❌</span> |`}
 }
+else if(ShowType=="4"){
+     html += `<div class="sub-section">`;
+    html+=`<table class='ui-table-list ui-form'><thead><tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th></tr></thead></table>`
+    html+="<tbody>";
+    satis.ALISLAR.forEach(alis => {
+      html += `<tr><td>${alis.SIPARIS_NO}</td><td>${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td></tr>`;
+    });
+    html+="</tbody>";
+    html += `</div>`;
+}
 
     html += `</div>`;
 
