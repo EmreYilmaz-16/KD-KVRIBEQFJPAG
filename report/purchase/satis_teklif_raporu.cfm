@@ -131,6 +131,9 @@ if(ShowType=="0"){
       html += `</div>`;
     });
 }
+else{
+     html += `<div class="sub-section" style="display:flex">`;
+}
     html += `</div>`;
 
     if(satis.SIPARIS_NO) {
