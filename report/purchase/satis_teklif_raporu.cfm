@@ -108,7 +108,7 @@ let html = "";
 Object.values(grouped).forEach(demand => {
  if(demand.INTERNAL_NUMBER){
     html += `<div class="offer-block">`;
-  html += `<div class="mb-2"><span style='cursor: pointer;' onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${INTERNAL_ID}"' class="section-title">Talep:</span> ${demand.INTERNAL_NUMBER} – ${demand.KIME} (${demand.NICKNAME})</div>`;
+  html += `<div class="mb-2"><span style='cursor: pointer;' onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${demand.INTERNAL_ID}"' class="section-title">Talep:</span> ${demand.INTERNAL_NUMBER} – ${demand.KIME} (${demand.NICKNAME})</div>`;
 
   Object.values(demand.SATIS).forEach(satis => {
     html += `<div class="sub-section"><span class="text-primary">Satış Teklifi:</span> ${satis.NO} <small class="text-muted">(${new Date(satis.TARIH).toLocaleDateString()})</small>`;
