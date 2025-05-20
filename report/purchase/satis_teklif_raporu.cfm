@@ -82,7 +82,7 @@ WHERE SATIS_TEKLIFI_SATIRLARI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID FOR JS
 
 
 </cfquery>
-
+<cfdump var="#getData#" label="getData" format="html" display="false">
 
 <div class="container">
   <h3 class="mb-4">Talep Bazlı Teklif & Sipariş İlişkileri</h3>
