@@ -129,7 +129,7 @@ data.forEach(row => {
 
   if (
     row.SATIS_FATURA_NO &&
-    !satisGroup[satisId].FATURALAR.some(f => f.FATURA_NO === row.SATIS_FATURA_NO)
+    !grouped[demandId].SATIS[satisId].FATURALAR.some(f => f.FATURA_NO === row.SATIS_FATURA_NO)
   ) {
   grouped[demandId].SATIS[satisId].FATURALAR.push({
     NO: row.SATIS_FATURA_NO,
