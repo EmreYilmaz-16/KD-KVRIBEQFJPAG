@@ -221,10 +221,12 @@ else if(ShowType=="3"){
 }
 else if(ShowType=="4"){
      html += `<div class="sub-section">`;
-    html+=`<table class='ui-table-list ui-form'><thead><tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th></tr></thead>`
+    html+=`<table class='ui-table-list ui-form'><thead>
+        <tr><th colspan="3">Teklif</th><th>Sipariş</th></tr>
+        <tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th><th>Sipariş No</th><th>Sipariş Tarihi</th></tr></thead>`
     html+="<tbody>";
     satis.ALISLAR.forEach(alis => {
-      html += `<tr><td>${alis.SIPARIS_NO}</td><td>${new Date(alis.TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td></tr>`;
+      html += `<tr><td>${alis.NO}</td><td>${new Date(alis.TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td><td>${alis.SIPARIS_NO ? alis.SIPARIS_NO :""} </td></tr>`;
     });
     html+="</tbody>";
     html+="</table>";
