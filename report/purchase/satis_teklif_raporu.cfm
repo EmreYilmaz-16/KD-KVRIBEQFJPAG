@@ -80,6 +80,7 @@ data.forEach(row => {
       INTERNAL_NUMBER: row.INTERNAL_NUMBER,
       NICKNAME: row.NICKNAME,
       KIME: row.KIME,
+        INTERNAL_ID: row.INTERNAL_ID,
       SATIS: {}
     };
   }
