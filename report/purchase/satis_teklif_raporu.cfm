@@ -127,6 +127,10 @@ data.forEach(row => {
     ID: row.ALIS_TEKLIF_ID
   });
 
+  if (
+    row.SATIS_FATURA_NO &&
+    !satisGroup[satisId].FATURALAR.some(f => f.FATURA_NO === row.SATIS_FATURA_NO)
+  ) {
   grouped[demandId].SATIS[satisId].FATURALAR.push({
     NO: row.SATIS_FATURA_NO,
     TARIH: row.SATIS_FATURA_TARIHI,        
@@ -134,6 +138,7 @@ data.forEach(row => {
     SATIS_FATURA_PERIOD: row.SATIS_FATURA_PERIOD
     
   });
+    }
 });
 
 // HTML Oluştur
