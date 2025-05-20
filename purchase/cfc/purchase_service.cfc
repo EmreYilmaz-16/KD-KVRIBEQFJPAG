@@ -725,7 +725,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
                     <cfset attributes["other_money_value_#ix#"] = TUTAR_ / satirKur.RATE2>
                     <cfset attributes["description#ix#"] = "">
                     <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
-                    <cfset attributes["wrk_row_relation_id#ix#"] = getSelectedRows.WRK_ROW_ID>
+                    <cfset attributes["wrk_row_relation_id#ix#"] = "#getSelectedRows.WRK_ROW_ID#_XX">
                     <CFSET attributes["row_nettotal#ix#"] = PR_HESAP*AMOUNT>
                 </cfif>
             </cfloop>
