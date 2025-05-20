@@ -116,7 +116,18 @@ data.forEach(row => {
 let html = "";
 Object.values(grouped).forEach(demand => {
  if(demand.INTERNAL_NUMBER){
-    html += `<div class="offer-block">`;
+    if(ShowType=="0"){
+html += `<div class="offer-block ">`;
+}
+else if(ShowType=="1"){
+    html += `<div class="offer-block ">`;
+}
+else if(ShowType=="2"){
+    html += `<div class="offer-block col col-6" style="width: 100%;margin-left:5px">`;
+}
+
+
+    
   html += `<div class="mb-2"><span  class="section-title">📦 Talep:</span><a href="javascript://"  onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${demand.INTERNAL_ID}"'>${demand.INTERNAL_NUMBER} –👤  ${demand.KIME} (${demand.NICKNAME})</a> </div>`;
 
   Object.values(demand.SATIS).forEach(satis => {
