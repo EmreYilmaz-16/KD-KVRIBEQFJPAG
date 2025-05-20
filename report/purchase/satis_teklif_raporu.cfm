@@ -106,7 +106,8 @@ data.forEach(row => {
 // HTML Oluştur
 let html = "";
 Object.values(grouped).forEach(demand => {
-  html += `<div class="offer-block">`;
+ if(demand.INTERNAL_NUMBER){
+    html += `<div class="offer-block">`;
   html += `<div class="mb-2"><span class="section-title">Talep:</span> ${demand.INTERNAL_NUMBER} – ${demand.KIME} (${demand.NICKNAME})</div>`;
 
   Object.values(demand.SATIS).forEach(satis => {
@@ -132,6 +133,7 @@ Object.values(grouped).forEach(demand => {
   });
 
   html += `</div>`;
+}
 });
 
 document.getElementById("output").innerHTML = html;
