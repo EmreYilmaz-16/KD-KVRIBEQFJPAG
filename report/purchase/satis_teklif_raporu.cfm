@@ -227,6 +227,7 @@ else if(ShowType=="4"){
       html += `<tr><td>${alis.SIPARIS_NO}</td><td>${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td></tr>`;
     });
     html+="</tbody>";
+    html+="</table>";
     html += `</div>`;
 }
 
