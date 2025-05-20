@@ -1,3 +1,7 @@
+<cfparam name="attributes.show_type" default="0">
+<script>
+    var ShowType='<cfoutput>#attributes.show_type#</cfoutput>';
+</script>
 <!DOCTYPE html>
 
   <title>Talep Bazlı Teklif ve Sipariş İlişkisi</title>
@@ -117,7 +121,7 @@ Object.values(grouped).forEach(demand => {
 
   Object.values(demand.SATIS).forEach(satis => {
     html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${satis.ID}"'> ${satis.NO} <small class="text-muted">📅 ${new Date(satis.TARIH).toLocaleDateString()}</small></a>`;
-
+if(ShowType=="0"){
     html += `<div class="sub-section">`;
     satis.ALISLAR.forEach(alis => {
       html += `<div>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
@@ -126,6 +130,7 @@ Object.values(grouped).forEach(demand => {
       }
       html += `</div>`;
     });
+}
     html += `</div>`;
 
     if(satis.SIPARIS_NO) {
