@@ -92,6 +92,7 @@ data.forEach(row => {
       TARIH: row.SATIS_TEKLIF_TARIHI,
       SIPARIS_NO: row.SATIS_SIPARIS_NO,
       SIPARIS_TARIHI: row.SATIS_SIPARISI_TARIHI,
+      SIPARIS_ID: row.SATIS_SIPARIS_ID,
       ID: satisId,
       ALISLAR: []
     };
@@ -127,7 +128,7 @@ Object.values(grouped).forEach(demand => {
     html += `</div>`;
 
     if(satis.SIPARIS_NO) {
-      html += `<div class="mt-2">➤ <span class="text-success">Satış Siparişi:</span> ${satis.SIPARIS_NO} <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
+      html += `<div class="mt-2">➤ <span class="text-success">Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${alis.ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></a></div>`;
     }else {
       html += `<div class="mt-2">➤ <span class="text-danger">Satış Siparişi Yok</span></div>`;
     }
