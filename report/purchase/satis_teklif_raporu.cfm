@@ -151,7 +151,7 @@ else if(ShowType=="2"){
       html += `</div>`;
     });
 }
-   
+   html += `</div>`;
 
     if(satis.SIPARIS_NO) {
       html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
