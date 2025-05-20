@@ -38,6 +38,7 @@ SELECT
     ALIS_TEKLIFI.OFFER_NUMBER AS ALIS_TEKLIF_NO, 
     ALIS_TEKLIFI.OFFER_ID AS ALIS_TEKLIF_ID,
     ALIS_TEKLIFI.OFFER_DATE AS ALIS_TEKLIFI_TARIHI,
+    C2.NICKNAME AS ALIS_TEKLIFI_COMPANY,
     SATIS_SIPARISI.ORDER_NUMBER AS SATIS_SIPARIS_NO,
     SATIS_SIPARISI.ORDER_ID AS SATIS_SIPARIS_ID,
     SATIS_SIPARISI.ORDER_DATE AS SATIS_SIPARISI_TARIHI,
@@ -73,7 +74,8 @@ FROM w3Qa_1.OFFER_ROW AS SATIS_TEKLIFI_SATIRLARI
         SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,1 AS PERIOD_ID FROM w3Qa_2024_1.INVOICE
         UNION ALL
         SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,2 AS PERIOD_ID FROM w3Qa_2025_1.INVOICE
-    ) AS INVOICE ON INVOICE.INVOICE_ID=OI.INVOICE_ID AND INVOICE.PERIOD_ID=OI.PERIOD_ID
+    ) AS INVOICE ON INVOICE.INVOICE_ID=OI.INVOICE_ID AND INVOICE.PERIOD_ID=OI.PERIOD_ID    
+    LEFT JOIN w3Qa.COMPANY AS C2 ON C2.COMPANY_ID=TRY_CAST(REPLACE(ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT)
 WHERE SATIS_TEKLIFI_SATIRLARI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID FOR JSON PATH
 ) datam
 
@@ -124,6 +126,7 @@ data.forEach(row => {
     SIPARIS_NO: row.ALIS_SIPARIS_NO,
     SIPARIS_TARIH: row.ALIS_SIPARIS_TARIHI,
     SIPARIS_ID: row.ALIS_SIPARIS_ID,
+    FIRMA: row.ALIS_TEKLIF_COMPANY,
     ID: row.ALIS_TEKLIF_ID
   });
 
@@ -173,7 +176,7 @@ else if(ShowType=="3"){
 if(ShowType=="0"){
     html += `<div class="sub-section">`;
     satis.ALISLAR.forEach(alis => {
-      html += `<div>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
+      html += `<div>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} - ${alis.FIRMA} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
       if (alis.SIPARIS_NO) {
         html += ` → <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
       }
