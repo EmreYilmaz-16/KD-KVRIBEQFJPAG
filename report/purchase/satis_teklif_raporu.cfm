@@ -139,6 +139,10 @@ data.forEach(row => {
     
   });
     }
+    const unique = [
+  ...new Map(grouped[demandId].SATIS[satisId].FATURALAR.map(item => [JSON.stringify(item), item])).values()
+];
+grouped[demandId].SATIS[satisId].FATURALAR=unique;
 });
 
 // HTML Oluştur
