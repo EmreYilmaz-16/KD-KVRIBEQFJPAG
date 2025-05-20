@@ -120,7 +120,7 @@ Object.values(grouped).forEach(demand => {
 
     html += `<div class="sub-section">`;
     satis.ALISLAR.forEach(alis => {
-      html += `<div>➤ 📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
+      html += `<div>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
       if (alis.SIPARIS_NO) {
         html += ` → <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
       }
@@ -129,9 +129,9 @@ Object.values(grouped).forEach(demand => {
     html += `</div>`;
 
     if(satis.SIPARIS_NO) {
-      html += `<div class="mt-2">➤ <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
+      html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
     }else {
-      html += `<div class="mt-2">➤ <span class="text-danger">Satış Siparişi Yok</span></div>`;
+      html += `<div class="mt-2"> <span class="text-danger">Satış Siparişi Yok</span></div>`;
     }
     //html += `<div class="mt-2">📝 Satış Siparişi: <strong>${satis.SIPARIS_NO}</strong> <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
     html += `</div>`;
