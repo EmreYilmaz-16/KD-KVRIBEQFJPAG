@@ -403,14 +403,21 @@ function renderList(filter = "") {
 `;
         });
       });
+      const satislarRaw = teklifKeys.flatMap(key => talep.teklifler[key].altTeklifler)
+  .filter(x => x.satisTeklifNo || x.satisSiparisNo);
+
+// Tekrarları önlemek için JSON string'e çevirerek benzersizleştir
+const satislarUnique = Array.from(
+  new Set(satislarRaw.map(JSON.stringify))
+).map(JSON.parse);
       // Satış bilgileri en sona, tek blok olarak
     const satislar = teklifKeys.flatMap(key => talep.teklifler[key].altTeklifler)
       .filter(x => x.satisTeklifNo || x.satisSiparisNo);
 
-    if (satislar.length > 0) {
+    if (satislarUnique.length > 0) {
       block.innerHTML += `<div class="satis-blok"><strong>📈 Satış Teklif & Sipariş Bilgileri</strong><ul class="satis-listesi">`;
 
-      satislar.forEach(sat => {
+      satislarUnique.forEach(sat => {
         block.innerHTML += `
           <li>
             ${sat.satisTeklifNo ? `📄 <strong>${sat.satisTeklifNo}</strong>` : ""}
