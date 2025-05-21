@@ -1,3 +1,31 @@
+<cfquery name="hazirlik1" datasource="#dsn3#">
+  IF OBJECT_ID('SATIS_TEKLIF_ALIS_TEKLIF', 'U') IS NOT NULL
+    DROP TABLE SATIS_TEKLIF_ALIS_TEKLIF;
+
+SELECT DISTINCT 
+    SATIS_TEKLIFI.OFFER_NUMBER AS SATIS_TEKLIF_NO, 
+    SATIS_TEKLIFI.OFFER_ID AS SATIS_TEKLIF_ID, 
+    SATIS_TEKLIFI.OFFER_DATE AS SATIS_TEKLIF_TARIHI,
+    ALIS_TEKLIFI.OFFER_ID AS ALIS_TEKLIF_ID
+INTO SATIS_TEKLIF_ALIS_TEKLIF
+FROM w3Qa_1.INTERNALDEMAND_ROW AS IRR
+LEFT JOIN w3Qa_1.INTERNALDEMAND AS IDD 
+    ON IDD.INTERNAL_ID = IRR.I_ID
+LEFT JOIN w3Qa_1.OFFER_ROW AS ALIS_TEKLIFI_SATIRLARI_MAIN 
+    ON ALIS_TEKLIFI_SATIRLARI_MAIN.WRK_ROW_RELATION_ID = IRR.WRK_ROW_ID
+LEFT JOIN w3Qa_1.OFFER_ROW AS ALIS_TEKLIFI_SATIRLARI 
+    ON ALIS_TEKLIFI_SATIRLARI.WRK_ROW_RELATION_ID = ALIS_TEKLIFI_SATIRLARI_MAIN.WRK_ROW_ID
+LEFT JOIN w3Qa_1.OFFER AS ALIS_TEKLIFI 
+    ON ALIS_TEKLIFI.OFFER_ID = ALIS_TEKLIFI_SATIRLARI.OFFER_ID
+LEFT JOIN w3Qa_1.OFFER_ROW AS SATIS_TEKLIFI_SATIRLARI 
+    ON SATIS_TEKLIFI_SATIRLARI.WRK_ROW_RELATION_ID = ALIS_TEKLIFI_SATIRLARI.WRK_ROW_ID
+LEFT JOIN w3Qa_1.OFFER AS SATIS_TEKLIFI 
+    ON SATIS_TEKLIFI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID
+WHERE SATIS_TEKLIFI.OFFER_NUMBER IS NOT NULL;
+
+</cfquery>
+
+
 <cfquery name="getData" datasource="#dsn3#">
 SELECT (
 SELECT DISTINCT 
@@ -14,7 +42,8 @@ SELECT DISTINCT
     OFFER_SUB.OFFER_ID AS ALT_TEKLIF_ID,
     OFFER_SUB.OFFER_DATE AS ALT_TEKLIF_TARIHI,
     C2.NICKNAME AS ALT_TEKLIF_FIRMA,
-    O.ORDER_NUMBER AS ALT_TEKLIF_SIPARIS
+    O.ORDER_NUMBER AS ALT_TEKLIF_SIPARIS,
+    SATIS_TEKLIF.*
 FROM w3Qa_1.INTERNALDEMAND AS IDO
     LEFT JOIN w3Qa_1.OFFER AS OFFER_MAIN 
         ON OFFER_MAIN.INTERNALDEMAND_ID = IDO.INTERNAL_ID
@@ -32,6 +61,8 @@ FROM w3Qa_1.INTERNALDEMAND AS IDO
             SELECT WRK_ROW_ID FROM w3Qa_1.OFFER_ROW WHERE OFFER_ID=OFFER_SUB.OFFER_ID
         ))
     ) AS O
+    LEFT JOIN SATIS_TEKLIF_ALIS_TEKLIF AS SATIS_TEKLIF 
+        ON SATIS_TEKLIF.ALIS_TEKLIF_ID = OFFER_SUB.OFFER_ID
 FOR JSON PATH
 ) AS DATA
 
@@ -145,7 +176,12 @@ data.forEach(item => {
       altTeklifId: item.ALT_TEKLIF_ID,
       altTeklifTarihi: item.ALT_TEKLIF_TARIHI,
       altTeklifFirma: item.ALT_TEKLIF_FIRMA,
-      altTeklifSiparis: item.ALT_TEKLIF_SIPARIS
+      altTeklifSiparis: item.ALT_TEKLIF_SIPARIS,      
+      satisTeklifId: item.SATIS_TEKLIF_ID,
+      satisTeklifNo: item.SATIS_TEKLIF_NO,
+      satisTeklifTarihi: item.SATIS_TEKLIF_TARIHI
+
+
     });
   }
 });
@@ -179,8 +215,9 @@ function renderList(filter = "") {
             <div class="alt-teklif">
               📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}'>${alt.altTeklifNo}</a></strong>
               ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
-              ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
-              ${alt.altTeklifSiparis ? `<span class="siparis">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
+              ${alt.altTeklifFirma ? `<span class="Firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
+              ${alt.altTeklifSiparis ? `<span class="Alış Siparişi">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
+              ${alt.SATIS_TEKLIF_NO ? `<span class="Satış Teklifi">📦 Sipariş: ${alt.SATIS_TEKLIF_NO}</span> <span class="text-muted">📅 ${alt.SATIS_TEKLIF_TARIHI.slice(0,10)}</span>` : ""}
             </div>
           `;
         });
