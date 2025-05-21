@@ -109,7 +109,7 @@ FOR JSON PATH
 
 <h2>📋 İç Talepler</h2>
 
-<input type="text" id="filterInput" class="search-input" placeholder="🔍 Talep No veya Talep Eden...">
+<input type="text" id="filterInput" class="search-input" placeholder="🔍 Talep No veya Talep Eden Firma...">
 
 <div id="talepListesi"></div>
 
@@ -134,6 +134,7 @@ data.forEach(item => {
   if (!grouped[key].teklifler[anaTeklifKey]) {
     grouped[key].teklifler[anaTeklifKey] = {
       anaTeklifNo: item.ANA_TEKLIF_NO,
+      anaTeklifId: item.ANA_TEKLIF_ID,
       altTeklifler: []
     };
   }
@@ -141,6 +142,7 @@ data.forEach(item => {
   if (item.ALT_TEKLIF_NO) {
     grouped[key].teklifler[anaTeklifKey].altTeklifler.push({
       altTeklifNo: item.ALT_TEKLIF_NO,
+      altTeklifId: item.ALT_TEKLIF_ID,
       altTeklifTarihi: item.ALT_TEKLIF_TARIHI,
       altTeklifFirma: item.ALT_TEKLIF_FIRMA,
       altTeklifSiparis: item.ALT_TEKLIF_SIPARIS
@@ -160,7 +162,7 @@ function renderList(filter = "") {
     block.className = "talep-block";
 
     block.innerHTML = `
-      <div class="talep-header">📦 Talep: ${talep.talepNo}
+      <div class="talep-header">📦 Talep: <a href='/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${talep.talepId}&is_hidden=1' target='_blank'> ${talep.talepNo}</a>
         <span class="text-company">👤 ${talep.talepEdenPers || "-"} (${talep.talepEden || "-"})</span>
       </div>
     `;
@@ -170,12 +172,12 @@ function renderList(filter = "") {
       teklifKeys.forEach(key => {
         const ana = talep.teklifler[key];
         block.innerHTML += `
-          <div class="ana-teklif">📄 Ana Teklif: ${ana.anaTeklifNo || "YOK"}</div>
+          <div class="ana-teklif">📄 Ana Teklif: <a href='/index.cfm?fuseaction=purchase.list_offer&event=det&offer_id=${ana.anaTeklifId}'>${ana.anaTeklifNo || "YOK"}</a></div>
         `;
         ana.altTeklifler.forEach(alt => {
           block.innerHTML += `
             <div class="alt-teklif">
-              📥 <strong>${alt.altTeklifNo}</strong>
+              📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.${alt.altTeklifNo}}'>${alt.altTeklifNo}</a></strong>
               ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
               ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
               ${alt.altTeklifSiparis ? `<span class="siparis">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
