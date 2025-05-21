@@ -1,321 +1,134 @@
-<cfparam name="attributes.show_type" default="0">
-<script>
-    var ShowType='<cfoutput>#attributes.show_type#</cfoutput>';
-</script>
-<!DOCTYPE html>
 
-  <title>Talep Bazlı Teklif ve Sipariş İlişkisi</title>
-  
+  <meta charset="UTF-8">
+  <title>İç Talepler</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a2e0e6cfd9.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
   <style>
-    .table-custom {
-      font-size: 0.9rem;
-    }
-    .offer-block {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-    .sub-section {
-      margin-left: 1.5rem;
-      margin-top: 0.5rem;
-    }
-    .section-title {
-      font-weight: bold;
-      color: #0056b3;
-    }
-    .col-6 {
-    width: 48.9% !important;
-    }
+    body { padding: 2rem; }
+    .talep-header i { margin-right: 6px; }
+    .search-input { max-width: 300px; margin-bottom: 20px; }
   </style>
+
+<h2 class="mb-4"><i class="fas fa-list-alt"></i> İç Talepler</h2>
+
+<input type="text" id="filterInput" class="form-control search-input" placeholder="Talep No veya Talep Eden...">
+
+<div class="accordion" id="talepAccordion"></div>
 <cfquery name="getData" datasource="#dsn3#">
- /* SELECT (
-SELECT 
-    SATIS_TEKLIFI.OFFER_NUMBER AS SATIS_TEKLIF_NO, 
-    SATIS_TEKLIFI.OFFER_ID AS SATIS_TEKLIF_ID, 
-    SATIS_TEKLIFI.OFFER_DATE AS SATIS_TEKLIF_TARIHI,
-    ALIS_TEKLIFI.OFFER_NUMBER AS ALIS_TEKLIF_NO, 
-    ALIS_TEKLIFI.OFFER_ID AS ALIS_TEKLIF_ID,
-    ALIS_TEKLIFI.OFFER_DATE AS ALIS_TEKLIFI_TARIHI,
-    C2.NICKNAME AS ALIS_TEKLIFI_COMPANY,
-    SATIS_SIPARISI.ORDER_NUMBER AS SATIS_SIPARIS_NO,
-    SATIS_SIPARISI.ORDER_ID AS SATIS_SIPARIS_ID,
-    SATIS_SIPARISI.ORDER_DATE AS SATIS_SIPARISI_TARIHI,
-    ALIS_SIPARIS.ORDER_ID AS ALIS_SIPARIS_ID,
-    ALIS_SIPARIS.ORDER_NUMBER AS ALIS_SIPARIS_NO,
-    ALIS_SIPARIS.ORDER_DATE AS ALIS_SIPARIS_TARIHI,
-    IDD.INTERNAL_ID,
-    IDD.INTERNAL_NUMBER,
-    IDD.TARGET_DATE AS INTERNAL_DATE,
-    C.NICKNAME,
-    EP.EMPLOYEE_NAME+' '+EP.EMPLOYEE_SURNAME AS KIME,
-     INVOICE.INVOICE_NUMBER AS SATIS_FATURA_NO,
-    INVOICE.INVOICE_ID AS SATIS_FATURA_ID,
-    INVOICE.INVOICE_DATE AS SATIS_FATURA_TARIHI,
-    INVOICE.PERIOD_ID AS SATIS_FATURA_PERIOD
-    
-
-FROM w3Qa_1.OFFER_ROW AS SATIS_TEKLIFI_SATIRLARI
-    INNER JOIN w3Qa_1.OFFER AS SATIS_TEKLIFI ON SATIS_TEKLIFI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID
-    LEFT JOIN w3Qa_1.OFFER_ROW AS ALIS_TEKLIFI_SATIRLARI ON ALIS_TEKLIFI_SATIRLARI.WRK_ROW_ID = SATIS_TEKLIFI_SATIRLARI.WRK_ROW_RELATION_ID
-    INNER JOIN w3Qa_1.OFFER AS ALIS_TEKLIFI ON ALIS_TEKLIFI.OFFER_ID = ALIS_TEKLIFI_SATIRLARI.OFFER_ID
-    LEFT JOIN w3Qa_1.ORDER_ROW AS SATIS_SIPARISI_SATIRLARI ON SATIS_SIPARISI_SATIRLARI.WRK_ROW_RELATION_ID = SATIS_TEKLIFI_SATIRLARI.WRK_ROW_ID
-    LEFT JOIN w3Qa_1.ORDERS AS SATIS_SIPARISI ON SATIS_SIPARISI.ORDER_ID = SATIS_SIPARISI_SATIRLARI.ORDER_ID
-    LEFT JOIN w3Qa_1.ORDER_ROW AS ALIS_SIPARIS_SATIRLARI 
-        ON ALIS_SIPARIS_SATIRLARI.WRK_ROW_RELATION_ID = CAST(SATIS_TEKLIFI_SATIRLARI.WRK_ROW_ID AS VARCHAR) + '_XX'
-    LEFT JOIN w3Qa_1.ORDERS AS ALIS_SIPARIS ON ALIS_SIPARIS.ORDER_ID = ALIS_SIPARIS_SATIRLARI.ORDER_ID
-    LEFT JOIN w3Qa_1.OFFER AS OA ON OA.OFFER_ID = ALIS_TEKLIFI.FOR_OFFER_ID
-    LEFT JOIN w3Qa_1.INTERNALDEMAND AS IDD ON IDD.INTERNAL_ID = OA.INTERNALDEMAND_ID
-    LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID=IDD.FROM_COMPANY_ID
-    LEFT JOIN w3Qa.EMPLOYEE_POSITIONS AS EP ON EP.POSITION_CODE=IDD.TO_POSITION_CODE
-        LEFT JOIN w3Qa_1.ORDERS_INVOICE AS OI ON OI.ORDER_ID=SATIS_SIPARISI.ORDER_ID
-    LEFT JOIN (
-        SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,1 AS PERIOD_ID FROM w3Qa_2024_1.INVOICE
-        UNION ALL
-        SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,2 AS PERIOD_ID FROM w3Qa_2025_1.INVOICE
-    ) AS INVOICE ON INVOICE.INVOICE_ID=OI.INVOICE_ID AND INVOICE.PERIOD_ID=OI.PERIOD_ID    
-    LEFT JOIN w3Qa.COMPANY AS C2 ON C2.COMPANY_ID=TRY_CAST(REPLACE(ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT)
-WHERE SATIS_TEKLIFI_SATIRLARI.OFFER_ID = SATIS_TEKLIFI_SATIRLARI.OFFER_ID FOR JSON PATH
-) datam
-
-*/
 SELECT (
-SELECT DISTINCT   SATIS_TEKLIFI.OFFER_NUMBER AS SATIS_TEKLIF_NO, 
-    SATIS_TEKLIFI.OFFER_ID AS SATIS_TEKLIF_ID, 
-    SATIS_TEKLIFI.OFFER_DATE AS SATIS_TEKLIF_TARIHI,
-    ALIS_TEKLIFI.OFFER_NUMBER AS ALIS_TEKLIF_NO, 
-    ALIS_TEKLIFI.OFFER_ID AS ALIS_TEKLIF_ID,
-    ALIS_TEKLIFI.OFFER_DATE AS ALIS_TEKLIFI_TARIHI,
-    C2.NICKNAME AS ALIS_TEKLIFI_COMPANY,
-    SATIS_SIPARISI.ORDER_NUMBER AS SATIS_SIPARIS_NO,
-    SATIS_SIPARISI.ORDER_ID AS SATIS_SIPARIS_ID,
-    SATIS_SIPARISI.ORDER_DATE AS SATIS_SIPARISI_TARIHI,
-    ALIS_SIPARIS.ORDER_ID AS ALIS_SIPARIS_ID,
-    ALIS_SIPARIS.ORDER_NUMBER AS ALIS_SIPARIS_NO,
-    ALIS_SIPARIS.ORDER_DATE AS ALIS_SIPARIS_TARIHI,
-    IDD.INTERNAL_ID,
-    IDD.INTERNAL_NUMBER,
-    IDD.TARGET_DATE AS INTERNAL_DATE,
-    C.NICKNAME,
-    EP.EMPLOYEE_NAME+' '+EP.EMPLOYEE_SURNAME AS KIME,
-     INVOICE.INVOICE_NUMBER AS SATIS_FATURA_NO,
-    INVOICE.INVOICE_ID AS SATIS_FATURA_ID,
-    INVOICE.INVOICE_DATE AS SATIS_FATURA_TARIHI,
-    INVOICE.PERIOD_ID AS SATIS_FATURA_PERIOD  FROM w3Qa_1.INTERNALDEMAND_ROW AS IRR
-LEFT JOIN w3Qa_1.INTERNALDEMAND AS IDD ON IDD.INTERNAL_ID=IRR.I_ID
-LEFT JOIN w3Qa_1.OFFER_ROW AS ALIS_TEKLIFI_SATIRLARI_MAIN ON ALIS_TEKLIFI_SATIRLARI_MAIN.WRK_ROW_RELATION_ID=IRR.WRK_ROW_ID
-LEFT JOIN w3Qa_1.OFFER_ROW AS ALIS_TEKLIFI_SATIRLARI ON ALIS_TEKLIFI_SATIRLARI.WRK_ROW_RELATION_ID=ALIS_TEKLIFI_SATIRLARI_MAIN.WRK_ROW_ID
-LEFT JOIN w3Qa_1.OFFER AS ALIS_TEKLIFI ON ALIS_TEKLIFI.OFFER_ID=ALIS_TEKLIFI_SATIRLARI.OFFER_ID
-LEFT JOIN w3Qa_1.OFFER_ROW AS SATIS_TEKLIFI_SATIRLARI ON SATIS_TEKLIFI_SATIRLARI.WRK_ROW_RELATION_ID=ALIS_TEKLIFI_SATIRLARI.WRK_ROW_ID
-LEFT JOIN w3Qa_1.OFFER  AS SATIS_TEKLIFI ON SATIS_TEKLIFI.OFFER_ID=SATIS_TEKLIFI_SATIRLARI.OFFER_ID
- LEFT JOIN w3Qa_1.ORDER_ROW AS SATIS_SIPARISI_SATIRLARI ON SATIS_SIPARISI_SATIRLARI.WRK_ROW_RELATION_ID = SATIS_TEKLIFI_SATIRLARI.WRK_ROW_ID
-    LEFT JOIN w3Qa_1.ORDERS AS SATIS_SIPARISI ON SATIS_SIPARISI.ORDER_ID = SATIS_SIPARISI_SATIRLARI.ORDER_ID
-    LEFT JOIN w3Qa_1.ORDER_ROW AS ALIS_SIPARIS_SATIRLARI 
-        ON ALIS_SIPARIS_SATIRLARI.WRK_ROW_RELATION_ID = CAST(SATIS_TEKLIFI_SATIRLARI.WRK_ROW_ID AS VARCHAR) + '_XX'
-         LEFT JOIN w3Qa_1.ORDERS AS ALIS_SIPARIS ON ALIS_SIPARIS.ORDER_ID = ALIS_SIPARIS_SATIRLARI.ORDER_ID
-           LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID=IDD.FROM_COMPANY_ID
-    LEFT JOIN w3Qa.EMPLOYEE_POSITIONS AS EP ON EP.POSITION_CODE=IDD.TO_POSITION_CODE
-        LEFT JOIN w3Qa_1.ORDERS_INVOICE AS OI ON OI.ORDER_ID=SATIS_SIPARISI.ORDER_ID
-    LEFT JOIN (
-        SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,1 AS PERIOD_ID FROM w3Qa_2024_1.INVOICE
-        UNION ALL
-        SELECT INVOICE_NUMBER,INVOICE_DATE,INVOICE_ID,2 AS PERIOD_ID FROM w3Qa_2025_1.INVOICE
-    ) AS INVOICE ON INVOICE.INVOICE_ID=OI.INVOICE_ID AND INVOICE.PERIOD_ID=OI.PERIOD_ID    
-    LEFT JOIN w3Qa.COMPANY AS C2 ON C2.COMPANY_ID=TRY_CAST(REPLACE(ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT)
+SELECT DISTINCT 
+    IDO.INTERNAL_ID AS TALEP_ID, 
+    IDO.INTERNAL_NUMBER AS TALEP_NO, 
+    IDO.TARGET_DATE AS TALEP_TARIHI,
+    C.NICKNAME AS TALEP_EDEN,
+    EP.EMPLOYEE_NAME + ' ' + EP.EMPLOYEE_SURNAME AS TALEP_EDEN_PERS,
 
-WHERE 1=1 ORDER BY IDD.INTERNAL_ID,ALIS_TEKLIFI.OFFER_ID FOR JSON PATH
+    OFFER_MAIN.OFFER_NUMBER AS ANA_TEKLIF_NO, 
+    OFFER_MAIN.OFFER_ID AS ANA_TEKLIF_ID, 
 
-) DATAM
+    OFFER_SUB.OFFER_NUMBER AS ALT_TEKLIF_NO, 
+    OFFER_SUB.OFFER_ID AS ALT_TEKLIF_ID,
+    OFFER_SUB.OFFER_DATE AS ALT_TEKLIF_TARIHI
+
+FROM w3Qa_1.INTERNALDEMAND AS IDO
+    LEFT JOIN w3Qa_1.OFFER AS OFFER_MAIN 
+        ON OFFER_MAIN.INTERNALDEMAND_ID = IDO.INTERNAL_ID
+    LEFT JOIN w3Qa_1.OFFER AS OFFER_SUB 
+        ON OFFER_SUB.FOR_OFFER_ID = OFFER_MAIN.OFFER_ID
+    LEFT JOIN w3Qa.COMPANY AS C 
+        ON C.COMPANY_ID = IDO.FROM_COMPANY_ID
+    LEFT JOIN w3Qa.EMPLOYEE_POSITIONS AS EP 
+        ON EP.POSITION_CODE = IDO.TO_POSITION_CODE
+FOR JSON PATH
+) AS DATA
 </cfquery>
-
-
-<div class="container">
-  <h3 class="mb-4">Talep Bazlı Teklif & Sipariş İlişkileri</h3>
-  <div id="output" <cfif attributes.show_type eq 2>style="display:flex;flex-wrap:wrap"</cfif>></div>
-</div>
-
 <script>
-const data = <cfoutput>#getData.datam#</cfoutput>;
+const data = <cfoutput>#getData.DATA#</cfoutput> // Buraya JSON datanı yapıştır
 
-// Grupla
+// Gruplama
 const grouped = {};
-data.forEach(row => {
-  const demandId = row.INTERNAL_ID;
-  if (!grouped[demandId]) {
-    grouped[demandId] = {
-      INTERNAL_NUMBER: row.INTERNAL_NUMBER,
-      NICKNAME: row.NICKNAME,
-      KIME: row.KIME,
-        INTERNAL_ID: row.INTERNAL_ID,
-      SATIS: {}
+data.forEach(item => {
+  const key = item.TALEP_NO;
+  if (!grouped[key]) {
+    grouped[key] = {
+      talepId: item.TALEP_ID,
+      talepNo: item.TALEP_NO,
+      talepEden: item.TALEP_EDEN,
+      talepEdenPers: item.TALEP_EDEN_PERS,
+      talepTarihi: item.TALEP_TARIHI,
+      teklifler: []
     };
   }
 
-  const satisId = row.SATIS_TEKLIF_ID;
-  if (!grouped[demandId].SATIS[satisId]) {
-    grouped[demandId].SATIS[satisId] = {
-      NO: row.SATIS_TEKLIF_NO,
-      TARIH: row.SATIS_TEKLIF_TARIHI,
-      SIPARIS_NO: row.SATIS_SIPARIS_NO,
-      SIPARIS_TARIHI: row.SATIS_SIPARISI_TARIHI,
-      SIPARIS_ID: row.SATIS_SIPARIS_ID,
-      ID: satisId,
-      ALISLAR: [],
-      FATURALAR:[]
-    };
+  if (item.ANA_TEKLIF_NO || item.ALT_TEKLIF_NO) {
+    grouped[key].teklifler.push({
+      anaTeklifNo: item.ANA_TEKLIF_NO,
+      altTeklifNo: item.ALT_TEKLIF_NO,
+      altTeklifTarihi: item.ALT_TEKLIF_TARIHI
+    });
   }
-
-  if (row.ALIS_TEKLIF_NO && !grouped[demandId].SATIS[satisId].ALISLAR.some(a => a.NO === row.ALIS_TEKLIF_NO)) {
-
-  grouped[demandId].SATIS[satisId].ALISLAR.push({
-    NO: row.ALIS_TEKLIF_NO,
-    TARIH: row.ALIS_TEKLIFI_TARIHI,
-    SIPARIS_NO: row.ALIS_SIPARIS_NO,
-    SIPARIS_TARIH: row.ALIS_SIPARIS_TARIHI,
-    SIPARIS_ID: row.ALIS_SIPARIS_ID,
-    FIRMA: row.ALIS_TEKLIFI_COMPANY,
-    ID: row.ALIS_TEKLIF_ID
-  });
-  }
-  if (
-    row.SATIS_FATURA_NO &&
-    !grouped[demandId].SATIS[satisId].FATURALAR.some(f => f.FATURA_NO === row.SATIS_FATURA_NO)
-  ) {
-  grouped[demandId].SATIS[satisId].FATURALAR.push({
-    NO: row.SATIS_FATURA_NO,
-    FATURA_TARIH: row.SATIS_FATURA_TARIHI,        
-    SATIS_FATURA_ID: row.SATIS_FATURA_ID,
-    SATIS_FATURA_PERIOD: row.SATIS_FATURA_PERIOD
-    
-  });
-    }
-    const unique = [
-  ...new Map(grouped[demandId].SATIS[satisId].FATURALAR.map(item => [JSON.stringify(item), item])).values()
-];
-      const unique2 = [
-  ...new Map(grouped[demandId].SATIS[satisId].ALISLAR.map(item => [item.NO, item])).values()
-];
-grouped[demandId].SATIS[satisId].FATURALAR=unique;
-grouped[demandId].SATIS[satisId].ALISLAR=unique2;
 });
 
-// HTML Oluştur
-let html = "";
-Object.values(grouped).forEach(demand => {
- if(demand.INTERNAL_NUMBER){
-    if(ShowType=="0"){
-html += `<div class="offer-block ">`;
-}
-else if(ShowType=="1"){
-    html += `<div class="offer-block ">`;
-}
-else if(ShowType=="2"){
-    html += `<div class="offer-block col col-6" style="width: 100%;margin-left:5px">`;
-}
-else if(ShowType=="3"){
-    html += `<div class="offer-block ">`;
-}else if(ShowType=="4"){
-    html += `<div class="offer-block ">`;
-}
+// HTML oluştur
+const accordion = document.getElementById("talepAccordion");
 
+function renderAccordion(filter = "") {
+  accordion.innerHTML = "";
+  Object.values(grouped).forEach((talep, index) => {
+    const searchText = `${talep.talepNo} ${talep.talepEden || ""}`.toLowerCase();
+    if (!searchText.includes(filter.toLowerCase())) return;
 
-    
-  html += `<div class="mb-2"><span  class="section-title">📦 Talep:</span><a href="javascript://"  onclick='window.location.href="/index.cfm?fuseaction=purchase.list_purchasedemand&event=upd&id=${demand.INTERNAL_ID}"'>${demand.INTERNAL_NUMBER} –👤  ${demand.KIME} (${demand.NICKNAME})</a> </div>`;
+    const collapseId = `collapse${index}`;
+    const item = document.createElement("div");
+    item.className = "accordion-item";
 
-  Object.values(demand.SATIS).forEach(satis => {
-  
-if(ShowType=="0"){
-    html += `<div class="sub-section">`;
-    satis.ALISLAR.forEach(alis => {
-      html += `<div style='border-bottom:0.1px solid #80808021'>📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} - ${alis.FIRMA} <small class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
-      if (alis.SIPARIS_NO) {
-        html += ` → <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
-      }
-      html += `</div>`;
-    });
-}
-else if(ShowType=="1"){
-     html += `<div class="sub-section" style="display:flex">`;
-       
-        satis.ALISLAR.forEach(alis => {
-      html += `<div class="col col-3 card" style="display:flex !important;justify-content:space-evenly;text-align:center;padding:5px !important;padding-top:5px !important;flex-direction:column;margin-left:5px">📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small style="display:block" class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
-      if (alis.SIPARIS_NO) {
-        html += ` <hr style="border: 0.1px solid #80808021;width: 100%;"> <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
-      }
-      html += `</div>`;
-    });
-}
-else if(ShowType=="2"){
-     html += `<div class="sub-section" style="display:flex;flex-wrap:wrap">`;
-        satis.ALISLAR.forEach(alis => {
-      html += `<div class="col col-3 card" style="display:flex !important;justify-content:space-evenly;text-align:center;padding:5px !important;padding-top:5px !important;flex-direction:column;margin-left:5px">📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small style="display:block" class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
-      if (alis.SIPARIS_NO) {
-        html += ` <hr style="border: 0.1px solid #80808021;width: 100%;"> <span class="text-success">📬 Sipariş: </span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=${alis.SIPARIS_ID}"'>${alis.SIPARIS_NO} <small class="text-muted">📅 ${new Date(alis.SIPARIS_TARIH).toLocaleDateString()}</small></a>`;
-      }
-      html += `</div>`;
-    });
-}
-else if(ShowType=="3"){
-    html += `<div class="sub-section">`;
-    if(satis){html+=`<span class="">📄 Satış Teklifi: ✅</span> |`}else{html+=`<span class="">📄 Satış Teklifi: ❌</span> |`}
-    if(satis.ALISLAR){html+=`<span class="">📥 Alış Teklifi: ✅</span> |`}else{html+=`<span class="">📥 Alış Teklifi: ❌</span> |`}
-    var ty=0;
-    satis.ALISLAR.forEach(alis => {if (alis.SIPARIS_NO) {ty++;}    });
-    if(ty>0){html+=`<span class="">📬 Alış Siparişi: ✅</span> |`}else{html+=`<span class="">📬 Alış Siparişi: ❌</span> |`}
-    if(satis.SIPARIS_NO) {html+=`<span class="">📝 Satış Siparişi: ✅</span> |`}else{html+=`<span class="">📝 Satış  Siparişi: ❌</span> |`}
-    var ty=0;
-    satis.FATURALAR.forEach(alis => {if (alis.SATIS_FATURA_ID) {ty++;}    });
-    if(ty>0){html+=`<span class="">🧾 Satış Faturası: ✅</span> |`}else{html+=`<span class="">🧾 Satış Faturası: ❌</span> |`}
-}
-else if(ShowType=="4"){
-     html += `<div class="sub-section ui-scroll">`;
-    html+=`<table class='ui-table-list ui-form'><thead>
-        <tr><th colspan="3">Teklif</th><th colspan="2">Sipariş</th></tr>
-        <tr><th>Sipariş No</th><th>Sipariş Tarihi</th><th>Firma</th><th>Sipariş No</th><th>Sipariş Tarihi</th></tr></thead>`
-    html+="<tbody>";
-    satis.ALISLAR.forEach(alis => {
-      html += `<tr><td>${alis.NO}</td><td>${new Date(alis.TARIH).toLocaleDateString()}</td><td>${alis.FIRMA}</td><td>${alis.SIPARIS_NO ? alis.SIPARIS_NO :""} </td><td>${alis.SIPARIS_NO ? new Date(alis.SIPARIS_TARIH).toLocaleDateString() :""} </td></tr>`;
-    });
-    html+="</tbody>";
-    html+="</table>";
-    
-}
+    item.innerHTML = `
+      <h2 class="accordion-header" id="heading${index}">
+        <button class="accordion-button collapsed talep-header" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+          <i class="fas fa-box-open text-primary"></i> ${talep.talepNo} — <small class="ms-2 text-muted">${talep.talepEden || "?"}</small>
+        </button>
+      </h2>
+      <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#talepAccordion">
+        <div class="accordion-body">
+          <p><i class="fas fa-user me-2 text-info"></i><strong>Talep Eden Kişi:</strong> ${talep.talepEdenPers || "-"}</p>
+          ${talep.talepTarihi ? `<p><i class="fas fa-calendar-alt me-2 text-success"></i><strong>Talep Tarihi:</strong> ${talep.talepTarihi.slice(0,10)}</p>` : ""}
 
-    html += `</div>`;
-
-     if(ShowType!="3"){
-      if(satis.NO){
-    html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${satis.ID}"'> ${satis.NO} <small class="text-muted">📅 ${new Date(satis.TARIH).toLocaleDateString()}</small></a>`;
-    }else{
-      html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> Satış Teklifi Yok </div>`
-    }
-    }
-
-    if(satis.SIPARIS_NO ) {
-     if(ShowType!="3"){
-        html += `<div class="mt-2"> <span class="text-success">📝 Satış Siparişi:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_order&event=upd&order_id=${satis.SIPARIS_ID}"'> ${satis.SIPARIS_NO} <small class="text-muted">📅${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()}</small></a></div>`;
-      satis.FATURALAR.forEach(fatura => {
-        html += `<div class="mt-2"> <span class="text-success">🧾 Fatura:</span><a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=invoice.form_add_bill&event=upd&iid=${fatura.SATIS_FATURA_ID}"'> ${fatura.NO} <small class="text-muted">📅${new Date(fatura.FATURA_TARIH).toLocaleDateString()} </small></a>`;
-        if (fatura.SATIS_FATURA_PERIOD) {
-          html += ` <small class="text-muted">(${fatura.SATIS_FATURA_PERIOD})</small>`;
-        }
-        html += `</div>`;
-        
-      });
-    }
-    }else {
-         if(ShowType!="3"){
-      html += `<div class="mt-2"> <span class="text-danger">📝 Satış Siparişi Yok</span></div>`;
-         }
-    }
-    //html += `<div class="mt-2">📝 Satış Siparişi: <strong>${satis.SIPARIS_NO}</strong> <small class="text-muted">(${new Date(satis.SIPARIS_TARIHI).toLocaleDateString()})</small></div>`;
-    html += `</div>`;
+          ${talep.teklifler.length > 0 ? `
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-sm mt-3">
+                <thead class="table-light">
+                  <tr>
+                    <th><i class="fas fa-tag"></i> Ana Teklif No</th>
+                    <th><i class="fas fa-tags"></i> Alt Teklif No</th>
+                    <th><i class="fas fa-calendar-day"></i> Alt Teklif Tarihi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${talep.teklifler.map(t => `
+                    <tr>
+                      <td>${t.anaTeklifNo || "-"}</td>
+                      <td>${t.altTeklifNo || "-"}</td>
+                      <td>${t.altTeklifTarihi ? t.altTeklifTarihi.slice(0, 10) : "-"}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          ` : `<p class="text-muted"><i class="fas fa-info-circle me-1"></i> Bu talep için teklif bulunmamaktadır.</p>`}
+        </div>
+      </div>
+    `;
+    accordion.appendChild(item);
   });
-
-  html += `</div>`;
 }
-});
 
-document.getElementById("output").innerHTML = html;
+renderAccordion();
+
+document.getElementById("filterInput").addEventListener("input", e => {
+  renderAccordion(e.target.value);
+});
 </script>
+
+</body>
+</html>
