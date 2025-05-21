@@ -472,7 +472,7 @@ const satislarUnique = Array.from(uniqueMap.values());
       .filter(x => x.satisTeklifNo || x.satisSiparisNo);
 
     if (satislarUnique.length > 0) {
-      block.innerHTML += `<div class="satis-blok"><strong>📈 Satış Teklif & Sipariş Bilgileri</strong><ul class="satis-listesi">`;
+      block.innerHTML += `<div class="satis-blok"><strong>📈 Satış Teklif , Sipariş & Fatura Bilgileri</strong><ul class="satis-listesi">`;
 
       satislarUnique.forEach(sat => {
         block.innerHTML += `
