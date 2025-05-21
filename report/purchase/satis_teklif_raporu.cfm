@@ -407,9 +407,21 @@ function renderList(filter = "") {
   .filter(x => x.satisTeklifNo || x.satisSiparisNo);
 
 // Tekrarları önlemek için JSON string'e çevirerek benzersizleştir
-const satislarUnique = Array.from(
-  new Set(satislarRaw.map(JSON.stringify))
-).map(JSON.parse);
+const uniqueMap = new Map();
+satislarRaw.forEach(item => {
+  const key = [
+    item.satisTeklifNo || "",
+    item.satisTeklifTarihi || "",
+    item.satisSiparisNo || "",
+    item.satisSiparisTarihi || ""
+  ].join("|");
+
+  if (!uniqueMap.has(key)) {
+    uniqueMap.set(key, item);
+  }
+});
+
+const satislarUnique = Array.from(uniqueMap.values());
       // Satış bilgileri en sona, tek blok olarak
     const satislar = teklifKeys.flatMap(key => talep.teklifler[key].altTeklifler)
       .filter(x => x.satisTeklifNo || x.satisSiparisNo);
