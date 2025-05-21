@@ -130,5 +130,3 @@ document.getElementById("filterInput").addEventListener("input", e => {
 });
 </script>
 
-</body>
-</html>
