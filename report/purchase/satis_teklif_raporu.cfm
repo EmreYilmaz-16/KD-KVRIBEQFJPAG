@@ -171,6 +171,61 @@ FOR JSON PATH
       margin-left: 20px;
       font-weight: bold;
     }
+    .alt-teklif {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-left: 4px solid #1a73e8;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 6px 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.alt-teklif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.alt-teklif-no {
+  color: #1a73e8;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.alt-teklif-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.alt-teklif-body span {
+  padding: 4px 8px;
+  background-color: #e8f0fe;
+  border-radius: 6px;
+  color: #333;
+}
+
+.alt-teklif-body .firma {
+  background-color: #ffe0b2;
+  color: #4e342e;
+  font-weight: bold;
+}
+
+.alt-teklif-body .etiket {
+  background-color: #d7ffd9;
+  color: #2e7d32;
+}
+
+.alt-teklif-body .tarih {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
   </style>
 
 <h2>📋 İç Talepler</h2>
@@ -249,18 +304,36 @@ function renderList(filter = "") {
           <div class="ana-teklif">📄 Ana Teklif: <a href='/index.cfm?fuseaction=purchase.list_offer&event=det&offer_id=${ana.anaTeklifId}'>${ana.anaTeklifNo || "YOK"}</a></div>
         `;
         ana.altTeklifler.forEach(alt => {
+          // block.innerHTML += `
+          //   <div class="alt-teklif">
+          //     📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}'>${alt.altTeklifNo}</a></strong>
+          //     ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
+          //     ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
+          //     ${alt.altTeklifSiparis ? `<span class="siparis">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
+          //     ${alt.satisTeklifNo ? `<span class="siparis">📦 Satış Teklifi: ${alt.satisTeklifNo}</span>` : ""}
+          //     ${alt.satisTeklifTarihi ? `<span class="text-muted">📅 ${alt.satisTeklifTarihi.slice(0,10)}</span>` : ""}
+          //      ${alt.satisSiparisNo ? `<span class="siparis">📦 Satış Siparişi: ${alt.satisSiparisNo}</span>` : ""}
+          //     ${alt.satisSiparisTarihi ? `<span class="text-muted">📅 ${alt.satisSiparisTarihi.slice(0,10)}</span>` : ""}
+          //   </div>
+          // `;
           block.innerHTML += `
-            <div class="alt-teklif">
-              📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}'>${alt.altTeklifNo}</a></strong>
-              ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
-              ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
-              ${alt.altTeklifSiparis ? `<span class="siparis">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
-              ${alt.satisTeklifNo ? `<span class="siparis">📦 Satış Teklifi: ${alt.satisTeklifNo}</span>` : ""}
-              ${alt.satisTeklifTarihi ? `<span class="text-muted">📅 ${alt.satisTeklifTarihi.slice(0,10)}</span>` : ""}
-               ${alt.satisSiparisNo ? `<span class="siparis">📦 Satış Siparişi: ${alt.satisSiparisNo}</span>` : ""}
-              ${alt.satisSiparisTarihi ? `<span class="text-muted">📅 ${alt.satisSiparisTarihi.slice(0,10)}</span>` : ""}
-            </div>
-          `;
+  <div class="alt-teklif">
+    <div class="alt-teklif-header">
+      <a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}' class="alt-teklif-no">
+        📥 ${alt.altTeklifNo}
+      </a>
+      ${alt.altTeklifTarihi ? `<span class="tarih">📅 ${alt.altTeklifTarihi.slice(0, 10)}</span>` : ""}
+    </div>
+    <div class="alt-teklif-body">
+      ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
+      ${alt.altTeklifSiparis ? `<span class="etiket">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
+      ${alt.satisTeklifNo ? `<span class="etiket">📦 Satış Teklifi: ${alt.satisTeklifNo}</span>` : ""}
+      ${alt.satisTeklifTarihi ? `<span class="tarih">📅 ${alt.satisTeklifTarihi.slice(0, 10)}</span>` : ""}
+      ${alt.satisSiparisNo ? `<span class="etiket">📦 Satış Siparişi: ${alt.satisSiparisNo}</span>` : ""}
+      ${alt.satisSiparisTarihi ? `<span class="tarih">📅 ${alt.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
+    </div>
+  </div>
+`;
         });
       });
     } else {
