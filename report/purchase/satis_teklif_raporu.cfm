@@ -483,7 +483,7 @@ const satislarUnique = Array.from(uniqueMap.values());
             ${sat.satisSiparisTarihi ? `<span class="tarih">📅 ${sat.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
             ${sat.satisFaturaNo ? `<span class="tarih">🧾 ${sat.satisFaturaNo}</span>` : ""}
             ${sat.satisFaturaTarihi ? `<span class="tarih">📅 ${sat.satisFaturaTarihi.slice(0, 10)}</span>` : ""}
-            
+
           </li>
         `;
       });
@@ -498,7 +498,7 @@ const satislarUnique = Array.from(uniqueMap.values());
     container.appendChild(block);
   });
 }
-
+console.log("Hazırlanan veri:");
 document.getElementById("filterInput").addEventListener("input", e => {
   renderList(e.target.value);
 });
