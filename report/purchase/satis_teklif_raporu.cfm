@@ -177,7 +177,7 @@ function renderList(filter = "") {
         ana.altTeklifler.forEach(alt => {
           block.innerHTML += `
             <div class="alt-teklif">
-              📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.${alt.altTeklifNo}}'>${alt.altTeklifNo}</a></strong>
+              📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}'>${alt.altTeklifNo}</a></strong>
               ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
               ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
               ${alt.altTeklifSiparis ? `<span class="siparis">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
