@@ -166,6 +166,8 @@ data.forEach(row => {
     };
   }
 
+  if (row.ALIS_TEKLIF_NO && !grouped[demandId].SATIS[satisId].ALISLAR.some(a => a.NO === row.ALIS_TEKLIF_NO)) {
+
   grouped[demandId].SATIS[satisId].ALISLAR.push({
     NO: row.ALIS_TEKLIF_NO,
     TARIH: row.ALIS_TEKLIFI_TARIHI,
@@ -175,7 +177,7 @@ data.forEach(row => {
     FIRMA: row.ALIS_TEKLIFI_COMPANY,
     ID: row.ALIS_TEKLIF_ID
   });
-
+  }
   if (
     row.SATIS_FATURA_NO &&
     !grouped[demandId].SATIS[satisId].FATURALAR.some(f => f.FATURA_NO === row.SATIS_FATURA_NO)
