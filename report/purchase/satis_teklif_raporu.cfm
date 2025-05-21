@@ -76,29 +76,28 @@ FOR JSON PATH
       font-size: 13px;
     }
 
-    .offer-line {
-      margin-left: 20px;
-      padding-left: 5px;
-      border-left: 2px solid #eee;
-      margin-top: 4px;
+    .ana-teklif {
+      margin-left: 15px;
+      font-weight: bold;
+      color: #198754;
+      margin-top: 5px;
     }
 
-    .label-red {
-      color: #d62828;
-      margin-left: 20px;
-      font-weight: bold;
-    }
-
-    .label-green {
-      color: #2f9e44;
-      margin-left: 20px;
-      font-weight: bold;
+    .alt-teklif {
+      margin-left: 30px;
+      margin-top: 3px;
     }
 
     .text-muted {
       color: #777;
       font-size: 13px;
       margin-left: 5px;
+    }
+
+    .label-red {
+      color: #d62828;
+      margin-left: 20px;
+      font-weight: bold;
     }
   </style>
 
@@ -111,7 +110,7 @@ FOR JSON PATH
 <script>
 const data = <cfoutput>#getData.DATA#</cfoutput>; // JSON verini buraya yapıştır
 
-// Grupla
+// Talepleri grupla
 const grouped = {};
 data.forEach(item => {
   const key = item.TALEP_NO;
@@ -122,20 +121,26 @@ data.forEach(item => {
       talepEden: item.TALEP_EDEN,
       talepEdenPers: item.TALEP_EDEN_PERS,
       talepTarihi: item.TALEP_TARIHI,
-      teklifler: []
+      teklifler: {}
     };
   }
-  if (item.ANA_TEKLIF_NO || item.ALT_TEKLIF_NO) {
-    grouped[key].teklifler.push({
+
+  const anaTeklifKey = item.ANA_TEKLIF_NO || "YOK";
+  if (!grouped[key].teklifler[anaTeklifKey]) {
+    grouped[key].teklifler[anaTeklifKey] = {
       anaTeklifNo: item.ANA_TEKLIF_NO,
+      altTeklifler: []
+    };
+  }
+
+  if (item.ALT_TEKLIF_NO) {
+    grouped[key].teklifler[anaTeklifKey].altTeklifler.push({
       altTeklifNo: item.ALT_TEKLIF_NO,
-      altTeklifTarihi: item.ALT_TEKLIF_TARIHI,
-      altTeklifFirma: item.ALT_TEKLIF_FIRMA
+      altTeklifTarihi: item.ALT_TEKLIF_TARIHI
     });
   }
 });
 
-// Listeyi çiz
 function renderList(filter = "") {
   const container = document.getElementById("talepListesi");
   container.innerHTML = "";
@@ -151,13 +156,26 @@ function renderList(filter = "") {
       <div class="talep-header">📦 Talep: ${talep.talepNo}
         <span class="text-company">👤 ${talep.talepEdenPers || "-"} (${talep.talepEden || "-"})</span>
       </div>
-
-      ${talep.teklifler.length > 0 ? talep.teklifler.map(t => `
-        <div class="offer-line">📥 Alış Teklifi: <strong>${t.altTeklifNo}</strong>
-          ${t.altTeklifTarihi ? `<span class="text-muted">📅 ${t.altTeklifTarihi.slice(0,10)}</span> <span>${t.altTeklifFirma}</span>` : ""}
-        </div>
-      `).join("") : `<div class="label-red">🚫 Teklif Yok</div>`}
     `;
+
+    const teklifKeys = Object.keys(talep.teklifler);
+    if (teklifKeys.length > 0) {
+      teklifKeys.forEach(key => {
+        const ana = talep.teklifler[key];
+        block.innerHTML += `
+          <div class="ana-teklif">📄 Ana Teklif: ${ana.anaTeklifNo || "YOK"}</div>
+        `;
+        ana.altTeklifler.forEach(alt => {
+          block.innerHTML += `
+            <div class="alt-teklif">📥 Alt Teklif: <strong>${alt.altTeklifNo}</strong>
+              ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
+            </div>
+          `;
+        });
+      });
+    } else {
+      block.innerHTML += `<div class="label-red">🚫 Teklif Yok</div>`;
+    }
 
     container.appendChild(block);
   });
@@ -169,5 +187,3 @@ document.getElementById("filterInput").addEventListener("input", e => {
 
 renderList();
 </script>
-
-
