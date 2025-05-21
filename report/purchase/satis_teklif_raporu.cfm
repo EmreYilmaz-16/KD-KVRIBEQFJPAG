@@ -272,6 +272,29 @@ FOR JSON PATH
   border-radius: 4px;
   font-size: 12px;
 }
+.satis-blok {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background-color: #e0f7fa;
+  border-left: 3px solid #00acc1;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.satis-listesi {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 4px;
+}
+
+.satis-listesi li {
+  margin: 2px 0;
+  padding: 2px 0;
+  border-bottom: 1px dashed #b2ebf2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
   </style>
 
@@ -374,15 +397,33 @@ function renderList(filter = "") {
     <div class="alt-teklif-body">
       ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
       ${alt.altTeklifSiparis ? `<span class="etiket">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
-      ${alt.satisTeklifNo ? `<span class="etiket">📦 Satış Teklifi: ${alt.satisTeklifNo}</span>` : ""}
-      ${alt.satisTeklifTarihi ? `<span class="tarih">📅 ${alt.satisTeklifTarihi.slice(0, 10)}</span>` : ""}
-      ${alt.satisSiparisNo ? `<span class="etiket">📦 Satış Siparişi: ${alt.satisSiparisNo}</span>` : ""}
-      ${alt.satisSiparisTarihi ? `<span class="tarih">📅 ${alt.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
+      
     </div>
   </div>
 `;
         });
       });
+      // Satış bilgileri en sona, tek blok olarak
+    const satislar = teklifKeys.flatMap(key => talep.teklifler[key].altTeklifler)
+      .filter(x => x.satisTeklifNo || x.satisSiparisNo);
+
+    if (satislar.length > 0) {
+      block.innerHTML += `<div class="satis-blok"><strong>📈 Satış Teklif & Sipariş Bilgileri</strong><ul class="satis-listesi">`;
+
+      satislar.forEach(sat => {
+        block.innerHTML += `
+          <li>
+            ${sat.satisTeklifNo ? `📄 <strong>${sat.satisTeklifNo}</strong>` : ""}
+            ${sat.satisTeklifTarihi ? `<span class="tarih">📅 ${sat.satisTeklifTarihi.slice(0, 10)}</span>` : ""}
+            ${sat.satisSiparisNo ? `📦 <strong>${sat.satisSiparisNo}</strong>` : ""}
+            ${sat.satisSiparisTarihi ? `<span class="tarih">📅 ${sat.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
+          </li>
+        `;
+      });
+
+      block.innerHTML += `</ul></div>`;
+    }
+      
     } else {
       block.innerHTML += `<div class="label-red">🚫 Teklif Yok</div>`;
     }
