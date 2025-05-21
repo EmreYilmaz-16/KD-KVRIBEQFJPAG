@@ -194,7 +194,7 @@ data.forEach(row => {
   ...new Map(grouped[demandId].SATIS[satisId].FATURALAR.map(item => [JSON.stringify(item), item])).values()
 ];
       const unique2 = [
-  ...new Map(grouped[demandId].SATIS[satisId].ALISLAR.map(item => [JSON.stringify(item), item])).values()
+  ...new Map(grouped[demandId].SATIS[satisId].ALISLAR.map(item => [item.NO, item])).values()
 ];
 grouped[demandId].SATIS[satisId].FATURALAR=unique;
 grouped[demandId].SATIS[satisId].ALISLAR=unique2;
