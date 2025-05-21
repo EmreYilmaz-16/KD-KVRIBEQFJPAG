@@ -202,7 +202,7 @@ FOR JSON PATH
   font-weight: bold;
   margin-bottom: 6px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
