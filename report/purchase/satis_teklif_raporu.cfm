@@ -215,9 +215,10 @@ function renderList(filter = "") {
             <div class="alt-teklif">
               📥 <strong><a href='/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alt.altTeklifId}'>${alt.altTeklifNo}</a></strong>
               ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
-              ${alt.altTeklifFirma ? `<span class="Firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
-              ${alt.altTeklifSiparis ? `<span class="Alış Siparişi">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
-              ${alt.SATIS_TEKLIF_NO ? `<span class="Satış Teklifi">📦 Sipariş: ${alt.SATIS_TEKLIF_NO}</span> <span class="text-muted">📅 ${alt.SATIS_TEKLIF_TARIHI.slice(0,10)}</span>` : ""}
+              ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
+              ${alt.altTeklifSiparis ? `<span class="siparis">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
+              ${alt.satisTeklifNo ? `<span class="siparis">📦 Satış Teklifi: ${alt.satisTeklifNo}</span>` : ""}
+              ${alt.satisTeklifTarihi ? `<span class="text-muted">📅 ${alt.satisTeklifTarihi.slice(0,10)}</span>` : ""}
             </div>
           `;
         });
