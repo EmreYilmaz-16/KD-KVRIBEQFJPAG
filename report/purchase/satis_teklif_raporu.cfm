@@ -4,9 +4,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a2e0e6cfd9.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
-  <style>
-    body { padding: 2rem; }
-    .talep-header i { margin-right: 6px; }
+ <style>
+    body { padding: 2rem; font-size: 14px; }
+    .talep-block { border-left: 4px solid #0d6efd; padding: 0.5rem 1rem; margin-bottom: 1.2rem; background: #f8f9fa; border-radius: 0.375rem; }
+    .talep-header { font-weight: 600; color: #0d6efd; margin-bottom: 0.4rem; }
+    .text-company { color: #555; font-weight: 500; }
+    .offer-line { margin-left: 1.5rem; }
+    .icon { width: 18px; display: inline-block; text-align: center; }
+    .text-muted { font-size: 13px; }
+    .label-green { color: #28a745; font-weight: 500; }
+    .label-red { color: #dc3545; font-weight: 500; }
     .search-input { max-width: 300px; margin-bottom: 20px; }
   </style>
 
@@ -14,7 +21,7 @@
 
 <input type="text" id="filterInput" class="form-control search-input" placeholder="Talep No veya Talep Eden...">
 
-<div class="accordion" id="talepAccordion"></div>
+<div id="talepListesi"></div>
 <cfquery name="getData" datasource="#dsn3#">
 SELECT (
 SELECT DISTINCT 
@@ -46,7 +53,6 @@ FOR JSON PATH
 <script>
 const data = <cfoutput>#getData.DATA#</cfoutput> // Buraya JSON datanı yapıştır
 
-// Gruplama
 const grouped = {};
 data.forEach(item => {
   const key = item.TALEP_NO;
@@ -60,73 +66,54 @@ data.forEach(item => {
       teklifler: []
     };
   }
-
   if (item.ANA_TEKLIF_NO || item.ALT_TEKLIF_NO) {
     grouped[key].teklifler.push({
       anaTeklifNo: item.ANA_TEKLIF_NO,
+      anaTeklifId: item.ANA_TEKLIF_ID,
       altTeklifNo: item.ALT_TEKLIF_NO,
+      altTeklifId: item.ALT_TEKLIF_ID,
       altTeklifTarihi: item.ALT_TEKLIF_TARIHI
     });
   }
 });
 
-// HTML oluştur
-const accordion = document.getElementById("talepAccordion");
+function renderList(filter = "") {
+  const container = document.getElementById("talepListesi");
+  container.innerHTML = "";
 
-function renderAccordion(filter = "") {
-  accordion.innerHTML = "";
-  Object.values(grouped).forEach((talep, index) => {
-    const searchText = `${talep.talepNo} ${talep.talepEden || ""}`.toLowerCase();
+  Object.values(grouped).forEach(talep => {
+    const searchText = `${talep.talepNo} ${talep.talepEden}`.toLowerCase();
     if (!searchText.includes(filter.toLowerCase())) return;
 
-    const collapseId = `collapse${index}`;
-    const item = document.createElement("div");
-    item.className = "accordion-item";
+    const block = document.createElement("div");
+    block.className = "talep-block";
 
-    item.innerHTML = `
-      <h2 class="accordion-header" id="heading${index}">
-        <button class="accordion-button collapsed talep-header" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
-          <i class="fas fa-box-open text-primary"></i> ${talep.talepNo} — <small class="ms-2 text-muted">${talep.talepEden || "?"}</small>
-        </button>
-      </h2>
-      <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#talepAccordion">
-        <div class="accordion-body">
-          <p><i class="fas fa-user me-2 text-info"></i><strong>Talep Eden Kişi:</strong> ${talep.talepEdenPers || "-"}</p>
-          ${talep.talepTarihi ? `<p><i class="fas fa-calendar-alt me-2 text-success"></i><strong>Talep Tarihi:</strong> ${talep.talepTarihi.slice(0,10)}</p>` : ""}
-
-          ${talep.teklifler.length > 0 ? `
-            <div class="table-responsive">
-              <table class="table table-bordered table-striped table-sm mt-3">
-                <thead class="table-light">
-                  <tr>
-                    <th><i class="fas fa-tag"></i> Ana Teklif No</th>
-                    <th><i class="fas fa-tags"></i> Alt Teklif No</th>
-                    <th><i class="fas fa-calendar-day"></i> Alt Teklif Tarihi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${talep.teklifler.map(t => `
-                    <tr>
-                      <td>${t.anaTeklifNo || "-"}</td>
-                      <td>${t.altTeklifNo || "-"}</td>
-                      <td>${t.altTeklifTarihi ? t.altTeklifTarihi.slice(0, 10) : "-"}</td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
-          ` : `<p class="text-muted"><i class="fas fa-info-circle me-1"></i> Bu talep için teklif bulunmamaktadır.</p>`}
-        </div>
+    block.innerHTML = `
+      <div class="talep-header">
+        <i class="fas fa-box-open icon"></i>
+        <strong>Talep: ${talep.talepNo}</strong>
+        <span class="ms-2 text-company"><i class="fas fa-user icon text-secondary"></i>${talep.talepEdenPers || ""} (${talep.talepEden || ""})</span>
       </div>
+
+      ${talep.teklifler.map(t => `
+        <div class="offer-line">
+          <i class="fas fa-file-download text-primary icon"></i>
+          <span>Alış Teklifi: <strong>${t.altTeklifNo}</strong></span>
+          <span class="text-muted ms-1">${t.altTeklifTarihi?.slice(0, 10) || ""}</span>
+        </div>
+      `).join("")}
+
+      ${talep.teklifler.length === 0 ? `<div class="offer-line label-red"><i class="fas fa-times-circle icon"></i> Teklif Yok</div>` : ""}
     `;
-    accordion.appendChild(item);
+
+    container.appendChild(block);
   });
 }
 
-renderAccordion();
-
 document.getElementById("filterInput").addEventListener("input", e => {
-  renderAccordion(e.target.value);
+  renderList(e.target.value);
 });
+
+renderList();
 </script>
 
