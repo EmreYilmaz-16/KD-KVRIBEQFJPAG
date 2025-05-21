@@ -129,7 +129,7 @@ data.forEach(item => {
     grouped[key].teklifler.push({
       anaTeklifNo: item.ANA_TEKLIF_NO,
       altTeklifNo: item.ALT_TEKLIF_NO,
-      altTeklifTarihi: item.ALT_TEKLIF_TARIHI
+      altTeklifTarihi: item.ALT_TEKLIF_TARIHI,
       altTeklifFirma: item.ALT_TEKLIF_FIRMA
     });
   }
