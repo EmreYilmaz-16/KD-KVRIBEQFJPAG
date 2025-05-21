@@ -171,59 +171,106 @@ FOR JSON PATH
       margin-left: 20px;
       font-weight: bold;
     }
-    .alt-teklif {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-left: 4px solid #1a73e8;
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin: 6px 0 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-}
-
-.alt-teklif-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-}
-
-.alt-teklif-no {
-  color: #1a73e8;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-.alt-teklif-body {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.alt-teklif-body span {
-  padding: 4px 8px;
-  background-color: #e8f0fe;
-  border-radius: 6px;
+   body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f5f6f8;
+  padding: 10px;
+  font-size: 13px;
   color: #333;
 }
 
-.alt-teklif-body .firma {
-  background-color: #ffe0b2;
-  color: #4e342e;
-  font-weight: bold;
+#filterInput {
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
-.alt-teklif-body .etiket {
+.talep-block {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-left: 3px solid #1a73e8;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.talep-header {
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.talep-header a {
+  text-decoration: none;
+  color: #1a73e8;
+}
+
+.text-company {
+  font-size: 12px;
+  color: #666;
+}
+
+.ana-teklif {
+  font-weight: bold;
+  margin: 6px 0 4px;
+  color: #1a73e8;
+  font-size: 13px;
+}
+
+.alt-teklif {
+  background-color: #f1f3f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 4px 0;
+  padding: 6px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.alt-teklif a {
+  color: #1a73e8;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.alt-teklif span {
+  padding: 2px 6px;
+  background-color: #e8f0fe;
+  border-radius: 4px;
+  color: #333;
+  font-size: 12px;
+}
+
+.firma {
+  background-color: #ffe0b2;
+  color: #5d4037;
+}
+
+.etiket {
   background-color: #d7ffd9;
   color: #2e7d32;
 }
 
-.alt-teklif-body .tarih {
+.tarih {
   background-color: #f3e5f5;
   color: #6a1b9a;
+}
+
+.label-red {
+  background-color: #ef5350;
+  color: #fff;
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
   </style>
