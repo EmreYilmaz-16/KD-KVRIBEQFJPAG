@@ -13,6 +13,7 @@ SELECT DISTINCT
     OFFER_SUB.OFFER_NUMBER AS ALT_TEKLIF_NO, 
     OFFER_SUB.OFFER_ID AS ALT_TEKLIF_ID,
     OFFER_SUB.OFFER_DATE AS ALT_TEKLIF_TARIHI
+    C2.NICKNAME AS ALT_TEKLIF_FIRMA
 
 FROM w3Qa_1.INTERNALDEMAND AS IDO
     LEFT JOIN w3Qa_1.OFFER AS OFFER_MAIN 
@@ -23,6 +24,8 @@ FROM w3Qa_1.INTERNALDEMAND AS IDO
         ON C.COMPANY_ID = IDO.FROM_COMPANY_ID
     LEFT JOIN w3Qa.EMPLOYEE_POSITIONS AS EP 
         ON EP.POSITION_CODE = IDO.TO_POSITION_CODE
+    LEFT JOIN w3Qa.COMPANY AS C2 
+        ON C2.COMPANY_ID=TRY_CAST(REPLACE(OFFER_SUB.OFFER_TO, ',', '') AS INT)
 FOR JSON PATH
 ) AS DATA
 
@@ -127,6 +130,7 @@ data.forEach(item => {
       anaTeklifNo: item.ANA_TEKLIF_NO,
       altTeklifNo: item.ALT_TEKLIF_NO,
       altTeklifTarihi: item.ALT_TEKLIF_TARIHI
+      altTeklifFirma: item.ALT_TEKLIF_FIRMA
     });
   }
 });
@@ -150,7 +154,7 @@ function renderList(filter = "") {
 
       ${talep.teklifler.length > 0 ? talep.teklifler.map(t => `
         <div class="offer-line">📥 Alış Teklifi: <strong>${t.altTeklifNo}</strong>
-          ${t.altTeklifTarihi ? `<span class="text-muted">📅 ${t.altTeklifTarihi.slice(0,10)}</span>` : ""}
+          ${t.altTeklifTarihi ? `<span class="text-muted">📅 ${t.altTeklifTarihi.slice(0,10)}</span> <span>${t.altTeklifFirma}</span>` : ""}
         </div>
       `).join("") : `<div class="label-red">🚫 Teklif Yok</div>`}
     `;
