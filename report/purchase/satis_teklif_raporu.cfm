@@ -13,8 +13,8 @@ SELECT DISTINCT
     OFFER_SUB.OFFER_NUMBER AS ALT_TEKLIF_NO, 
     OFFER_SUB.OFFER_ID AS ALT_TEKLIF_ID,
     OFFER_SUB.OFFER_DATE AS ALT_TEKLIF_TARIHI,
-    C2.NICKNAME AS ALT_TEKLIF_FIRMA
-
+    C2.NICKNAME AS ALT_TEKLIF_FIRMA,
+    O.ORDER_NUMBER AS ALT_TEKLIF_SIPARIS
 FROM w3Qa_1.INTERNALDEMAND AS IDO
     LEFT JOIN w3Qa_1.OFFER AS OFFER_MAIN 
         ON OFFER_MAIN.INTERNALDEMAND_ID = IDO.INTERNAL_ID
@@ -26,6 +26,12 @@ FROM w3Qa_1.INTERNALDEMAND AS IDO
         ON EP.POSITION_CODE = IDO.TO_POSITION_CODE
     LEFT JOIN w3Qa.COMPANY AS C2 
         ON C2.COMPANY_ID=TRY_CAST(REPLACE(OFFER_SUB.OFFER_TO, ',', '') AS INT)
+        OUTER APPLY (
+        SELECT ORDER_NUMBER,ORDER_ID FROM w3Qa_1.ORDERS WHERE ORDER_ID IN (
+        SELECT ORDER_ID FROM w3Qa_1.ORDER_ROW AS ORR WHERE ORR.WRK_ROW_RELATION_ID IN(
+            SELECT WRK_ROW_ID FROM w3Qa_1.OFFER_ROW WHERE OFFER_ID=OFFER_SUB.OFFER_ID
+        ))
+    ) AS O
 FOR JSON PATH
 ) AS DATA
 
@@ -109,7 +115,6 @@ FOR JSON PATH
 
 <script>
 const data = <cfoutput>#getData.DATA#</cfoutput>; // JSON verini buraya yapıştır
-
 // Talepleri grupla
 const grouped = {};
 data.forEach(item => {
@@ -136,7 +141,9 @@ data.forEach(item => {
   if (item.ALT_TEKLIF_NO) {
     grouped[key].teklifler[anaTeklifKey].altTeklifler.push({
       altTeklifNo: item.ALT_TEKLIF_NO,
-      altTeklifTarihi: item.ALT_TEKLIF_TARIHI
+      altTeklifTarihi: item.ALT_TEKLIF_TARIHI,
+      altTeklifFirma: item.ALT_TEKLIF_FIRMA,
+      altTeklifSiparis: item.ALT_TEKLIF_SIPARIS
     });
   }
 });
@@ -167,8 +174,11 @@ function renderList(filter = "") {
         `;
         ana.altTeklifler.forEach(alt => {
           block.innerHTML += `
-            <div class="alt-teklif">📥 Alt Teklif: <strong>${alt.altTeklifNo}</strong>
+            <div class="alt-teklif">
+              📥 <strong>${alt.altTeklifNo}</strong>
               ${alt.altTeklifTarihi ? `<span class="text-muted">📅 ${alt.altTeklifTarihi.slice(0,10)}</span>` : ""}
+              ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
+              ${alt.altTeklifSiparis ? `<span class="siparis">📦 Sipariş: ${alt.altTeklifSiparis}</span>` : ""}
             </div>
           `;
         });
