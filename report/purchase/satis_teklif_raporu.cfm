@@ -235,6 +235,7 @@ if(ShowType=="0"){
 }
 else if(ShowType=="1"){
      html += `<div class="sub-section" style="display:flex">`;
+       
         satis.ALISLAR.forEach(alis => {
       html += `<div class="col col-3 card" style="display:flex !important;justify-content:space-evenly;text-align:center;padding:5px !important;padding-top:5px !important;flex-direction:column;margin-left:5px">📥 Alış Teklifi: <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=purchase.list_offer&event=upd&offer_id=${alis.ID}"'> ${alis.NO} <small style="display:block" class="text-muted">📅 ${new Date(alis.TARIH).toLocaleDateString()}</small></a>`;
       if (alis.SIPARIS_NO) {
@@ -282,7 +283,11 @@ else if(ShowType=="4"){
     html += `</div>`;
 
      if(ShowType!="3"){
+      if(satis.NO){
     html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> <a href="javascript://" onclick='window.location.href="/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${satis.ID}"'> ${satis.NO} <small class="text-muted">📅 ${new Date(satis.TARIH).toLocaleDateString()}</small></a>`;
+    }else{
+      html += `<div class="sub-section"><span class="text-primary">📄 Satış Teklifi:</span> Satış Teklifi Yok </div>`
+    }
     }
 
     if(satis.SIPARIS_NO ) {
