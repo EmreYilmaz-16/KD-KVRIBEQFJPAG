@@ -1,4 +1,4 @@
-<cfquery name="hazirlik1" datasource="#dsn3#">
+﻿<cfquery name="hazirlik1" datasource="#dsn3#">
   IF OBJECT_ID('SATIS_TEKLIF_ALIS_TEKLIF', 'U') IS NOT NULL
     DROP TABLE SATIS_TEKLIF_ALIS_TEKLIF;
 
