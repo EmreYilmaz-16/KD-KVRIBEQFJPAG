@@ -123,7 +123,7 @@ LEFT JOIN (
 WHERE INVOICE2.INVOICE_NUMBER IS NOT NULL;
 </cfquery>
 
-<cfquery name="hazirlik4" datasource="#dsn3#">
+<cfquery name="hazirlik5" datasource="#dsn3#">
   IF OBJECT_ID('ALIS_IRSALIYE_ALIS_TEKLIF', 'U') IS NOT NULL
     DROP TABLE ALIS_IRSALIYE_ALIS_TEKLIF;
 
