@@ -442,7 +442,7 @@ if(last_price === 0){
   const convertedLastPrice = (last_price * rate1) / rate2;
   lastPriceCell.textContent = convertedLastPrice.toFixed(2);
 }
-lastPriceCell.textContent = last_price.toFixed(2) || '-';
+
 
 marjCell.appendChild(marjInput);
 
