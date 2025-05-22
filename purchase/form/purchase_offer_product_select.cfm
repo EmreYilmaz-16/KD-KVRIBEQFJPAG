@@ -305,9 +305,17 @@ const output = document.getElementById('output');
 const selectedCells = new Map();
 
 const productSet = new Set();
+const productInfoMap = new Map();
 data.forEach(supplier => {
   supplier.URUNLER.forEach(product => {
     productSet.add(product.PRODUCT_NAME);
+    // PRODUCT_ID ve STOCK_ID'yi de sakla
+    if (!productInfoMap.has(product.PRODUCT_NAME)) {
+      productInfoMap.set(product.PRODUCT_NAME, {
+        PRODUCT_ID: product.PRODUCT_ID,
+        STOCK_ID: product.STOCK_ID
+      });
+    }
   });
 });
 const uniqueProducts = Array.from(productSet);
@@ -369,6 +377,8 @@ uniqueProducts.forEach(productName => {
   const row = document.createElement('tr');
   const productCell = document.createElement('td');
   productCell.textContent = productName;
+  productCell.innerHTML = `<a href="javascript:void(0)" onclick="window.open('http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=${productName}&stock_id=75&pid=${productName}&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3','popup','width=800,height=600');">${productName}</a>`;
+  //http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=70&stock_id=75&pid=70&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3
   productCell.className = 'product-name';
   row.appendChild(productCell);
 
