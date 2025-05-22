@@ -320,7 +320,9 @@ headerRow.innerHTML += `
     <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
 `;
+headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Son Satış Fiyatı (${DEMAND_MONEY})</th>`;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
+
 data.forEach(supplier => {
   const th = document.createElement('th');
   th.className = "sticky-header bg-success text-white";
@@ -384,6 +386,15 @@ for (const supplier of data) {
   }
 }
 
+let last_price = 0;
+for (const supplier of data) {
+  const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
+  if (product && product.LAST_PRICE) {
+    last_price = product.LAST_PRICE;
+    break; // İlk bulduğunda döngüyü kır
+  }
+}
+
 codeCell.textContent = productCode || "N/A"; // Eğer bulunamazsa "N/A" yaz
 codeCell.className = 'product-code';
 row.appendChild(codeCell);
@@ -418,6 +429,11 @@ marjInput.type = 'number';
 marjInput.value = slpInfo.PRODUCT_MARJ || 0;
 marjInput.className = 'form-control form-control-sm';
 marjInput.style.width = '80px';
+marjCell.appendChild(marjInput);
+
+const lastPriceCell = document.createElement('td');
+lastPriceCell.textContent = last_price.toFixed(2) || '-';
+
 marjCell.appendChild(marjInput);
 
 const salePriceCell = document.createElement('td');
@@ -487,7 +503,9 @@ console.table(
 });
 
 row.appendChild(marjCell);
+row.appendChild(lastPriceCell);
 row.appendChild(salePriceCell);
+
 
   cellElements[productName] = [];
 
