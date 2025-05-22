@@ -269,7 +269,7 @@ FOR JSON PATH
 
 
 </cfquery>
-<cfdump var="#getData#">
+
 
 
   <title>Talep Listesi</title>
