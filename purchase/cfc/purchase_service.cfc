@@ -499,24 +499,24 @@ VALUES(
         </cfloop>
         <cfset ix=0>
         <cfloop array="#products#" item="product">
-            <cfset wrkRowId=product>
+            <cfset AwrkRowId=product>
             <cfscript>
                 ix=ix+1;
-                attributes["product_id#ix#"] = evaluate("PID_#wrkRowId#");
-                attributes["stock_id#ix#"] = evaluate("SID_#wrkRowId#");
-                attributes["product_name#ix#"] = evaluate("PRODUCT_NAME_#wrkRowId#");
-                attributes["unit#ix#"] = evaluate("PRODUCT_UNIT_#wrkRowId#");
-                attributes["unit_id#ix#"] = evaluate("PRODUCT_UNIT_ID_#wrkRowId#");
+                attributes["product_id#ix#"] = evaluate("PID_#AwrkRowId#");
+                attributes["stock_id#ix#"] = evaluate("SID_#AwrkRowId#");
+                attributes["product_name#ix#"] = evaluate("PRODUCT_NAME_#AwrkRowId#");
+                attributes["unit#ix#"] = evaluate("PRODUCT_UNIT_#AwrkRowId#");
+                attributes["unit_id#ix#"] = evaluate("PRODUCT_UNIT_ID_#AwrkRowId#");
                 attributes["price#ix#"] = 0;
                 attributes["price_other#ix#"] = 0;
-                attributes["tax#ix#"] = evaluate("TAX_PURCHASE_#wrkRowId#");
-                attributes["amount#ix#"] = evaluate("QUANTITY_#wrkRowId#");
+                attributes["tax#ix#"] = evaluate("TAX_PURCHASE_#AwrkRowId#");
+                attributes["amount#ix#"] = evaluate("QUANTITY_#AwrkRowId#");
                 attributes["indirim1#ix#"] = 0;
-                attributes["other_money_#ix#"] = evaluate("OTHER_MONEY_#wrkRowId#");
+                attributes["other_money_#ix#"] = evaluate("OTHER_MONEY_#AwrkRowId#");
                 attributes["other_money_value_#ix#"] = 0;
                 attributes["description#ix#"] = "";
                 attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
-                attributes["wrk_row_relation_id#ix#"] = product;
+                attributes["wrk_row_relation_id#ix#"] = AwrkRowId;
                 attributes["is_virtual#ix#"] = 0;
                 attributes["SHELF_CODE#ix#"] = "";
                 attributes["OFFER_ROW_CURRENCY#ix#"] = "";
@@ -724,7 +724,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
                     <cfset attributes["other_money_#ix#"] = otherMoney>
                     <cfset attributes["other_money_value_#ix#"] = TUTAR_ / satirKur.RATE2>
                     <cfset attributes["description#ix#"] = "">
-                    <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#">
+                    <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#_#ix#">
                     <cfset attributes["wrk_row_relation_id#ix#"] = "#getSelectedRows.WRK_ROW_ID#_XX">
                     <CFSET attributes["row_nettotal#ix#"] = PR_HESAP*AMOUNT>
                 </cfif>
