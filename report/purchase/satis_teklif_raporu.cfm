@@ -528,6 +528,7 @@ function renderList(filter = "") {
       ${alt.altTeklifFirma ? `<span class="firma">🏢 ${alt.altTeklifFirma}</span>` : ""}
       ${alt.altTeklifSiparis ? `<span class="etiket">📦 Alış Siparişi: ${alt.altTeklifSiparis}</span>` : ""}
       ${alt.alisFaturaNo ? `<span class="etiket">🧾 Alış Fatura: ${alt.alisFaturaNo}</span>` : ""}
+      ${alt.alisIrsaliyeNo ? `<span class="etiket">🧾 Alış İrsaliye: ${alt.alisIrsaliyeNo}</span>` : ""}
     </div>
   </div>
 `;
