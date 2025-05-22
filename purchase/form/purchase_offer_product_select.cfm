@@ -432,6 +432,16 @@ marjInput.style.width = '80px';
 marjCell.appendChild(marjInput);
 
 const lastPriceCell = document.createElement('td');
+if(last_price === 0){
+  lastPriceCell.textContent = "-";
+}else{
+  const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+  const rate1 = parseFloat(currency?.RATE1 || 1);
+  const rate2 = parseFloat(currency?.RATE2 || 1);
+
+  const convertedLastPrice = (last_price * rate1) / rate2;
+  lastPriceCell.textContent = convertedLastPrice.toFixed(2);
+}
 lastPriceCell.textContent = last_price.toFixed(2) || '-';
 
 marjCell.appendChild(marjInput);
