@@ -377,7 +377,8 @@ uniqueProducts.forEach(productName => {
   const row = document.createElement('tr');
   const productCell = document.createElement('td');
   productCell.textContent = productName;
-  productCell.innerHTML = `<a href="javascript:void(0)" onclick="window.open('http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=${productName}&stock_id=75&pid=${productName}&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3','popup','width=800,height=600');">${productName}</a>`;
+  var urunBilgisi = productInfoMap.get(productName);
+  productCell.innerHTML = `<a href="javascript:void(0)" onclick="window.open('http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=${urunBilgisi.PRODUCT_ID}&stock_id=${urunBilgisi.STOCK_ID}&pid=${urunBilgisi.PRODUCT_ID}&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3','popup','width=800,height=600');">${productName}</a>`;
   //http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=70&stock_id=75&pid=70&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3
   productCell.className = 'product-name';
   row.appendChild(productCell);
