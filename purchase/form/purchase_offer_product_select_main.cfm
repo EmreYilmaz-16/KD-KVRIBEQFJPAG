@@ -1,3 +1,18 @@
+<style>
+/* Sekmeler fade ile yumuşak geçiş yapsın */
+.tab-pane.fade {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  display: none;
+}
+
+/* Aktif sekme görünür ve opak hale gelsin */
+.tab-pane.fade.show {
+  opacity: 1;
+  display: block;
+}
+</style>
+
 <button id="Tab1" class="btn btn-primary active" data-bs-toggle="tab" data-bs-target="#Tab1Content" type="button">
   Satınalma Teklifini Seç
 
@@ -13,11 +28,11 @@
     <!-- Tab 1 içeriği -->
     <cfinclude template="includes/satin_alma_yeni_urun.cfm">
   </div>
-  <div class="tab-pane fade" id="Tab2Content">
+  <div class="tab-pane fade" id="Tab2Content" style="display: none;">
     <!-- Tab 2 içeriği -->
     <cfinclude template="includes/depodan_teslim.cfm">
   </div>
-  <div class="tab-pane fade" id="Tab3Content">
+  <div class="tab-pane fade" id="Tab3Content" style="display: none;">
     <!-- Tab 3 içeriği -->
     <cfinclude template="includes/depodan_tedarik.cfm">
   </div>
