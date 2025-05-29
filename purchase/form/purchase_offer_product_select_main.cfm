@@ -21,3 +21,33 @@
     <!-- Tab 3 içeriği -->
     <cfinclude template="includes/depodan_tedarik.cfm">
   </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll("button[data-bs-toggle='tab']");
+  const contents = document.querySelectorAll(".tab-pane");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      // Aktif buton sınıflarını ayarla
+      buttons.forEach((b) => {
+        b.classList.remove("btn-primary", "active");
+        b.classList.add("btn-secondary");
+      });
+      this.classList.remove("btn-secondary");
+      this.classList.add("btn-primary", "active");
+
+      // İçerik görünürlüğünü ayarla
+      const targetId = this.getAttribute("data-bs-target");
+
+      contents.forEach((pane) => {
+        if ("#" + pane.id === targetId) {
+          pane.classList.add("show", "active");
+        } else {
+          pane.classList.remove("show", "active");
+        }
+      });
+    });
+  });
+});
+</script>
