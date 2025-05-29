@@ -11,13 +11,13 @@
 <div class="tab-content">
   <div class="tab-pane fade show active" id="Tab1Content">
     <!-- Tab 1 içeriği -->
-    <cf_include template="includes/satin_alma_yeni_urun.cfm">
+    <cfinclude template="includes/satin_alma_yeni_urun.cfm">
   </div>
   <div class="tab-pane fade" id="Tab2Content">
     <!-- Tab 2 içeriği -->
-    <cf_include template="includes/depodan_teslim.cfm">
+    <cfinclude template="includes/depodan_teslim.cfm">
   </div>
   <div class="tab-pane fade" id="Tab3Content">
     <!-- Tab 3 içeriği -->
-    <cf_include template="includes/depodan_tedarik.cfm">
+    <cfinclude template="includes/depodan_tedarik.cfm">
   </div>
