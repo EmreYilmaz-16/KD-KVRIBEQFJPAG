@@ -305,13 +305,13 @@ data2.forEach(supplier => {
   th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
   headerRow2.appendChild(th);
 });
-const thead = document.createElement('thead');
-const tbody = document.createElement('tbody');
-thead.appendChild(headerRow2);
-table2.appendChild(thead);
+const thead2= document.createElement('thead');
+const tbody2 = document.createElement('tbody');
+thead2.appendChild(headerRow2);
+table2.appendChild(thead2);
 
-const cellElements = {};
-const alternativeGroups = {};
+const cellElements2 = {};
+const alternativeGroups2 = {};
 
 data2.forEach(supplier => {
   supplier.URUNLER.forEach(product => {
@@ -320,12 +320,12 @@ data2.forEach(supplier => {
     const allIds = [baseId, ...altIds];
 
     // Bu gruptan herhangi birine atanmış renk var mı?
-    let existingColor = allIds.find(id => alternativeGroups[id]);
+    let existingColor = allIds.find(id => alternativeGroups2[id]);
 
-    const groupColor = existingColor ? alternativeGroups[existingColor] : getRandomColor();
+    const groupColor = existingColor ? alternativeGroups2[existingColor] : getRandomColor();
 
     allIds.forEach(id => {
-      alternativeGroups[id] = groupColor;
+      alternativeGroups2[id] = groupColor;
     });
   });
 })
@@ -496,7 +496,7 @@ row.appendChild(lastPriceCell);
 row.appendChild(salePriceCell);
 
 
-  cellElements[productName] = [];
+  cellElements2[productName] = [];
 
   let lowestNetPrice = Infinity;
   data2.forEach(supplier => {
@@ -549,7 +549,7 @@ if(rowHasOS){
   console.log("Satırda  Satış Teklifine Dönmüşmüş Ürün Var",product.PRODUCT_NAME,product.IS_OS);
 }
 
-const bgColor = alternativeGroups[product.PRODUCT_ID];
+const bgColor = alternativeGroups2[product.PRODUCT_ID];
 if (bgColor) {
   //cell.style.backgroundColor = bgColor;
 }
@@ -563,7 +563,7 @@ if (!rowHasSatinalma && !rowHasOS) {
   cell.dataset.key = cellKey;
 
   cell.addEventListener('click', () => {
-    cellElements[productName].forEach(c => {
+    cellElements2[productName].forEach(c => {
       const icon = c.querySelector('div.check-icon');
       if (icon) icon.remove();
     });
@@ -603,7 +603,7 @@ if (!rowHasSatinalma && !rowHasOS) {
       cell.dataset.product = productName;
 
       cell.addEventListener('click', () => {
-        cellElements[productName].forEach(c => {
+        cellElements2[productName].forEach(c => {
           const icon = c.querySelector('div.check-icon');
           if (icon) icon.remove();
         });
@@ -617,7 +617,7 @@ if (!rowHasSatinalma && !rowHasOS) {
         
       });
 
-      cellElements[productName].push(cell);
+      cellElements2[productName].push(cell);
       if (product.IS_SELECTED === 1) {
         if(product.IS_OS === true) {
   const checkIcon = document.createElement('div');
@@ -634,8 +634,8 @@ if (!rowHasSatinalma && !rowHasOS) {
 
     row.appendChild(cell);
   });
-  tbody.appendChild(row)
-  table2.appendChild(tbody);
+  tbody2.appendChild(row)
+  table2.appendChild(tbody2);
 
   
   
