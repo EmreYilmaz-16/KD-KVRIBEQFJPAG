@@ -288,26 +288,26 @@ data2.forEach(supplier => {
 });
 const uniqueProducts2 = Array.from(productSet2);
 
-const headerRow = document.createElement('tr');
-headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
-headerRow.innerHTML += `
+const headerRow2 = document.createElement('tr');
+headerRow2.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
+headerRow2.innerHTML += `
   <th class="sticky-header bg-info text-white">
     Marj (%)<br>
     <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
 `;
-headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Son Satış Fiyatı (${DEMAND_MONEY})</th>`;
-headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
+headerRow2.innerHTML += `<th class="sticky-header bg-info text-white">Son Satış Fiyatı (${DEMAND_MONEY})</th>`;
+headerRow2.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
 
 data2.forEach(supplier => {
   const th = document.createElement('th');
   th.className = "sticky-header bg-success text-white";
   th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
-  headerRow.appendChild(th);
+  headerRow2.appendChild(th);
 });
 const thead = document.createElement('thead');
 const tbody = document.createElement('tbody');
-thead.appendChild(headerRow);
+thead.appendChild(headerRow2);
 table2.appendChild(thead);
 
 const cellElements = {};
