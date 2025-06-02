@@ -23,8 +23,18 @@
 <button id="Tab3" class="btn btn-secondary" data-bs-toggle="tab" data-bs-target="#Tab3Content" type="button">
   Satınalma Teklifini Dönüştür
 </button>
+<button onclick="$('#bolum1').show(); $('#bolum2').hide();">
+  1
+</button>
+<button onclick="$('#bolum1').hide(); $('#bolum2').toggle();">
+  2
+</button>
+<div class="bolum1">
 <cfinclude template="includes/satin_alma_yeni_urun.cfm">
+</div>
+<div class="bolum2">
 <cfinclude template="includes/depodan_teslim.cfm">
+</div>
 <div class="tab-content">
   <div class="tab-pane fade show active" id="Tab1Content">
     <!-- Tab 1 içeriği -->
