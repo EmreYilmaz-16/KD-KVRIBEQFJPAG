@@ -23,17 +23,19 @@
 <button id="Tab3" class="btn btn-secondary" data-bs-toggle="tab" data-bs-target="#Tab3Content" type="button">
   Satınalma Teklifini Dönüştür
 </button>
+<cfinclude template="includes/satin_alma_yeni_urun.cfm">
+<cfinclude template="includes/depodan_teslim.cfm">
 <div class="tab-content">
   <div class="tab-pane fade show active" id="Tab1Content">
     <!-- Tab 1 içeriği -->
     tab1 içeriği
-    <cfinclude template="includes/satin_alma_yeni_urun.cfm">
+    
     tab1 içeriği sonu
   </div>
   <div class="tab-pane fade" id="Tab2Content" style="display: none;">
     <!-- Tab 2 içeriği -->
     tab 2 içeriği
-    <cfinclude template="includes/depodan_teslim.cfm">
+    
     tab 2 içeriği sonu
   </div>
   <div class="tab-pane fade" id="Tab3Content" style="display: none;">
