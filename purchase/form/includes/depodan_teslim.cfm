@@ -1,5 +1,5 @@
 merhahahdkjanskjdsaskj
-<cf_box title="Satınalma Seçim Ekranı">
+<cfdump var="#attributes#">
 
 
   <style>
@@ -858,5 +858,5 @@ $(document).on("click", "#price-table > tbody > tr > td > span", function () {
 
 
 
-</cf_box>
+
 
