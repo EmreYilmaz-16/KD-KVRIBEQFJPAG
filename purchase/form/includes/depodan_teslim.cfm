@@ -1,21 +1,6 @@
 merhahahdkjanskjdsaskj
 <cf_box title="Satınalma Seçim Ekranı">
-<cfquery name="HAZIRLIK1" datasource="#dsn#">
-   IF OBJECT_ID('CMP_PRICE_ALL', 'U') IS NOT NULL
-    DROP TABLE CMP_PRICE_ALL;
 
-    SELECT  CAST(PRICE_OTHER AS DECIMAL(18,2)) AS PRICE,INVOICE_DATE,STOCK_ID,COMPANY_ID INTO CMP_PRICE_ALL FROM (
-SELECT PRICE_OTHER,INVOICE_ROW.OTHER_MONEY,INVOICE.INVOICE_DATE,STOCK_ID,COMPANY_ID FROM w3Qa_2025_1.INVOICE_ROW 
-INNER JOIN w3Qa_2025_1.INVOICE ON INVOICE.INVOICE_ID=INVOICE_ROW.INVOICE_ID
-WHERE INVOICE.PURCHASE_SALES=1-- AND STOCK_ID=75 AND COMPANY_ID=9
-UNION ALL
-SELECT PRICE_OTHER,INVOICE_ROW.OTHER_MONEY,INVOICE.INVOICE_DATE,STOCK_ID,COMPANY_ID FROM w3Qa_2024_1.INVOICE_ROW 
-INNER JOIN w3Qa_2024_1.INVOICE ON INVOICE.INVOICE_ID=INVOICE_ROW.INVOICE_ID
-WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
-) AS T
-
-
-</cfquery>
 
   <style>
     td.selectable {
@@ -107,28 +92,8 @@ WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
         <div class="mt-4 text-end">
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
             <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
-         <cfquery name="getOfferStage" datasource="#DSN3#">
-SELECT OFFER_ID,OFFER_STAGE,SUM(SS) SS FROM (
-SELECT 
-	DISTINCT
-	ORR_SATIS_TEKLIFI.OFFER_ID,
-	O_SATIS_TEKLIFI.OFFER_STAGE,
-	(SELECT COUNT(*) FROM w3Qa_1.ORDER_ROW WHERE WRK_ROW_RELATION_ID=ORR_SATIS_TEKLIFI.WRK_ROW_ID)	AS SS
-FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
-LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
-LEFT JOIN w3Qa_1.OFFER AS O_SATIS_TEKLIFI ON O_SATIS_TEKLIFI.OFFER_ID=ORR_SATIS_TEKLIFI.OFFER_ID
-WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
-SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.internal_id#)
-) AS T GROUP BY OFFER_ID,OFFER_STAGE
+         
 
-</cfquery>
-<cfquery name="GETDEMAND_MONEY" datasource="#dsn3#">
-  SELECT OTHER_MONEY,FROM_COMPANY_ID FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.internal_id#
-</cfquery>
-<script>
-  var DEMAND_MONEY = '<cfoutput>#GETDEMAND_MONEY.OTHER_MONEY#</cfoutput>';
-</script>
 
 <cfif getOfferStage.recordCount>
 <cfelse>
@@ -162,7 +127,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   </div>
   
 
-  <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
+  <cfquery name="getMainPurchaseOffer2" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
 SELECT C.FULLNAME, C.COMPANY_ID, OFFER_ID,
 (
@@ -262,7 +227,7 @@ FOR JSON PATH
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 
-    var data2 = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+    var data2 = <cfoutput>#getMainPurchaseOffer2.QRESULT#</cfoutput>
     data2=mergeCompanies(data2);
     var ww_data2=data2;
     
