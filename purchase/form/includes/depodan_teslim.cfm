@@ -537,8 +537,8 @@ if (!rowHasSatinalma && !rowHasOS) {
     checkIcon.innerHTML = '✔️';
     cell.appendChild(checkIcon);
     selectedCells2.set(productName, cellKey);
-    updateOutput();
-    updateBestSupplier();
+    updateOutput2();
+    updateBestSupplier2();
   });
 
   if (product.IS_SELECTED === 1) {
@@ -577,8 +577,8 @@ if (!rowHasSatinalma && !rowHasOS) {
         checkIcon.innerHTML = '✔️';
         cell.appendChild(checkIcon);
         selectedCells2.set(productName, cellKey);
-        updateOutput();
-        updateBestSupplier();
+        updateOutput2();
+        updateBestSupplier2();
         
       });
 
@@ -606,7 +606,7 @@ if (!rowHasSatinalma && !rowHasOS) {
   
 });
 
-function updateOutput() {
+function updateOutput2() {
   const grouped = {};
   selectedCells2.forEach((key, productName) => {
     const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma,yyy,xxx,oemNo,selectInfoExtra] = key.split('|');
@@ -668,7 +668,7 @@ try {
   return groupedArray;
 }
 
-function updateBestSupplier() {
+function updateBestSupplier2() {
   const supplierTotals = {};
   console.log(data2);
   ww_data2.forEach(supplier => {
@@ -710,7 +710,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
   if(!sifirKontrl()){
     return;
   }
-  const payload = updateOutput(); // Ensure payload is generated correctly
+  const payload = updateOutput2(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
 
@@ -737,7 +737,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
 });
 
 document.getElementById('send-btn3').addEventListener('click', () => {
-  const payload = updateOutput(); // Ensure payload is generated correctly
+  const payload = updateOutput2(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
 
@@ -764,10 +764,10 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 });
 
 
-updateBestSupplier();
+updateBestSupplier2();
 
 function sifirKontrl(){
-  var mx=updateOutput()
+  var mx=updateOutput2()
   var SFRFIYAT=0;
 var SFRMarj=0;
 for(let i=0;i<mx.length;i++){
