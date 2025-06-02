@@ -926,7 +926,7 @@ $(document).on("click", "#price-table > tbody > tr > td > span", function () {
 
 </script>
 
-
+</div>
 
 
 
