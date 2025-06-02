@@ -32,7 +32,10 @@
 <div class="bolum1">
 <cfinclude template="includes/satin_alma_yeni_urun.cfm">
 </div>
-<div class="bolum2">
+<div class="bolum2" style="display: none;">
+  <!-- Bu bölümde depodan teslimat işlemleri yapılacak -->
+  <h3>Depodan Teslimat İşlemleri</h3>
+  <p>Bu bölümde depodan teslimat işlemleri yapılacak.</p>
 <cfinclude template="includes/depodan_teslim.cfm">
 </div>
 <div class="tab-content">
