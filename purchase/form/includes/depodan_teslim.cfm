@@ -536,6 +536,7 @@ if (!rowHasSatinalma && !rowHasOS) {
     checkIcon.className = 'check-icon text-success';
     checkIcon.innerHTML = '✔️';
     cell.appendChild(checkIcon);
+    selectedCells.set(productName, cellKey);
     selectedCells2.set(productName, cellKey);
     updateOutput2();
     updateBestSupplier2();
