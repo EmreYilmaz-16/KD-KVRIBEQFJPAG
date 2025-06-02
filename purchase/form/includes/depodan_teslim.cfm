@@ -102,7 +102,7 @@ WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
       <div class="card-body">
         
         <div class="table-responsive">
-          <cf_grid_list  class="table table-bordered align-middle text-center" id="price-table"></cf_grid_list>
+          <cf_grid_list  class="table table-bordered align-middle text-center" id="price-table2"></cf_grid_list>
         </div>
         <div class="mt-4 text-end">
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
@@ -154,7 +154,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   <div class="card mt-4 shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Seçilen Veriler (JSON)</h5>
-        <pre id="output">[]</pre>
+        <pre id="output2">[]</pre>
       </div>
     </div>
 
@@ -252,76 +252,41 @@ FOR JSON PATH
   
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 
-  <cfset MONEYARRRR=arrayNew(1)>
-            <cfquery name="getMoneyext" datasource="#dsn3#">
-                SELECT 
-             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
-             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
-             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
-             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
-             SM.MONEY
-             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
-             </cfquery>
-        
-    <cfloop query="getMoneyext">
-        <cfscript>
-            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
-        </cfscript>
-        
-    </cfloop>
+  
 
 
   <script>
-  function mergeCompanies(data) {
-  const result = [];
-
-  data.forEach(entry => {
-    const existing = result.find(c => c.COMPANY_ID === entry.COMPANY_ID);
-
-    if (existing) {
-      existing.URUNLER = existing.URUNLER.concat(entry.URUNLER);
-    } else {
-      result.push({
-        FULLNAME: entry.FULLNAME,
-        COMPANY_ID: entry.COMPANY_ID,
-        URUNLER: [...entry.URUNLER]
-      });
-    }
-  });
-
-  return result;
-}
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
 // Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
 // Ayrılmış JavaScript dosyası, HTML'den bağımsız olarak çalışabilir
-var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
-    var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
-    data=mergeCompanies(data);
-    var ww_data=data;
-    const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
+
+    var data2 = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
+    data2=mergeCompanies(data2);
+    var ww_data2=data2;
+    
 // script.js - Ayrılmış JavaScript dosyası
 
-const table = document.getElementById('price-table');
-const output = document.getElementById('output');
-const selectedCells = new Map();
+const table2 = document.getElementById('price-table2');
+const output2 = document.getElementById('output2');
+const selectedCells2 = new Map();
 
-const productSet = new Set();
-const productInfoMap = new Map();
-data.forEach(supplier => {
+const productSet2 = new Set();
+const productInfoMap2 = new Map();
+data2.forEach(supplier => {
   supplier.URUNLER.forEach(product => {
-    productSet.add(product.PRODUCT_NAME);
+    productSet2.add(product.PRODUCT_NAME);
     // PRODUCT_ID ve STOCK_ID'yi de sakla
-    if (!productInfoMap.has(product.PRODUCT_NAME)) {
-      productInfoMap.set(product.PRODUCT_NAME, {
+    if (!productInfoMap2.has(product.PRODUCT_NAME)) {
+      productInfoMap2.set(product.PRODUCT_NAME, {
         PRODUCT_ID: product.PRODUCT_ID,
         STOCK_ID: product.STOCK_ID
       });
     }
   });
 });
-const uniqueProducts = Array.from(productSet);
+const uniqueProducts2 = Array.from(productSet2);
 
 const headerRow = document.createElement('tr');
 headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
@@ -334,7 +299,7 @@ headerRow.innerHTML += `
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Son Satış Fiyatı (${DEMAND_MONEY})</th>`;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
 
-data.forEach(supplier => {
+data2.forEach(supplier => {
   const th = document.createElement('th');
   th.className = "sticky-header bg-success text-white";
   th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
@@ -343,12 +308,12 @@ data.forEach(supplier => {
 const thead = document.createElement('thead');
 const tbody = document.createElement('tbody');
 thead.appendChild(headerRow);
-table.appendChild(thead);
+table2.appendChild(thead);
 
 const cellElements = {};
 const alternativeGroups = {};
 
-data.forEach(supplier => {
+data2.forEach(supplier => {
   supplier.URUNLER.forEach(product => {
     const baseId = product.PRODUCT_ID;
     const altIds = (product.ALTERNATIFLER || []).map(a => a.PRODUCT_ID);
@@ -366,13 +331,13 @@ data.forEach(supplier => {
 })
 
 
-uniqueProducts.forEach(productName => {
-  const rowHasSatinalma = data.some(supplier => {
+uniqueProducts2.forEach(productName => {
+  const rowHasSatinalma = data2.some(supplier => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
     return p?.IS_SATINALMA === 1;
   });
   
-  const rowHasOS = data.some(supplier => {
+  const rowHasOS = data2.some(supplier => {
     const p = supplier.URUNLER.find(u => u.PRODUCT_NAME === productName);
     return p?.IS_OS === false;
   })
@@ -380,7 +345,7 @@ uniqueProducts.forEach(productName => {
   const row = document.createElement('tr');
   const productCell = document.createElement('td');
   productCell.textContent = productName;
-  var urunBilgisi = productInfoMap.get(productName);
+  var urunBilgisi = productInfoMap2.get(productName);
   productCell.innerHTML = `<a href="javascript:void(0)" onclick="window.open('http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=${urunBilgisi.PRODUCT_ID}&stock_id=${urunBilgisi.STOCK_ID}&pid=${urunBilgisi.PRODUCT_ID}&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3','popup','width=800,height=600');">${productName}</a>`;
   //http://qa.kdteknik.com.tr/index.cfm?fuseaction=objects.popup_product_price_history_js&sepet_process_type=2502&product_id=70&stock_id=75&pid=70&product_name=&unit=Adet&row_id=0&TL=1&USD=1.55&EUR=3
   productCell.className = 'product-name';
@@ -392,7 +357,7 @@ uniqueProducts.forEach(productName => {
 
 // Tüm şirketlerde ürünü ara
 let productCode = "";
-for (const supplier of data) {
+for (const supplier of data2) {
   const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
   if (product && product.PRODUCT_CODE_2) {
     productCode = product.PRODUCT_CODE_2;
@@ -401,7 +366,7 @@ for (const supplier of data) {
 }
 
 let last_price = 0;
-for (const supplier of data) {
+for (const supplier of data2) {
   const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
   if (product && product.LAST_PRICE) {
     last_price = product.LAST_PRICE;
@@ -417,7 +382,7 @@ row.appendChild(codeCell);
 
 // Tüm şirketlerde ürünü ara
 let oemNo = "";
-for (const supplier of data) {
+for (const supplier of data2) {
   const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
   if (product && product.OEM_NO) {
     oemNo = product.OEM_NO;
@@ -430,7 +395,7 @@ oemCell.className = 'product-oem';
 row.appendChild(oemCell);
 
   let slpInfo = {};
-for (const supplier of data) {
+for (const supplier of data2) {
   const match = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName && p.SLP && p.SLP.length > 0);
   if (match) {
     slpInfo = match.SLP[0];
@@ -480,7 +445,7 @@ marjInput.addEventListener('input', () => {
   }
 });*/
 marjInput.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
+  const selectedKey = selectedCells2.get(productName);
   const net = parseFloat(selectedKey?.split('|')[6]);
   const marj = parseFloat(marjInput.value);
 
@@ -499,7 +464,7 @@ marjInput.addEventListener('input', () => {
   }
 });
 salePriceInput.addEventListener('change', () => {
-  const selectedKey = selectedCells.get(productName);
+  const selectedKey = selectedCells2.get(productName);
   const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
   const otherMoney = selectedKey?.split('|')[9]; 
   const netPrice = parseFloat(selectedKey?.split('|')[6]); // 9. index = OTHER_MONEY
@@ -534,14 +499,14 @@ row.appendChild(salePriceCell);
   cellElements[productName] = [];
 
   let lowestNetPrice = Infinity;
-  data.forEach(supplier => {
+  data2.forEach(supplier => {
     const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
     if (product && product.NET_PRICE < lowestNetPrice) {
       lowestNetPrice = product.NET_PRICE;
     }
   });
 
-  data.forEach(supplier => {
+  data2.forEach(supplier => {
     const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
     const cell = document.createElement('td');
 
@@ -606,7 +571,7 @@ if (!rowHasSatinalma && !rowHasOS) {
     checkIcon.className = 'check-icon text-success';
     checkIcon.innerHTML = '✔️';
     cell.appendChild(checkIcon);
-    selectedCells.set(productName, cellKey);
+    selectedCells2.set(productName, cellKey);
     updateOutput();
     updateBestSupplier();
   });
@@ -618,7 +583,7 @@ if (!rowHasSatinalma && !rowHasOS) {
       checkIcon.className = 'check-icon text-success';
       checkIcon.innerHTML = '✔️';
       cell.appendChild(checkIcon);
-      selectedCells.set(productName, cellKey);}
+      selectedCells2.set(productName, cellKey);}
     else{
       cell.style.pointerEvents = 'none';
       cell.style.opacity = '0.8';
@@ -646,7 +611,7 @@ if (!rowHasSatinalma && !rowHasOS) {
         checkIcon.className = 'check-icon text-success';
         checkIcon.innerHTML = '✔️';
         cell.appendChild(checkIcon);
-        selectedCells.set(productName, cellKey);
+        selectedCells2.set(productName, cellKey);
         updateOutput();
         updateBestSupplier();
         
@@ -659,7 +624,7 @@ if (!rowHasSatinalma && !rowHasOS) {
   checkIcon.className = 'check-icon text-success';
   checkIcon.innerHTML = '✔️';
   cell.appendChild(checkIcon);
-  selectedCells.set(productName, cellKey);
+  selectedCells2.set(productName, cellKey);
         }
 }
     } else {
@@ -670,7 +635,7 @@ if (!rowHasSatinalma && !rowHasOS) {
     row.appendChild(cell);
   });
   tbody.appendChild(row)
-  table.appendChild(tbody);
+  table2.appendChild(tbody);
 
   
   
@@ -678,7 +643,7 @@ if (!rowHasSatinalma && !rowHasOS) {
 
 function updateOutput() {
   const grouped = {};
-  selectedCells.forEach((key, productName) => {
+  selectedCells2.forEach((key, productName) => {
     const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma,yyy,xxx,oemNo,selectInfoExtra] = key.split('|');
     if (!grouped[companyId]) {
       grouped[companyId] = {
@@ -740,10 +705,10 @@ try {
 
 function updateBestSupplier() {
   const supplierTotals = {};
-  console.log(data);
-  ww_data.forEach(supplier => {
+  console.log(data2);
+  ww_data2.forEach(supplier => {
     const productNames = supplier.URUNLER.map(p => p.PRODUCT_NAME);
-    const hasAllProducts = uniqueProducts.every(pName => productNames.includes(pName));
+    const hasAllProducts = uniqueProducts2.every(pName => productNames.includes(pName));
     if (!hasAllProducts) return;
     let total = 0;
     supplier.URUNLER.forEach(product => {
