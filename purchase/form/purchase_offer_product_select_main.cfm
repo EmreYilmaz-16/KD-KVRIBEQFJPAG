@@ -26,7 +26,7 @@
 <button onclick="$('#bolum1').show(); $('#bolum2').hide();">
   1
 </button>
-<button onclick="$('#bolum1').hide(); $('#bolum2').toggle();">
+<button onclick="$('#bolum1').hide(); $('#bolum2').show();">
   2
 </button>
 <div id="bolum1">
