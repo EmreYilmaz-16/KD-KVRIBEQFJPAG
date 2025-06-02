@@ -665,7 +665,7 @@ try {
     });
   });
   const groupedArray = Object.values(grouped);
-  output.textContent = JSON.stringify(groupedArray, null, 2);
+  output2.textContent = JSON.stringify(groupedArray, null, 2);
   return groupedArray;
 }
 
