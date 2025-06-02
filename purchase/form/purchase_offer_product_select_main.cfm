@@ -30,13 +30,13 @@
     <cfinclude template="includes/satin_alma_yeni_urun.cfm">
     tab1 içeriği sonu
   </div>
-  <div class="tab-pane fade" id="Tab2Content" style="display: none;">
+  <div class="tab-pane fade" id="Tab2Content" >
     <!-- Tab 2 içeriği -->
     tab 2 içeriği
     <cfinclude template="includes/depodan_teslim.cfm">
     tab 2 içeriği sonu
   </div>
-  <div class="tab-pane fade" id="Tab3Content" style="display: none;">
+  <div class="tab-pane fade" id="Tab3Content" >
     <!-- Tab 3 içeriği -->
     <cfinclude template="includes/depodan_tedarik.cfm">
   </div>
