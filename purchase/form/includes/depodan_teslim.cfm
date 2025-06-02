@@ -1,4 +1,4 @@
-sdşlkaksdjalsd
+merhahahdkjanskjdsaskj
 <cf_box title="Satınalma Seçim Ekranı">
 <cfquery name="HAZIRLIK1" datasource="#dsn#">
    IF OBJECT_ID('CMP_PRICE_ALL', 'U') IS NOT NULL
