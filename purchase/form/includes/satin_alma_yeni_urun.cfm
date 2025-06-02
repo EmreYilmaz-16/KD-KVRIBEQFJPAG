@@ -247,6 +247,8 @@ WHERE INTERNALDEMAND_ID=#attributes.internal_id#
 
 
   </cfquery>
+
+  <cfdump var="#getMainPurchaseOffer#">
   
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 
