@@ -160,6 +160,8 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 
    
   </div>
+  </div>
+  </div>
   
 
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
@@ -926,7 +928,7 @@ $(document).on("click", "#price-table > tbody > tr > td > span", function () {
 
 </script>
 
-</div>
+
 
 
 
