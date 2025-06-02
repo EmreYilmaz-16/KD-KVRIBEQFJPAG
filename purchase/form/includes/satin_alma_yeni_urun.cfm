@@ -812,7 +812,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
   const payload = updateOutput(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
-
+return false; // Prevent default action for this button
   fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelectorOnly', { // Correct endpoint
     method: 'POST',
     headers: {
