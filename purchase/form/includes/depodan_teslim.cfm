@@ -608,6 +608,7 @@ if (!rowHasSatinalma && !rowHasOS) {
 });
 
 function updateOutput2() {
+    
   const grouped = {};
   selectedCells2.forEach((key, productName) => {
     const [companyId, productId, price, wrkRowId, discount1, quantity, netPrice,tax,priceOther,otherMoney,demandMoney,stockId,isSatinalma,yyy,xxx,oemNo,selectInfoExtra] = key.split('|');
@@ -666,6 +667,7 @@ try {
   });
   const groupedArray = Object.values(grouped);
   output2.textContent = JSON.stringify(groupedArray, null, 2);
+  updateOutput()
   return groupedArray;
 }
 
