@@ -230,7 +230,7 @@ SELECT OFFER_ROW.PRODUCT_NAME
              
 FROM w3Qa_1.OFFER_ROW
 LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=OFFER_ROW.STOCK_ID
-WHERE OFFER_ID = O.OFFER_ID AND OFFER_ROW.SELECT_INFO_EXTRA <>3
+WHERE OFFER_ID = O.OFFER_ID AND ISNULL(OFFER_ROW.SELECT_INFO_EXTRA,0) <>3
 FOR JSON PATH
 ) AS URUNLER
 FROM w3Qa_1.OFFER AS O
@@ -247,8 +247,6 @@ WHERE INTERNALDEMAND_ID=#attributes.internal_id#
 
 
   </cfquery>
-
-  <cfdump var="#getMainPurchaseOffer#">
   
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 
