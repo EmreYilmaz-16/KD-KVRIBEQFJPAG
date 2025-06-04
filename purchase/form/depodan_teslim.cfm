@@ -469,7 +469,7 @@ dsc1Input.type = 'number';
 dsc1Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
 dsc1Input.className = 'form-control form-control-sm';
 dsc1Input.style.width = '80px';
-dsc1Cell.appendChild(dsc1Cell);
+dsc1Cell.appendChild(dsc1Input);
 
 const dsc2Cell = document.createElement('td');
 const dsc2Input = document.createElement('input');
