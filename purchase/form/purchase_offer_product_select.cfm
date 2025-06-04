@@ -105,7 +105,7 @@ WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
         </div>
         <div class="mt-4 text-end">
             <button class="btn btn-success" id="send-btn3">Kaydet</button>
-            <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
+            
          <cfquery name="getOfferStage" datasource="#DSN3#">
 SELECT OFFER_ID,OFFER_STAGE,SUM(SS) SS FROM (
 SELECT 
