@@ -511,7 +511,7 @@ salePriceInput.className = 'form-control form-control-sm sale-price-input';
 salePriceInput.style.width = '100px';
 salePriceInput.dataset.product = productName;
  const selectedKeyxx = selectedCells.get(productName);
-  const netPricexx = parseFloat(selectedKey?.split('|')[6]);
+  const netPricexx = parseFloat(selectedKeyxx?.split('|')[6]);
 console.log("Satış Fiyatı",salePriceInput.value,slpInfo,netPricexx);
 salePriceCell.appendChild(salePriceInput);
 /*
