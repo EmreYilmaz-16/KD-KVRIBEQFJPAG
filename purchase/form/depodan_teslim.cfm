@@ -463,6 +463,31 @@ marjInput.className = 'form-control form-control-sm';
 marjInput.style.width = '80px';
 marjCell.appendChild(marjInput);
 
+const dsc1Cell = document.createElement('td');
+const dsc1Input = document.createElement('input');
+dsc1Input.type = 'number';
+dsc1Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
+dsc1Input.className = 'form-control form-control-sm';
+dsc1Input.style.width = '80px';
+dsc1Cell.appendChild(dsc1Cell);
+
+const dsc2Cell = document.createElement('td');
+const dsc2Input = document.createElement('input');
+dsc2Input.type = 'number';
+dsc2Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
+dsc2Input.className = 'form-control form-control-sm';
+dsc2Input.style.width = '80px';
+dsc2Cell.appendChild(dsc2Input);
+
+
+const dsc3Cell = document.createElement('td');
+const dsc3Input = document.createElement('input');
+dsc3Input.type = 'number';
+dsc3Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 3 Kontrol Edecek Tabloya EKlenecek
+dsc3Input.className = 'form-control form-control-sm';
+dsc3Input.style.width = '80px';
+dsc3Cell.appendChild(dsc3Input);
+
 const lastPriceCell = document.createElement('td');
 if(last_price === 0){
   lastPriceCell.textContent = "-";
