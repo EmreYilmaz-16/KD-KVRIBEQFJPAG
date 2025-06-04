@@ -1,6 +1,6 @@
 <button onclick="GetPage(1)">Yeni Ürün</button>
 <button onclick="GetPage(2)">Depodan</button>
-<button>Depodan Tedarik</button>
+<button onclick="GetPage(3)">Depodan Tedarik</button>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div id="ShownArea"></div>
 
