@@ -549,7 +549,16 @@ dsc1Input.addEventListener('input', () => {
   const dsc1 = parseFloat(dsc1Input.value) || 0;
 
   if (!isNaN(netPrice) && !isNaN(dsc1)) {
+    
+    if(parseFloat(saleprice.value) !=0){
+      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
+      const calculatedSalePrice = salePrice - (salePrice * dsc1 / 100);
+      salePriceInput.value = calculatedSalePrice.toFixed(2);
+      return;
+    }
+    
     const calculatedSalePrice = netPrice - (netPrice * dsc1 / 100);
+
     salePriceInput.value = calculatedSalePrice.toFixed(2);
   }
 });
@@ -560,6 +569,12 @@ dsc2Input.addEventListener('input', () => {
   const dsc2 = parseFloat(dsc2Input.value) || 0;
 
   if (!isNaN(netPrice) && !isNaN(dsc2)) {
+    if(parseFloat(salePriceInput.value) !=0){
+      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
+      const calculatedSalePrice = salePrice - (salePrice * dsc2 / 100);
+      salePriceInput.value = calculatedSalePrice.toFixed(2);
+      return;
+    }
     const calculatedSalePrice = netPrice - (netPrice * dsc2 / 100);
     salePriceInput.value = calculatedSalePrice.toFixed(2);
   }
@@ -571,6 +586,12 @@ dsc3Input.addEventListener('input', () => {
   const dsc3 = parseFloat(dsc3Input.value) || 0;
 
   if (!isNaN(netPrice) && !isNaN(dsc3)) {
+    if(parseFloat(salePriceInput.value) !=0){
+      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
+      const calculatedSalePrice = salePrice - (salePrice * dsc3 / 100);
+      salePriceInput.value = calculatedSalePrice.toFixed(2);
+      return;
+    }
     const calculatedSalePrice = netPrice - (netPrice * dsc3 / 100);
     salePriceInput.value = calculatedSalePrice.toFixed(2);
   }
