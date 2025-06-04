@@ -90,8 +90,8 @@ merhahahdkjanskjdsaskj
           <cf_grid_list  class="table table-bordered align-middle text-center" id="price-table2"></cf_grid_list>
         </div>
         <div class="mt-4 text-end">
-            <button class="btn btn-success" id="send-btn3">Kaydet</button>
-            <button class="btn btn-primary" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
+            <button class="btn btn-success" id="send-btn32">Kaydet</button>
+            <button class="btn btn-primary" id="send-btn22">Kaydet ve Satış Teklifine Dönüştür</button>
          
 
 
@@ -520,8 +520,8 @@ if (bgColor) {
 }
 
 if (product.IS_SATINALMA===1) {
-  $("#send-btn").hide();
-  $("#send-btn3").hide();
+  $("#send-btn22").hide();
+  $("#send-btn32").hide();
 }
 if (!rowHasSatinalma && !rowHasOS) {
   cell.classList.add('selectable');
@@ -709,7 +709,7 @@ function getRandomColor() {
   return color;
 }
 
-document.getElementById('send-btn').addEventListener('click', () => {
+document.getElementById('send-btn22').addEventListener('click', () => {
   if(!sifirKontrl()){
     return;
   }
@@ -739,7 +739,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
   });
 });
 
-document.getElementById('send-btn3').addEventListener('click', () => {
+document.getElementById('send-btn32').addEventListener('click', () => {
   const payload = updateOutput2(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
