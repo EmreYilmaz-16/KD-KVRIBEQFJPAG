@@ -3,6 +3,7 @@
 <button class="ui-wrk-btn ui-wrk-btn-extra" onclick="GetPage(3)">Depodan Tedarik</button>
 <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
+<div style="clear:both;"></div>
 <div id="ShownArea"></div>
 
 <script>
