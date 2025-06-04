@@ -570,6 +570,9 @@ console.table(
 });
 
 row.appendChild(marjCell);
+row.appendChild(dsc1Cell);
+row.appendChild(dsc2Cell);
+row.appendChild(dsc3Cell);
 row.appendChild(lastPriceCell);
 row.appendChild(salePriceCell);
 
