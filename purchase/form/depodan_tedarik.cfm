@@ -106,7 +106,7 @@ FOR JSON PATH
 
   </cfquery>
 <cfif len(getMainPurchaseOffer.QRESULT) EQ 0>
-    <p class="text-danger">Bu talep için henüz satınalma teklifi oluşturulmamış.</p><cfabort>
+    <div class="alert alert-warning">Bu Talep İçin Depodan Tedarik Edilecek Ürün Bulunmamaktadır</div><cfabort>
 </cfif>
   <style>
     td.selectable {
