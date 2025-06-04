@@ -510,8 +510,7 @@ salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2
 salePriceInput.className = 'form-control form-control-sm sale-price-input';
 salePriceInput.style.width = '100px';
 salePriceInput.dataset.product = productName;
- const selectedKeyxx = selectedCells.get(productName);
-  const netPricexx = selectedKeyxx?.split('|')[6];
+ 
 console.log("Satış Fiyatı",salePriceInput.value,slpInfo,netPricexx);
 salePriceCell.appendChild(salePriceInput);
 /*
