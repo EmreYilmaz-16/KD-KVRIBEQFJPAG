@@ -4,8 +4,9 @@
 <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div style="clear:both;"></div>
+<cf_box title="Teklif Oluşturma">
 <div id="ShownArea"></div>
-
+</cf_box>
 <script>
 function GetPage(pageid) {
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
