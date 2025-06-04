@@ -809,8 +809,29 @@ function updateBestSupplier() {
 
 window.setMarjAllRows = function(el) {
   const newMarj = parseFloat(el.value) || 0;
-  document.querySelectorAll('td input[class="marj-input"]').forEach(input => {
+  document.querySelectorAll('td input.marj-input').forEach(input => {
     input.value = newMarj;
+    input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
+  });
+};
+window.setAllDsc1Rows = function(el) {
+  const newDsc1 = parseFloat(el.value) || 0;
+  document.querySelectorAll('td input.dsc1-input').forEach(input => {
+    input.value = newDsc1;
+    input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
+  });
+};
+window.setAllDsc2Rows = function(el) {
+  const newDsc2 = parseFloat(el.value) || 0;
+  document.querySelectorAll('td input.dsc2-input').forEach(input => {
+    input.value = newDsc2;
+    input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
+  });
+};
+window.setAllDsc3Rows = function(el) {
+  const newDsc3 = parseFloat(el.value) || 0;
+  document.querySelectorAll('td input.dsc3-input').forEach(input => {
+    input.value = newDsc3;
     input.dispatchEvent(new Event('input')); // satış fiyatını güncelle
   });
 };
