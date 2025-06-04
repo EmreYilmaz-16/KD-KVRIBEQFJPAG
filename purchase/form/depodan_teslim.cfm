@@ -542,6 +542,41 @@ marjInput.addEventListener('input', () => {
   }
 });
 
+// İskonto 1 değişince hesapla
+dsc1Input.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  const netPrice = parseFloat(selectedKey?.split('|')[6]);
+  const dsc1 = parseFloat(dsc1Input.value) || 0;
+
+  if (!isNaN(netPrice) && !isNaN(dsc1)) {
+    const calculatedSalePrice = netPrice - (netPrice * dsc1 / 100);
+    salePriceInput.value = calculatedSalePrice.toFixed(2);
+  }
+});
+// İskonto 2 değişince hesapla
+dsc2Input.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  const netPrice = parseFloat(selectedKey?.split('|')[6]);
+  const dsc2 = parseFloat(dsc2Input.value) || 0;
+
+  if (!isNaN(netPrice) && !isNaN(dsc2)) {
+    const calculatedSalePrice = netPrice - (netPrice * dsc2 / 100);
+    salePriceInput.value = calculatedSalePrice.toFixed(2);
+  }
+});
+// İskonto 3 değişince hesapla
+dsc3Input.addEventListener('input', () => {
+  const selectedKey = selectedCells.get(productName);
+  const netPrice = parseFloat(selectedKey?.split('|')[6]);
+  const dsc3 = parseFloat(dsc3Input.value) || 0;
+
+  if (!isNaN(netPrice) && !isNaN(dsc3)) {
+    const calculatedSalePrice = netPrice - (netPrice * dsc3 / 100);
+    salePriceInput.value = calculatedSalePrice.toFixed(2);
+  }
+});
+
+
 
 salePriceInput.addEventListener('change', () => {
   const selectedKey = selectedCells.get(productName);
