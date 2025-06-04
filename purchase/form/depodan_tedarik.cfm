@@ -252,6 +252,9 @@ FOR JSON PATH
   
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 <cfdump var="#getMainPurchaseOffer#" label="getMainPurchaseOffer" abort="no">
+<cfif len(getMainPurchaseOffer.QRESULT) EQ 0>
+    <p class="text-danger">Bu talep için henüz satınalma teklifi oluşturulmamış.</p><cfabort>
+</cfif>
 
   <cfset MONEYARRRR=arrayNew(1)>
             <cfquery name="getMoneyext" datasource="#dsn3#">
