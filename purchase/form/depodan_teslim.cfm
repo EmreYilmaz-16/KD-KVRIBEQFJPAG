@@ -361,6 +361,52 @@ function calculateFinalSalePrice(productName) {
     salePriceInput.value = final.toFixed(2);
 }
 
+function calculateMarjFromSalePrice(productName) {
+    const selectedKey = selectedCells.get(productName);
+    if (!selectedKey) return;
+
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    if (isNaN(net) || net === 0) return;
+
+    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    const rate1 = parseFloat(currency?.RATE1 || 1);
+    const rate2 = parseFloat(currency?.RATE2 || 1);
+
+    // İlgili inputları bul
+    const row = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement;
+    if (!row) return;
+
+    const salePriceInput = row.querySelector('input.sale-price-input');
+    const marjInput = row.querySelector('input.marj-input');
+
+    const d1 = parseFloat(row.querySelector('input.dsc1-input')?.value) || 0;
+    const d2 = parseFloat(row.querySelector('input.dsc2-input')?.value) || 0;
+    const d3 = parseFloat(row.querySelector('input.dsc3-input')?.value) || 0;
+
+    let salePrice = parseFloat(salePriceInput?.value.replace(',', '.')) || 0;
+
+    // Önce iskonto etkisini geri al
+    let grossSalePrice = salePrice;
+    if (d1 || d2 || d3) {
+        grossSalePrice = salePrice / ((1 - d1 / 100) * (1 - d2 / 100) * (1 - d3 / 100));
+    }
+
+    // Kur geri dönüşümü
+    const original = (grossSalePrice * rate2) / rate1;
+
+    // Marj hesapla
+    const marj = ((original / net) - 1) * 100;
+    marjInput.value = marj.toFixed(2);
+
+    console.table({
+        net,
+        grossSalePrice,
+        original,
+        marj
+    });
+}
+
+
 
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
@@ -616,21 +662,8 @@ dsc3Input.addEventListener('input', () => {
 
 
 salePriceInput.addEventListener('change', () => {
-    const selectedKey = selectedCells.get(productName);
-    const netPrice = parseFloat(selectedKey?.split('|')[6]);
-    const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
-
-    if (!isNaN(netPrice) && netPrice > 0) {
-        const marj = ((salePrice / netPrice) - 1) * 100;
-        marjInput.value = marj.toFixed(2);
-
-        console.table({
-            salePrice,
-            netPrice,
-            marj
-        });
-    }
-})
+    calculateMarjFromSalePrice(productName);
+});
 
 row.appendChild(marjCell);
 row.appendChild(dsc1Cell);
