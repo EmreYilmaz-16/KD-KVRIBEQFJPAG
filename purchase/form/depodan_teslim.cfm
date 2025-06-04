@@ -325,6 +325,43 @@ function applyDiscounts(basePrice, d1 = 0, d2 = 0, d3 = 0) {
     return price;
 }
 
+function calculateFinalSalePrice(productName) {
+    const selectedKey = selectedCells.get(productName);
+    if (!selectedKey) return;
+
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    if (isNaN(net) || net === 0) return;
+
+    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    const rate1 = parseFloat(currency?.RATE1 || 1);
+    const rate2 = parseFloat(currency?.RATE2 || 1);
+
+    // İlgili inputları bul
+    const row = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement;
+    if (!row) return;
+
+    const marjInput = row.querySelector('input.marj-input');
+    const dsc1Input = row.querySelector('input.dsc1-input');
+    const dsc2Input = row.querySelector('input.dsc2-input');
+    const dsc3Input = row.querySelector('input.dsc3-input');
+    const salePriceInput = row.querySelector('input.sale-price-input');
+
+    const marj = parseFloat(marjInput?.value) || 0;
+    const d1 = parseFloat(dsc1Input?.value) || 0;
+    const d2 = parseFloat(dsc2Input?.value) || 0;
+    const d3 = parseFloat(dsc3Input?.value) || 0;
+
+    // Marj + kur dönüşümü
+    const base = net + (net * marj / 100);
+    const converted = (base * rate1) / rate2;
+
+    // İskontolar
+    const final = applyDiscounts(converted, d1, d2, d3);
+
+    salePriceInput.value = final.toFixed(2);
+}
+
+
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
 // Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
@@ -560,101 +597,20 @@ marjInput.addEventListener('input', () => {
 });*/
 
 marjInput.addEventListener('input', () => {
-    const selectedKey = selectedCells.get(productName);
-    const net = parseFloat(selectedKey?.split('|')[6]);
-    const marj = parseFloat(marjInput.value);
-
-    if (!isNaN(net) && !isNaN(marj)) {
-        const calculatedSalePrice = net + (net * marj / 100);
-
-        // Kur dönüşümü
-        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-        const rate1 = parseFloat(currency?.RATE1 || 1);
-        const rate2 = parseFloat(currency?.RATE2 || 1);
-        const converted = (calculatedSalePrice * rate1) / rate2;
-
-        // İskontolar
-        const d1 = parseFloat(dsc1Input.value) || 0;
-        const d2 = parseFloat(dsc2Input.value) || 0;
-        const d3 = parseFloat(dsc3Input.value) || 0;
-        const discounted = applyDiscounts(converted, d1, d2, d3);
-
-        salePriceInput.value = discounted.toFixed(2);
-    }
+    calculateFinalSalePrice(productName);
 });
 
 
 dsc1Input.addEventListener('input', () => {
-    const selectedKey = selectedCells.get(productName);
-    const net = parseFloat(selectedKey?.split('|')[6]);
-    const marj = parseFloat(marjInput.value) || 0;
-
-    if (!isNaN(net)) {
-        const calculatedSalePrice = net + (net * marj / 100);
-
-        // Kur dönüşümü
-        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-        const rate1 = parseFloat(currency?.RATE1 || 1);
-        const rate2 = parseFloat(currency?.RATE2 || 1);
-        const converted = (calculatedSalePrice * rate1) / rate2;
-
-        // İskontolar
-        const d1 = parseFloat(dsc1Input.value) || 0;
-        const d2 = parseFloat(dsc2Input.value) || 0;
-        const d3 = parseFloat(dsc3Input.value) || 0;
-        const discounted = applyDiscounts(converted, d1, d2, d3);
-
-        salePriceInput.value = discounted.toFixed(2);
-    }
+    calculateFinalSalePrice(productName);
 });
-
 dsc2Input.addEventListener('input', () => {
-    const selectedKey = selectedCells.get(productName);
-    const net = parseFloat(selectedKey?.split('|')[6]);
-    const marj = parseFloat(marjInput.value) || 0;
-
-    if (!isNaN(net)) {
-        const calculatedSalePrice = net + (net * marj / 100);
-
-        // Kur dönüşümü
-        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-        const rate1 = parseFloat(currency?.RATE1 || 1);
-        const rate2 = parseFloat(currency?.RATE2 || 1);
-        const converted = (calculatedSalePrice * rate1) / rate2;
-
-        // İskontolar
-        const d1 = parseFloat(dsc1Input.value) || 0;
-        const d2 = parseFloat(dsc2Input.value) || 0;
-        const d3 = parseFloat(dsc3Input.value) || 0;
-        const discounted = applyDiscounts(converted, d1, d2, d3);
-
-        salePriceInput.value = discounted.toFixed(2);
-    }
+    calculateFinalSalePrice(productName);
 });
-
 dsc3Input.addEventListener('input', () => {
-    const selectedKey = selectedCells.get(productName);
-    const net = parseFloat(selectedKey?.split('|')[6]);
-    const marj = parseFloat(marjInput.value) || 0;
-
-    if (!isNaN(net)) {
-        const calculatedSalePrice = net + (net * marj / 100);
-
-        // Kur dönüşümü
-        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-        const rate1 = parseFloat(currency?.RATE1 || 1);
-        const rate2 = parseFloat(currency?.RATE2 || 1);
-        const converted = (calculatedSalePrice * rate1) / rate2;
-
-        // İskontolar
-        const d1 = parseFloat(dsc1Input.value) || 0;
-        const d2 = parseFloat(dsc2Input.value) || 0;
-        const d3 = parseFloat(dsc3Input.value) || 0;
-        const discounted = applyDiscounts(converted, d1, d2, d3);
-
-        salePriceInput.value = discounted.toFixed(2);
-    }
+    calculateFinalSalePrice(productName);
 });
+
 
 
 
