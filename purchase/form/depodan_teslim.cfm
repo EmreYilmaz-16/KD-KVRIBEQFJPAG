@@ -317,6 +317,14 @@ function getConvertedNetPriceWithMarj(productName, marj = 0) {
     return converted.toFixed(2);
 }
 
+function applyDiscounts(basePrice, d1 = 0, d2 = 0, d3 = 0) {
+    let price = basePrice;
+    price *= (1 - d1 / 100);
+    price *= (1 - d2 / 100);
+    price *= (1 - d3 / 100);
+    return price;
+}
+
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
 // Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
@@ -552,109 +560,121 @@ marjInput.addEventListener('input', () => {
 });*/
 
 marjInput.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
-  const net = parseFloat(selectedKey?.split('|')[6]);
-  const marj = parseFloat(marjInput.value);
+    const selectedKey = selectedCells.get(productName);
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    const marj = parseFloat(marjInput.value);
 
-  if (!isNaN(net) && !isNaN(marj)) {
-    const calculatedSalePrice = net + (net * marj / 100);
+    if (!isNaN(net) && !isNaN(marj)) {
+        const calculatedSalePrice = net + (net * marj / 100);
 
-    // Kur bilgisi için diğerMoney ve ilgili döviz kurları
-    const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
-    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-    const rate1 = parseFloat(currency?.RATE1 || 1);
-    const rate2 = parseFloat(currency?.RATE2 || 1);
+        // Kur dönüşümü
+        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+        const rate1 = parseFloat(currency?.RATE1 || 1);
+        const rate2 = parseFloat(currency?.RATE2 || 1);
+        const converted = (calculatedSalePrice * rate1) / rate2;
 
-    const converted = (calculatedSalePrice * rate1) / rate2;
+        // İskontolar
+        const d1 = parseFloat(dsc1Input.value) || 0;
+        const d2 = parseFloat(dsc2Input.value) || 0;
+        const d3 = parseFloat(dsc3Input.value) || 0;
+        const discounted = applyDiscounts(converted, d1, d2, d3);
 
-    salePriceInput.value = converted.toFixed(2);
-  }
+        salePriceInput.value = discounted.toFixed(2);
+    }
 });
 
-// İskonto 1 değişince hesapla
+
 dsc1Input.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
-  const netPrice = parseFloat(selectedKey?.split('|')[6]);
-  const dsc1 = parseFloat(dsc1Input.value) || 0;
+    const selectedKey = selectedCells.get(productName);
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    const marj = parseFloat(marjInput.value) || 0;
 
-  if (!isNaN(netPrice) && !isNaN(dsc1)) {
-    
-    if(parseFloat(saleprice.value) !=0){
-      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
-      const calculatedSalePrice = salePrice - (salePrice * dsc1 / 100);
-      salePriceInput.value = calculatedSalePrice.toFixed(2);
-      return;
+    if (!isNaN(net)) {
+        const calculatedSalePrice = net + (net * marj / 100);
+
+        // Kur dönüşümü
+        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+        const rate1 = parseFloat(currency?.RATE1 || 1);
+        const rate2 = parseFloat(currency?.RATE2 || 1);
+        const converted = (calculatedSalePrice * rate1) / rate2;
+
+        // İskontolar
+        const d1 = parseFloat(dsc1Input.value) || 0;
+        const d2 = parseFloat(dsc2Input.value) || 0;
+        const d3 = parseFloat(dsc3Input.value) || 0;
+        const discounted = applyDiscounts(converted, d1, d2, d3);
+
+        salePriceInput.value = discounted.toFixed(2);
     }
-    
-    const calculatedSalePrice = netPrice - (netPrice * dsc1 / 100);
-
-    salePriceInput.value = calculatedSalePrice.toFixed(2);
-  }
 });
-// İskonto 2 değişince hesapla
+
 dsc2Input.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
-  const netPrice = parseFloat(selectedKey?.split('|')[6]);
-  const dsc2 = parseFloat(dsc2Input.value) || 0;
+    const selectedKey = selectedCells.get(productName);
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    const marj = parseFloat(marjInput.value) || 0;
 
-  if (!isNaN(netPrice) && !isNaN(dsc2)) {
-    if(parseFloat(salePriceInput.value) !=0){
-      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
-      const calculatedSalePrice = salePrice - (salePrice * dsc2 / 100);
-      salePriceInput.value = calculatedSalePrice.toFixed(2);
-      return;
+    if (!isNaN(net)) {
+        const calculatedSalePrice = net + (net * marj / 100);
+
+        // Kur dönüşümü
+        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+        const rate1 = parseFloat(currency?.RATE1 || 1);
+        const rate2 = parseFloat(currency?.RATE2 || 1);
+        const converted = (calculatedSalePrice * rate1) / rate2;
+
+        // İskontolar
+        const d1 = parseFloat(dsc1Input.value) || 0;
+        const d2 = parseFloat(dsc2Input.value) || 0;
+        const d3 = parseFloat(dsc3Input.value) || 0;
+        const discounted = applyDiscounts(converted, d1, d2, d3);
+
+        salePriceInput.value = discounted.toFixed(2);
     }
-    const calculatedSalePrice = netPrice - (netPrice * dsc2 / 100);
-    salePriceInput.value = calculatedSalePrice.toFixed(2);
-  }
 });
-// İskonto 3 değişince hesapla
+
 dsc3Input.addEventListener('input', () => {
-  const selectedKey = selectedCells.get(productName);
-  const netPrice = parseFloat(selectedKey?.split('|')[6]);
-  const dsc3 = parseFloat(dsc3Input.value) || 0;
+    const selectedKey = selectedCells.get(productName);
+    const net = parseFloat(selectedKey?.split('|')[6]);
+    const marj = parseFloat(marjInput.value) || 0;
 
-  if (!isNaN(netPrice) && !isNaN(dsc3)) {
-    if(parseFloat(salePriceInput.value) !=0){
-      const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
-      const calculatedSalePrice = salePrice - (salePrice * dsc3 / 100);
-      salePriceInput.value = calculatedSalePrice.toFixed(2);
-      return;
+    if (!isNaN(net)) {
+        const calculatedSalePrice = net + (net * marj / 100);
+
+        // Kur dönüşümü
+        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+        const rate1 = parseFloat(currency?.RATE1 || 1);
+        const rate2 = parseFloat(currency?.RATE2 || 1);
+        const converted = (calculatedSalePrice * rate1) / rate2;
+
+        // İskontolar
+        const d1 = parseFloat(dsc1Input.value) || 0;
+        const d2 = parseFloat(dsc2Input.value) || 0;
+        const d3 = parseFloat(dsc3Input.value) || 0;
+        const discounted = applyDiscounts(converted, d1, d2, d3);
+
+        salePriceInput.value = discounted.toFixed(2);
     }
-    const calculatedSalePrice = netPrice - (netPrice * dsc3 / 100);
-    salePriceInput.value = calculatedSalePrice.toFixed(2);
-  }
 });
+
 
 
 
 salePriceInput.addEventListener('change', () => {
-  const selectedKey = selectedCells.get(productName);
-  const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
-  const otherMoney = selectedKey?.split('|')[9]; 
-  const netPrice = parseFloat(selectedKey?.split('|')[6]); // 9. index = OTHER_MONEY
-  const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-  const rate1 = parseFloat(currency?.RATE1 || 1);
-  const rate2 = parseFloat(currency?.RATE2 || 1);
+    const selectedKey = selectedCells.get(productName);
+    const netPrice = parseFloat(selectedKey?.split('|')[6]);
+    const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
 
-  const convertedSalePrice = (salePrice * rate2) / rate1;
-  //var sm=convertedSalePrice/(netPrice*100)
-  var smx=convertedSalePrice-netPrice
-  var smx2=smx/netPrice;
-  var smx3=smx2*100
- // smx3=smx3.toFixed(2)
-  marjInput.value=smx3
-console.table(
-  {
-    convertedSalePrice,
-    smx,
-    smx2,
-    smx3,
-    salePrice,
-    netPrice
-  }
-)
-});
+    if (!isNaN(netPrice) && netPrice > 0) {
+        const marj = ((salePrice / netPrice) - 1) * 100;
+        marjInput.value = marj.toFixed(2);
+
+        console.table({
+            salePrice,
+            netPrice,
+            marj
+        });
+    }
+})
 
 row.appendChild(marjCell);
 row.appendChild(dsc1Cell);
