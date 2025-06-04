@@ -15,6 +15,9 @@ WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
 
 
 </cfquery>
+<cfquery name="GETDEMAND_MONEY" datasource="#dsn3#">
+  SELECT OTHER_MONEY,FROM_COMPANY_ID FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.internal_id#
+</cfquery>
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
 SELECT C.FULLNAME, C.COMPANY_ID, OFFER_ID,
@@ -211,9 +214,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 ) AS T GROUP BY OFFER_ID,OFFER_STAGE
 
 </cfquery>
-<cfquery name="GETDEMAND_MONEY" datasource="#dsn3#">
-  SELECT OTHER_MONEY,FROM_COMPANY_ID FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.internal_id#
-</cfquery>
+
 <script>
   var DEMAND_MONEY = '<cfoutput>#GETDEMAND_MONEY.OTHER_MONEY#</cfoutput>';
 </script>
