@@ -297,7 +297,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 
   return result;
 }
-function getConvertedNetPrice(productName) {
+function getConvertedNetPriceWithMarj(productName, marj = 0) {
     let net = 0;
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_NAME === productName);
@@ -307,13 +307,16 @@ function getConvertedNetPrice(productName) {
         }
     }
 
+    const netWithMarj = net + (net * marj / 100);
+
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
     const rate1 = parseFloat(currency?.RATE1 || 1);
     const rate2 = parseFloat(currency?.RATE2 || 1);
-    const converted = (net * rate1) / rate2;
+    const converted = (netWithMarj * rate1) / rate2;
 
     return converted.toFixed(2);
 }
+
 // script.js - Ayrılmış JavaScript dosyası
 // Bu dosya, JavaScript kodunu içerir ve HTML'den ayrıdır
 // Bu dosya, HTML'den ayrılmıştır ve daha iyi bir yapı sağlar
@@ -525,11 +528,12 @@ const salePriceInput = document.createElement('input');
 salePriceInput.type = 'text';
 
 if (data.length === 1) {
-    // Tek tedarikçiyse net fiyatla başlat
-    salePriceInput.value = getConvertedNetPrice(productName);
+    const marj = parseFloat(slpInfo.PRODUCT_MARJ || 0);
+    salePriceInput.value = getConvertedNetPriceWithMarj(productName, marj);
 } else {
     salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2) : "";
 }
+
 
 salePriceInput.className = 'form-control form-control-sm sale-price-input';
 salePriceInput.style.width = '100px';
