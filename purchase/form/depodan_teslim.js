@@ -143,7 +143,7 @@ var output = document.getElementById('output');
 var  selectedCells = new Map();
 
 var  productSet = new Set();
-const productInfoMap = new Map();
+var  productInfoMap = new Map();
 data.forEach(supplier => {
     supplier.URUNLER.forEach(product => {
         productSet.add(product.PRODUCT_ID); // PRODUCT_NAME yerine PRODUCT_ID
@@ -156,9 +156,9 @@ data.forEach(supplier => {
         }
     });
 });
-const uniqueProducts = Array.from(productSet);
+var  uniqueProducts = Array.from(productSet);
 
-const headerRow = document.createElement('tr');
+var  headerRow = document.createElement('tr');
 headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
 headerRow.innerHTML += `
   <th class="sticky-header bg-info text-white">
