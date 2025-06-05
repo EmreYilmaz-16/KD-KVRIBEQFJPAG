@@ -559,7 +559,7 @@ function updateOutput() {
             productMarj = parseFloat(marjInput.value) || 0;
         }
         if (dsc1Input) {
-            discount1 = parseFloat(dsc1Input.value) || 0;
+            dsc1 = parseFloat(dsc1Input.value) || 0;
         }
         if (dsc2Input) {
             discount2 = parseFloat(dsc2Input.value) || 0;
@@ -586,7 +586,7 @@ function updateOutput() {
             stockId: parseInt(stockId),
             price: parseFloat(price),
             wrkRowId,
-            discount1: parseFloat(discount1),
+            discount: parseFloat(discount1),
             quantity: parseFloat(quantity),
             netPrice: parseFloat(netPrice),
             tax: parseFloat(tax),
@@ -602,7 +602,7 @@ function updateOutput() {
             xxx: xxx,
             yyy: yyy,
             selectInfoExtra: selectInfoExtra,
-            discount1: parseFloat(discount1) || 0,
+            discount1:parseFloat(dsc1Input?.value) || 0,
             discount3: parseFloat(dsc3Input?.value) || 0,
             discount2: parseFloat(dsc2Input?.value) || 0,
         });
