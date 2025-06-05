@@ -54,6 +54,23 @@
     <cfset workcube_mode=0>
 <cffunction name="saveSaleOfferFromSelectedRows" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
+        <cfset arguments.payload = getHTTPRequestData().content>
+
+        <cfif isJSON(arguments.payload)>
+            <cfset arguments.payload = deserializeJSON(arguments.payload)>            
+        </cfif>
+        <cfif NOT isStruct(arguments.payload)>
+            <cfthrow message="Payload is invalid or missing." type="ValidationError">
+        </cfif>
+        <cfset var offers = arguments.payload>
+        <cfset var session = offers.session_variables>
+        <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
+
+        
+
+        <cfset var attributes = structNew()>
+        <cfset var session = arguments.payload.session_variables>
+        
         <cfset response.res = "success">
             <cfset response.message = "Purchase offers saved successfully.">
             <cfset response.data = attributes>
