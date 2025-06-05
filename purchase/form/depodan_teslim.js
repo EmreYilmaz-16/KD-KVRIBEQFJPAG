@@ -142,7 +142,7 @@ var output = document.getElementById('output');
 
 var  selectedCells = new Map();
 
-const productSet = new Set();
+var  productSet = new Set();
 const productInfoMap = new Map();
 data.forEach(supplier => {
     supplier.URUNLER.forEach(product => {
