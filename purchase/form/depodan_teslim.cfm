@@ -63,6 +63,9 @@ SELECT OFFER_ROW.PRODUCT_NAME
 , ISNULL((
 							SELECT CAST(PRODUCT_MARJ AS DECIMAL(18, 2)) AS PRODUCT_MARJ
 								, CAST(SALE_PRICE AS DECIMAL(18, 2)) AS SALE_PRICE
+                , CAST(ISNULL(DSC1,0) AS DECIMAL(18, 2)) AS DSC1
+                , CAST(ISNULL(DSC2,0) AS DECIMAL(18, 2)) AS DSC2
+                , CAST(ISNULL(DSC3,0) AS DECIMAL(18, 2)) AS DSC3
     FROM w3Qa_1.PBS_SELECTED_ROWS
     WHERE WRK_ROW_ID = OFFER_ROW.WRK_ROW_ID
     FOR JSON AUTO
@@ -577,7 +580,7 @@ marjCell.appendChild(marjInput);
 const dsc1Cell = document.createElement('td');
 const dsc1Input = document.createElement('input');
 dsc1Input.type = 'number';
-dsc1Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
+dsc1Input.value = slpInfo.DSC1 || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
 dsc1Input.className = 'form-control form-control-sm dsc1-input';
 dsc1Input.style.width = '80px';
 dsc1Cell.appendChild(dsc1Input);
@@ -585,7 +588,7 @@ dsc1Cell.appendChild(dsc1Input);
 const dsc2Cell = document.createElement('td');
 const dsc2Input = document.createElement('input');
 dsc2Input.type = 'number';
-dsc2Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
+dsc2Input.value = slpInfo.DSC2 || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
 dsc2Input.className = 'form-control form-control-sm dsc2-input';
 dsc2Input.style.width = '80px';
 dsc2Cell.appendChild(dsc2Input);
@@ -594,7 +597,7 @@ dsc2Cell.appendChild(dsc2Input);
 const dsc3Cell = document.createElement('td');
 const dsc3Input = document.createElement('input');
 dsc3Input.type = 'number';
-dsc3Input.value = slpInfo.PRODUCT_MARJ || 0; //#TODO: Burası İskonto 3 Kontrol Edecek Tabloya EKlenecek
+dsc3Input.value = slpInfo.DSC3 || 0; //#TODO: Burası İskonto 3 Kontrol Edecek Tabloya EKlenecek
 dsc3Input.className = 'form-control form-control-sm dsc3-input';
 dsc3Input.style.width = '80px';
 dsc3Cell.appendChild(dsc3Input);
@@ -828,8 +831,11 @@ function updateOutput() {
         products: []
       };
     }
-    const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');
+    const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');    
     const salePriceInput = document.querySelector(`input.sale-price-input[data-product="${productName}"]`);
+    const dsc1Input = document.querySelector(`input.dsc1-input[data-product="${productName}"]`);
+    const dsc2Input = document.querySelector(`input.dsc2-input[data-product="${productName}"]`);
+    const dsc3Input = document.querySelector(`input.dsc3-input[data-product="${productName}"]`);
 
 let productMarj = 0;
 let salePrice = 0;
@@ -837,6 +843,16 @@ let salePrice = 0;
 if (marjInput) {
   productMarj = parseFloat(marjInput.value) || 0;
 }
+if(dsc1Input) {
+  discount1 = parseFloat(dsc1Input.value) || 0;
+}
+if (dsc2Input) {
+  discount2 = parseFloat(dsc2Input.value) || 0;
+}
+if (dsc3Input) {
+  discount3 = parseFloat(dsc3Input.value) || 0;
+}
+
 
 if (salePriceInput) {
   salePrice = parseFloat(salePriceInput.value) || 0;
@@ -872,6 +888,9 @@ try {
       xxx:xxx,
       yyy:yyy,
       selectInfoExtra:selectInfoExtra,
+      discount1: parseFloat(discount1) || 0,
+      discount3: parseFloat(dsc3Input?.value) || 0,
+      discount2: parseFloat(dsc2Input?.value) || 0,
 
     });
   });

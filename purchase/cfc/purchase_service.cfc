@@ -77,6 +77,9 @@
         <cfset var ix = 0>
         <cfloop query="getRows">
             <cfset ix = ix + 1>
+            <cfquery name="getStockInfo" datasource="#dsn3#">
+                        SELECT * FROM STOCKS WHERE STOCK_ID=#getRows.STOCK_ID#
+            </cfquery>
             <cfset attributes["price#ix#"] = getRows.PRICE>
             <cfset attributes["price_other#ix#"] = getRows.SALE_PRICE>
             <cfset attributes["tax#ix#"] = getRows.TAX>
