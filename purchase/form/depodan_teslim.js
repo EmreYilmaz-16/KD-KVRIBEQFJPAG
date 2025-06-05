@@ -134,7 +134,10 @@ var ww_data = data;
 
 // script.js - Ayrılmış JavaScript dosyası
 
-var table = document.getElementById('price-table');
+//var table = document.getElementById('price-table');
+if (typeof table === 'undefined') {
+    var table = document.getElementById('price-table');
+}
 var output = document.getElementById('output');
 const selectedCells = new Map();
 
