@@ -68,7 +68,7 @@
 
         <cfquery name="getRows" datasource="#dsn3#">
             SELECT * FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' 
-            --AND BASKET_EXTRA_INFO=#offers.BEI#
+            
         </cfquery>
         <cfif getRows.recordcount EQ 0>
             <cfthrow message="No selected rows found for the given offer." type="DataNotFound">
