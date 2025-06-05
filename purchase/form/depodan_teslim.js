@@ -118,7 +118,7 @@ function calculateMarjFromSalePrice(productId) {
     const marj = ((original / net) - 1) * 100;
     marjInput.value = marj.toFixed(2);
 
-
+   
 }
 
 
@@ -134,16 +134,12 @@ var ww_data = data;
 
 // script.js - Ayrılmış JavaScript dosyası
 
-//var table = document.getElementById('price-table');
-if (typeof table === 'undefined') {
-    var table = document.getElementById('price-table');
-}
-var output = document.getElementById('output');
+const table = document.getElementById('price-table');
+const output = document.getElementById('output');
+const selectedCells = new Map();
 
-var selectedCells = new Map();
-
-var productSet = new Set();
-var productInfoMap = new Map();
+const productSet = new Set();
+const productInfoMap = new Map();
 data.forEach(supplier => {
     supplier.URUNLER.forEach(product => {
         productSet.add(product.PRODUCT_ID); // PRODUCT_NAME yerine PRODUCT_ID
@@ -156,9 +152,9 @@ data.forEach(supplier => {
         }
     });
 });
-var uniqueProducts = Array.from(productSet);
+const uniqueProducts = Array.from(productSet);
 
-var headerRow = document.createElement('tr');
+const headerRow = document.createElement('tr');
 headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
 headerRow.innerHTML += `
   <th class="sticky-header bg-info text-white">
@@ -187,13 +183,13 @@ data.forEach(supplier => {
     th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
     headerRow.appendChild(th);
 });
-var thead = document.createElement('thead');
-var tbody = document.createElement('tbody');
+const thead = document.createElement('thead');
+const tbody = document.createElement('tbody');
 thead.appendChild(headerRow);
 table.appendChild(thead);
 
-var cellElements = {};
-var alternativeGroups = {};
+const cellElements = {};
+const alternativeGroups = {};
 
 data.forEach(supplier => {
     supplier.URUNLER.forEach(product => {
@@ -610,7 +606,7 @@ function updateOutput() {
             xxx: xxx,
             yyy: yyy,
             selectInfoExtra: selectInfoExtra,
-            discount1: parseFloat(dsc1Input?.value) || 0,
+            discount1:parseFloat(dsc1Input?.value) || 0,
             discount3: parseFloat(dsc3Input?.value) || 0,
             discount2: parseFloat(dsc2Input?.value) || 0,
         });
