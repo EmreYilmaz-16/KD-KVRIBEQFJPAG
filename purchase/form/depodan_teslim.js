@@ -1,4 +1,4 @@
-function mergeCompanies(data) {
+﻿function mergeCompanies(data) {
     const result = [];
 
     data.forEach(entry => {
