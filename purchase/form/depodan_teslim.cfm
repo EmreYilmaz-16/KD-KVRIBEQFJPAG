@@ -970,7 +970,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
 });
 
 document.getElementById('send-btn3').addEventListener('click', () => {
-  updateOutput2();
+  updateOutput();
   const payload = updateOutput(); // Ensure payload is generated correctly
   console.log("Sunucuya gönderilecek veri:", payload);
   var offer_id = document.getElementById("offer_id").value;
