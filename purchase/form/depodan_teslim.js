@@ -118,7 +118,12 @@ function calculateMarjFromSalePrice(productId) {
     const marj = ((original / net) - 1) * 100;
     marjInput.value = marj.toFixed(2);
 
-   
+    console.table({
+        net,
+        grossSalePrice,
+        original,
+        marj
+    });
 }
 
 
