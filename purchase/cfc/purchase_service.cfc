@@ -52,7 +52,13 @@
     <cfset dsn="w3Qa">
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
-
+<cffunction name="saveSaleOfferFromSelectedRows" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+        <cfset var response = {}>
+        <cfset response.res = "success">
+            <cfset response.message = "Purchase offers saved successfully.">
+            <cfset response.data = attributes>
+            <cfreturn response>
+</cffunction>
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
@@ -328,6 +334,7 @@ VALUES(
             <cfset response.res = "success">
             <cfset response.message = "Purchase offers saved successfully.">
             <cfset response.data = attributes>
+            <cfreturn response>
         <cfcatch>
             <!-- Handle errors -->
             <cfset response.res = "error">
