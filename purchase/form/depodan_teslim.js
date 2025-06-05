@@ -187,13 +187,13 @@ data.forEach(supplier => {
     th.innerHTML = `${supplier.FULLNAME}<br><small>ID: ${supplier.COMPANY_ID}</small>`;
     headerRow.appendChild(th);
 });
-const thead = document.createElement('thead');
-const tbody = document.createElement('tbody');
+var  thead = document.createElement('thead');
+var tbody = document.createElement('tbody');
 thead.appendChild(headerRow);
 table.appendChild(thead);
 
-const cellElements = {};
-const alternativeGroups = {};
+var  cellElements = {};
+var alternativeGroups = {};
 
 data.forEach(supplier => {
     supplier.URUNLER.forEach(product => {
