@@ -248,6 +248,10 @@ uniqueProducts.forEach(productId => {
             break; // İlk bulduğunda döngüyü kır
         }
     }
+    codeCell.textContent = productCode || "-"; // Eğer kod bulunamazsa "-" göster
+    codeCell.className = 'product-code';
+    codeCell.dataset.productid = productId;
+    row.appendChild(codeCell);
 
     // Son fiyat
     let last_price = 0;
@@ -259,6 +263,7 @@ uniqueProducts.forEach(productId => {
         }
     }
 
+    const oemCell = document.createElement('td');
     // OEM No
     let oemNo = "";
     for (const supplier of data) {
@@ -268,6 +273,10 @@ uniqueProducts.forEach(productId => {
             break; // İlk bulduğunda döngüyü kır
         }
     }
+    oemCell.textContent = oemNo || "-"; // Eğer OEM No bulunamazsa "-" göster
+    oemCell.className = 'product-oem';
+    oemCell.dataset.productid = productId;
+    row.appendChild(oemCell);
 
     // SLP info
     let slpInfo = {};
