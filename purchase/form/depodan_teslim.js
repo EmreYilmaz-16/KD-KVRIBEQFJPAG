@@ -139,7 +139,8 @@ if (typeof table === 'undefined') {
     var table = document.getElementById('price-table');
 }
 var output = document.getElementById('output');
-const selectedCells = new Map();
+
+var  selectedCells = new Map();
 
 const productSet = new Set();
 const productInfoMap = new Map();
