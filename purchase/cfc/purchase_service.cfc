@@ -66,9 +66,40 @@
         <cfset var session = offers.session_variables>
         <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
+        <cfquery name="getRows" datasource="#dsn3#">
+            SELECT * FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' 
+            --AND BASKET_EXTRA_INFO=#offers.BEI#
+        </cfquery>
+        <cfif getRows.recordcount EQ 0>
+            <cfthrow message="No selected rows found for the given offer." type="DataNotFound">
+        </cfif>
+        <cfset var attributes = structNew()>
+        <cfset var ix = 0>
+        <cfloop query="getRows">
+            <cfset ix = ix + 1>
+            <cfset attributes["price#ix#"] = getRows.PRICE>
+            <cfset attributes["price_other#ix#"] = getRows.SALE_PRICE>
+            <cfset attributes["tax#ix#"] = getRows.TAX>
+            <cfset attributes["amount#ix#"] = getRows.AMOUNT>
+            <cfset attributes["indirim1#ix#"] = getRows.DISCOUNT1>
+            <cfset attributes["other_money_#ix#"] = getRows.OTHER_MONEY>
+            <cfset attributes["product_id#ix#"] = getRows.PRODUCT_ID>
+            <cfset attributes["stock_id#ix#"] = getRows.STOCK_ID>
+            <cfset attributes["unit#ix#"] = getRows.UNIT>
+            <cfset attributes["unit_id#ix#"] = getRows.UNIT_ID>
+            <cfset attributes["product_name#ix#"] = getRows.PRODUCT_NAME>
+            <cfset attributes["other_money_value_#ix#"] = (getRows.SALE_PRICE * getRows.AMOUNT) - ((getRows.SALE_PRICE * getRows.AMOUNT) * getRows.DISCOUNT1) / 100>
+            <cfset attributes["description#ix#"] = "">
+            <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#">
+            <cfset attributes["wrk_row_relation_id#ix#"] = getRows.WRK_ROW_RELATION_ID>
+            <cfset attributes["is_virtual#ix#"] = 0>
+            <cfset attributes["SHELF_CODE#ix#"] = "">
+            <cfset attributes["OFFER_ROW_CURRENCY#ix#"] = "">
+        </cfloop>
         
 
-        <cfset var attributes = structNew()>
+
+        
         <cfset var session = arguments.payload.session_variables>
         
         <cfset response.res = "success">
