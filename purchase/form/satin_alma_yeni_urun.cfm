@@ -303,8 +303,8 @@ var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfout
     const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 // script.js - Ayrılmış JavaScript dosyası
 
-const table = document.getElementById('price-table');
-const output = document.getElementById('output');
+var table = document.getElementById('price-table');
+var output = document.getElementById('output');
 const selectedCells = new Map();
 
 const productSet = new Set();

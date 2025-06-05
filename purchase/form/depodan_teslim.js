@@ -135,7 +135,7 @@ var ww_data = data;
 // script.js - Ayrılmış JavaScript dosyası
 
 var table = document.getElementById('price-table');
-const output = document.getElementById('output');
+var output = document.getElementById('output');
 const selectedCells = new Map();
 
 const productSet = new Set();
