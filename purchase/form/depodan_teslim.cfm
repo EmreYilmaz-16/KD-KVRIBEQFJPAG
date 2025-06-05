@@ -284,7 +284,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   var MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 </script>
 <script>
-  <cfinclude template="depodan_teslim.js">
+  <cfinclude template="depodan_teslim.min.js">
 </script>
 
 
