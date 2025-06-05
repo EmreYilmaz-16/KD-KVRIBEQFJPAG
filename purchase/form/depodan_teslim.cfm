@@ -281,6 +281,6 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 <script>
   var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
   var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
-  const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
+  var MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 </script>
 <script src="/AddOns/Partner/purchase/form/depodan_teslim.js"></script>
