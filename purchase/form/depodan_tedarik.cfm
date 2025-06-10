@@ -86,10 +86,39 @@ SELECT OFFER_ROW.PRODUCT_NAME
                 OR ALTERNATIVE_PRODUCT_ID = OFFER_ROW.PRODUCT_ID
 								) AS TABLO
     FOR JSON PATH
-							), '[]') AS ALTERNATIFLER
+							), '[]') AS ALTERNATIFLER,
+              GPA.*
              
 FROM w3Qa_1.OFFER_ROW
 LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=OFFER_ROW.STOCK_ID
+LEFT JOIN
+            (
+                SELECT
+                    P.UNIT									GPA_UNIT,
+                    CAST(P.PRICE AS DECIMAL(18,2))			GPA_PRICE,
+                    CAST(P.PRICE_KDV AS DECIMAL(18,2))		GPA_PRICE_KDV,
+                    P.PRODUCT_ID							GPA_PRODUCT_ID,
+                    P.MONEY									GPA_MONEY,
+                    P.PRICE_CATID							GPA_PRICE_CATID,
+                    P.CATALOG_ID							GPA_CATALOG_ID,
+                    CAST(P.PRICE_DISCOUNT AS DECIMAL(18,2))	GPA_DISCOUNT
+                FROM
+                    w3Qa_1.PRICE P,
+                    w3Qa_1.PRODUCT PR
+                WHERE
+                    P.PRODUCT_ID = PR.PRODUCT_ID
+                    AND P.PRICE_CATID = 1
+                    AND
+                    (
+                        P.STARTDATE <= convert(date,getdate())
+                        AND
+                        (
+                            P.FINISHDATE >= convert(date,getdate()) OR
+                            P.FINISHDATE IS NULL
+                        )
+                    )
+                    AND ISNULL(P.SPECT_VAR_ID, 0) = 0 
+            ) AS GPA ON GPA.GPA_PRODUCT_ID = OFFER_ROW.PRODUCT_ID AND GPA.GPA_UNIT = OFFER_ROW.UNIT_ID
 WHERE OFFER_ID = O.OFFER_ID AND ISNULL(OFFER_ROW.SELECT_INFO_EXTRA,0) =4
 FOR JSON PATH
 ) AS URUNLER
