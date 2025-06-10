@@ -1,3 +1,5 @@
+  data=mergeCompanies(data);
+    var ww_data=data;
 function mergeCompanies(data) {
     const result = [];
 
