@@ -274,8 +274,7 @@ FOR JSON PATH
   <script>
     var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
-  
-    const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
+    var MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 </script>
 
 <script>
