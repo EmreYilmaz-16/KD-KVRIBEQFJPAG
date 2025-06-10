@@ -39,7 +39,7 @@ SELECT OFFER_ROW.PRODUCT_NAME
 	, CAST(DISCOUNT_1 AS DECIMAL(18, 2)) AS DISCOUNT_1
 	, CAST(OFFER_ROW.TAX AS DECIMAL(18, 2)) AS TAX
 	, CAST(QUANTITY AS DECIMAL(18, 2)) AS QUANTITY
-	, CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18, 2)) AS NET_PRICE
+	, GPA_PRICE AS  NET_PRICE--CAST(PRICE - (PRICE * DISCOUNT_1 / 100) AS DECIMAL(18, 2)) AS NET_PRICE
   ,CASE WHEN (SELECT (SELECT COUNT(*) FROM w3Qa_1.ORDER_ROW WHERE WRK_ROW_RELATION_ID=OFR2.WRK_ROW_ID+'_XX') FROM w3Qa_1.OFFER_ROW OFR2 WHERE WRK_ROW_RELATION_ID=OFFER_ROW.WRK_ROW_ID) >0	THEN 1 ELSE 0 END AS SNT_S
 	, CASE 
 		WHEN (
@@ -90,6 +90,34 @@ SELECT OFFER_ROW.PRODUCT_NAME
              
 FROM w3Qa_1.OFFER_ROW
 LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=OFFER_ROW.STOCK_ID
+LEFT JOIN
+            (
+                SELECT
+                    P.UNIT									GPA_UNIT,
+                    CAST(P.PRICE AS DECIMAL(18,2))			GPA_PRICE,
+                    CAST(P.PRICE_KDV AS DECIMAL(18,2))		GPA_PRICE_KDV,
+                    P.PRODUCT_ID							GPA_PRODUCT_ID,
+                    P.MONEY									GPA_MONEY,
+                    P.PRICE_CATID							GPA_PRICE_CATID,
+                    P.CATALOG_ID							GPA_CATALOG_ID,
+                    CAST(P.PRICE_DISCOUNT AS DECIMAL(18,2))	GPA_DISCOUNT
+                FROM
+                    w3Qa_1.PRICE P,
+                    w3Qa_1.PRODUCT PR
+                WHERE
+                    P.PRODUCT_ID = PR.PRODUCT_ID
+                    AND P.PRICE_CATID = 1
+                    AND
+                    (
+                        P.STARTDATE <= convert(date,getdate())
+                        AND
+                        (
+                            P.FINISHDATE >= convert(date,getdate()) OR
+                            P.FINISHDATE IS NULL
+                        )
+                    )
+                    AND ISNULL(P.SPECT_VAR_ID, 0) = 0 
+            ) AS GPA ON GPA.GPA_PRODUCT_ID = OFFER_ROW.PRODUCT_ID AND GPA.GPA_UNIT = OFFER_ROW.UNIT_ID
 WHERE OFFER_ID = O.OFFER_ID AND ISNULL(OFFER_ROW.SELECT_INFO_EXTRA,0) =3
 FOR JSON PATH
 ) AS URUNLER
