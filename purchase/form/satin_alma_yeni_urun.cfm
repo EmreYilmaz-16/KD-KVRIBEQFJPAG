@@ -274,11 +274,10 @@ FOR JSON PATH
   <script>
     var session_variables=<cfoutput>#replace(serializeJSON(session),"//","")#</cfoutput>
     var data = <cfoutput>#getMainPurchaseOffer.QRESULT#</cfoutput>
-    data=mergeCompanies(data);
-    var ww_data=data;
+  
     const MONEYARRRR=<cfoutput>#replace(serializeJSON(MONEYARRRR),"//","")#</cfoutput>
 </script>
-hi
+
 <script>
   <cfinclude template="satin_alma_yeni_urun.js">
 </script>
