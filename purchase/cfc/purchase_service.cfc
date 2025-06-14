@@ -272,7 +272,7 @@
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
-
+ <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
