@@ -26,12 +26,12 @@ document.getElementById('send-btn').addEventListener('click', () => {
     console.log("Sunucuya gönderilecek veri:", payload);
     var offer_id = document.getElementById("offer_id").value;
 
-    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelector', { // Correct endpoint
+    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=saveSaleOfferFromSelectedRows', { // Correct endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({ payload, offer_id, session_variables }) // Include offer_id in the payload
+        body: JSON.stringify({  offer_id, session_variables }) // Include offer_id in the payload
     })
         .then(response => response.json())
         .then(data => {
