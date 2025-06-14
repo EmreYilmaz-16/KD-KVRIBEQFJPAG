@@ -98,6 +98,7 @@
             <cfset attributes["is_virtual#ix#"] = 0>
             <cfset attributes["SHELF_CODE#ix#"] = "">
             <cfset attributes["OFFER_ROW_CURRENCY#ix#"] = "">
+            <cfset attributes["detail_info_extra#ix#"] = getRows.DETAIL_INFO_EXTRA>
         </cfloop>
         
 
@@ -440,7 +441,8 @@ VALUES(
                             PRODUCT_MARJ,
                             SALE_PRICE,
                             IS_OS,
-                            BASKET_EXTRA_INFO
+                            BASKET_EXTRA_INFO,
+                            OEM_NO
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -449,7 +451,8 @@ VALUES(
                             #product.productMarj#,
                             #product.salePrice#,
                             1,
-                            #product.selectInfoExtra#
+                            #product.selectInfoExtra#,
+                            '#product.oemNo#'
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
