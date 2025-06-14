@@ -47,3 +47,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
             alert("Sunucuya bağlanırken bir hata oluştu!");
         });
 });
+
+function sifirKontrl() {
+    return true;
+}

@@ -515,27 +515,6 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 
 updateBestSupplier();
 
-function sifirKontrl() {
-    var mx = updateOutput()
-    var SFRFIYAT = 0;
-    var SFRMarj = 0;
-    for (let i = 0; i < mx.length; i++) {
-        var my = mx[i].products;
-        for (let j = 0; j < my.length; j++) {
-            var p = my[j].productMarj
-            if (p == 0) {
-                SFRFIYAT++
-            }
-        }
-    }
-
-    if (SFRFIYAT > 0) {
-        var fx = confirm("Marj Girilmemiş Ürünler Var; Lütfen Kontrol Edin!")
-        return fx;
-    } else {
-        return true;
-    }
-}
 function SatinalmaSiparis(params) {
     /* $.ajax({
        url: '/AddOns/Partner/purchase/cfc/purchase_Service.cfc?method=SAVEORDER_gpt&internal_id='+params,
