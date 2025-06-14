@@ -95,7 +95,8 @@
             <cfset attributes["unit#ix#"] = getRows.UNIT>
             <cfset attributes["unit_id#ix#"] = getRows.UNIT_ID>
             <cfset attributes["product_name#ix#"] = getRows.PRODUCT_NAME>
-            <cfset attributes["other_money_value_#ix#"] = (getRows.SALE_PRICE * getRows.AMOUNT) - ((getRows.SALE_PRICE * getRows.AMOUNT) * getRows.DISCOUNT1) / 100>
+            <cfset attributes["other_money_value_#ix#"] = (getRows.SALE_PRICE * getRows.QUANTITY) - ((getRows.SALE_PRICE * getRows.QUANTITY) * getRows.DSC1) / 100>
+            
             <cfset attributes["description#ix#"] = "">
             <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#">
             <cfset attributes["wrk_row_relation_id#ix#"] = getRows.WRK_ROW_RELATION_ID>
