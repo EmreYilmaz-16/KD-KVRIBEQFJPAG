@@ -87,7 +87,7 @@
             <cfset attributes["indirim1#ix#"] = getRows.DISCOUNT1>
             <cfset attributes["other_money_#ix#"] = getRows.OTHER_MONEY>
             <cfset attributes["product_id#ix#"] = getRows.PRODUCT_ID>
-            <cfset attributes["stock_id#ix#"] = getRows.STOCK_ID>
+            <cfset attributes["stock_id#ix#"] = getStockInfo.STOCK_ID>
             <cfset attributes["unit#ix#"] = getRows.UNIT>
             <cfset attributes["unit_id#ix#"] = getRows.UNIT_ID>
             <cfset attributes["product_name#ix#"] = getRows.PRODUCT_NAME>
