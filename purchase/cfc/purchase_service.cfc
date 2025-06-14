@@ -144,7 +144,8 @@
         </cfscript>
         <cfset ibnm=ibnm+1>
     </cfloop>
-    <cfset attributes.KUR_SAY=ibnm>
+    <cfset kur_sayisi=ibnm-1>
+    <cfset attributes.KUR_SAY=kur_sayisi>
 
 <cfset attributes.offer_date=now()>
 <cfset attributes.deliverdate=now()>
@@ -272,7 +273,7 @@
 <cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
- <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
+ <cfset attributes.KUR_SAY=kur_sayisi>
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
