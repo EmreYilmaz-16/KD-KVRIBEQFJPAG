@@ -274,7 +274,7 @@
 <cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
 <cfset attributes.PRICE=BASKET_NET_TOTAL_>
  <cfset attributes.KUR_SAY=kur_sayisi>
-<cfset attributes.kur_say=paper_fulbs>
+<cfset attributes.kur_say=kur_sayisi>
 <cfdump var="#attributes#" abort="true">
 <cfinclude template="../query/add_offer.cfm">
 
