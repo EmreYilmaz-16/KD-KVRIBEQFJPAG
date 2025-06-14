@@ -8,6 +8,7 @@
 
 <div id="ShownArea"></div>
 </cf_box>
+<script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
 function GetPage(pageid) {
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
