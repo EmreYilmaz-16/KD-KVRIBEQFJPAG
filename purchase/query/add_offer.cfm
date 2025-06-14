@@ -514,6 +514,7 @@
 				ACTION_ID=#arguments.action_id#
 		</cfquery>
 	</cfif>
+	<cfdump var="#attributes#" abort="true">
 	<cfloop from="1" to="#attributes.kur_say#" index="fnc_i">
 		<cfquery name="add_money_obj_bskt" datasource="#arguments.transaction_dsn#">
 			INSERT INTO #arguments.action_table_dsn_alias##fnc_table_name# 
