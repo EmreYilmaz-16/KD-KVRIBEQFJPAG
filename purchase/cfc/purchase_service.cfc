@@ -144,7 +144,7 @@
         </cfscript>
         <cfset ibnm=ibnm+1>
     </cfloop>
-    <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
+    <cfset attributes.KUR_SAY=ibnm>
 
 <cfset attributes.offer_date=now()>
 <cfset attributes.deliverdate=now()>
