@@ -464,7 +464,7 @@
 	<cfargument name="transaction_dsn">
 	<cfargument name="kursayisi">
 	<cfset attributes.kur_say = arguments.kursayisi>
-	<cfset attributes.basket_money_db = arguments.basket_money_db>
+	
 	<cfset attributes.action_id = arguments.action_id>
 	<cfset attributes.table_type_id = arguments.table_type_id>
 	<cfset attributes.process_type = arguments.process_type>
