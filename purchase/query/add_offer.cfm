@@ -20,10 +20,12 @@
 <cfelse>
 	<cfset offer_due_date = "">
 </cfif> 
+
 <cfif len(attributes.deliverdate)><cf_date tarih="attributes.deliverdate"></cfif>
 <cfif len(attributes.ship_date)><cf_date tarih="attributes.ship_date"></cfif>
 <cfif len(attributes.finishdate)><cf_date tarih="attributes.finishdate"></cfif>
 <cf_papers paper_type="offer" paper_type2="1">
+	<cfdump var="#attributes#" abort="true">
 <cfquery name="get_country" datasource="#dsn#">
     <cfif isdefined("attributes.company_id") and len(attributes.company_id)>
         SELECT 

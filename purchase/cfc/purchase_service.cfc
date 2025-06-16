@@ -197,6 +197,7 @@
 <cfset attributes.ref_member_type ="">
 <cfset attributes.consumer_id="">
 <cfset attributes.reserved=1>
+<cfset attributes.offer_status=1>
 
 
 <cfscript>
