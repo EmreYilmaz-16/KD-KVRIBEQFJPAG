@@ -472,7 +472,7 @@
 	<cfset attributes.action_id = arguments.action_id>
 	<cfset attributes.table_type_id = arguments.table_type_id>
 	<cfset attributes.process_type = arguments.process_type>
-	<cfdump var="#caller#">
+	
 	<!---
 		by : Arzu BT 20031211
 		notes : Basket_money tablosuna islemlere gore kur bilgilerini kaydeder.
