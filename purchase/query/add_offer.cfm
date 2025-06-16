@@ -25,7 +25,7 @@
 <cfif len(attributes.ship_date)><cf_date tarih="attributes.ship_date"></cfif>
 <cfif len(attributes.finishdate)><cf_date tarih="attributes.finishdate"></cfif>
 <cf_papers paper_type="offer" paper_type2="1">
-	<cfdump var="#attributes#" abort="true">
+	
 <cfquery name="get_country" datasource="#dsn#">
     <cfif isdefined("attributes.company_id") and len(attributes.company_id)>
         SELECT 
@@ -195,7 +195,7 @@
 		</cfquery>
 		<cfset GET_MAX_OFFER.max_id = GET_MAX_OFFER.IDENTITYCOL>
         <cfset dsn_type=dsn3>
-
+<cfdump var="#attributes#" abort="true">
 		<cfloop from="1" to="#attributes.rows_#" index="I">
 			<cf_date tarih="attributes.deliver_date#i#">
 			<cfif session.ep.our_company_info.spect_type and isdefined('attributes.is_production#i#') and evaluate('attributes.is_production#i#') eq 1 and (not isdefined('attributes.spect_id#i#') or not len(evaluate('attributes.spect_id#i#')))>
