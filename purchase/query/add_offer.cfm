@@ -450,7 +450,7 @@
 		</cfloop>
 
 		<cfscript>
-			basket_kur_ekle_pbs(action_id:get_max_offer.max_id,table_type_id:4,process_type:0,kursayisi:attributes.kur_say,transaction_dsn:dsn3);
+			basket_kur_ekle_pbs(action_id:get_max_offer.max_id,table_type_id:4,process_type:0,kursayisi:attributes.kur_say,transaction_dsn:dsn3,attributes:attributes);
 		</cfscript>
         
 	
@@ -463,7 +463,11 @@
 	<cfargument name="basket_money_db" type="string" default="">
 	<cfargument name="transaction_dsn">
 	<cfargument name="kursayisi">
+	<cfargument name="attributes">
+	<cfset attributes = structNew()>
+	<cfset attributes=arguments.attributes>
 	<cfset attributes.kur_say = arguments.kursayisi>
+	
 	
 	<cfset attributes.action_id = arguments.action_id>
 	<cfset attributes.table_type_id = arguments.table_type_id>
