@@ -448,9 +448,9 @@
 			
 			
 		</cfloop>
-<cfdump var="#attributes#" abort="true">
+
 		<cfscript>
-			basket_kur_ekle_pbs(action_id:get_max_offer.max_id,table_type_id:4,process_type:0);
+			basket_kur_ekle_pbs(action_id:get_max_offer.max_id,table_type_id:4,process_type:0,kursayisi:attributes.kur_say,basket_money_db:attributes.basket_money_db,transaction_dsn:dsn3);
 		</cfscript>
         
 	
@@ -462,6 +462,8 @@
 	<cfargument name="process_type" required="true">
 	<cfargument name="basket_money_db" type="string" default="">
 	<cfargument name="transaction_dsn">
+	<cfargument name="kursayisi">
+	<cfset attributes.kur_say = arguments.kursayisi>
 	<!---
 		by : Arzu BT 20031211
 		notes : Basket_money tablosuna islemlere gore kur bilgilerini kaydeder.
