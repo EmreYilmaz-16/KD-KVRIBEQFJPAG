@@ -187,7 +187,7 @@ FOR JSON PATH
       font-weight: bold;
     }
     .net-price .invalid {
-      color: red;
+      color: red !important;
       font-weight: bold;
     }
     .check-icon {
