@@ -18,6 +18,14 @@ WHERE INVOICE.PURCHASE_SALES=1 --AND STOCK_ID=75 AND COMPANY_ID=9
 <cfquery name="GETDEMAND_MONEY" datasource="#dsn3#">
   SELECT OTHER_MONEY,FROM_COMPANY_ID FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.internal_id#
 </cfquery>
+<cfquery name="getComppanyPriceCat" datasource="#DSN3#">
+SELECT PRICE_CAT FROM w3Qa.COMPANY_CREDIT WHERE COMPANY_ID=#GETDEMAND_MONEY.FROM_COMPANY_ID#
+
+</cfquery>
+<CFSET CMPRICE_ID=1>
+<cfif getComppanyPriceCat.recordCount>
+<cfset CMPRICE_ID=getComppanyPriceCat.PRICE_CAT>
+</cfif>
 
 <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
@@ -107,7 +115,7 @@ LEFT JOIN
                     w3Qa_1.PRODUCT PR
                 WHERE
                     P.PRODUCT_ID = PR.PRODUCT_ID
-                    AND P.PRICE_CATID = 1
+                    AND P.PRICE_CATID = #CMPRICE_ID#
                     AND
                     (
                         P.STARTDATE <= convert(date,getdate())
