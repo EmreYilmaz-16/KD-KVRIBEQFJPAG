@@ -17,11 +17,7 @@ function GetPage(pageid) {
 
 
 $(document).ready(function() {
-  GetPage(1);
-  $("#send-btn").click(function() {
-    var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
-    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_1&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")
-  });
+  GetPage(1); 
 });
   
 </script>
