@@ -11,6 +11,10 @@
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
 function GetPage(pageid,x=true) {
+  
+  console.log("GetPage called with pageid: " + pageid + " and x: " + x);
+debugger.log("GetPage called with pageid: " + pageid + " and x: " + x);
+  
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
   if(x){
     if( SecimKontrol()){
