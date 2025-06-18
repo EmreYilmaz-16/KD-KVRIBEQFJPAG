@@ -39,7 +39,15 @@ function calculateFinalSalePrice(productId) {
     if (!selectedKey) return;
 
     const net = parseFloat(selectedKey?.split('|')[6]);
+    const gpaPrice = parseFloat(selectedKey?.split('|')[16]);
+    const gpaPrice1 = parseFloat(selectedKey?.split('|')[17]);
+    const gpaMoney = selectedKey?.split('|')[18];
     console.log("Selected Key:", selectedKey);
+    console.log("Net Price:", net);
+    console.log("GPA Price:", gpaPrice);
+    console.log("GPA Price 1:", gpaPrice1);
+    console.log("GPA Money:", gpaMoney);
+
     if (isNaN(net) || net === 0) return;
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
