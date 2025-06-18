@@ -13,7 +13,7 @@
 function GetPage(pageid,x=true) {
   
   console.log("GetPage called with pageid: " + pageid + " and x: " + x);
-debugger.log("GetPage called with pageid: " + pageid + " and x: " + x);
+
   
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
   if(x){
