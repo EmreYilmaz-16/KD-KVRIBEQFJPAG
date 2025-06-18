@@ -74,6 +74,10 @@ function SecimKontrol() {
     for (var u of ux) {
         PL += u.products.length
     }
+    console.log("PL", PL);
+    console.log("data", data);
+    console.log("UniqueProduct.length", UniqueProduct.length);
+    
     console.log("UniqueProduct", UniqueProduct);
     console.log("ux", ux);
 
