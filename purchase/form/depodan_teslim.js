@@ -4,7 +4,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
         if (product && product.NET_PRICE) {
-            net = product.NET_PRICE;
+            net = product.GPA_PRICE;
             break;
         }
     }
