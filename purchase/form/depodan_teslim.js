@@ -262,7 +262,10 @@ uniqueProducts.forEach(productId => {
             const rate2 = parseFloat(currency?.RATE2 || 1); 
             convertedListPrice = (listPrice * rate1) / rate2;
             listMoney = product.GPA_MONEY;
-            listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
+            //listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
+            listPriceCell.innerHTML = `<div><span class="list-price-value">${listPrice.toFixed(2)}</span> <span class="list-price-money">${listMoney}</span></div>
+            <div><span class="list-price-value">${convertedListPrice.toFixed(2)}</span> <span class="list-price-money">${DEMAND_MONEY}</span></div>`;
+
             break; // İlk bulduğunda döngüyü kır
         }
     }       
