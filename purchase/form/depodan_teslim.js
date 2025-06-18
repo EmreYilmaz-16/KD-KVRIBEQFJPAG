@@ -163,6 +163,7 @@ headerRow.innerHTML += `
 `;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Son Satış Fiyatı (${DEMAND_MONEY})</th>`;
 headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Satış Fiyatı (${DEMAND_MONEY})</th>`;
+headerRow.innerHTML += `<th class="sticky-header bg-info text-white">Liste Fiyatı (${DEMAND_MONEY})</th>`;
 
 data.forEach(supplier => {
     const th = document.createElement('th');
@@ -245,6 +246,28 @@ uniqueProducts.forEach(productId => {
         }
     }
 
+    let listPrice=0;
+    let convertedListPrice=0;
+    let listMoney="";
+    let listPriceCell = document.createElement('td');
+    listPriceCell.className = 'product-list-price';
+    listPriceCell.dataset.productid = productId;
+    listPriceCell.textContent = "-"; // Varsayılan olarak boş göster
+    for (const supplier of data) {
+        const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+        if (product && product.GPA_PRICE) {
+            listPrice = product.GPA_PRICE;
+            const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+            const rate1 = parseFloat(currency?.RATE1 || 1);
+            const rate2 = parseFloat(currency?.RATE2 || 1); 
+            convertedListPrice = (listPrice * rate1) / rate2;
+            listMoney = product.GPA_MONEY;
+            listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
+            break; // İlk bulduğunda döngüyü kır
+        }
+    }       
+
+
     const oemCell = document.createElement('td');
     // OEM No
     let oemNo = "";
@@ -322,9 +345,12 @@ uniqueProducts.forEach(productId => {
     salePriceInput.type = 'text';
 
     if (data.length === 1) {
+        // Tek tedarikçi varsa, marj ve kur dönüşümü ile hesapla
         const marj = parseFloat(slpInfo.PRODUCT_MARJ || 0);
         salePriceInput.value = getConvertedNetPriceWithMarj(productId, marj);
+
     } else {
+        // Çoklu tedarikçi varsa, son satış fiyatını kullan
         salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2) : "";
     }
 
@@ -374,6 +400,7 @@ uniqueProducts.forEach(productId => {
     row.appendChild(dsc3Cell);
     row.appendChild(lastPriceCell);
     row.appendChild(salePriceCell);
+    row.appendChild(listPriceCell);
 
 
     cellElements[productId] = [];
