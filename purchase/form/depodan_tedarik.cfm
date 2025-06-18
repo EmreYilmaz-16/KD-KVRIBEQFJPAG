@@ -26,6 +26,7 @@ SELECT PRICE_CAT FROM w3Qa.COMPANY_CREDIT WHERE COMPANY_ID=#GETDEMAND_MONEY.FROM
 <cfif getComppanyPriceCat.recordCount>
 <cfset CMPRICE_ID=getComppanyPriceCat.PRICE_CAT>
 </cfif>
+<cfdump var="#CMPRICE_ID#">
 
 <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
