@@ -39,6 +39,7 @@ function calculateFinalSalePrice(productId) {
     if (!selectedKey) return;
 
     const net = parseFloat(selectedKey?.split('|')[6]);
+    console.log("Selected Key:", selectedKey);
     if (isNaN(net) || net === 0) return;
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
@@ -442,7 +443,7 @@ uniqueProducts.forEach(productId => {
             const cmqrate2 = parseFloat(cmqurrency?.RATE2 || 1);
             const cmqconvertedPrice = (parseFloat(product.NET_PRICE) / cmqrate2) * cmqrate1;
             // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
-            const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${DEMAND_MONEY}|${product.STOCK_ID}|${product.PRODUCT_ID}|${product.IS_SELECTED || 0}|${product.IS_SATINALMA || 0}|${product.OEM_NO || ""}|${product.SELECT_INFO_EXTRA || 0}`;
+            const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${DEMAND_MONEY}|${product.STOCK_ID}|${product.PRODUCT_ID}|${product.IS_SELECTED || 0}|${product.IS_SATINALMA || 0}|${product.OEM_NO || ""}|${product.SELECT_INFO_EXTRA || 0}|${product.GPA_PRICE || 0}|${product.GPA_MONEY || ""}`;
 
             const priceDisplay = product.DISCOUNT_1 > 0
                 ? `<div class="tooltip"><span class="price-original">${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
@@ -579,7 +580,7 @@ uniqueProducts.forEach(productId => {
 function updateOutput() {
     const grouped = {};
     selectedCells.forEach((key, productId) => {
-        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra] = key.split('|');
+        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra,gpaPrice,gpaMoney] = key.split('|');
         if (!grouped[companyId]) {
             grouped[companyId] = {
                 companyId: parseInt(companyId),
@@ -646,6 +647,8 @@ function updateOutput() {
             discount1: parseFloat(dsc1Input?.value) || 0,
             discount3: parseFloat(dsc3Input?.value) || 0,
             discount2: parseFloat(dsc2Input?.value) || 0,
+            gpaPrice: parseFloat(gpaPrice) || 0,
+            gpaMoney: gpaMoney || ""
         });
     });
     const groupedArray = Object.values(grouped);
