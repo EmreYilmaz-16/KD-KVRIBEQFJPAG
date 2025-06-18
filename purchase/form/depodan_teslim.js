@@ -356,7 +356,7 @@ uniqueProducts.forEach(productId => {
     const salePriceInput = document.createElement('input');
     salePriceInput.type = 'text';
 
-    if (data.length === 1) {
+    if (1 === 1) {
         // Tek tedarikçi varsa, marj ve kur dönüşümü ile hesapla
         const marj = parseFloat(slpInfo.PRODUCT_MARJ || 0);
         salePriceInput.value = getConvertedNetPriceWithMarj(productId, marj);
