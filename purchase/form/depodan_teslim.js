@@ -1,7 +1,7 @@
 ﻿
 function getConvertedNetPriceWithMarj(productId, marj = 0) {
     let net = 0;
-    let gpa_money="";
+    let gpa_money = "";
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
         if (product && product.GPA_PRICE) {
@@ -15,11 +15,11 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
     let rate1 = 1;
-    let rate2 = 1;  
-    if(DEMAND_MONEY !=  gpa_money){
-        
-     rate1 = parseFloat(currency?.RATE1 || 1);
-     rate2 = parseFloat(currency?.RATE2 || 1);
+    let rate2 = 1;
+    if (DEMAND_MONEY != gpa_money) {
+
+        rate1 = parseFloat(currency?.RATE1 || 1);
+        rate2 = parseFloat(currency?.RATE2 || 1);
     }
     const converted = (netWithMarj * rate1) / rate2;
 
@@ -49,11 +49,17 @@ function calculateFinalSalePrice(productId) {
     console.log("GPA Money:", gpaMoney);
 
     if (isNaN(net) || net === 0) return;
+    if (isNaN(gpaPrice1) || gpaPrice1 === 0) return;
+
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-    const rate1 = parseFloat(currency?.RATE1 || 1);
-    const rate2 = parseFloat(currency?.RATE2 || 1);
+    let rate1 = 1;
+    let rate2 = 1;
 
+    if (DEMAND_MONEY != gpaMoney) {
+        const rate1 = parseFloat(currency?.RATE1 || 1);
+        const rate2 = parseFloat(currency?.RATE2 || 1);
+    }
     // İlgili inputları bul
     const row = [...document.querySelectorAll('td.product-name')].find(td => td.dataset.productid == productId)?.parentElement;
     if (!row) return;
@@ -70,7 +76,7 @@ function calculateFinalSalePrice(productId) {
     const d3 = parseFloat(dsc3Input?.value) || 0;
 
     // Marj + kur dönüşümü
-    const base = net + (net * marj / 100);
+    const base = gpaPrice1 + (gpaPrice1 * marj / 100);
     const converted = (base * rate1) / rate2;
 
     // İskontolar
@@ -588,7 +594,7 @@ uniqueProducts.forEach(productId => {
 function updateOutput() {
     const grouped = {};
     selectedCells.forEach((key, productId) => {
-        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra,gpaPrice,gpaMoney] = key.split('|');
+        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra, gpaPrice, gpaMoney] = key.split('|');
         if (!grouped[companyId]) {
             grouped[companyId] = {
                 companyId: parseInt(companyId),
