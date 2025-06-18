@@ -1,10 +1,12 @@
 ﻿
 function getConvertedNetPriceWithMarj(productId, marj = 0) {
     let net = 0;
+    let gpa_money="";
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
-        if (product && product.NET_PRICE) {
+        if (product && product.GPA_PRICE) {
             net = product.GPA_PRICE;
+            gpa_money = product.GPA_MONEY;
             break;
         }
     }
@@ -12,8 +14,13 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     const netWithMarj = net + (net * marj / 100);
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-    const rate1 = parseFloat(currency?.RATE1 || 1);
-    const rate2 = parseFloat(currency?.RATE2 || 1);
+    let rate1 = 1;
+    let rate2 = 1;  
+    if(DEMAND_MONEY !=  gpa_money){
+        
+     rate1 = parseFloat(currency?.RATE1 || 1);
+     rate2 = parseFloat(currency?.RATE2 || 1);
+    }
     const converted = (netWithMarj * rate1) / rate2;
 
     return converted.toFixed(2);
