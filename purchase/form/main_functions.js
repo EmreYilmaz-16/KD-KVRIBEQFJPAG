@@ -69,6 +69,8 @@ function SecimKontrol() {
     }
 
     var ux = updateOutput()
+    console.log("UniqueProduct", UniqueProduct);
+    console.log("ux", ux);
 
     if (!(UniqueProduct.length == ux.length)) {
         var T = confirm("Seçilmemiş Ürünler Var", "Yinede Devam Et");
