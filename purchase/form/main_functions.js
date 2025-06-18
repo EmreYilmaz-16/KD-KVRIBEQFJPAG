@@ -68,11 +68,16 @@ function SecimKontrol() {
         }
     }
 
+
     var ux = updateOutput()
+    var PL = 0;
+    for (var u of ux) {
+        PL += u.products.length
+    }
     console.log("UniqueProduct", UniqueProduct);
     console.log("ux", ux);
 
-    if (!(UniqueProduct.length == ux.length)) {
+    if (!(UniqueProduct.length == PL)) {
         var T = confirm("Seçilmemiş Ürünler Var", "Yinede Devam Et");
         return T
     }
