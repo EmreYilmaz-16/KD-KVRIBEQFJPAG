@@ -246,9 +246,9 @@ uniqueProducts.forEach(productId => {
         }
     }
 
-    let listPrice=0;
-    let convertedListPrice=0;
-    let listMoney="";
+    let listPrice = 0;
+    let convertedListPrice = 0;
+    let listMoney = "";
     let listPriceCell = document.createElement('td');
     listPriceCell.className = 'product-list-price';
     listPriceCell.dataset.productid = productId;
@@ -258,8 +258,17 @@ uniqueProducts.forEach(productId => {
         if (product && product.GPA_PRICE) {
             listPrice = product.GPA_PRICE;
             const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-            const rate1 = parseFloat(currency?.RATE1 || 1);
-            const rate2 = parseFloat(currency?.RATE2 || 1); 
+            let rate1 = 1;
+            let rate2 = 1;
+            if (GPA_MONEY != DEMAND_MONEY) {
+                rate1 = parseFloat(currency?.RATE1 || 1);
+                rate2 = parseFloat(currency?.RATE2 || 1);
+            } else {
+                rate1 = 1;
+                rate2 = 1;
+            }
+
+
             convertedListPrice = (listPrice * rate1) / rate2;
             listMoney = product.GPA_MONEY;
             //listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
@@ -268,7 +277,7 @@ uniqueProducts.forEach(productId => {
 
             break; // İlk bulduğunda döngüyü kır
         }
-    }       
+    }
 
 
     const oemCell = document.createElement('td');
@@ -431,16 +440,16 @@ uniqueProducts.forEach(productId => {
             const priceDisplay = product.DISCOUNT_1 > 0
                 ? `<div class="tooltip"><span class="price-original">${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
                 : `<div><strong>${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</strong></div>`;
-            var netPriceHtml="";
-            if(product.NET_PRICE > 0) {
-             netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
-            if (product.NET_PRICE === lowestNetPrice) {
-                netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
-                cell.title = 'En iyi teklif' + product.WRK_ROW_ID;
+            var netPriceHtml = "";
+            if (product.NET_PRICE > 0) {
+                netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                if (product.NET_PRICE === lowestNetPrice) {
+                    netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                    cell.title = 'En iyi teklif' + product.WRK_ROW_ID;
+                }
+            } else {
+                netPriceHtml = `<div class=\"net-price invalid\">Net: - TL <div><strong>-</strong> Fiyat Listesinde Bulunamadı</div></div>`;
             }
-        }else{
-             netPriceHtml = `<div class=\"net-price invalid\">Net: - TL <div><strong>-</strong> Fiyat Listesinde Bulunamadı</div></div>`;
-        }
 
             cell.innerHTML = `
   ${priceDisplay}
@@ -627,7 +636,7 @@ function updateOutput() {
             xxx: xxx,
             yyy: yyy,
             selectInfoExtra: selectInfoExtra,
-            discount1:parseFloat(dsc1Input?.value) || 0,
+            discount1: parseFloat(dsc1Input?.value) || 0,
             discount3: parseFloat(dsc3Input?.value) || 0,
             discount2: parseFloat(dsc2Input?.value) || 0,
         });
@@ -700,7 +709,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
     const payload = updateOutput(); // Ensure payload is generated correctly
     console.log("Sunucuya gönderilecek veri:", payload);
     var offer_id = document.getElementById("offer_id").value;
-    
+
     //return false; // Prevent default action for this button
     fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelectorOnly', { // Correct endpoint
         method: 'POST',
