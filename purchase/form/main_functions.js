@@ -77,7 +77,7 @@ function SecimKontrol() {
     console.log("PL", PL);
     console.log("data", data);
     console.log("UniqueProduct.length", UniqueProduct.length);
-    
+
     console.log("UniqueProduct", UniqueProduct);
     console.log("ux", ux);
 
@@ -85,4 +85,5 @@ function SecimKontrol() {
         var T = confirm("Seçilmemiş Ürünler Var", "Yinede Devam Et");
         return T
     }
+    return true;
 }
