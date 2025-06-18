@@ -10,17 +10,23 @@
 </cf_box>
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
-function GetPage(pageid) {
+function GetPage(pageid,x=true) {
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
-  if( SecimKontrol()){
-  AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_"+pageid+"&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")  
+  if(x){
+    if( SecimKontrol()){
+      AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_"+pageid+"&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")  
+    }
+  }else{
+    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_"+pageid+"&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")
   }
+  
+  
   
 }
 
 
 $(document).ready(function() {
-  GetPage(1); 
+  GetPage(1,false); 
 });
   
 </script>
