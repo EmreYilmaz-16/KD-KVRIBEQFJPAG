@@ -260,7 +260,7 @@ uniqueProducts.forEach(productId => {
             const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
             let rate1 = 1;
             let rate2 = 1;
-            if (GPA_MONEY != DEMAND_MONEY) {
+            if (product.GPA_MONEY != DEMAND_MONEY) {
                 rate1 = parseFloat(currency?.RATE1 || 1);
                 rate2 = parseFloat(currency?.RATE2 || 1);
             } else {
