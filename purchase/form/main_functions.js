@@ -31,7 +31,7 @@ document.getElementById('send-btn').addEventListener('click', () => {
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({  offer_id, session_variables }) // Include offer_id in the payload
+        body: JSON.stringify({ offer_id, session_variables }) // Include offer_id in the payload
     })
         .then(response => response.json())
         .then(data => {
@@ -50,4 +50,28 @@ document.getElementById('send-btn').addEventListener('click', () => {
 
 function sifirKontrl() {
     return true;
+}
+
+
+function SecimKontrol() {
+    var UniqueProduct = [];
+    var tx = 0;
+    for (const supplier of data) {
+        //    console.log(supplier)
+        var urunler = supplier.URUNLER;
+        for (const urun of urunler) {
+            //  console.log(urun)
+            if (UniqueProduct.findIndex(p => p.PRODUCT_ID == urun.PRODUCT_ID) == -1) {
+                console.log(urun)
+                UniqueProduct.push(urun)
+            }
+        }
+    }
+
+    var ux = updateOutput()
+
+    if (!(UniqueProduct.length == ux.length)) {
+        var T = confirm("Seçilmemiş Ürünler Var", "Yinede Devam Et");
+        return T
+    }
 }
