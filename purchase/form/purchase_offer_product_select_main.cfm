@@ -13,6 +13,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 <cfoutput query="#getSatis#">
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href=index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
   Teklife Gİt #OFFER_NUMBER#</button>
+  </cfoutput>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div style="clear:both;"></div>
 
