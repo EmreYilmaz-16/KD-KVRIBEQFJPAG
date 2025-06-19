@@ -1,6 +1,6 @@
 <style>
   .ui-wrk-btn.active {
-    background-color: #007bff; /* Mavi arka plan */
+    background-color: red !important; /* Mavi arka plan */
     color: white;
     font-weight: bold;
   }
