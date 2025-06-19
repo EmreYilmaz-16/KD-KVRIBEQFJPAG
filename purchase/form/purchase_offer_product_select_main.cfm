@@ -1,7 +1,16 @@
+<style>
+  .ui-wrk-btn.active {
+    background-color: #007bff; /* Mavi arka plan */
+    color: white;
+    font-weight: bold;
+  }
+</style>
+
 <cf_box title="Teklif Oluşturma">
-<button class=" ui-wrk-btn ui-wrk-btn-extra"  onclick="GetPage(1)">Yeni Ürün</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" onclick="GetPage(2)">Depodan Teslim</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" onclick="GetPage(3)">Depoya Tedarik</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1)">Yeni Ürün</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2)">Depodan Teslim</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3)">Depoya Tedarik</button>
+
 <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
 <cfquery NAME="getSatis" datasource="#dsn3#">
   select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
@@ -21,23 +30,28 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 </cf_box>
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
-function GetPage(pageid,x=true) {
-  
+function GetPage(pageid, x = true) {
   console.log("GetPage called with pageid: " + pageid + " and x: " + x);
 
-  
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
-  if(x){
-    if( SecimKontrol()){
-      AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_"+pageid+"&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")  
+
+  // Butonların aktif durumunu güncelle
+  document.querySelectorAll(".ui-wrk-btn[data-pageid]").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+  var activeBtn = document.querySelector(".ui-wrk-btn[data-pageid='" + pageid + "']");
+  if (activeBtn) activeBtn.classList.add("active");
+
+  // Sayfa içeriğini yükle
+  if (x) {
+    if (SecimKontrol()) {
+      AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
     }
-  }else{
-    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_"+pageid+"&INTERNAL_ID="+INTERNAL_ID , "ShownArea", 1, "Yükleniyor")
+  } else {
+    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
   }
-  
-  
-  
 }
+
 
 
 $(document).ready(function() {
