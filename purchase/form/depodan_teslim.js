@@ -48,6 +48,8 @@ function calculateFinalSalePrice(productId) {
     console.log("GPA Price:", gpaPrice);
     console.log("GPA Price 1:", gpaPrice1);
     console.log("GPA Money:", gpaMoney);
+    console.log("Demand Money:", DEMAND_MONEY);
+    
 
     if (isNaN(net) || net === 0) return;
     if (isNaN(gpaPrice1) || gpaPrice1 === 0) return;
