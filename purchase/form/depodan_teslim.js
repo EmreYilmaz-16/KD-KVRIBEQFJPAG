@@ -731,9 +731,7 @@ function getRandomColor() {
     return color;
 }
 
-document.getElementById('teklife_git_buton').addEventListener('click', () => {
 
-});
 document.getElementById('send-btn3').addEventListener('click', () => {
     updateOutput();
     const payload = updateOutput(); // Ensure payload is generated correctly
