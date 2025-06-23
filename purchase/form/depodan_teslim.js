@@ -49,7 +49,7 @@ function calculateFinalSalePrice(productId) {
     console.log("GPA Price 1:", gpaPrice1);
     console.log("GPA Money:", gpaMoney);
     console.log("Demand Money:", DEMAND_MONEY);
-    
+
 
     if (isNaN(net) || net === 0) return;
     if (isNaN(gpaPrice1) || gpaPrice1 === 0) return;
@@ -60,8 +60,8 @@ function calculateFinalSalePrice(productId) {
     let rate2 = 1;
 
     if (DEMAND_MONEY != gpaMoney) {
-        const rate1 = parseFloat(currency?.RATE1 || 1);
-        const rate2 = parseFloat(currency?.RATE2 || 1);
+         rate1 = parseFloat(currency?.RATE1 || 1);
+         rate2 = parseFloat(currency?.RATE2 || 1);
     }
     // İlgili inputları bul
     const row = [...document.querySelectorAll('td.product-name')].find(td => td.dataset.productid == productId)?.parentElement;
