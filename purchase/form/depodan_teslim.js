@@ -35,6 +35,7 @@ function applyDiscounts(basePrice, d1 = 0, d2 = 0, d3 = 0) {
 }
 
 function calculateFinalSalePrice(productId) {
+    console.log("Calculating final sale price for product ID:", productId);
     const selectedKey = selectedCells.get(productId);
     if (!selectedKey) return;
 
@@ -728,6 +729,9 @@ function getRandomColor() {
     return color;
 }
 
+document.getElementById('teklife_git_buton').addEventListener('click', () => {
+
+});
 document.getElementById('send-btn3').addEventListener('click', () => {
     updateOutput();
     const payload = updateOutput(); // Ensure payload is generated correctly
