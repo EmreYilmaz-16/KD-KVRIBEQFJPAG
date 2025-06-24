@@ -750,7 +750,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
         .then(data => {
             if (data.RES === "success") {
                 alert("İşlem başarılı!");
-                AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_1&INTERNAL_ID=" + offer_id, "ShownArea", 1, "Yükleniyor")
+                //AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_1&INTERNAL_ID=" + offer_id, "ShownArea", 1, "Yükleniyor")
             } else if (data.RES === "error") {
                 alert("Bir hata oluştu!");
             }
