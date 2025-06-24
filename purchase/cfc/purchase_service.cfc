@@ -632,7 +632,8 @@ VALUES(
                             SALE_PRICE,
                             IS_OS,
                             BASKET_EXTRA_INFO,
-                            OEM_NO
+                            OEM_NO,
+                            OTHER_MONEY
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -642,7 +643,8 @@ VALUES(
                             #product.salePrice#,
                             1,
                             #product.selectInfoExtra#,
-                            '#product.oemNo#'
+                            '#product.oemNo#',
+                            '#product.demandMoney#'
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
