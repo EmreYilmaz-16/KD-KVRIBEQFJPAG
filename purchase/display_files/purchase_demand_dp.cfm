@@ -3,7 +3,7 @@
 $(document).ready(function () {
     var btn=document.createElement("button")
 btn.setAttribute("type","button")
-btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector&internal_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
+btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector_main&internal_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
 btn.innerText="Fiyat Karşılaştırma"
 btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
 document.getElementById("workcube_button").appendChild(btn)
