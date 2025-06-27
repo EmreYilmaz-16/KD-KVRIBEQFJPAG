@@ -75,6 +75,7 @@ SanallariIsaretle();
         url.searchParams.set("wrkRowId", data.wrkRowId);
         url.searchParams.set("index", index);
         url.searchParams.set("offer_id", offer_id);
+        url.searchParams.set("oem_no", data.detail_info_extra);
     
         // Yeni pencereyi aç
         windowopen(url.toString(), "adminTv");
