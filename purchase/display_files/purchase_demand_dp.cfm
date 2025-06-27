@@ -18,13 +18,15 @@ SanallariIsaretle();
         const productName = $row.find("[name='product_name']").val();
         const productNameOther = $row.find("[name='product_name_other']").val();
         const wrkRowId = $row.find("[name='wrk_row_id']").val();
+        const detail_info_extra = $row.find("[name='detail_info_extra']").val();
     
         const productData = {
             productId,
             productName,
             productNameOther,
             wrkRowId,
-            index
+            index,
+            detail_info_extra
         };
     
         console.log(productData);

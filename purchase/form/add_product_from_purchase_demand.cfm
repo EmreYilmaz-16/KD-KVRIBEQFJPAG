@@ -241,7 +241,14 @@
 
 
 <script>
-    function OemSatirEkle() {
+    $document.ready(function() {
+        // Initialize the OEM rows if any exist
+        <cfif isDefined("attributes.oem_no") and arrayLen(attributes.oem_no)>
+            
+        <cfoutput>OemSatirEkle("#attributes.oem_no#");</cfoutput>
+        </cfif>
+    });
+    function OemSatirEkle(oem_numarasi="") {
         const oemCounter = document.getElementsByName("oem_satir")[0];
         let ix = parseInt(oemCounter.value) + 1;
         oemCounter.value = ix;
@@ -257,6 +264,7 @@
         input.className = "form-control";
         input.id = `oem_${ix}`;
         input.name = `oem_${ix}`;
+        input.value = oem_numarasi;
         input.placeholder = `OEM No ${ix}`;
 
         const inputGroupAddon = document.createElement("div");
