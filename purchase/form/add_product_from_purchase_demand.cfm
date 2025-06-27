@@ -242,7 +242,7 @@
 
 
 <script>
-    $document.ready(function() {
+    $(document).ready(function() {
         // Initialize the OEM rows if any exist
         <cfif isDefined("attributes.oem_no") and len(attributes.oem_no)>
             
