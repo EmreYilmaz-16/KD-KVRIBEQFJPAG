@@ -113,6 +113,7 @@
     
     
     <cf_box title="Yeni Ürün Ekle">
+        <cfdump var="#attributes#" format="html" label="attributes" abort="true">
         <div style="height:100vh">
             <cfquery name="getOfferRows" datasource="#dsn3#">
                 SELECT * FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#' and PRODUCT_ID<>1055
