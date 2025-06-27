@@ -244,7 +244,7 @@
 <script>
     $document.ready(function() {
         // Initialize the OEM rows if any exist
-        <cfif isDefined("attributes.oem_no") and arrayLen(attributes.oem_no)>
+        <cfif isDefined("attributes.oem_no") and len(attributes.oem_no)>
             
         <cfoutput>OemSatirEkle("#attributes.oem_no#");</cfoutput>
         </cfif>
