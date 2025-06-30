@@ -277,7 +277,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   </cfquery>
 </cfif>
             <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
-            <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+            <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
           
           </CFIF>
           
