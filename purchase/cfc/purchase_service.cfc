@@ -278,7 +278,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 
 </CFLOOP>
 
-<CFIF getSatis.recordCount></CFIF>
+<CFIF getSatis.recordCount>
     <cfset attributes.rel_offer_id=getSatis.OFFER_ID>
     <cfset paper_fulbs"#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
 <cfelse>
