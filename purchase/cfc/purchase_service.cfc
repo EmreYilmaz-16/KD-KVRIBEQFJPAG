@@ -187,7 +187,7 @@
 
 <cfset attributes.commission_rate="">
 <cfquery NAME="getSatis" datasource="#dsn#">
-  select TOP 1 OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
+  select OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
 INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
 SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
@@ -195,6 +195,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 </cfquery>
 <CFIF getSatis.recordCount>
     <CFSET attributes.rel_offer_id=getSatis.OFFER_ID>
+    <CFSET attributes.rel_offer_head="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
 </CFIF>
 
 
