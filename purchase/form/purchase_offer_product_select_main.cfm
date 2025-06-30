@@ -19,9 +19,9 @@ ORDER BY OFFER_ID DESC
 </cfif>
 <cf_box title="Teklif Oluşturma">
   <cfoutput>
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,#last_offer_id#)">Yeni Ürün</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,#last_offer_id#)">Depodan Teslim</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,#last_offer_id#)">Depoya Tedarik</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,true,#last_offer_id#)">Yeni Ürün</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,true,#last_offer_id#)">Depodan Teslim</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,true,#last_offer_id#)">Depoya Tedarik</button>
 </cfoutput>
 <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
 
@@ -37,7 +37,7 @@ ORDER BY OFFER_ID DESC
 </cf_box>
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
-function GetPage(pageid, x = true) {
+function GetPage(pageid, x = true,y="") {
   console.log("GetPage called with pageid: " + pageid + " and x: " + x);
 
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
@@ -52,10 +52,10 @@ function GetPage(pageid, x = true) {
   // Sayfa içeriğini yükle
   if (x) {
     if (SecimKontrol()) {
-      AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
+      AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&last_offer_id="+last_offer_id+"&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
     }
   } else {
-    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
+    AjaxPageLoad("index.cfm?fuseaction=sales.ajax_list_pbs_offer_purchases_" + pageid + "&last_offer_id="+last_offer_id+"&INTERNAL_ID=" + INTERNAL_ID, "ShownArea", 1, "Yükleniyor");
   }
 }
 
