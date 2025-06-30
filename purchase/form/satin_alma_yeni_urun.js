@@ -515,7 +515,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 
 updateBestSupplier();
 
-function SatinalmaSiparis(params) {
+function SatinalmaSiparis(params,last_offer_id) {
     /* $.ajax({
        url: '/AddOns/Partner/purchase/cfc/purchase_Service.cfc?method=SAVEORDER_gpt&internal_id='+params,
        type: 'POST',
@@ -533,7 +533,7 @@ function SatinalmaSiparis(params) {
        console.log("İşlem tamamlandı.");
      });*/
 
-    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&internal_id=' + params, { // Correct endpoint
+    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&last_offer_id='+last_offer_id+'&internal_id=' + params, { // Correct endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
