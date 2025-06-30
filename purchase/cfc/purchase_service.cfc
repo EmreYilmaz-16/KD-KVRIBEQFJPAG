@@ -191,10 +191,10 @@
 INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
 SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
-) ORDER BY OFFER_ID DESC
+) ORDER BY OFFER_ID ASC
 </cfquery>
 <CFIF getSatis.recordCount>
-    <CFSET attributes.RELATION_OFFER_ID=getSatis.OFFER_ID>
+    <CFSET attributes.rel_offer_id=getSatis.OFFER_ID>
 </CFIF>
 
 
