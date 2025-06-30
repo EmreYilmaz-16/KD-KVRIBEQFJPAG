@@ -292,7 +292,7 @@ uniqueProducts.forEach(productId => {
             }
 
             if (product.IS_SATINALMA === 1) {
-                $("#send-btn").hide();
+               // $("#send-btn").hide();
                 $("#send-btn3").hide();
             }
             if (!rowHasSatinalma && !rowHasOS) {
