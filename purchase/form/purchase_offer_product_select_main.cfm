@@ -37,7 +37,7 @@ ORDER BY OFFER_ID DESC
 </cf_box>
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
-function GetPage(pageid, x = true,y="") {
+function GetPage(pageid, x = true,last_offer_id="") {
   console.log("GetPage called with pageid: " + pageid + " and x: " + x);
 
   var INTERNAL_ID = document.getElementById("INTERNAL_ID").value;
