@@ -62,7 +62,7 @@ function GetPage(pageid, x = true,last_offer_id="") {
 
 
 $(document).ready(function() {
-  GetPage(1,false); 
+  GetPage(1,false,<cfoutput>#last_offer_id#</cfoutput>); 
 });
   
 </script>
