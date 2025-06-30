@@ -5,13 +5,6 @@
     font-weight: bold;
   }
 </style>
-
-<cf_box title="Teklif Oluşturma">
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1)">Yeni Ürün</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2)">Depodan Teslim</button>
-<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3)">Depoya Tedarik</button>
-
-<button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
 <cfquery NAME="getSatis" datasource="#dsn3#">
   select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
 INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
@@ -20,9 +13,22 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 )
 ORDER BY OFFER_ID DESC
 </cfquery>
+<cfset last_offer_id = "">
+<cfif getSatis.recordCount>
+  <cfset last_offer_id = getSatis.OFFER_ID>
+</cfif>
+<cf_box title="Teklif Oluşturma">
+  <cfoutput>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,#last_offer_id#)">Yeni Ürün</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,#last_offer_id#)">Depodan Teslim</button>
+<button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,#last_offer_id#)">Depoya Tedarik</button>
+</cfoutput>
+<button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
+
+  
 <cfoutput query="getSatis">
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
-  Teklife Gİt #OFFER_NUMBER#</button>
+  Teklife Git #OFFER_NUMBER#</button>
   </cfoutput>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div style="clear:both;"></div>
