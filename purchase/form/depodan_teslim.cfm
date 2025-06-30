@@ -67,6 +67,9 @@ SELECT OFFER_ROW.PRODUCT_NAME
 								SELECT COUNT(*)
     FROM w3Qa_1.OFFER_ROW AS TTTTTTT
     WHERE WRK_ROW_RELATION_ID = OFFER_ROW.WRK_ROW_ID
+     <cfif LEN(attributes.last_offer_id)>
+    AND OFFER_ID = #attributes.last_offer_id#
+    </cfif>
 								) > 0
 							THEN 1
 						ELSE 0
