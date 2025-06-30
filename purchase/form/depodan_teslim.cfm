@@ -318,7 +318,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
              SM.MONEY
              FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
              </cfquery>
-             <cfdump var="#getMoneyext#" label="getMoneyext">
+             
         
     <cfloop query="getMoneyext">
         <cfscript>
