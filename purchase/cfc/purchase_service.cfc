@@ -280,7 +280,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 
 <CFIF getSatis.recordCount>
     <cfset attributes.rel_offer_id=getSatis.OFFER_ID>
-    <cfset paper_fulbs"#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
+    <cfset paper_fulbs="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
 <cfelse>
 <cfquery name="get_offer_number" datasource="#dsn3#">
     EXEC GET_PAPER_NUMBER 1
