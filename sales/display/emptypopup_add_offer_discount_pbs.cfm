@@ -156,6 +156,7 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
         // Get all table rows
         const rows = Array.from(document.querySelectorAll('#tablo1 tbody tr'));
         if(!MarkaModelKontrol()){
+            $("#tablo1 > thead > tr > th:nth-child(9) > div > input[type=text]").val("");
             return false;
         }
         // Start from index 1 to skip the header/filter row
@@ -174,7 +175,9 @@ WHERE ORR.OFFER_ID = #attributes.OFFER_ID#
     function applyMarjToVisibleRows(discountNumber, value) {
         const rows = Array.from(document.querySelectorAll('#tablo1 tbody tr'));
         if(!MarkaModelKontrol()){
+            $("#tablo1 > thead > tr > th:nth-child(9) > div > input[type=text]").val("");
             return false;
+
         }
         // Start from index 1 to skip the header/filter row
         for (let i = 0; i < rows.length; i++) {

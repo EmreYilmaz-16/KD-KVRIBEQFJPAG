@@ -11,13 +11,14 @@
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2)">Depodan Teslim</button>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3)">Depoya Tedarik</button>
 
-<button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Kaydet ve Satış Teklifine Dönüştür</button>
+<button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
 <cfquery NAME="getSatis" datasource="#dsn3#">
   select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
 INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
 SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTERNAL_ID#
 )
+ORDER BY OFFER_ID DESC
 </cfquery>
 <cfoutput query="getSatis">
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
