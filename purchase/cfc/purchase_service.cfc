@@ -187,7 +187,7 @@
 
 <cfset attributes.commission_rate="">
 <cfquery NAME="getSatis" datasource="#dsn#">
-  select OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
+  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
 INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
 SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
