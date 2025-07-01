@@ -11,6 +11,7 @@
     <cfargument name="tax_sales">
     <cfargument name="OFFER_WRK_ROW_ID">
     <cfargument name="IS_FROM_DEMAND" default="0">
+    <cfargument name="eta_kodu" default="">
 <cftry>
     <cfquery name="GETPCAT" datasource="#DSN#_product">
         SELECT * FROM PRODUCT_CAT WHERE PRODUCT_CATID=#arguments.PRODUCT_CATID#
@@ -40,7 +41,7 @@
         brand_id="";
         short_code = '';
         short_code_id = '';
-        product_code_2='';
+        product_code_2='#arguments.eta_kodu#';
         is_limited_stock="";
         min_margin="";
         max_margin="";

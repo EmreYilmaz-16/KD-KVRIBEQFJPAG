@@ -70,7 +70,7 @@
         
         writeDump(var=attributes, format="html", label="attributes", abort=true);
         */
-        ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId,1);
+        ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId,1,attributes.eta_kodu);
         ProductInserResult=deserializeJSON(ProductInserResult);
        
 
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Eta Kodu</label>
-                                    <input type="text" class="form-control" id="product_code2" name="product_code2" value="<cfoutput>#attributes.product_code2#</cfoutput>">
+                                    <input type="text" class="form-control" id="eta_kodu" name="eta_kodu" value="<cfoutput>#attributes.product_code2#</cfoutput>">
                                 </div>
                                 <div class="form-group" id="item-brand_name">
                                     <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
