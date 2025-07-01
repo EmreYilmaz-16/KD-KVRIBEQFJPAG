@@ -195,7 +195,7 @@ WHERE INVOICE.SHIP_NUMBER IS NOT NULL;
 
 </cfquery>
 <cfquery name="hazirlik7" datasource="#dsn3#">
-  DROP TABLE 
+  
     IF OBJECT_ID('TEST00000', 'U') IS NOT NULL
     DROP TABLE TEST00000;
 
