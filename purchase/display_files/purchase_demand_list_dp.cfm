@@ -13,7 +13,7 @@ function SanalKontrol() {
         var checkbox = $row.find("input[type='checkbox'][name='internal_row_info']");
 
         if (checkbox.length > 0 && checkbox.is(":checked")) {
-            var link = $row.find("td:nth-child(8) > a"); // 8. sütun: Ürün
+            var link = $row.find("td:nth-child(11) > a"); // 8. sütun: Ürün
 
             if (link.length > 0) {
                 var onclickAttr = link.attr("onclick");
