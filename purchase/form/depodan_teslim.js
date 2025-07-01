@@ -450,6 +450,12 @@ uniqueProducts.forEach(productId => {
         }
     });
 
+    // Tek tedarikçi kontrolü - bu ürün için kaç tedarikçi var?
+    const suppliersWithThisProduct = data.filter(supplier => 
+        supplier.URUNLER.find(p => p.PRODUCT_ID === productId)
+    );
+    const isSingleSupplier = suppliersWithThisProduct.length === 1;
+
     data.forEach(supplier => {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
         const cell = document.createElement('td');
@@ -579,6 +585,15 @@ uniqueProducts.forEach(productId => {
                     cell.appendChild(checkIcon);
                     selectedCells.set(productId, cellKey);
                 }
+            }
+            
+            // Tek tedarikçi varsa otomatik seç
+            if (isSingleSupplier && !rowHasSatinalma && !rowHasOS) {
+                const checkIcon = document.createElement('div');
+                checkIcon.className = 'check-icon text-success';
+                checkIcon.innerHTML = '✔️';
+                cell.appendChild(checkIcon);
+                selectedCells.set(productId, cellKey);
             }
         } else {
             cell.className = 'no-data';
