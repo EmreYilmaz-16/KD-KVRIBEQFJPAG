@@ -196,13 +196,13 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 <CFIF getSatis.recordCount>
     <CFSET attributes.rel_offer_id=getSatis.OFFER_ID>
     <CFSET attributes.rel_offer_head="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
-</CFIF>
+
 <cfquery name="UP" datasource="#DSN#">
     UPDATE w3Qa_1.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
         #valueList(getSatis.OFFER_ID)#
     )
 </cfquery>
-
+</CFIF>
 
 <cfset attributes.sales_add_option="">
 <cfset attributes.offer_head="Teklifimiz">
