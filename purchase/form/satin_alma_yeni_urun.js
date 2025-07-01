@@ -145,6 +145,7 @@ uniqueProducts.forEach(productId => {
     marjInput.value = slpInfo.PRODUCT_MARJ || 0;
     marjInput.className = 'form-control form-control-sm';
     marjInput.style.width = '80px';
+    marjInput.dataset.product = productId; // productId eklendi
     marjCell.appendChild(marjInput);
 
     const lastPriceCell = document.createElement('td');
@@ -300,7 +301,7 @@ uniqueProducts.forEach(productId => {
                 cell.dataset.key = cellKey;
 
                 cell.addEventListener('click', () => {
-                    cellElements[productName].forEach(c => {
+                    cellElements[productId].forEach(c => {
                         const icon = c.querySelector('div.check-icon');
                         if (icon) icon.remove();
                     });
@@ -393,7 +394,7 @@ function updateOutput() {
         const urunBilgisi = productInfoMap.get(productId);
         const productName = urunBilgisi?.PRODUCT_NAME || "";
 
-        const marjInput = [...document.querySelectorAll('td.product-name')].find(td => td.textContent.trim() === productName.trim())?.parentElement.querySelector('input');
+        const marjInput = document.querySelector(`input[type="number"][data-product="${productId}"]`);
         const salePriceInput = document.querySelector(`input.sale-price-input[data-product="${productId}"]`);
 
         let productMarj = 0;
