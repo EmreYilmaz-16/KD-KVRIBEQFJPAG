@@ -1,5 +1,6 @@
 <cfparam name="main_unit_id" default="0">
 <cfparam name="tax_purchase" default="20">
+<cfparam name="attributes.product_code2" default="">
 <cfparam name="tax_s" default="20">
 <style>
     .list-group {
@@ -129,6 +130,10 @@
                                 <div class="form-group">
                                     <label for="product_name">Ürün Adı</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="product_name">Eta Kodu</label>
+                                    <input type="text" class="form-control" id="product_code2" name="product_code2" value="<cfoutput>#attributes.product_code2#</cfoutput>">
                                 </div>
                                 <div class="form-group" id="item-brand_name">
                                     <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
