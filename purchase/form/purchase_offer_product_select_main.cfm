@@ -63,6 +63,7 @@ SELECT
   <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
   </cfoutput>
 <cfelse>
+  <cfinclude template="includes/get_offer_stage_query.cfm" dsn3="#dsn3#" attributes="#attributes#">
   <cfif getOfferStage.recordCount>
   <cfelse>
     <cfquery name="upos" datasource="#dsn3#">
