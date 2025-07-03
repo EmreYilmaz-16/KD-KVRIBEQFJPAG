@@ -17,6 +17,34 @@ ORDER BY OFFER_ID DESC
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
 </cfif>
+<cfquery name="GETORDERS" datasource="#dsn3#">
+  
+SELECT DISTINCT ORDER_ID,ORDER_NUMBER FROM (
+SELECT DISTINCT * FROM (
+SELECT	
+		
+		ALT_TEKLIFM.OFFER_NUMBER AS ALT_TEKLIF_NO,		
+		IR.I_ID AS INTERNAL_ID,
+		STTK_M.OFFER_NUMBER SATIS_TEKLIF_NO,
+		STTK_M.OFFER_STAGE,
+		STTK_M.OFFER_ID AS SATIS_TEKLIF_ID, 
+		O.ORDER_NUMBER ,
+		O.ORDER_ID,
+		ALT_TEKLIF.OFFER_ID
+		FROM w3Qa_1.INTERNALDEMAND_ROW AS IR
+	LEFT JOIN w3Qa_1.OFFER_ROW AS ANA_TEKLIF ON ANA_TEKLIF.WRK_ROW_RELATION_ID=IR.WRK_ROW_ID
+	LEFT JOIN w3Qa_1.OFFER AS ANA_TEKLIFM ON ANA_TEKLIFM.OFFER_ID=ANA_TEKLIF.OFFER_ID
+	LEFT JOIN w3Qa_1.OFFER_ROW  AS ALT_TEKLIF ON ANA_TEKLIF.WRK_ROW_ID=ALT_TEKLIF.WRK_ROW_RELATION_ID
+	LEFT JOIN w3Qa_1.OFFER AS ALT_TEKLIFM ON ALT_TEKLIFM.OFFER_ID=ALT_TEKLIF.OFFER_ID
+	LEFT JOIN w3Qa_1.OFFER_ROW AS ST_TEKLIF ON ST_TEKLIF.WRK_ROW_RELATION_ID=ALT_TEKLIF.WRK_ROW_ID 
+	LEFT JOIN w3Qa_1.OFFER AS STTK_M ON STTK_M.OFFER_ID=ST_TEKLIF.OFFER_ID AND STTK_M.OFFER_STAGE<>267
+	LEFT JOIN w3Qa_1.ORDER_ROW AS ALS_SIP ON ALS_SIP.WRK_ROW_RELATION_ID=ST_TEKLIF.WRK_ROW_ID+'_XX'
+	LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ALS_SIP.ORDER_ID
+	
+	) AS T WHERE OFFER_STAGE<>267 AND OFFER_STAGE IS NOT NULL 
+	) TT WHERE INTERNAL_ID=#attributes.INTERNAL_ID# AND ORDER_ID IS NOT NULL
+
+</cfquery>
 <cf_box title="Teklif Oluşturma">
   <cfoutput>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,true,#last_offer_id#)">Yeni Ürün</button>
@@ -35,6 +63,13 @@ ORDER BY OFFER_ID DESC
 
 <div id="ShownArea"></div>
 </cf_box>
+<cfif GETORDERS.recordCount> 
+  <cfoutput query="GETORDERS">
+  <button class="btn btn-success" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
+  </cfoutput>
+<cfelse>
+<button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2aaa">Satınalma Siparişlerini Oluştur</button>
+</cfif>
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
 function GetPage(pageid, x = true,last_offer_id="") {
