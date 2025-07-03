@@ -249,37 +249,12 @@ FOR JSON PATH
         <div class="mt-4 text-end">
             <button class="ui-wrk-btn ui-wrk-btn-success" id="send-btn3">Kaydet</button>
             
-         <cfquery name="getOfferStage" datasource="#DSN3#">
-SELECT OFFER_ID,OFFER_STAGE,SUM(SS) SS FROM (
-SELECT 
-	DISTINCT
-	ORR_SATIS_TEKLIFI.OFFER_ID,
-	O_SATIS_TEKLIFI.OFFER_STAGE,
-	(SELECT COUNT(*) FROM w3Qa_1.ORDER_ROW WHERE WRK_ROW_RELATION_ID=ORR_SATIS_TEKLIFI.WRK_ROW_ID)	AS SS
-FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
-LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
-LEFT JOIN w3Qa_1.OFFER AS O_SATIS_TEKLIFI ON O_SATIS_TEKLIFI.OFFER_ID=ORR_SATIS_TEKLIFI.OFFER_ID
-WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
-SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.internal_id#)
-) AS T GROUP BY OFFER_ID,OFFER_STAGE
 
-</cfquery>
 
 <script>
   var DEMAND_MONEY = '<cfoutput>#GETDEMAND_MONEY.OTHER_MONEY#</cfoutput>';
 </script>
 
-<cfif getOfferStage.recordCount>
-<cfelse>
-  <cfquery name="upos" datasource="#dsn3#">
-    UPDATE w3Qa_1.PBS_SELECTED_ROWS SET IS_OS=1 WHERE OFFER_ID=#attributes.internal_id#
-  </cfquery>
-</cfif>
-            <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
-            <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
-          
-          </CFIF>
           
         </div>
 

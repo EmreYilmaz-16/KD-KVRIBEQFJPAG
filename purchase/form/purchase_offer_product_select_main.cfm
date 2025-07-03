@@ -63,7 +63,15 @@ SELECT
   <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
   </cfoutput>
 <cfelse>
-<button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2aaa">Satınalma Siparişlerini Oluştur</button>
+  <cfif getOfferStage.recordCount>
+  <cfelse>
+    <cfquery name="upos" datasource="#dsn3#">
+      UPDATE w3Qa_1.PBS_SELECTED_ROWS SET IS_OS=1 WHERE OFFER_ID=#attributes.internal_id#
+    </cfquery>
+  </cfif>
+  <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
+    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+  </CFIF>
 </cfif>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div style="clear:both;"></div>
