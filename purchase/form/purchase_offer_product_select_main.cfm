@@ -60,10 +60,10 @@ SELECT
   </cfoutput>
 <cfif GETORDERS.recordCount> 
   <cfoutput query="GETORDERS">
-  <button class="btn btn-success" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
+  <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
   </cfoutput>
 <cfelse>
-<button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2aaa">Satınalma Siparişlerini Oluştur</button>
+<button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2aaa">Satınalma Siparişlerini Oluştur</button>
 </cfif>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
 <div style="clear:both;"></div>
