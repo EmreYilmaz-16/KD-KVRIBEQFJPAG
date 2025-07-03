@@ -58,11 +58,6 @@ SELECT
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
   Teklife Git #OFFER_NUMBER#</button>
   </cfoutput>
-<input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
-<div style="clear:both;"></div>
-
-<div id="ShownArea"></div>
-</cf_box>
 <cfif GETORDERS.recordCount> 
   <cfoutput query="GETORDERS">
   <button class="btn btn-success" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
@@ -70,6 +65,12 @@ SELECT
 <cfelse>
 <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2aaa">Satınalma Siparişlerini Oluştur</button>
 </cfif>
+<input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
+<div style="clear:both;"></div>
+
+<div id="ShownArea"></div>
+</cf_box>
+
 <script src="/AddOns/Partner/purchase/form/main_functions.js"></script>
 <script>
 function GetPage(pageid, x = true,last_offer_id="") {
