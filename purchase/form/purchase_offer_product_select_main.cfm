@@ -71,7 +71,7 @@ SELECT
     </cfquery>
   </cfif>
   <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
-    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#attributes.last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
   </CFIF>
 </cfif>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
