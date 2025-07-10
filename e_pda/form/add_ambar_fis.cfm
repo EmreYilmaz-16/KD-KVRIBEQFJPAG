@@ -329,11 +329,11 @@ $(".header").hide()
 			return false;
 		}
 	}
-	function get_stock_with_serial_no(serial_no)
+	function get_stock_with_serial_no(serialno)
     {
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; 
 		serial_no=""; //ilk önce sıfırlıyoruz
-		console.log('get_stock_with_serial_no called with serial_no: ' + serial_no);
+		console.log('get_stock_with_serial_no called with serialno: ' + serialno);
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
@@ -346,7 +346,7 @@ $(".header").hide()
 FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
 INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
 INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
-WHERE SB.SERIAL_NO = '${serial_no}'`;
+WHERE SB.SERIAL_NO = '${serialno}'`;
 		 	
 		 	console.log('Executing SQL: ' + new_sql);
 			var get_product = wrk_query(new_sql,'dsn3');
