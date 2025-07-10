@@ -214,6 +214,17 @@ $(".header").hide()
 		if (keycode == 13)
 		{
 			console.log('Enter key pressed');
+			var barkod=$("#add_other_barcod").val().trim();
+			var raf=$("#add_other_shelf").val().trim();
+			var serial=$("#serial_number").val().trim();
+
+			console.table({
+				'barkod': barkod,
+				'raf': raf,
+				'serial': serial
+			});
+
+			/*
 			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			{
 				console.log('Shelf input without barcode');
@@ -231,7 +242,7 @@ $(".header").hide()
 				search_shelf(document.getElementById('add_other_shelf').value);
 				else
 				get_stock(document.getElementById('add_other_barcod').value);
-			}
+			}*/
 		}
 	}
 	function actionidolustur()
