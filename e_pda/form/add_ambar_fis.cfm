@@ -234,6 +234,7 @@ $(".header").hide()
 			
 			if(serial.length>0){
 				console.log('Serial number detected: ' + serial);
+				get_stock_with_serial_no(serial);
 			}else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
 				get_stock_with_barcode(barkod);
