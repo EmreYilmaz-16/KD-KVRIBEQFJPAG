@@ -107,12 +107,14 @@
           <tr class="color-list" height="15px">
             <td align="center" width="45px">Miktar</td>
             <td align="center" width="95px">Barcode</td>
+			<td>Seri No</td>
             <td align="center">Raf</td>
             <td></td>
        	  </tr>
           <tr class="color-list" height="20px">
             <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" /></td>
             <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" ></td>
+			<td><input type="text" name="serial_number" id="serial_number"></td>
             <td><input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" /></td>
             <td>
               <table>
