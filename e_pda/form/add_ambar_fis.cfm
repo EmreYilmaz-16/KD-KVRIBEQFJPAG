@@ -333,7 +333,7 @@ $(".header").hide()
     {
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; 
 		serial_no=""; //ilk önce sıfırlıyoruz
-		console.log('get_stock called with barcode: ' + barcode);
+		console.log('get_stock_with_serial_no called with serial_no: ' + serial_no);
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
