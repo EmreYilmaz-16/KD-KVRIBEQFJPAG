@@ -223,8 +223,26 @@ $(".header").hide()
 				'raf': raf,
 				'serial': serial
 			});
+			/**
+			 * Undocumented unknown
+			 * Eğer Seri No Varsa Seri Nolu Fonksiyonu Çağır 
+			 * Eğer Barkod Varsa Barkodlu Fonksiyonu Çağır
+			 * 
+			 */
 
-			/*
+			
+			if(serial.length>0){
+				console.log('Serial number detected: ' + serial);
+			}else if(barkod.length>0){
+				console.log('Barcode detected: ' + barkod);
+				get_stock(barkod);
+			}else{
+				console.log('No barcode or serial number detected');
+				alert('Lütfen Barkod veya Seri Numarası Giriniz');
+				document.getElementById('add_other_barcod').focus();
+				return false;
+			}
+
 			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			{
 				console.log('Shelf input without barcode');
