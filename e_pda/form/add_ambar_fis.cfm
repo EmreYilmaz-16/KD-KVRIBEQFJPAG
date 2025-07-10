@@ -243,7 +243,7 @@ $(".header").hide()
 				return false;
 			}
 
-			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
+			/*if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			{
 				console.log('Shelf input without barcode');
 				alert('Önce Ürün Barkodu Okutunuz');
