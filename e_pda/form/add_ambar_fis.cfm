@@ -88,6 +88,7 @@
   var stockid = '';
   var spectmainid = '';
   var stockcode = '';
+  var serial_no="";
   var amount = '';
   var ekle = 0;
   var cikar = 0;
@@ -235,7 +236,7 @@ $(".header").hide()
 				console.log('Serial number detected: ' + serial);
 			}else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
-				get_stock(barkod);
+				get_stock_with_barcode(barkod);
 			}else{
 				console.log('No barcode or serial number detected');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
@@ -293,9 +294,11 @@ $(".header").hide()
 		else
 			document.getElementById('onay').disabled = false;
 	}
-	function get_stock(barcode)
+	function get_stock_with_barcode(barcode)
     {
-	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
+	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; 
+		serial_no = '';  //ilk önce sıfırlıyoruz
+		//ilk önce sıfırlıyoruz
 		console.log('get_stock called with barcode: ' + barcode);
 	 	k_= 0;
 	 	if (k_ == 0)
@@ -325,6 +328,41 @@ $(".header").hide()
 			return false;
 		}
 	}
+	function get_stock_with_serial_no(serial_no)
+    {
+	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; 
+		serial_no=""; //ilk önce sıfırlıyoruz
+		console.log('get_stock called with barcode: ' + barcode);
+	 	k_= 0;
+	 	if (k_ == 0)
+     	{
+			var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
+		 	var get_product = wrk_query(new_sql,'dsn3');
+		 	if (get_product.STOCK_ID == undefined)
+		 	{
+				ekle = 1;
+				cikar = 1;
+				k_=1;
+				alert('Ürün Bulunamadı');
+		 	}
+		 	else
+		 	{	
+				stockid = get_product.STOCK_ID;
+				stockcode = get_product.PRODUCT_NAME;
+				barcode = get_product.BARCODE;
+				document.getElementById('add_other_shelf').focus();
+				set_shelfs(stockid);
+				buton_kontrol();
+    		}
+		}
+		else
+		{
+			barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
+			return false;
+		}
+	}
+
+
 
 	function add_amount()
 	{
