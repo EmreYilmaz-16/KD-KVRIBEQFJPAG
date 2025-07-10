@@ -207,13 +207,16 @@ $(".header").hide()
 	document.onkeydown = checkKeycode
 	function checkKeycode(e) 
 	{
+		console.log('checkKeycode called');
 		var keycode;
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
 		if (keycode == 13)
 		{
+			console.log('Enter key pressed');
 			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			{
+				console.log('Shelf input without barcode');
 				alert('Önce Ürün Barkodu Okutunuz');
 				document.getElementById('add_other_barcod').value = '';
 				document.getElementById('add_other_shelf').value = '';
@@ -223,6 +226,7 @@ $(".header").hide()
 			}
 			else
 			{
+				console.log('Adding row with barcode: ' + document.getElementById('add_other_barcod').value);
 				if (document.getElementById('add_other_barcod').value.length >0 && document.getElementById('add_other_shelf').value.length >0)	
 				search_shelf(document.getElementById('add_other_shelf').value);
 				else
@@ -263,6 +267,7 @@ $(".header").hide()
 	function get_stock(barcode)
     {
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
+		console.log('get_stock called with barcode: ' + barcode);
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
