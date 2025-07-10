@@ -336,8 +336,19 @@ $(".header").hide()
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
-			var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
-		 	var get_product = wrk_query(new_sql,'dsn3');
+			//var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
+			var new_sql=`SELECT SB.STOCK_ID
+	,SB.SERIAL_NO
+	,PU.MAIN_UNIT
+	,PU.MULTIPLIER
+	,S.PRODUCT_NAME
+FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+WHERE SB.SERIAL_NO = '${serial_no}'`;
+		 	
+		 	console.log('Executing SQL: ' + new_sql);
+			var get_product = wrk_query(new_sql,'dsn3');
 		 	if (get_product.STOCK_ID == undefined)
 		 	{
 				ekle = 1;
