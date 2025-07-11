@@ -494,7 +494,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 				newRow.setAttribute("ID","frm_row" + row_count);		
 				
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="hidden" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" /><input type="hidden" value="'+serialc_+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="hidden" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" /><input type="text" value="'+serialc_+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
 				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="10" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
@@ -613,7 +613,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 						shelf_code = get_product.SHELF_CODE; 
 						serial_no = document.getElementById('serial_number').value;
 						buton_kontrol();
-						add_row_with_serial_no(barcode);
+						add_row_with_serial_no(serial_no);
 						document.getElementById('add_other_barcod').value = '';
 						document.getElementById('add_other_shelf').value = '';
 						document.getElementById('add_other_amount').value = 1;
