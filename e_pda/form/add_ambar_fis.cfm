@@ -567,7 +567,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		document.getElementById('shelf_select_td').style.display='';
 		//var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS PP LEFT OUTER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = "+xyz+" N ORDER BY REAL_STOCK DESC","dsn2");
 		//SELECT * FROM w3Qa_2025_1.PBS_SHELF_STOCK_AMOUNTS WHERE STOCK_ID=1114 AND DEPO='2-1' ORDER BY REAL_STOCK DESC
-		var product_shelfs=wrk_query(`SELECT * FROM w3Qa_2025_1.PBS_SHELF_STOCK_AMOUNTS WHERE STOCK_ID=${xyz} AND DEPO='${form_basket.txt_department_out.value}' ORDER BY REAL_STOCK DESC`)
+		var product_shelfs=wrk_query(`SELECT * FROM w3Qa_2025_1.PBS_SHELF_STOCK_AMOUNTS WHERE STOCK_ID=${xyz} AND DEPO='${form_basket.txt_department_in.value}' ORDER BY REAL_STOCK DESC`)
 		var option_count = document.getElementById('shelf_select').options.length; 
 		for(x=option_count;x>=0;x--)
 			document.getElementById('shelf_select').options[x] = null;
