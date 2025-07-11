@@ -484,6 +484,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		if(get_shelf.recordcount)
 		{
 			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
+			console.log('Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s);
 			if(giris_depo != giris_depo_s)
 			{
 					alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');	
