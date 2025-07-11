@@ -1,4 +1,5 @@
-﻿<cfset current_row_list = ''>
+﻿<cfdump var="#attributes#" abort="true">
+<cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
 <cfloop list="#attributes.action_id#" index="i">
