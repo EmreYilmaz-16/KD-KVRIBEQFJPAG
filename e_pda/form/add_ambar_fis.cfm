@@ -238,7 +238,7 @@ $(".header").hide()
 				if(raf.length > 0){
 					console.log('Shelf detected: ' + raf);
 					//set_shelfs_with_serial_no(serial, stockid);
-					search_shelf(document.getElementById('add_other_shelf').value);
+					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value);
 				}
 
 			}else if(barkod.length>0){
@@ -495,6 +495,68 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			else
 			{
 				if (document.getElementById('add_other_barcod').value.length > 0)
+				{
+					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
+		 			var get_product = wrk_query(new_sql,'dsn3');
+					if (get_product.STOCK_ID == undefined)
+					{
+						alert('Ürün Bu Rafa Tanıtılmamış');
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_shelf').focus();
+					}
+					else
+					{	
+						stockid = get_product.STOCK_ID;
+						stockcode = get_product.PRODUCT_NAME;
+						barcode = get_product.BARCODE;
+						shelf_code = get_product.SHELF_CODE; 
+						buton_kontrol();
+						add_row(barcode);
+						document.getElementById('add_other_barcod').value = '';
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_amount').value = 1;
+						document.getElementById('add_other_barcod').focus();
+					}
+				}
+				else if (document.getElementById('add_other_barcod').value.length == 0)
+				{
+						document.getElementById('add_other_barcod').focus();	
+				}
+				else
+				{
+						alert('Ürün Barkodu Hatalı');
+						document.getElementById('add_other_barcod').value = '';
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_barcod').focus();
+				}
+			}
+		}
+		else
+		{
+			alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
+			document.getElementById('add_other_shelf').value = '';
+			document.getElementById('add_other_shelf').focus();
+		}
+	}
+	function search_shelf_with_serial_no(shelf_8)
+	{
+		var giris_depo = document.all.txt_department_in.value;
+		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
+		var get_shelf = wrk_query(shelf_sql,'dsn3');
+		if(get_shelf.recordcount)
+		{
+			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
+			console.log('Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s);
+			if(giris_depo != giris_depo_s)
+			{
+					alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');	
+					document.getElementById('serial_number').value = '';
+					document.getElementById('add_other_shelf').value = '';
+					document.getElementById('serial_number').focus();	
+			}
+			else
+			{
+				if (document.getElementById('serial_number').value.length > 0)
 				{
 					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
 		 			var get_product = wrk_query(new_sql,'dsn3');
