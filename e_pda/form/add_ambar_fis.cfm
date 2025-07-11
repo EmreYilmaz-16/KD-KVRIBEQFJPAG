@@ -338,7 +338,7 @@ $(".header").hide()
 	 	if (k_ == 0)
      	{
 			//var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
-			var new_sql=`SELECT SB.STOCK_ID
+			var new_sql=`SELECT TOP 1 SB.STOCK_ID
 	,SB.SERIAL_NO
 	,PU.MAIN_UNIT
 	,PU.MULTIPLIER
@@ -359,6 +359,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		 	}
 		 	else
 		 	{	
+				
 				stockid = get_product.STOCK_ID;
 				stockcode = get_product.PRODUCT_NAME;
 				barcode = get_product.BARCODE;
