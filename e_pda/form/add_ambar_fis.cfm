@@ -235,6 +235,12 @@ $(".header").hide()
 			if(serial.length>0){
 				console.log('Serial number detected: ' + serial);
 				get_stock_with_serial_no(serial);
+				if(raf.length > 0){
+					console.log('Shelf detected: ' + raf);
+					//set_shelfs_with_serial_no(serial, stockid);
+					search_shelf(document.getElementById('add_other_shelf').value);
+				}
+
 			}else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
 				get_stock_with_barcode(barkod);
