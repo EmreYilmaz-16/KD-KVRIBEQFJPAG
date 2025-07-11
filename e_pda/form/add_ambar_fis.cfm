@@ -238,7 +238,7 @@ $(".header").hide()
 				if(raf.length > 0){
 					console.log('Shelf detected: ' + raf);
 					//set_shelfs_with_serial_no(serial, stockid);
-					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value);
+					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
 				}
 
 			}else if(barkod.length>0){
@@ -539,7 +539,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			document.getElementById('add_other_shelf').focus();
 		}
 	}
-	function search_shelf_with_serial_no(shelf_8)
+	function search_shelf_with_serial_no(shelf_8,sid)
 	{
 		var giris_depo = document.all.txt_department_in.value;
 		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
@@ -559,7 +559,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			{
 				if (document.getElementById('serial_number').value.length > 0)
 				{
-					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
+					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.STOCK_ID = '"+sid+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
 		 			var get_product = wrk_query(new_sql,'dsn3');
 					if (get_product.STOCK_ID == undefined)
 					{
