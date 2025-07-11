@@ -364,7 +364,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 				stockcode = get_product.PRODUCT_NAME;
 				barcode = get_product.BARCODE;
 				document.getElementById('add_other_shelf').focus();
-				set_shelfs_with_serial_no(serialno);
+				set_shelfs_with_serial_no(serialno,stockid);
 				buton_kontrol();
     		}
 		}
@@ -555,7 +555,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			document.getElementById('shelf_select').options[0] = new Option('Raf Tanımsız','');
 	}
 		
-	function set_shelfs_with_serial_no(serial_no)
+	function set_shelfs_with_serial_no(serial_no,xyz)
 	{
 		document.getElementById('shelf_select_td').style.display='';
 		var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS PP LEFT OUTER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = "+xyz+" ORDER BY REAL_STOCK DESC","dsn2");
