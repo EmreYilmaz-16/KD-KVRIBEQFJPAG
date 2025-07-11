@@ -456,7 +456,45 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 				newRow.setAttribute("ID","frm_row" + row_count);		
 				
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="hidden" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" /><input type="hidden" value="'+barcode+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="10" class="boxtext" readonly="yes" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" style="text-align:right" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes"  style="text-align:" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="12" class="boxtext" readonly="yes" style="text-align:right" />';
+			  }
+			  else
+			  {
+				 ekle = 0;
+			  }
+		}
+	}
+	function add_row(serialc_)
+	{
+		{
+			  amount = document.getElementById('add_other_amount').value;
+			  if(amount == 0)
+			  {
+				alert('Miktar 0 dan Büyük Olmalıdır.');
+				document.getElementById('shelf_select_td').style.display='none';
+				return false;
+			  }
+			  add_amount();
+			  if (ekle == 0)
+			  {
+				row_count++;
+				document.getElementById('row_count').value = row_count;
+				var newRow;
+				var newCell;	
+				newRow = document.getElementById("table1").insertRow(document.getElementById("table1").rows.length);
+				newRow.setAttribute("name","frm_row" + row_count);
+				newRow.setAttribute("id","frm_row" + row_count);		
+				newRow.setAttribute("NAME","frm_row" + row_count);
+				newRow.setAttribute("ID","frm_row" + row_count);		
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="hidden" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" /><input type="hidden" value="'+serialc_+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
 				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="10" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
@@ -573,8 +611,9 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 						stockcode = get_product.PRODUCT_NAME;
 						barcode = get_product.BARCODE;
 						shelf_code = get_product.SHELF_CODE; 
+						serial_no = document.getElementById('serial_number').value;
 						buton_kontrol();
-						add_row(barcode);
+						add_row_with_serial_no(barcode);
 						document.getElementById('add_other_barcod').value = '';
 						document.getElementById('add_other_shelf').value = '';
 						document.getElementById('add_other_amount').value = 1;
