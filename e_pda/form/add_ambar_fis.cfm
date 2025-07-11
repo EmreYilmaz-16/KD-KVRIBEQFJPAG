@@ -470,7 +470,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			  }
 		}
 	}
-	function add_row(serialc_)
+	function add_row_with_serial_no(serialc_)
 	{
 		{
 			  amount = document.getElementById('add_other_amount').value;
