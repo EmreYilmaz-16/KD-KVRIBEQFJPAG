@@ -570,7 +570,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 			}
 
 			//var depo_stock_sql = "SELECT ISNULL(PRODUCT_STOCK,0) AS PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+xyz;
-			var depo_stock_sql = `SELECT *FROM w3Qa_1.PBS_SERIAL_LAST_STOCK WHERE SERIAL_NO='KF9S-99VD-FJHA' AND DEPO='${form_basket.txt_department_out.value}' AND SERIAL_NO='${serial_no}'`;
+			var depo_stock_sql = `SELECT *FROM w3Qa_1.PBS_SERIAL_LAST_STOCK WHERE 1=1 AND DEPO='${form_basket.txt_department_out.value}' AND SERIAL_NO='${serial_no}'`;
 			var depo_stock = wrk_query(depo_stock_sql,'dsn2');
 			if(depo_stock.PRODUCT_STOCK == undefined)
 			depo_stock.PRODUCT_STOCK = 0;
