@@ -325,7 +325,7 @@
     UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = ""
 }>
-        <cfset data = {
+        <cfset data2 = {
     STOCK_ID = STOCK_ID_SER,
     SERIAL_NO = "#SERI_NO_SER#",
     LOT_NO = "#GETSER.LOT_NO#",
@@ -355,6 +355,7 @@
 
 
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
+<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)>
 <cfdump var="#result#">
 <cfif result>
     <cfoutput>Kayıt başarılı!</cfoutput>
