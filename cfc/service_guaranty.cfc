@@ -5,7 +5,7 @@
         <cfargument name="data" type="struct" required="true" />
         <cfargument name="recordEmp" type="string" required="true" />
         <cfset var success = false />
-
+<cfset dsn3="w3Qa_1">
         <!--- İş kuralları --->
         <cfset var isPurchase = (arguments.data.IN_OUT EQ 1 ? 1 : 0)>
         <cfset var isSale     = (arguments.data.IN_OUT EQ 0 ? 1 : 0)>
