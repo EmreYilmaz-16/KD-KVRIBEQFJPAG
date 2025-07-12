@@ -71,6 +71,7 @@
         <cfcatch>
             <cfset success = false />
             <cfset cfcatchError = cfcatch.message />
+            <cfdump var="#cfcatchError#">
             <!--- Hata loglamak için cfcatchError'u yazabilirsin --->
         </cfcatch>
         </cftry>
