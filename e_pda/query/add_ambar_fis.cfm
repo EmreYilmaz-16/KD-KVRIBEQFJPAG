@@ -2,23 +2,25 @@
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
-<cfloop list="#attributes.action_id#" index="i">
-	<cfset current_row_list = ListAppend(current_row_list,Listgetat(i,1,'-'))>
-    <cfset stock_id_list = ListAppend(stock_id_list,Listgetat(i,2,'-'))>
-    <cfset 'STOCK_ID_#Listgetat(i,1,'-')#' = Listgetat(i,2,'-')>
-    <cfset 'AMOUNT_#Listgetat(i,1,'-')#' = Listgetat(i,3,'-')>
-    <cfset 'SHELF_#Listgetat(i,1,'-')#' = Listgetat(i,4,'-')>
+<cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
+<!----<cfloop -- list="#attributes.action_id#" index="i">---->
+	<cfset current_row_list = ListAppend(current_row_list,i)>
+    <cfset stock_id_list = ListAppend(stock_id_list,evaluate("attributes.STOCK_ID#i#"))>
+    <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCK_ID#i#")>
+    <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
+    <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
+
     <cfquery name="get_shelf_id" datasource="#dsn3#">
     	SELECT        
         	PRODUCT_PLACE_ID
 		FROM            
         	PRODUCT_PLACE
 		WHERE        
-        	SHELF_CODE = '#Listgetat(i,4,'-')#'
+        	SHELF_CODE = '#evaluate("attributes.SHELF_CODE#i#")#'
     </cfquery>
-    <cfset 'SHELF_ID_#Listgetat(i,1,'-')#' = get_shelf_id.PRODUCT_PLACE_ID>
-    <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
-    	<cfset 'SHELF_OTHER_#Listgetat(i,1,'-')#' = Listgetat(i,5,'-')>
+    <cfset 'SHELF_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
+    <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa---> <!----- TODO: RAF DEĞİŞTİRME İŞLEMİNDE BAK CANIM ----->
+    	<cfset 'SHELF_OTHER_#i#' = Listgetat(i,5,'-')>
         <cfquery name="get_shelf_id" datasource="#dsn3#">
             SELECT        
                 PRODUCT_PLACE_ID
@@ -27,7 +29,7 @@
             WHERE        
                 SHELF_CODE = '#Listgetat(i,5,'-')#'
         </cfquery>
-    	<cfset 'SHELF_OTHER_ID_#Listgetat(i,1,'-')#' = get_shelf_id.PRODUCT_PLACE_ID>
+    	<cfset 'SHELF_OTHER_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
     </cfif>
     <cfquery name="GET_LOT_K_KONT_ID" datasource="#dsn3#">
         SELECT     
@@ -49,7 +51,7 @@
             PU.IS_MAIN = 1 AND 
             PS.PRICESTANDART_STATUS = 1 AND 
             PS.PURCHASESALES = 0 AND
-            S.STOCK_ID = #Evaluate('STOCK_ID_#Listgetat(i,1,'-')#')#
+            S.STOCK_ID = #Evaluate('STOCK_ID_#i#')#
         ORDER BY 	
             S.PRODUCT_NAME
     </cfquery>
@@ -67,28 +69,28 @@
                                	FROM            
                                 	SPECTS AS SPECTS_1
                                	WHERE        
-                                	STOCK_ID = #Evaluate('STOCK_ID_#Listgetat(i,1,'-')#')#
+                                	STOCK_ID = #Evaluate('STOCK_ID_#i#')#
                           	)
     </cfquery>
     <cfoutput query="GET_LOT_K_KONT_ID">
-    	<cfset 'PRODUCT_UNIT_ID_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.PRODUCT_UNIT_ID>
-        <cfset 'MAIN_UNIT_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.MAIN_UNIT>
-        <cfset 'PRICE_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.PRICE>
-        <cfset 'MONEY_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.MONEY>
-        <cfset 'BARCOD_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.BARCOD>
-        <cfset 'TAX_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.TAX>
-        <cfset 'PRODUCT_ID_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.PRODUCT_ID>
-        <cfset 'PRODUCT_NAME_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.PRODUCT_NAME>
-        <cfset 'STOCK_CODE_#Listgetat(i,1,'-')#' = GET_LOT_K_KONT_ID.STOCK_CODE>
+    	<cfset 'PRODUCT_UNIT_ID_#i#' = GET_LOT_K_KONT_ID.PRODUCT_UNIT_ID>
+        <cfset 'MAIN_UNIT_#i#' = GET_LOT_K_KONT_ID.MAIN_UNIT>
+        <cfset 'PRICE_#i#' = GET_LOT_K_KONT_ID.PRICE>
+        <cfset 'MONEY_#i#' = GET_LOT_K_KONT_ID.MONEY>
+        <cfset 'BARCOD_#i#' = GET_LOT_K_KONT_ID.BARCOD>
+        <cfset 'TAX_#i#' = GET_LOT_K_KONT_ID.TAX>
+        <cfset 'PRODUCT_ID_#i#' = GET_LOT_K_KONT_ID.PRODUCT_ID>
+        <cfset 'PRODUCT_NAME_#i#' = GET_LOT_K_KONT_ID.PRODUCT_NAME>
+        <cfset 'STOCK_CODE_#i#' = GET_LOT_K_KONT_ID.STOCK_CODE>
     </cfoutput>
     <cfif get_spect.recordcount>
 		<cfoutput query="get_spect">
-            <cfset 'SPECT_ID#Listgetat(i,1,'-')#' = get_spect.SPECT_VAR_ID>
-            <cfset 'SPECT_NAME#Listgetat(i,1,'-')#' = get_spect.SPECT_VAR_NAME>
+            <cfset 'SPECT_ID#i#' = get_spect.SPECT_VAR_ID>
+            <cfset 'SPECT_NAME#i#' = get_spect.SPECT_VAR_NAME>
         </cfoutput>
     <cfelse>
-    	<cfset 'SPECT_ID#Listgetat(i,1,'-')#' = ''>
-        <cfset 'SPECT_NAME#Listgetat(i,1,'-')#' = ''>
+    	<cfset 'SPECT_ID#i#' = ''>
+        <cfset 'SPECT_NAME#i#' = ''>
     </cfif>
 </cfloop>
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
