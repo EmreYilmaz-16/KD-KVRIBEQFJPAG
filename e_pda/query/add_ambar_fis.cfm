@@ -367,7 +367,7 @@
     
 
 
-<cfinclude template="/v16/stock/query/add_ship_fis.cfm">
+<cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 
 
 <cfabort>
