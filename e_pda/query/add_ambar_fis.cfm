@@ -355,10 +355,11 @@
 
 
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
-
+<cfdump var="#result#">
 <cfif result>
     <cfoutput>Kayıt başarılı!</cfoutput>
 <cfelse>
+
     <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
 </cfif>
 
