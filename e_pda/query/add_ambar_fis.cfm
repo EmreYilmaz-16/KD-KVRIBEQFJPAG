@@ -370,7 +370,9 @@
 
 
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
-
+<cfquery name="UP" datasource="#DSN3#">
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#attributes.FIS_NO#,PROCESS_ID=GET_ID.MAX_ID WHERE PROCESS_ID=0;
+</cfquery>
 
 <cfabort>
 	<cflocation url="#request.self#?fuseaction=pda.form_add_ambar_fis" addtoken="No">
