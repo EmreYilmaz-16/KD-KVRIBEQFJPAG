@@ -351,7 +351,7 @@
     
     
     ----------->
-<cfset recordEmp = session.ep.user_id>
+<cfset recordEmp = session.ep.userid>
 
 
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
