@@ -386,6 +386,8 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 
 	function add_amount()
 	{
+		ekle=0;
+		return;
 	  document.getElementById('shelf_select_td').style.display='none';
 	  if(row_count >0) /*ilk Satırdan sonrası*/
 	  {
