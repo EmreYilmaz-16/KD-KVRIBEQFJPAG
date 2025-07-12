@@ -296,6 +296,7 @@
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
+    <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
     <cfloop list="#current_row_list#" index="k">
         <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
         <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
@@ -352,7 +353,7 @@
     ----------->
 <cfset recordEmp = session.ep.user_id>
 
-<cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
+
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
 
 <cfif result>
