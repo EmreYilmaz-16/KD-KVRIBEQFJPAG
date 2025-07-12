@@ -399,7 +399,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 				  	get_real_stock.PRODUCT_STOCK = 0;
 				  if(get_real_stock.PRODUCT_STOCK < document.getElementById('amount'+i).value - (-1 * amount))
 				  {
-					ekle=1;
+					ekle=0;
 					alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock.PRODUCT_STOCK);
 					document.getElementById('add_other_amount').focus();
 				  }
@@ -410,7 +410,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
 						if (document.getElementById('frm_row'+i).style.display == 'none')
 							document.getElementById('frm_row'+i).style.display='block';
-						ekle=1;
+						ekle=;
 					  }
 				  }
 			  }
