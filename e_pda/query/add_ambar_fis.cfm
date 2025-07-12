@@ -296,7 +296,7 @@
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
-</cfif>
+
 	<cflocation url="#request.self#?fuseaction=pda.form_add_ambar_fis" addtoken="No">
 
 </cfif>
