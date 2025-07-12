@@ -322,6 +322,24 @@
     WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
     WRK_ROW_ID = "#WRK_ROW_ID_SER#",
     UNIT_ROW_QUANTITY = 1,
+    SHELF_NUMBER = ""
+}>
+        <cfset data = {
+    STOCK_ID = STOCK_ID_SER,
+    SERIAL_NO = "#SERI_NO_SER#",
+    LOT_NO = "#GETSER.LOT_NO#",
+    IN_OUT = 1,
+    PROCESS_CAT = 113,
+    PROCESS_ID = 0,
+    PROCESS_NO = "",
+    PERIOD_ID = session.ep.period_id,
+    DEPARTMENT_ID = attributes.DEPARTMENT_OUT,
+    LOCATION_ID = attributes.LOCATION_OUT,
+    IS_SARF = 0,
+    IS_SERI_SONU = 0,
+    WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
+    WRK_ROW_ID = "#WRK_ROW_ID_SER#",
+    UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = "#GIRIS_RAF_ID#"
 }>
 <!---------
@@ -332,9 +350,9 @@
     
     
     ----------->
-<cfset recordEmp = session.user_id>
+<cfset recordEmp = session.ep.user_id>
 
-<cfset svc = createObject("component", "service_guaranty")>
+<cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
 
 <cfif result>
