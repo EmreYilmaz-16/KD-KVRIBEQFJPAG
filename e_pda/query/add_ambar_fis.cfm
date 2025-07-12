@@ -5,7 +5,7 @@
 <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
 <!----<cfloop -- list="#attributes.action_id#" index="i">---->
 	<cfset current_row_list = ListAppend(current_row_list,i)>
-    <cfset stock_id_list = ListAppend(stock_id_list,evaluate("attributes.STOCK_ID#i#"))>
+    <cfset stock_id_list = ListAppend(stock_id_list,evaluate("attributes.STOCKID#i#"))>
     <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'STOCK_ID#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
