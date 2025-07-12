@@ -97,7 +97,7 @@
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
 
 <br>current row list
-<cfdump  var="#current_row_list#" abort="true">
+
 <br>
 <cfif ListLen(current_row_list)>
     <cf_papers paper_type="stock_fis">
