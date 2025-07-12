@@ -410,7 +410,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
 						if (document.getElementById('frm_row'+i).style.display == 'none')
 							document.getElementById('frm_row'+i).style.display='block';
-						ekle=;
+						ekle=0;
 					  }
 				  }
 			  }
