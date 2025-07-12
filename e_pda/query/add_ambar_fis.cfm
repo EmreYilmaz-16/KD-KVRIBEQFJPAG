@@ -371,7 +371,7 @@
 
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 <cfquery name="UP" datasource="#DSN3#">
-    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#attributes.FIS_NO#',PROCESS_ID=GET_ID.MAX_ID WHERE PROCESS_ID=0;
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
 <cfabort>
