@@ -296,7 +296,61 @@
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
+    <cfloop list="#current_row_list#" index="k">
+        <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
+        <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
+        <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
+        <cfset GIRIS_RAF_ID=Evaluate('SHELF_ID_#k#')>
+        <cfset CIKIS_RAF_ID=Evaluate('SHELF_ID_#k#')>
+        <cfquery name="GETSER" datasource="#DSN3#">
+            SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
+        </cfquery>
+        
+        <cfset data = {
+    STOCK_ID = STOCK_ID_SER,
+    SERIAL_NO = "#SERI_NO_SER#",
+    LOT_NO = "#GETSER.LOT_NO#",
+    IN_OUT = 0,
+    PROCESS_CAT = 113,
+    PROCESS_ID = 0,
+    PROCESS_NO = "",
+    PERIOD_ID = #session.ep.period_id#,
+    DEPARTMENT_ID = attributes.DEPARTMENT_OUT,
+    LOCATION_ID = attributes.LOCATION_OUT,
+    IS_SARF = 0,
+    IS_SERI_SONU = 0,
+    WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
+    WRK_ROW_ID = "#WRK_ROW_ID_SER#",
+    UNIT_ROW_QUANTITY = 1,
+    SHELF_NUMBER = "#GIRIS_RAF_ID#"
+}>
+<!---------
+    <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
+    <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
+    <cfset attributes.DEPARTMENT_IN = Listgetat(attributes.dep_in,1,'-')>
+    <cfset attributes.LOCATION_IN = Listgetat(attributes.dep_in,2,'-')> 
+    
+    
+    ----------->
+<cfset recordEmp = session.user_id>
+
+<cfset svc = createObject("component", "service_guaranty")>
+<cfset result = svc.saveServiceGuaranty(data, recordEmp)>
+
+<cfif result>
+    <cfoutput>Kayıt başarılı!</cfoutput>
+<cfelse>
+    <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
+</cfif>
+
+    </cfloop>
+
+    
+
+
 <cfinclude template="/v16/stock/query/add_ship_fis.cfm">
+
+
 <cfabort>
 	<cflocation url="#request.self#?fuseaction=pda.form_add_ambar_fis" addtoken="No">
 
