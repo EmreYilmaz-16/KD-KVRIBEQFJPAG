@@ -1,7 +1,7 @@
 <cfcomponent displayname="ServiceGuaranty" output="false">
 
     <!--- Veriyi kaydeden fonksiyon --->
-    <cffunction name="saveServiceGuaranty" access="public" returntype="boolean" output="false">
+    <cffunction name="saveServiceGuaranty" access="public" returntype="boolean" >
         <cfargument name="data" type="struct" required="true" />
         <cfargument name="recordEmp" type="string" required="true" />
         <cfset var success = false />
@@ -71,7 +71,7 @@
         <cfcatch>
             <cfset success = false />
             <cfset cfcatchError = cfcatch.message />
-            <cfdump var="#cfcatchError#">
+            <cfdump var="#cfcatch#">
             <!--- Hata loglamak için cfcatchError'u yazabilirsin --->
         </cfcatch>
         </cftry>
