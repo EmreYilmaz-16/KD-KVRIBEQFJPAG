@@ -296,7 +296,8 @@
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
-
+<cfinclude template="/v16/stock/query/add_ship_fis.cfm">
+<cfabort>
 	<cflocation url="#request.self#?fuseaction=pda.form_add_ambar_fis" addtoken="No">
 
 </cfif>
