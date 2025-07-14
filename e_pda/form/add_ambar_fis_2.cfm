@@ -378,7 +378,7 @@ $(".header").hide()
 			}
 			else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
-				get_stock_with_barcode(barkod);
+				get_stock(barkod);
 			}else{
 				console.log('No barcode or serial number detected');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
