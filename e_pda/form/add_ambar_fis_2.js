@@ -95,6 +95,29 @@ function search_shelf_with_serial_no(shelf_8, sid) {
     }
 }
 
+function set_shelfs_with_serial_no(serial_no, xyz) {
+    document.getElementById('shelf_select_td').style.display = '';
+    //var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS PP LEFT OUTER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = "+xyz+" N ORDER BY REAL_STOCK DESC","dsn2");
+    //SELECT * FROM w3Qa_2025_1.PBS_SHELF_STOCK_AMOUNTS WHERE STOCK_ID=1114 AND DEPO='2-1' ORDER BY REAL_STOCK DESC
+    var product_shelfs = wrk_query(`SELECT * FROM w3Qa_2025_1.PBS_SHELF_STOCK_AMOUNTS WHERE STOCK_ID=${xyz} AND DEPO='${form_basket.txt_department_in.value}' ORDER BY REAL_STOCK DESC`)
+    var option_count = document.getElementById('shelf_select').options.length;
+    for (x = option_count; x >= 0; x--)
+        document.getElementById('shelf_select').options[x] = null;
+    if (product_shelfs.recordcount != 0) {
+        for (var xx = 0; xx < product_shelfs.recordcount; xx++) {
+            document.getElementById('shelf_select').options[xx] = new Option(product_shelfs.SHELF_CODE[xx] + "-" + product_shelfs.REAL_STOCK[xx], product_shelfs.PRODUCT_PLACE_ID[xx], product_shelfs.AMOUNT[xx]);
+        }
+
+        //var depo_stock_sql = "SELECT ISNULL(PRODUCT_STOCK,0) AS PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+xyz;
+        var depo_stock_sql = `SELECT *FROM w3Qa_1.PBS_SERIAL_LAST_STOCK WHERE 1=1 AND DEPO='${form_basket.txt_department_out.value}' AND SERIAL_NO='${serial_no}'`;
+        var depo_stock = wrk_query(depo_stock_sql, 'dsn2');
+        if (depo_stock.PRODUCT_STOCK == undefined)
+            depo_stock.PRODUCT_STOCK = 0;
+        document.getElementById('add_other_amount').value = depo_stock.PRODUCT_STOCK;
+    }
+    else
+        document.getElementById('shelf_select').options[0] = new Option('Raf Tanımsız', '');
+}
 
 
 function wrk_query(str_query, data_source, maxrows) {
@@ -162,3 +185,4 @@ function wrk_query(str_query, data_source, maxrows) {
 
     return new_query;
 }
+

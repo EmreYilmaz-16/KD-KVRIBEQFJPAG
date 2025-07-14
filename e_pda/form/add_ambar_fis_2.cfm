@@ -235,7 +235,7 @@ $(".header").hide()
 			document.getElementById('onay').disabled = false;
 	}
 	
-	function get_stock(barcode)
+	function get_stock_with_barcode(barcode)
     {
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
 	 	k_= 0;
@@ -378,7 +378,7 @@ $(".header").hide()
 			}
 			else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
-				get_stock(barkod);
+				get_stock_with_barcode(barkod);
 			}else{
 				console.log('No barcode or serial number detected');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
