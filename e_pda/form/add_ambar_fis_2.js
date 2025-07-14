@@ -42,7 +42,8 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 
 
 function search_shelf_with_serial_no(shelf_8, sid) {
-    var giris_depo = document.all.txt_department_out.value;
+    var giris_depo = document.all.txt_department_in.value;
+    var cikis_depo = document.all.txt_department_out.value;
     var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelf_8 + "'";
     var get_shelf = wrk_query(shelf_sql, 'dsn3');
     if (get_shelf.recordcount) {
