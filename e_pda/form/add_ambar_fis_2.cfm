@@ -197,6 +197,7 @@
   </table>
   </div>
 </cfform>
+<script src="/AddOns/partner/e_pda/form/add_ambar_fis_2.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
 	$(document).ready(function(){
 $(".header").hide()
@@ -350,110 +351,9 @@ $(".header").hide()
 
 <script language="JavaScript">
 	document.onkeydown = checkKeycode
-	function checkKeycode(e) 
-	{
-		var keycode;
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		if (keycode == 13)
-		{
-			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
-			{
-				alert('Önce Ürün Barkodu Okutunuz');
-				document.getElementById('add_other_barcod').value = '';
-				document.getElementById('add_other_shelf').value = '';
-				document.getElementById('add_other_amount').value = 1;
-				document.getElementById('add_other_barcod').focus();	
-			
-			}
-			else
-			{
-				if (document.getElementById('add_other_barcod').value.length >0 && document.getElementById('add_other_shelf').value.length >0)	
-				search_shelf(document.getElementById('add_other_shelf').value);
-				else
-				get_stock(document.getElementById('add_other_barcod').value);
-			}
-		}
-	}
-	function search_shelf(shelf_8)
-	{
-		var cikis_depo = document.all.txt_department_out.value;
-		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
-		var get_shelf = wrk_query(shelf_sql,'dsn3');
-		if(get_shelf.recordcount)
-		{
-			var cikis_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
-			if(cikis_depo != cikis_depo_s)
-			{
-					alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');	
-					document.getElementById('add_other_barcod').value = '';
-					document.getElementById('add_other_shelf').value = '';
-					document.getElementById('add_other_barcod').focus();	
-			}
-			else
-			{
-				if (document.getElementById('add_other_barcod').value.length > 0)
-				{
-					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
-		 			var get_product = wrk_query(new_sql,'dsn3');
-					if (get_product.STOCK_ID == undefined)
-					{
-						alert('Ürün Bu Rafa Tanıtılmamış');
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_shelf').focus();
-					}
-					else
-					{	
-						stockid = get_product.STOCK_ID;
-						stockcode = get_product.PRODUCT_NAME;
-						barcode = get_product.BARCODE;
-						shelf_code = get_product.SHELF_CODE; 
-						buton_kontrol();
-						document.getElementById('txt_department_out').disabled = true;
-						add_row(barcode);
-						document.getElementById('add_other_barcod').value = '';
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_amount').value = 1;
-						document.getElementById('add_other_barcod').focus();
-					}
-				}
-				else if (document.getElementById('add_other_barcod').value.length == 0)
-				{
-						document.getElementById('add_other_barcod').focus();	
-				}
-				else
-				{
-						alert('Ürün Barkodu Hatalı');
-						document.getElementById('add_other_barcod').value = '';
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_barcod').focus();
-				}
-			}
-		}
-		else
-		{
-			alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
-			document.getElementById('add_other_shelf').value = '';
-			document.getElementById('add_other_shelf').focus();
-		}
-	}
-	function set_shelfs(xyz)
-	{
-		document.getElementById('shelf_select_td').style.display='';
-		var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS PP LEFT OUTER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = "+xyz+" ORDER BY REAL_STOCK DESC","dsn2");
-		var option_count = document.getElementById('shelf_select').options.length; 
-		for(x=option_count;x>=0;x--)
-			document.getElementById('shelf_select').options[x] = null;
-		if(product_shelfs.recordcount != 0)
-		{	
-			for(var xx=0;xx<product_shelfs.recordcount;xx++)
-			{
-				document.getElementById('shelf_select').options[xx]=new Option(product_shelfs.SHELF_CODE[xx]+"-"+product_shelfs.REAL_STOCK[xx],product_shelfs.PRODUCT_PLACE_ID[xx],product_shelfs.AMOUNT[xx]);
-			}
-		}
-		else
-			document.getElementById('shelf_select').options[0] = new Option('Raf Tanımsız','');
-	}
+	
+	
+	
 </script>
 <script language="javascript" type="text/javascript">
 		function kontrol_kayit()
