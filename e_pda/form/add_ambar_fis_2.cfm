@@ -376,6 +376,15 @@ $(".header").hide()
 					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
 				}
 			}
+			else if(barkod.length>0){
+				console.log('Barcode detected: ' + barkod);
+				get_stock_with_barcode(barkod);
+			}else{
+				console.log('No barcode or serial number detected');
+				alert('Lütfen Barkod veya Seri Numarası Giriniz');
+				document.getElementById('add_other_barcod').focus();
+				return false;
+			}
 
 			// if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			// {
