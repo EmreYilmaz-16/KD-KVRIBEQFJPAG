@@ -47,9 +47,9 @@ function search_shelf_with_serial_no(shelf_8, sid) {
     var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelf_8 + "'";
     var get_shelf = wrk_query(shelf_sql, 'dsn3');
     if (get_shelf.recordcount) {
-        var giris_depo_s = get_shelf.STORE_ID.toString() + '-' + get_shelf.LOCATION_ID.toString();
-        console.log('Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s);
-        if (giris_depo != giris_depo_s) {
+        var cikis_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
+        console.log('Çıkış depo: ' + cikis_depo + ', Çıkış depo SQL: ' + cikis_depo_s);
+        if (cikis_depo != cikis_depo_s) {
             alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');
             document.getElementById('serial_number').value = '';
             document.getElementById('add_other_shelf').value = '';
