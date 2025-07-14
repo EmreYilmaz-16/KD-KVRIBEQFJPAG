@@ -105,8 +105,50 @@ function search_shelf(shelf_8) {
         document.getElementById('add_other_shelf').focus();
     }
 }
+function get_stock_with_serial_no(serialno) {
+    barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
+    serial_no = ""; //ilk önce sıfırlıyoruz
+    console.log('get_stock_with_serial_no called with serialno: ' + serialno);
+    k_ = 0;
+    if (k_ == 0) {
+        //var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
+        var new_sql = `SELECT TOP 1 SB.STOCK_ID
+	,SB.SERIAL_NO
+	,PU.MAIN_UNIT
+	,PU.MULTIPLIER
+	,S.PRODUCT_NAME
+FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+WHERE SB.SERIAL_NO = '${serialno}'`;
 
-function search_shelf_with_serial_no(shelf_8,sid) {
+        console.log('Executing SQL: ' + new_sql);
+        var get_product = wrk_query(new_sql, 'dsn3');
+        if (get_product.STOCK_ID == undefined) {
+            ekle = 1;
+            cikar = 1;
+            k_ = 1;
+            alert('Ürün Bulunamadı');
+        }
+        else {
+
+            stockid = get_product.STOCK_ID;
+            stockcode = get_product.PRODUCT_NAME;
+            barcode = get_product.BARCODE;
+            document.getElementById('add_other_shelf').focus();
+            set_shelfs_with_serial_no(serialno, stockid);
+            buton_kontrol();
+        }
+    }
+    else {
+        barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
+        return false;
+    }
+    return stockid;
+}
+
+
+function search_shelf_with_serial_no(shelf_8, sid) {
     var cikis_depo = document.all.txt_department_out.value;
     var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelf_8 + "'";
     var get_shelf = wrk_query(shelf_sql, 'dsn3');
