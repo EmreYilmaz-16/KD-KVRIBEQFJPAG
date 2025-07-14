@@ -165,7 +165,7 @@ function resetFormState() {
               </select>
           	</td>
             <td>
-              <select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
+              <select name="txt_department_in" id="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
