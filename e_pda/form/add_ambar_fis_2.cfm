@@ -88,7 +88,6 @@
   var stockid = '';
   var spectmainid = '';
   var stockcode = '';
-  var serial_no="";
   var amount = '';
   var ekle = 0;
   var cikar = 0;
@@ -235,7 +234,7 @@ $(".header").hide()
 			document.getElementById('onay').disabled = false;
 	}
 	
-	function get_stock_with_barcode(barcode)
+	function get_stock(barcode)
     {
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
 	 	k_= 0;
@@ -348,7 +347,6 @@ $(".header").hide()
     	}
 	}
 </script>
-<script src="/AddOns/Partner/e_pda/form/add_ambar_fis_2.js"></script>
 
 <script language="JavaScript">
 	document.onkeydown = checkKeycode
@@ -359,52 +357,24 @@ $(".header").hide()
 		else if (e) keycode = e.which;
 		if (keycode == 13)
 		{
-			console.log('Enter key pressed');
-			var barkod=$("#add_other_barcod").val().trim();
-			var raf=$("#add_other_shelf").val().trim();
-			var serial=$("#serial_number").val().trim();
-			var otheramount=$("#add_other_amount").val().trim();
-
-			console.table({
-				'barkod': barkod,
-				'raf': raf,
-				'serial': serial
-			});
-			if(serial.length>0){
-				var StockId_=get_stock_with_serial_no(serial);
-				if(raf.length>0){
-					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
-				}
-			}
-			else if(barkod.length>0){
-				console.log('Barcode detected: ' + barkod);
-				get_stock_with_barcode(barkod);
-			}else{
-				console.log('No barcode or serial number detected');
-				alert('Lütfen Barkod veya Seri Numarası Giriniz');
-				document.getElementById('add_other_barcod').focus();
-				return false;
-			}
-
-			// if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
-			// {
-			// 	alert('Önce Ürün Barkodu Okutunuz');
-			// 	document.getElementById('add_other_barcod').value = '';
-			// 	document.getElementById('add_other_shelf').value = '';
-			// 	document.getElementById('add_other_amount').value = 1;
-			// 	document.getElementById('add_other_barcod').focus();	
+			if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
+			{
+				alert('Önce Ürün Barkodu Okutunuz');
+				document.getElementById('add_other_barcod').value = '';
+				document.getElementById('add_other_shelf').value = '';
+				document.getElementById('add_other_amount').value = 1;
+				document.getElementById('add_other_barcod').focus();	
 			
-			// }
-			// else
-			// {
-			// 	if (document.getElementById('add_other_barcod').value.length >0 && document.getElementById('add_other_shelf').value.length >0)	
-			// 	search_shelf(document.getElementById('add_other_shelf').value);
-			// 	else
-			// 	get_stock(document.getElementById('add_other_barcod').value);
-			// }
+			}
+			else
+			{
+				if (document.getElementById('add_other_barcod').value.length >0 && document.getElementById('add_other_shelf').value.length >0)	
+				search_shelf(document.getElementById('add_other_shelf').value);
+				else
+				get_stock(document.getElementById('add_other_barcod').value);
+			}
 		}
 	}
-	
 	function search_shelf(shelf_8)
 	{
 		var cikis_depo = document.all.txt_department_out.value;
