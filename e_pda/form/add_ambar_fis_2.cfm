@@ -197,6 +197,10 @@
   </table>
   </div>
 </cfform>
+<script>
+	var dsn3='<cfoutput>#dsn3#</cfoutput>';
+	var dsn3_alias='<cfoutput>#dsn3_alias#</cfoutput>';
+</script>
 <script src="/AddOns/partner/e_pda/form/add_ambar_fis_2.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
 	$(document).ready(function(){

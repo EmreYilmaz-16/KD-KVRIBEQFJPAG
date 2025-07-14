@@ -203,7 +203,7 @@ function search_shelf_with_serial_no(shelf_8, sid) {
 
 function set_shelfs(xyz) {
     document.getElementById('shelf_select_td').style.display = '';
-    var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS PP LEFT OUTER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = " + xyz + " ORDER BY REAL_STOCK DESC", "dsn2");
+    var product_shelfs = wrk_query("SELECT PP.SHELF_CODE, PPR.AMOUNT, PP.PRODUCT_PLACE_ID, ISNULL((SELECT REAL_STOCK FROM GET_STOCK_LAST_SHELF WHERE SHELF_NUMBER = PP.PRODUCT_PLACE_ID AND STOCK_ID = PPR.STOCK_ID),0) AS REAL_STOCK FROM"+dsn3_alias+".PRODUCT_PLACE AS PP LEFT OUTER JOIN "+dsn3_alias+".PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID = " + xyz + " ORDER BY REAL_STOCK DESC", "dsn2");
     var option_count = document.getElementById('shelf_select').options.length;
     for (x = option_count; x >= 0; x--)
         document.getElementById('shelf_select').options[x] = null;
