@@ -374,7 +374,7 @@ document.addEventListener('keydown', function (e) {
 			console.log(isHaveStock);
 			console.table(FormState)
 			if(shelf.length){
-
+				searchShelfWithSerialNo(shelf,FormState.stockId);
 			}
 
         } else if (barcode.length > 0) {
