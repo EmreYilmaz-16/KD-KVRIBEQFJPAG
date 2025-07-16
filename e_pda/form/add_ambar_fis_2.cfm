@@ -395,7 +395,7 @@ function getStockWithSerialNo(serialNo) {
 FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
 INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
 INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
-WHERE SB.SERIAL_NO = '${serialno}'`;
+WHERE SB.SERIAL_NO = '${serialNo}'`;
 
     const product = wrk_query(sql, 'dsn3');
 
