@@ -397,7 +397,7 @@ function addProductRowWithSerialNo() {
 		// Create cells with proper data
 		var cells = [
 			'<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />' +
-			'<input type="hidden" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />
+			'<input type="hidden" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />' +
 			'<input type="text" value="' + AppState.SerialNo + '" name="serino' + AppState.rowCount + '" id="serino' + AppState.rowCount + '" size="13" class="boxtext" readonly />',
 			
 			'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
