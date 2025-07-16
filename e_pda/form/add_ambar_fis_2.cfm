@@ -373,6 +373,9 @@ document.addEventListener('keydown', function (e) {
             var isHaveStock=getStockWithSerialNo(serialNo);
 			console.log(isHaveStock);
 			console.table(FormState)
+			if(shelf.length){
+
+			}
 
         } else if (barcode.length > 0) {
             if (!barcode && shelf) {
@@ -472,6 +475,60 @@ function searchShelf(shelfCode) {
 	FormState.barcode = product.BARCODE;
 	FormState.shelfCode = product.SHELF_CODE;
 	
+	updateButtonState();
+	DOM.get('txt_department_out').disabled = true;
+	
+	if (addRow(FormState.barcode)) {
+		clearForm();
+	}
+}
+
+function searchShelfWithSerialNo(shelfCode,sid) {
+	const exitWarehouse = DOM.getValue('txt_department_out');
+	const sql = `SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID 
+		FROM PRODUCT_PLACE 
+		WHERE PLACE_STATUS = 1 AND SHELF_CODE = '${shelfCode}'`;
+	
+	const shelf = wrk_query(sql, 'dsn3');
+	
+	if (!shelf.recordcount) {
+		alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
+		DOM.setValue('add_other_shelf', '');
+		DOM.focus('add_other_shelf');
+		return;
+	}
+	
+	const shelfLocation = `${shelf.STORE_ID}-${shelf.LOCATION_ID}`;
+	if (exitWarehouse !== shelfLocation) {
+		alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur!');
+		clearForm();
+		return;
+	}
+	
+	const seriNo = DOM.getValue('serial_number');
+	if (!seriNo) {
+		DOM.focus('serial_number');
+		return;
+	}
+	
+	const productSql =  "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.STOCK_ID = '"+sid+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
+	
+	const product = wrk_query(productSql, 'dsn3');
+	
+	if (!product.STOCK_ID) {
+		alert('Ürün Bu Rafa Tanıtılmamış');
+		DOM.setValue('add_other_shelf', '');
+		DOM.focus('add_other_shelf');
+		return;
+	}
+
+	
+	FormState.stockId = product.STOCK_ID;
+	FormState.stockCode = product.PRODUCT_NAME;
+	FormState.barcode = product.BARCODE;
+	FormState.shelfCode = product.SHELF_CODE;
+	console.table(FormState);
+
 	updateButtonState();
 	DOM.get('txt_department_out').disabled = true;
 	
