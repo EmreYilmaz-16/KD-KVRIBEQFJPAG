@@ -36,12 +36,12 @@ h5{
     </tr>
         <tr>
     <td>
-     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/down30.png"><h5>Mal Kabulden Ambara</h5><span style="color:green;font-weight:bold">Yapıldı !</span></a>
+     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/down30.png"><h5>Mal Kabulden Ambara</h5>&nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
     <td>
-     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_2</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/exit30.png"><h5>Ambardan Mal Kabule</h5></a>
+     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_2</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/exit30.png"><h5>Ambardan Mal Kabule</h5> &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
