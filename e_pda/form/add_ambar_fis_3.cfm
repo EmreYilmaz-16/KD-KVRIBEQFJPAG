@@ -665,16 +665,7 @@ function validateProductInShelf(shelfCode, type) {
 function validateProductInShelfWithSerialNo(shelfCode, type,sid) {
 	var serial_number = getId('serial_number').value;
 	
-	if (serial_number.length >0) {
-		if (barcodeValue.length === 0) {
-			getId('serial_number').focus();
-		} else {
-			showAlert('Ürün Barkodu Hatalı');
-			resetForm();
-			getId('serial_number').focus();
-		}
-		return false;
-	}
+	
 	
 	var sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE " +
 			  "FROM STOCKS_BARCODES AS SB " +
