@@ -404,7 +404,12 @@ function validateStock(amount) {
 					return false;
 				}
 				
-				// Update existing row
+				// If using serial number, always create new row (skip merging)
+				if (AppState.useSerialNo) {
+					continue; // Skip to next iteration, don't merge
+				}
+				
+				// For barcode-only products, merge quantities if same product and shelves
 				if (getId('stockid' + i).value == AppState.stockId && 
 					getId('shelf_code_out' + i).value == AppState.shelfCodeOut && 
 					getId('shelf_code_in' + i).value == AppState.shelfCodeIn) {
