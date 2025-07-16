@@ -1,4 +1,3 @@
-SADASDS
 <cfset default_process_type = 113>
 <cfquery name="get_default_departments" datasource="#dsn#">
 	SELECT        
@@ -64,43 +63,52 @@ SADASDS
 </cfif>
 <style type="text/css">
 .boxtext {
-	text-decoration: none;
 	background-color: #e6e6fe;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 0px;
-	border-right-width: 0px;
-	border-bottom-width: 0px;
-	border-left-width: 0px;
+	border: none;
+	margin: 0;
+	padding: 2px;
 }
+
 .tablo {
-	text-decoration: none;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 0px;
-	border-top-color: aec7f0;
-	border-right-color: aec7f0;
-	border-bottom-color: aec7f0;
-	border-left-color: aec7f0;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid #aec7f0;
+	border-bottom: 1px solid #aec7f0;
 }
-    .header{
-        display:none;
-    }
+
+.header {
+	display: none;
+}
+
+.input-container {
+	width: 100%;
+}
+
+.shelf-info {
+	font-size: 12px;
+	color: #666;
+}
 </style>
-<script language="javascript" type="text/javascript">
-  var row_count = 0;
-  var barcod = '';
-  var stockid = '';
-  var spectmainid = '';
-  var stockcode = '';
-  var amount = '';
-  var ekle = 0;
-  var cikar = 0;
-  var islemtipi = 0;//0-ekle 1-çıkar
-  var buton = 0;// <1-buton pasif, >0-buton aktif
+<script type="text/javascript">
+// Global variables
+var AppState = {
+	rowCount: 0,
+	barcode: '',
+	stockId: '',
+	stockCode: '',
+	amount: '',
+	canAdd: false,
+	operationType: 0, // 0-ekle 1-çıkar
+	buttonActive: 0,
+	shelfCodeOut: '',
+	shelfCodeIn: ''
+};
+
+// Configuration
+var Config = {
+	BARCODE_LENGTH: 13,
+	SHELF_CODE_LENGTHS: [8, 11]
+};
 </script>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -114,14 +122,16 @@ SADASDS
           <tr class="color-list">
             <td align="center" width="25px">Miktar</td>
             <td align="center" width="57px">Barcode</td>
+			<td align="center" width="60px">Seri No</td>
             <td align="center" width="60px">Çıkış Raf</td>
             <td align="center" width="60px">Giriş Raf</td>
        	  </tr>
           <tr class="color-list">
-            <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:25px; text-align:right" value="1" /></td>
-            <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:55px;" ></td>
-            <td><input id="add_out_shelf" name="add_out_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" /></td>
-            <td><input id="add_in_shelf" name="add_in_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" /></td>
+            <td><input id="add_other_amount" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:25px; text-align:right" value="1" /></td>
+            <td><input id="add_other_barcod" type="text" class="boxtext" style="width:55px;" /></td>
+			<td><input id="serial_number" type="text" class="boxtext" style="width:55px;" /></td>
+            <td><input id="add_out_shelf" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:60px;" /></td>
+            <td><input id="add_in_shelf" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:60px;" /></td>
           </tr>
           <tr class="color-list">
           	<td colspan="4">
@@ -184,6 +194,7 @@ SADASDS
     </tr>
     <tr class="color-list">
       <td width="55" align="center">Barkod</td>
+	  
       <td width="25" align="right">Mikt.</td>
       <td width="50" align="left">Çıkış Raf</td>
       <td width="50" align="left">Giriş Raf</td>
@@ -201,7 +212,7 @@ SADASDS
       	<input type="hidden" id="department_in" name="department_in" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
         <input type="hidden" id="action_id" name="action_id" value="" />
-        <input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" /></td>
+        <input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onclick="validateAndSave();" /></td>
         
     </tr>
 
@@ -209,79 +220,95 @@ SADASDS
 
   </table>
 </cfform>
-<script language="javascript" type="text/javascript">
-$(document).ready(function(){
-$(".header").hide()
-})
-	document.getElementById('add_other_barcod').focus();
-	setTimeout("document.getElementById('add_other_barcod').select();",1000);	
-	function actionidolustur()
-	{
-	  var j = 0;
-	  for(i=1;i<=row_count;i++)
-	  {
-		  if(document.getElementById('amount'+i).value > 0)
-		  {
-			if (j > 0)
-			document.getElementById('action_id').value = document.getElementById('action_id').value + ',';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + i + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('stockid'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('amount'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('shelf_code_out'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('shelf_code_in'+i).value
-			j++;
-		  }
-		  document.getElementById('row_count').value = j;
-	  }
-	}
+<script type="text/javascript">
+// Utility functions
+function getId(id) {
+	return document.getElementById(id);
+}
 
-	function buton_kontrol()
-	{
-		if (islemtipi == 0)
-			buton++;
-		else if (buton>0)
-			buton--;
-		if (buton < 1)
-			document.getElementById('onay').disabled = true;
-		else
-			document.getElementById('onay').disabled = false;
+function showAlert(message) {
+	alert(message);
+}
+
+function resetForm() {
+	getId('add_other_barcod').value = '';
+	getId('add_out_shelf').value = '';
+	getId('add_in_shelf').value = '';
+	getId('add_other_amount').value = 1;
+	getId('add_other_amount').disabled = false;
+	AppState.barcode = '';
+	AppState.stockId = '';
+	AppState.stockCode = '';
+	AppState.canAdd = false;
+}
+
+// Main application functions
+$(document).ready(function(){
+	$(".header").hide();
+	getId('add_other_barcod').focus();
+	setTimeout(function() { getId('add_other_barcod').select(); }, 1000);
+});
+
+function generateActionId() {
+	var actions = [];
+	for(var i = 1; i <= AppState.rowCount; i++) {
+		var amountEl = getId('amount' + i);
+		if(amountEl && amountEl.value > 0) {
+			var action = [
+				i,
+				getId('stockid' + i).value,
+				amountEl.value,
+				getId('shelf_code_out' + i).value,
+				getId('shelf_code_in' + i).value
+			].join('-');
+			actions.push(action);
+		}
+	}
+	getId('action_id').value = actions.join(',');
+	getId('row_count').value = actions.length;
+}
+
+function toggleSaveButton() {
+	if (AppState.operationType == 0) {
+		AppState.buttonActive++;
+	} else if (AppState.buttonActive > 0) {
+		AppState.buttonActive--;
+	}
+	getId('onay').disabled = (AppState.buttonActive < 1);
+}
+
+function getStockInfo(barcode) {
+	// Reset state
+	AppState.barcode = '';
+	AppState.stockId = '';
+	AppState.stockCode = '';
+	
+	var sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME " +
+			  "FROM STOCKS_BARCODES AS SB " +
+			  "INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID " +
+			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
+			  "WHERE SB.BARCODE = '" + barcode + "'";
+	
+	var result = wrk_query(sql, 'dsn3');
+	if (!result.STOCK_ID) {
+		AppState.canAdd = true;
+		showAlert('Ürün Bulunamadı');
+		return false;
 	}
 	
-	function get_stock(barcode)
-    {
-	 	/*shelf_code = '';*/ barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
-	 	k_= 0;
-	 	if (k_ == 0)
-     	{
-			var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
-		 	var get_product = wrk_query(new_sql,'dsn3');
-		 	if (get_product.STOCK_ID == undefined)
-		 	{
-				ekle = 1;
-				cikar = 1;
-				k_=1;
-				alert('Ürün Bulunamadı');
-		 	}
-		 	else
-		 	{	
-				stockid = get_product.STOCK_ID;
-				stockcode = get_product.PRODUCT_NAME;
-				barcode = get_product.BARCODE;
-				document.getElementById('add_out_shelf').focus();
-				set_shelfs(stockid);
-				buton_kontrol();
-    		}
-		}
-		else
-		{
-			return false;
-		}
-	}
+	AppState.stockId = result.STOCK_ID;
+	AppState.stockCode = result.PRODUCT_NAME;
+	AppState.barcode = result.BARCODE;
+	getId('add_out_shelf').focus();
+	setShelfOptions(AppState.stockId);
+	toggleSaveButton();
+	return true;
+}
 
 	function add_amount()
 	{
 	  document.getElementById('shelf_select_td').style.display='none';
-	  if(row_count >0) /*ilk Satırdan sonrası*/
+	  if(row_count >0 /*ilk Satırdan sonrası*/)
 	  {
 		  for(i=1;i<=row_count;i++)
 		  {
@@ -369,58 +396,132 @@ $(".header").hide()
 		var keycode;
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
-		if (keycode == 13)
-		{
-			if (document.getElementById('add_other_barcod').value.length == 13 && document.getElementById('add_out_shelf').value.length == '' && document.getElementById('add_in_shelf').value.length == '')
-			{
-				get_stock(document.getElementById('add_other_barcod').value);
+// Keyboard event handler
+document.onkeydown = function(e) {
+	var keycode = window.event ? window.event.keyCode : e.which;
+	if (keycode !== 13) return; // Only handle Enter key
+	
+	var barcodeValue = getId('add_other_barcod').value;
+	var outShelfValue = getId('add_out_shelf').value;
+	var inShelfValue = getId('add_in_shelf').value;
+	
+	// Validate input lengths
+	if (barcodeValue.length === Config.BARCODE_LENGTH && !outShelfValue && !inShelfValue) {
+		getStockInfo(barcodeValue);
+	}
+	else if (Config.SHELF_CODE_LENGTHS.includes(barcodeValue.length)) {
+		showAlert('Önce Ürün Barkodu Okutunuz');
+		resetForm();
+		getId('add_other_barcod').focus();
+	}
+	else if (barcodeValue.length === Config.BARCODE_LENGTH && Config.SHELF_CODE_LENGTHS.includes(outShelfValue.length)) {
+		if (Config.SHELF_CODE_LENGTHS.includes(inShelfValue.length)) {
+			if (inShelfValue === outShelfValue) {
+				showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
+				getId('add_in_shelf').value = '';
+				getId('add_in_shelf').focus();
+				return false;
 			}
-			else if (document.getElementById('add_other_barcod').value.length == 8 || document.getElementById('add_other_barcod').value.length == 11)
-			{
-				alert('Önce Ürün Barkodu Okutunuz');
-				document.getElementById('add_other_barcod').value = '';
-				document.getElementById('add_out_shelf').value = '';
-				document.getElementById('add_other_amount').value = 1;
-				document.getElementById('add_other_barcod').focus();	
-			}
-			else if (document.getElementById('add_other_barcod').value.length == 13 && (document.getElementById('add_out_shelf').value.length == 8 || document.getElementById('add_out_shelf').value.length == 11))
-			{
-				if(document.getElementById('add_in_shelf').value.length == 8 || document.getElementById('add_in_shelf').value.length == 11)
-				{
-					if(document.getElementById('add_in_shelf').value == document.getElementById('add_out_shelf').value)
-					{
-						alert('Giriş ve Çıkış Rafları Aynı Olamaz');
-						document.getElementById('add_in_shelf').value = '';
-						document.getElementById('add_in_shelf').focus();
-						return false;
-					}
-					else
-					search_shelf_in(document.getElementById('add_in_shelf').value);
-				}
-				else
-				search_shelf_out(document.getElementById('add_out_shelf').value);
-			}
-			else
-			{
-				alert('Borkodu Hatalı');
-				document.getElementById('add_other_barcod').value = '';
-				document.getElementById('add_out_shelf').value = '';
-				document.getElementById('add_other_amount').value = 1;
-				document.getElementById('add_other_barcod').focus();	
-			}
+			searchShelf(inShelfValue, 'in');
+		} else {
+			searchShelf(outShelfValue, 'out');
 		}
 	}
-	function search_shelf_out(shelf_8)
-	{
-		var cikis_depo = document.all.txt_department_out.value;
-		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
-		var get_shelf = wrk_query(shelf_sql,'dsn3');
-		if(get_shelf.recordcount)
-		{
-			var cikis_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
-			if(cikis_depo != cikis_depo_s)
-			{
-					alert('Seçtiğiniz Raf Çıkış Lokasyonunda Yoktur.!');	
+	else {
+		showAlert('Barkod Hatalı');
+		resetForm();
+		getId('add_other_barcod').focus();
+	}
+};
+
+// Unified shelf search function
+function searchShelf(shelfCode, type) {
+	var departmentValue = type === 'out' ? 
+		getId('txt_department_out').value : 
+		getId('txt_department_in').value;
+		
+	var sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID " +
+			  "FROM PRODUCT_PLACE " +
+			  "WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelfCode + "'";
+	
+	var shelfResult = wrk_query(sql, 'dsn3');
+	
+	if (!shelfResult.recordcount) {
+		showAlert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
+		resetShelfFields(type);
+		return false;
+	}
+	
+	var shelfDepartment = shelfResult.STORE_ID + '-' + shelfResult.LOCATION_ID;
+	if (departmentValue !== shelfDepartment) {
+		var locationText = type === 'out' ? 'Çıkış' : 'Giriş';
+		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
+		resetForm();
+		getId('add_other_barcod').focus();
+		return false;
+	}
+	
+	return validateProductInShelf(shelfCode, type);
+}
+
+function resetShelfFields(type) {
+	if (type === 'out') {
+		getId('add_out_shelf').value = '';
+		getId('add_out_shelf').focus();
+	} else {
+		getId('add_in_shelf').value = '';
+		getId('add_in_shelf').focus();
+	}
+}
+
+function validateProductInShelf(shelfCode, type) {
+	var barcodeValue = getId('add_other_barcod').value;
+	
+	if (barcodeValue.length !== Config.BARCODE_LENGTH) {
+		if (barcodeValue.length === 0) {
+			getId('add_other_barcod').focus();
+		} else {
+			showAlert('Ürün Barkodu Hatalı');
+			resetForm();
+			getId('add_other_barcod').focus();
+		}
+		return false;
+	}
+	
+	var sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE " +
+			  "FROM STOCKS_BARCODES AS SB " +
+			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
+			  "INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID " +
+			  "INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID " +
+			  "WHERE SB.BARCODE = '" + barcodeValue + "' AND PP.SHELF_CODE = '" + shelfCode + "'";
+	
+	var productResult = wrk_query(sql, 'dsn3');
+	
+	if (!productResult.STOCK_ID) {
+		showAlert('Ürün Bu Rafa Tanıtılmamış');
+		resetShelfFields(type);
+		return false;
+	}
+	
+	if (type === 'out') {
+		getId('add_other_amount').disabled = true;
+		getId('add_in_shelf').focus();
+	} else {
+		// Process for 'in' shelf
+		AppState.stockId = productResult.STOCK_ID;
+		AppState.stockCode = productResult.PRODUCT_NAME;
+		AppState.barcode = productResult.BARCODE;
+		AppState.shelfCodeIn = productResult.SHELF_CODE;
+		AppState.shelfCodeOut = getId('add_out_shelf').value;
+		
+		toggleSaveButton();
+		addProductRow();
+		resetForm();
+		getId('add_other_barcod').focus();
+	}
+	
+	return true;
+}	
 					document.getElementById('add_other_barcod').value = '';
 					document.getElementById('add_out_shelf').value = '';
 					document.getElementById('add_other_barcod').focus();	
@@ -547,103 +648,63 @@ $(".header").hide()
 		else
 			document.getElementById('shelf_select').options[0] = new Option('Raf Tanımsız','');
 	}
-</script>
-<script language="javascript" type="text/javascript">
-		function kontrol_kayit()
-		{
-			if(form_basket.txt_department_in.value == "")
-			{
-				alert('Depo Seçmelisiniz.');
-				return false;
-			}
-			else if(form_basket.txt_department_in.value.indexOf('-') == -1)
-			{
-				alert('Lütfen giriş için doğru depo seçiniz.');
-				return false;
-			}
-			else
-			{
-			actionidolustur();
-			window.location.href='<cfoutput>#request.self#</cfoutput>?fuseaction=pda.add_ambar_fis&change_shelf_fis=1&dep_in='+form_basket.txt_department_in.value+'&dep_out='+form_basket.txt_department_out.value+'&action_id='+document.getElementById('action_id').value+'&fis_tipi='+form_basket.fis_tipi.value+'&process_cat='+form_basket.process_cat_id.value;
-			}
-		}
-		
-</script>
-<script>
-    function wrk_query(str_query,data_source,maxrows)
-{
-	/*console.log(str_query);
-	alert('Bu sayfada wrk_query kullanılmıştır. İlgili kontrolü ajax yapısına çeviriniz.');
-	return false;
-	*/
-	/*
-	by  Workcube
-	Created 20060315
-	Modified 20060324
-	Usage:
-		my_query = query('SELECT COL1,COL2 FROM TABLE1 WHERE COL2=1');
-		veya
-		my_query = query('SELECT COL1,COL2 FROM TABLE1 WHERE COL2=1','dsn2');
-		veya
-		my_query = query('SELECT COL1,COL2 FROM TABLE1 WHERE COL2=1 ORDER BY COL2 DESC','dsn2',1);
-		ifadesi ile my_query degiskeni cfquery ile donen sonucun tamamen aynisi bir javascript query degeri alir
-		data_source : optional , default olarak 'dsn' kullaniliyor
-		maxrows : optional , default olarak 0 ataniyor, 0 olunca query sonucundaki tum kayitlar gelir
-	*/
-	
-	var new_query=new Object();
-	var req;
-	if(!data_source) data_source='dsn';
-	if(!maxrows) maxrows=0;
-	function callpage(url) {
-		req = false;
-		if(window.XMLHttpRequest)
-			try
-				{req = new XMLHttpRequest();}
-			catch(e)
-				{req = false;}
-		else if(window.ActiveXObject)
-			try {
-				req = new ActiveXObject("Msxml2.XMLHTTP");
-				}
-			catch(e)
-				{
-				try {req = new ActiveXObject("Microsoft.XMLHTTP");}
-				catch(e)
-					{req = false;}
-				}
-		if(req)
-			{
-				function return_function_()
-				{
-
-				if (req.readyState == 4 && req.status == 200)
-					try
-						{
-							eval(req.responseText.replace(/\u200B/g,''));
-							new_query = get_js_query; //alert('Cevap:\n\n'+req.responseText);//
-						}
-					catch(e)
-						{new_query = false;}
-				}
-			req.open("post", url+'&xmlhttp=1', false);
-			req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-			req.setRequestHeader('pragma','nocache');
-			if(encodeURI(str_query).indexOf('+') == -1) // + isareti encodeURI fonksiyonundan gecmedigi icin encodeURIComponent fonksiyonunu kullaniyoruz. EY 20120125
-				req.send('str_sql='+encodeURI(str_query)+'&data_source='+data_source+'&maxrows='+maxrows);
-			else
-				req.send('str_sql='+encodeURIComponent(str_query)+'&data_source='+data_source+'&maxrows='+maxrows);
-			return_function_();
-			}
-		
-	}
-	
-	//TolgaS 20070124 objects yetkisi olmayan partnerlar var diye fuseaction objects2 yapildi
-	callpage('/index.cfm?fuseaction=objects2.emptypopup_get_js_query&isAjax=1');
-	//alert(new_query);
-	
-	return new_query;
 }
 </script>
-<cf_get_lang_set module_name="stock">
 
+<script type="text/javascript">
+// Simplified AJAX query function
+function wrk_query(query, dataSource, maxRows) {
+	dataSource = dataSource || 'dsn';
+	maxRows = maxRows || 0;
+	
+	var result = new Object();
+	var xhr = null;
+	
+	// Create XMLHttpRequest
+	if (window.XMLHttpRequest) {
+		try {
+			xhr = new XMLHttpRequest();
+		} catch(e) {
+			xhr = false;
+		}
+	} else if (window.ActiveXObject) {
+		try {
+			xhr = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch(e) {
+			try {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch(e) {
+				xhr = false;
+			}
+		}
+	}
+	
+	if (!xhr) {
+		console.error('XMLHttpRequest not supported');
+		return false;
+	}
+	
+	xhr.open("POST", '/index.cfm?fuseaction=objects2.emptypopup_get_js_query&isAjax=1&xmlhttp=1', false);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.setRequestHeader('pragma', 'nocache');
+	
+	var params = 'str_sql=' + encodeURIComponent(query) + 
+				 '&data_source=' + dataSource + 
+				 '&maxrows=' + maxRows;
+	
+	try {
+		xhr.send(params);
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			eval(xhr.responseText.replace(/\u200B/g, ''));
+			result = get_js_query;
+		}
+	} catch(e) {
+		console.error('Query execution failed:', e);
+		result = false;
+	}
+	
+	return result;
+}
+</script>
+
+<cf_get_lang_set module_name="stock">
