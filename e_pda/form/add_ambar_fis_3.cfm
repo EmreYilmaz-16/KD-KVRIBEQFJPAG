@@ -101,7 +101,8 @@ var AppState = {
 	operationType: 0, // 0-ekle 1-çıkar
 	buttonActive: 0,
 	shelfCodeOut: '',
-	shelfCodeIn: ''
+	shelfCodeIn: '',
+	SerialNo: ''
 };
 
 // Configuration
@@ -305,6 +306,40 @@ function getStockInfo(barcode) {
 	return true;
 }
 
+function getStockInfowithSerialNo(serialno) {
+	// Reset state
+	AppState.barcode = '';
+	AppState.stockId = '';
+	AppState.stockCode = '';
+	AppState.SerialNo="";
+	
+	var sql = `SELECT TOP 1 SB.STOCK_ID
+	,SB.SERIAL_NO
+	,PU.MAIN_UNIT
+	,PU.MULTIPLIER
+	,S.PRODUCT_NAME
+FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+WHERE SB.SERIAL_NO = '${serialno}'`;
+	
+	var result = wrk_query(sql, 'dsn3');
+	if (!result.STOCK_ID) {
+		AppState.canAdd = true;
+		showAlert('Ürün Bulunamadı');
+		return false;
+	}
+	
+	AppState.stockId = result.STOCK_ID;
+	AppState.stockCode = result.PRODUCT_NAME;
+	AppState.barcode = result.BARCODE;
+	AppState.SerialNo=result.SERIAL_NO;
+	getId('add_out_shelf').focus();
+	setShelfOptions(AppState.stockId);
+	toggleSaveButton();
+	return true;
+}
+
 function addProductRow() {
 	var amount = getId('add_other_amount').value;
 	
@@ -458,7 +493,15 @@ document.onkeydown = function(e) {
 	var barcodeValue = getId('add_other_barcod').value;
 	var outShelfValue = getId('add_out_shelf').value;
 	var inShelfValue = getId('add_in_shelf').value;
-	
+	var serialNumber = getId('serial_number').value;
+	if(serialNumber.length > 0) {
+		if(!outShelfValue && !inShelfValue){
+			getStockInfowithSerialNo(serialNumber);
+		}
+
+		return false;
+	}
+
 	// Validate input lengths
 	if (barcodeValue.length === Config.BARCODE_LENGTH && !outShelfValue && !inShelfValue) {
 		getStockInfo(barcodeValue);
