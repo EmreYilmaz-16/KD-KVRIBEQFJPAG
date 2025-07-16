@@ -364,7 +364,9 @@ document.addEventListener('keydown', function (e) {
         if (serialNo.length > 0) {
             // If serial number is provided, search by serial number
             console.log('Searching by Serial No:', serialNo);
-            var stockId=getStockWithSerialNo(serialNo);
+            var isHaveStock=getStockWithSerialNo(serialNo);
+			console.log(isHaveStock);
+			console.table(FormState)
 
         } else if (barcode.length > 0) {
             if (!barcode && shelf) {
