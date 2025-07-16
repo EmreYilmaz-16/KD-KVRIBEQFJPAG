@@ -359,7 +359,7 @@ function addRow(barcode) {
 	
 	return true;
 }
-function addRowWithSerialNo(serialNo) {
+function addRowWithSerialNo(serialNo,barcode) {
 	FormState.amount = DOM.getValue('add_other_amount');
 	
 	if (!addAmount()) {
@@ -564,7 +564,7 @@ function searchShelfWithSerialNo(shelfCode,sid) {
 	updateButtonState();
 	DOM.get('txt_department_out').disabled = true;
 	
-	if (addRowWithSerialNo(FormState.serialNo)) {
+	if (addRowWithSerialNo(FormState.serialNo,FormState.barcode)) {
 		clearForm();
 	}
 }
