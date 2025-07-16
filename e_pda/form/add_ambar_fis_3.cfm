@@ -242,6 +242,7 @@ function resetForm() {
 	AppState.stockId = '';
 	AppState.stockCode = '';
 	AppState.canAdd = false;
+	AppState.SerialNo="";
 }
 
 // Main application functions
@@ -362,6 +363,42 @@ function addProductRow() {
 		var cells = [
 			'<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />' +
 			'<input type="text" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />',
+			
+			'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
+			
+			'<input type="text" value="' + AppState.shelfCodeOut + '" name="shelf_code_out' + AppState.rowCount + '" id="shelf_code_out' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />',
+			
+			'<input type="text" value="' + AppState.shelfCodeIn + '" name="shelf_code_in' + AppState.rowCount + '" id="shelf_code_in' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />'
+		];
+		
+		cells.forEach(function(cellHtml) {
+			var newCell = newRow.insertCell();
+			newCell.innerHTML = cellHtml;
+		});
+	}
+	
+	AppState.canAdd = false;
+}
+function addProductRowWithSerialNo() {
+	var amount = getId('add_other_amount').value;
+	
+	if (!validateStock(amount)) {
+		return false;
+	}
+	
+	if (!AppState.canAdd) {
+		AppState.rowCount++;
+		getId('row_count').value = AppState.rowCount;
+		
+		var table = getId('table1');
+		var newRow = table.insertRow(table.rows.length);
+		newRow.setAttribute('id', 'frm_row' + AppState.rowCount);
+		
+		// Create cells with proper data
+		var cells = [
+			'<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />' +
+			'<input type="hidden" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />
+			'<input type="text" value="' + AppState.SerialNo + '" name="serino' + AppState.rowCount + '" id="serino' + AppState.rowCount + '" size="13" class="boxtext" readonly />',
 			
 			'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
 			
@@ -694,7 +731,7 @@ function validateProductInShelfWithSerialNo(shelfCode, type,sid) {
 		AppState.shelfCodeOut = getId('add_out_shelf').value;
 		
 		toggleSaveButton();
-		addProductRow();
+		addProductRowWithSerialNo();
 		resetForm();
 		getId('add_other_barcod').focus();
 	}
