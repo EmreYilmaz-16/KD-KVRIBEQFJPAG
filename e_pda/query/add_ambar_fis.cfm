@@ -306,7 +306,45 @@
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
         </cfquery>
-        
+      <cfif isdefined('attributes.tersfis')>
+             <cfset data = {
+    STOCK_ID = STOCK_ID_SER,
+    SERIAL_NO = "#SERI_NO_SER#",
+    LOT_NO = "#GETSER.LOT_NO#",
+    IN_OUT = 0,
+    PROCESS_CAT = 113,
+    PROCESS_ID = 0,
+    PROCESS_NO = "",
+    PERIOD_ID = #session.ep.period_id#,
+    DEPARTMENT_ID = attributes.DEPARTMENT_OUT,
+    LOCATION_ID = attributes.LOCATION_OUT,
+    IS_SARF = 0,
+    IS_SERI_SONU = 0,
+    WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
+    WRK_ROW_ID = "#WRK_ROW_ID_SER#",
+    UNIT_ROW_QUANTITY = 1,
+    SHELF_NUMBER = "#GIRIS_RAF_ID#"
+}>
+        <cfset data2 = {
+    STOCK_ID = STOCK_ID_SER,
+    SERIAL_NO = "#SERI_NO_SER#",
+    LOT_NO = "#GETSER.LOT_NO#",
+    IN_OUT = 1,
+    PROCESS_CAT = 113,
+    PROCESS_ID = 0,
+    PROCESS_NO = "",
+    PERIOD_ID = session.ep.period_id,
+    DEPARTMENT_ID = attributes.DEPARTMENT_IN,
+    LOCATION_ID = attributes.LOCATION_IN,
+    IS_SARF = 0,
+    IS_SERI_SONU = 0,
+    WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
+    WRK_ROW_ID = "#WRK_ROW_ID_SER#",
+    UNIT_ROW_QUANTITY = 1,
+    SHELF_NUMBER = ""
+}>
+      <cfelse>
+      
         <cfset data = {
     STOCK_ID = STOCK_ID_SER,
     SERIAL_NO = "#SERI_NO_SER#",
@@ -343,6 +381,7 @@
     UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = "#GIRIS_RAF_ID#"
 }>
+</cfif>
 <!---------
     <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
