@@ -567,7 +567,9 @@ function validateAndSave() {
 		process_cat: DOM.getValue('process_cat_id')
 	});
 	
-	window.location.href = '<cfoutput>#request.self#</cfoutput>?' + params.toString();
+	//window.location.href = '<cfoutput>#request.self#</cfoutput>?' + params.toString();
+	document.form_basket.action='<cfoutput>#request.self#</cfoutput>?' + params.toString();
+			document.form_basket.submit();
 }
 </script>
 
