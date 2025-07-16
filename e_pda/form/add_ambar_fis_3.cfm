@@ -336,6 +336,8 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 	AppState.barcode = result.BARCODE;
 	AppState.SerialNo=result.SERIAL_NO;
 	getId('add_out_shelf').focus();
+	console.log(AppState.SerialNo);
+
 	setShelfOptions(AppState.stockId);
 	toggleSaveButton();
 	return true;
@@ -498,6 +500,18 @@ document.onkeydown = function(e) {
 	if(serialNumber.length > 0) {
 		if(!outShelfValue && !inShelfValue){
 			getStockInfowithSerialNo(serialNumber);
+		}else{
+			if(Config.SHELF_CODE_LENGTHS.includes(outShelfValue.length) && Config.SHELF_CODE_LENGTHS.includes(inShelfValue.length)) {
+				if (inShelfValue === outShelfValue) {
+					showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
+					getId('add_in_shelf').value = '';
+					getId('add_in_shelf').focus();
+					return false;
+				}
+				searchShelf(inShelfValue, 'in');
+			} else {
+				searchShelf(outShelfValue, 'out');
+			}
 		}
 
 		return false;
