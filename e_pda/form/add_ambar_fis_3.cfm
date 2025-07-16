@@ -211,6 +211,7 @@ var Config = {
     <tr class="color-list">
       <td colspan="6" align="right">
       	<input type="hidden" id="department_in" name="department_in" value="" />
+		<input type="hidden" id="department_out" name="department_out" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
         <input type="hidden" id="action_id" name="action_id" value="" />
         <input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onclick="validateAndSave();" /></td>
