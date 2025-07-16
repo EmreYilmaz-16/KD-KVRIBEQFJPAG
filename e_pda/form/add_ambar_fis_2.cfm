@@ -80,7 +80,8 @@ const FormState = {
 	amount: '',
 	shelfCode: '',
 	isAdd: true,
-	buttonCount: 0
+	buttonCount: 0,
+	serialNo: ''
 };
 
 
@@ -100,6 +101,7 @@ function clearForm() {
 	DOM.setValue('add_other_shelf', '');
 	DOM.setValue('add_other_amount', '1');
 	DOM.focus('add_other_barcod');
+	DOM.setValue('serial_number', '');
 }
 
 function resetFormState() {
@@ -107,6 +109,7 @@ function resetFormState() {
 	FormState.stockId = '';
 	FormState.stockCode = '';
 	FormState.shelfCode = '';
+	FormState.serialNo = '';
 }
 </script>
 <cfform name="form_basket">
@@ -122,12 +125,14 @@ function resetFormState() {
           <tr class="color-list">
             <td align="center" width="45px">Miktar</td>
             <td align="center" width="95px">Barcode</td>
+			<td align="center" width="95px">Seri No</td>
             <td align="center">Raf</td>
             <td></td>
        	  </tr>
           <tr height="20px" class="color-list">
             <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:40px; text-align:right" value="1" /></td>
             <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" ></td>
+			<td><input id="serial_number" name="serial_number" type="text" value="" style="width:90px;" ></td>
             <td><input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:60px;" value="" /></td>
             <td>
               <div id="shelf_select_td" style="display:none">
@@ -350,24 +355,65 @@ function addRow(barcode) {
 }
 
 // Event Handlers
-document.addEventListener('keydown', function(e) {
-	if (e.keyCode === 13) { // Enter key
-		const barcode = DOM.getValue('add_other_barcod');
-		const shelf = DOM.getValue('add_other_shelf');
-		
-		if (!barcode && shelf) {
-			alert('Önce Ürün Barkodu Okutunuz');
-			clearForm();
-			return;
-		}
-		
-		if (barcode && shelf) {
-			searchShelf(shelf);
-		} else if (barcode) {
-			getStock(barcode);
-		}
-	}
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode === 13) { // Enter key
+        const barcode = DOM.getValue('add_other_barcod');
+        const shelf = DOM.getValue('add_other_shelf');
+        const serialNo = DOM.getValue('serial_number');
+
+        if (serialNo.length > 0) {
+            // If serial number is provided, search by serial number
+            console.log('Searching by Serial No:', serialNo);
+            var stockId=getStockWithSerialNo(serialNo);
+
+        } else if (barcode.length > 0) {
+            if (!barcode && shelf) {
+                alert('Önce Ürün Barkodu Okutunuz');
+                clearForm();
+                return;
+            }
+
+            if (barcode && shelf) {
+                searchShelf(shelf);
+            } else if (barcode) {
+                getStock(barcode);
+            }
+        }
+
+    }
 });
+
+
+function getStockWithSerialNo(serialNo) {
+    resetFormState();
+
+    const sql = `SELECT TOP 1 SB.STOCK_ID
+	,SB.SERIAL_NO
+	,PU.MAIN_UNIT
+	,PU.MULTIPLIER
+	,S.PRODUCT_NAME
+FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+WHERE SB.SERIAL_NO = '${serialno}'`;
+
+    const product = wrk_query(sql, 'dsn3');
+
+    if (!product.STOCK_ID) {
+        alert('Ürün Bulunamadı');
+        return false;
+    }
+
+    FormState.stockId = product.STOCK_ID;
+    FormState.stockCode = product.PRODUCT_NAME;
+    FormState.barcode = product.BARCODE;
+
+    DOM.focus('add_other_shelf');
+    setShelfs(FormState.stockId);
+    updateButtonState();
+    return true;
+}
+
 function searchShelf(shelfCode) {
 	const exitWarehouse = DOM.getValue('txt_department_out');
 	const sql = `SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID 
