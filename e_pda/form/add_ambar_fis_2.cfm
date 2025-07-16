@@ -112,10 +112,10 @@ function resetFormState() {
 	FormState.serialNo = '';
 }
 var DsnVariables = {
-	dsn: '#dsn#',
-	dsn2: '#dsn2#',
-	dsn3: '#dsn3#',
-	dsn3_alias: '#dsn3_alias#'
+	dsn: '<cfoutput>#dsn#</cfoutput>',
+	dsn2: '<cfoutput>#dsn2#</cfoutput>',
+	dsn3: '<cfoutput>#dsn3#</cfoutput>',
+	dsn3_alias: '<cfoutput>#dsn3_alias#</cfoutput>'
 };
 </script>
 <cfform name="form_basket">
@@ -286,7 +286,7 @@ function getStock(barcode) {
 function checkStock(shelfCode, stockId, amount) {
 	const sql = `SELECT ISNULL(S.REAL_STOCK, 0) AS PRODUCT_STOCK 
 		FROM GET_STOCK_LAST_SHELF AS S 
-		INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P 
+		INNER JOIN ${DsnVariables.dsn3_alias}.PRODUCT_PLACE AS P 
 		ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID 
 		WHERE P.SHELF_CODE = '${shelfCode}' AND S.STOCK_ID = ${stockId}`;
 	
