@@ -111,6 +111,12 @@ function resetFormState() {
 	FormState.shelfCode = '';
 	FormState.serialNo = '';
 }
+var DsnVariables = {
+	dsn: '#dsn#',
+	dsn2: '#dsn2#',
+	dsn3: '#dsn3#',
+	dsn3_alias: '#dsn3_alias#'
+};
 </script>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -409,6 +415,7 @@ WHERE SB.SERIAL_NO = '${serialNo}'`;
     FormState.stockId = product.STOCK_ID;
     FormState.stockCode = product.PRODUCT_NAME;
     FormState.barcode = product.BARCODE;
+	FormState.serialNo = serialNo;
 
     DOM.focus('add_other_shelf');
     setShelfs(FormState.stockId);
