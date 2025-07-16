@@ -359,7 +359,39 @@ function addRow(barcode) {
 	
 	return true;
 }
-
+function addRowWithSerialNo(serialNo) {
+	FormState.amount = DOM.getValue('add_other_amount');
+	
+	if (!addAmount()) {
+		return false;
+	}
+	
+	FormState.rowCount++;
+	DOM.setValue('row_count', FormState.rowCount);
+	
+	const table = DOM.get('table1');
+	const newRow = table.insertRow(table.rows.length);
+	newRow.id = `frm_row${FormState.rowCount}`;
+	
+	const cells = [
+		`<input type="hidden" value="${FormState.stockId}" name="stockid${FormState.rowCount}" id="stockid${FormState.rowCount}" />
+		 <input type="hidden" value="${barcode}" name="barcod${FormState.rowCount}" id="barcod${FormState.rowCount}" size="13" class="boxtext" readonly />
+		 <input type="text" value="${serialNo}" name="seriNo${FormState.rowCount}" id="seriNo${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+		
+		`<input type="text" value="${FormState.stockCode}" name="stockcode${FormState.rowCount}" id="stockcode${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+		
+		`<input type="text" style="text-align:right" value="${FormState.amount}" name="amount${FormState.rowCount}" id="amount${FormState.rowCount}" size="5" class="boxtext" readonly />`,
+		
+		`<input type="text" value="${FormState.shelfCode}" name="shelf_code${FormState.rowCount}" id="shelf_code${FormState.rowCount}" size="12" class="boxtext" readonly />`
+	];
+	
+	cells.forEach(cellContent => {
+		const cell = newRow.insertCell();
+		cell.innerHTML = cellContent;
+	});
+	
+	return true;
+}
 // Event Handlers
 document.addEventListener('keydown', function (e) {
     if (e.keyCode === 13) { // Enter key
