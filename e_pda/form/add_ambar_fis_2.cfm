@@ -564,7 +564,7 @@ function searchShelfWithSerialNo(shelfCode,sid) {
 	updateButtonState();
 	DOM.get('txt_department_out').disabled = true;
 	
-	if (addRow(FormState.barcode)) {
+	if (addRowWithSerialNo(FormState.serialNo)) {
 		clearForm();
 	}
 }
