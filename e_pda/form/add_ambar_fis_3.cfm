@@ -446,6 +446,7 @@ function validateAndSave() {
 	];
 	
 	window.location.href = '<cfoutput>#request.self#</cfoutput>?' + params.join('&');
+}
 </script>
 
 <script type="text/javascript">
