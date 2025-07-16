@@ -161,7 +161,7 @@ var Config = {
            </tr>
            <tr class="color-list">
             <td>
-              <select name="txt_department_out" style="width:110px" onchange="document.getElementById('department_out').value = this.value">
+              <select name="txt_department_out" id="txt_department_out" style="width:110px" onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
@@ -175,7 +175,7 @@ var Config = {
               </select>
           	</td>
             <td>
-              <select name="txt_department_in" style="width:110px" onchange="document.getElementById('department_in').value = this.value">
+              <select name="txt_department_in" id="txt_department_in" style="width:110px" onchange="document.getElementById('department_in').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
