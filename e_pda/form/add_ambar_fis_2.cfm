@@ -97,26 +97,73 @@ const DOM = {
 
 // Form Functions
 function clearForm() {
-	DOM.setValue('add_other_barcod', '');
-	DOM.setValue('add_other_shelf', '');
+	const fields = ['add_other_barcod', 'add_other_shelf', 'serial_number'];
+	fields.forEach(field => DOM.setValue(field, ''));
 	DOM.setValue('add_other_amount', '1');
 	DOM.focus('add_other_barcod');
-	DOM.setValue('serial_number', '');
 }
 
 function resetFormState() {
-	FormState.barcode = '';
-	FormState.stockId = '';
-	FormState.stockCode = '';
-	FormState.shelfCode = '';
-	FormState.serialNo = '';
+	Object.assign(FormState, {
+		barcode: '',
+		stockId: '',
+		stockCode: '',
+		shelfCode: '',
+		serialNo: '',
+		amount: ''
+	});
 }
-var DsnVariables = {
-	dsn: '<cfoutput>#dsn#</cfoutput>',
-	dsn2: '<cfoutput>#dsn2#</cfoutput>',
-	dsn3: '<cfoutput>#dsn3#</cfoutput>',
+// Database Configuration
+const DB = {
 	dsn3_alias: '<cfoutput>#dsn3_alias#</cfoutput>'
 };
+
+// Product Search Functions
+function getStock(barcode) {
+	resetFormState();
+	
+	const sql = `SELECT SB.STOCK_ID, SB.BARCODE, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME 
+		FROM STOCKS_BARCODES AS SB 
+		INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID 
+		INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
+		WHERE SB.BARCODE = '${barcode}'`;
+	
+	return processProductQuery(sql, 'dsn3', 'Ürün Bulunamadı');
+}
+
+function getStockWithSerialNo(serialNo) {
+	resetFormState();
+	
+	const sql = `SELECT TOP 1 SB.STOCK_ID, SB.SERIAL_NO, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME
+		FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+		INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+		INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+		WHERE SB.SERIAL_NO = '${serialNo}'`;
+	
+	const result = processProductQuery(sql, 'dsn3', 'Seri Numaralı Ürün Bulunamadı');
+	if (result) {
+		FormState.serialNo = serialNo;
+	}
+	return result;
+}
+
+function processProductQuery(sql, datasource, errorMessage) {
+	const product = wrk_query(sql, datasource);
+	
+	if (!product.STOCK_ID) {
+		alert(errorMessage);
+		return false;
+	}
+	
+	FormState.stockId = product.STOCK_ID;
+	FormState.stockCode = product.PRODUCT_NAME;
+	FormState.barcode = product.BARCODE || '';
+	
+	DOM.focus('add_other_shelf');
+	setShelfs(FormState.stockId);
+	updateButtonState();
+	return true;
+}
 </script>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -257,36 +304,10 @@ function updateButtonState() {
 	toggleSubmitButton();
 }
 
-function getStock(barcode) {
-	resetFormState();
-	
-	const sql = `SELECT SB.STOCK_ID, SB.BARCODE, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME 
-		FROM STOCKS_BARCODES AS SB 
-		INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID 
-		INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
-		WHERE SB.BARCODE = '${barcode}'`;
-	
-	const product = wrk_query(sql, 'dsn3');
-	
-	if (!product.STOCK_ID) {
-		alert('Ürün Bulunamadı');
-		return false;
-	}
-	
-	FormState.stockId = product.STOCK_ID;
-	FormState.stockCode = product.PRODUCT_NAME;
-	FormState.barcode = product.BARCODE;
-	
-	DOM.focus('add_other_shelf');
-	setShelfs(FormState.stockId);
-	updateButtonState();
-	return true;
-}
-
 function checkStock(shelfCode, stockId, amount) {
 	const sql = `SELECT ISNULL(S.REAL_STOCK, 0) AS PRODUCT_STOCK 
 		FROM GET_STOCK_LAST_SHELF AS S 
-		INNER JOIN ${DsnVariables.dsn3_alias}.PRODUCT_PLACE AS P 
+		INNER JOIN ${DB.dsn3_alias}.PRODUCT_PLACE AS P 
 		ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID 
 		WHERE P.SHELF_CODE = '${shelfCode}' AND S.STOCK_ID = ${stockId}`;
 	
@@ -327,7 +348,7 @@ function addAmount() {
 	// New row - check stock
 	return checkStock(shelfCode, FormState.stockId, amount);
 }
-function addRow(barcode) {
+function addRow(useSerial = false) {
 	FormState.amount = DOM.getValue('add_other_amount');
 	
 	if (!addAmount()) {
@@ -341,49 +362,32 @@ function addRow(barcode) {
 	const newRow = table.insertRow(table.rows.length);
 	newRow.id = `frm_row${FormState.rowCount}`;
 	
-	const cells = [
-		`<input type="hidden" value="${FormState.stockId}" name="stockid${FormState.rowCount}" id="stockid${FormState.rowCount}" />
-		 <input type="text" value="${barcode}" name="barcod${FormState.rowCount}" id="barcod${FormState.rowCount}" size="13" class="boxtext" readonly />`,
-		
-		`<input type="text" value="${FormState.stockCode}" name="stockcode${FormState.rowCount}" id="stockcode${FormState.rowCount}" size="13" class="boxtext" readonly />`,
-		
-		`<input type="text" style="text-align:right" value="${FormState.amount}" name="amount${FormState.rowCount}" id="amount${FormState.rowCount}" size="5" class="boxtext" readonly />`,
-		
-		`<input type="text" value="${FormState.shelfCode}" name="shelf_code${FormState.rowCount}" id="shelf_code${FormState.rowCount}" size="12" class="boxtext" readonly />`
-	];
+	let cells;
 	
-	cells.forEach(cellContent => {
-		const cell = newRow.insertCell();
-		cell.innerHTML = cellContent;
-	});
-	
-	return true;
-}
-function addRowWithSerialNo(serialNo,barcode) {
-	FormState.amount = DOM.getValue('add_other_amount');
-	
-	if (!addAmount()) {
-		return false;
+	if (useSerial) {
+		cells = [
+			`<input type="hidden" value="${FormState.stockId}" name="stockid${FormState.rowCount}" id="stockid${FormState.rowCount}" />
+			 <input type="hidden" value="${FormState.barcode}" name="barcod${FormState.rowCount}" id="barcod${FormState.rowCount}" />
+			 <input type="text" value="${FormState.serialNo}" name="seriNo${FormState.rowCount}" id="seriNo${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+			
+			`<input type="text" value="${FormState.stockCode}" name="stockcode${FormState.rowCount}" id="stockcode${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+			
+			`<input type="text" style="text-align:right" value="${FormState.amount}" name="amount${FormState.rowCount}" id="amount${FormState.rowCount}" size="5" class="boxtext" readonly />`,
+			
+			`<input type="text" value="${FormState.shelfCode}" name="shelf_code${FormState.rowCount}" id="shelf_code${FormState.rowCount}" size="12" class="boxtext" readonly />`
+		];
+	} else {
+		cells = [
+			`<input type="hidden" value="${FormState.stockId}" name="stockid${FormState.rowCount}" id="stockid${FormState.rowCount}" />
+			 <input type="text" value="${FormState.barcode}" name="barcod${FormState.rowCount}" id="barcod${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+			
+			`<input type="text" value="${FormState.stockCode}" name="stockcode${FormState.rowCount}" id="stockcode${FormState.rowCount}" size="13" class="boxtext" readonly />`,
+			
+			`<input type="text" style="text-align:right" value="${FormState.amount}" name="amount${FormState.rowCount}" id="amount${FormState.rowCount}" size="5" class="boxtext" readonly />`,
+			
+			`<input type="text" value="${FormState.shelfCode}" name="shelf_code${FormState.rowCount}" id="shelf_code${FormState.rowCount}" size="12" class="boxtext" readonly />`
+		];
 	}
-	
-	FormState.rowCount++;
-	DOM.setValue('row_count', FormState.rowCount);
-	
-	const table = DOM.get('table1');
-	const newRow = table.insertRow(table.rows.length);
-	newRow.id = `frm_row${FormState.rowCount}`;
-	
-	const cells = [
-		`<input type="hidden" value="${FormState.stockId}" name="stockid${FormState.rowCount}" id="stockid${FormState.rowCount}" />
-		 <input type="hidden" value="${barcode}" name="barcod${FormState.rowCount}" id="barcod${FormState.rowCount}" size="13" class="boxtext" readonly />
-		 <input type="text" value="${serialNo}" name="seriNo${FormState.rowCount}" id="seriNo${FormState.rowCount}" size="13" class="boxtext" readonly />`,
-		
-		`<input type="text" value="${FormState.stockCode}" name="stockcode${FormState.rowCount}" id="stockcode${FormState.rowCount}" size="13" class="boxtext" readonly />`,
-		
-		`<input type="text" style="text-align:right" value="${FormState.amount}" name="amount${FormState.rowCount}" id="amount${FormState.rowCount}" size="5" class="boxtext" readonly />`,
-		
-		`<input type="text" value="${FormState.shelfCode}" name="shelf_code${FormState.rowCount}" id="shelf_code${FormState.rowCount}" size="12" class="boxtext" readonly />`
-	];
 	
 	cells.forEach(cellContent => {
 		const cell = newRow.insertCell();
@@ -393,178 +397,117 @@ function addRowWithSerialNo(serialNo,barcode) {
 	return true;
 }
 // Event Handlers
-document.addEventListener('keydown', function (e) {
-    if (e.keyCode === 13) { // Enter key
-        const barcode = DOM.getValue('add_other_barcod');
-        const shelf = DOM.getValue('add_other_shelf');
-        const serialNo = DOM.getValue('serial_number');
-
-        if (serialNo.length > 0) {
-            // If serial number is provided, search by serial number
-            console.log('Searching by Serial No:', serialNo);
-            var isHaveStock=getStockWithSerialNo(serialNo);
-			console.log(isHaveStock);
-			console.table(FormState)
-			if(shelf.length){
-				searchShelfWithSerialNo(shelf,FormState.stockId);
-			}
-
-        } else if (barcode.length > 0) {
-            if (!barcode && shelf) {
-                alert('Önce Ürün Barkodu Okutunuz');
-                clearForm();
-                return;
-            }
-
-            if (barcode && shelf) {
-                searchShelf(shelf);
-            } else if (barcode) {
-                getStock(barcode);
-            }
-        }
-
-    }
+document.addEventListener('keydown', function(e) {
+	if (e.keyCode === 13) { // Enter key
+		const barcode = DOM.getValue('add_other_barcod');
+		const shelf = DOM.getValue('add_other_shelf');
+		const serialNo = DOM.getValue('serial_number');
+		
+		// Priority: Serial No > Barcode
+		if (serialNo) {
+			handleSerialNoInput(serialNo, shelf);
+		} else if (barcode) {
+			handleBarcodeInput(barcode, shelf);
+		}
+	}
 });
 
-
-function getStockWithSerialNo(serialNo) {
-    resetFormState();
-
-    const sql = `SELECT TOP 1 SB.STOCK_ID
-	,SB.SERIAL_NO
-	,PU.MAIN_UNIT
-	,PU.MULTIPLIER
-	,S.PRODUCT_NAME
-FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
-INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
-INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
-WHERE SB.SERIAL_NO = '${serialNo}'`;
-
-    const product = wrk_query(sql, 'dsn3');
-
-    if (!product.STOCK_ID) {
-        alert('Ürün Bulunamadı');
-        return false;
-    }
-
-    FormState.stockId = product.STOCK_ID;
-    FormState.stockCode = product.PRODUCT_NAME;
-    FormState.barcode = product.BARCODE;
-	FormState.serialNo = serialNo;
-
-    DOM.focus('add_other_shelf');
-    setShelfs(FormState.stockId);
-    updateButtonState();
-    return true;
-}
-
-function searchShelf(shelfCode) {
-	const exitWarehouse = DOM.getValue('txt_department_out');
-	const sql = `SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID 
-		FROM PRODUCT_PLACE 
-		WHERE PLACE_STATUS = 1 AND SHELF_CODE = '${shelfCode}'`;
-	
-	const shelf = wrk_query(sql, 'dsn3');
-	
-	if (!shelf.recordcount) {
-		alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
-		DOM.setValue('add_other_shelf', '');
-		DOM.focus('add_other_shelf');
-		return;
-	}
-	
-	const shelfLocation = `${shelf.STORE_ID}-${shelf.LOCATION_ID}`;
-	if (exitWarehouse !== shelfLocation) {
-		alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur!');
-		clearForm();
-		return;
-	}
-	
-	const barcode = DOM.getValue('add_other_barcod');
-	if (!barcode) {
-		DOM.focus('add_other_barcod');
-		return;
-	}
-	
-	const productSql = `SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE 
-		FROM STOCKS_BARCODES AS SB 
-		INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
-		INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID 
-		INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID 
-		WHERE SB.BARCODE = '${barcode}' AND PP.SHELF_CODE = '${shelfCode}'`;
-	
-	const product = wrk_query(productSql, 'dsn3');
-	
-	if (!product.STOCK_ID) {
-		alert('Ürün Bu Rafa Tanıtılmamış');
-		DOM.setValue('add_other_shelf', '');
-		DOM.focus('add_other_shelf');
-		return;
-	}
-	
-	FormState.stockId = product.STOCK_ID;
-	FormState.stockCode = product.PRODUCT_NAME;
-	FormState.barcode = product.BARCODE;
-	FormState.shelfCode = product.SHELF_CODE;
-	
-	updateButtonState();
-	DOM.get('txt_department_out').disabled = true;
-	
-	if (addRow(FormState.barcode)) {
-		clearForm();
-	}
-}
-
-function searchShelfWithSerialNo(shelfCode,sid) {
-	const exitWarehouse = DOM.getValue('txt_department_out');
-	const sql = `SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID 
-		FROM PRODUCT_PLACE 
-		WHERE PLACE_STATUS = 1 AND SHELF_CODE = '${shelfCode}'`;
-	
-	const shelf = wrk_query(sql, 'dsn3');
-	
-	if (!shelf.recordcount) {
-		alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
-		DOM.setValue('add_other_shelf', '');
-		DOM.focus('add_other_shelf');
-		return;
-	}
-	
-	const shelfLocation = `${shelf.STORE_ID}-${shelf.LOCATION_ID}`;
-	if (exitWarehouse !== shelfLocation) {
-		alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur!');
-		clearForm();
-		return;
-	}
-	
-	const seriNo = DOM.getValue('serial_number');
-	if (!seriNo) {
-		DOM.focus('serial_number');
-		return;
-	}
-	
-	const productSql =  "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.STOCK_ID = '"+sid+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
-	
-	const product = wrk_query(productSql, 'dsn3');
-	
-	if (!product.STOCK_ID) {
-		alert('Ürün Bu Rafa Tanıtılmamış');
-		DOM.setValue('add_other_shelf', '');
-		DOM.focus('add_other_shelf');
-		return;
-	}
-
-	
-	FormState.stockId = product.STOCK_ID;
-	FormState.stockCode = product.PRODUCT_NAME;
-	FormState.barcode = product.BARCODE;
-	FormState.shelfCode = product.SHELF_CODE;
+function handleSerialNoInput(serialNo, shelf) {
+	console.log('Searching by Serial No:', serialNo);
+	const hasStock = getStockWithSerialNo(serialNo);
+	console.log('Stock found:', hasStock);
 	console.table(FormState);
+	
+	if (hasStock && shelf) {
+		searchShelf(shelf, true); // true = use serial mode
+	}
+}
 
+function handleBarcodeInput(barcode, shelf) {
+	if (!barcode && shelf) {
+		alert('Önce Ürün Barkodu Okutunuz');
+		clearForm();
+		return;
+	}
+	
+	if (barcode && shelf) {
+		searchShelf(shelf, false); // false = use barcode mode
+	} else if (barcode) {
+		getStock(barcode);
+	}
+}
+
+function searchShelf(shelfCode, useSerial = false) {
+	const exitWarehouse = DOM.getValue('txt_department_out');
+	
+	// Validate shelf existence
+	const shelfSql = `SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID 
+		FROM PRODUCT_PLACE 
+		WHERE PLACE_STATUS = 1 AND SHELF_CODE = '${shelfCode}'`;
+	
+	const shelf = wrk_query(shelfSql, 'dsn3');
+	
+	if (!shelf.recordcount) {
+		alert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
+		DOM.setValue('add_other_shelf', '');
+		DOM.focus('add_other_shelf');
+		return;
+	}
+	
+	// Validate shelf location
+	const shelfLocation = `${shelf.STORE_ID}-${shelf.LOCATION_ID}`;
+	if (exitWarehouse !== shelfLocation) {
+		alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur!');
+		clearForm();
+		return;
+	}
+	
+	// Validate input based on mode
+	const inputValue = useSerial ? DOM.getValue('serial_number') : DOM.getValue('add_other_barcod');
+	if (!inputValue) {
+		DOM.focus(useSerial ? 'serial_number' : 'add_other_barcod');
+		return;
+	}
+	
+	// Build product query based on mode
+	let productSql;
+	if (useSerial) {
+		productSql = `SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE 
+			FROM STOCKS_BARCODES AS SB 
+			INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
+			INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID 
+			INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID 
+			WHERE SB.STOCK_ID = '${FormState.stockId}' AND PP.SHELF_CODE = '${shelfCode}'`;
+	} else {
+		productSql = `SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE 
+			FROM STOCKS_BARCODES AS SB 
+			INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
+			INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID 
+			INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID 
+			WHERE SB.BARCODE = '${inputValue}' AND PP.SHELF_CODE = '${shelfCode}'`;
+	}
+	
+	const product = wrk_query(productSql, 'dsn3');
+	
+	if (!product.STOCK_ID) {
+		alert('Ürün Bu Rafa Tanıtılmamış');
+		DOM.setValue('add_other_shelf', '');
+		DOM.focus('add_other_shelf');
+		return;
+	}
+	
+	// Update FormState
+	FormState.stockId = product.STOCK_ID;
+	FormState.stockCode = product.PRODUCT_NAME;
+	FormState.barcode = product.BARCODE;
+	FormState.shelfCode = product.SHELF_CODE;
+	
+	console.table(FormState);
+	
 	updateButtonState();
 	DOM.get('txt_department_out').disabled = true;
 	
-	if (addRowWithSerialNo(FormState.serialNo,FormState.barcode)) {
+	if (addRow(useSerial)) {
 		clearForm();
 	}
 }
