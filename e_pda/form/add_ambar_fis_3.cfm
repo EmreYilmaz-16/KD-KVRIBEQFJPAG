@@ -90,7 +90,7 @@
 }
 </style>
 <script type="text/javascript">
-// Global variables
+// Global variables with better organization
 var AppState = {
 	rowCount: 0,
 	barcode: '',
@@ -102,13 +102,20 @@ var AppState = {
 	buttonActive: 0,
 	shelfCodeOut: '',
 	shelfCodeIn: '',
-	SerialNo: ''
+	serialNo: '',
+	useSerialNo: false
 };
 
 // Configuration
 var Config = {
 	BARCODE_LENGTH: 13,
-	SHELF_CODE_LENGTHS: [8, 11]
+	SHELF_CODE_LENGTHS: [8, 11],
+	QUERIES: {
+		STOCK_BY_BARCODE: "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE = '{{barcode}}'",
+		STOCK_BY_SERIAL: "SELECT TOP 1 SB.STOCK_ID,SB.SERIAL_NO,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID WHERE SB.SERIAL_NO = '{{serial}}'",
+		SHELF_VALIDATION: "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '{{shelf}}'",
+		PRODUCT_IN_SHELF: "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE {{condition}} AND PP.SHELF_CODE = '{{shelf}}'"
+	}
 };
 </script>
 <cfform name="form_basket">
@@ -233,16 +240,23 @@ function showAlert(message) {
 }
 
 function resetForm() {
-	getId('add_other_barcod').value = '';
-	getId('add_out_shelf').value = '';
-	getId('add_in_shelf').value = '';
+	var fields = ['add_other_barcod', 'add_out_shelf', 'add_in_shelf', 'serial_number'];
+	fields.forEach(function(fieldId) {
+		getId(fieldId).value = '';
+	});
+	
 	getId('add_other_amount').value = 1;
 	getId('add_other_amount').disabled = false;
-	AppState.barcode = '';
-	AppState.stockId = '';
-	AppState.stockCode = '';
-	AppState.canAdd = false;
-	AppState.SerialNo="";
+	
+	// Reset AppState
+	Object.assign(AppState, {
+		barcode: '',
+		stockId: '',
+		stockCode: '',
+		canAdd: false,
+		serialNo: '',
+		useSerialNo: false
+	});
 }
 
 // Main application functions
@@ -280,17 +294,20 @@ function toggleSaveButton() {
 	getId('onay').disabled = (AppState.buttonActive < 1);
 }
 
-function getStockInfo(barcode) {
+// Unified stock information retrieval
+function getStockInfo(identifier, isSerial = false) {
 	// Reset state
-	AppState.barcode = '';
-	AppState.stockId = '';
-	AppState.stockCode = '';
+	Object.assign(AppState, {
+		barcode: '',
+		stockId: '',
+		stockCode: '',
+		serialNo: '',
+		useSerialNo: isSerial
+	});
 	
-	var sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME " +
-			  "FROM STOCKS_BARCODES AS SB " +
-			  "INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID " +
-			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
-			  "WHERE SB.BARCODE = '" + barcode + "'";
+	var sql = isSerial ? 
+		Config.QUERIES.STOCK_BY_SERIAL.replace('{{serial}}', identifier) :
+		Config.QUERIES.STOCK_BY_BARCODE.replace('{{barcode}}', identifier);
 	
 	var result = wrk_query(sql, 'dsn3');
 	if (!result.STOCK_ID) {
@@ -301,49 +318,21 @@ function getStockInfo(barcode) {
 	
 	AppState.stockId = result.STOCK_ID;
 	AppState.stockCode = result.PRODUCT_NAME;
-	AppState.barcode = result.BARCODE;
-	getId('add_out_shelf').focus();
-	setShelfOptions(AppState.stockId);
-	toggleSaveButton();
-	return true;
-}
-
-function getStockInfowithSerialNo(serialno) {
-	// Reset state
-	AppState.barcode = '';
-	AppState.stockId = '';
-	AppState.stockCode = '';
-	AppState.SerialNo="";
 	
-	var sql = `SELECT TOP 1 SB.STOCK_ID
-	,SB.SERIAL_NO
-	,PU.MAIN_UNIT
-	,PU.MULTIPLIER
-	,S.PRODUCT_NAME
-FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
-INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
-INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
-WHERE SB.SERIAL_NO = '${serialno}'`;
-	
-	var result = wrk_query(sql, 'dsn3');
-	if (!result.STOCK_ID) {
-		AppState.canAdd = true;
-		showAlert('Ürün Bulunamadı');
-		return false;
+	if (isSerial) {
+		AppState.serialNo = result.SERIAL_NO;
+		console.log('Serial No:', AppState.serialNo);
+	} else {
+		AppState.barcode = result.BARCODE;
 	}
 	
-	AppState.stockId = result.STOCK_ID;
-	AppState.stockCode = result.PRODUCT_NAME;
-	AppState.barcode = result.BARCODE;
-	AppState.SerialNo=result.SERIAL_NO;
 	getId('add_out_shelf').focus();
-	console.log(AppState.SerialNo);
-
 	setShelfOptions(AppState.stockId);
 	toggleSaveButton();
 	return true;
 }
 
+// Unified product row creation
 function addProductRow() {
 	var amount = getId('add_other_amount').value;
 	
@@ -359,17 +348,8 @@ function addProductRow() {
 		var newRow = table.insertRow(table.rows.length);
 		newRow.setAttribute('id', 'frm_row' + AppState.rowCount);
 		
-		// Create cells with proper data
-		var cells = [
-			'<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />' +
-			'<input type="text" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />',
-			
-			'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
-			
-			'<input type="text" value="' + AppState.shelfCodeOut + '" name="shelf_code_out' + AppState.rowCount + '" id="shelf_code_out' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />',
-			
-			'<input type="text" value="' + AppState.shelfCodeIn + '" name="shelf_code_in' + AppState.rowCount + '" id="shelf_code_in' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />'
-		];
+		// Create cells based on whether using serial number or barcode
+		var cells = createProductRowCells(amount);
 		
 		cells.forEach(function(cellHtml) {
 			var newCell = newRow.insertCell();
@@ -379,41 +359,24 @@ function addProductRow() {
 	
 	AppState.canAdd = false;
 }
-function addProductRowWithSerialNo() {
-	var amount = getId('add_other_amount').value;
+
+function createProductRowCells(amount) {
+	var baseInputs = '<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />';
 	
-	if (!validateStock(amount)) {
-		return false;
+	var displayInput;
+	if (AppState.useSerialNo) {
+		displayInput = '<input type="hidden" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" />' +
+					   '<input type="text" value="' + AppState.serialNo + '" name="serino' + AppState.rowCount + '" id="serino' + AppState.rowCount + '" size="13" class="boxtext" readonly />';
+	} else {
+		displayInput = '<input type="text" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />';
 	}
 	
-	if (!AppState.canAdd) {
-		AppState.rowCount++;
-		getId('row_count').value = AppState.rowCount;
-		
-		var table = getId('table1');
-		var newRow = table.insertRow(table.rows.length);
-		newRow.setAttribute('id', 'frm_row' + AppState.rowCount);
-		
-		// Create cells with proper data
-		var cells = [
-			'<input type="hidden" value="' + AppState.stockId + '" name="stockid' + AppState.rowCount + '" id="stockid' + AppState.rowCount + '" />' +
-			'<input type="hidden" value="' + AppState.barcode + '" name="barcod' + AppState.rowCount + '" id="barcod' + AppState.rowCount + '" size="13" class="boxtext" readonly />' +
-			'<input type="text" value="' + AppState.SerialNo + '" name="serino' + AppState.rowCount + '" id="serino' + AppState.rowCount + '" size="13" class="boxtext" readonly />',
-			
-			'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
-			
-			'<input type="text" value="' + AppState.shelfCodeOut + '" name="shelf_code_out' + AppState.rowCount + '" id="shelf_code_out' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />',
-			
-			'<input type="text" value="' + AppState.shelfCodeIn + '" name="shelf_code_in' + AppState.rowCount + '" id="shelf_code_in' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />'
-		];
-		
-		cells.forEach(function(cellHtml) {
-			var newCell = newRow.insertCell();
-			newCell.innerHTML = cellHtml;
-		});
-	}
-	
-	AppState.canAdd = false;
+	return [
+		baseInputs + displayInput,
+		'<input type="text" style="text-align:right" value="' + amount + '" name="amount' + AppState.rowCount + '" id="amount' + AppState.rowCount + '" size="5" class="boxtext" readonly />',
+		'<input type="text" value="' + AppState.shelfCodeOut + '" name="shelf_code_out' + AppState.rowCount + '" id="shelf_code_out' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />',
+		'<input type="text" value="' + AppState.shelfCodeIn + '" name="shelf_code_in' + AppState.rowCount + '" id="shelf_code_in' + AppState.rowCount + '" size="12" class="boxtext" readonly style="text-align:right" />'
+	];
 }
 
 function validateStock(amount) {
@@ -525,55 +488,70 @@ function validateAndSave() {
 </script>
 
 <script type="text/javascript">
-// Keyboard event handler
+// Keyboard event handler with improved logic
 document.onkeydown = function(e) {
 	var keycode = window.event ? window.event.keyCode : e.which;
 	if (keycode !== 13) return; // Only handle Enter key
 	
-	var barcodeValue = getId('add_other_barcod').value;
-	var outShelfValue = getId('add_out_shelf').value;
-	var inShelfValue = getId('add_in_shelf').value;
-	var serialNumber = getId('serial_number').value;
-	if(serialNumber.length > 0) {
-		if(!outShelfValue && !inShelfValue){
-			getStockInfowithSerialNo(serialNumber);
-		}else{
-			if(Config.SHELF_CODE_LENGTHS.includes(outShelfValue.length) && Config.SHELF_CODE_LENGTHS.includes(inShelfValue.length)) {
-				if (inShelfValue === outShelfValue) {
-					showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
-					getId('add_in_shelf').value = '';
-					getId('add_in_shelf').focus();
-					return false;
-				}
-				searchShelfWithSerialNo(inShelfValue, 'in');
-			} else {
-				searchShelfWithSerialNo(outShelfValue, 'out');
-			}
-		}
+	var inputs = {
+		barcode: getId('add_other_barcod').value,
+		outShelf: getId('add_out_shelf').value,
+		inShelf: getId('add_in_shelf').value,
+		serial: getId('serial_number').value
+	};
+	
+	// Handle serial number workflow
+	if (inputs.serial.length > 0) {
+		return handleSerialWorkflow(inputs);
+	}
+	
+	// Handle barcode workflow
+	return handleBarcodeWorkflow(inputs);
+};
 
+function handleSerialWorkflow(inputs) {
+	if (!inputs.outShelf && !inputs.inShelf) {
+		getStockInfo(inputs.serial, true);
 		return false;
 	}
-
-	// Validate input lengths
-	if (barcodeValue.length === Config.BARCODE_LENGTH && !outShelfValue && !inShelfValue) {
-		getStockInfo(barcodeValue);
+	
+	if (Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length) && 
+		Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length)) {
+		if (inputs.inShelf === inputs.outShelf) {
+			showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
+			getId('add_in_shelf').value = '';
+			getId('add_in_shelf').focus();
+			return false;
+		}
+		searchShelf(inputs.inShelf, 'in', true);
+	} else {
+		searchShelf(inputs.outShelf, 'out', true);
 	}
-	else if (Config.SHELF_CODE_LENGTHS.includes(barcodeValue.length)) {
+	return false;
+}
+
+function handleBarcodeWorkflow(inputs) {
+	// Validate input lengths
+	if (inputs.barcode.length === Config.BARCODE_LENGTH && !inputs.outShelf && !inputs.inShelf) {
+		getStockInfo(inputs.barcode, false);
+	}
+	else if (Config.SHELF_CODE_LENGTHS.includes(inputs.barcode.length)) {
 		showAlert('Önce Ürün Barkodu Okutunuz');
 		resetForm();
 		getId('add_other_barcod').focus();
 	}
-	else if (barcodeValue.length === Config.BARCODE_LENGTH && Config.SHELF_CODE_LENGTHS.includes(outShelfValue.length)) {
-		if (Config.SHELF_CODE_LENGTHS.includes(inShelfValue.length)) {
-			if (inShelfValue === outShelfValue) {
+	else if (inputs.barcode.length === Config.BARCODE_LENGTH && 
+			 Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length)) {
+		if (Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length)) {
+			if (inputs.inShelf === inputs.outShelf) {
 				showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
 				getId('add_in_shelf').value = '';
 				getId('add_in_shelf').focus();
 				return false;
 			}
-			searchShelf(inShelfValue, 'in');
+			searchShelf(inputs.inShelf, 'in', false);
 		} else {
-			searchShelf(outShelfValue, 'out');
+			searchShelf(inputs.outShelf, 'out', false);
 		}
 	}
 	else {
@@ -581,18 +559,15 @@ document.onkeydown = function(e) {
 		resetForm();
 		getId('add_other_barcod').focus();
 	}
-};
+}
 
 // Unified shelf search function
-function searchShelf(shelfCode, type) {
+function searchShelf(shelfCode, type, useSerial = false) {
 	var departmentValue = type === 'out' ? 
 		getId('txt_department_out').value : 
 		getId('txt_department_in').value;
 		
-	var sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID " +
-			  "FROM PRODUCT_PLACE " +
-			  "WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelfCode + "'";
-	
+	var sql = Config.QUERIES.SHELF_VALIDATION.replace('{{shelf}}', shelfCode);
 	var shelfResult = wrk_query(sql, 'dsn3');
 	
 	if (!shelfResult.recordcount) {
@@ -610,67 +585,32 @@ function searchShelf(shelfCode, type) {
 		return false;
 	}
 	
-	return validateProductInShelf(shelfCode, type);
-}
-function searchShelfWithSerialNo(shelfCode, type) {
-	var departmentValue = type === 'out' ? 
-		getId('txt_department_out').value : 
-		getId('txt_department_in').value;
-		
-	var sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID " +
-			  "FROM PRODUCT_PLACE " +
-			  "WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelfCode + "'";
-	
-	var shelfResult = wrk_query(sql, 'dsn3');
-	
-	if (!shelfResult.recordcount) {
-		showAlert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
-		resetShelfFields(type);
-		return false;
-	}
-	
-	var shelfDepartment = shelfResult.STORE_ID + '-' + shelfResult.LOCATION_ID;
-	if (departmentValue !== shelfDepartment) {
-		var locationText = type === 'out' ? 'Çıkış' : 'Giriş';
-		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
-		resetForm();
-		getId('add_other_barcod').focus();
-		return false;
-	}
-	
-	return validateProductInShelfWithSerialNo(shelfCode, type,AppState.stockId);
+	return validateProductInShelf(shelfCode, type, useSerial);
 }
 
-function resetShelfFields(type) {
-	if (type === 'out') {
-		getId('add_out_shelf').value = '';
-		getId('add_out_shelf').focus();
+function validateProductInShelf(shelfCode, type, useSerial = false) {
+	var condition, inputValue;
+	
+	if (useSerial) {
+		condition = "SB.STOCK_ID = '" + AppState.stockId + "'";
 	} else {
-		getId('add_in_shelf').value = '';
-		getId('add_in_shelf').focus();
-	}
-}
-
-function validateProductInShelf(shelfCode, type) {
-	var barcodeValue = getId('add_other_barcod').value;
-	
-	if (barcodeValue.length !== Config.BARCODE_LENGTH) {
-		if (barcodeValue.length === 0) {
-			getId('add_other_barcod').focus();
-		} else {
-			showAlert('Ürün Barkodu Hatalı');
-			resetForm();
-			getId('add_other_barcod').focus();
+		inputValue = getId('add_other_barcod').value;
+		if (inputValue.length !== Config.BARCODE_LENGTH) {
+			if (inputValue.length === 0) {
+				getId('add_other_barcod').focus();
+			} else {
+				showAlert('Ürün Barkodu Hatalı');
+				resetForm();
+				getId('add_other_barcod').focus();
+			}
+			return false;
 		}
-		return false;
+		condition = "SB.BARCODE = '" + inputValue + "'";
 	}
 	
-	var sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE " +
-			  "FROM STOCKS_BARCODES AS SB " +
-			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
-			  "INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID " +
-			  "INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID " +
-			  "WHERE SB.BARCODE = '" + barcodeValue + "' AND PP.SHELF_CODE = '" + shelfCode + "'";
+	var sql = Config.QUERIES.PRODUCT_IN_SHELF
+		.replace('{{condition}}', condition)
+		.replace('{{shelf}}', shelfCode);
 	
 	var productResult = wrk_query(sql, 'dsn3');
 	
@@ -699,44 +639,11 @@ function validateProductInShelf(shelfCode, type) {
 	
 	return true;
 }
-function validateProductInShelfWithSerialNo(shelfCode, type,sid) {
-	var serial_number = getId('serial_number').value;
-	
-	
-	
-	var sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE " +
-			  "FROM STOCKS_BARCODES AS SB " +
-			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
-			  "INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID " +
-			  "INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID " +
-			  "WHERE SB.STOCK_ID = '" + sid + "' AND PP.SHELF_CODE = '" + shelfCode + "'";
-	
-	var productResult = wrk_query(sql, 'dsn3');
-	
-	if (!productResult.STOCK_ID) {
-		showAlert('Ürün Bu Rafa Tanıtılmamış');
-		resetShelfFields(type);
-		return false;
-	}
-	
-	if (type === 'out') {
-		getId('add_other_amount').disabled = true;
-		getId('add_in_shelf').focus();
-	} else {
-		// Process for 'in' shelf
-		AppState.stockId = productResult.STOCK_ID;
-		AppState.stockCode = productResult.PRODUCT_NAME;
-		AppState.barcode = productResult.BARCODE;
-		AppState.shelfCodeIn = productResult.SHELF_CODE;
-		AppState.shelfCodeOut = getId('add_out_shelf').value;
-		
-		toggleSaveButton();
-		addProductRowWithSerialNo();
-		resetForm();
-		getId('add_other_barcod').focus();
-	}
-	
-	return true;
+
+function resetShelfFields(type) {
+	var fieldId = type === 'out' ? 'add_out_shelf' : 'add_in_shelf';
+	getId(fieldId).value = '';
+	getId(fieldId).focus();
 }
 </script>
 
