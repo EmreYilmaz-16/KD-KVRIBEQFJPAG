@@ -508,9 +508,9 @@ document.onkeydown = function(e) {
 					getId('add_in_shelf').focus();
 					return false;
 				}
-				searchShelf(inShelfValue, 'in');
+				searchShelfWithSerialNo(inShelfValue, 'in');
 			} else {
-				searchShelf(outShelfValue, 'out');
+				searchShelfWithSerialNo(outShelfValue, 'out');
 			}
 		}
 
@@ -575,6 +575,34 @@ function searchShelf(shelfCode, type) {
 	
 	return validateProductInShelf(shelfCode, type);
 }
+function searchShelfWithSerialNo(shelfCode, type) {
+	var departmentValue = type === 'out' ? 
+		getId('txt_department_out').value : 
+		getId('txt_department_in').value;
+		
+	var sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID " +
+			  "FROM PRODUCT_PLACE " +
+			  "WHERE PLACE_STATUS = 1 AND SHELF_CODE = '" + shelfCode + "'";
+	
+	var shelfResult = wrk_query(sql, 'dsn3');
+	
+	if (!shelfResult.recordcount) {
+		showAlert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
+		resetShelfFields(type);
+		return false;
+	}
+	
+	var shelfDepartment = shelfResult.STORE_ID + '-' + shelfResult.LOCATION_ID;
+	if (departmentValue !== shelfDepartment) {
+		var locationText = type === 'out' ? 'Çıkış' : 'Giriş';
+		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
+		resetForm();
+		getId('add_other_barcod').focus();
+		return false;
+	}
+	
+	return validateProductInShelfWithSerialNo(shelfCode, type,AppState.stockId);
+}
 
 function resetShelfFields(type) {
 	if (type === 'out') {
@@ -606,6 +634,54 @@ function validateProductInShelf(shelfCode, type) {
 			  "INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID " +
 			  "INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID " +
 			  "WHERE SB.BARCODE = '" + barcodeValue + "' AND PP.SHELF_CODE = '" + shelfCode + "'";
+	
+	var productResult = wrk_query(sql, 'dsn3');
+	
+	if (!productResult.STOCK_ID) {
+		showAlert('Ürün Bu Rafa Tanıtılmamış');
+		resetShelfFields(type);
+		return false;
+	}
+	
+	if (type === 'out') {
+		getId('add_other_amount').disabled = true;
+		getId('add_in_shelf').focus();
+	} else {
+		// Process for 'in' shelf
+		AppState.stockId = productResult.STOCK_ID;
+		AppState.stockCode = productResult.PRODUCT_NAME;
+		AppState.barcode = productResult.BARCODE;
+		AppState.shelfCodeIn = productResult.SHELF_CODE;
+		AppState.shelfCodeOut = getId('add_out_shelf').value;
+		
+		toggleSaveButton();
+		addProductRow();
+		resetForm();
+		getId('add_other_barcod').focus();
+	}
+	
+	return true;
+}
+function validateProductInShelfWithSerialNo(shelfCode, type,sid) {
+	var serial_number = getId('serial_number').value;
+	
+	if (serial_number.length >0) {
+		if (barcodeValue.length === 0) {
+			getId('serial_number').focus();
+		} else {
+			showAlert('Ürün Barkodu Hatalı');
+			resetForm();
+			getId('serial_number').focus();
+		}
+		return false;
+	}
+	
+	var sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE " +
+			  "FROM STOCKS_BARCODES AS SB " +
+			  "INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID " +
+			  "INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID " +
+			  "INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID " +
+			  "WHERE SB.STOCK_ID = '" + sid + "' AND PP.SHELF_CODE = '" + shelfCode + "'";
 	
 	var productResult = wrk_query(sql, 'dsn3');
 	
