@@ -422,7 +422,9 @@ const WarehouseManager = {
 			process_cat: formBasket.process_cat_id.value
 		});
 		
-		window.location.href = `${location.pathname}?${params.toString()}`;
+	//	window.location.href = `${location.pathname}?${params.toString()}`;
+	document.form_basket.action='<cfoutput>#request.self#</cfoutput>?' + params.toString();
+			document.form_basket.submit();
 	}
 };
 
