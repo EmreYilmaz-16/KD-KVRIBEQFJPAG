@@ -350,10 +350,10 @@
     ----------->
 <cfset recordEmp = session.ep.userid>
 
-<!----
+
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
-<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)>---->
-<cfset result=true>
+<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
+
 <cfdump var="#result#">
 <cfif result>
     <cfoutput>Kayıt başarılı!</cfoutput>
