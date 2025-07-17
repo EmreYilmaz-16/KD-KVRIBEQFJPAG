@@ -341,7 +341,7 @@
 <!----
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
 <cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)>---->
-<cfset result="DDDD">
+<cfset result=true>
 <cfdump var="#result#">
 <cfif result>
     <cfoutput>Kayıt başarılı!</cfoutput>
