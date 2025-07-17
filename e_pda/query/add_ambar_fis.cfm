@@ -9,7 +9,13 @@
     <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'STOCK_ID#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
-    <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
+    
+    <cfif isDefined("attributes.change_shelf_fis")>
+        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE_IN#i#")>    
+        <cfset 'SHELFOUT_#i#' = evaluate("attributes.SHELF_CODE_OUT#i#")>    
+    <cfelse>
+        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
+    </cfif>
 
     <cfquery name="get_shelf_id" datasource="#dsn3#">
     	SELECT        
@@ -17,18 +23,18 @@
 		FROM            
         	PRODUCT_PLACE
 		WHERE        
-        	SHELF_CODE = '#evaluate("attributes.SHELF_CODE#i#")#'
+        	SHELF_CODE = '#evaluate("attributes.SHELF_#i#")#'
     </cfquery>
     <cfset 'SHELF_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
     <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa---> <!----- TODO: RAF DEĞİŞTİRME İŞLEMİNDE BAK CANIM ----->
-    	<cfset 'SHELF_OTHER_#i#' = Listgetat(i,5,'-')>
+    	<cfset 'SHELF_OTHER_#i#' = evaluate("attributes.SHELFOUT_#i#")>
         <cfquery name="get_shelf_id" datasource="#dsn3#">
             SELECT        
                 PRODUCT_PLACE_ID
             FROM            
                 PRODUCT_PLACE
             WHERE        
-                SHELF_CODE = '#Listgetat(i,5,'-')#'
+                SHELF_CODE = '#evaluate("attributes.SHELFOUT_#i#")#'
         </cfquery>
     	<cfset 'SHELF_OTHER_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
     </cfif>
