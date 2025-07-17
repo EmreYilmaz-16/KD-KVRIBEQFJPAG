@@ -393,7 +393,7 @@ const WarehouseManager = {
 				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
 			`;
 		}
-	
+	},
 	createProductNameCell: function() {
 		return `<input type="text" value="${this.state.currentStock.stockCode}" name="stockcode${this.state.rowCount}" id="stockcode${this.state.rowCount}" size="23" class="boxtext" readonly />`;
 	},
