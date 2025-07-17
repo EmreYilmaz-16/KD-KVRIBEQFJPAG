@@ -5,6 +5,9 @@
 <cfif isdefined("attributes.dep_out") and listlen(attributes.dep_out) eq 2>
     <cfset attributes.dep_out=listgetat(attributes.dep_out,1)>
 </cfif>
+<cfif attributes.process_cat eq "90fuseaction=pda.add_ambar_fis,90">
+    <cfset attributes.process_cat=90>
+</cfif>
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
