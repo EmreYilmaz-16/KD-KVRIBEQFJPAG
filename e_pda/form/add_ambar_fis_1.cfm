@@ -1,4 +1,4 @@
-﻿SDASD<cfset default_process_type = 113>
+﻿<cfset default_process_type = 113>
 <cfquery name="get_default_departments" datasource="#dsn#">
 	SELECT        
     	DEFAULT_MK_TO_RF_DEP, 
@@ -62,43 +62,379 @@
 </cfif>
 <style type="text/css">
 .boxtext {
-	text-decoration: none;
 	background-color: #e6e6fe;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 0px;
-	border-right-width: 0px;
-	border-bottom-width: 0px;
-	border-left-width: 0px;
+	border: none;
+	margin: 0;
+	padding: 0;
 }
 .tablo {
-	text-decoration: none;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 0px;
-	border-top-color: aec7f0;
-	border-right-color: aec7f0;
-	border-bottom-color: aec7f0;
-	border-left-color: aec7f0;
+	border: 1px solid #aec7f0;
+	border-left: none;
+	border-right: none;
+	margin: 0;
+	padding: 0;
 }
-    .header{
-        display:none;
-    }
+.header {
+	display: none;
+}
 </style>
-<script language="javascript" type="text/javascript">
-  var row_count = 0;
-  var barcod = '';
-  var stockid = '';
-  var spectmainid = '';
-  var stockcode = '';
-  var amount = '';
-  var ekle = 0;
-  var cikar = 0;
-  var islemtipi = 0;//0-ekle 1-çıkar
-  var buton = 0;// <1-buton pasif, >0-buton aktif
+<script type="text/javascript">
+// Warehouse Operations Manager - Unified and Optimized
+const WarehouseManager = {
+	// Application state
+	state: {
+		rowCount: 0,
+		buttonCount: 0,
+		operationType: 0, // 0-add, 1-remove
+		currentStock: {
+			multiplier: '',
+			unit: '',
+			barcode: '',
+			stockId: '',
+			stockCode: '',
+			specMainId: '',
+			serialNo: ''
+		}
+	},
+	
+	// Initialize the application
+	init: function() {
+		this.setupUI();
+		this.setupEventHandlers();
+	},
+	
+	setupUI: function() {
+		const barcodeInput = document.getElementById('add_other_barcod');
+		if (barcodeInput) {
+			barcodeInput.focus();
+			setTimeout(() => barcodeInput.select(), 1000);
+		}
+		
+		// Hide headers on DOM ready
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', this.hideHeaders);
+		} else {
+			this.hideHeaders();
+		}
+	},
+	
+	hideHeaders: function() {
+		document.querySelectorAll('.header').forEach(header => {
+			header.style.display = 'none';
+		});
+	},
+	
+	setupEventHandlers: function() {
+		document.onkeydown = (e) => {
+			const keycode = e.which || e.keyCode;
+			if (keycode === 13) {
+				this.handleEnterKey();
+			}
+		};
+	},
+	
+	handleEnterKey: function() {
+		const barcodeInput = document.getElementById('add_other_barcod');
+		const serialInput = document.getElementById('serial_number');
+		
+		const barcode = barcodeInput.value.trim();
+		const serial = serialInput.value.trim();
+		
+		if (serial.length > 0 && this.state.operationType === 0) {
+			// Serial number processing logic
+			this.addRowWithSerial(barcode, serial);
+			this.clearInputs();
+		} else if (barcode.length > 0 && this.state.operationType === 0) {
+			this.addRow(barcode);
+			this.clearInputs();
+		} else {
+			alert('Barkod Hatalı');
+			barcodeInput.value = '';
+			barcodeInput.focus();
+		}
+	},
+	
+	clearInputs: function() {
+		document.getElementById('add_other_barcod').value = '';
+		document.getElementById('add_other_amount').value = '1';
+		if (document.getElementById('serial_number')) {
+			document.getElementById('serial_number').value = '';
+		}
+		document.getElementById('add_other_barcod').focus();
+	},
+	
+	controlButton: function() {
+		if (this.state.operationType === 0) {
+			this.state.buttonCount++;
+		} else if (this.state.buttonCount > 0) {
+			this.state.buttonCount--;
+		}
+		
+		const saveButton = document.getElementById('onay');
+		if (saveButton) {
+			saveButton.disabled = this.state.buttonCount < 1;
+		}
+	},
+	
+	getStock: function(barcode) {
+		this.resetCurrentStock();
+		
+		if (!document.getElementById('add_other_amount').value.length) {
+			alert('Miktar Giriniz');
+			return false;
+		}
+		
+		// Clean barcode (some readers add 'j' prefix)
+		if (barcode.length > 9 && barcode.substr(0, 1) === 'j') {
+			barcode = barcode.substring(1, 9);
+		}
+		
+		const sql = `SELECT SB.STOCK_ID, SB.BARCODE, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME 
+					FROM STOCKS_BARCODES AS SB 
+					INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID 
+					INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID 
+					WHERE SB.BARCODE = '${barcode}'`;
+		
+		const product = wrk_query(sql, 'dsn3');
+		
+		if (!product.STOCK_ID) {
+			alert('Ürün Bulunamadı');
+			return false;
+		}
+		
+		// Set current stock data
+		this.state.currentStock = {
+			multiplier: product.MULTIPLIER,
+			unit: product.MAIN_UNIT,
+			stockId: product.STOCK_ID,
+			stockCode: product.PRODUCT_NAME,
+			barcode: product.BARCODE,
+			specMainId: '',
+			serialNo: ''
+		};
+		
+		this.controlButton();
+		return true;
+	},
+
+	getStockWithSerialNo: function(serialNo) {
+		this.resetCurrentStock();
+		
+		if (!document.getElementById('add_other_amount').value.length) {
+			alert('Miktar Giriniz');
+			return false;
+		}
+		
+		
+		
+		const sql = `SELECT TOP 1 SB.STOCK_ID, SB.SERIAL_NO, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME
+		FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+		INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+		INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+		WHERE SB.SERIAL_NO = '${serialNo}'`;
+		
+		const product = wrk_query(sql, 'dsn3');
+		
+		if (!product.STOCK_ID) {
+			alert('Ürün Bulunamadı');
+			return false;
+		}
+		
+		// Set current stock data
+		this.state.currentStock = {
+			multiplier: product.MULTIPLIER,
+			unit: product.MAIN_UNIT,
+			stockId: product.STOCK_ID,
+			stockCode: product.PRODUCT_NAME,
+			barcode: product.BARCODE,
+			specMainId: '',
+			serialNo: ''
+		};
+		
+		this.controlButton();
+		return true;
+	},
+	
+	resetCurrentStock: function() {
+		this.state.currentStock = {
+			multiplier: '', unit: '', barcode: '', 
+			stockId: '', stockCode: '', specMainId: '', serialNo: ''
+		};
+	},
+	
+	checkStockAvailability: function(requestedAmount) {
+		const stockSql = `SELECT PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL 
+						 WHERE DEPO = '${form_basket.txt_department_out.value}' 
+						 AND STOCK_ID = ${this.state.currentStock.stockId}`;
+		
+		const stockResult = wrk_query(stockSql, 'dsn2');
+		const availableStock = stockResult.PRODUCT_STOCK || 0;
+		
+		if (availableStock < requestedAmount) {
+			alert(`Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı: ${availableStock}`);
+			document.getElementById('add_other_amount').focus();
+			return false;
+		}
+		
+		return true;
+	},
+	
+	addRow: function(barcode) {
+		if (!this.getStock(barcode)) return;
+		this.processRowAddition();
+	},
+	
+	addRowWithSerial: function(barcode, serial) {
+		if (!this.getStock(barcode)) return;
+		this.state.currentStock.serialNo = serial;
+		this.processRowAddition();
+	},
+	
+	processRowAddition: function() {
+		const amount = parseFloat(document.getElementById('add_other_amount').value);
+		
+		// Check if product already exists in the list
+		for (let i = 1; i <= this.state.rowCount; i++) {
+			const existingStockId = document.getElementById(`stockid${i}`).value;
+			if (existingStockId == this.state.currentStock.stockId) {
+				const currentAmount = parseFloat(document.getElementById(`amount${i}`).value);
+				const newTotal = currentAmount + amount;
+				
+				if (this.checkStockAvailability(newTotal)) {
+					document.getElementById(`amount${i}`).value = newTotal;
+					const row = document.getElementById(`frm_row${i}`);
+					if (row && row.style.display === 'none') {
+						row.style.display = 'block';
+					}
+				}
+				return;
+			}
+		}
+		
+		// Add new row
+		if (this.state.rowCount === 0) {
+			if (!this.checkStockAvailability(amount)) return;
+			const deptOut = document.getElementById('txt_department_out');
+			if (deptOut) deptOut.disabled = true;
+		}
+		
+		this.createNewRow(amount);
+	},
+	
+	createNewRow: function(amount) {
+		this.state.rowCount++;
+		const rowCountEl = document.getElementById('row_count');
+		if (rowCountEl) rowCountEl.value = this.state.rowCount;
+		
+		const table = document.getElementById('table1');
+		if (!table) return;
+		
+		const newRow = table.insertRow(table.rows.length);
+		newRow.setAttribute('id', `frm_row${this.state.rowCount}`);
+		newRow.setAttribute('name', `frm_row${this.state.rowCount}`);
+		
+		// Create cells
+		const cells = [
+			this.createBarcodeCell(),
+			this.createProductNameCell(),
+			this.createAmountCell(amount),
+			this.createUnitCell()
+		];
+		
+		cells.forEach(cellHTML => {
+			const cell = newRow.insertCell();
+			cell.innerHTML = cellHTML;
+		});
+	},
+	
+	createBarcodeCell: function() {
+		const serialField = this.state.currentStock.serialNo ? 
+			`<input type="hidden" value="${this.state.currentStock.serialNo}" name="serial${this.state.rowCount}" id="serial${this.state.rowCount}" />` : '';
+		
+		return `<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
+				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
+				${serialField}
+				<input type="text" value="${this.state.currentStock.barcode}" name="barcod${this.state.rowCount}" id="barcod${this.state.rowCount}" size="14" class="boxtext" readonly />`;
+	},
+	
+	createProductNameCell: function() {
+		return `<input type="text" value="${this.state.currentStock.stockCode}" name="stockcode${this.state.rowCount}" id="stockcode${this.state.rowCount}" size="23" class="boxtext" readonly />`;
+	},
+	
+	createAmountCell: function(amount) {
+		return `<input type="text" style="text-align:right" value="${amount}" name="amount${this.state.rowCount}" id="amount${this.state.rowCount}" size="4" class="boxtext" readonly />`;
+	},
+	
+	createUnitCell: function() {
+		return `<input type="hidden" value="${this.state.currentStock.unit}" name="birim${this.state.rowCount}" id="birim${this.state.rowCount}" />`;
+	},
+	
+	generateActionId: function() {
+		let actionId = '';
+		let validRowCount = 0;
+		
+		for (let i = 1; i <= this.state.rowCount; i++) {
+			const amountEl = document.getElementById(`amount${i}`);
+			if (!amountEl) continue;
+			
+			const amount = amountEl.value;
+			if (parseFloat(amount) > 0) {
+				if (validRowCount > 0) actionId += ',';
+				
+				const stockIdEl = document.getElementById(`stockid${i}`);
+				const stockId = stockIdEl ? stockIdEl.value : '';
+				actionId += `${i}-${stockId}-${amount}-0`;
+				validRowCount++;
+			}
+		}
+		
+		const actionIdEl = document.getElementById('action_id');
+		const rowCountEl = document.getElementById('row_count');
+		
+		if (actionIdEl) actionIdEl.value = actionId;
+		if (rowCountEl) rowCountEl.value = validRowCount;
+	},
+	
+	validateAndSave: function() {
+		const formBasket = document.forms.form_basket;
+		if (!formBasket) return false;
+		
+		const departmentIn = formBasket.txt_department_in.value;
+		const departmentOut = formBasket.txt_department_out.value;
+		
+		if (departmentIn === departmentOut) {
+			alert('Giriş ve Çıkış Lokasyonu Farklı Olmalıdır.');
+			return false;
+		}
+		
+		this.generateActionId();
+		
+		const actionIdEl = document.getElementById('action_id');
+		const actionId = actionIdEl ? actionIdEl.value : '';
+		
+		const params = new URLSearchParams({
+			fuseaction: 'pda.add_ambar_fis',
+			dep_in: departmentIn,
+			dep_out: departmentOut,
+			action_id: actionId,
+			fis_tipi: formBasket.fis_tipi.value,
+			process_cat: formBasket.process_cat_id.value
+		});
+		
+		window.location.href = `${location.pathname}?${params.toString()}`;
+	}
+};
+
+// Legacy function aliases for compatibility
+function actionidolustur() { WarehouseManager.generateActionId(); }
+function buton_kontrol() { WarehouseManager.controlButton(); }
+function get_stock(barcode) { return WarehouseManager.getStock(barcode); }
+function add_row(barcode) { WarehouseManager.addRow(barcode); }
+function kontrol_kayit() { return WarehouseManager.validateAndSave(); }
+
+// Initialize the application
+WarehouseManager.init();
+</script>
 </script>
 <cfform name="form_basket">
   	<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -112,12 +448,14 @@
             	<table cellpadding="0" cellspacing="0" width="40%">
           			<tr>
                         <td>&nbsp;&nbsp;Miktar&nbsp;</td>
-                        <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:30px; text-align:right" value="1" /></td>
+                        <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" style="width:30px; text-align:right" value="1" /></td>
                         <td nowrap="nowrap">&nbsp;&nbsp;&nbsp;Barkod&nbsp;</td>
                         <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" ></td>
+						  <td nowrap="nowrap">&nbsp;&nbsp;&nbsp;Seri No&nbsp;</td>
+                        <td><input id="serial_number" name="serial_number" type="text" value="" style="width:90px;" ></td>
           			</tr>
-                  	<input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
-                  	<input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" style="width:90px;" >
+                  	<input id="del_other_amount" name="del_other_amount" type="hidden" value="1" />
+                  	<input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" />
         		</table>
           	</td>
     	</tr>
@@ -179,217 +517,6 @@
   	</table>
     </div>
 </cfform>
-<script language="javascript" type="text/javascript">
-	document.getElementById('add_other_barcod').focus();
-	setTimeout("document.getElementById('add_other_barcod').select();",1000);	
-	function actionidolustur()
-	{
-	  var j = 0;
-	  for(i=1;i<=row_count;i++)
-	  {
-		  if(document.getElementById('amount'+i).value > 0)
-		  {
-			if (j > 0)
-			document.getElementById('action_id').value = document.getElementById('action_id').value + ',';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + i + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('stockid'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('amount'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + '0'
-			j++;
-		  }
-		  document.getElementById('row_count').value = j;
-	  }
-	}
-
-	function buton_kontrol()
-	{
-		if (islemtipi == 0)
-			buton++;
-		else if (buton>0)
-			buton--;
-		if (buton < 1)
-			document.getElementById('onay').disabled = true;
-		else
-			document.getElementById('onay').disabled = false;
-	}
-	
-	function get_stock(barcode)
-    {
-	 	carpan = ''; birim = ''; barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
-	 	k_= 0;
-		if(document.getElementById('add_other_amount').value.length == 0)
-		{
-			alert('Miktar Giriniz');
-			k_=1;
-			return false;
-		}
-	 	var uzunluk = barcode.length;
-	 	if(uzunluk > 9)
-	 	{
-			if(barcode.substr(0,1)=='j')//Bazı barkod okuyucular okuduktan sonra başına j harfi koyuyor kontrol için yapıldı
-			{
-				barcode = barcode.substring(1,9);
-			}
-	 	}
-		
-	 	if (k_ == 0)
-     	{
-		 	var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
-		 	var get_product = wrk_query(new_sql,'dsn3');
-		 	if (get_product.STOCK_ID == undefined)
-		 	{
-				ekle = 1;
-				cikar = 1;
-				k_=1;
-				alert('Ürün Bulunamadı');
-		 	}
-		 	else
-		 	{	carpan = get_product.MULTIPLIER;
-				birim = get_product.MAIN_UNIT;
-				stockid = get_product.STOCK_ID;
-				stockcode = get_product.PRODUCT_NAME;
-				barcode = get_product.PRODUCT_BARCOD;
-				buton_kontrol();
-    		}
-		}
-		else
-		{
-			carpan = ''; birim = ''; barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
-			return false;
-		}
-	}
-	function add_amount()
-	{
-	  if(row_count >0) /*ilk Satırdan sonrası*/
-	  {
-		  for(i=1;i<=row_count;i++)
-		  {
-				  var stock_sql = "SELECT PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+stockid;
-				  var get_real_stock = wrk_query(stock_sql,'dsn2');
-				  if (get_real_stock.PRODUCT_STOCK == undefined)
-					get_real_stock.PRODUCT_STOCK = 0;
-				  if(get_real_stock.PRODUCT_STOCK < document.getElementById('amount'+i).value - (-1 * amount) && document.getElementById('stockid'+i).value == stockid)
-				  {
-					ekle=1;
-					alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock.PRODUCT_STOCK);
-					document.getElementById('add_other_amount').focus();
-					return false;
-				  }
-				  else
-				  {
-					  if(document.getElementById('stockid'+i).value == stockid)
-					  {
-						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
-						if (document.getElementById('frm_row'+i).style.display == 'none')
-							document.getElementById('frm_row'+i).style.display='block';
-						ekle=1;
-					  }
-				  }
-		   }
-	   }
-	   else
-	   {
-		    var stock_sql = "SELECT PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+stockid;
-			var get_real_stock = wrk_query(stock_sql,'dsn2');
-			if (get_real_stock.PRODUCT_STOCK == undefined)
-				get_real_stock.PRODUCT_STOCK = 0;
-			if(get_real_stock.PRODUCT_STOCK < amount)
-			{
-				ekle=1;
-				alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock.PRODUCT_STOCK);
-				document.getElementById('add_other_amount').focus();
-			}
-			else
-			{
-				document.getElementById('txt_department_out').disabled = true;
-			}
-	   }
-	}
-	
-	function add_row(barcode)
-	{
-		get_stock(barcode);
-		if (k_==0)
-		{
-			  amount = ''; 
-			  amount = document.getElementById('add_other_amount').value;
-			  if (ekle == 0)
-				add_amount();
-			  if (ekle == 0)
-			  {
-				row_count++;
-				document.getElementById('row_count').value = row_count;
-				var newRow;
-				var newCell;	
-				newRow = document.getElementById("table1").insertRow(document.getElementById("table1").rows.length);
-				newRow.setAttribute("name","frm_row" + row_count);
-				newRow.setAttribute("id","frm_row" + row_count);		
-				newRow.setAttribute("NAME","frm_row" + row_count);
-				newRow.setAttribute("ID","frm_row" + row_count);		
-				
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="14" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="23" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" style="text-align:right" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="4" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+birim+'" name="birim'+row_count+'" id="birim'+row_count+'" />';
-			  }
-			  else
-			  {
-				 ekle = 0;
-			  }
-		}
-	}
-</script>
-
-<script language="JavaScript">
-	$(document).ready(function(){
-$(".header").hide()
-})
-
-	
-	document.onkeydown = checkKeycode
-	
-	function checkKeycode(e) {
-	var keycode;
-	if (window.event) keycode = window.event.keyCode;
-	else if (e) keycode = e.which;
-	if (keycode == 13)
-		{
-			if ((document.getElementById('add_other_barcod').value.length > 0) && (islemtipi==0))
-			{
-				add_row(document.getElementById('add_other_barcod').value);
-				document.getElementById('add_other_barcod').value = '';
-				document.getElementById('add_other_amount').value = '1';
-				document.getElementById('add_other_barcod').focus();
-			}
-			else
-			{
-				alert('Barcod Hatalı');
-				document.getElementById('add_other_barcod').value = '';
-				document.getElementById('add_other_barcode').focus();
-			}
-		}
-	}
-</script>
-<script language="javascript" type="text/javascript">
-		function kontrol_kayit()
-		{
-			if(form_basket.txt_department_in.value == form_basket.txt_department_out.value)
-			{
-				alert('Giriş ve Çıkış Lokasyonu Farklı Olmalıdır.');
-				return false;
-			}
-			else
-			{
-			actionidolustur();
-			window.location.href='<cfoutput>#request.self#</cfoutput>?fuseaction=pda.add_ambar_fis&dep_in='+form_basket.txt_department_in.value+'&dep_out='+form_basket.txt_department_out.value+'&action_id='+document.getElementById('action_id').value+'&fis_tipi='+form_basket.fis_tipi.value+'&process_cat='+form_basket.process_cat_id.value;
-			}
-		}
-		
-</script>
 
 <script>
     function wrk_query(str_query,data_source,maxrows)
