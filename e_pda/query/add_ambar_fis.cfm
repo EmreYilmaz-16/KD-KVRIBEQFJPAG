@@ -24,7 +24,11 @@
         <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE_IN#i#")>    
         <cfset 'SHELFOUT_#i#' = evaluate("attributes.SHELF_CODE_OUT#i#")>    
     <cfelse>
+        <cfif isDefined("attributes.SHELF_CODE#i#")>            
         <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
+        <cfelse>
+        <cfset 'SHELF_#i#'="">
+        </cfif>
     </cfif>
 
     <cfquery name="get_shelf_id" datasource="#dsn3#">
