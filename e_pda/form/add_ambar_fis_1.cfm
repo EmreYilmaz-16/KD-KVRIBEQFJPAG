@@ -293,25 +293,7 @@ const WarehouseManager = {
 	processRowAddition: function() {
 		const amount = parseFloat(document.getElementById('add_other_amount').value);
 		
-		// Check if product already exists in the list
-		for (let i = 1; i <= this.state.rowCount; i++) {
-			const existingStockId = document.getElementById(`stockid${i}`).value;
-			if (existingStockId == this.state.currentStock.stockId) {
-				const currentAmount = parseFloat(document.getElementById(`amount${i}`).value);
-				const newTotal = currentAmount + amount;
-				
-				if (this.checkStockAvailability(newTotal)) {
-					document.getElementById(`amount${i}`).value = newTotal;
-					const row = document.getElementById(`frm_row${i}`);
-					if (row && row.style.display === 'none') {
-						row.style.display = 'block';
-					}
-				}
-				return;
-			}
-		}
-		
-		// Add new row
+		// Add new row directly without checking for existing products
 		if (this.state.rowCount === 0) {
 			if (!this.checkStockAvailability(amount)) return;
 			const deptOut = document.getElementById('txt_department_out');
@@ -323,25 +305,7 @@ const WarehouseManager = {
 	processRowAdditionWithSerialNo: function() {
 		const amount = parseFloat(document.getElementById('add_other_amount').value);
 		
-		// Check if product already exists in the list
-		for (let i = 1; i <= this.state.rowCount; i++) {
-			const existingStockId = document.getElementById(`stockid${i}`).value;
-			if (existingStockId == this.state.currentStock.stockId) {
-				const currentAmount = parseFloat(document.getElementById(`amount${i}`).value);
-				const newTotal = currentAmount + amount;
-				
-				if (this.checkStockAvailability(newTotal)) {
-					document.getElementById(`amount${i}`).value = newTotal;
-					const row = document.getElementById(`frm_row${i}`);
-					if (row && row.style.display === 'none') {
-						row.style.display = 'block';
-					}
-				}
-				return;
-			}
-		}
-		
-		// Add new row
+		// Add new row directly without checking for existing products
 		if (this.state.rowCount === 0) {
 			if (!this.checkStockAvailability(amount)) return;
 			const deptOut = document.getElementById('txt_department_out');
