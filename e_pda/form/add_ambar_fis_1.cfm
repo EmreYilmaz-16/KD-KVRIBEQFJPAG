@@ -344,14 +344,14 @@ const WarehouseManager = {
 	createBarcodeCell: function() {
 		if (this.state.currentStock.serialNo) {
 			return `
-				<input type="text" value="${this.state.currentStock.serialNo}" name="serial_${this.state.rowCount}" id="serial_${this.state.rowCount}" size="14" class="boxtext" readonly />
+				<input type="text" value="${this.state.currentStock.serialNo}" name="serino${this.state.rowCount}" id="serino${this.state.rowCount}" size="14" class="boxtext" readonly />
 				<input type="hidden" value="${this.state.currentStock.barcode}" name="barcode_${this.state.rowCount}" id="barcode_${this.state.rowCount}" />
 				<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
 				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
 			`;
 		} else {
 			return `
-				<input type="hidden" value="" name="serial_${this.state.rowCount}" id="serial_${this.state.rowCount}" />
+				<input type="hidden" value="" name="serino${this.state.rowCount}" id="serino${this.state.rowCount}" />
 				<input type="text" value="${this.state.currentStock.barcode}" name="barcode_${this.state.rowCount}" id="barcode_${this.state.rowCount}" size="14" class="boxtext" readonly />
 				<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
 				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
