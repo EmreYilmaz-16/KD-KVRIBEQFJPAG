@@ -60,7 +60,7 @@ h5{
 
     <td>  
 
-     <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_3</cfoutput>">  <img src="../../images/e-pd/shelf30.png"><h5>Raf Değiştir</h5></a>
+     <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_3</cfoutput>">  <img src="../../images/e-pd/shelf30.png"><h5>Raf Değiştir</h5>  &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
