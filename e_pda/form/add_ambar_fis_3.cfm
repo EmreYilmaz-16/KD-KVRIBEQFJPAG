@@ -488,7 +488,10 @@ function validateAndSave() {
 		'process_cat=' + getId('process_cat_id').value
 	];
 	
-	window.location.href = '<cfoutput>#request.self#</cfoutput>?' + params.join('&');
+	//window.location.href = '<cfoutput>#request.self#</cfoutput>?' + params.join('&');
+	document.form_basket.action='<cfoutput>#request.self#</cfoutput>?fuseaction=pda.add_ambar_fis&dep_in='+form_basket.txt_department_in.value+'&dep_out='+form_basket.txt_department_out.value+'&action_id='+document.getElementById('action_id').value+'&fis_tipi='+form_basket.fis_tipi.value+'&process_cat='+form_basket.process_cat_id.value+ params.join('&');
+	
+			document.form_basket.submit();
 }
 </script>
 
