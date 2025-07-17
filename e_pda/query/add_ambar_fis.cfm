@@ -1,4 +1,10 @@
 ﻿<cfdump var="#attributes#">
+<cfif isdefined("attributes.dep_in") and listlen(attributes.dep_in) eq 2>
+    <cfset attributes.dep_in=listgetat(attributes.dep_in,1)>
+</cfif>
+<cfif isdefined("attributes.dep_out") and listlen(attributes.dep_out) eq 2>
+    <cfset attributes.dep_out=listgetat(attributes.dep_out,1)>
+</cfif>
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
@@ -9,6 +15,7 @@
     <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'STOCK_ID#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
+
     
     <cfif isDefined("attributes.change_shelf_fis")>
         <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE_IN#i#")>    
