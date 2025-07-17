@@ -142,7 +142,7 @@ const WarehouseManager = {
 		
 		if (serial.length > 0 && this.state.operationType === 0) {
 			// Serial number processing logic
-			this.addRowWithSerial(barcode, serial);
+			this.addRowWithSerial(serial);
 			this.clearInputs();
 		} else if (barcode.length > 0 && this.state.operationType === 0) {
 			this.addRow(barcode);
@@ -284,8 +284,8 @@ const WarehouseManager = {
 		this.processRowAddition();
 	},
 	
-	addRowWithSerial: function(barcode, serial) {
-		if (!this.getStock(barcode)) return;
+	addRowWithSerial: function( serial) {
+		if (!this.getStockWithSerialNo(serial)) return;
 		this.state.currentStock.serialNo = serial;
 		this.processRowAddition();
 	},
