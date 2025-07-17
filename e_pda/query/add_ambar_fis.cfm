@@ -309,6 +309,7 @@
         <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
         <cfset GIRIS_RAF_ID=Evaluate('SHELF_OTHER_ID_#k#')>
         <cfset CIKIS_RAF_ID=Evaluate('SHELF_ID_#k#')>
+        <cfdump var="GIRIS_RAF_ID=#GIRIS_RAF_ID# ----- CIKIS_RAF_ID=#CIKIS_RAF_ID#">
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
         </cfquery>
