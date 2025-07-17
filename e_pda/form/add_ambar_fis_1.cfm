@@ -287,10 +287,40 @@ const WarehouseManager = {
 	addRowWithSerial: function( serial) {
 		if (!this.getStockWithSerialNo(serial)) return;
 		this.state.currentStock.serialNo = serial;
-		this.processRowAddition();
+		this.processRowAdditionWithSerialNo();
 	},
 	
 	processRowAddition: function() {
+		const amount = parseFloat(document.getElementById('add_other_amount').value);
+		
+		// Check if product already exists in the list
+		for (let i = 1; i <= this.state.rowCount; i++) {
+			const existingStockId = document.getElementById(`stockid${i}`).value;
+			if (existingStockId == this.state.currentStock.stockId) {
+				const currentAmount = parseFloat(document.getElementById(`amount${i}`).value);
+				const newTotal = currentAmount + amount;
+				
+				if (this.checkStockAvailability(newTotal)) {
+					document.getElementById(`amount${i}`).value = newTotal;
+					const row = document.getElementById(`frm_row${i}`);
+					if (row && row.style.display === 'none') {
+						row.style.display = 'block';
+					}
+				}
+				return;
+			}
+		}
+		
+		// Add new row
+		if (this.state.rowCount === 0) {
+			if (!this.checkStockAvailability(amount)) return;
+			const deptOut = document.getElementById('txt_department_out');
+			if (deptOut) deptOut.disabled = true;
+		}
+		
+		this.createNewRow(amount);
+	},
+	processRowAdditionWithSerialNo: function() {
 		const amount = parseFloat(document.getElementById('add_other_amount').value);
 		
 		// Check if product already exists in the list
@@ -348,14 +378,21 @@ const WarehouseManager = {
 	},
 	
 	createBarcodeCell: function() {
-		const serialField = this.state.currentStock.serialNo ? 
-			`<input type="hidden" value="${this.state.currentStock.serialNo}" name="serial${this.state.rowCount}" id="serial${this.state.rowCount}" />` : '';
-		
-		return `<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
+		if (this.state.currentStock.serialNo) {
+			return `
+				<input type="text" value="${this.state.currentStock.serialNo}" name="serial_${this.state.rowCount}" id="serial_${this.state.rowCount}" size="14" class="boxtext" readonly />
+				<input type="hidden" value="${this.state.currentStock.barcode}" name="barcode_${this.state.rowCount}" id="barcode_${this.state.rowCount}" />
+				<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
 				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
-				${serialField}
-				<input type="text" value="${this.state.currentStock.barcode}" name="barcod${this.state.rowCount}" id="barcod${this.state.rowCount}" size="14" class="boxtext" readonly />`;
-	},
+			`;
+		} else {
+			return `
+				<input type="hidden" value="" name="serial_${this.state.rowCount}" id="serial_${this.state.rowCount}" />
+				<input type="text" value="${this.state.currentStock.barcode}" name="barcode_${this.state.rowCount}" id="barcode_${this.state.rowCount}" size="14" class="boxtext" readonly />
+				<input type="hidden" value="${this.state.currentStock.stockId}" name="stockid${this.state.rowCount}" id="stockid${this.state.rowCount}" />
+				<input type="hidden" value="${this.state.currentStock.specMainId}" name="spectmainid${this.state.rowCount}" id="spectmainid${this.state.rowCount}" />
+			`;
+		}
 	
 	createProductNameCell: function() {
 		return `<input type="text" value="${this.state.currentStock.stockCode}" name="stockcode${this.state.rowCount}" id="stockcode${this.state.rowCount}" size="23" class="boxtext" readonly />`;
