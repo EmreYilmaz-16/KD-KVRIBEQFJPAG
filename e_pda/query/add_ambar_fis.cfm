@@ -28,6 +28,7 @@
         <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
         <cfelse>
         <cfset 'SHELF_#i#'="">
+        <cfset 'SHELF_OTHER_ID_#i#'="">
         </cfif>
     </cfif>
 
