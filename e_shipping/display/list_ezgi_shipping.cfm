@@ -818,8 +818,8 @@
 </cfquery>
 
 <cfform name="order_form" method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
-<cf_big_list_search title="#getLang('main',1445)#">
-    <cf_big_list_search_area>
+<div title="#getLang('main',1445)#">
+    <div>
         <cf_object_main_table>
             <input name="form_varmi" id="form_varmi" value="1" type="hidden">
             <cf_object_table column_width_list="50,150">
@@ -934,8 +934,8 @@
                 </cf_object_tr>
             </cf_object_table>        
         </cf_object_main_table>
-    </cf_big_list_search_area>
-    <cf_big_list_search_detail_area>
+    </div>
+    <div_detail_area>
         <cf_object_main_table>
             <cf_object_table column_width_list="100,140">
                 <cfsavecontent variable="header_"><cfoutput>#getLang('report',1380)#</cfoutput></cfsavecontent>
@@ -1043,8 +1043,8 @@
                 </cf_object_tr>
             </cf_object_table>
         </cf_object_main_table>                               
-    </cf_big_list_search_detail_area>
-</cf_big_list_search>
+    </div_detail_area>
+</div>
 </cfform>
 	<table class="big_list">
 		<thead>
