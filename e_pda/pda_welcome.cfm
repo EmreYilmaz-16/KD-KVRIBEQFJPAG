@@ -67,7 +67,7 @@ h5{
 
     <td>    
 
-    <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_1</cfoutput>"><img src="../../images/e-pd/ticket30.png"><h5>Ambar Fişi</h5></a>
+    <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_1</cfoutput>"><img src="../../images/e-pd/ticket30.png"><h5>Ambar Fişi</h5> &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
