@@ -820,22 +820,22 @@
 <cfform name="order_form" method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
 <cf_big_list_search title="#getLang('main',1445)#">
     <cf_big_list_search_area>
-        <cf_object_main_table>
+        <table>
             <input name="form_varmi" id="form_varmi" value="1" type="hidden">
-            <cf_object_table column_width_list="50,150">
+            <table column_width_list="50,150">
 
                 <cfsavecontent variable="header_"><cf_get_lang_main no='48.Filtre'></cfsavecontent>
-                <cf_object_tr id="form_ul_keyword" title="#header_#">
-                    <cf_object_td type="text"><cf_get_lang_main no='48.Filtre'></cf_object_td>
-                    <cf_object_td>
+                <tr id="form_ul_keyword" title="#header_#">
+                    <td type="text"><cf_get_lang_main no='48.Filtre'></td>
+                    <td>
                         <cfinput type="text" name="keyword" maxlength="50" style="width:150px;" value="#attributes.keyword#">                    
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="50,75">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="50,75">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='296.Tümü'></cfsavecontent>
-                <cf_object_tr id="zone_id" title="#header_#">
-                    <cf_object_td>
+                <tr id="zone_id" title="#header_#">
+                    <td>
                         <select name="report_type_id" id="report_type_id" style="width:120px;height:20px">
 							<option value="" <cfif attributes.report_type_id eq ''>selected</cfif>><cf_get_lang_main no='296.Tümü'></option>
 							<option value="1" <cfif attributes.report_type_id eq '1'>selected</cfif>><cfoutput>#getLang('main',1305)# #getLang('main',3517)#</cfoutput></option>
@@ -843,27 +843,27 @@
                             <option value="3" <cfif attributes.report_type_id eq '3'>selected</cfif>><cfoutput>#getLang('main',3518)#</cfoutput></option>
                             <option value="4" <cfif attributes.report_type_id eq '4'>selected</cfif>><cfoutput>#getLang('main',3519)#</cfoutput></option>
 					</select>                    
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="50,75">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="50,75">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='247.Satis Bölgesi'></cfsavecontent>
-                <cf_object_tr id="zone_id" title="#header_#">
-                    <cf_object_td>
+                <tr id="zone_id" title="#header_#">
+                    <td>
                         <select name="zone_id" id="zone_id" style="width:100px;height:20px">
 						<option value=""><cf_get_lang_main no='247.Satis Bölgesi'></option>
 						<cfoutput query="sz">
 							<option value="#SZ_HIERARCHY#" <cfif attributes.zone_id eq SZ_HIERARCHY>selected</cfif>>#sz_name#</option>
 						</cfoutput>
 					</select>                    
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
+                    </td>
+                </tr>
+            </table>
            
-            <cf_object_table column_width_list="165">
+            <table column_width_list="165">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='1512.Sıralama'></cfsavecontent>
-                <cf_object_tr id="form_ul_sort_type" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_sort_type" title="#header_#">
+                    <td>
                         <select name="sort_type" id="sort_type" style="width:160px;height:20px">
                             <option value="1" <cfif attributes.sort_type eq 1>selected</cfif>><cfoutput>#getLang('prod',505)#</cfoutput></option>
                             <option value="2" <cfif attributes.sort_type eq 2>selected</cfif>><cfoutput>#getLang('prod',506)#</cfoutput></option>
@@ -871,25 +871,25 @@
                             <option value="4" <cfif attributes.sort_type eq 4>selected</cfif>><cfoutput>#getLang('main',3074)#</cfoutput></option>
                             <option value="5" <cfif attributes.sort_type eq 5>selected</cfif>><cfoutput>#getLang('main',3520)#</cfoutput></option>
                         </select>                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table> 
-            <cf_object_table column_width_list="95">
+                    </td>
+                </tr>
+            </table> 
+            <table column_width_list="95">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='3284.Liste Tipi'></cfsavecontent>
-                <cf_object_tr id="form_ul_sort_type" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_sort_type" title="#header_#">
+                    <td>
                         <select name="listing_type" id="listing_type" style="width:90px;height:20px">
                             <option value="1" <cfif attributes.listing_type eq 1>selected</cfif>><cf_get_lang_main no='296.Tümü'></option>
                             <option value="2" <cfif attributes.listing_type eq 2>selected</cfif>><cf_get_lang_main no='3521.Sevk Planları'></option>
                             <option value="3" <cfif attributes.listing_type eq 3>selected</cfif>><cfoutput>#getLang('myhome',1276)#</cfoutput></option>
                         </select>                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table> 
-            <cf_object_table column_width_list="90">
+                    </td>
+                </tr>
+            </table> 
+            <table column_width_list="90">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='330.Tarih'></cfsavecontent>
-                <cf_object_tr id="form_ul_start_date" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_start_date" title="#header_#">
+                    <td>
                         <cfif session.ep.our_company_info.unconditional_list>
                             <cfinput type="text" name="start_date" value="#dateformat(attributes.start_date,'dd/mm/yyyy')#" validate="eurodate" maxlength="10" style="width:65px;">
                         <cfelse>
@@ -897,13 +897,13 @@
                             <cfinput type="text" name="start_date"  value="#dateformat(attributes.start_date,'dd/mm/yyyy')#" validate="eurodate" maxlength="10" message="#message#" style="width:65px;">
                         </cfif>
                         <cf_wrk_date_image date_field="start_date">                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="90">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="90">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='330.Tarih'></cfsavecontent>
-                <cf_object_tr id="form_ul_finish_date" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_finish_date" title="#header_#">
+                    <td>
                         <cfif session.ep.our_company_info.unconditional_list>
                             <cfinput type="text" name="finish_date" value="#dateformat(attributes.finish_date,'dd/mm/yyyy')#" validate="eurodate" maxlength="10" style="width:65px;">
                         <cfelse>
@@ -911,13 +911,13 @@
                             <cfinput type="text" name="finish_date" value="#dateformat(attributes.finish_date,'dd/mm/yyyy')#" validate="eurodate" maxlength="10" message="#message#" style="width:65px;">
                         </cfif>
                         <cf_wrk_date_image date_field="finish_date">                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>    
+                    </td>
+                </tr>
+            </table>    
             
-            <cf_object_table column_width_list="170">
-                <cf_object_tr id="">
-                    <cf_object_td>
+            <table column_width_list="170">
+                <tr id="">
+                    <td>
                         <a href="javascript://" onclick="windowopen('<cfoutput>#request.self#?fuseaction=sales.popup_list_ezgi_shipping_graph</cfoutput>','longpage');" class="tableyazi">
                         	<img src="../../../images/graph.gif" align="absmiddle" border="0" title="<cf_get_lang_main no='3522.Sevkiyat Perspektif'>" />
                       	</a>
@@ -930,29 +930,29 @@
                         <cfsavecontent variable="message"><cf_get_lang_main no='125.Sayi_Hatasi_Mesaj'></cfsavecontent>
                         <cfinput type="text" name="maxrows" value="#attributes.maxrows#" required="yes" onKeyUp="isNumber(this)" validate="integer" range="1,250" message="#message#" maxlength="3" style="width:25px;">
                         <cf_wrk_search_button search_function='input_control()'>
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>        
-        </cf_object_main_table>
+                    </td>
+                </tr>
+            </table>        
+        </table>
     </cf_big_list_search_area>
     <cf_big_list_search_detail_area>
-        <cf_object_main_table>
-            <cf_object_table column_width_list="100,140">
+        <table>
+            <table column_width_list="100,140">
                 <cfsavecontent variable="header_"><cfoutput>#getLang('report',1380)#</cfoutput></cfsavecontent>
-                <cf_object_tr id="form_ul_order_employee" title="#header_#">
-                    <cf_object_td type="text" td_style="text-align:right;"><cfoutput>#getLang('report',1380)#</cfoutput></cf_object_td>
-                    <cf_object_td>
+                <tr id="form_ul_order_employee" title="#header_#">
+                    <td type="text" td_style="text-align:right;"><cfoutput>#getLang('report',1380)#</cfoutput></td>
+                    <td>
                         <input type="hidden" name="order_employee_id" id="order_employee_id" value="<cfif isdefined('attributes.order_employee_id') and len(attributes.order_employee_id) and isdefined('attributes.order_employee') and len(attributes.order_employee)><cfoutput>#attributes.order_employee_id#</cfoutput></cfif>">
                         <input name="order_employee" type="text" id="order_employee" style="width:115px;" onfocus="AutoComplete_Create('order_employee','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','order_employee_id','','3','125');" value="<cfif isdefined('attributes.order_employee_id') and len(attributes.order_employee_id)><cfoutput>#attributes.order_employee#</cfoutput></cfif>" autocomplete="off">	
                         <a href="javascript://" onclick="windowopen('<cfoutput>#request.self#</cfoutput>?fuseaction=objects.popup_list_positions&field_emp_id=order_form.order_employee_id&field_name=order_form.order_employee&is_form_submitted=1&select_list=1','list');"><img src="/images/plus_thin.gif" style="vertical-align:bottom"></a>		   
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="90,140">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="90,140">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='107.Cari Hesap'></cfsavecontent>
-                <cf_object_tr id="form_ul_member_name" title="#header_#">
-                    <cf_object_td  td_style="text-align:right;" type="text"><cf_get_lang_main no='107.Cari Hesap'></cf_object_td>
-                    <cf_object_td>
+                <tr id="form_ul_member_name" title="#header_#">
+                    <td  td_style="text-align:right;" type="text"><cf_get_lang_main no='107.Cari Hesap'></td>
+                    <td>
                         <input type="hidden" name="consumer_id" id="consumer_id" value="<cfif isdefined("attributes.consumer_id")><cfoutput>#attributes.consumer_id#</cfoutput></cfif>">
                         <input type="hidden" name="company_id" id="company_id" value="<cfif isdefined("attributes.company_id")><cfoutput>#attributes.company_id#</cfoutput></cfif>">
                         <input type="hidden" name="member_type" id="member_type" value="<cfif isdefined("attributes.member_type")><cfoutput>#attributes.member_type#</cfoutput></cfif>">
@@ -961,24 +961,24 @@
                         <a href="javascript://" onclick="windowopen('<cfoutput>#request.self#</cfoutput>?fuseaction=objects.popup_list_all_pars<cfoutput>#str_linke_ait#<cfif fusebox.circuit eq "store">&is_store_module=1</cfif></cfoutput>&select_list=7,8&keyword='+encodeURIComponent(document.order_form.member_name.value),'list');">
                             <img src="/images/plus_thin.gif" style="vertical-align:bottom">
                         </a>
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="50,145">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="50,145">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='245.Ürün'></cfsavecontent>
-                <cf_object_tr id="form_ul_product_name" title="#header_#">
-                    <cf_object_td td_style="text-align:right;" type="text"><cf_get_lang_main no='245.Ürün'></cf_object_td>
-                    <cf_object_td>
+                <tr id="form_ul_product_name" title="#header_#">
+                    <td td_style="text-align:right;" type="text"><cf_get_lang_main no='245.Ürün'></td>
+                    <td>
                         <input type="hidden" name="product_id" id="product_id" <cfif len(attributes.product_id) and len(attributes.product_name)>value="<cfoutput>#attributes.product_id#</cfoutput>"</cfif>>
                         <input name="product_name" type="text" id="product_name" style="width:120px;" onfocus="AutoComplete_Create('product_name','PRODUCT_NAME','PRODUCT_NAME','get_product','0','PRODUCT_ID','product_id','','3','100');" value="<cfif len(attributes.product_id) and len(attributes.product_name)><cfoutput>#attributes.product_name#</cfoutput></cfif>" autocomplete="off">
                         <a href="javascript://" onclick="windowopen('<cfoutput>#request.self#</cfoutput>?fuseaction=objects.popup_product_names&product_id=order_form.product_id&field_name=order_form.product_name&keyword='+encodeURIComponent(document.order_form.product_name.value),'list');"><img src="/images/plus_thin.gif" style="vertical-align:bottom"></a>
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="50,145">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="50,145">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='1604.rn Kategorileri'></cfsavecontent>
-                <cf_object_tr id="form_ul_prod_cat" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_prod_cat" title="#header_#">
+                    <td>
                         <select name="prod_cat" id="prod_cat" style="width:140px;height:20px">
                             <option value=""><cf_get_lang_main no='1604.rn Kategorileri'></option>
                             <cfoutput query="GET_PRODUCT_CATS">
@@ -987,62 +987,62 @@
                                 </cfif>
                             </cfoutput>
                         </select>                       
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-             <cf_object_table column_width_list="75">
+                    </td>
+                </tr>
+            </table>
+             <table column_width_list="75">
               	<cfsavecontent variable="header_"><cf_get_lang_main no='41.Şube'></cfsavecontent>
-               	<cf_object_tr id="form_ul_branch_id" title="#header_#">
-                 	<cf_object_td>
+               	<tr id="form_ul_branch_id" title="#header_#">
+                 	<td>
                     	<select name="branch_id" id="branch_id" style="width:70px;height:20px">
                         	<option value=""><cf_get_lang_main no='41.Sube'></option>
                          	<cfoutput query="get_branch">
                            		<option value="#branch_id#" <cfif isdefined("attributes.branch_id") and branch_id eq attributes.branch_id>selected</cfif>>#branch_name#</option>
                             </cfoutput>
                    		</select>        
-              		</cf_object_td>
-           		</cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="50,135">
+              		</td>
+           		</tr>
+            </table>
+            <table column_width_list="50,135">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='2234.Lokasyon'></cfsavecontent>
-                <cf_object_tr id="form_ul_sales_departments" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ul_sales_departments" title="#header_#">
+                    <td>
                         <select name="sales_departments" id="sales_departments" style="width:130px;height:20px">
                             <option value=""><cf_get_lang_main no='2234.Lokasyon'></option>
                             <cfoutput query="get_department_name">
                                 <option value="#department_id#-#location_id#" <cfif isdefined("attributes.sales_departments") and attributes.sales_departments is '#department_id#-#location_id#'>selected</cfif>>#department_head#-#comment#</option>
                             </cfoutput>
                         </select>
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-            <cf_object_table column_width_list="105">
+                    </td>
+                </tr>
+            </table>
+            <table column_width_list="105">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='559.Şehir'></cfsavecontent>
-                <cf_object_tr id="form_city_name" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_city_name" title="#header_#">
+                    <td>
                         <select name="city_name" id="city_name" style="width:100px;height:20px">
                             <option value=""><cf_get_lang_main no='559.Şehir'></option>
                             <cfoutput query="get_city">
                                 <option value="#city_name#" <cfif isdefined("attributes.city_name") and attributes.city_name is '#city_name#'>selected</cfif>>#city_name#</option>
                             </cfoutput>
                         </select>                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>   
-         	<cf_object_table column_width_list="105">
+                    </td>
+                </tr>
+            </table>   
+         	<table column_width_list="105">
                 <cfsavecontent variable="header_"><cf_get_lang_main no='1703.Sevk Yöntemi'></cfsavecontent>
-                <cf_object_tr id="form_ship_method" title="#header_#">
-                    <cf_object_td>
+                <tr id="form_ship_method" title="#header_#">
+                    <td>
                         <select name="SHIP_METHOD_ID" id="SHIP_METHOD_ID" style="width:100px;height:20px">
                             <option value=""><cf_get_lang_main no='1703.Sevk Yöntemi'></option>
                             <cfoutput query="GET_SHIP_METHOD">
                                 <option value="#SHIP_METHOD_ID#" <cfif isdefined("attributes.SHIP_METHOD_ID") and attributes.SHIP_METHOD_ID eq SHIP_METHOD_ID>selected</cfif>>#SHIP_METHOD#</option>
                             </cfoutput>
                         </select>                 
-                    </cf_object_td>
-                </cf_object_tr>
-            </cf_object_table>
-        </cf_object_main_table>                               
+                    </td>
+                </tr>
+            </table>
+        </table>                               
     </cf_big_list_search_detail_area>
 </cf_big_list_search>
 </cfform>
