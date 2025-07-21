@@ -42,7 +42,7 @@
                     ,GTSL.COMMENT
                     ,(
                         SELECT DEPARTMENT_HEAD
-                        FROM workcube_hidtek.DEPARTMENT AS DEPT
+                        FROM #DSN#.DEPARTMENT AS DEPT
                         WHERE DEPT.DEPARTMENT_ID = GTSL.DEPARTMENT_ID
                         ) AS DEPARTMAN
                         ,BARCOD
