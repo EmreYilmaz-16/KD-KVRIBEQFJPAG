@@ -1,5 +1,5 @@
 <cfquery name="getRelOrder" datasource="#dsn#">
-    SELECT * FROM workcube_hidtek.COMPANY_REL_ACTIONS_PARTNER WHERE TO_ACTION_ID=#attributes.ORDER_ID# AND TO_PERIOD_ID=#session.ep.period_id#
+    SELECT * FROM COMPANY_REL_ACTIONS_PARTNER WHERE TO_ACTION_ID=#attributes.ORDER_ID# AND TO_PERIOD_ID=#session.ep.period_id#
 </cfquery>
 
 
