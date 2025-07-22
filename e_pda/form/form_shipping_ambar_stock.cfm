@@ -148,10 +148,13 @@
 	<cfset all_amount = 0>
 </cfif>
 
-
+<div class="row">
+	<div class="col col-md-2 col-sm-12 col-xs-12">
+		
 <cfform name="form_basket">
   <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
   <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <div class="form-group"><input type="text" class="form-control" name="miktar" id="miktar" value="1" readonly></div>
 </cfform>
+</div></div>
