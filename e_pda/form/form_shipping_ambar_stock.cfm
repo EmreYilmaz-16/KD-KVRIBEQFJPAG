@@ -187,6 +187,7 @@
 </div>
 <script>
 	var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
+	var is_rafli = <cfoutput>#get_store_type.raf#</cfoutput>;
 </script>
 <script>
 	$(document).ready(function(){
