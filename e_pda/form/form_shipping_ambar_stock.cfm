@@ -155,7 +155,7 @@
   <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
   <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
- <div>
+ <div style="display:flex">
   <div class="form-group">
 	<label for="miktar">Miktar</label>
 	<input type="text" class="moneybox" name="miktar" id="miktar" value="1" readonly>
