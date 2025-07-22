@@ -155,6 +155,7 @@
   <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
   <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+ <div>
   <div class="form-group">
 	<label for="miktar">Miktar</label>
 	<input type="text" class="form-control" name="miktar" id="miktar" value="1" readonly>
@@ -167,6 +168,6 @@
 	<label for="serial_number">Seri Numarası</label>
 	<input type="text" name="serial_number" id="serial_number" class="form-control" placeholder="Seri Numarası">
   </div>
-  
+  </div>
 </cfform>
 </div></div>
