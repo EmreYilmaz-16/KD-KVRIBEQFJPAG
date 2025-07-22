@@ -143,6 +143,7 @@
         	SF.REF_NO = '#attributes.deliver_paper_no#' AND 
             SFR.STOCK_ID = #f_stock_id#
 </cfquery>
+<cfset all_amount = 0>
 <cfif get_ambar_fis_group.recordcount>
 	<cfset all_amount = get_ambar_fis_group.amount>
 <cfelse>
