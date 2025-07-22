@@ -188,6 +188,7 @@
 <script>
 	var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
 	var is_rafli = <cfoutput>#get_store_type.raf#</cfoutput>;
+	var all_amount = <cfoutput>#all_amount#</cfoutput>;
 </script>
 <script>
 	$(document).ready(function(){
