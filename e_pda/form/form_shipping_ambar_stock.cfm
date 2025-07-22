@@ -1,4 +1,5 @@
-﻿<cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
+﻿<cfdump var="#attributes#">
+<cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
 <cfparam name="attributes.department_in_id" default="">
 <cfparam name="attributes.department_out_id" default="">
 <cfquery name="get_process_cat" datasource="#DSN3#">
