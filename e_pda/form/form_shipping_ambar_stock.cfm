@@ -151,28 +151,40 @@
 
 <div class="row">
 	<div class="col col-md-2 col-sm-12 col-xs-12">
-		
-<cfform name="form_basket">
-  <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
-  <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
-  <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
- <div style="display:flex">
-  <div class="form-group">
-	<label for="miktar">Miktar</label>
-	<input type="text" class="moneybox" name="miktar" id="miktar" value="1" readonly>
-  </div>
-  
-  <div class="form-group">
-	<label for="serial_number">Seri Numarası</label>
-	<input type="text" name="serial_number" id="serial_number" class="moneybox" placeholder="Seri Numarası">
-  </div>
-  <div class="form-group">
-	<label for="txt_shelf_number">Raf Numarası</label>
-	<input type="text" class="moneybox" name="txt_shelf_number" id="txt_shelf_number" value="" placeholder="Raf Numarası">
-  </div>
-  </div>
-</cfform>
-</div></div>
+		<cfform name="form_basket">
+			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
+			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
+			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+			<div style="display:flex">
+				<div class="form-group">
+					<label for="miktar">Miktar</label>
+					<input type="text" class="moneybox" name="miktar" id="miktar" value="1" readonly>
+				</div>
+				<div class="form-group">
+					<label for="serial_number">Seri Numarası</label>
+					<input type="text" name="serial_number" id="serial_number" class="moneybox" placeholder="Seri Numarası">
+				</div>
+				<cfif get_store_type.raf gt 0>
+				<div class="form-group">
+					<label for="txt_shelf_number">Raf Numarası</label>
+					<input type="text" class="moneybox" name="txt_shelf_number" id="txt_shelf_number" value="" placeholder="Raf Numarası">
+				</div>
+				</cfif>
+			</div>
+			<div class="form-group">
+				<cfif get_store_type.raf gt 0>
+                    <select name="shelf_select" style="width:100px; text-align:center">
+                        <cfoutput query="get_shelf_stock">
+                            <option value="">#SHELF_CODE# - #REAL_STOCK#</option>
+                        </cfoutput>
+                    </select>
+                <cfelse>
+                    Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
+                </cfif>
+			</div>
+		</cfform>
+	</div>
+</div>
 <script>
 	var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
 </script>
@@ -190,6 +202,80 @@ document.onkeydown = checkKeycode
 		{
 			console.log('Enter tuşuna basıldı');
 			e.preventDefault(); // Enter tuşunun formu göndermesini engelle
+			var miktar = document.getElementById('miktar').value;
+			var serial_number = document.getElementById('serial_number').value;
+			var txt_shelf_number = document.getElementById('txt_shelf_number').value;
+			if()
+		}
+	}
+
+	function search_shelf(shelf_8)
+	{
+		var giris_depo = document.all.txt_department_out.value;
+		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
+		var get_shelf = wrk_query(shelf_sql,'dsn3');
+		if(get_shelf.recordcount)
+		{
+			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
+			if(giris_depo != giris_depo_s)
+			{
+					alert('Seçtiğiniz Raf Giriş Lokasyonunda Değildir.!');	
+					document.getElementById('add_other_shelf').value = '';
+					document.getElementById('add_other_shelf').focus();	
+			}
+			else
+			{
+				if (document.getElementById('add_other_barcod').value.length >0)
+				{
+					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
+		 			var get_product = wrk_query(new_sql,'dsn3');
+					if (get_product.STOCK_ID == undefined)
+					{
+						alert('Ürün Bulunamadı');
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_shelf').focus();
+					}
+					else
+					{	
+						document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*-1);
+						if (document.getElementById('all_amount').value*1 <= document.getElementById('paket_sayisi').value*1)
+						{
+						stockid = get_product.STOCK_ID;
+						stockcode = get_product.PRODUCT_NAME;
+						barcode = get_product.BARCODE;
+						shelf_code = get_product.SHELF_CODE; 
+						buton_kontrol();
+						add_row(barcode);
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_amount').value = '';
+						document.getElementById('add_other_amount').focus();
+						}
+						else
+						{
+							alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
+							document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
+							document.getElementById('add_other_shelf').value = '';
+							document.getElementById('add_other_amount').focus();
+						}
+					}
+				}
+				else if (document.getElementById('add_other_barcod').value.length == 0)
+				{
+						document.getElementById('add_other_barcod').focus();	
+				}
+				/*else
+				{
+						alert('Ürün Barkodu Hatalı');
+						document.getElementById('add_other_shelf').value = '';
+						document.getElementById('add_other_shelf').focus();
+				}*/
+			}
+		}
+		else
+		{
+			alert('Seçtiğiniz Raf Bulunamadı!');
+			document.getElementById('add_other_shelf').value = '';
+			document.getElementById('add_other_shelf').focus();
 		}
 	}
 </script>
