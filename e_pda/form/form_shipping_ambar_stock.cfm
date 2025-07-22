@@ -211,13 +211,26 @@ document.onkeydown = checkKeycode
 			e.preventDefault(); // Enter tuşunun formu göndermesini engelle
 			var miktar = document.getElementById('miktar').value;
 			var serial_number = document.getElementById('serial_number').value;
-			var txt_shelf_number = document.getElementById('txt_shelf_number').value;
-			if()
+			
+			if(formArgs.is_rafli >0){
+				var txt_shelf_number = document.getElementById('txt_shelf_number').value;
+				if (txt_shelf_number.length >0)
+				{
+					search_shelf(txt_shelf_number);
+				}
+				else
+				{
+					alert('Raf Borkodu Hatalı');
+					document.getElementById('add_other_shelf').value = '';
+					document.getElementById('add_other_shelf').focus();	
+				}
+			}
 		}
 	}
 
 	function search_shelf(shelf_8)
 	{
+		console.log('search_shelf fonksiyonu çalıştı');
 		var giris_depo = document.all.txt_department_out.value;
 		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
 		var get_shelf = wrk_query(shelf_sql,'dsn3');
