@@ -134,6 +134,7 @@
     
 </cfif>
 <cfquery name="get_ambar_fis_group" datasource="#dsn2#">
+	SELECT ISNULL(AMOUNT,0) AS AMOUNT FROM (
 		SELECT        
         	SUM(SFR.AMOUNT) AS AMOUNT
 		FROM            
@@ -142,6 +143,7 @@
 		WHERE 
         	SF.REF_NO = '#attributes.deliver_paper_no#' AND 
             SFR.STOCK_ID = #f_stock_id#
+	) AS T
 </cfquery>
 <cfdump var="#get_ambar_fis_group#">
 <cfset all_amount = 0>
