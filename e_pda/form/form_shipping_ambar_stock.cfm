@@ -216,7 +216,7 @@ document.onkeydown = checkKeycode
 				var txt_shelf_number = document.getElementById('txt_shelf_number').value;
 				if (txt_shelf_number.length >0)
 				{
-					search_shelf(txt_shelf_number);
+					search_shelf(txt_shelf_number, serial_number);
 				}
 				else
 				{
@@ -228,7 +228,7 @@ document.onkeydown = checkKeycode
 		}
 	}
 
-	function search_shelf(shelf_8)
+	function search_shelf(shelf_8,serial_number)
 	{
 		console.log('search_shelf fonksiyonu çalıştı');
 		var giris_depo = document.all.txt_department_out.value;
