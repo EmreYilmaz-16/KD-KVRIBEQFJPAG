@@ -174,6 +174,9 @@
 </cfform>
 </div></div>
 <script>
+	var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
+</script>
+<script>
 	$(document).ready(function(){
 	$(".header").hide()
 })
