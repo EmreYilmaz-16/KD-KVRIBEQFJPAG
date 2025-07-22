@@ -158,15 +158,15 @@
  <div>
   <div class="form-group">
 	<label for="miktar">Miktar</label>
-	<input type="text" class="form-control" name="miktar" id="miktar" value="1" readonly>
+	<input type="text" class="moneybox" name="miktar" id="miktar" value="1" readonly>
   </div>
   <div class="form-group">
 	<label for="txt_shelf_number">Raf Numarası</label>
-	<input type="text" class="form-control" name="txt_shelf_number" id="txt_shelf_number" value="" placeholder="Raf Numarası">
+	<input type="text" class="moneybox" name="txt_shelf_number" id="txt_shelf_number" value="" placeholder="Raf Numarası">
   </div>
   <div class="form-group">
 	<label for="serial_number">Seri Numarası</label>
-	<input type="text" name="serial_number" id="serial_number" class="form-control" placeholder="Seri Numarası">
+	<input type="text" name="serial_number" id="serial_number" class="moneybox" placeholder="Seri Numarası">
   </div>
   </div>
 </cfform>
