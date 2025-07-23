@@ -8,7 +8,7 @@
 }
 
 </style>
-<cf_box title="Sevkiyat Kontrol">
+<cf_box title="Sevkiyat Hazırlama">
 <cfdump var="#attributes#">
 <cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
 <cfparam name="attributes.department_in_id" default="">
@@ -234,7 +234,7 @@ document.onkeydown = checkKeycode
 			var miktar = document.getElementById('miktar').value;
 			var serial_number = document.getElementById('serial_number').value;
 			var HasStock=false;
-			var sql=`SELECT IS_ALIVE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}'`;
+			var sql=`SELECT IS_ALIVE,PURCHASE_DATE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}'`;
 			var StockResult= wrk_query(sql, 'dsn3', 1);
 			var spectmainid = '';
 			var barcode = '';
@@ -289,6 +289,8 @@ document.onkeydown = checkKeycode
 						{
 							console.log('Raf numarası ve seri numarası kontrolü başarılı.');
 							shelf_code = shelf_number;
+							var OncekiVarmiSql=`SELECT * FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) <'2025-07-10' AND IS_ALIVE=1`
+
 							row_count++;
 							document.getElementById('row_count').value = row_count;
 							var newRow;
