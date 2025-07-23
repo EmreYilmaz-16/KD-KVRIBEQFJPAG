@@ -25,7 +25,8 @@
         <cfset 'SHELFOUT_#i#' = evaluate("attributes.SHELF_CODE_OUT#i#")>    
     <cfelse>
         <cfif isDefined("attributes.SHELF_CODE#i#")>            
-        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")>    
+        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")> 
+           <cfset 'SHELF_OTHER_ID_#i#'="">
         <cfelse>
         <cfset 'SHELF_#i#'="">
         <cfset 'SHELF_OTHER_ID_#i#'="">
