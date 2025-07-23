@@ -61,7 +61,7 @@
                     <cfqueryparam value="#arguments.data.WRK_ROW_ID#" cfsqltype="cf_sql_varchar">,
                     <cfqueryparam value="#unitType#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.UNIT_ROW_QUANTITY#" cfsqltype="cf_sql_decimal" scale="2">,
-                    '#arguments.data.SHELF_NUMBER#'
+                    <cfif arguments.data.SHELF_NUMBER eq 0>NULL <cfelse>#arguments.data.SHELF_NUMBER#</cfif>
                 )
             </cfquery>
 
