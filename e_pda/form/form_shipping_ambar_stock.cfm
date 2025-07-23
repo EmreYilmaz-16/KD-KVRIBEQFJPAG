@@ -131,6 +131,7 @@
 			<cfinput id="f_stock_id" name="f_stock_id" type="hidden" value="#f_stock_id#">
 			<input type="hidden" name="action_id" id="action_id" value="">
 			<input type="hidden" name="fis_tipi" id="fis_tipi" value="">
+			<cfinput id="PROCESS_CAT " name="PROCESS_CAT" type="hidden" value="#get_process_cat.process_cat_id#">
 			
 			<!--- Orijinal Form Hidden Alanları --->
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
