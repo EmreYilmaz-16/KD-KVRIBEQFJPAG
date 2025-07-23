@@ -245,12 +245,17 @@ document.onkeydown = checkKeycode
 					// Raf numarası kontrolü
 					if(HasStock && shelf_number != '')
 					{
-						console.log('Raf numarası kontrolü yapılıyor...');
-
+						console.log('Raf numarası kontrolü yapılıyor...');						
+						var ss=`SELECT * FROM PRODUCT_PLACE_ROWS AS PPR INNER JOIN PRODUCT_PLACE AS PP ON PP.PRODUCT_PLACE_ID=PPR.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID=${formArgs.stock_id} AND SHELF_CODE='${shelf_number}' AND STORE_ID=${formArgs.department_out_id} AND LOCATION_ID=${formArgs.location_out_id}`
+						var r=wrk_query(ss,"dsn3")
+						if(r.recordcount ==0){
+							alert("Çıkış Deposunda Bu Raf Bulunmamaktadır ve ya Ürün Bu Rafa Tanımlı Değildir");
+							return false
+						}
 						var rafKontrolSql=`
 						SELECT SHELF_NUMBER,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serial_number}'
 						GROUP BY SHELF_NUMBER
-						HAVING SHELF_NUMBER=${shelf_number}`// Raf numarası ve seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
+						HAVING SHELF_NUMBER=${r.PRODUCT_PLACE_ID[0]}`// Raf numarası ve seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
 						var rafKontrolSonuc = wrk_query(rafKontrolSql, 'dsn3', 1);
 						console.log(rafKontrolSonuc);
 					}
