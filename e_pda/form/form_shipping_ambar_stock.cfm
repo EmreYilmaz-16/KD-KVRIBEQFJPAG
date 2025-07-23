@@ -193,7 +193,9 @@
 	var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
 	var is_rafli = <cfoutput>#get_store_type.raf#</cfoutput>;
 	var all_amount = <cfoutput>#all_amount#</cfoutput>;
-	var formArgs={stock_id,is_rafli,all_amount}
+	var serial_number = '';
+
+	var formArgs={stock_id,is_rafli,all_amount,serial_number}
 </script>
 <script>
 	$(document).ready(function(){
@@ -211,23 +213,65 @@ document.onkeydown = checkKeycode
 			e.preventDefault(); // Enter tuşunun formu göndermesini engelle
 			var miktar = document.getElementById('miktar').value;
 			var serial_number = document.getElementById('serial_number').value;
-			
+			if(serial_number.length == 0)
+			{
+				alert('Seri Numarası Giriniz');
+				document.getElementById('serial_number').focus();
+				return false;
+			}else 
+			{
+				get_stock(serial_number);
+			}
 			if(formArgs.is_rafli >0){
 				var txt_shelf_number = document.getElementById('txt_shelf_number').value;
 				if (txt_shelf_number.length >0)
 				{
 					search_shelf(txt_shelf_number, serial_number);
 				}
-				else
-				{
-					alert('Raf Borkodu Hatalı');
-					document.getElementById('add_other_shelf').value = '';
-					document.getElementById('add_other_shelf').focus();	
-				}
+				
 			}
 		}
 	}
-
+function get_stock(serial_number)
+    {
+	 	//barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
+	 	k_= 0;
+	 	if (k_ == 0)
+     	{
+		 	var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
+		 	var get_product = wrk_query(new_sql,'dsn3');
+		 	if (get_product.STOCK_ID == undefined)
+		 	{
+				ekle = 1;
+				cikar = 1;
+				k_=1;
+				alert('Ürün Bulunamadı');
+		 	}
+		 	else
+		 	{	
+				document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*-1);
+				if (document.getElementById('all_amount').value*1 <= document.getElementById('paket_sayisi').value*1)
+				{
+					stockid = get_product.STOCK_ID;
+					stockcode = get_product.PRODUCT_NAME;
+					barcode = get_product.BARCODE;
+					buton_kontrol();
+				}
+				else
+				{
+					alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
+					document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
+					document.getElementById('add_other_amount').focus();
+					ekle=1;
+				}
+    		}
+		}
+		else
+		{
+			barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
+			return false;
+		}
+	}
 	function search_shelf(shelf_8,serial_number)
 	{
 		console.log('search_shelf fonksiyonu çalıştı');
