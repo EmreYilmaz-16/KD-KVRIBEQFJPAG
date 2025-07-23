@@ -55,11 +55,12 @@
                 SELECT PRODUCT_STOCK FROM EZGI_GET_STOCK_LOCATION_TOTAL WHERE STOCK_ID = #Evaluate('STOCK_ID_#Listgetat(i,1,'-')#')# AND DEPO = '#attributes.dep_out#'
             </cfquery>
         </cfif>
-        
+        <cfdump var="#get_stock_kontrol#">
         <cfif get_stock_kontrol.PRODUCT_STOCK lt Evaluate('AMOUNT_#Listgetat(i,1,'-')#')>
         	<script type="text/javascript">
 				alert('Depoda Yeterli Bakiye Yoktur!');
-				window.history.go(-1)
+                <cfabort>
+				//window.history.go(-1)
 			</script>
         	<cfabort>
         </cfif>
