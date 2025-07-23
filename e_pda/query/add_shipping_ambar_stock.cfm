@@ -18,7 +18,7 @@
     
 	<cfset form.process_cat = attributes.process_cat>
     
-    <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
+    <cfloop list="#attributes.action_id#" index="i">
     
         <cfset current_row_list = ListAppend(current_row_list,Listgetat(i,1,'-'))>
         <cfset stock_id_list = ListAppend(stock_id_list,Listgetat(i,2,'-'))>
