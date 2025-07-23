@@ -11,6 +11,7 @@
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
+<cfabort>
 <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
 <!----<cfloop -- list="#attributes.action_id#" index="i">---->
 	<cfset current_row_list = ListAppend(current_row_list,i)>
@@ -18,8 +19,21 @@
     <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'STOCK_ID#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
-
+    <cfif isDefined("attributes.change_shelf_fis")>
+        <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE#i#")>
+    <cfelse>
+        <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE#i#")>
+        <CFSET SHELF_CODE_OUT= "">
+    </cfif>
     
+
+
+
+
+
+
+
+
     <cfif isDefined("attributes.change_shelf_fis")>
         <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE_IN#i#")>    
         <cfset 'SHELFOUT_#i#' = evaluate("attributes.SHELF_CODE_OUT#i#")>    
