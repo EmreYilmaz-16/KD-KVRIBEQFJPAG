@@ -18,56 +18,90 @@
     <cfset stock_id_list = ListAppend(stock_id_list,evaluate("attributes.STOCKID#i#"))>
     <cfset 'STOCK_ID_#i#' = evaluate("attributes.STOCKID#i#")>
     <cfset 'STOCK_ID#i#' = evaluate("attributes.STOCKID#i#")>
-    <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")>    
+    <cfset 'AMOUNT_#i#' = evaluate("attributes.AMOUNT#i#")> 
+     <cfset SHELF_ID_IN="">
+    <cfset SHELF_ID_OUT="">   
+      <cfset SHELF_CODE_IN="">
+    <cfset SHELF_CODE_OUT="">  
+    <CFSET "SHELF_CODE_IN__#i#"="">
+    <CFSET "SHELF_CODE_OUT__#i#"=""> 
     <cfif isDefined("attributes.change_shelf_fis")>
-        <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE#i#")>
+        <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE_IN#i#")>
+        <cfset SHELF_CODE_OUT= evaluate("attributes.SHELF_CODE_OUT#i#")>
+        <cfquery name="get_shelf_id" datasource="#dsn3#">
+            SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE WHERE SHELF_CODE = '#SHELF_CODE_IN#'
+        </cfquery>
+        <CFSET SHELF_ID_IN= get_shelf_id.PRODUCT_PLACE_ID>
+        <CFSET "SHELF_CODE_IN__#i#"= SHELF_ID_IN>        
+        <cfquery name="get_shelf_id" datasource="#dsn3#">
+            SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE WHERE SHELF_CODE = '#SHELF_CODE_OUT#' WHERE SHELF_CODE = '#SHELF_CODE_OUT#'
+        </cfquery>
+        <CFSET SHELF_ID_OUT= get_shelf_id.PRODUCT_PLACE_ID>
+        <CFSET "SHELF_CODE_OUT__#i#"= SHELF_ID_OUT>
     <cfelse>
-        <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE#i#")>
-        <CFSET SHELF_CODE_OUT= "">
-    </cfif>
-    
-
-
-
-
-
-
-
-
-    <cfif isDefined("attributes.change_shelf_fis")>
-        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE_IN#i#")>    
-        <cfset 'SHELFOUT_#i#' = evaluate("attributes.SHELF_CODE_OUT#i#")>    
-    <cfelse>
-        <cfif isDefined("attributes.SHELF_CODE#i#")>            
-        <cfset 'SHELF_#i#' = evaluate("attributes.SHELF_CODE#i#")> 
-           <cfset 'SHELF_OTHER_ID_#i#'="">
+        <cfif isDefined("attributes.tersfis") and attributes.tersfis eq 1>
+            <cfset SHELF_CODE_IN= "">
+            <CFSET SHELF_CODE_OUT= evaluate("attributes.SHELF_CODE#i#")>
+            <cfquery name="get_shelf_id" datasource="#dsn3#">
+                SELECT        
+                    PRODUCT_PLACE_ID
+                FROM            
+                    PRODUCT_PLACE
+                WHERE        
+                    SHELF_CODE = '#SHELF_CODE_OUT#'
+            </cfquery>
+        <CFSET SHELF_ID_OUT= get_shelf_id.PRODUCT_PLACE_ID>
+           <CFSET "SHELF_CODE_IN__#i#"="">
+    <CFSET "SHELF_CODE_OUT__#i#"="#SHELF_ID_OUT#"> 
         <cfelse>
-        <cfset 'SHELF_#i#'="">
-        <cfset 'SHELF_OTHER_ID_#i#'="">
-        </cfif>
-    </cfif>
-
-    <cfquery name="get_shelf_id" datasource="#dsn3#">
-    	SELECT        
-        	PRODUCT_PLACE_ID
-		FROM            
-        	PRODUCT_PLACE
-		WHERE        
-        	SHELF_CODE = '#evaluate("SHELF_#i#")#'
-    </cfquery>
-    <cfset 'SHELF_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
-    <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa---> <!----- TODO: RAF DEĞİŞTİRME İŞLEMİNDE BAK CANIM ----->
-    	<cfset 'SHELF_OTHER_#i#' = evaluate("SHELFOUT_#i#")>
+            <cfset SHELF_CODE_IN= evaluate("attributes.SHELF_CODE#i#")>
+            <CFSET SHELF_CODE_OUT= "">
         <cfquery name="get_shelf_id" datasource="#dsn3#">
             SELECT        
                 PRODUCT_PLACE_ID
             FROM            
                 PRODUCT_PLACE
             WHERE        
-                SHELF_CODE = '#evaluate("SHELFOUT_#i#")#'
+                SHELF_CODE = '#SHELF_CODE_IN#'
         </cfquery>
-    	<cfset 'SHELF_OTHER_ID_#i#' = get_shelf_id.PRODUCT_PLACE_ID>
+        <CFSET SHELF_ID_IN= get_shelf_id.PRODUCT_PLACE_ID>
+        <CFSET "SHELF_CODE_IN__#i#"="#SHELF_ID_IN#">
+        <CFSET "SHELF_CODE_OUT__#i#"=""> 
+        </cfif>
     </cfif>
+    
+    
+    
+
+  <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
+        	<cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
+          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT> 
+           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN>  
+          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+        <cfelse>
+			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
+                <cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT > 
+                <cfset 'attributes.TO_SHELF_NUMBER#k#' = ''>  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = ''>
+            <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
+                <cfset 'attributes.SHELF_NUMBER#k#' = ''>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = ''> 
+                <cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN >  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+            </cfif>
+       	</cfif>
+
+
+
+
+
+
+    
+
+    
+    
+    
     <cfquery name="GET_LOT_K_KONT_ID" datasource="#dsn3#">
         SELECT     
             PU.PRODUCT_UNIT_ID, 
@@ -305,7 +339,7 @@
         <cfset 'attributes.ROW_UNIQUE_RELATION_ID#k#' = ''>  
         <cfset 'attributes.ROW_WIDTH#k#' = ''>
         <cfset 'attributes.ROW_DEPTH#k#' = ''>
-        <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
+        <!-----<cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
         	<cfset 'attributes.SHELF_NUMBER#k#' = Evaluate('SHELF_ID_#k#')>  
           	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')> 
            	<cfset 'attributes.TO_SHELF_NUMBER#k#' = Evaluate('SHELF_OTHER_ID_#k#')>  
@@ -322,7 +356,7 @@
                 <cfset 'attributes.TO_SHELF_NUMBER#k#' = Evaluate('SHELF_ID_#k#') >  
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')>
             </cfif>
-       	</cfif>
+       	</cfif>------>
         <cfset 'attributes.SPECIAL_CODE#k#' = ''>  
         <cfset 'attributes.SPECT_ID#k#' = Evaluate('SPECT_ID#k#')>  
         <cfset 'attributes.TAX_PRICE#k#' = ''>  
@@ -337,15 +371,17 @@
         <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
         <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
         <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
-        <cfset GIRIS_RAF_ID=Evaluate('SHELF_OTHER_ID_#k#')>
-        <cfset CIKIS_RAF_ID=Evaluate('SHELF_ID_#k#')>
+            <CFSET "SHELF_CODE_IN__#i#"="">
+    <CFSET "SHELF_CODE_OUT__#i#"=""> 
+        
+        <cfset GIRIS_RAF_ID=Evaluate('SHELF_CODE_IN__#k#')>
+        <cfset CIKIS_RAF_ID=Evaluate('SHELF_CODE_OUT__#k#')>
         <cfdump var="GIRIS_RAF_ID=#GIRIS_RAF_ID# ----- CIKIS_RAF_ID=#CIKIS_RAF_ID#">
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
         </cfquery>
-    <cfif isdefined('attributes.change_shelf_fis')>
-        <!---<cfset GIRIS_RAF_ID=Evaluate('SHELF_ID_#k#')>
-        <cfset CIKIS_RAF_ID=Evaluate('SHELF_ID_#k#')>---->
+        <cfif isdefined('attributes.change_shelf_fis')>
+        
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
             <cfdump var="#data#">
         <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
@@ -353,7 +389,7 @@
     <cfelse>
       
       <cfif isdefined('attributes.tersfis')>
-        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
         <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
       <cfelse>      
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
