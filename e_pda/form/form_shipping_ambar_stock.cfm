@@ -187,7 +187,7 @@
                     Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
                 </cfif>
 			</div>
-			<table id="table1" name="table1"></table>
+			<cf_grid_list id="table1" name="table1"></table>
 		</cfform>
 	</div>
 </div>
