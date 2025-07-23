@@ -177,6 +177,7 @@
         <cfset system_paper_no = "">
 
     </cfif>
+    POZİSYON=STANDART FİŞ
     <cfdump  var="#system_paper_no#">
     <cfset attributes.ROWS_ = listlen(stock_id_list)>
     <cfset attributes.FIS_DATE_H = hour(now())>
@@ -254,7 +255,7 @@
     <cfset attributes.X_COST_ACC = 1>
     <cfset BASKET_KUR_EKLE = 0>
     <cfset 	attributes.XML_MULTIPLE_COUNTING_FIS =1>
-    
+    POZİSYON=STANDART ROW DÖNGÜSÜ
     <cfloop list="#current_row_list#" index="k">
     	<cfset 'attributes.UNIT#k#' = Evaluate('MAIN_UNIT_#k#')>
         <cfset 'attributes.UNIT_ID#k#' = Evaluate('PRODUCT_UNIT_ID_#k#') > 
