@@ -34,7 +34,7 @@
         <CFSET SHELF_ID_IN= get_shelf_id.PRODUCT_PLACE_ID>
         <CFSET "SHELF_CODE_IN__#i#"= SHELF_ID_IN>        
         <cfquery name="get_shelf_id" datasource="#dsn3#">
-            SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE WHERE SHELF_CODE = '#SHELF_CODE_OUT#' WHERE SHELF_CODE = '#SHELF_CODE_OUT#'
+            SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE WHERE SHELF_CODE = '#SHELF_CODE_OUT#' 
         </cfquery>
         <CFSET SHELF_ID_OUT= get_shelf_id.PRODUCT_PLACE_ID>
         <CFSET "SHELF_CODE_OUT__#i#"= SHELF_ID_OUT>
