@@ -166,6 +166,7 @@
 
 <div class="row">
 	<div class="col col-md-2 col-sm-12 col-xs-12">
+		<cfoutput>#attributes.product_name# - <span>#attributes.paket_sayisi#</span>/<span>#all_amount#</span></cfoutput>
 		<cfform name="form_basket">
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
 			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
@@ -214,7 +215,7 @@
 	var location_in_id = <cfoutput>#listgetat(attributes.department_in_id,2,"-")#</cfoutput>;
 	var department_out_id = <cfoutput>#listgetat(attributes.department_out_id,1,"-")#</cfoutput>;
 	var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#</cfoutput>;
-
+	var paketSayisi=<cfoutput>#attributes.paket_sayisi#</cfoutput>
 	var formArgs={stock_id,is_rafli,all_amount,serial_number,department_in_id,location_in_id,department_out_id,location_out_id}
 </script>
 <script>
