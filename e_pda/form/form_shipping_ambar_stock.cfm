@@ -229,14 +229,19 @@ document.onkeydown = checkKeycode
 			// Seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
 			if(is_rafli == 1)
 			{
+				console.log('Raflı Depo Kontrolü');
 				var shelf_number = document.getElementById('txt_shelf_number').value;
 				if(shelf_number == '')
 				{
 					alert('Lütfen Raf Numarasını Giriniz!');
 					return false;
 				}else{
+					console.log('Raf Numarası: ' + shelf_number);
+					console.log('Seri Numarası: ' + serial_number);
+					// Raf numarası kontrolü
 					if(HasStock && shelf_number != '')
 					{
+						console.log('Raf numarası kontrolü yapılıyor...');
 						var rafKontrolSql=`
 						SELECT SHELF_NUMBER,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serial_number}'
 						GROUP BY SHELF_NUMBER
