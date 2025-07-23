@@ -359,7 +359,7 @@ POZİSYON=SATIRLAR
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')>
             </cfif>
        	</cfif>------>
-          <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
+         <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
         	<cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
           	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT> 
            	<cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN>  
