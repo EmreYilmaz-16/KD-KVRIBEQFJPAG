@@ -354,7 +354,8 @@ function submitForm() {
     }
     
     // action_id ve fis_tipi değerlerini güncelle
-    document.getElementById('action_id').value = 'save'; // veya gerekli değer
+    //document.getElementById('action_id').value = 'save'; // veya gerekli değer
+	actionidolustur();
     document.getElementById('fis_tipi').value = 'shipping'; // veya gerekli değer
     
     // Formu submit et
@@ -412,6 +413,33 @@ function wrk_query(str_query, data_source, maxrows) {
     
     return new_query;
 }
+function actionidolustur()
+	{
+	  document.getElementById("action_id").value="";
+var ARRR=[];
+for(let i=1;i<=row_count;i++){
+    var STOCK_ID=$("#stockid"+i).val()
+    var SHELF_NUMBER=$("#shelf_code"+i).val();
+    var AMOUNT=1;
+    var ix=ARRR.findIndex(p=>p.SHELF_NUMBER==SHELF_NUMBER)
+    if(ix==-1){
+        ARRR.push({SHELF_NUMBER,STOCK_ID,AMOUNT})
+    }else{
+        ARRR[ix].AMOUNT++
+    }
+}
+console.log(ARRR)
+var ACSTR=document.getElementById("action_id").value;
+for(let i=0;i<ARRR.length;i++){    
+    if(ACSTR.length>0) ACSTR+=",";
+    ACSTR+=(i+1)+"-";
+    ACSTR+=ARRR[i].STOCK_ID+"-";
+    ACSTR+=ARRR[i].AMOUNT+"-";
+    ACSTR+=ARRR[i].SHELF_NUMBER;
+    
+
+}
+	}
 
 // XMLHttpRequest oluşturma fonksiyonu
 function createXMLHttpRequest() {

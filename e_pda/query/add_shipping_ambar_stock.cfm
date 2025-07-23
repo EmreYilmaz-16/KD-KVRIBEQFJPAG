@@ -1,6 +1,8 @@
 <cfdump var="#attributes#" abort="true">
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
+<cfset attributes.dep_out=attributes.TXT_DEPARTMENT_OUT>
+<cfset attributes.dep_in=attributes.TXT_DEPARTMENT_IN>
 <cfquery name="get_shelf_control" datasource="#dsn3#">
 	SELECT  PRODUCT_PLACE_ID FROM PRODUCT_PLACE WHERE LOCATION_ID = #Listgetat(attributes.dep_out,2,'-')# AND STORE_ID = #Listgetat(attributes.dep_out,1,'-')#
 </cfquery>
@@ -12,11 +14,11 @@
 
 <cftransaction>
 
-	<cfinclude template="del_shipping_ambar_stock.cfm">
+	<!----<cfinclude template="del_shipping_ambar_stock.cfm">---->
     
 	<cfset form.process_cat = attributes.process_cat>
     
-    <cfloop list="#attributes.action_id#" index="i">
+    <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
     
         <cfset current_row_list = ListAppend(current_row_list,Listgetat(i,1,'-'))>
         <cfset stock_id_list = ListAppend(stock_id_list,Listgetat(i,2,'-'))>
