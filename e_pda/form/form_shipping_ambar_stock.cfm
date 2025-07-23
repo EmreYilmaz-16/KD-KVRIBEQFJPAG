@@ -117,7 +117,22 @@
 			</cfoutput>
 		</cf_grid_list>
 		
-		<cfform name="form_basket">
+		<cfform name="form_basket" action="#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock">
+			<!--- Form URL Parametreleri --->
+			<cfinput id="shelf_type" name="shelf_type" type="hidden" value="#get_store_type.raf#">
+			<cfinput id="date1" name="date1" type="hidden" value="#attributes.date1#">
+			<cfinput id="date2" name="date2" type="hidden" value="#attributes.date2#">
+			<cfinput id="is_type" name="is_type" type="hidden" value="#attributes.is_type#">
+			<cfinput id="keyword" name="keyword" type="hidden" value="#attributes.keyword#">
+			<cfinput id="dep_in" name="dep_in" type="hidden" value="#attributes.department_in_id#">
+			<cfinput id="dep_out" name="dep_out" type="hidden" value="#attributes.department_out_id#">
+			<cfinput id="ref_no" name="ref_no" type="hidden" value="#attributes.deliver_paper_no#">
+			<cfinput id="ship_id" name="ship_id" type="hidden" value="#attributes.ship_id#">
+			<cfinput id="f_stock_id" name="f_stock_id" type="hidden" value="#f_stock_id#">
+			<input type="hidden" name="action_id" id="action_id" value="">
+			<input type="hidden" name="fis_tipi" id="fis_tipi" value="">
+			
+			<!--- Orijinal Form Hidden Alanları --->
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
 			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
 			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -156,6 +171,12 @@
 				<thead><tr><th>Seri No</th><th>Barkod</th><th>Miktar</th><th>Raf</th></tr></thead>
 				<tbody id="table1" name="table1"></tbody>
 			</cf_grid_list>
+			
+			<!--- Form Submit Butonları --->
+			<div class="form-group" style="margin-top: 10px;">
+				<button type="submit" class="btn btn-primary" onclick="submitForm()">Kaydet</button>
+				<button type="button" class="btn btn-secondary" onclick="clearAllInputs()">Temizle</button>
+			</div>
 		</cfform>
 	</div>
 </div>
@@ -323,6 +344,40 @@ function clearInputs() {
         document.getElementById('txt_shelf_number').value = "";
     }
     document.getElementById('serial_number').focus();
+}
+
+// Form Submit Fonksiyonu
+function submitForm() {
+    if (row_count == 0) {
+        alert('En az bir seri numarası eklemelisiniz!');
+        return false;
+    }
+    
+    // action_id ve fis_tipi değerlerini güncelle
+    document.getElementById('action_id').value = 'save'; // veya gerekli değer
+    document.getElementById('fis_tipi').value = 'shipping'; // veya gerekli değer
+    
+    // Formu submit et
+    document.form_basket.submit();
+}
+
+// Tüm Input'ları Temizle
+function clearAllInputs() {
+    if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
+        // Tabloyu temizle
+        var table = document.getElementById("table1");
+        var rowCount = table.rows.length;
+        for (var i = rowCount - 1; i > 0; i--) {
+            table.deleteRow(i);
+        }
+        
+        // Row count'u sıfırla
+        row_count = 0;
+        document.getElementById('row_count').value = 0;
+        
+        // Input'ları temizle
+        clearInputs();
+    }
 }
 
 
