@@ -167,7 +167,7 @@
 <div class="row">
 	<div class="col col-md-2 col-sm-12 col-xs-12">
 		
-			<cf_grid_list><cfoutput><tr><td>#attributes.product_name#</td><td><span>#attributes.paket_sayisi#</span>/<span>#all_amount#</span></td></tr></cfoutput></cf_grid_list>
+			<cf_grid_list><cfoutput><tr><td style="font-size:12pt">#attributes.product_name#</td><td style="font-size:12pt;text-align:center"><span style="font-size:12pt">#attributes.paket_sayisi#</span>/<span style="font-size:12pt">#all_amount#</span></td></tr></cfoutput></cf_grid_list>
 			 
 		<cfform name="form_basket">
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
