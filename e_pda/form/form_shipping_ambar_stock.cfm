@@ -1,4 +1,15 @@
-﻿<cfdump var="#attributes#">
+﻿<style>
+.ui-table-list>tfoot>tr>td, .ui-table-list>tbody>tr>td, .ui-table-list>thead>tr>td {
+    border: 1px solid #bbb;
+    font-size: 12px;
+     padding: 0px 0px;
+    color: #555;
+    min-width: 30px;
+}
+
+</style>
+<cf_box title="Sevkiyat Kontrol">
+<cfdump var="#attributes#">
 <cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
 <cfparam name="attributes.department_in_id" default="">
 <cfparam name="attributes.department_out_id" default="">
@@ -187,7 +198,10 @@
                     Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
                 </cfif>
 			</div>
-			<cf_grid_list id="table1" name="table1"></table>
+			<cf_grid_list id="table1" name="table1">
+				<thead><tr><th>Seri No</th><th>Barkod</th><th>Miktar</th><th>Raf</th></tr></thead>
+				<tbody id="table1" name="table1"></tbody>
+			</cf_grid_list>
 		</cfform>
 	</div>
 </div>
@@ -389,3 +403,4 @@ document.onkeydown = checkKeycode
 	return new_query;
 }
 </script>
+</cf_box>
