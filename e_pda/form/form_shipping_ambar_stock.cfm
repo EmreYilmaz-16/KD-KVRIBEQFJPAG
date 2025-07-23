@@ -224,6 +224,9 @@ document.onkeydown = checkKeycode
 			var StockResult= wrk_query(sql, 'dsn3', 1);
 			var spectmainid = '';
 			var barcode = '';
+			var stockcode = '';
+			var shelf_code = '';	
+			var amount=1;
 			console.log(StockResult);
 			if(StockResult.recordcount >0 && StockResult.IS_ALIVE[0] == 1)
 			{
@@ -270,6 +273,7 @@ document.onkeydown = checkKeycode
 						else
 						{
 							console.log('Raf numarası ve seri numarası kontrolü başarılı.');
+							shelf_code = shelf_number;
 							row_count++;
 							document.getElementById('row_count').value = row_count;
 							var newRow;
