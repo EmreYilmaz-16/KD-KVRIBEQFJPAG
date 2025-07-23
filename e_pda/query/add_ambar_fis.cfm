@@ -11,7 +11,7 @@
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
-
+POZİSYON=BENİM DÖNGÜM
 <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
 <!----<cfloop -- list="#attributes.action_id#" index="i">---->
 	<cfset current_row_list = ListAppend(current_row_list,i)>
@@ -166,8 +166,9 @@
 </cfloop>
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
 
-<br>current row list
-
+<br>current row list 
+POZİSYON=SATIRLAR 
+<cfdump var="#current_row_list#">
 <br>
 <cfif ListLen(current_row_list)>
     <cf_papers paper_type="stock_fis">
