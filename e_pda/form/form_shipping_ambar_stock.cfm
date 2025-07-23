@@ -289,8 +289,9 @@ document.onkeydown = checkKeycode
 						{
 							console.log('Raf numarası ve seri numarası kontrolü başarılı.');
 							shelf_code = shelf_number;
-							var OncekiVarmiSql=`SELECT * FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) <'2025-07-10' AND IS_ALIVE=1`
-
+							var OncekiVarmiSql=`SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) <CAST('${StockResult.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`
+							var OncekiResult=wrk_query(OncekiVarmiSql,"DSN3");
+							console.log(OncekiResult) 
 							row_count++;
 							document.getElementById('row_count').value = row_count;
 							var newRow;
