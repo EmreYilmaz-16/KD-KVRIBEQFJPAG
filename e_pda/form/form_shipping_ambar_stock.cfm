@@ -222,6 +222,8 @@ document.onkeydown = checkKeycode
 			var HasStock=false;
 			var sql=`SELECT IS_ALIVE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}'`;
 			var StockResult= wrk_query(sql, 'dsn3', 1);
+			var spectmainid = '';
+			var barcode = '';
 			console.log(StockResult);
 			if(StockResult.recordcount >0 && StockResult.IS_ALIVE[0] == 1)
 			{
@@ -279,7 +281,7 @@ document.onkeydown = checkKeycode
 				newRow.setAttribute("ID","frm_row" + row_count);		
 				
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<input type="hidden" value="'+formArgs.stock_id+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+serial_number+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
 				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="13" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
