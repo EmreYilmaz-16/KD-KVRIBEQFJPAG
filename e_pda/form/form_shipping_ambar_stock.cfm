@@ -220,7 +220,7 @@ document.onkeydown = checkKeycode
 				return false;
 			}else 
 			{
-				get_stock(serial_number);
+				getStockWithSerialNo(serial_number);
 			}
 			if(formArgs.is_rafli >0){
 				var txt_shelf_number = document.getElementById('txt_shelf_number').value;
@@ -232,13 +232,51 @@ document.onkeydown = checkKeycode
 			}
 		}
 	}
+function getStockWithSerialNo(serialNo) {
+		this.resetCurrentStock();
+		
+		if (!document.getElementById('add_other_amount').value.length) {
+			alert('Miktar Giriniz');
+			return false;
+		}
+		
+		
+		
+		const sql = `SELECT TOP 1 SB.STOCK_ID, SB.SERIAL_NO, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME
+		FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
+		INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+		INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+		WHERE SB.SERIAL_NO = '${serialNo}'`;
+		
+		const product = wrk_query(sql, 'dsn3');
+		
+		if (!product.STOCK_ID) {
+			alert('Ürün Bulunamadı');
+			return false;
+		}
+		
+		// // Set current stock data
+		// this.state.currentStock = {
+		// 	multiplier: product.MULTIPLIER,
+		// 	unit: product.MAIN_UNIT,
+		// 	stockId: product.STOCK_ID,
+		// 	stockCode: product.PRODUCT_NAME,
+		// 	barcode: product.BARCODE,
+		// 	specMainId: '',
+		// 	serialNo: ''
+		// };
+		
+		// this.controlButton();
+		return true;
+	}
+
 function get_stock(serial_number)
     {
 	 	//barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
-		 	var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
+		 	var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
 		 	var get_product = wrk_query(new_sql,'dsn3');
 		 	if (get_product.STOCK_ID == undefined)
 		 	{
