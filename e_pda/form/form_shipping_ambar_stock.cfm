@@ -218,7 +218,7 @@
 	var department_out_id = <cfoutput>#listgetat(attributes.department_out_id,1,"-")#</cfoutput>;
 	var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#</cfoutput>;
 	var paketSayisi=<cfoutput>#attributes.paket_sayisi#</cfoutput>
-	var formArgs={stock_id,is_rafli,all_amount,serial_number,department_in_id,location_in_id,department_out_id,location_out_id}
+	var formArgs={stock_id,is_rafli,all_amount,serial_number,department_in_id,location_in_id,department_out_id,location_out_id,paketSayisi}
 </script>
 <script>
 	$(document).ready(function(){
@@ -294,6 +294,13 @@ document.onkeydown = checkKeycode
 							shelf_code = shelf_number;
 							var OncekiVarmiSql=`SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) <CAST('${StockResult.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`
 							var OncekiResult=wrk_query(OncekiVarmiSql,"DSN3");
+							if(parseInt(OncekiResult.MK)>0){
+								alert("Daha Eski Tarihli Seriler Var")
+									document.getElementById('serial_number').focus();
+				document.getElementById('serial_number').value="";
+				document.getElementById('txt_shelf_number').value="";
+								return false;
+							}
 							console.log(OncekiResult) 
 							row_count++;
 							document.getElementById('row_count').value = row_count;
