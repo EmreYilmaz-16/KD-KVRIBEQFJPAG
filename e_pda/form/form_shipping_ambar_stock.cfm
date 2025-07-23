@@ -234,7 +234,7 @@ document.onkeydown = checkKeycode
 			var miktar = document.getElementById('miktar').value;
 			var serial_number = document.getElementById('serial_number').value;
 			var HasStock=false;
-			var sql=`SELECT IS_ALIVE,PURCHASE_DATE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}'`;
+			var sql=`SELECT IS_ALIVE,PURCHASE_DATE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}' AND STOCK_ID=${formArgs.stock_id}`;
 			var StockResult= wrk_query(sql, 'dsn3', 1);
 			var spectmainid = '';
 			var barcode = '';
