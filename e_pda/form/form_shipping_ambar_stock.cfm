@@ -313,6 +313,9 @@ document.onkeydown = checkKeycode
 						}
 					}
 				}
+				document.getElementById('serial_number').focus();
+				document.getElementById('serial_number').value="";
+				document.getElementById('txt_shelf_number').value="";
 				// Raf numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
 
 			}
