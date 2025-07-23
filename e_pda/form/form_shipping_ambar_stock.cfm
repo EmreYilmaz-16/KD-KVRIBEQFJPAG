@@ -227,7 +227,7 @@ document.onkeydown = checkKeycode
 				return false;
 			}
 			// Seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
-			if(is_rafli == 1)
+			if(is_rafli > 0)
 			{
 				console.log('Raflı Depo Kontrolü');
 				var shelf_number = document.getElementById('txt_shelf_number').value;
