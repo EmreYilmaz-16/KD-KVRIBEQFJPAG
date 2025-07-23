@@ -194,8 +194,12 @@
 	var is_rafli = <cfoutput>#get_store_type.raf#</cfoutput>;
 	var all_amount = <cfoutput>#all_amount#</cfoutput>;
 	var serial_number = '';
+	var department_in_id = <cfoutput>#listgetat(attributes.department_in_id,1,"-")#</cfoutput>;
+	var location_in_id = <cfoutput>#listgetat(attributes.department_in_id,2,"-")#</cfoutput>;
+	var department_out_id = <cfoutput>#listgetat(attributes.department_out_id,1,"-")#</cfoutput>;
+	var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#</cfoutput>;
 
-	var formArgs={stock_id,is_rafli,all_amount,serial_number}
+	var formArgs={stock_id,is_rafli,all_amount,serial_number,department_in_id,location_in_id,department_out_id,location_out_id}
 </script>
 <script>
 	$(document).ready(function(){
@@ -233,7 +237,7 @@ document.onkeydown = checkKeycode
 				var shelf_number = document.getElementById('txt_shelf_number').value;
 				if(shelf_number == '')
 				{
-					alert('Lütfen Raf Numarasını Giriniz!');
+					//alert('Lütfen Raf Numarasını Giriniz!');
 					return false;
 				}else{
 					console.log('Raf Numarası: ' + shelf_number);
@@ -242,6 +246,7 @@ document.onkeydown = checkKeycode
 					if(HasStock && shelf_number != '')
 					{
 						console.log('Raf numarası kontrolü yapılıyor...');
+
 						var rafKontrolSql=`
 						SELECT SHELF_NUMBER,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serial_number}'
 						GROUP BY SHELF_NUMBER
