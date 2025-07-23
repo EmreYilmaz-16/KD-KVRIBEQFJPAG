@@ -159,6 +159,7 @@
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
 			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
 			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+			<input type="hidden" name="row_count" id="row_count" value="0">
 			<div style="display:flex">
 				<div class="form-group">
 					<label for="miktar">Miktar</label>
@@ -186,6 +187,7 @@
                     Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
                 </cfif>
 			</div>
+			<table id="table1" name="table1"></table>
 		</cfform>
 	</div>
 </div>
@@ -266,8 +268,27 @@ document.onkeydown = checkKeycode
 						else
 						{
 							console.log('Raf numarası ve seri numarası kontrolü başarılı.');
+							row_count++;
+							document.getElementById('row_count').value = row_count;
+							var newRow;
+				var newCell;	
+				newRow = document.getElementById("table1").insertRow(document.getElementById("table1").rows.length);
+				newRow.setAttribute("name","frm_row" + row_count);
+				newRow.setAttribute("id","frm_row" + row_count);		
+				newRow.setAttribute("NAME","frm_row" + row_count);
+				newRow.setAttribute("ID","frm_row" + row_count);		
+				
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" style="text-align:center" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes" />';
+				newCell = newRow.insertCell();
+				newCell.innerHTML = '<input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="8" class="boxtext" readonly="yes" style="text-align:right" />';
 							// Diğer işlemleri gerçekleştirin
 							//document.getElementById('form_basket').submit();
+							
 						}
 					}
 				}
