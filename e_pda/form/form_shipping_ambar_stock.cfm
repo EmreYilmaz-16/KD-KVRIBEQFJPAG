@@ -285,13 +285,13 @@ document.onkeydown = checkKeycode
 				newRow.setAttribute("ID","frm_row" + row_count);		
 				
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+formArgs.stock_id+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+serial_number+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<div class="form-group"><input type="hidden" value="'+formArgs.stock_id+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+serial_number+'" name="serino'+row_count+'" id="serino'+row_count+'" size="13" class="boxtext" readonly="yes" /></div>';
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="13" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<div class="form-group"><input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="13" class="boxtext" readonly="yes" /></div>';
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" style="text-align:center" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes" />';
+				newCell.innerHTML = '<div class="form-group"><input type="text" style="text-align:center" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes" /></div>';
 				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="8" class="boxtext" readonly="yes" style="text-align:right" />';
+				newCell.innerHTML = '<div class="form-group"><input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="8" class="boxtext" readonly="yes" style="text-align:right" /></div>';
 							// Diğer işlemleri gerçekleştirin
 							//document.getElementById('form_basket').submit();
 							
