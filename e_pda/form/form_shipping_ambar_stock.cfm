@@ -217,6 +217,43 @@ document.onkeydown = checkKeycode
 			var sql=`SELECT IS_ALIVE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serial_number}'`;
 			var StockResult= wrk_query(sql, 'dsn3', 1);
 			console.log(StockResult);
+			if(StockResult.recordcount >0 && StockResult.IS_ALIVE[0] == 1)
+			{
+				HasStock = true;
+			}			
+			else
+			{
+				alert('Seri Numarası Bulunamadı veya Seri Numarası Kullanımda!');
+				return false;
+			}
+			// Seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
+			if(is_rafli == 1)
+			{
+				var shelf_number = document.getElementById('txt_shelf_number').value;
+				if(shelf_number == '')
+				{
+					alert('Lütfen Raf Numarasını Giriniz!');
+					return false;
+				}else{
+					if(HasStock && shelf_number != '')
+					{
+						var rafKontrolSql=`
+						SELECT SHELF_NUMBER,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serial_number}'
+						GROUP BY SHELF_NUMBER
+						HAVING SHELF_NUMBER=${shelf_number}`// Raf numarası ve seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
+						var rafKontrolSonuc = wrk_query(rafKontrolSql, 'dsn3', 1);
+						console.log(rafKontrolSonuc);
+					}
+				}
+				// Raf numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
+
+			}
+			else
+			{
+				var shelf_number = '';
+			}
+
+
 		}
 	}
 
