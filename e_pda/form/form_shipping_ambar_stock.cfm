@@ -235,10 +235,10 @@ document.onkeydown = checkKeycode
 function getStockWithSerialNo(serialNo) {
 		//this.resetCurrentStock();
 		
-		if (!document.getElementById('add_other_amount').value.length) {
-			alert('Miktar Giriniz');
-			return false;
-		}
+		// if (!document.getElementById('add_other_amount').value.length) {
+		// 	alert('Miktar Giriniz');
+		// 	return false;
+		// }
 		
 		
 		
