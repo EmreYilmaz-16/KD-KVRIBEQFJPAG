@@ -366,13 +366,13 @@
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
+    POZİSYON=SERVİS İMPORT EDİLDİ
     <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
     <cfloop list="#current_row_list#" index="k">
         <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
         <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
         <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
-            <CFSET "SHELF_CODE_IN__#i#"="">
-    <CFSET "SHELF_CODE_OUT__#i#"=""> 
+    
         
         <cfset GIRIS_RAF_ID=Evaluate('SHELF_CODE_IN__#k#')>
         <cfset CIKIS_RAF_ID=Evaluate('SHELF_CODE_OUT__#k#')>
