@@ -439,6 +439,7 @@ for(let i=0;i<ARRR.length;i++){
     
 
 }
+ document.getElementById("action_id").value=ACSTR;
 	}
 
 // XMLHttpRequest oluşturma fonksiyonu
