@@ -382,4 +382,5 @@ function createXMLHttpRequest() {
     
     return req;
 }
+</script>
 </cf_box>
