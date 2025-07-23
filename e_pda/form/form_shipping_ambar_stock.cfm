@@ -258,6 +258,17 @@ document.onkeydown = checkKeycode
 						HAVING SHELF_NUMBER=${r.PRODUCT_PLACE_ID[0]}`// Raf numarası ve seri numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
 						var rafKontrolSonuc = wrk_query(rafKontrolSql, 'dsn3', 1);
 						console.log(rafKontrolSonuc);
+						if(rafKontrolSonuc.recordcount == 0 || rafKontrolSonuc.V[0] <= 0)
+						{
+							alert("Raf Numarası ve Seri Numarası Eşleşmiyor veya Rafta Ürün Bulunmamaktadır!");
+							return false;
+						}
+						else
+						{
+							console.log('Raf numarası ve seri numarası kontrolü başarılı.');
+							// Diğer işlemleri gerçekleştirin
+							//document.getElementById('form_basket').submit();
+						}
 					}
 				}
 				// Raf numarası kontrolü başarılı ise, diğer işlemleri gerçekleştirin
