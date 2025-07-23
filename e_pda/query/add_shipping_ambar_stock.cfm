@@ -1,4 +1,4 @@
-
+<cfdump var="#attributes#" abort="true">
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfquery name="get_shelf_control" datasource="#dsn3#">
