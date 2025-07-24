@@ -193,7 +193,7 @@ var department_out_id = <cfoutput>#listgetat(attributes.department_out_id,1,"-")
 var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#</cfoutput>;
 var paketSayisi = <cfoutput>#attributes.paket_sayisi#</cfoutput>;
 var row_count = 0;
-
+var TarihKontrol=false;
 var formArgs = {
     stock_id: stock_id,
     is_rafli: is_rafli,
@@ -203,7 +203,9 @@ var formArgs = {
     location_in_id: location_in_id,
     department_out_id: department_out_id,
     location_out_id: location_out_id,
-    paketSayisi: paketSayisi
+    paketSayisi: paketSayisi,
+    TarihKontrol: TarihKontrol
+
 };
 
 // DOM Ready
@@ -259,7 +261,7 @@ function checkSerialNumber(serialNumber) {
         var oncekiSql = `SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) < CAST('${result.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`;
         var oncekiResult = wrk_query(oncekiSql, "DSN3");
         
-        if (parseInt(oncekiResult.MK) > 0) {
+        if (formArgs.TarihKontrol && parseInt(oncekiResult.MK) > 0) {
             alert("Daha Eski Tarihli Seriler Var");
             clearInputs();
             return false;
