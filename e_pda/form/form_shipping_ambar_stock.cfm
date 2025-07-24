@@ -194,7 +194,7 @@ var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#<
 var paketSayisi = <cfoutput>#attributes.paket_sayisi#</cfoutput>;
 var row_count = 0;
 var TarihKontrol=false;
-var TarihKontrolLokasyonIds="2-1,2-2";
+var TarihKontrolLokasyonIds="'2-1','2-2'";
 var formArgs = {
     stock_id: stock_id,
     is_rafli: is_rafli,
