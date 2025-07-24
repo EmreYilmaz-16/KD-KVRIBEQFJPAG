@@ -259,8 +259,29 @@ function checkSerialNumber(serialNumber) {
     
     if (result.recordcount > 0 && result.IS_ALIVE[0] == 1) {
         // Eski tarihli seri kontrolü
-        var oncekiSql = `SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) < CAST('${result.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`;
+       // var oncekiSql = `SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) < CAST('${result.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`;
+//         var oncekiSql=`
+//         SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
+//         WHERE 1=1
+//         AND DEPO IN (${TarihKontrolLokasyonIds})
+//         AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
+//         AND STOCK_ID = ${formArgs.stock_id}
+//   `
+
+//         var oncekiResult = wrk_query(oncekiSql, "DSN3");
+
+var oncekiSql=`
+        SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
+        WHERE 1=1
+        AND DEPO IN (${TarihKontrolLokasyonIds})
+        AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
+        AND STOCK_ID = ${formArgs.stock_id} AND SERIAL_NUMBER NOT IN (${SerialNumberList})
+  `
+
         var oncekiResult = wrk_query(oncekiSql, "DSN3");
+        console.log('Onceki Check Result:', oncekiResult);
+
+
         
         if (formArgs.TarihKontrol && parseInt(oncekiResult.MK) > 0) {
             alert("Daha Eski Tarihli Seriler Var");
