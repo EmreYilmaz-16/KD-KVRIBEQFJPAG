@@ -288,6 +288,7 @@ function processRafliDepo(serialNumber) {
         alert("Çıkış Deposunda Bu Raf Bulunmamaktadır ve ya Ürün Bu Rafa Tanımlı Değildir");
         return false;
     }
+    var shelf_id = rafResult.PRODUCT_PLACE_ID[0];
     
     // Raf-seri eşleşme kontrolü
     var rafKontrolSql = `SELECT SHELF_NUMBER, SUM(CASE WHEN IN_OUT = 1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serialNumber}' GROUP BY SHELF_NUMBER HAVING SHELF_NUMBER=${rafResult.PRODUCT_PLACE_ID[0]}`;
@@ -299,7 +300,7 @@ function processRafliDepo(serialNumber) {
     }
     
     // Başarılı işlem - satır ekle
-    addRowToTable(serialNumber, '', 1, shelf_number);
+    addRowToTable(serialNumber, '', 1, shelf_number,shelf_id);
     clearInputs();
     return true;
 }
@@ -312,7 +313,7 @@ function processNormalDepo(serialNumber) {
 }
 
 // Tabloya Satır Ekleme
-function addRowToTable(serialNo, stockCode, amount, shelfCode) {
+function addRowToTable(serialNo, stockCode, amount, shelfCode,shelf_id) {
     row_count++;
     document.getElementById('row_count').value = row_count;
     
@@ -325,7 +326,7 @@ function addRowToTable(serialNo, stockCode, amount, shelfCode) {
     var cells = [
         `<input type="hidden" value="${formArgs.stock_id}" name="stockid${row_count}" id="stockid${row_count}" />
          <input type="hidden" value="" name="spectmainid${row_count}" id="spectmainid${row_count}" />
-         <input type="text" value="${serialNo}" name="serino${row_count}" id="serino${row_count}" size="13" class="boxtext" readonly />`,
+         <input type="text" value="${serialNo}" name="serino${shelf_id}" id="serino${row_count}" size="13" class="boxtext" readonly />`,
         
         `<input type="text" value="${stockCode}" name="stockcode${row_count}" id="stockcode${row_count}" size="13" class="boxtext" readonly />`,
         
