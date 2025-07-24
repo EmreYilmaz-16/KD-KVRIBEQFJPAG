@@ -269,7 +269,7 @@ function checkSerialNumber(serialNumber) {
 //   `
 
 //         var oncekiResult = wrk_query(oncekiSql, "DSN3");
-
+var SerialNumberList=""
 var oncekiSql=`
         SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
         WHERE 1=1
@@ -291,6 +291,11 @@ var oncekiSql=`
         return true;
     }
     return false;
+}
+function listAppend(list, item, delimiter = ',') {
+  if (!list) return item;
+  if (!item) return list;
+  return list + delimiter + item;
 }
 
 // Raflı Depo İşlemi
