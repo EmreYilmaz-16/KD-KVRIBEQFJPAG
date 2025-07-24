@@ -270,6 +270,11 @@ function checkSerialNumber(serialNumber) {
 
 //         var oncekiResult = wrk_query(oncekiSql, "DSN3");
 var SerialNumberList=""
+for(let i=1;i<=row_count;i++){
+    var S=$("#serino"+i).val();
+    SerialNumberList=listAppend(SerialNumberList,"'"+S+"'")
+    
+}
 var oncekiSql=`
         SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
         WHERE 1=1
