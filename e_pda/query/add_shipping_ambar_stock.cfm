@@ -323,9 +323,9 @@
 <cfset Miktar=Evaluate('AMOUNT#k#')>
 <cfloop from="1" to="#Miktar#" index="j">
     <cfset "PBSATR.AWRK_ROW_ID#IX#" = evaluate('attributes.WRK_ROW_ID#k#')>
-    <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('STOCK_ID_#k#')>
-    <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('SHELF_NUMBER_#k#')>
-    <cfset "PBSATR.ASHELF_NUMBER_TXT#IX#" = Evaluate('SHELF_#k#')>
+    <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('attributes.STOCK_ID_#k#')>
+    <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('attributes.SHELF_NUMBER#k#')>
+    
     <cfset "PBSATR.AMOUNT#IX#" = 1>    
 <cfset current_row_list_IX=listAppend(current_row_list_IX, IX)>
     <CFSET IX=IX+1>
