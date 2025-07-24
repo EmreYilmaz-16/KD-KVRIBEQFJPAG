@@ -317,6 +317,90 @@
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
 </cfif>
+<cfset IX=1>
+<CFSET current_row_list_IX="">
+<cfloop list="#current_row_list#" index="k">
+<cfset Miktar=Evaluate('AMOUNT#k#')>
+<cfloop from="1" to="#Miktar#">
+    <cfset "PBSATR.AWRK_ROW_ID#IX#" = evaluate('attributes.WRK_ROW_ID#k#')>
+    <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('STOCK_ID_#k#')>
+    <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('SHELF_NUMBER_#k#')>
+    <cfset "PBSATR.ASHELF_NUMBER_TXT#IX#" = Evaluate('SHELF_#k#')>
+    <cfset "PBSATR.AMOUNT#IX#" = 1>    
+<cfset current_row_list_IX=listAppend(current_row_list_IX, IX)>
+    <CFSET IX=IX+1>
+
+
+</cfloop>
+
+</cfloop>
+<cfdump var="#current_row_list_IX#">
+<cfdump var="#PBSATR#">
+
+<cfabort>
+<cfloop list="#current_row_list#" index="k">
+        <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
+        <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
+        <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
+    
+        
+        <cfset GIRIS_RAF_ID="">
+        <cfset CIKIS_RAF_ID=Evaluate('attributes.SHELF_NUMBER#k#')>
+        
+        <cfdump var="GIRIS_RAF_ID=#GIRIS_RAF_ID# ----- CIKIS_RAF_ID=#CIKIS_RAF_ID#">
+        
+        <cfquery name="GETSER" datasource="#DSN3#">
+            SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
+        </cfquery>
+    <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
+            <cfdump var="#data#">
+        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+        <cfdump var="#data2#">
+
+
+
+        <!---------<cfif isdefined('attributes.change_shelf_fis')>
+        
+        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
+            <cfdump var="#data#">
+        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+        <cfdump var="#data2#">
+    <cfelse>
+      
+      <cfif isdefined('attributes.tersfis')>
+        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
+        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
+      <cfelse>      
+        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
+        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+      </cfif>
+    </cfif>--------->
+<!---------
+    <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
+    <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
+    <cfset attributes.DEPARTMENT_IN = Listgetat(attributes.dep_in,1,'-')>
+    <cfset attributes.LOCATION_IN = Listgetat(attributes.dep_in,2,'-')> 
+    
+    
+    ----------->
+<cfset recordEmp = session.ep.userid>
+
+
+<cfset result = svc.saveServiceGuaranty(data, recordEmp)>
+<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
+
+<cfdump var="#result#">
+<cfif result>
+    <cfoutput>Kayıt başarılı!</cfoutput>
+<cfelse>
+
+    <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
+</cfif>
+
+    </cfloop>
+
+
+
 
 <cf_get_lang_set module_name="stock"> sayfanin en altinda kapanisi var 
 <cfinclude template="../../../../v16/stock/query/check_our_period.cfm"> 
@@ -339,6 +423,11 @@
 				INSERT INTO STOCK_FIS_ROW (FIS_NUMBER,FIS_ID) VALUES (<cfqueryparam cfsqltype="cf_sql_varchar" value="#FIS_NO#">,#GET_ID.MAX_ID#)
 			</cfquery>
 		</cfif>
+<cfquery name="UP" datasource="#DSN3#">
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
+</cfquery>
+
+
 		Ek Bilgiler
         <cfset attributes.info_id = GET_ID.MAX_ID>
         <cfset attributes.is_upd = 0>
