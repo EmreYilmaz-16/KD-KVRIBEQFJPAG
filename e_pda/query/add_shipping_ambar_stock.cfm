@@ -341,7 +341,7 @@
      <cfset WRK_ROW_ID_SER=evaluate('PBSATR.AWRK_ROW_ID#k#')>
      <cfset STOCK_ID_SER=evaluate('PBSATR.ASTOCK_ID#k#') >
      <cfset SHELF_NUMBER_SER=evaluate('PBSATR.ASHELF_NUMBER#k#') >
-     <cfset SERINO_SER=evaluate('PBSATR.ASERINO#k#') >
+     <cfset SERI_NO_SER=evaluate('PBSATR.ASERINO#k#') >
      <cfset AMOUNT_SER=evaluate('PBSATR.AMOUNT#k#') >
      <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
