@@ -321,7 +321,7 @@
 <cfset IX=1>
 <CFSET current_row_list_IX="">
 <cfloop list="#current_row_list#" index="k">
-<cfset Miktar=Evaluate('AMOUNT#k#')>
+<cfset Miktar=Evaluate('attributes.AMOUNT#k#')>
 <cfloop from="1" to="#Miktar#" index="j">
     <cfset "PBSATR.AWRK_ROW_ID#IX#" = evaluate('attributes.WRK_ROW_ID#k#')>
     <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('attributes.STOCK_ID#k#')>
