@@ -270,28 +270,24 @@ function checkSerialNumber(serialNumber) {
 
 //         var oncekiResult = wrk_query(oncekiSql, "DSN3");
 var SerialNumberList=""
-var oncekiSql=`
-        SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
-        WHERE 1=1
-        AND DEPO IN (${TarihKontrolLokasyonIds})
-        AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
-        AND STOCK_ID = ${formArgs.stock_id} AND SERIAL_NUMBER NOT IN (${SerialNumberList})
-  `
+var oncekiSql = `
+    SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
+    WHERE 1=1
+    AND DEPO IN (${TarihKontrolLokasyonIds})
+    AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
+    AND STOCK_ID = ${formArgs.stock_id}
+    ${SerialNumberList ? `AND SERIAL_NUMBER NOT IN (${SerialNumberList})` : ''}
+`;
 
-        var oncekiResult = wrk_query(oncekiSql, "DSN3");
-        console.log('Onceki Check Result:', oncekiResult);
+var oncekiResult = wrk_query(oncekiSql, "DSN3");
+console.log('Onceki Check Result:', oncekiResult);
 
-
-        
-        if (formArgs.TarihKontrol && parseInt(oncekiResult.MK) > 0) {
-            alert("Daha Eski Tarihli Seriler Var");
-            clearInputs();
-            return false;
-        }
-        return true;
-    }
+if (formArgs.TarihKontrol && parseInt(oncekiResult.MK) > 0) {
+    alert("Daha Eski Tarihli Seriler Var");
+    clearInputs();
     return false;
 }
+return true;
 function listAppend(list, item, delimiter = ',') {
   if (!list) return item;
   if (!item) return list;
