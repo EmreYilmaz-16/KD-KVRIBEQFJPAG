@@ -269,17 +269,12 @@ function checkSerialNumber(serialNumber) {
 //   `
 
 //         var oncekiResult = wrk_query(oncekiSql, "DSN3");
-var SerialNumberList=""
-for(let i=1;i<=row_count;i++){
-    var S=$("#serino"+i).val();
-    SerialNumberList=listAppend(SerialNumberList,"'"+S+"'")
-    
-}
+var SerialNumberList = getUsedSerialNumbers();
 var oncekiSql=`
-        SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
+        SELECT COUNT(*) as MK FROM w3Qa_1.vw_SerialAliveWithDepo
         WHERE 1=1
         AND DEPO IN (${TarihKontrolLokasyonIds})
-        AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
+        AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE[0]}' AS DATE) 
         AND STOCK_ID = ${formArgs.stock_id}`;
         
 if (SerialNumberList && SerialNumberList.trim() !== "") {
@@ -291,7 +286,7 @@ if (SerialNumberList && SerialNumberList.trim() !== "") {
 
 
         
-        if (formArgs.TarihKontrol && parseInt(oncekiResult.MK) > 0) {
+        if (formArgs.TarihKontrol && oncekiResult.recordcount > 0 && parseInt(oncekiResult.MK[0]) > 0) {
             alert("Daha Eski Tarihli Seriler Var");
             clearInputs();
             return false;
@@ -300,6 +295,19 @@ if (SerialNumberList && SerialNumberList.trim() !== "") {
     }
     return false;
 }
+
+// Kullanılan seri numaralarını toplayan fonksiyon
+function getUsedSerialNumbers() {
+    var SerialNumberList = "";
+    for(let i = 1; i <= row_count; i++) {
+        var serialInput = document.getElementById('serino' + i);
+        if (serialInput && serialInput.value) {
+            SerialNumberList = listAppend(SerialNumberList, "'" + serialInput.value + "'");
+        }
+    }
+    return SerialNumberList;
+}
+
 function listAppend(list, item, delimiter = ',') {
   if (!list) return item;
   if (!item) return list;
