@@ -319,6 +319,7 @@
 </cfif>
 <cfdump var="#attributes#">
 <cfset IX=1>
+
 <CFSET current_row_list_IX="">
 <cfloop list="#current_row_list#" index="k">
 <cfset Miktar=Evaluate('attributes.AMOUNT#k#')>
@@ -333,10 +334,23 @@
 <cfset current_row_list_IX=listAppend(current_row_list_IX, IX)>
     <CFSET IX=IX+1>
 
-
 </cfloop>
 
 </cfloop>
+<cfloop list="#current_row_list_IX#" index="k">
+     <cfset WRK_ROW_ID_SER=evaluate('PBSATR.AWRK_ROW_ID#k#')>
+     <cfset STOCK_ID_SER=evaluate('PBSATR.ASTOCK_ID#k#') >
+     <cfset SHELF_NUMBER_SER=evaluate('PBSATR.ASHELF_NUMBER#k#') >
+     <cfset SERINO_SER=evaluate('PBSATR.ASERINO#k#') >
+     <cfset AMOUNT_SER=evaluate('PBSATR.AMOUNT#k#') >
+     <cfquery name="GETSER" datasource="#DSN3#">
+            SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
+        </cfquery>
+    <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
+    <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+</cfloop>
+
+
 <cfdump var="#current_row_list_IX#">
 <cfdump var="#PBSATR#">
 
