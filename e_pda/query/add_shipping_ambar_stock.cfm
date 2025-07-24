@@ -337,13 +337,7 @@
 </cfloop>
 <cfdump var="#current_row_list_IX#">
 <cfdump var="#PBSATR#">
-<cfloop list="#current_row_list_IX#" index="k">
-    <cfset attributes.WRK_ROW_ID#k# = Evaluate('PBSATR.AWRK_ROW_ID#k#')>
-    <cfset attributes.STOCK_ID#k# = Evaluate('PBSATR.ASTOCK_ID#k#')>
-    <cfset attributes.SHELF_NUMBER#k# = Evaluate('PBSATR.ASHELF_NUMBER#k#')>
-    <cfset attributes.AMOUNT#k# = Evaluate('PBSATR.AMOUNT#k#')>
-</cfloop>
-    
+
 
 
 <cfabort>
