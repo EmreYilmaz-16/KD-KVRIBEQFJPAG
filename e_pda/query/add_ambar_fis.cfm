@@ -13,6 +13,9 @@
 <cfset form.process_cat = attributes.process_cat>
 POZİSYON=BENİM DÖNGÜM
 <cfloop from="1" to="#attributes.ROW_COUNT#" index="i">
+    <cfif not isDefined("attributes.SHELF_CODE#i#")>
+        <cfset "attributes.SHELF_CODE#i#"="">
+    </cfif>
 <!----<cfloop -- list="#attributes.action_id#" index="i">---->
 	<cfset current_row_list = ListAppend(current_row_list,i,",")>
     <cfset stock_id_list = ListAppend(stock_id_list,evaluate("attributes.STOCKID#i#"))>
