@@ -337,6 +337,7 @@
 </cfloop>
 
 </cfloop>
+<cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 <cfloop list="#current_row_list_IX#" index="k">
      <cfset WRK_ROW_ID_SER=evaluate('PBSATR.AWRK_ROW_ID#k#')>
      <cfset STOCK_ID_SER=evaluate('PBSATR.ASTOCK_ID#k#') >
