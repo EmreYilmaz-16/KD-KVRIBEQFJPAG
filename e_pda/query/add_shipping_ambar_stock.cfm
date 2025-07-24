@@ -314,7 +314,7 @@
         <cfset 'attributes.WRK_ROW_RELATION_ID#k#' = ''>
         <cfset 'attributes.TAX#k#' = 0>
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
-    	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG-#createUUID()#'>
+    	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG-#replace(createUUID(),'-','','all')#'>
     </cfloop>
 </cfif>
 <cfdump var="#attributes#">
