@@ -329,9 +329,9 @@ function addRowToTable(serialNo, stockCode, amount, shelfCode) {
         
         `<input type="text" value="${stockCode}" name="stockcode${row_count}" id="stockcode${row_count}" size="13" class="boxtext" readonly />`,
         
-        `<input type="text" style="text-align:center" value="${amount}" name="amount${row_count}" id="amount${row_count}" size="5" class="boxtext" readonly />`,
+        `<input type="text" style="text-align:center" value="${amount}" name="TTamount${row_count}" id="amount${row_count}" size="5" class="boxtext" readonly />`,
         
-        `<input type="text" value="${shelfCode}" name="shelf_code${row_count}" id="shelf_code${row_count}" size="8" class="boxtext" readonly style="text-align:right" />`
+        `<input type="text" value="${shelfCode}" name="TTshelf_code${row_count}" id="shelf_code${row_count}" size="8" class="boxtext" readonly style="text-align:right" />`
     ];
     
     cells.forEach(function(cellContent) {
