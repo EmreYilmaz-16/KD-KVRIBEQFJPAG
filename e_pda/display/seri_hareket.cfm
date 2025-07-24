@@ -1,3 +1,4 @@
+<cf_box title="Seri Hareket Bilgileri">
 <cfparam name="attributes.seri_no" default="">
 <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
    <cfoutput> <input type="text" name="seri_no" value="#attributes.seri_no#"></cfoutput>
@@ -67,3 +68,4 @@ GROUP BY SHELF_NUMBER,SERIAL_NO
 </cfoutput>
 
 </cfif>
+</cf_box>
