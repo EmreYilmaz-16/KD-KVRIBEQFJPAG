@@ -14,9 +14,9 @@
  FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#attributes.seri_no#' 
     </cfquery>
 <cfquery name="seriSB" datasource="#dsn3#">
-SELECT SHELF_NUMBER,SERIAL_NO,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW
+SELECT SHELF_NUMBER,SERIAL_NO,DEPARTMENT_ID,LOCATION_ID,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW
 WHERE SERIAL_NO=<cfqueryparam cfsqltype="cf_sql_varchar" value="#attributes.seri_no#">
-GROUP BY SHELF_NUMBER,SERIAL_NO
+GROUP BY SHELF_NUMBER,SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
 </cfquery>
 
 <cfquery name="depodakiseri" datasource="#dsn3#">
@@ -58,12 +58,16 @@ GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
             <tr style="background-color: ##f0f0f0;">
                 <th>Raf Numarası</th>
                 <th>Seri No</th>
+                <th>Departman ID</th>
+                <th>Lokasyon ID</th>
                 <th>Stok Miktarı</th>
             </tr>
             <cfloop query="seriSB">
                 <tr>
                     <td>#SHELF_NUMBER#</td>
                     <td>#SERIAL_NO#</td>
+                    <td>#DEPARTMENT_ID#</td>
+                    <td>#LOCATION_ID#</td>
                     <td style="text-align: center; <cfif V gt 0>color: green;<cfelseif V lt 0>color: red;<cfelse>color: orange;</cfif>">#V#</td>
                 </tr>
             </cfloop>
