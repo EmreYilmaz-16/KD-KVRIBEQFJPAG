@@ -317,6 +317,7 @@
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
 </cfif>
+<cfdump var="#attributes#">
 <cfset IX=1>
 <CFSET current_row_list_IX="">
 <cfloop list="#current_row_list#" index="k">
