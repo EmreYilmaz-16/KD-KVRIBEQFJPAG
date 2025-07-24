@@ -350,152 +350,93 @@
         </cfquery>
     <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
     <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+<cfset result = svc.saveServiceGuaranty(data, recordEmp)>
+<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)>
 </cfloop>
 
 
-<cfdump var="#current_row_list_IX#">
-<cfdump var="#PBSATR#">
-
-
-
-<cfabort>
-<cfloop list="#current_row_list#" index="k">
-        <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
-        <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
-        <cfset SERI_NO_SER=evaluate('attributes.serino#k#') >
-    
-        
-        <cfset GIRIS_RAF_ID="">
-        <cfset CIKIS_RAF_ID=Evaluate('attributes.SHELF_NUMBER#k#')>
-        
-        <cfdump var="GIRIS_RAF_ID=#GIRIS_RAF_ID# ----- CIKIS_RAF_ID=#CIKIS_RAF_ID#">
-        
-        <cfquery name="GETSER" datasource="#DSN3#">
-            SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
-        </cfquery>
-    <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
-            <cfdump var="#data#">
-        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
-        <cfdump var="#data2#">
-
-
-
-        <!---------<cfif isdefined('attributes.change_shelf_fis')>
-        
-        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
-            <cfdump var="#data#">
-        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
-        <cfdump var="#data2#">
-    <cfelse>
-      
-      <cfif isdefined('attributes.tersfis')>
-        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#CIKIS_RAF_ID#"}>
-        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
-      <cfelse>      
-        <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
-        <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
-      </cfif>
-    </cfif>--------->
-<!---------
-    <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
-    <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
-    <cfset attributes.DEPARTMENT_IN = Listgetat(attributes.dep_in,1,'-')>
-    <cfset attributes.LOCATION_IN = Listgetat(attributes.dep_in,2,'-')> 
-    
-    
-    ----------->
-<cfset recordEmp = session.ep.userid>
-
-
-<cfset result = svc.saveServiceGuaranty(data, recordEmp)>
-<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
-
-<cfdump var="#result#">
-<cfif result>
-    <cfoutput>Kayıt başarılı!</cfoutput>
-<cfelse>
-
-    <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
-</cfif>
-
-    </cfloop>
-
-
-
-
-<cf_get_lang_set module_name="stock"> sayfanin en altinda kapanisi var 
-<cfinclude template="../../../../v16/stock/query/check_our_period.cfm"> 
-<cfinclude template="../../../../v16/stock/query/get_process_cat.cfm">
-<cfset attributes.fis_type = get_process_type.PROCESS_TYPE> 
- kontroller  & tanimlamalar 
-<cfinclude template="../../../../v16/stock/query/add_ship_fis_1.cfm">
-  // kontroller & tanimlamalar 
-<cflock name="#CreateUUID()#" timeout="60">
-	<cftransaction>
-		<cfinclude template="../../../../v16/stock/query/add_ship_fis_2.cfm">
-		<cfif isdefined("attributes.rows_")>
-			<cfinclude template="../../../../v16/stock/query/add_ship_fis_3.cfm">
-			<cfinclude template="../../../../v16/stock/query/add_ship_fis_4.cfm">
-			<cfif listfind("111,112,113",attributes.fis_type)> sarf,fire,ambar fisleri icin muhasebele�tirme i�lemi  
-				<cfinclude template="../../../../v16/stock/query/add_ship_fis_6.cfm">
-			</cfif>
-		<cfelse>
-			<cfquery name="ADD_STOCK_FIS_ROW" datasource="#dsn2#">
-				INSERT INTO STOCK_FIS_ROW (FIS_NUMBER,FIS_ID) VALUES (<cfqueryparam cfsqltype="cf_sql_varchar" value="#FIS_NO#">,#GET_ID.MAX_ID#)
-			</cfquery>
-		</cfif>
+<cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
 
-		Ek Bilgiler
-        <cfset attributes.info_id = GET_ID.MAX_ID>
-        <cfset attributes.is_upd = 0>
-        <cfset attributes.info_type_id=-22>
-        <cfinclude template="../../../../v16/objects/query/add_info_plus2.cfm">
-        Ek Bilgiler
-		 secilen islem kategorisine bir action file eklenmisse 
-			<cf_workcube_process_cat 
-				process_cat="#attributes.process_cat#"
-				action_id = "#GET_ID.MAX_ID#"
-				action_table="STOCK_FIS"
-				action_column="FIS_ID"
-				is_action_file = 1
-				action_page='#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.form_upd_fis&upd_id=#GET_ID.MAX_ID#'
-				action_file_name='#get_process_type.action_file_name#'
-				action_db_type = '#dsn2#'
-				is_template_action_file = '#get_process_type.action_file_from_template#'>
-	</cftransaction>
-</cflock>
-<cfquery name="UPD_GEN_PAP" datasource="#DSN3#">
-	UPDATE 
-		GENERAL_PAPERS
-	SET
-		STOCK_FIS_NUMBER = #system_paper_no_add#
-	WHERE
-		STOCK_FIS_NUMBER IS NOT NULL
-</cfquery>
-<cfif  isDefined("attributes.fire_fisi_kaydet") and isDefined("fire_fisi_gerekiyor") and len(session_list)>
-	<cfquery name="UPD_GEN_PAP" datasource="#DSN3#">
-		UPDATE 
-			GENERAL_PAPERS
-		SET
-			STOCK_FIS_NUMBER = #system_paper_no_add_fire#
-		WHERE
-			STOCK_FIS_NUMBER IS NOT NULL
-	</cfquery>
-</cfif>
-<cfif not isdefined("attributes.is_mobile")>
-<cfif session.ep.our_company_info.is_cost eq 1 and get_process_type.IS_COST eq 1> sirket maliyet takip ediliyorsa not js le yonlenioyr cunku cost_action locationda calismiyor 
-	<cfscript>
-		cost_action(action_type:3,action_id:GET_ID.MAX_ID,query_type:1);
-	</cfscript>
-	<script type="text/javascript">
-		window.location.href="<cfoutput>#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&</cfoutput>";
-	</script>
-<cfelse>
-	<cflocation url="#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&" addtoken="No">
-</cfif>
-</cfif>
-<cf_get_lang_set module_name="#lcase(listgetat(attributes.fuseaction,1,'.'))#"> <!---sayfanin en ustunde acilisi var --->
+<!--------------------
+
+// <cf_get_lang_set module_name="stock"> sayfanin en altinda kapanisi var 
+// <cfinclude template="../../../../v16/stock/query/check_our_period.cfm"> 
+// <cfinclude template="../../../../v16/stock/query/get_process_cat.cfm">
+// <cfset attributes.fis_type = get_process_type.PROCESS_TYPE> 
+//  kontroller  & tanimlamalar 
+// <cfinclude template="../../../../v16/stock/query/add_ship_fis_1.cfm">
+//   // kontroller & tanimlamalar 
+// <cflock name="#CreateUUID()#" timeout="60">
+// 	<cftransaction>
+// 		<cfinclude template="../../../../v16/stock/query/add_ship_fis_2.cfm">
+// 		<cfif isdefined("attributes.rows_")>
+// 			<cfinclude template="../../../../v16/stock/query/add_ship_fis_3.cfm">
+// 			<cfinclude template="../../../../v16/stock/query/add_ship_fis_4.cfm">
+// 			<cfif listfind("111,112,113",attributes.fis_type)> sarf,fire,ambar fisleri icin muhasebele�tirme i�lemi  
+// 				<cfinclude template="../../../../v16/stock/query/add_ship_fis_6.cfm">
+// 			</cfif>
+// 		<cfelse>
+// 			<cfquery name="ADD_STOCK_FIS_ROW" datasource="#dsn2#">
+// 				INSERT INTO STOCK_FIS_ROW (FIS_NUMBER,FIS_ID) VALUES (<cfqueryparam cfsqltype="cf_sql_varchar" value="#FIS_NO#">,#GET_ID.MAX_ID#)
+// 			</cfquery>
+// 		</cfif>
+// <cfquery name="UP" datasource="#DSN3#">
+//     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
+// </cfquery>
+
+
+// 		Ek Bilgiler
+//         <cfset attributes.info_id = GET_ID.MAX_ID>
+//         <cfset attributes.is_upd = 0>
+//         <cfset attributes.info_type_id=-22>
+//         <cfinclude template="../../../../v16/objects/query/add_info_plus2.cfm">
+//         Ek Bilgiler
+// 		 secilen islem kategorisine bir action file eklenmisse 
+// 			<cf_workcube_process_cat 
+// 				process_cat="#attributes.process_cat#"
+// 				action_id = "#GET_ID.MAX_ID#"
+// 				action_table="STOCK_FIS"
+// 				action_column="FIS_ID"
+// 				is_action_file = 1
+// 				action_page='#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.form_upd_fis&upd_id=#GET_ID.MAX_ID#'
+// 				action_file_name='#get_process_type.action_file_name#'
+// 				action_db_type = '#dsn2#'
+// 				is_template_action_file = '#get_process_type.action_file_from_template#'>
+// 	</cftransaction>
+// </cflock>
+// <cfquery name="UPD_GEN_PAP" datasource="#DSN3#">
+// 	UPDATE 
+// 		GENERAL_PAPERS
+// 	SET
+// 		STOCK_FIS_NUMBER = #system_paper_no_add#
+// 	WHERE
+// 		STOCK_FIS_NUMBER IS NOT NULL
+// </cfquery>
+// <cfif  isDefined("attributes.fire_fisi_kaydet") and isDefined("fire_fisi_gerekiyor") and len(session_list)>
+// 	<cfquery name="UPD_GEN_PAP" datasource="#DSN3#">
+// 		UPDATE 
+// 			GENERAL_PAPERS
+// 		SET
+// 			STOCK_FIS_NUMBER = #system_paper_no_add_fire#
+// 		WHERE
+// 			STOCK_FIS_NUMBER IS NOT NULL
+// 	</cfquery>
+// </cfif>
+// <cfif not isdefined("attributes.is_mobile")>
+// <cfif session.ep.our_company_info.is_cost eq 1 and get_process_type.IS_COST eq 1> sirket maliyet takip ediliyorsa not js le yonlenioyr cunku cost_action locationda calismiyor 
+// 	<cfscript>
+// 		cost_action(action_type:3,action_id:GET_ID.MAX_ID,query_type:1);
+// 	</cfscript>
+// 	<script type="text/javascript">
+// 		window.location.href="<cfoutput>#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&</cfoutput>";
+// 	</script>
+// <cfelse>
+// 	<cflocation url="#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&" addtoken="No">
+// </cfif>
+// </cfif>
+// <cf_get_lang_set module_name="#lcase(listgetat(attributes.fuseaction,1,'.'))#"> <!---sayfanin en ustunde acilisi var --->
+-------------------->
