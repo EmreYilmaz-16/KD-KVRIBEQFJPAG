@@ -19,6 +19,12 @@ WHERE SERIAL_NO=<cfqueryparam cfsqltype="cf_sql_varchar" value="#attributes.seri
 GROUP BY SHELF_NUMBER,SERIAL_NO
 </cfquery>
 
+<cfquery name="depodakiseri" datasource="#dsn3#">
+SELECT * FROM (
+SELECT DEPARTMENT_ID,LOCATION_ID,SERIAL_NO,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW 
+GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
+) AS T WHERE DEPARTMENT_ID=2 AND LOCATION_ID=1 AND V>0
+</cfquery>
 <cfoutput>
     <h3>Seri Hareket Bilgileri - #attributes.seri_no#</h3>
     <cfif getSeriHareket.recordCount gt 0>
@@ -64,6 +70,29 @@ GROUP BY SHELF_NUMBER,SERIAL_NO
         </table>
     <cfelse>
         <p>Bu seri numarası için raf bilgisi bulunamadı.</p>
+    </cfif>
+
+    <h3>Depodaki Seriler (Departman: 2, Lokasyon: 1)</h3>
+    <cfif depodakiseri.recordCount gt 0>
+        <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+            <tr style="background-color: ##f0f0f0;">
+                <th>Departman ID</th>
+                <th>Lokasyon ID</th>
+                <th>Seri No</th>
+                <th>Stok Miktarı</th>
+            </tr>
+            <cfloop query="depodakiseri">
+                <tr>
+                    <td>#DEPARTMENT_ID#</td>
+                    <td>#LOCATION_ID#</td>
+                    <td>#SERIAL_NO#</td>
+                    <td style="text-align: center; color: green;">#V#</td>
+                </tr>
+            </cfloop>
+        </table>
+        <p><strong>Toplam Seri Sayısı:</strong> #depodakiseri.recordCount#</p>
+    <cfelse>
+        <p>Depoda hiç seri bulunamadı.</p>
     </cfif>
 </cfoutput>
 
