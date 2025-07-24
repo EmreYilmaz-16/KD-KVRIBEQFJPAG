@@ -74,21 +74,21 @@ POZİSYON=BENİM DÖNGÜM
     
 
   <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
-        	<cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
-          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT> 
-           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN>  
-          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+        	<cfset 'attributes.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
+          	<cfset 'attributes.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT> 
+           	<cfset 'attributes.TO_SHELF_NUMBER#i#' = SHELF_ID_IN>  
+          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
         <cfelse>
 			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
-                <cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
-                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT > 
-                <cfset 'attributes.TO_SHELF_NUMBER#k#' = ''>  
-                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = ''>
+                <cfset 'attributes.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT > 
+                <cfset 'attributes.TO_SHELF_NUMBER#i#' = ''>  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = ''>
             <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
-                <cfset 'attributes.SHELF_NUMBER#k#' = ''>  
-                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = ''> 
-                <cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN >  
-                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+                <cfset 'attributes.SHELF_NUMBER#i#' = ''>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#i#' = ''> 
+                <cfset 'attributes.TO_SHELF_NUMBER#i#' = SHELF_ID_IN >  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
             </cfif>
        	</cfif>
 
