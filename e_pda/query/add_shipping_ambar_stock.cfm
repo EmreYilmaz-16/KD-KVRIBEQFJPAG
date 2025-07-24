@@ -327,7 +327,7 @@
     <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('attributes.STOCK_ID#k#')>
     <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('attributes.SHELF_NUMBER#k#')>
     <cfset SHID=Evaluate('attributes.SHELF_NUMBER#k#')>
-    <cfset "PBSATR.ASERINO#IX#" = Evaluate('attributes.serino#SHID#')>
+    <cfset "PBSATR.ASERINO#IX#" = listgetat(Evaluate('attributes.serino#SHID#'),j)>
     
     <cfset "PBSATR.AMOUNT#IX#" = 1>    
 <cfset current_row_list_IX=listAppend(current_row_list_IX, IX)>
