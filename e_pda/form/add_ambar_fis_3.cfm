@@ -286,6 +286,7 @@ function generateActionId() {
 }
 
 function toggleSaveButton() {
+	console.log('Toggling save button');
 	if (AppState.operationType == 0) {
 		AppState.buttonActive++;
 	} else if (AppState.buttonActive > 0) {
@@ -651,8 +652,9 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 		AppState.barcode = productResult.BARCODE;
 		AppState.shelfCodeIn = productResult.SHELF_CODE;
 		AppState.shelfCodeOut = getId('add_out_shelf').value;
-		
+		console.log('Setting shelf codes:', AppState.shelfCodeOut, AppState.shelfCodeIn);
 		toggleSaveButton();
+		console.log('Adding product row after validation');
 		addProductRow();
 		resetForm();
 		getId('add_other_barcod').focus();
