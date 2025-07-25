@@ -34,10 +34,7 @@
     <cfcase value="save_query">
         <cfif len(trim(attributes.sql_sorgu))>
             <!--- Aynı sorgu var mı kontrol et --->
-            <cfquery name="checkQuery" datasource="#dsn#">
-                SELECT ID FROM SQL_QUERY_HISTORY 
-                WHERE SQL_QUERY = <cfqueryparam value="#attributes.sql_sorgu#" cfsqltype="cf_sql_longvarchar">
-            </cfquery>
+            <cfset checkQuery.recordcount=0>
             
             <cfif checkQuery.recordcount gt 0>
                 <!--- Mevcut sorguyu güncelle --->
