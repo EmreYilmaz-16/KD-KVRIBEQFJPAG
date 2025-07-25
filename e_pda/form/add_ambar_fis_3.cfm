@@ -500,7 +500,13 @@ function validateAndSave() {
 // Keyboard event handler with improved logic
 document.onkeydown = function(e) {
 	var keycode = window.event ? window.event.keyCode : e.which;
-	if (keycode !== 13) return; // Only handle Enter key
+	console.log('=== ENTER KEY PRESSED ===');
+	console.log('Keycode:', keycode);
+	
+	if (keycode !== 13) {
+		console.log('Not Enter key, ignoring');
+		return; // Only handle Enter key
+	}
 	
 	var inputs = {
 		barcode: getId('add_other_barcod').value,
@@ -508,14 +514,17 @@ document.onkeydown = function(e) {
 		inShelf: getId('add_in_shelf').value,
 		serial: getId('serial_number').value
 	};
-	console.log('Key pressed:', keycode, 'Inputs:', inputs);
+	console.log('Current inputs:', inputs);
+	console.log('Current AppState:', AppState);
+	
 	// Handle serial number workflow
 	if (inputs.serial.length > 0) {
-		console.log('Handling serial number workflow');
+		console.log('=== SERIAL NUMBER WORKFLOW ===');
 		return handleSerialWorkflow(inputs);
 	}
 	
 	// Handle barcode workflow
+	console.log('=== BARCODE WORKFLOW ===');
 	return handleBarcodeWorkflow(inputs);
 };
 
@@ -546,48 +555,71 @@ function handleSerialWorkflow(inputs) {
 }
 
 function handleBarcodeWorkflow(inputs) {
+	console.log('=== BARCODE WORKFLOW START ===');
+	console.log('Barcode length:', inputs.barcode.length, 'Expected:', Config.BARCODE_LENGTH);
+	console.log('OutShelf length:', inputs.outShelf.length, 'Valid lengths:', Config.SHELF_CODE_LENGTHS);
+	console.log('InShelf length:', inputs.inShelf.length, 'Valid lengths:', Config.SHELF_CODE_LENGTHS);
+	
 	// Validate input lengths
 	if (inputs.barcode.length === Config.BARCODE_LENGTH && !inputs.outShelf && !inputs.inShelf) {
+		console.log('Case 1: Valid barcode, no shelves - getting stock info');
 		getStockInfo(inputs.barcode, false);
 	}
 	else if (Config.SHELF_CODE_LENGTHS.includes(inputs.barcode.length)) {
+		console.log('Case 2: Shelf code entered in barcode field');
 		showAlert('Önce Ürün Barkodu Okutunuz');
 		resetForm();
 		getId('add_other_barcod').focus();
 	}
 	else if (inputs.barcode.length === Config.BARCODE_LENGTH && 
 			 Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length)) {
+		console.log('Case 3: Valid barcode and out shelf provided');
 		if (Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length)) {
+			console.log('Case 3a: Both shelves provided');
 			if (inputs.inShelf === inputs.outShelf) {
+				console.log('Error: Same shelf codes');
 				showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
 				getId('add_in_shelf').value = '';
 				getId('add_in_shelf').focus();
 				return false;
 			}
+			console.log('Searching IN shelf:', inputs.inShelf);
 			searchShelf(inputs.inShelf, 'in', false);
 		} else {
+			console.log('Case 3b: Only out shelf provided, searching out shelf:', inputs.outShelf);
 			searchShelf(inputs.outShelf, 'out', false);
 		}
 	}
 	else {
+		console.log('Case 4: Invalid barcode');
+		console.log('Barcode value:', inputs.barcode, 'Length:', inputs.barcode.length);
 		showAlert('Barkod Hatalı');
 		resetForm();
 		getId('add_other_barcod').focus();
 	}
+	console.log('=== BARCODE WORKFLOW END ===');
 }
 
 // Unified shelf search function
 function searchShelf(shelfCode, type, useSerial = false) {
-	console.log('Searching shelf:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
+	console.log('=== SEARCH SHELF START ===');
+	console.log('Shelf Code:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
+	
 	var departmentValue = type === 'out' ? 
 		getId('txt_department_out').value : 
 		getId('txt_department_in').value;
+	
+	console.log('Department Value:', departmentValue);
+	console.log('Department element exists:', !!getId('txt_department_' + type));
 		
 	var sql = Config.QUERIES.SHELF_VALIDATION.replace('{{shelf}}', shelfCode);
+	console.log('Shelf validation SQL:', sql);
+	
 	var shelfResult = wrk_query(sql, 'dsn3');
+	console.log('Shelf validation result:', shelfResult);
 	
 	if (!shelfResult.recordcount) {
-		console.log('Shelf not found:', shelfCode);
+		console.log('ERROR: Shelf not found');
 		showAlert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
 		resetShelfFields(type);
 		return false;
@@ -595,28 +627,42 @@ function searchShelf(shelfCode, type, useSerial = false) {
 	
 	var shelfDepartment = shelfResult.STORE_ID + '-' + shelfResult.LOCATION_ID;
 	console.log('Shelf Department:', shelfDepartment, 'Selected Department:', departmentValue);
+	
 	if (departmentValue !== shelfDepartment) {
 		var locationText = type === 'out' ? 'Çıkış' : 'Giriş';
+		console.log('ERROR: Department mismatch');
 		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
 		resetForm();
 		getId('add_other_barcod').focus();
 		return false;
 	}
-	console.log('Shelf validation passed for:', shelfCode);
+	
+	console.log('Shelf validation passed, calling validateProductInShelf');
 	return validateProductInShelf(shelfCode, type, useSerial);
 }
 
 function validateProductInShelf(shelfCode, type, useSerial = false) {
+	console.log('=== VALIDATE PRODUCT IN SHELF START ===');
+	console.log('Shelf Code:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
+	console.log('Current AppState:', JSON.stringify(AppState));
+	
 	var condition, inputValue;
-	console.log('Validating product in shelf:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
+	
 	if (useSerial) {
+		console.log('Using serial number validation');
 		condition = "SB.STOCK_ID = '" + AppState.stockId + "'";
 	} else {
+		console.log('Using barcode validation');
 		inputValue = getId('add_other_barcod').value;
+		console.log('Barcode input value:', inputValue, 'Length:', inputValue.length);
+		
 		if (inputValue.length !== Config.BARCODE_LENGTH) {
+			console.log('ERROR: Invalid barcode length');
 			if (inputValue.length === 0) {
+				console.log('Empty barcode, focusing input');
 				getId('add_other_barcod').focus();
 			} else {
+				console.log('Invalid barcode, showing error');
 				showAlert('Ürün Barkodu Hatalı');
 				resetForm();
 				getId('add_other_barcod').focus();
@@ -625,46 +671,58 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 		}
 		condition = "SB.BARCODE = '" + inputValue + "'";
 	}
-	console.log('Condition for SQL:', condition);
+	
+	console.log('SQL Condition:', condition);
 	
 	var sql = Config.QUERIES.PRODUCT_IN_SHELF
 		.replace('{{condition}}', condition)
 		.replace('{{shelf}}', shelfCode);
 	
+	console.log('Product validation SQL:', sql);
+	
 	var productResult = wrk_query(sql, 'dsn3');
-	console.log('Product Result:', productResult);
+	console.log('Product validation result:', productResult);
+	
 	if (!productResult.STOCK_ID) {
-		console.log('Product not found in shelf:', shelfCode);
+		console.log('ERROR: Product not found in shelf');
 		showAlert('Ürün Bu Rafa Tanıtılmamış');
 		resetShelfFields(type);
 		return false;
 	}
-	console.log('Product found in shelf:', productResult);
+	
+	console.log('Product found, processing type:', type);
+	
 	if (type === 'out') {
-		console.log('Processing for out shelf:', productResult);
+		console.log('=== PROCESSING OUT SHELF ===');
 		// Set the required state values for out shelf processing
 		AppState.stockId = productResult.STOCK_ID;
 		AppState.stockCode = productResult.PRODUCT_NAME;
 		AppState.barcode = productResult.BARCODE;
 		AppState.shelfCodeOut = shelfCode;
+		console.log('Updated AppState for OUT:', JSON.stringify(AppState));
 		getId('add_other_amount').disabled = true;
 		getId('add_in_shelf').focus();
+		console.log('Focused on in shelf input');
 	} else {
+		console.log('=== PROCESSING IN SHELF ===');
 		// Process for 'in' shelf
-		console.log('Processing for in shelf:', productResult);
 		AppState.stockId = productResult.STOCK_ID;
 		AppState.stockCode = productResult.PRODUCT_NAME;
 		AppState.barcode = productResult.BARCODE;
 		AppState.shelfCodeIn = productResult.SHELF_CODE;
 		AppState.shelfCodeOut = getId('add_out_shelf').value;
-		console.log('Setting shelf codes:', AppState.shelfCodeOut, AppState.shelfCodeIn);
+		console.log('Updated AppState for IN:', JSON.stringify(AppState));
+		console.log('Calling toggleSaveButton');
 		toggleSaveButton();
-		console.log('Adding product row after validation');
+		console.log('Calling addProductRow');
 		addProductRow();
+		console.log('Calling resetForm');
 		resetForm();
+		console.log('Focusing on barcode input');
 		getId('add_other_barcod').focus();
 	}
 	
+	console.log('=== VALIDATE PRODUCT IN SHELF END ===');
 	return true;
 }
 
@@ -678,6 +736,10 @@ function resetShelfFields(type) {
 <script type="text/javascript">
 // Simplified AJAX query function
 function wrk_query(query, dataSource, maxRows) {
+	console.log('=== WRK_QUERY START ===');
+	console.log('Query:', query);
+	console.log('DataSource:', dataSource);
+	
 	dataSource = dataSource || 'dsn';
 	maxRows = maxRows || 0;
 	
@@ -689,6 +751,7 @@ function wrk_query(query, dataSource, maxRows) {
 		try {
 			xhr = new XMLHttpRequest();
 		} catch(e) {
+			console.error('XMLHttpRequest creation failed:', e);
 			xhr = false;
 		}
 	} else if (window.ActiveXObject) {
@@ -698,6 +761,7 @@ function wrk_query(query, dataSource, maxRows) {
 			try {
 				xhr = new ActiveXObject("Microsoft.XMLHTTP");
 			} catch(e) {
+				console.error('ActiveXObject creation failed:', e);
 				xhr = false;
 			}
 		}
@@ -716,17 +780,24 @@ function wrk_query(query, dataSource, maxRows) {
 				 '&data_source=' + dataSource + 
 				 '&maxrows=' + maxRows;
 	
+	console.log('Request params:', params);
+	
 	try {
 		xhr.send(params);
+		console.log('XHR Status:', xhr.status, 'Ready State:', xhr.readyState);
+		console.log('Response Text:', xhr.responseText);
+		
 		if (xhr.readyState === 4 && xhr.status === 200) {
 			eval(xhr.responseText.replace(/\u200B/g, ''));
 			result = get_js_query;
+			console.log('Query result:', result);
 		}
 	} catch(e) {
 		console.error('Query execution failed:', e);
 		result = false;
 	}
 	
+	console.log('=== WRK_QUERY END ===');
 	return result;
 }
 </script>
