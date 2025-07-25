@@ -507,9 +507,10 @@ document.onkeydown = function(e) {
 		inShelf: getId('add_in_shelf').value,
 		serial: getId('serial_number').value
 	};
-	
+	console.log('Key pressed:', keycode, 'Inputs:', inputs);
 	// Handle serial number workflow
 	if (inputs.serial.length > 0) {
+		console.log('Handling serial number workflow');
 		return handleSerialWorkflow(inputs);
 	}
 	
