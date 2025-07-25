@@ -79,37 +79,75 @@ ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
 
     <h3>Tüm Departman ve Lokasyonlardaki Seriler</h3>
     <cfif depodakiseri.recordCount gt 0>
-        <cfset currentDept = "">
-        <cfset currentLoc = "">
-        <cfset deptCount = 0>
-        <cfloop query="depodakiseri">
-            <cfif DEPARTMENT_ID NEQ currentDept OR LOCATION_ID NEQ currentLoc>
-                <cfif deptCount gt 0>
-                    </table>
-                    <p><strong>Bu departman/lokasyon için toplam seri sayısı:</strong> #deptCount#</p>
-                    <br>
+        <style>
+            .department-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin: 10px 0;
+            }
+            .department-group {
+                border: 2px solid ##e6f3ff;
+                border-radius: 8px;
+                padding: 10px;
+                min-width: 300px;
+                max-width: 400px;
+                background-color: ##f9f9f9;
+            }
+            .department-header {
+                background-color: ##e6f3ff;
+                padding: 8px;
+                margin: -10px -10px 10px -10px;
+                border-radius: 6px 6px 0 0;
+                font-weight: bold;
+                text-align: center;
+            }
+            .department-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+            }
+            .department-count {
+                text-align: center;
+                font-weight: bold;
+                color: ##666;
+                font-size: 12px;
+            }
+        </style>
+        
+        <div class="department-container">
+            <cfset currentDept = "">
+            <cfset currentLoc = "">
+            <cfset deptCount = 0>
+            <cfset groupContent = "">
+            
+            <cfloop query="depodakiseri">
+                <cfif DEPARTMENT_ID NEQ currentDept OR LOCATION_ID NEQ currentLoc>
+                    <cfif deptCount gt 0>
+                        <cfset groupContent = groupContent & "</table><div class='department-count'>Toplam: #deptCount# seri</div></div>">
+                        <cfoutput>#groupContent#</cfoutput>
+                    </cfif>
+                    <cfset currentDept = DEPARTMENT_ID>
+                    <cfset currentLoc = LOCATION_ID>
+                    <cfset deptCount = 0>
+                    <cfset groupContent = "<div class='department-group'>">
+                    <cfset groupContent = groupContent & "<div class='department-header'>Dept: #DEPARTMENT_ID# - Lok: #LOCATION_ID#</div>">
+                    <cfset groupContent = groupContent & "<table class='department-table' border='1' cellpadding='3' cellspacing='0'>">
+                    <cfset groupContent = groupContent & "<tr style='background-color: ##f0f0f0; font-size: 12px;'><th>Seri No</th><th>Miktar</th></tr>">
                 </cfif>
-                <cfset currentDept = DEPARTMENT_ID>
-                <cfset currentLoc = LOCATION_ID>
-                <cfset deptCount = 0>
-                <h4 style="background-color: ##e6f3ff; padding: 10px; margin: 10px 0;">Departman ID: #DEPARTMENT_ID# - Lokasyon ID: #LOCATION_ID#</h4>
-                <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; margin-bottom: 10px;">
-                    <tr style="background-color: ##f0f0f0;">
-                        <th>Seri No</th>
-                        <th>Stok Miktarı</th>
-                    </tr>
+                <cfset groupContent = groupContent & "<tr style='font-size: 11px;'><td>#SERIAL_NO#</td><td style='text-align: center; color: green;'>#V#</td></tr>">
+                <cfset deptCount = deptCount + 1>
+            </cfloop>
+            
+            <cfif deptCount gt 0>
+                <cfset groupContent = groupContent & "</table><div class='department-count'>Toplam: #deptCount# seri</div></div>">
+                <cfoutput>#groupContent#</cfoutput>
             </cfif>
-                    <tr>
-                        <td>#SERIAL_NO#</td>
-                        <td style="text-align: center; color: green;">#V#</td>
-                    </tr>
-            <cfset deptCount = deptCount + 1>
-        </cfloop>
-        <cfif deptCount gt 0>
-            </table>
-            <p><strong>Bu departman/lokasyon için toplam seri sayısı:</strong> #deptCount#</p>
-        </cfif>
-        <p><strong>Genel Toplam Seri Sayısı:</strong> #depodakiseri.recordCount#</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; padding: 10px; background-color: ##e6ffe6; border-radius: 5px;">
+            <strong>Genel Toplam Seri Sayısı: #depodakiseri.recordCount#</strong>
+        </div>
     <cfelse>
         <p>Hiç seri bulunamadı.</p>
     </cfif>
