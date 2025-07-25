@@ -109,7 +109,7 @@ var AppState = {
 // Configuration
 var Config = {
 	BARCODE_LENGTH: 13,
-	SHELF_CODE_LENGTHS: [8, 11],
+	SHELF_CODE_LENGTHS: [6, 8, 11],  // 6 karakter eklendi (TM0101 için)
 	QUERIES: {
 		STOCK_BY_BARCODE: "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE = '{{barcode}}'",
 		STOCK_BY_SERIAL: "SELECT TOP 1 SB.STOCK_ID,SB.SERIAL_NO,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID WHERE SB.SERIAL_NO = '{{serial}}'",
@@ -543,8 +543,15 @@ function handleSerialWorkflow(inputs) {
 		return false;
 	}
 	console.log('Checking shelf codes:', inputs.outShelf, inputs.inShelf);
-	if (Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length) && 
-		Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length)) {
+	console.log('OutShelf length:', inputs.outShelf.length, 'InShelf length:', inputs.inShelf.length);
+	console.log('Valid lengths:', Config.SHELF_CODE_LENGTHS);
+	
+	var isOutShelfValid = Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length);
+	var isInShelfValid = Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length);
+	
+	console.log('OutShelf valid:', isOutShelfValid, 'InShelf valid:', isInShelfValid);
+	
+	if (isOutShelfValid && isInShelfValid) {
 		if (inputs.inShelf === inputs.outShelf) {
 			console.log('In and Out shelves are the same:', inputs.inShelf);
 			showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
@@ -554,12 +561,12 @@ function handleSerialWorkflow(inputs) {
 		}
 		console.log('Both shelves provided, searching IN shelf:', inputs.inShelf);
 		searchShelf(inputs.inShelf, 'in', true);
-	} else if (Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length)) {
+	} else if (isOutShelfValid) {
 		console.log('Only out shelf provided, searching out shelf:', inputs.outShelf);
 		searchShelf(inputs.outShelf, 'out', true);
 	} else {
-		console.log('Invalid shelf codes provided');
-		showAlert('Geçerli raf kodu giriniz');
+		console.log('Invalid shelf codes provided - OutShelf:', inputs.outShelf, 'InShelf:', inputs.inShelf);
+		showAlert('Geçerli raf kodu giriniz (6, 8 veya 11 karakter)');
 		return false;
 	}
 	return false;
