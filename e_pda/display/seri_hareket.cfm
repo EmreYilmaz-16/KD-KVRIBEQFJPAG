@@ -20,11 +20,22 @@ GROUP BY SHELF_NUMBER,SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
 </cfquery>
 
 <cfquery name="depodakiseri" datasource="#dsn3#">
-SELECT * FROM (
-SELECT DEPARTMENT_ID,LOCATION_ID,SERIAL_NO,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW 
-GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
-) AS T WHERE V>0
-ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
+SELECT 
+    T.DEPARTMENT_ID,
+    T.LOCATION_ID,
+    T.SERIAL_NO,
+    T.V,
+    ISNULL(D.DEPARTMENT_HEAD, 'Bilinmeyen Departman') AS DEPARTMENT_NAME,
+    ISNULL(SL.COMMENT, 'Bilinmeyen Lokasyon') AS LOCATION_NAME
+FROM (
+    SELECT DEPARTMENT_ID,LOCATION_ID,SERIAL_NO,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V 
+    FROM w3Qa_1.SERVICE_GUARANTY_NEW 
+    GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
+) AS T 
+LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID = T.DEPARTMENT_ID
+LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.DEPARTMENT_ID = T.DEPARTMENT_ID AND SL.LOCATION_ID = T.LOCATION_ID
+WHERE T.V > 0
+ORDER BY T.DEPARTMENT_ID, T.LOCATION_ID, T.SERIAL_NO
 </cfquery>
 <cfoutput>
     <h3>Seri Hareket Bilgileri - #attributes.seri_no#</h3>
@@ -90,8 +101,8 @@ ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
                 border: 2px solid ##e6f3ff;
                 border-radius: 8px;
                 padding: 10px;
-                min-width: 300px;
-                max-width: 400px;
+                min-width: 350px;
+                max-width: 450px;
                 background-color: ##f9f9f9;
             }
             .department-header {
@@ -101,6 +112,7 @@ ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
                 border-radius: 6px 6px 0 0;
                 font-weight: bold;
                 text-align: center;
+                font-size: 13px;
             }
             .department-table {
                 width: 100%;
@@ -131,7 +143,7 @@ ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
                     <cfset currentLoc = LOCATION_ID>
                     <cfset deptCount = 0>
                     <cfset groupContent = "<div class='department-group'>">
-                    <cfset groupContent = groupContent & "<div class='department-header'>Dept: #DEPARTMENT_ID# - Lok: #LOCATION_ID#</div>">
+                    <cfset groupContent = groupContent & "<div class='department-header'>#DEPARTMENT_NAME# (#DEPARTMENT_ID#) - #LOCATION_NAME# (#LOCATION_ID#)</div>">
                     <cfset groupContent = groupContent & "<table class='department-table' border='1' cellpadding='3' cellspacing='0'>">
                     <cfset groupContent = groupContent & "<tr style='background-color: ##f0f0f0; font-size: 12px;'><th>Seri No</th><th>Miktar</th></tr>">
                 </cfif>
