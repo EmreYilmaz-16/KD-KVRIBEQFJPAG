@@ -297,6 +297,9 @@ function toggleSaveButton() {
 
 // Unified stock information retrieval
 function getStockInfo(identifier, isSerial = false) {
+	console.log('=== GET STOCK INFO START ===');
+	console.log('Identifier:', identifier, 'Is Serial:', isSerial);
+	
 	// Reset state
 	Object.assign(AppState, {
 		barcode: '',
@@ -317,19 +320,23 @@ function getStockInfo(identifier, isSerial = false) {
 		return false;
 	}
 	
-	AppState.stockId = result.STOCK_ID;
-	AppState.stockCode = result.PRODUCT_NAME;
+	// Fix array indexing issue
+	AppState.stockId = result.STOCK_ID[0] || result.STOCK_ID;
+	AppState.stockCode = result.PRODUCT_NAME[0] || result.PRODUCT_NAME;
 	
 	if (isSerial) {
-		AppState.serialNo = result.SERIAL_NO;
-		console.log('Serial No:', AppState.serialNo);
+		AppState.serialNo = result.SERIAL_NO[0] || result.SERIAL_NO;
+		console.log('Serial No set:', AppState.serialNo);
 	} else {
-		AppState.barcode = result.BARCODE;
+		AppState.barcode = result.BARCODE[0] || result.BARCODE;
+		console.log('Barcode set:', AppState.barcode);
 	}
 	
+	console.log('Updated AppState after getStockInfo:', JSON.stringify(AppState));
 	getId('add_out_shelf').focus();
 	setShelfOptions(AppState.stockId);
 	toggleSaveButton();
+	console.log('=== GET STOCK INFO END ===');
 	return true;
 }
 
@@ -545,11 +552,15 @@ function handleSerialWorkflow(inputs) {
 			getId('add_in_shelf').focus();
 			return false;
 		}
-		console.log('Searching shelves:', inputs.inShelf, inputs.outShelf);
+		console.log('Both shelves provided, searching IN shelf:', inputs.inShelf);
 		searchShelf(inputs.inShelf, 'in', true);
-	} else {
-		console.log('Searching out shelf:', inputs.outShelf);
+	} else if (Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length)) {
+		console.log('Only out shelf provided, searching out shelf:', inputs.outShelf);
 		searchShelf(inputs.outShelf, 'out', true);
+	} else {
+		console.log('Invalid shelf codes provided');
+		showAlert('Geçerli raf kodu giriniz');
+		return false;
 	}
 	return false;
 }
@@ -695,9 +706,9 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 	if (type === 'out') {
 		console.log('=== PROCESSING OUT SHELF ===');
 		// Set the required state values for out shelf processing
-		AppState.stockId = productResult.STOCK_ID;
-		AppState.stockCode = productResult.PRODUCT_NAME;
-		AppState.barcode = productResult.BARCODE;
+		AppState.stockId = productResult.STOCK_ID[0] || productResult.STOCK_ID;
+		AppState.stockCode = productResult.PRODUCT_NAME[0] || productResult.PRODUCT_NAME;
+		AppState.barcode = productResult.BARCODE[0] || productResult.BARCODE;
 		AppState.shelfCodeOut = shelfCode;
 		console.log('Updated AppState for OUT:', JSON.stringify(AppState));
 		getId('add_other_amount').disabled = true;
@@ -706,10 +717,10 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 	} else {
 		console.log('=== PROCESSING IN SHELF ===');
 		// Process for 'in' shelf
-		AppState.stockId = productResult.STOCK_ID;
-		AppState.stockCode = productResult.PRODUCT_NAME;
-		AppState.barcode = productResult.BARCODE;
-		AppState.shelfCodeIn = productResult.SHELF_CODE;
+		AppState.stockId = productResult.STOCK_ID[0] || productResult.STOCK_ID;
+		AppState.stockCode = productResult.PRODUCT_NAME[0] || productResult.PRODUCT_NAME;
+		AppState.barcode = productResult.BARCODE[0] || productResult.BARCODE;
+		AppState.shelfCodeIn = productResult.SHELF_CODE[0] || productResult.SHELF_CODE;
 		AppState.shelfCodeOut = getId('add_out_shelf').value;
 		console.log('Updated AppState for IN:', JSON.stringify(AppState));
 		console.log('Calling toggleSaveButton');
