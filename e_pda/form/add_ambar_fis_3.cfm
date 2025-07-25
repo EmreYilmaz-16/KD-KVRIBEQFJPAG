@@ -642,6 +642,11 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 	console.log('Product found in shelf:', productResult);
 	if (type === 'out') {
 		console.log('Processing for out shelf:', productResult);
+		// Set the required state values for out shelf processing
+		AppState.stockId = productResult.STOCK_ID;
+		AppState.stockCode = productResult.PRODUCT_NAME;
+		AppState.barcode = productResult.BARCODE;
+		AppState.shelfCodeOut = shelfCode;
 		getId('add_other_amount').disabled = true;
 		getId('add_in_shelf').focus();
 	} else {
