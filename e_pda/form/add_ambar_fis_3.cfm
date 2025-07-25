@@ -519,21 +519,26 @@ document.onkeydown = function(e) {
 };
 
 function handleSerialWorkflow(inputs) {
+	console.log('Handling serial number:', inputs.serial);
 	if (!inputs.outShelf && !inputs.inShelf) {
+		console.log('No shelves provided, fetching stock info by serial');
 		getStockInfo(inputs.serial, true);
 		return false;
 	}
-	
+	console.log('Checking shelf codes:', inputs.outShelf, inputs.inShelf);
 	if (Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length) && 
 		Config.SHELF_CODE_LENGTHS.includes(inputs.inShelf.length)) {
 		if (inputs.inShelf === inputs.outShelf) {
+			console.log('In and Out shelves are the same:', inputs.inShelf);
 			showAlert('Giriş ve Çıkış Rafları Aynı Olamaz');
 			getId('add_in_shelf').value = '';
 			getId('add_in_shelf').focus();
 			return false;
 		}
+		console.log('Searching shelves:', inputs.inShelf, inputs.outShelf);
 		searchShelf(inputs.inShelf, 'in', true);
 	} else {
+		console.log('Searching out shelf:', inputs.outShelf);
 		searchShelf(inputs.outShelf, 'out', true);
 	}
 	return false;
@@ -572,6 +577,7 @@ function handleBarcodeWorkflow(inputs) {
 
 // Unified shelf search function
 function searchShelf(shelfCode, type, useSerial = false) {
+	console.log('Searching shelf:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
 	var departmentValue = type === 'out' ? 
 		getId('txt_department_out').value : 
 		getId('txt_department_in').value;
@@ -580,12 +586,14 @@ function searchShelf(shelfCode, type, useSerial = false) {
 	var shelfResult = wrk_query(sql, 'dsn3');
 	
 	if (!shelfResult.recordcount) {
+		console.log('Shelf not found:', shelfCode);
 		showAlert('Seçtiğiniz Raf Hiç Tanımlanmamış!');
 		resetShelfFields(type);
 		return false;
 	}
 	
 	var shelfDepartment = shelfResult.STORE_ID + '-' + shelfResult.LOCATION_ID;
+	console.log('Shelf Department:', shelfDepartment, 'Selected Department:', departmentValue);
 	if (departmentValue !== shelfDepartment) {
 		var locationText = type === 'out' ? 'Çıkış' : 'Giriş';
 		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
@@ -593,13 +601,13 @@ function searchShelf(shelfCode, type, useSerial = false) {
 		getId('add_other_barcod').focus();
 		return false;
 	}
-	
+	console.log('Shelf validation passed for:', shelfCode);
 	return validateProductInShelf(shelfCode, type, useSerial);
 }
 
 function validateProductInShelf(shelfCode, type, useSerial = false) {
 	var condition, inputValue;
-	
+	console.log('Validating product in shelf:', shelfCode, 'Type:', type, 'Use Serial:', useSerial);
 	if (useSerial) {
 		condition = "SB.STOCK_ID = '" + AppState.stockId + "'";
 	} else {
