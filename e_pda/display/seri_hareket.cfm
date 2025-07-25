@@ -1,5 +1,33 @@
 <cf_box title="Seri Hareket Bilgileri">
-<cfparam name="attributes.seri_no" default="">
+<    <cfquery name="depodakiseri" datasource="#dsn3#">
+        SELECT DEPARTMENT_ID,LOCATION_ID,SERIAL_NO,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS V 
+        FROM w3Qa_1.SERVICE_GUARANTY_NEW 
+        GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
+        HAVING SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) > 0
+        ORDER BY DEPARTMENT_ID, LOCATION_ID, SERIAL_NO
+    </cfquery>
+
+    <!--- Departman/Lokasyon isimlerini alma fonksiyonu --->
+    <cffunction name="getDeptLocName" access="public" returntype="string">
+        <cfargument name="deptId" type="numeric" required="true">
+        <cfargument name="locId" type="numeric" required="true">
+        <cfargument name="type" type="string" required="true"> <!--- 'dept' veya 'loc' --->
+        
+        <cfset var key = "#arguments.deptId#_#arguments.locId#">
+        <cfif structKeyExists(deptLocInfo, key)>
+            <cfif arguments.type eq "dept">
+                <cfreturn deptLocInfo[key].deptName>
+            <cfelse>
+                <cfreturn deptLocInfo[key].locName>
+            </cfif>
+        <cfelse>
+            <cfif arguments.type eq "dept">
+                <cfreturn "Bilinmeyen Departman">
+            <cfelse>
+                <cfreturn "Bilinmeyen Lokasyon">
+            </cfif>
+        </cfif>
+    </cffunction>ibutes.seri_no" default="">
 <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
    <cfoutput> <input type="text" name="seri_no" value="#attributes.seri_no#"></cfoutput>
    <input type="submit" name="submit" value="Gönder">
@@ -8,6 +36,27 @@
 <cfif len(attributes.seri_no)>
     <cfset attributes.seri_no = trim(attributes.seri_no)>
     <cfset attributes.seri_no = ucase(attributes.seri_no)>
+
+    <!--- Merkezi departman/lokasyon bilgileri sorgusu --->
+    <cfquery name="getDeptLocInfo" datasource="#dsn3#">
+        SELECT 
+            D.DEPARTMENT_ID,
+            D.DEPARTMENT_HEAD,
+            SL.LOCATION_ID,
+            SL.COMMENT AS LOCATION_HEAD 
+        FROM w3Qa.STOCKS_LOCATION AS SL 
+        INNER JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID = SL.DEPARTMENT_ID
+    </cfquery>
+
+    <!--- Departman/Lokasyon bilgilerini struct'a çevir --->
+    <cfset deptLocInfo = {}>
+    <cfloop query="getDeptLocInfo">
+        <cfset key = "#DEPARTMENT_ID#_#LOCATION_ID#">
+        <cfset deptLocInfo[key] = {
+            deptName = DEPARTMENT_HEAD,
+            locName = LOCATION_HEAD
+        }>
+    </cfloop>
 
     <cfquery name="getSeriHareket" datasource="#dsn3#">
  SELECT SERIAL_NO,CASE WHEN IN_OUT=1 THEN 'GIRIS' ELSE 'CIKIS' END GS,PROCESS_CAT,DEPARTMENT_ID,LOCATION_ID,SHELF_NUMBER 
@@ -45,17 +94,19 @@ ORDER BY T.DEPARTMENT_ID, T.LOCATION_ID, T.SERIAL_NO
                 <th>Seri No</th>
                 <th>Giriş/Çıkış</th>
                 <th>İşlem Kategorisi</th>
-                <th>Departman ID</th>
-                <th>Lokasyon ID</th>
+                <th>Departman</th>
+                <th>Lokasyon</th>
                 <th>Raf Numarası</th>
             </tr>
             <cfloop query="getSeriHareket">
+                <cfset deptName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "dept")>
+                <cfset locName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "loc")>
                 <tr>
                     <td>#SERIAL_NO#</td>
                     <td>#GS#</td>
                     <td>#PROCESS_CAT#</td>
-                    <td>#DEPARTMENT_ID#</td>
-                    <td>#LOCATION_ID#</td>
+                    <td>#deptName# (#DEPARTMENT_ID#)</td>
+                    <td>#locName# (#LOCATION_ID#)</td>
                     <td>#SHELF_NUMBER#</td>
                 </tr>
             </cfloop>
@@ -70,16 +121,18 @@ ORDER BY T.DEPARTMENT_ID, T.LOCATION_ID, T.SERIAL_NO
             <tr style="background-color: ##f0f0f0;">
                 <th>Raf Numarası</th>
                 <th>Seri No</th>
-                <th>Departman ID</th>
-                <th>Lokasyon ID</th>
+                <th>Departman</th>
+                <th>Lokasyon</th>
                 <th>Stok Miktarı</th>
             </tr>
             <cfloop query="seriSB">
+                <cfset deptName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "dept")>
+                <cfset locName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "loc")>
                 <tr>
                     <td>#SHELF_NUMBER#</td>
                     <td>#SERIAL_NO#</td>
-                    <td>#DEPARTMENT_ID#</td>
-                    <td>#LOCATION_ID#</td>
+                    <td>#deptName# (#DEPARTMENT_ID#)</td>
+                    <td>#locName# (#LOCATION_ID#)</td>
                     <td style="text-align: center; <cfif V gt 0>color: green;<cfelseif V lt 0>color: red;<cfelse>color: orange;</cfif>">#V#</td>
                 </tr>
             </cfloop>
@@ -142,8 +195,10 @@ ORDER BY T.DEPARTMENT_ID, T.LOCATION_ID, T.SERIAL_NO
                     <cfset currentDept = DEPARTMENT_ID>
                     <cfset currentLoc = LOCATION_ID>
                     <cfset deptCount = 0>
+                    <cfset deptName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "dept")>
+                    <cfset locName = getDeptLocName(DEPARTMENT_ID, LOCATION_ID, "loc")>
                     <cfset groupContent = "<div class='department-group'>">
-                    <cfset groupContent = groupContent & "<div class='department-header'>#DEPARTMENT_NAME# (#DEPARTMENT_ID#) - #LOCATION_NAME# (#LOCATION_ID#)</div>">
+                    <cfset groupContent = groupContent & "<div class='department-header'>#deptName# (#DEPARTMENT_ID#) - #locName# (#LOCATION_ID#)</div>">
                     <cfset groupContent = groupContent & "<table class='department-table' border='1' cellpadding='3' cellspacing='0'>">
                     <cfset groupContent = groupContent & "<tr style='background-color: ##f0f0f0; font-size: 12px;'><th>Seri No</th><th>Miktar</th></tr>">
                 </cfif>
