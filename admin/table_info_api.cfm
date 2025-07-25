@@ -52,13 +52,21 @@
     <cfquery name="getForeignKeys" datasource="#dsn#">
         SELECT 
             KCU.COLUMN_NAME,
-            KCU.REFERENCED_TABLE_SCHEMA,
-            KCU.REFERENCED_TABLE_NAME,
-            KCU.REFERENCED_COLUMN_NAME
+            RC.UNIQUE_CONSTRAINT_SCHEMA AS REFERENCED_TABLE_SCHEMA,
+            RC.UNIQUE_CONSTRAINT_NAME,
+            KCU2.TABLE_NAME AS REFERENCED_TABLE_NAME,
+            KCU2.COLUMN_NAME AS REFERENCED_COLUMN_NAME
         FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE KCU
-        WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL
-        AND KCU.TABLE_SCHEMA = <cfqueryparam value="#attributes.schema#" cfsqltype="cf_sql_varchar">
+        INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC 
+            ON KCU.CONSTRAINT_NAME = RC.CONSTRAINT_NAME
+            AND KCU.CONSTRAINT_SCHEMA = RC.CONSTRAINT_SCHEMA
+        INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE KCU2 
+            ON RC.UNIQUE_CONSTRAINT_NAME = KCU2.CONSTRAINT_NAME
+            AND RC.UNIQUE_CONSTRAINT_SCHEMA = KCU2.CONSTRAINT_SCHEMA
+        WHERE KCU.TABLE_SCHEMA = <cfqueryparam value="#attributes.schema#" cfsqltype="cf_sql_varchar">
         AND KCU.TABLE_NAME = <cfqueryparam value="#attributes.tableName#" cfsqltype="cf_sql_varchar">
+        AND RC.CONSTRAINT_NAME IS NOT NULL
+        ORDER BY KCU.ORDINAL_POSITION
     </cfquery>
 
     <cfoutput>
