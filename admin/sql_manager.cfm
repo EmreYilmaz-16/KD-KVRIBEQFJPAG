@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" id="queryForm">
+                <cfform method="post" action="/AddOns/Partner/admin/sql_manager.cfm" id="queryForm">
                     <div class="mb-3">
                         <label for="sql_sorgu" class="form-label">SQL Sorgusu:</label>
                         <textarea name="sql_sorgu" id="sql_sorgu" class="form-control"><cfoutput>#attributes.sql_sorgu#</cfoutput></textarea>
