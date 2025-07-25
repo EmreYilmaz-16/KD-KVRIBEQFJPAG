@@ -335,7 +335,7 @@ function getStockInfo(identifier, isSerial = false) {
 // Unified product row creation
 function addProductRow() {
 	var amount = getId('add_other_amount').value;
-	
+	console.log('Adding product row with amount:', amount);
 	if (!validateStock(amount)) {
 		return false;
 	}
@@ -624,24 +624,28 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 		}
 		condition = "SB.BARCODE = '" + inputValue + "'";
 	}
+	console.log('Condition for SQL:', condition);
 	
 	var sql = Config.QUERIES.PRODUCT_IN_SHELF
 		.replace('{{condition}}', condition)
 		.replace('{{shelf}}', shelfCode);
 	
 	var productResult = wrk_query(sql, 'dsn3');
-	
+	console.log('Product Result:', productResult);
 	if (!productResult.STOCK_ID) {
+		console.log('Product not found in shelf:', shelfCode);
 		showAlert('Ürün Bu Rafa Tanıtılmamış');
 		resetShelfFields(type);
 		return false;
 	}
-	
+	console.log('Product found in shelf:', productResult);
 	if (type === 'out') {
+		console.log('Processing for out shelf:', productResult);
 		getId('add_other_amount').disabled = true;
 		getId('add_in_shelf').focus();
 	} else {
 		// Process for 'in' shelf
+		console.log('Processing for in shelf:', productResult);
 		AppState.stockId = productResult.STOCK_ID;
 		AppState.stockCode = productResult.PRODUCT_NAME;
 		AppState.barcode = productResult.BARCODE;
