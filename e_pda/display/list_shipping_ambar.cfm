@@ -140,18 +140,21 @@
     </tr>
   </table>
 </cfform>
-<table style="width:100%;">
-  <tr class="color-header" height="20">
-    <td style="width:40px;" class="form-title">No</td>
-    <td class="form-title">Müşteri</td>
-    <td style="width:100px;" class="form-title">Hazırlayan</td>
-    <td width="20px" class="form-title">&nbsp;</td>
+<cf_ajax_list style="width:100%;">
+    <thead>
+  <tr >
+    <th style="width:40px;" class="form-title">No</th>
+    <th class="form-title">Müşteri</th>
+    <th style="width:100px;" class="form-title">Hazırlayan</th>
+    <th width="20px" class="form-title">&nbsp;</th>
   </tr>
   
+  </thead>
+  <tbody>
   <cfif get_sevk_fis.recordcount>
   
     <cfoutput query="get_sevk_fis">
-      <tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
+      <tr  >
       	<cfquery name="get_url" datasource="#dsn#">
             SELECT     
                 E.EMPLOYEE_NAME + ' ' + E.EMPLOYEE_SURNAME AS ADI,
@@ -377,7 +380,8 @@
          	</td>
      	</tr>
   	</cfif>
-</table>
+    </tbody>
+</cf_ajax_list>
 </div>
 <script language="javascript">
 $(document).ready(function(){
