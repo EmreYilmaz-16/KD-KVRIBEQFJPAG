@@ -107,7 +107,9 @@
         <td>
             Giriş Depo
         </td>
-        
+        <td rowspan="2">
+                <input type="submit" style="width:40px" value="Ara" />
+            </td>
     </tr>
     <tr>
         <td>
@@ -134,6 +136,7 @@
         	</select>
             </div>
         </td>
+        
     </tr>
   </table>
 </cfform>
