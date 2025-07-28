@@ -74,6 +74,38 @@
   <cfelse>
   <cfset get_sevk_fis.recordcount = 0>
 </cfif>
+
+<cf_box title="Sevkiyat Listesi">
+<cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping_ambar">
+  <input type="hidden" name="is_form_submitted" value="1">
+  <table class="table">
+    <tr>
+        <td>
+            <div class="form-group">
+                <input type="text" name="keyword" style="width:70px" id="keyword" value="<cfoutput>#attributes.keyword#</cfoutput>">
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                
+                    <cfsavecontent variable="message">Tarih girmelisiniz</cfsavecontent>
+                        <cfinput type="text" maxlength="10" name="date1" value="#dateformat(attributes.date1,'dd/mm/yyyy')#" validate="eurodate" message="#message#" style="width:70px;">
+                
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <cfsavecontent variable="message">Tarih girmelisiniz</cfsavecontent>
+                        <cfinput type="text" maxlength="10" name="date2" value="#dateformat(attributes.date2,'dd/mm/yyyy')#" validate="eurodate" message="#message#" style="width:70px;">
+            </div>
+        </td>
+    </tr>
+  </table>
+</cfform>
+</cf_box>
+<cfabort>
+
+
 <div style="width:290px">
 <cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping_ambar">
   <input type="hidden" name="is_form_submitted" value="1">
@@ -86,7 +118,7 @@
         	<table width="100%">
             	<tr height="20px">
                     <td align="80px">
-                        <input type="text" name="keyword" style="width:70px" id="keyword" value="<cfoutput>#attributes.keyword#</cfoutput>">
+                        
                     </td>
                     <td width="40px">Tarih</td>
                     <td>
