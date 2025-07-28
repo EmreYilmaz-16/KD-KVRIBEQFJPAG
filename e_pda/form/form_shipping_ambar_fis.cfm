@@ -230,8 +230,6 @@
 </cfif> 
 
 <cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
-
-<cfabort>
 <div style="width:290px">
 	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="100%">
     	<form name="add_fis" method="post" action="<cfoutput>#request.self#?fuseaction=#adres#</cfoutput>">
