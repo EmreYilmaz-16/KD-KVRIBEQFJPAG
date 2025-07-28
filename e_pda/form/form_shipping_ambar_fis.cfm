@@ -1,5 +1,4 @@
-﻿DASDASDS
-<cfsetting showdebugoutput="no">
+﻿<cfsetting showdebugoutput="no">
 <style>
 .header{
 	display:none;
@@ -295,79 +294,14 @@
             	</tr>
         	</cfoutput>
 		</tbody>
+		<tfoot>
+			<tr class="color-list" height="20">
+				<td colspan="2"><input type="submit" value="Geri" name="1"></td>
+				<td colspan="3" height="20px" align="right"><input type="button" value="Yazıcı Havuzuna Gönder" name="print_button" onclick="grupla(-2);" /></td>
+			</tr>
 	</cf_grid_list>
 </form>
 </cf_box>
-<cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
-<div style="width:290px">
-	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="100%">
-    	<form name="add_fis" method="post" action="<cfoutput>#request.self#?fuseaction=#adres#</cfoutput>">
-        	<tr class="color-list">
-            	<td colspan="5">
-            		<table width="99%" height="29" cellpadding="0" cellspacing="0">
-                		<tr>
-                    		<td> <cfif attributes.is_type eq 1><b>Sevk Plan No :</b><cfelse><b>Sevk Talep No :</b></cfif><cfoutput>#attributes.DELIVER_PAPER_NO#</cfoutput></b></td>
-                    		<td><input type="submit" value="Geri" name="1"></td>
-                		</tr>
-            		</table>
-            	</td>
-        	</tr>
-        	<tr class="color-list" height="20">
-				<cfif get_shelf.recordcount>
-                    <td width="45"> Raf Kodu</td>
-                <cfelse>
-                	<td width="50">Barkod</td>
-                </cfif>
-            	<td>Stok Adı</td>
-            	<td width="30">Miktar</td>
-            	<td width="15">OK</td>     
-            	<td width="15"><input type="checkbox" alt="<cf_get_lang no ='546.Hepsini Seç'>" onClick="grupla(-1);"></td>                              
-        	</tr>
-        	<cfoutput query="GET_SHIP_PACKAGE_LIST">
-           	 	<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
-                	<td>
-						<cfif get_shelf.recordcount>	
-                            #SHELF_CODE#	
-                        <cfelse>     
-                            #BARCOD#
-                        </cfif>
-                    </td>
-                    <td >
-                        <cfif (get_shelf.recordcount and len(SHELF_CODE)) or (not get_shelf.recordcount and len(BARCOD))>
-                            <a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
-                                #PRODUCT_NAME#
-                            </a>
-                    	<cfelse>
-                    		#PRODUCT_NAME#
-                    	</cfif>
-               	 	</td>
-                	<td style="text-align:right;color:FF0000;"><a href="#request.self#?fuseaction=pda.Stock_location_partner&isSubmit=1&barcode=#BARCOD#" class="tableyazi">#PAKETSAYISI#</a></td>
-                	<td align="center">
-						<cfif PAKETSAYISI eq 0>
-                        	<img src="/images/plus_ques.gif" border="0" title="Barkod Yok.">
-                    	<cfelseif PAKETSAYISI - CONTROL_AMOUNT eq 0>
-                      		<a href="#request.self#?fuseaction=pda.emptypopup_ezgi_print_spool&ship_id=#attributes.ship_id#&stock_id_list=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#">
-                                <img src="/images/c_ok.gif" border="0" title="Sevk Edildi">
-                            </a>
-                        <cfelseif CONTROL_AMOUNT eq 0>
-                            <img src="/images/caution_small.gif" border="0" title="Sevk Edilmedi">
-                        <cfelseif PAKETSAYISI gt CONTROL_AMOUNT>
-                            <img src="/images/warning.gif" border="0" title="Eksik Sevkiyat">
-                        <cfelseif PAKETSAYISI lt CONTROL_AMOUNT>
-                            <img src="/images/control.gif" border="0" title="Fazla Sevkiyat">   
-                        </cfif>
-                	</td> 
-                	<td align="center">
-                		<input type="checkbox" name="select_production" value="#STOCK_ID#_#CONTROL_AMOUNT#" <cfif ListFind(spollist,STOCK_ID)>checked</cfif>>
-                	</td>      
-            	</tr>
-        	</cfoutput>
-        	<tr class="color-list" height="20">
-        		<td colspan="5" height="20px" align="right"><input type="button" value="Yazıcı Havuzuna Gönder" name="print_button" onclick="grupla(-2);" /></td>
-        	</tr>
-    	</form>
-	</table>
-</div>
 <script language="javascript">
 $(document).ready(function(){
 	$(".header").hide()
@@ -484,3 +418,74 @@ $(document).ready(function(){
 	return new_query;
 }
 </script>
+<cfabort>
+<cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
+<div style="width:290px">
+	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="100%">
+    	<form name="add_fis" method="post" action="<cfoutput>#request.self#?fuseaction=#adres#</cfoutput>">
+        	<tr class="color-list">
+            	<td colspan="5">
+            		<table width="99%" height="29" cellpadding="0" cellspacing="0">
+                		<tr>
+                    		<td> <cfif attributes.is_type eq 1><b>Sevk Plan No :</b><cfelse><b>Sevk Talep No :</b></cfif><cfoutput>#attributes.DELIVER_PAPER_NO#</cfoutput></b></td>
+                    		<td><input type="submit" value="Geri" name="1"></td>
+                		</tr>
+            		</table>
+            	</td>
+        	</tr>
+        	<tr class="color-list" height="20">
+				<cfif get_shelf.recordcount>
+                    <td width="45"> Raf Kodu</td>
+                <cfelse>
+                	<td width="50">Barkod</td>
+                </cfif>
+            	<td>Stok Adı</td>
+            	<td width="30">Miktar</td>
+            	<td width="15">OK</td>     
+            	<td width="15"><input type="checkbox" alt="<cf_get_lang no ='546.Hepsini Seç'>" onClick="grupla(-1);"></td>                              
+        	</tr>
+        	<cfoutput query="GET_SHIP_PACKAGE_LIST">
+           	 	<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
+                	<td>
+						<cfif get_shelf.recordcount>	
+                            #SHELF_CODE#	
+                        <cfelse>     
+                            #BARCOD#
+                        </cfif>
+                    </td>
+                    <td >
+                        <cfif (get_shelf.recordcount and len(SHELF_CODE)) or (not get_shelf.recordcount and len(BARCOD))>
+                            <a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
+                                #PRODUCT_NAME#
+                            </a>
+                    	<cfelse>
+                    		#PRODUCT_NAME#
+                    	</cfif>
+               	 	</td>
+                	<td style="text-align:right;color:FF0000;"><a href="#request.self#?fuseaction=pda.Stock_location_partner&isSubmit=1&barcode=#BARCOD#" class="tableyazi">#PAKETSAYISI#</a></td>
+                	<td align="center">
+						<cfif PAKETSAYISI eq 0>
+                        	<img src="/images/plus_ques.gif" border="0" title="Barkod Yok.">
+                    	<cfelseif PAKETSAYISI - CONTROL_AMOUNT eq 0>
+                      		<a href="#request.self#?fuseaction=pda.emptypopup_ezgi_print_spool&ship_id=#attributes.ship_id#&stock_id_list=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#">
+                                <img src="/images/c_ok.gif" border="0" title="Sevk Edildi">
+                            </a>
+                        <cfelseif CONTROL_AMOUNT eq 0>
+                            <img src="/images/caution_small.gif" border="0" title="Sevk Edilmedi">
+                        <cfelseif PAKETSAYISI gt CONTROL_AMOUNT>
+                            <img src="/images/warning.gif" border="0" title="Eksik Sevkiyat">
+                        <cfelseif PAKETSAYISI lt CONTROL_AMOUNT>
+                            <img src="/images/control.gif" border="0" title="Fazla Sevkiyat">   
+                        </cfif>
+                	</td> 
+                	<td align="center">
+                		<input type="checkbox" name="select_production" value="#STOCK_ID#_#CONTROL_AMOUNT#" <cfif ListFind(spollist,STOCK_ID)>checked</cfif>>
+                	</td>      
+            	</tr>
+        	</cfoutput>
+        	<tr class="color-list" height="20">
+        		<td colspan="5" height="20px" align="right"><input type="button" value="Yazıcı Havuzuna Gönder" name="print_button" onclick="grupla(-2);" /></td>
+        	</tr>
+    	</form>
+	</table>
+</div>
