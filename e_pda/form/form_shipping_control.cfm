@@ -253,11 +253,15 @@
 </table>
 </div>
 <cfquery name="getSerialNumbers" datasource="#dsn3#">
-	SELECT SERIAL_NO FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
-SELECT FIS_ID FROM w3Qa_2025_1.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1
+SELECT  (SELECT SERIAL_NO FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
+SELECT FIS_ID FROM w3Qa_2025_1.STOCK_FIS WHERE REF_NO='SEV-8')  AND PROCESS_CAT=113 AND IN_OUT=1 FOR JSON AUTO)  AS SERI_NUMARALI
 </cfquery>
 
-<cfdump var="#getSerialNumbers#">
+<script>
+	var serialNumbers = <cfoutput>#getSerialNumbers.SERI_NUMARALI#</cfoutput>;
+</script>
+
+
 
 
 <script language="javascript">
