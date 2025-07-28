@@ -100,6 +100,41 @@
             </div>
         </td>
     </tr>
+    <tr>
+        <td>
+            Çıkış Depo
+        </td>
+        <td>
+            Giriş Depo
+        </td>
+        
+    </tr>
+    <tr>
+        <td>
+            <div class="form-group">
+                <select name="department_out_id" style="width:110px; height:20px">
+         	 	<cfoutput query="get_all_location" group="department_id">
+            		<option disabled="disabled" value="#department_id#">#department_head#</option>
+					<cfoutput>
+                    <option value="#department_id#-#location_id#" <cfif department_id is #ListFirst(attributes.department_out_id,'-')# and location_id is #ListLast(attributes.department_out_id,'-')#>selected="selected"</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#</option>
+                    </cfoutput> 
+				</cfoutput>
+        	</select>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+                <select name="department_in_id" style="width:110px; height:20px">
+         	 	<cfoutput query="get_all_location" group="department_id">
+            		<option disabled="disabled" value="#department_id#">#department_head#</option>
+					<cfoutput>
+                    <option value="#department_id#-#location_id#" <cfif department_id is #ListFirst(attributes.department_in_id,'-')# and location_id is #ListLast(attributes.department_in_id,'-')#>selected="selected"</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#</option>
+                    </cfoutput> 
+				</cfoutput>
+        	</select>
+            </div>
+        </td>
+    </tr>
   </table>
 </cfform>
 </cf_box>
