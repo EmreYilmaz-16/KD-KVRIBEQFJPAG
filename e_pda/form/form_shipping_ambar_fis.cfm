@@ -235,8 +235,68 @@
 <cfelse>
 	<cfset BASLIK="Sevk Talep No :">
 </cfif>
+<cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
 <cf_box title="#BASLIK# #attributes.DELIVER_PAPER_NO#">
-
+<form name="add_fis" method="post" action="<cfoutput>#request.self#?fuseaction=#adres#</cfoutput>">
+	<cf_grid_list>
+	<thead>
+		<tr>			
+			<th>
+<cfif get_shelf.recordcount>
+                    Raf Kodu
+                <cfelse>
+                	Barkod
+                </cfif>
+			</th>
+			<th>Stok Adı</th>
+			<th>Miktar</th>
+			<th>OK</th>
+			<th><input type="checkbox" alt="<cf_get_lang no ='546.Hepsini Seç'>" onClick="grupla(-1);"></th>
+		</tr>
+		</thead>
+		<tbody>
+			<cfoutput query="GET_SHIP_PACKAGE_LIST">
+           	 	<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
+                	<td>
+						<cfif get_shelf.recordcount>	
+                            #SHELF_CODE#	
+                        <cfelse>     
+                            #BARCOD#
+                        </cfif>
+                    </td>
+                    <td >
+                        <cfif (get_shelf.recordcount and len(SHELF_CODE)) or (not get_shelf.recordcount and len(BARCOD))>
+                            <a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
+                                #PRODUCT_NAME#
+                            </a>
+                    	<cfelse>
+                    		#PRODUCT_NAME#
+                    	</cfif>
+               	 	</td>
+                	<td style="text-align:right;color:FF0000;"><a href="#request.self#?fuseaction=pda.Stock_location_partner&isSubmit=1&barcode=#BARCOD#" class="tableyazi">#PAKETSAYISI#</a></td>
+                	<td align="center">
+						<cfif PAKETSAYISI eq 0>
+                        	<img src="/images/plus_ques.gif" border="0" title="Barkod Yok.">
+                    	<cfelseif PAKETSAYISI - CONTROL_AMOUNT eq 0>
+                      		<a href="#request.self#?fuseaction=pda.emptypopup_ezgi_print_spool&ship_id=#attributes.ship_id#&stock_id_list=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#">
+                                <img src="/images/c_ok.gif" border="0" title="Sevk Edildi">
+                            </a>
+                        <cfelseif CONTROL_AMOUNT eq 0>
+                            <img src="/images/caution_small.gif" border="0" title="Sevk Edilmedi">
+                        <cfelseif PAKETSAYISI gt CONTROL_AMOUNT>
+                            <img src="/images/warning.gif" border="0" title="Eksik Sevkiyat">
+                        <cfelseif PAKETSAYISI lt CONTROL_AMOUNT>
+                            <img src="/images/control.gif" border="0" title="Fazla Sevkiyat">   
+                        </cfif>
+                	</td> 
+                	<td align="center">
+                		<input type="checkbox" name="select_production" value="#STOCK_ID#_#CONTROL_AMOUNT#" <cfif ListFind(spollist,STOCK_ID)>checked</cfif>>
+                	</td>      
+            	</tr>
+        	</cfoutput>
+		</tbody>
+	</cf_grid_list>
+</form>
 </cf_box>
 <cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
 <div style="width:290px">
