@@ -296,8 +296,8 @@
 		</tbody>
 		<tfoot>
 			<tr class="color-list" height="20">
-				<td colspan="2"><input type="submit" value="Geri" name="1"></td>
-				<td colspan="3" height="20px" align="right"><input type="button" value="Yazıcı Havuzuna Gönder" name="print_button" onclick="grupla(-2);" /></td>
+				<td colspan="2"><input class=" ui-wrk-btn ui-wrk-btn-red" type="submit" value="Geri" name="1"></td>
+				<td colspan="3" height="20px" align="right"><input type="button" class="ui-wrk-btn ui-wrk-btn-extra" value="Yazıcı Havuzuna Gönder" name="print_button" onclick="grupla(-2);" /></td>
 			</tr>
 	</cf_grid_list>
 </form>
