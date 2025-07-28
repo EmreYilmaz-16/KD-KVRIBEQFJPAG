@@ -229,7 +229,15 @@
     </cfquery>
 	
 </cfif> 
+<cfset BASLIK="">
+<cfif attributes.is_type eq 1>
+	<cfset BASLIK="Sevk Plan No :">
+<cfelse>
+	<cfset BASLIK="Sevk Talep No :">
+</cfif>
+<cf_box title="#BASLIK# #attributes.DELIVER_PAPER_NO#">
 
+</cf_box>
 <cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
 <div style="width:290px">
 	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="100%">
