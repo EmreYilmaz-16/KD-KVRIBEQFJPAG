@@ -108,7 +108,7 @@
             Giriş Depo
         </td>
         <td rowspan="2">
-                <input type="submit" style="width:40px" value="Ara" />
+                <input class=" ui-wrk-btn ui-wrk-btn-success" type="submit" style="width:40px" value="Ara" />
             </td>
     </tr>
     <tr>
