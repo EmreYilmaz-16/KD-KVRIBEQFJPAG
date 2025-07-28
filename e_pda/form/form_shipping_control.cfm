@@ -252,6 +252,14 @@
 	</form>
 </table>
 </div>
+<cfquery name="getSerialNumbers" datasource="#dsn3#">
+	SELECT SERIAL_NO FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
+SELECT FIS_ID FROM w3Qa_2025_1.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1
+</cfquery>
+
+<cfdump var="#getSerialNumbers#">
+
+
 <script language="javascript">
 document.getElementById('add_other_barcod').focus();
 $(document).ready(function(){
