@@ -120,7 +120,7 @@
 			</div>
 			<div id="shelf_select_td" style="display:none"  class="form-group">
 				<label for="shelf_select_td">Raf Seçimi</label>				
-				<select name="shelf_select" id="shelf_select" style="width:70px;height:20px;text-align:center">
+				<select name="shelf_select" id="shelf_select" style="text-align:center">
 					<option value="">Ürün Rafları</option>
 				</select>
 			</div>
@@ -128,7 +128,7 @@
 		<div style="display:flex">
 			<div class="form-group">
 				<label for="txt_department_out">Çıkış Depo</label>
-				<select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
+				<select name="txt_department_out"  onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
@@ -143,7 +143,7 @@
 			</div>
 			<div class="form-group">
 				<label for="txt_department_in">Giriş Depo</label>
-				<select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
+				<select name="txt_department_in"  onchange="document.getElementById('department_in').value = this.value">
 				<cfoutput query="get_all_location" group="department_id">
 				  <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
 				  <cfoutput>
@@ -158,6 +158,26 @@
 		</div>
     <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
           <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
+	
+	<form name="product_row" id="product_row" method="post">
+		<cf_ajax_list>
+			<thead>
+				<tr class="color-list" height="20px">
+					<th>Kod</th>
+					<th width="25px">Miktar</th>
+					<th width="25px">Kontrol</th>
+					<th width="25px">Raf</th>
+					<th>Seri No</th>
+				</tr>
+				</thead>
+				<tbody id="table1"></tbody>
+					
+		</cf_ajax_list>
+	</form>
+	<input type="hidden" id="department_in" name="department_in" value="" />
+      	<input type="hidden" id="row_count" name="row_count" value="0" />
+        <input type="hidden" id="action_id" name="action_id" value="" />
+		<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
 	</cfform>
 </cf_box>
 <!-------------------
@@ -211,7 +231,7 @@
            </tr>
            <tr class="color-list" height="20px">
             <td>
-              <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
+              <select name="txt_department_out"  onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
@@ -225,7 +245,7 @@
               </select>
           	</td>
             <td>
-              <select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
+              <select name="txt_department_in"  onchange="document.getElementById('department_in').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
                   <cfoutput>
