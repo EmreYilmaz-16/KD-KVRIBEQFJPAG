@@ -115,11 +115,14 @@
 		</table>
 	</cfform>
     <cf_ajax_list >
+        <thead>
   		<tr  height="20">
-    		<td style="width:60px;" class="form-title">No</td>
-    		<td class="form-title">Cari</td>
-    		<td width="16" class="form-title">&nbsp;</td>
+    		<th style="width:60px;" class="form-title">No</th>
+    		<th class="form-title">Cari</th>
+    		<th width="16" class="form-title">&nbsp;</th>
   		</tr>
+        </thead>
+        <tbody>
   		<cfif get_sevk_fis.recordcount>
     		<cfoutput query="get_sevk_fis" startrow="#attributes.startrow#" maxrows="#attributes.maxrows#">
       			<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
@@ -350,6 +353,7 @@
          		</td>
      		</tr>
   		</cfif>
+        </tbody>
 	</table>
 </cf_box>
 <div style="width:290px">
