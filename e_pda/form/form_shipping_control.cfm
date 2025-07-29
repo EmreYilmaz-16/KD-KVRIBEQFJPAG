@@ -287,6 +287,7 @@ function findStockIdBySerial(serial, groupedData) {
 function findAndMarkSerial(serialNo, groupedData) {
   for (const stockId in groupedData) {
     const group = groupedData[stockId];
+	console.log(`Stok ID: ${stockId}, Seri Numaraları: ${group.map(item => item.SERIAL_NO).join(', ')}`);
     const item = group.find(obj => obj.SERIAL_NO === serialNo);
 	console.log(`Aranıyor: ${serialNo} - Bulunan: ${item ? item.SERIAL_NO : 'Yok'}`);
     if (item) {
