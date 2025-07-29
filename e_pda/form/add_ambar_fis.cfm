@@ -197,6 +197,8 @@
         </table>
       </td>
     </tr>
+	</table>
+	<cf_ajax_list>
     <tr class="color-list" height="15px">
       <td width="55" align="center">Barkod</td>
       <td width="55" align="left">Ürün Adı</td>
