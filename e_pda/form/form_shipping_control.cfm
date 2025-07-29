@@ -275,7 +275,8 @@ function groupByStockId(data) {
 	}
 	return result;
 }
-var groupedData = groupByStockId(serialNumbers);
+var _groupedData = groupByStockId(serialNumbers);
+
 function findStockIdBySerial(serial, groupedData) {
   for (const stockId in groupedData) {
     if (groupedData[stockId].includes(serial)) {
@@ -325,8 +326,8 @@ function add_product_to_barkod(barcode, amount, type) {
 	console.log('barcode: ' + barcode);
 	console.log('amount: ' + amount);
 	console.log('type: ' + type);
-	var SID = findStockIdBySerial(barcode, groupedData);
-	var isRead= findAndMarkSerial(barcode, groupedData);
+	var SID = findStockIdBySerial(barcode, _groupedData);
+	var isRead= findAndMarkSerial(barcode, _groupedData);
 	console.log('SID: ' + SID);
 	console.log('isRead: ' + isRead);
 	if (SID != null) {
