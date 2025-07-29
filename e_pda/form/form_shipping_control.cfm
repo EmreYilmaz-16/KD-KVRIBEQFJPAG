@@ -341,6 +341,12 @@ function add_product_to_barkod(barcode, amount, type) {
 	console.log('type: ' + type);
 	var SID = findStockIdBySerial(barcode, _groupedData);
 	var isRead= findAndMarkSerial(barcode, _groupedData);
+	if(isRead === false) {
+		alert('Bu seri numarası zaten okutulmuş.');
+		document.getElementById('add_other_barcod').value = '';
+		document.getElementById('add_other_barcod').focus();
+		return false;
+	}
 	console.log('SID: ' + SID);
 	console.log('isRead: ' + isRead);
 	if (SID != null) {
