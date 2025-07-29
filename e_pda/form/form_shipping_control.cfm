@@ -307,6 +307,16 @@ function add_product_to_barkod(barcode,amount,type)
 	console.log('type: ' + type);
 	var SID = findStockIdBySerial(barcode, groupedData);
 	console.log('SID: ' + SID);
+	if(SID != null) {
+		eval('row'+SID).style.background='<cfoutput>#colorrow#</cfoutput>';
+	} else if(uzunluk < 5 || uzunluk > 20)
+	{
+		alert('Barkod 5 ile 20 karakter arasında olmalıdır');
+		document.getElementById('add_other_barcod').value='';
+		document.getElementById('add_other_barcod').focus();
+		return false;
+	}
+
 	return false;
 	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>',barcode,','))
 	{
