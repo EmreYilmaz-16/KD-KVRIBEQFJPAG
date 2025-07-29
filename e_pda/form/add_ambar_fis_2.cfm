@@ -226,6 +226,17 @@ function processProductQuery(sql, datasource, errorMessage) {
               </select>
 			</div>
 		</div>
+		<cf_ajax_list>
+			<thead>
+				<tr class="color-list" height="20px">
+					<th>Seri No</th>
+					<th>Ürün</th>
+					<th style="display:none">Miktar</th>
+					<th>Raf</th>
+				</tr>
+			</thead>
+			<tbody id="table1"></tbody>
+		</cf_ajax_list>
 	</cfform>
 </cf_box>
 <!--------------
