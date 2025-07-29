@@ -200,6 +200,14 @@
 		<input type="hidden" id="serials" name="serials" value="">
 		<div>	
 			<div style="display:flex;align-items: baseline;justify-content: flex-end;">
+				<div class="form-group">
+					<label for="add_other_amount">Miktar</label>
+					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" style="width:40px !important;">
+				</div>
+				<div class="form-group">
+					<label for="add_other_barcod">Ekle</label>
+					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" style="width:120px !important;">
+				</div>
 				<cfoutput>
 				<span style="font-weight:bold; color:##0000FF;">Ok:</span>
 				<div class="form-group">
@@ -209,14 +217,7 @@
 				</cfoutput>	 		
 			</div>
 			<div style="display:flex;align-items: baseline;">
-				<div class="form-group">
-					<label for="add_other_amount">Miktar</label>
-					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" style="width:40px !important;">
-				</div>
-				<div class="form-group">
-					<label for="add_other_barcod">Ekle</label>
-					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" style="width:120px !important;">
-				</div>
+				
 			</div>
 	</form>
 </cf_box>
