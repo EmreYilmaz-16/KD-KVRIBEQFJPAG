@@ -160,21 +160,33 @@ var Config = {
 		<div style="display:flex;gap:10px;margin-top:10px;">
 			<div class="form-group">
 				<label for="txt_department_out">Çıkış Depo</label>
-				<select name="txt_department_out" id="txt_department_out" style="width:110px" onchange="document.getElementById('department_out').value=this.value;">
-					<option value="">Seçiniz</option>
-					<cfoutput query="qry_departments">
-						<option value="#DEPARTMENT_ID#">#DEPARTMENT_NAME#</option>
+				<select name="txt_department_out" id="txt_department_out" style="width:110px" onchange="document.getElementById('department_out').value = this.value">
+					<cfoutput query="GET_ALL_LOCATION" group="department_id">
+						<option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
+						<cfoutput>
+							<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+							<cfif not status>
+								-
+								<cf_get_lang_main no='82.Pasif'>
+							</cfif>
+							</option>
+						</cfoutput> 
 					</cfoutput>
 				</select>
 			</div>
-		</div>
-		<div style="display:flex;gap:10px;margin-top:10px;">
 			<div class="form-group">
 				<label for="txt_department_in">Giriş Depo</label>
-				<select name="txt_department_in" id="txt_department_in" style="width:110px" onchange="document.getElementById('department_in').value=this.value;">
-					<option value="">Seçiniz</option>
-					<cfoutput query="qry_departments">
-						<option value="#DEPARTMENT_ID#">#DEPARTMENT_NAME#</option>
+				<select name="txt_department_in" id="txt_department_in" style="width:110px" onchange="document.getElementById('department_in').value = this.value">
+					<cfoutput query="GET_ALL_LOCATION" group="department_id">
+						<option disabled="disabled" value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
+						<cfoutput>
+							<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+							<cfif not status>
+								-
+								<cf_get_lang_main no='82.Pasif'>
+							</cfif>
+							</option>
+						</cfoutput> 
 					</cfoutput>
 				</select>
 			</div>
