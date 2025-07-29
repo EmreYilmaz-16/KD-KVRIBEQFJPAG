@@ -189,7 +189,7 @@
 <div style="width:290px">
 <table cellpadding="1" cellspacing="1" align="left" class="color-border" width="100%">
 <form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
-	<input type="hidden" name="serials" value="">
+	<input type="hidden" id="serials" name="serials" value="">
 		<tr class="color-list">
 		<td colspan="4" style="width:100%">
 		<table cellpadding="0" cellspacing="1" width="100%">
