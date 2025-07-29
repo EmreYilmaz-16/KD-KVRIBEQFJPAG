@@ -198,22 +198,32 @@
 						<tbody>
 							<tr>
 								<td>
+									<div class="form-group">
 									<input id="add_other_amount" name="add_other_amount" type="number" min="1" class="form-control text-end" onfocus="islemtipi=0;" value="1" placeholder="Miktar" inputmode="numeric" />
+									</div>
 								</td>
 								<td>
+									<div class="form-group">
 									<input id="add_other_barcod" name="add_other_barcod" type="text" class="form-control" value="" placeholder="Barkod" autocomplete="off" />
+									</div>
 								</td>
 								<td>
+									<div class="form-group">
 									<input type="text" name="serial_number" id="serial_number" class="form-control" placeholder="Seri No" autocomplete="off" />
+									</div>
 								</td>
 								<td>
+									<div class="form-group">
 									<input id="add_other_shelf" name="add_other_shelf" type="text" class="form-control" onfocus="islemtipi=0;" value="" placeholder="Raf" autocomplete="off" />
+									</div>
 								</td>
 								<td>
 									<div id="shelf_select_td" style="display:none">
+										<div class="form-group">
 										<select name="shelf_select" id="shelf_select" class="form-select form-select-sm">
 											<option value="">Ürün Rafları</option>
 										</select>
+									</div>
 									</div>
 								</td>
 							</tr>
