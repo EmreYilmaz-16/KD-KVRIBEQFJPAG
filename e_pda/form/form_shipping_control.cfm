@@ -294,73 +294,98 @@ $(document).ready(function(){
 	$(".header").hide()
 })
 setTimeout("document.getElementById('add_other_barcod').select();",1000);	
-function add_product_to_barkod(barcode,amount,type)
-{	
+function add_product_to_barkod(barcode, amount, type) {	
 	<cfoutput>
 	var ship_id = #attributes.ship_id#;
 	var is_type = #attributes.is_type#;
 	</cfoutput>
 	var uzunluk = barcode.length;
-	var amount = amount
+	var amount = amount;
 	console.log('barcode: ' + barcode);
 	console.log('amount: ' + amount);
 	console.log('type: ' + type);
 	var SID = findStockIdBySerial(barcode, groupedData);
 	console.log('SID: ' + SID);
-	if(SID != null) {
-		eval('row'+SID).style.background='<cfoutput>#colorrow#</cfoutput>';
-	} else if(uzunluk < 5 || uzunluk > 20)
-	{
+	if (SID != null) {
+		eval('row' + SID).style.background = '<cfoutput>#colorrow#</cfoutput>';
+			if (type == 1) { //ekleme ise
+				if ((document.getElementById('control_amount' + SID).value * 1) - (amount * -1) > (document.getElementById('amount' + SID).value * 1))
+					alert(document.getElementById('PRODUCT_NAME' + SID).value + ' Ürününde Fazla Çıkış Var');
+				else {
+					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) + (amount * 1);
+					document.all.total_control_amount.value = (document.all.total_control_amount.value * 1) + (amount * 1);
+				}
+				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value)
+					document.getElementById('row' + SID).style.display = 'none';
+			} else if (type == 0) { //silme ise	
+				if (document.getElementById('control_amount' + SID).value == 0 || document.getElementById('control_amount' + SID).value < 0)
+					alert('Çıkan Ürünlerin Sayısı 0 dan küçük olamaz');
+				else
+					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) - (amount * 1);
+				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value) {
+					eval('document.all.is_ok' + SID).style.display = '';
+					eval('document.all.is_error' + SID).style.display = 'none';
+				}
+				if (document.getElementById('control_amount' + SID).value > document.getElementById('amount' + SID).value) {
+					eval('document.all.is_ok' + SID).style.display = 'none';
+					eval('document.all.is_error' + SID).style.display = '';
+				}
+				if (document.getElementById('control_amount' + SID).value < document.getElementById('amount' + SID).value)
+					eval('document.all.is_ok' + SID).style.display = 'none';
+			}
+			document.all.add_other_barcod.value = '';
+			/*document.all.del_other_barcod.value='';*/
+			document.all.changed_stock_id.value = SID;
+			eval('row' + SID).style.background = 'FFCCCC';
+			
+	} else if (uzunluk < 5 || uzunluk > 20) {
 		alert('Barkod 5 ile 20 karakter arasında olmalıdır');
-		document.getElementById('add_other_barcod').value='';
+		document.getElementById('add_other_barcod').value = '';
 		document.getElementById('add_other_barcod').focus();
 		return false;
 	}
 
 	return false;
-	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>',barcode,','))
-	{
-		var new_sql = "SELECT TOP 1 STOCK_ID FROM STOCKS_BARCODES WHERE BARCODE = '"+barcode+"'";
-		var get_product = wrk_query(new_sql,'dsn1');
-			if(document.getElementById('control_amount'+get_product.STOCK_ID)==undefined)
-				alert('Ürünün Barkodlarında Sorun Var.')		
-			else
-			{
-				if(document.all.changed_stock_id.value != "")//daha önceden bir satır eklenmişse alan dolmuş demektir ve yeni eklenecek alan için satırı renklendiyoruz bir alt satırda
-					eval('row'+document.all.changed_stock_id.value).style.background='<cfoutput>#colorrow#</cfoutput>';
-				if(type==1)//ekleme ise
-				{		
-					if((document.getElementById('control_amount'+get_product.STOCK_ID).value*1)-(amount*-1) > (document.getElementById('amount'+get_product.STOCK_ID).value*1))
-						alert(document.getElementById('PRODUCT_NAME'+get_product.STOCK_ID).value+' Ürününde Fazla Çıkış Var');
-					else
-					{
-						document.getElementById('control_amount'+get_product.STOCK_ID).value = (document.getElementById('control_amount'+get_product.STOCK_ID).value*1)+(amount*1);
-						document.all.total_control_amount.value=(document.all.total_control_amount.value*1)+(amount*1);
-					}
-					if(document.getElementById('control_amount'+get_product.STOCK_ID).value == document.getElementById('amount'+get_product.STOCK_ID).value)
-						document.getElementById('row'+get_product.STOCK_ID).style.display='none';
-				}			
-				else if(type==0)//silme ise	
-					if(document.getElementById('control_amount'+get_product.STOCK_ID).value == 0 || document.getElementById('control_amount'+get_product.STOCK_ID).value < 0)
-						alert('Çıkan Ürünlerin Sayısı 0 dan küçük olamaz');
-					else		
-						document.getElementById('control_amount'+get_product.STOCK_ID).value = (document.getElementById('control_amount'+get_product.STOCK_ID).value*1)-(amount*1);
-							if(document.getElementById('control_amount'+get_product.STOCK_ID).value == document.getElementById('amount'+get_product.STOCK_ID).value)
-							{eval('document.all.is_ok'+get_product.STOCK_ID).style.display='';
-							eval('document.all.is_error'+get_product.STOCK_ID).style.display='none';}	
-							if(document.getElementById('control_amount'+get_product.STOCK_ID).value > document.getElementById('amount'+get_product.STOCK_ID).value)
-							{eval('document.all.is_ok'+get_product.STOCK_ID).style.display='none';
-							eval('document.all.is_error'+get_product.STOCK_ID).style.display='';}
-							if(document.getElementById('control_amount'+get_product.STOCK_ID).value < document.getElementById('amount'+get_product.STOCK_ID).value)
-								eval('document.all.is_ok'+get_product.STOCK_ID).style.display='none';
-			document.all.add_other_barcod.value='';
+	if (list_find('<cfoutput>#product_barcode_list#</cfoutput>', barcode, ',')) {
+		var new_sql = "SELECT TOP 1 STOCK_ID FROM STOCKS_BARCODES WHERE BARCODE = '" + barcode + "'";
+		var get_product = wrk_query(new_sql, 'dsn1');
+		if (document.getElementById('control_amount' + SID) == undefined)
+			alert('Ürünün Barkodlarında Sorun Var.');
+		else {
+			if (document.all.changed_stock_id.value != "") //daha önceden bir satır eklenmişse alan dolmuş demektir ve yeni eklenecek alan için satırı renklendiyoruz bir alt satırda
+				eval('row' + document.all.changed_stock_id.value).style.background = '<cfoutput>#colorrow#</cfoutput>';
+			if (type == 1) { //ekleme ise
+				if ((document.getElementById('control_amount' + SID).value * 1) - (amount * -1) > (document.getElementById('amount' + SID).value * 1))
+					alert(document.getElementById('PRODUCT_NAME' + SID).value + ' Ürününde Fazla Çıkış Var');
+				else {
+					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) + (amount * 1);
+					document.all.total_control_amount.value = (document.all.total_control_amount.value * 1) + (amount * 1);
+				}
+				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value)
+					document.getElementById('row' + SID).style.display = 'none';
+			} else if (type == 0) { //silme ise	
+				if (document.getElementById('control_amount' + SID).value == 0 || document.getElementById('control_amount' + SID).value < 0)
+					alert('Çıkan Ürünlerin Sayısı 0 dan küçük olamaz');
+				else
+					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) - (amount * 1);
+				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value) {
+					eval('document.all.is_ok' + SID).style.display = '';
+					eval('document.all.is_error' + SID).style.display = 'none';
+				}
+				if (document.getElementById('control_amount' + SID).value > document.getElementById('amount' + SID).value) {
+					eval('document.all.is_ok' + SID).style.display = 'none';
+					eval('document.all.is_error' + SID).style.display = '';
+				}
+				if (document.getElementById('control_amount' + SID).value < document.getElementById('amount' + SID).value)
+					eval('document.all.is_ok' + SID).style.display = 'none';
+			}
+			document.all.add_other_barcod.value = '';
 			/*document.all.del_other_barcod.value='';*/
-			document.all.changed_stock_id.value = get_product.STOCK_ID;
-			eval('row'+get_product.STOCK_ID).style.background='FFCCCC';
-			}	
+			document.all.changed_stock_id.value = SID;
+			eval('row' + SID).style.background = 'FFCCCC';
 		}
-	else
-		alert('Kayıtlı Barkod Yok!')
+	} else
+		alert('Kayıtlı Barkod Yok!');
 }
 function kontrol()
 {
