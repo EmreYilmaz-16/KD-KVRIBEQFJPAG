@@ -424,7 +424,7 @@ $(".header").hide()
 				get_stock(document.getElementById('add_other_barcod').value);
 			}*/
 		}
-	}
+	
 	function actionidolustur()
 	{
 	  var j = 0;
