@@ -254,13 +254,36 @@
 </div>
 <cfquery name="getSerialNumbers" datasource="#dsn3#">
 SELECT  (SELECT SERIAL_NO,STOCK_ID FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
-SELECT FIS_ID FROM w3Qa_2025_1.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1 FOR JSON AUTO)  AS SERI_NUMARALI
+SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1 FOR JSON AUTO)  AS SERI_NUMARALI
 </cfquery>
 
 <script>
 	var serialNumbers = <cfoutput>#getSerialNumbers.SERI_NUMARALI#</cfoutput>;
+	
 </script>
-
+<script>
+function groupByStockId(data) {
+	var result = {};
+	for (var i = 0; i < data.length; i++) {
+		var item = data[i];
+		var stockId = item.STOCK_ID;
+		var serialNo = item.SERIAL_NO;
+		if (!result[stockId]) {
+			result[stockId] = [];
+		}
+		result[stockId].push(serialNo);
+	}
+	return result;
+}
+function findStockIdBySerial(serial, groupedData) {
+  for (const stockId in groupedData) {
+    if (groupedData[stockId].includes(serial)) {
+      return parseInt(stockId); // sayı olarak döner
+    }
+  }
+  return null; // Bulunamazsa
+}
+</script>
 
 
 
@@ -278,6 +301,8 @@ function add_product_to_barkod(barcode,amount,type)
 	</cfoutput>
 	var uzunluk = barcode.length;
 	var amount = amount
+	console.log('barcode: ' + barcode);
+	return false;
 	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>',barcode,','))
 	{
 		var new_sql = "SELECT TOP 1 STOCK_ID FROM STOCKS_BARCODES WHERE BARCODE = '"+barcode+"'";
