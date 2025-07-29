@@ -184,6 +184,8 @@ function processProductQuery(sql, datasource, errorMessage) {
 				<label for="serial_number">Seri No</label>
 				<input id="serial_number" name="serial_number" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
 			</div>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:10px;">
 			<div class="form-group">
 				<label for="add_other_shelf">Raf</label>
 				<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:60px;" value="" />
