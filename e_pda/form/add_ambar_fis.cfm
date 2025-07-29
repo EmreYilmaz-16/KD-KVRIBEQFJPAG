@@ -1,4 +1,5 @@
 ﻿
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <cfset default_process_type = 113>
 <cfquery name="get_default_departments" datasource="#dsn#">
 	SELECT        
@@ -81,6 +82,27 @@
     .header{
         display:none;
     }
+    
+    /* Mobil uyumluluk CSS */
+    @media (max-width: 768px) {
+        input[type="text"], select {
+            min-height: 44px; /* Touch-friendly minimum size */
+            font-size: 16px; /* Prevent zoom on iOS */
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        #add_other_barcod, #serial_number {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    }
+</style>
 </style>
 <script language="javascript" type="text/javascript">
   var row_count = 0;
@@ -108,11 +130,24 @@
 			</div>
 			<div class="form-group">
 				<label for="add_other_barcod">Barkod</label>
-				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="" >
+				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done"
+					   style="" >
 			</div>	
 			<div class="form-group">
 				<label for="serial_number">Seri No</label>
-				<input type="text" name="serial_number" id="serial_number">
+				<input type="text" name="serial_number" id="serial_number"
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done">
 			</div>
 			<div class="form-group">
 				<label for="add_other_shelf">Raf</label>
@@ -295,6 +330,23 @@ $(".header").hide()
 
 	document.getElementById('add_other_barcod').focus();
 	setTimeout("document.getElementById('add_other_barcod').select();",1000);
+	
+	// Mobil uyumluluk için input event listeners ekle
+	document.getElementById('add_other_barcod').addEventListener('keydown', function(e) {
+		if (e.keyCode === 13 || e.which === 13) {
+			e.preventDefault();
+			processBarcode();
+		}
+	});
+	
+	// Touch device desteği için blur event ekle
+	document.getElementById('add_other_barcod').addEventListener('blur', function(e) {
+		var value = this.value.trim();
+		if (value.length > 0) {
+			setTimeout(function() { processBarcode(); }, 100);
+		}
+	});
+	
 	document.onkeydown = checkKeycode
 	function checkKeycode(e) 
 	{
@@ -305,42 +357,48 @@ $(".header").hide()
 		else if (e) keycode = e.which;
 		if (keycode == 13 )
 		{
-			console.log('Enter key pressed');
-			$("#loglar").append('<p>Enter key pressed</p>');
-			var barkod=$("#add_other_barcod").val().trim();
-			var raf=$("#add_other_shelf").val().trim();
-			var serial=$("#serial_number").val().trim();
+			processBarcode();
+		}
+	}
+	
+	// Mobil uyumlu barcode işleme fonksiyonu
+	function processBarcode() {
+		console.log('Enter key pressed');
+		$("#loglar").append('<p>Enter key pressed</p>');
+		var barkod=$("#add_other_barcod").val().trim();
+		var raf=$("#add_other_shelf").val().trim();
+		var serial=$("#serial_number").val().trim();
 
-			console.table({
-				'barkod': barkod,
-				'raf': raf,
-				'serial': serial
-			});
-			/**
-			 * Undocumented unknown
-			 * Eğer Seri No Varsa Seri Nolu Fonksiyonu Çağır 
-			 * Eğer Barkod Varsa Barkodlu Fonksiyonu Çağır
-			 * 
-			 */
+		console.table({
+			'barkod': barkod,
+			'raf': raf,
+			'serial': serial
+		});
+		/**
+		 * Undocumented unknown
+		 * Eğer Seri No Varsa Seri Nolu Fonksiyonu Çağır 
+		 * Eğer Barkod Varsa Barkodlu Fonksiyonu Çağır
+		 * 
+		 */
 
-			
-			if(serial.length>0){
-				console.log('Serial number detected: ' + serial);
-				$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
-				var StockId_=get_stock_with_serial_no(serial);
-				if(raf.length > 0){
-					console.log('Shelf detected: ' + raf);
-					$("#loglar").append('<p>Shelf detected: ' + raf + '</p>');
-					//set_shelfs_with_serial_no(serial, stockid);
-					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
-				}
+		
+		if(serial.length>0){
+			console.log('Serial number detected: ' + serial);
+			$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
+			var StockId_=get_stock_with_serial_no(serial);
+			if(raf.length > 0){
+				console.log('Shelf detected: ' + raf);
+				$("#loglar").append('<p>Shelf detected: ' + raf + '</p>');
+				//set_shelfs_with_serial_no(serial, stockid);
+				search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
+			}
 
-			}else if(barkod.length>0){
-				console.log('Barcode detected: ' + barkod);
-				$("#loglar").append('<p>Barcode detected: ' + barkod + '</p>');
-				get_stock_with_barcode(barkod);
-			}else{
-				console.log('No barcode or serial number detected');
+		}else if(barkod.length>0){
+			console.log('Barcode detected: ' + barkod);
+			$("#loglar").append('<p>Barcode detected: ' + barkod + '</p>');
+			get_stock_with_barcode(barkod);
+		}else{
+			console.log('No barcode or serial number detected');
 				$("#loglar").append('<p>No barcode or serial number detected</p>');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
 				document.getElementById('add_other_barcod').focus();
