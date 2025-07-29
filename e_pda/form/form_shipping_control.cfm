@@ -204,7 +204,7 @@
 					<label for="add_other_amount">Miktar</label>
 					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
 				</div>
-				<div class="form-group col col-6">
+				<div class="form-group col col-4">
 					<label for="add_other_barcod">Ekle</label>
 					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
@@ -216,6 +216,9 @@
 					<div class="form-group col col-2">
 						<label for="total_control_packages">Paket Sayısı:</label>
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
+					</div>
+					<div class="form-group col col-2">
+						<input type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
 					</div>
 				<!----<div style="display:flex">
 					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
@@ -232,7 +235,7 @@
 			<input type="hidden" name="stock_id_list" value="<cfoutput>#stock_id_list#</cfoutput>">
 			<cf_ajax_list>
 				<thead>
-					<tr class="color-list" height="20px">
+					<tr  height="20px">
 						<th>Kod</th>
 						<th width="25px">Miktar</th>
 						<th width="25px">Kontrol</th>
@@ -272,6 +275,7 @@
 	</cfoutput>
 				</tbody>
 			</cf_ajax_list>
+			
 	</form>
 </cf_box>
 
