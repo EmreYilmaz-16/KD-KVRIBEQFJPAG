@@ -159,7 +159,7 @@
     <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
           <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
 	</div>
-	<form name="product_row" id="product_row" method="post">
+	
 		<cf_ajax_list>
 			<thead>
 				<tr class="color-list" height="20px">
@@ -173,7 +173,7 @@
 				<tbody id="table1"></tbody>
 					
 		</cf_ajax_list>
-	</form>
+	
 	<input type="hidden" id="department_in" name="department_in" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
         <input type="hidden" id="action_id" name="action_id" value="" />
