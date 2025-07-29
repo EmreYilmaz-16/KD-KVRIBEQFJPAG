@@ -253,7 +253,7 @@
 </table>
 </div>
 <cfquery name="getSerialNumbers" datasource="#dsn3#">
-SELECT  (SELECT SERIAL_NO,STOCK_ID FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
+SELECT  (SELECT SERIAL_NO,STOCK_ID,0 as IS_READ FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
 SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1 FOR JSON AUTO)  AS SERI_NUMARALI
 </cfquery>
 
@@ -337,7 +337,7 @@ function add_product_to_barkod(barcode, amount, type) {
 			/*document.all.del_other_barcod.value='';*/
 			document.all.changed_stock_id.value = SID;
 			eval('row' + SID).style.background = 'FFCCCC';
-			
+
 	} else if (uzunluk < 5 || uzunluk > 20) {
 		alert('Barkod 5 ile 20 karakter arasında olmalıdır');
 		document.getElementById('add_other_barcod').value = '';
