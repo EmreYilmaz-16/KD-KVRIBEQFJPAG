@@ -195,7 +195,7 @@ var Config = {
 			<thead>
 				<tr class="color-list">
 					<th width="55" align="center">Barkod</th>
-					<th width="25" align="right">Mikt.</th>
+					<th width="25" align="right" style="display:none">Mikt.</th>
 					<th width="50" align="left">Çıkış Raf</th>
 					<th width="50" align="left">Giriş Raf</th>
 				</tr>
@@ -454,9 +454,14 @@ function addProductRow() {
 		// Create cells based on whether using serial number or barcode
 		var cells = createProductRowCells(amount);
 		
-		cells.forEach(function(cellHtml) {
+		cells.forEach(function(cellHtml, index) {
 			var newCell = newRow.insertCell();
 			newCell.innerHTML = cellHtml;
+			
+			// Miktar kolonunu gizle (2. kolon, index 1)
+			if (index === 1) {
+				newCell.style.display = 'none';
+			}
 		});
 	}
 	
