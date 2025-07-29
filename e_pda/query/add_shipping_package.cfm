@@ -1,5 +1,5 @@
 ﻿<cfdump var="#attributes#">
-<cfset SERIAL_NUMBERS=serializeJSON(attributes.SERIALS)>
+<cfset SERIAL_NUMBERS=deserializeJSON(attributes.SERIALS)>
 <cfdump var="#SERIAL_NUMBERS#">
 <cfabort>
 <cfsetting showdebugoutput="yes">
