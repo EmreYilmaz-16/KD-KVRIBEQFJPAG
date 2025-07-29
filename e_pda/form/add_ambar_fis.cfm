@@ -205,9 +205,9 @@
 		<cf_ajax_list>
 			<thead>
 				<tr class="color-list" height="20px">
-					<th>Seri No</th>
-					<th >Miktar</th>
-					<th >Kontrol</th>
+					<th>Seri No</th>				
+					<th >Ürün</th>
+					<th style="display:none">Miktar</th>
 					<th >Raf</th>
 					
 				</tr>
@@ -629,6 +629,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="10" class="boxtext" readonly="yes" />';
 				newCell = newRow.insertCell();
 				newCell.innerHTML = '<input type="text" style="text-align:right" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes"  style="text-align:" />';
+				newCeLL.style.display = 'none';
 				newCell = newRow.insertCell();
 				newCell.innerHTML = '<input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="12" class="boxtext" readonly="yes" style="text-align:right" />';
 			  }
