@@ -302,6 +302,9 @@ function add_product_to_barkod(barcode,amount,type)
 	var uzunluk = barcode.length;
 	var amount = amount
 	console.log('barcode: ' + barcode);
+	console.log('amount: ' + amount);
+	console.log('type: ' + type);
+
 	return false;
 	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>',barcode,','))
 	{
