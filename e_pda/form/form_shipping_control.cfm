@@ -1,4 +1,6 @@
-﻿<cfsetting showdebugoutput="no">
+﻿
+<cfsetting showdebugoutput="no">
+
 <style>
     .header{
         display:none;
@@ -186,6 +188,24 @@
 	<cfset 'control_amount#STOCK_ID#' = CONTROL_AMOUNT>
 </cfoutput>
 <cfset stock_id_list = ValueList(GET_SHIP_PACKAGE_LIST.STOCK_ID,',')>
+<cfset BASLIK="">
+<cfif attributes.is_type eq 1></cfif>
+	<cfset BASLIK = "Sevk No : #attributes.DELIVER_PAPER_NO#">
+<cfelse>
+	<cfset BASLIK = "Sevk Talep No : #attributes.DELIVER_PAPER_NO#">
+</cfif>
+<cf_box title="#BASLIK#">
+<form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
+<input type="hidden" id="serials" name="serials" value="">
+<div>
+	<div class="form-group">
+		<b>Ok: <cfoutput><input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px;text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="" /> / #get_total_control.PAKETSAYISI#</b></cfoutput>
+	</div>
+</div>
+</form>
+</cf_box>
+
+
 <div style="width:290px">
 <table cellpadding="1" cellspacing="1" align="left" class="color-border" width="100%">
 <form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
