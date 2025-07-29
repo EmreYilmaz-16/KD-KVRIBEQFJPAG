@@ -439,6 +439,55 @@ function kontrol_kayit() { return WarehouseManager.validateAndSave(); }
 WarehouseManager.init();
 </script>
 </script>
+<cf_box title="Ambar Fişi Ekle">
+<cfform name="form_basket">
+	<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+  	<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+  	<input type="hidden" name="kuponlist" value="" />
+  	<input type="hidden" name="active_period" value="#session.ep.period_id#" />
+	<div style="display:flex">
+		<div class="form-group">
+			<label for="add_other_amount">Miktar</label>
+			<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" style="text-align:right" value="1" />
+		</div>
+		<div class="form-group">
+			<label for="add_other_barcod">Barkod</label>
+			<input id="add_other_barcod" name="add_other_barcod" type="text"  />
+		</div>
+		<div class="form-group">
+			<label for="serial_number">Seri No</label>
+			<input id="serial_number" name="serial_number" type="text"  />
+			</div>
+	</div>
+	<div style="display:flex">
+		<div class="form-group">
+			<label for="add_other_shelf">Çıkış Depo</label>
+			<select name="txt_department_out" id="txt_department_out" style="width:100px" onchange="document.getElementById('department_out').value = this.value">
+                				<cfoutput query="get_all_location" group="department_id">
+                  					<option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
+                  						<cfoutput>
+                    						<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#<cfif not status>-<cf_get_lang_main no='82.Pasif'></cfif>
+                    						</option>
+                  						</cfoutput> 
+								</cfoutput>
+              				</select>
+		</div>
+		<div class="form-group">
+			<label for="txt_department_in">Giriş Depo</label>
+			<select name="txt_department_in" id="txt_department_in" style="width:100px" onchange="document.getElementById('department_in').value = this.value">
+								<cfoutput query="get_all_location" group="department_id">
+				  					<option disabled="disabled" value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
+				  					<cfoutput>
+										<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#<cfif not status>-<cf_get_lang_main no='82.Pasif'></cfif>
+										</option>
+				  					</cfoutput> 
+								</cfoutput>
+			  				</select>
+							</div>
+	</div>
+</cfform>
+</cf_box>
+<!--------------
 <cfform name="form_basket">
   	<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   	<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
@@ -520,7 +569,7 @@ WarehouseManager.init();
   	</table>
     </div>
 </cfform>
-
+----------------->
 <script>
     function wrk_query(str_query,data_source,maxrows)
 {
