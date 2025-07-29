@@ -214,6 +214,7 @@
 						<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="#get_total_control.CONTROL_AMOUNT#" />
 					</div>
 					<div class="form-group">
+						<label for="total_control_packages">Paket Sayısı:</label>
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
 					</div>
 				<!----<div style="display:flex">
