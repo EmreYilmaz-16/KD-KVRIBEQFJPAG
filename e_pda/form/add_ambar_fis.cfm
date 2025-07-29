@@ -180,6 +180,8 @@
 		<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
 	</cfform>
 </cf_box>
+<div id="loglar"></div>
+
 <!-------------------
 <cfabort>
 -
@@ -297,12 +299,14 @@ $(".header").hide()
 	function checkKeycode(e) 
 	{
 		console.log('checkKeycode called');
+		$("#loglar").append('<p>Key pressed: ' + e.keyCode + '</p>');
 		var keycode;
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
 		if (keycode == 13)
 		{
 			console.log('Enter key pressed');
+			$("#loglar").append('<p>Enter key pressed</p>');
 			var barkod=$("#add_other_barcod").val().trim();
 			var raf=$("#add_other_shelf").val().trim();
 			var serial=$("#serial_number").val().trim();
@@ -322,18 +326,22 @@ $(".header").hide()
 			
 			if(serial.length>0){
 				console.log('Serial number detected: ' + serial);
+				$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
 				var StockId_=get_stock_with_serial_no(serial);
 				if(raf.length > 0){
 					console.log('Shelf detected: ' + raf);
+					$("#loglar").append('<p>Shelf detected: ' + raf + '</p>');
 					//set_shelfs_with_serial_no(serial, stockid);
 					search_shelf_with_serial_no(document.getElementById('add_other_shelf').value,StockId_);
 				}
 
 			}else if(barkod.length>0){
 				console.log('Barcode detected: ' + barkod);
+				$("#loglar").append('<p>Barcode detected: ' + barkod + '</p>');
 				get_stock_with_barcode(barkod);
 			}else{
 				console.log('No barcode or serial number detected');
+				$("#loglar").append('<p>No barcode or serial number detected</p>');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
 				document.getElementById('add_other_barcod').focus();
 				return false;
@@ -395,6 +403,7 @@ $(".header").hide()
 		serial_no = '';  //ilk önce sıfırlıyoruz
 		//ilk önce sıfırlıyoruz
 		console.log('get_stock called with barcode: ' + barcode);
+		$("#loglar").append('<p>get_stock called with barcode: ' + barcode + '</p>');
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
@@ -428,6 +437,7 @@ $(".header").hide()
 	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; 
 		serial_no=""; //ilk önce sıfırlıyoruz
 		console.log('get_stock_with_serial_no called with serialno: ' + serialno);
+		$("#loglar").append('<p>get_stock_with_serial_no called with serialno: ' + serialno + '</p>');
 	 	k_= 0;
 	 	if (k_ == 0)
      	{
@@ -443,6 +453,9 @@ INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
 WHERE SB.SERIAL_NO = '${serialno}'`;
 		 	
 		 	console.log('Executing SQL: ' + new_sql);
+			$("#loglar").append('<p>Executing SQL: ' + new_sql + '</p>');
+		 	
+		 	// Execute the query	
 			var get_product = wrk_query(new_sql,'dsn3');
 		 	if (get_product.STOCK_ID == undefined)
 		 	{
@@ -614,6 +627,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		{
 			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
 			console.log('Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s);
+			$("#loglar").append('<p>Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s + '</p>');
 			if(giris_depo != giris_depo_s)
 			{
 					alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');	
@@ -676,6 +690,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		{
 			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
 			console.log('Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s);
+			$("#loglar").append('<p>Giriş depo: ' + giris_depo + ', Giriş depo SQL: ' + giris_depo_s + '</p>');
 			if(giris_depo != giris_depo_s)
 			{
 					alert('Seçtiğiniz Raf Giriş Lokasyonunda Yoktur.!');	
@@ -783,6 +798,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 
 	function kontrol_kayit()
 	{
+		$("#loglar").append('<p>kontrol_kayit called</p>');
 			if(form_basket.txt_department_in.value == "")
 			{
 				alert('Depo Seçmelisiniz.');
