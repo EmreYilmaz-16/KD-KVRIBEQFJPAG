@@ -199,7 +199,7 @@
 	<form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
 		<input type="hidden" id="serials" name="serials" value="">
 		<div>	
-			<div style="display:flex;align-items: baseline">
+			<div style="display:flex;align-items: flex-end">
 				<div class="form-group col col-2">
 					<label for="add_other_amount">Miktar</label>
 					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
