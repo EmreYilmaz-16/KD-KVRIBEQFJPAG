@@ -118,6 +118,47 @@ var Config = {
 	}
 };
 </script>
+<cf_box title="Raf Değiştir">
+	<cfform name="form_basket">
+		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+  		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+  		<input type="hidden" name="kuponlist" value="" />
+  		<input type="hidden" name="active_period" value="#session.ep.period_id#" />
+		<div style="display:flex;gap:10px;margin-top:10px;">
+			
+		<div class="form-group">
+			<label for="add_other_amount">Miktar</label>
+			<input id="add_other_amount" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="text-align:right" value="1" />
+		</div>
+		<div class="form-group">
+			<label for="add_other_barcod">Barkod</label>
+			<input id="add_other_barcod" type="text" class="boxtext" style="width:90px;" 
+				   autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+				   inputmode="text" enterkeyhint="done">
+		</div>
+		<div class="form-group">
+			<label for="serial_number">Seri No</label>
+			<input id="serial_number" type="text" class="boxtext" style="width:55px;" />
+		</div>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:10px;">
+			<div class="form-group">
+				<label for="add_out_shelf">Çıkış Raf</label>
+				<input id="add_out_shelf" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:60px;" />
+			</div>
+			<div class="form-group">
+				<label for="add_in_shelf">Giriş Raf</label>
+				<input id="add_in_shelf" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:60px;" />
+			</div>
+			<div class="form-group"  id="shelf_select_td" style="display:none">
+				<select name="shelf_select" id="shelf_select" style="width:85px; text-align:center">
+					<option value="">Ürün Rafları</option>
+				</select>
+			</div>
+		</div>
+	</cfform>
+</cf_box>
+<!-------------
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
@@ -229,6 +270,7 @@ var Config = {
 
   </table>
 </cfform>
+--------------->
 <script type="text/javascript">
 // Utility functions
 function getId(id) {
