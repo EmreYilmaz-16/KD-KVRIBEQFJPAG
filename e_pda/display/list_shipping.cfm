@@ -403,6 +403,15 @@
   		</table>
 	</cfif>
 </cf_box>
+<script language="javascript">
+	$(document).ready(function(){
+        $(".header").hide();
+    document.getElementById('keyword').focus();
+    })
+    
+
+</script>
+<cfabort>
 <div style="width:290px">
 	<cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping">
   		<input type="hidden" name="is_form_submitted" value="1">
