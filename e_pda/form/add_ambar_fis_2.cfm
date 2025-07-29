@@ -165,6 +165,34 @@ function processProductQuery(sql, datasource, errorMessage) {
 	return true;
 }
 </script>
+<cf_box title="Ambardan Mal Kabule">
+	<cfform name="form_basket">
+		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+		<input type="hidden" name="kuponlist" value="" />
+		<input type="hidden" name="active_period" value="#session.ep.period_id#" />
+		<div>
+			<div class="form-group">
+				<label for="add_other_amount">Miktar</label>
+				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:40px; text-align:right" value="1" /><
+			</div>
+			<div class="form-group">
+				<label for="add_other_barcod">Barkod</label>
+				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
+			</div>
+			<div class="form-group">
+				<label for="serial_number">Seri No</label>
+				<input id="serial_number" name="serial_number" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
+			</div>
+			<div class="form-group">
+				<label for="add_other_shelf">Raf</label>
+				<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:60px;" value="" />
+			</div>
+
+		</div>
+	</cfform>
+</cf_box>
+<cfabort>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
