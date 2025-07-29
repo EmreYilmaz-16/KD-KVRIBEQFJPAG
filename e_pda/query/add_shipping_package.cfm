@@ -1,4 +1,6 @@
-﻿<cfsetting showdebugoutput="yes">
+﻿<cfdump var="#attributes#">
+<cfabort>
+<cfsetting showdebugoutput="yes">
 <cfif listlen(attributes.stock_id_list)>
 	<cfquery name="DELETE_PACKAGE_LIST" datasource="#DSN3#">
 		DELETE EZGI_SHIPPING_PACKAGE_LIST WHERE SHIPPING_ID = #attributes.SHIP_ID# AND TYPE = #attributes.is_type#
