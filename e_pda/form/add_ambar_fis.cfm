@@ -303,7 +303,7 @@ $(".header").hide()
 		var keycode;
 		if (window.event) keycode = window.event.keyCode;
 		else if (e) keycode = e.which;
-		if (keycode == 13 or keyCode==229)
+		if (keycode == 13 || keycode == 229)
 		{
 			console.log('Enter key pressed');
 			$("#loglar").append('<p>Enter key pressed</p>');
