@@ -171,7 +171,7 @@ function processProductQuery(sql, datasource, errorMessage) {
 		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
 		<input type="hidden" name="kuponlist" value="" />
 		<input type="hidden" name="active_period" value="#session.ep.period_id#" />
-		<div style="display:flex; flex-direction:column; gap:10px;">
+		<div style="display:flex;gap:10px;">
 			<div class="form-group">
 				<label for="add_other_amount">Miktar</label>
 				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:40px; text-align:right" value="1" />
@@ -194,8 +194,38 @@ function processProductQuery(sql, datasource, errorMessage) {
                 </select>
 			</div>
 		</div>
-		<input id="del_other_amount" name="del_other_amount" type="hidden" onfocus="FormState.isAdd=false;" value="1" />
-          <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" style="width:90px;" >
+		<div style="display:flex;gap:10px;margin-top:10px;">
+		  <div class="form-group">
+			<label for="txt_department_out">Çıkış Depo</label>
+			 <select name="txt_department_out" id="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
+                <cfoutput query="get_all_location" group="department_id">
+                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
+                  <cfoutput>
+                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+                    <cfif not status>
+                      -
+                      <cf_get_lang_main no='82.Pasif'>
+                    </cfif>
+                    </option>
+                  </cfoutput> </cfoutput>
+              </select>
+			</div>
+		  <div class="form-group"> 
+			<label for="txt_department_in">Giriş Depo</label>
+			 <select name="txt_department_in" id="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
+                <cfoutput query="get_all_location" group="department_id">
+                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
+                  <cfoutput>
+                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+                    <cfif not status>
+                      -
+                      <cf_get_lang_main no='82.Pasif'>
+                    </cfif>
+                    </option>
+                  </cfoutput> </cfoutput>
+              </select>
+			</div>
+		</div>
 	</cfform>
 </cf_box>
 <cfabort>
