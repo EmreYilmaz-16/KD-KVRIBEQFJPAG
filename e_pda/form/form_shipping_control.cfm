@@ -209,11 +209,14 @@
 					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
-				<span style="font-weight:bold; color:##0000FF;">Ok:</span>
+				<div style="display:flex">
+					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
+				
 				<div class="form-group">
 					<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="text-align:right;color:##FF0000; font-weight:bold" id="total_control_amount" value="" />
 				</div>
 				<span style="font-weight:bold; color:##0000FF;">/#get_total_control.PAKETSAYISI#</span>
+				</div>
 				</cfoutput>	 		
 			</div>
 			<div style="display:flex;align-items: baseline;">
