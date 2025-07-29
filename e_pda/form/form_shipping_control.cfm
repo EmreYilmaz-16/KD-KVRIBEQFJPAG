@@ -202,16 +202,16 @@
 			<div style="display:flex;align-items: baseline;justify-content: flex-end;">
 				<div class="form-group">
 					<label for="add_other_amount">Miktar</label>
-					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" style="width:40px !important;">
+					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
 				</div>
 				<div class="form-group">
 					<label for="add_other_barcod">Ekle</label>
-					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" style="width:120px !important;">
+					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
 				<span style="font-weight:bold; color:##0000FF;">Ok:</span>
 				<div class="form-group">
-					<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px !important;text-align:right;color:##FF0000; font-weight:bold" id="total_control_amount" value="" />
+					<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="text-align:right;color:##FF0000; font-weight:bold" id="total_control_amount" value="" />
 				</div>
 				<span style="font-weight:bold; color:##0000FF;">/#get_total_control.PAKETSAYISI#</span>
 				</cfoutput>	 		
