@@ -1,4 +1,5 @@
-﻿<cfset default_process_type = 113>
+﻿<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<cfset default_process_type = 113>
 <cfquery name="get_default_departments" datasource="#dsn#">
 	SELECT        
     	DEFAULT_MK_TO_RF_DEP, 
