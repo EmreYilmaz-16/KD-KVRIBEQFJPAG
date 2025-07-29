@@ -32,6 +32,7 @@
                 )
 		</cfquery>
 	</cfloop>
+</cfif>
     
 <cfif isdefined('session.ep')>
 	<cflocation url="#request.self#?fuseaction=pda.list_shipping&department_id=#department_id#&date1=#date1#&date2=#date2#&page=#page#&is_form_submitted=1&kontrol_status=#kontrol_status#" addtoken="no">  
