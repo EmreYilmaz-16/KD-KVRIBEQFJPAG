@@ -279,7 +279,7 @@
 	</form>
 </cf_box>
 
-
+<!------------
 <div style="width:290px">
 <table cellpadding="1" cellspacing="1" align="left" class="color-border" width="100%">
 <form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
@@ -346,7 +346,7 @@
 	</tr>
 	</form>
 </table>
-</div>
+</div>----------->
 <cfquery name="getSerialNumbers" datasource="#dsn3#">
 SELECT  (
   SELECT SERIAL_NO,STOCK_ID,(SELECT COUNT(*) FROM w3Qa_1.PBS_SHIPPING_PACKAGE_LIST_SERIALS where SERIAL_NUMBER=SGN.SERIAL_NO) as IS_READ FROM w3Qa_1.SERVICE_GUARANTY_NEW SGN
