@@ -151,11 +151,30 @@ var Config = {
 				<input id="add_in_shelf" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="width:60px;" />
 			</div>
 			<div class="form-group"  id="shelf_select_td" style="display:none">
+				<label for="shelf_select">Raf</label>
 				<select name="shelf_select" id="shelf_select" style="width:85px; text-align:center">
 					<option value="">Ürün Rafları</option>
 				</select>
 			</div>
 		</div>
+		<cf_ajax_list>
+			<thead>
+				<tr class="color-list">
+					<th width="55" align="center">Barkod</th>
+					<th width="25" align="right">Mikt.</th>
+					<th width="50" align="left">Çıkış Raf</th>
+					<th width="50" align="left">Giriş Raf</th>
+				</tr>
+			</thead>
+			<tbody id="table1">
+				<!--- Product rows will be dynamically added here --->
+			</tbody>
+		</cf_ajax_list>
+		<input type="hidden" id="department_in" name="department_in" value="" />
+		<input type="hidden" id="department_out" name="department_out" value="" />
+      	<input type="hidden" id="row_count" name="row_count" value="0" />
+        <input type="hidden" id="action_id" name="action_id" value="" />
+        <input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onclick="validateAndSave();" />
 	</cfform>
 </cf_box>
 <!-------------
