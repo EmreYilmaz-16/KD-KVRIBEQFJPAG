@@ -95,152 +95,24 @@
   var islemtipi = 0;//0-ekle 1-çıkar
   var buton = 0;// <1-buton pasif, >0-buton aktif
 </script>
-<cf_box title="Mal Kabul > Ambar">
-	<cfform name="form_basket">
-		 <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
-  		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
-  		<input type="hidden" name="kuponlist" value="" />
-  		<input type="hidden" name="active_period" value="#session.ep.period_id#" />
-		<table cellpadding="2" cellspacing="1" align="left"  width="99%">
-    <tr >
-      <td colspan="4">
-      	<table class="table">
-          <tr>
-            <td align="center" width="45px">Miktar</td>
-            <td align="center" width="95px">Barcode</td>
-			<td>Seri No</td>
-            <td align="center">Raf</td>
-            <td></td>
-       	  </tr>
-          <tr  height="20px">
-            <td>
-				<div class="form-group">
-					<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" />
-				</div>
-			</td>
-            <td>
-				<div class="form-group">
-					<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" >
-				</div>
-			</td>
-
-			<td>
-				<div class="form-group">
-				<input type="text" name="serial_number" id="serial_number">
-				</div>
-			</td>
-            <td>
-				<div class="form-group">
-					<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" />
-				</div>
-			</td>
-            <td>
-              <table>
-              	<tr>
-                    <td id="shelf_select_td" style="display:none">
-						<div class="form-group">
-                        <select name="shelf_select" id="shelf_select" style="width:70px;height:20px;text-align:center">
-                            <option value="">Ürün Rafları</option>
-                        </select>
-						</div>
-                    </td>
-                  </tr>
-                </table>
-			</td>
-          </tr>
-          <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
-          <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
-        </table>
-      </td>
-    </tr>
-    <tr >
-      <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
-           <tr  height="15px">
-            <td align="center" width="50%">Çıkış Depo</td>
-            <td align="center" width="50%">Giriş Depo</td>
-           </tr>
-           <tr  height="20px">
-            <td>
-				<div class="form-group">
-              <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
-                <cfoutput query="get_all_location" group="department_id">
-                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
-                  <cfoutput>
-                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
-                    <cfif not status>
-                      -
-                      <cf_get_lang_main no='82.Pasif'>
-                    </cfif>
-                    </option>
-                  </cfoutput> </cfoutput>
-              </select>
-			</div>
-          	</td>
-            <td>
-				<div class="form-group">
-              <select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
-                <cfoutput query="get_all_location" group="department_id">
-                  <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
-                  <cfoutput>
-                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
-                    <cfif not status>
-                      -
-                      <cf_get_lang_main no='82.Pasif'>
-                    </cfif>
-                    </option>
-                  </cfoutput> </cfoutput>
-              </select>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-	</table>
-	<cf_ajax_list>
-    <tr  height="15px">
-      <td width="55" align="center">Barkod</td>
-      <td width="55" align="left">Ürün Adı</td>
-      <td width="25" align="right">Mikt.</td>
-      <td width="50" align="left">Raf</td>
-    </tr>
-    <tr  height="20px">
-      <td align="left" colspan="4"><!---  kontrol edilen tablo--->
-        <form name="product_row" id="product_row" method="post">
-          <table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
-          </table>
-        </form>
-        <!---  kontrol edilen tablo---></td>
-    </tr>
-    <tr  height="15px">
-      <td colspan="6" align="right">
-      	<input type="hidden" id="department_in" name="department_in" value="" />
-      	<input type="hidden" id="row_count" name="row_count" value="0" />
-        <input type="hidden" id="action_id" name="action_id" value="" />
-        <input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" /></td>
-    </tr>
-  </table>
-	</cfform>	
-</cf_box>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
   <input type="hidden" name="kuponlist" value="" />
   <input type="hidden" name="active_period" value="#session.ep.period_id#" />
   <div style="width:290px">
-  <table cellpadding="2" cellspacing="1" align="left"  width="99%">
-    <tr >
+  <table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
+    <tr class="color-list">
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
-          <tr  height="15px">
+      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
+          <tr class="color-list" height="15px">
             <td align="center" width="45px">Miktar</td>
             <td align="center" width="95px">Barcode</td>
 			<td>Seri No</td>
             <td align="center">Raf</td>
             <td></td>
        	  </tr>
-          <tr  height="20px">
+          <tr class="color-list" height="20px">
             <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" /></td>
             <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" ></td>
 			<td><input type="text" name="serial_number" id="serial_number"></td>
@@ -262,14 +134,14 @@
         </table>
       </td>
     </tr>
-    <tr >
+    <tr class="color-list">
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
-           <tr  height="15px">
+      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
+           <tr class="color-list" height="15px">
             <td align="center" width="50%">Çıkış Depo</td>
             <td align="center" width="50%">Giriş Depo</td>
            </tr>
-           <tr  height="20px">
+           <tr class="color-list" height="20px">
             <td>
               <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
@@ -302,13 +174,13 @@
         </table>
       </td>
     </tr>
-    <tr  height="15px">
+    <tr class="color-list" height="15px">
       <td width="55" align="center">Barkod</td>
       <td width="55" align="left">Ürün Adı</td>
       <td width="25" align="right">Mikt.</td>
       <td width="50" align="left">Raf</td>
     </tr>
-    <tr  height="20px">
+    <tr class="color-list" height="20px">
       <td align="left" colspan="4"><!---  kontrol edilen tablo--->
         <form name="product_row" id="product_row" method="post">
           <table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
@@ -316,7 +188,7 @@
         </form>
         <!---  kontrol edilen tablo---></td>
     </tr>
-    <tr  height="15px">
+    <tr class="color-list" height="15px">
       <td colspan="6" align="right">
       	<input type="hidden" id="department_in" name="department_in" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
