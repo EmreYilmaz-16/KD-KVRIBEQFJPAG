@@ -259,3 +259,47 @@
         <i class="bi bi-exclamation-triangle"></i> Geçersiz istek.
     </div>
 </cfif>
+
+<!--- Insert için sütun bilgilerini JSON olarak döndür --->
+<cfif attributes.action eq "getTableColumns" and len(attributes.schema) and len(attributes.tableName)>
+    <cftry>
+        <cfquery name="getColumnsForInsert" datasource="#dsn#">
+            SELECT 
+                c.COLUMN_NAME,
+                c.DATA_TYPE,
+                c.CHARACTER_MAXIMUM_LENGTH,
+                c.NUMERIC_PRECISION,
+                c.NUMERIC_SCALE,
+                c.IS_NULLABLE,
+                c.COLUMN_DEFAULT,
+                c.ORDINAL_POSITION,
+                COLUMNPROPERTY(OBJECT_ID(c.TABLE_SCHEMA + '.' + c.TABLE_NAME), c.COLUMN_NAME, 'IsIdentity') as IS_IDENTITY
+            FROM INFORMATION_SCHEMA.COLUMNS c
+            WHERE c.TABLE_SCHEMA = <cfqueryparam value="#attributes.schema#" cfsqltype="cf_sql_varchar">
+                AND c.TABLE_NAME = <cfqueryparam value="#attributes.tableName#" cfsqltype="cf_sql_varchar">
+            ORDER BY c.ORDINAL_POSITION
+        </cfquery>
+
+        <cfset columnsArray = []>
+        <cfloop query="getColumnsForInsert">
+            <cfset columnInfo = {
+                "COLUMN_NAME" = COLUMN_NAME,
+                "DATA_TYPE" = DATA_TYPE,
+                "CHARACTER_MAXIMUM_LENGTH" = CHARACTER_MAXIMUM_LENGTH,
+                "NUMERIC_PRECISION" = NUMERIC_PRECISION,
+                "NUMERIC_SCALE" = NUMERIC_SCALE,
+                "IS_NULLABLE" = IS_NULLABLE,
+                "COLUMN_DEFAULT" = COLUMN_DEFAULT,
+                "ORDINAL_POSITION" = ORDINAL_POSITION,
+                "IS_IDENTITY" = IS_IDENTITY
+            }>
+            <cfset arrayAppend(columnsArray, columnInfo)>
+        </cfloop>
+
+        <cfcontent type="application/json"><cfoutput>#serializeJSON(columnsArray)#</cfoutput>
+
+        <cfcatch type="any">
+            <cfcontent type="application/json"><cfoutput>{"error": "#cfcatch.message#"}</cfoutput>
+        </cfcatch>
+    </cftry>
+</cfif>

@@ -38,6 +38,7 @@
     <title>SQL Sorgu Yöneticisi</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -79,6 +80,32 @@
             color: #495057;
             margin-top: 10px;
         }
+        .insert-form-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .insert-form-field {
+            margin-bottom: 1rem;
+        }
+        .insert-preview-sql {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .field-required {
+            color: #dc3545;
+        }
+        .field-identity {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
     </style>
 </head>
 <body>
@@ -97,7 +124,9 @@
                             <cfset currentSchema = schema_name>
                             <div class="schema-header">#schema_name#</div>
                         </cfif>
-                        <div class="table-item" onclick="loadTableInfo('#schema_name#', '#name#')" title="#column_count# kolon">
+                        <div class="table-item" onclick="loadTableInfo('#schema_name#', '#name#')" 
+                             oncontextmenu="showTableContextMenu(event, '#schema_name#', '#name#')" 
+                             title="#column_count# kolon">
                             <small><i class="bi bi-table"></i> #name# (#column_count#)</small>
                         </div>
                     </cfoutput>
@@ -272,6 +301,62 @@
                             <div class="modal-body" id="tableInfoContent">
                                 <!-- Tablo bilgileri burada yüklenecek -->
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                <button type="button" class="btn btn-success" onclick="openInsertModal()">
+                                    <i class="bi bi-plus-circle"></i> Yeni Kayıt Ekle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insert Modal -->
+                <div class="modal fade" id="insertModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-plus-circle"></i> 
+                                    Yeni Kayıt Ekle - <span id="insertTableName"></span>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form id="insertForm">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div id="insertFormFields">
+                                                <!-- Form alanları burada dinamik olarak oluşturulacak -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6><i class="bi bi-code-square"></i> Oluşturulan SQL</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="bg-light p-2 rounded" style="min-height: 200px; max-height: 400px; overflow-y: auto;">
+                                                        <code id="generatedInsertSQL" style="white-space: pre-wrap;"></code>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                    <button type="button" class="btn btn-info" onclick="previewInsert()">
+                                        <i class="bi bi-eye"></i> Önizle
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="copyInsertSQL()">
+                                        <i class="bi bi-clipboard"></i> SQL'i Kopyala
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="executeInsert()">
+                                        <i class="bi bi-save"></i> Kaydet
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -322,6 +407,23 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="tableContextMenu" class="dropdown-menu" style="position: absolute; z-index: 1050; display: none;">
+        <a class="dropdown-item" href="javascript:void(0)" onclick="contextSelectTable()">
+            <i class="bi bi-eye"></i> Tabloyu Görüntüle
+        </a>
+        <a class="dropdown-item" href="javascript:void(0)" onclick="contextInsertRecord()">
+            <i class="bi bi-plus-circle"></i> Yeni Kayıt Ekle
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="javascript:void(0)" onclick="generateSelectQuery()">
+            <i class="bi bi-code"></i> SELECT Sorgusu Oluştur
+        </a>
+        <a class="dropdown-item" href="javascript:void(0)" onclick="generateInsertQuery()">
+            <i class="bi bi-plus-square"></i> INSERT Şablonu Oluştur
+        </a>
     </div>
 
     <script>
@@ -402,6 +504,10 @@
         }
 
         function loadTableInfo(schema, tableName) {
+            // Global değişkenleri güncelle
+            currentTableSchema = schema;
+            currentTableName = tableName;
+            
             // AJAX ile tablo bilgilerini yükle
             $.post('table_info_api.cfm', {
                 action: 'getTableInfo',
@@ -510,6 +616,298 @@
             }, function(data) {
                 $('#favoriteQueries').html(data);
             });
+        }
+
+        // Insert Modal Functions
+        let currentTableSchema = '';
+        let currentTableName = '';
+        let tableColumns = [];
+
+        function openInsertModal() {
+            if (!currentTableSchema || !currentTableName) {
+                alert('Lütfen önce bir tablo seçin.');
+                return;
+            }
+
+            $('#insertTableName').text(`${currentTableSchema}.${currentTableName}`);
+            
+            // Tablo sütun bilgilerini al
+            $.post('table_info_api.cfm', {
+                action: 'getTableColumns',
+                schema: currentTableSchema,
+                tableName: currentTableName
+            }, function(data) {
+                try {
+                    tableColumns = JSON.parse(data);
+                    buildInsertForm();
+                    $('#tableInfoModal').modal('hide');
+                    $('#insertModal').modal('show');
+                } catch(e) {
+                    console.error('Sütun bilgileri alınamadı:', e);
+                    alert('Tablo sütun bilgileri alınamadı. Lütfen tekrar deneyin.');
+                }
+            });
+        }
+
+        function buildInsertForm() {
+            let formHTML = '<div class="row">';
+            
+            tableColumns.forEach((column, index) => {
+                const isRequired = column.IS_NULLABLE === 'NO' && !column.IS_IDENTITY;
+                const isIdentity = column.IS_IDENTITY === 1;
+                
+                formHTML += `
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            ${column.COLUMN_NAME} 
+                            <small class="text-muted">(${column.DATA_TYPE}${column.CHARACTER_MAXIMUM_LENGTH ? `(${column.CHARACTER_MAXIMUM_LENGTH})` : ''})</small>
+                            ${isRequired ? '<span class="text-danger">*</span>' : ''}
+                            ${isIdentity ? '<span class="badge bg-info">Identity</span>' : ''}
+                        </label>
+                        ${buildInputField(column)}
+                        ${column.COLUMN_DEFAULT ? `<small class="text-muted">Varsayılan: ${column.COLUMN_DEFAULT}</small>` : ''}
+                    </div>`;
+            });
+            
+            formHTML += '</div>';
+            $('#insertFormFields').html(formHTML);
+            
+            // Form değişikliklerini dinle
+            $('#insertFormFields input, #insertFormFields select, #insertFormFields textarea').on('input change', function() {
+                updateInsertSQL();
+            });
+            
+            updateInsertSQL();
+        }
+
+        function buildInputField(column) {
+            const fieldName = column.COLUMN_NAME;
+            const dataType = column.DATA_TYPE.toLowerCase();
+            const isIdentity = column.IS_IDENTITY === 1;
+            
+            if (isIdentity) {
+                return `<input type="text" class="form-control" disabled value="Auto Generated" data-column="${fieldName}">`;
+            }
+            
+            switch (dataType) {
+                case 'bit':
+                    return `
+                        <select class="form-control" name="${fieldName}" data-column="${fieldName}">
+                            <option value="">Seçin...</option>
+                            <option value="1">True (1)</option>
+                            <option value="0">False (0)</option>
+                        </select>`;
+                        
+                case 'datetime':
+                case 'datetime2':
+                case 'date':
+                    return `<input type="datetime-local" class="form-control" name="${fieldName}" data-column="${fieldName}">`;
+                    
+                case 'time':
+                    return `<input type="time" class="form-control" name="${fieldName}" data-column="${fieldName}">`;
+                    
+                case 'int':
+                case 'bigint':
+                case 'smallint':
+                case 'tinyint':
+                    return `<input type="number" class="form-control" name="${fieldName}" data-column="${fieldName}">`;
+                    
+                case 'decimal':
+                case 'numeric':
+                case 'float':
+                case 'real':
+                case 'money':
+                    return `<input type="number" step="0.01" class="form-control" name="${fieldName}" data-column="${fieldName}">`;
+                    
+                case 'text':
+                case 'ntext':
+                    return `<textarea class="form-control" rows="3" name="${fieldName}" data-column="${fieldName}"></textarea>`;
+                    
+                default:
+                    const maxLength = column.CHARACTER_MAXIMUM_LENGTH ? `maxlength="${column.CHARACTER_MAXIMUM_LENGTH}"` : '';
+                    return `<input type="text" class="form-control" name="${fieldName}" data-column="${fieldName}" ${maxLength}>`;
+            }
+        }
+
+        function updateInsertSQL() {
+            const columns = [];
+            const values = [];
+            
+            $('#insertFormFields [data-column]').each(function() {
+                const $field = $(this);
+                const columnName = $field.data('column');
+                const value = $field.val();
+                
+                if ($field.is(':disabled') || value === '') {
+                    return; // Skip identity columns and empty values
+                }
+                
+                columns.push(`[${columnName}]`);
+                
+                // Value formatting based on data type
+                const column = tableColumns.find(c => c.COLUMN_NAME === columnName);
+                if (column) {
+                    const dataType = column.DATA_TYPE.toLowerCase();
+                    
+                    if (['varchar', 'nvarchar', 'char', 'nchar', 'text', 'ntext'].includes(dataType)) {
+                        values.push(`'${value.replace(/'/g, "''")}'`);
+                    } else if (['datetime', 'datetime2', 'date', 'time'].includes(dataType)) {
+                        values.push(`'${value}'`);
+                    } else if (dataType === 'bit') {
+                        values.push(value);
+                    } else {
+                        values.push(value);
+                    }
+                }
+            });
+            
+            let sql = '';
+            if (columns.length > 0) {
+                sql = `INSERT INTO [${currentTableSchema}].[${currentTableName}] 
+(${columns.join(',\n ')}) 
+VALUES 
+(${values.join(',\n ')})`;
+            } else {
+                sql = '-- Lütfen en az bir alan doldurun';
+            }
+            
+            $('#generatedInsertSQL').text(sql);
+        }
+
+        function previewInsert() {
+            const sql = $('#generatedInsertSQL').text();
+            if (sql.includes('-- Lütfen')) {
+                alert('Lütfen en az bir alan doldurun.');
+                return;
+            }
+            
+            editor.setValue(sql);
+            $('#insertModal').modal('hide');
+        }
+
+        function copyInsertSQL() {
+            const sql = $('#generatedInsertSQL').text();
+            if (sql.includes('-- Lütfen')) {
+                alert('Lütfen en az bir alan doldurun.');
+                return;
+            }
+            
+            navigator.clipboard.writeText(sql).then(function() {
+                alert('SQL kopyalandı!');
+            }, function(err) {
+                console.error('Kopyalama hatası: ', err);
+                alert('SQL kopyalanamadı. Lütfen manuel olarak seçip kopyalayın.');
+            });
+        }
+
+        function executeInsert() {
+            const sql = $('#generatedInsertSQL').text();
+            if (sql.includes('-- Lütfen')) {
+                alert('Lütfen en az bir alan doldurun.');
+                return;
+            }
+            
+            if (!confirm('Bu INSERT sorgusunu çalıştırmak istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            // Form'a SQL'i set et ve submit et
+            editor.setValue(sql);
+            $('#insertModal').modal('hide');
+            setTimeout(() => {
+                executeQuery();
+            }, 500);
+        }
+
+        // Context Menu Functions
+        let contextMenuTableSchema = '';
+        let contextMenuTableName = '';
+
+        function showTableContextMenu(event, schema, tableName) {
+            event.preventDefault();
+            contextMenuTableSchema = schema;
+            contextMenuTableName = tableName;
+            
+            const menu = $('#tableContextMenu');
+            menu.css({
+                display: 'block',
+                left: event.pageX + 'px',
+                top: event.pageY + 'px'
+            });
+            
+            // Context menu dışına tıklanınca kapat
+            $(document).one('click', function() {
+                menu.hide();
+            });
+            
+            return false;
+        }
+
+        function contextSelectTable() {
+            loadTableInfo(contextMenuTableSchema, contextMenuTableName);
+            $('#tableContextMenu').hide();
+        }
+
+        function contextInsertRecord() {
+            currentTableSchema = contextMenuTableSchema;
+            currentTableName = contextMenuTableName;
+            openInsertModal();
+            $('#tableContextMenu').hide();
+        }
+
+        function generateSelectQuery() {
+            const query = `SELECT TOP 100 * FROM [${contextMenuTableSchema}].[${contextMenuTableName}] ORDER BY 1 DESC`;
+            editor.setValue(query);
+            $('#tableContextMenu').hide();
+        }
+
+        function generateInsertQuery() {
+            // Sütun bilgilerini al ve INSERT şablonu oluştur
+            $.post('table_info_api.cfm', {
+                action: 'getTableColumns',
+                schema: contextMenuTableSchema,
+                tableName: contextMenuTableName
+            }, function(data) {
+                try {
+                    const columns = JSON.parse(data);
+                    const insertableColumns = columns.filter(col => col.IS_IDENTITY !== 1);
+                    
+                    const columnNames = insertableColumns.map(col => `[${col.COLUMN_NAME}]`).join(',\n    ');
+                    const valueTemplates = insertableColumns.map(col => {
+                        switch(col.DATA_TYPE.toLowerCase()) {
+                            case 'varchar':
+                            case 'nvarchar':
+                            case 'char':
+                            case 'nchar':
+                            case 'text':
+                            case 'ntext':
+                                return `'değer_${col.COLUMN_NAME}'`;
+                            case 'datetime':
+                            case 'datetime2':
+                            case 'date':
+                                return `'2025-01-01 00:00:00'`;
+                            case 'bit':
+                                return '1';
+                            default:
+                                return `değer_${col.COLUMN_NAME}`;
+                        }
+                    }).join(',\n    ');
+                    
+                    const insertTemplate = `INSERT INTO [${contextMenuTableSchema}].[${contextMenuTableName}] 
+(
+    ${columnNames}
+) 
+VALUES 
+(
+    ${valueTemplates}
+)`;
+                    
+                    editor.setValue(insertTemplate);
+                } catch(e) {
+                    console.error('Insert şablonu oluşturulamadı:', e);
+                }
+            });
+            $('#tableContextMenu').hide();
         }
     </script>
 </body>
