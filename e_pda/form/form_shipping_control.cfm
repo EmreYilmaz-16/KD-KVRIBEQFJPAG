@@ -200,20 +200,20 @@
 		<input type="hidden" id="serials" name="serials" value="">
 		<div>	
 			<div style="display:flex;align-items: baseline">
-				<div class="form-group col col-1">
+				<div class="form-group col col-2">
 					<label for="add_other_amount">Miktar</label>
 					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
 				</div>
-				<div class="form-group col col-9">
+				<div class="form-group col col-6">
 					<label for="add_other_barcod">Ekle</label>
 					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
-					<div class="form-group col col-1">
+					<div class="form-group col col-2">
 						<label for="total_control_amount">Ok:</label>
 						<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="#get_total_control.CONTROL_AMOUNT#" />
 					</div>
-					<div class="form-group col col-1">
+					<div class="form-group col col-2">
 						<label for="total_control_packages">Paket Sayısı:</label>
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
 					</div>
