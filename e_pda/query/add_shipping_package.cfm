@@ -41,20 +41,18 @@
     <!--- SERIAL_NUMBERS struct yapısını işle --->
 <cfloop collection="#SERIAL_NUMBERS#" item="stock_id">
     <cfset serial_array = SERIAL_NUMBERS[stock_id]>
-    <cfdump var="STOCK_ID: #stock_id#" label="Current Stock ID">
-    <cfdump var="#serial_array#" label="Serial Numbers for Stock #stock_id#">
+    
     
     <!--- Her bir seri numarası için işlem yap --->
     <cfloop array="#serial_array#" index="serial_item">
        <cfif serial_item.IS_READ eq 1>
         <cfquery name="ADD_SERIAL_LIST" datasource="#dsn3#">
             INSERT INTO 
-                EZGI_SHIPPING_PACKAGE_SERIAL
+                PBS_SHIPPING_PACKAGE_LIST_SERIALS
                 (
                     SHIPPING_ID,
                     STOCK_ID,
-                    SERIAL_NO,
-                    IS_READ,
+                    SERIAL_NUMBER,                    
                     RECORD_DATE,
                     RECORD_EMP
                 )
@@ -62,8 +60,7 @@
                 (
                     #attributes.SHIP_ID#,
                     #stock_id#,
-                    '#serial_item.SERIAL_NO#',
-                    #serial_item.IS_READ#,
+                    '#serial_item.SERIAL_NO#',                    
                     #now()#,
                     #session.ep.userid#
                 )
