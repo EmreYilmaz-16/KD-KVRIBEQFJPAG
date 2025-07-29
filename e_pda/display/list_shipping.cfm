@@ -57,6 +57,64 @@
 <cfparam name="attributes.maxrows" default=20>
 <cfset attributes.startrow = ((attributes.page-1)*attributes.maxrows)+1>
 <cfparam name="attributes.totalrecords" default='#get_sevk_fis.recordcount#'>
+<cf_box title="Sevkiyat Listesi">
+    <cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping">
+  		<input type="hidden" name="is_form_submitted" value="1">
+        <input type="hidden" name="consumer_id" value="<cfif len(attributes.company)><cfoutput>#attributes.consumer_id#</cfoutput></cfif>">
+    	<input type="hidden" name="company_id" value="<cfif len(attributes.company)><cfoutput>#attributes.company_id#</cfoutput></cfif>">
+  		<table class="table" width="100%">
+    		
+    		<tr height="20px">
+            	<td align="85px">
+                    <div class="form-group">
+        			<input type="text" name="keyword" style="width:70px" id="keyword" value="<cfoutput>#attributes.keyword#</cfoutput>">
+                    </div>
+        		</td>
+                <td width="40px">Tarih</td>
+      			<td>
+                    <div class="form-group">
+                    <cfsavecontent variable="message">Tarih girmelisiniz</cfsavecontent>
+                    <cfinput type="text" maxlength="10" name="date1" value="#dateformat(attributes.date1,'dd/mm/yyyy')#" validate="eurodate" message="#message#" style="width:70px;">
+                    </div>
+  				</td>
+      			<td>
+                    <div class="form-group">
+                    <cfsavecontent variable="message">Tarih girmelisiniz</cfsavecontent>
+                    <cfinput type="text" maxlength="10" name="date2" value="#dateformat(attributes.date2,'dd/mm/yyyy')#" validate="eurodate" message="#message#" style="width:70px;">
+                    </div>
+        		</td>
+    		</tr>
+            <tr class="color-header" height="15px">
+                <td colspan="4" class="form-title" width="97%">Sevkiyat Kontrol Deposu</td>
+            </tr>
+    		<tr height="20px">
+      			<td colspan="4">
+                <div class="form-group">
+        			<select name="department_id" style="width:280px; height:20px">
+          				<option value="">Tüm Depolar</option>
+         	 			<cfoutput query="get_all_location" group="department_id">
+            				<option value="#department_id#">#department_head#</option>
+							<cfoutput>
+                    			<option value="#department_id#-#location_id#" <cfif department_id is #ListFirst(attributes.department_id,'-')# and location_id is #ListLast(attributes.department_id,'-')#>selected="selected"</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#</option>
+                    		</cfoutput> 
+						</cfoutput>
+        			</select>
+                </div>
+    			</td>
+  			</tr>
+  			<tr height="20px">
+    			<td colspan="3">
+        			<input type="radio" name="kontrol_status" value="1" <cfif attributes.kontrol_status eq 1>checked</cfif>>Satır Bazında
+            		<input type="radio" name="kontrol_status" value="2" <cfif attributes.kontrol_status eq 2>checked</cfif>>Belge Bazında
+            		&nbsp;
+              	</td>
+                <td style="text-align:right">
+        			<input type="submit" style="width:50px; text-align:right" value="Ara" />
+        		</td>
+    		</tr>  
+		</table>
+	</cfform>
+</cf_box>
 <div style="width:290px">
 	<cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping">
   		<input type="hidden" name="is_form_submitted" value="1">
