@@ -104,14 +104,28 @@
 		<div style="display:flex">
 			<div class="form-group">
 				<label for="add_other_amount">Miktar</label>
-				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" />
+				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="text-align:right" value="1" />
 			</div>
 			<div class="form-group">
 				<label for="add_other_barcod">Barkod</label>
-				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" >
+				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="" >
 			</div>	
-			
+			<div class="form-group">
+				<label for="serial_number">Seri No</label>
+				<input type="text" name="serial_number" id="serial_number">
+			</div>
+			<div class="form-group">
+				<label for="add_other_shelf">Raf</label>
+				<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
+			</div>
+			<div id="shelf_select_td" style="display:none"  class="form-group">
+				<label for="shelf_select_td">Raf Seçimi</label>				
+				<select name="shelf_select" id="shelf_select" style="width:70px;height:20px;text-align:center">
+					<option value="">Ürün Rafları</option>
+				</select>
+			</div>
 		</div>
+
 	</cfform>
 </cf_box>
 
