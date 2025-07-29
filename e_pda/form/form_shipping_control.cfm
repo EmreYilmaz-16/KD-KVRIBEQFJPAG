@@ -267,44 +267,57 @@ function groupByStockId(data) {
 	for (var i = 0; i < data.length; i++) {
 		var item = data[i];
 		var stockId = item.STOCK_ID;
-		var serialNo = item.SERIAL_NO;
 		if (!result[stockId]) {
 			result[stockId] = [];
 		}
-		result[stockId].push(serialNo);
+		result[stockId].push(item); // Tüm objeyi push ediyoruz, sadece serial_no'yu değil
 	}
 	return result;
 }
 var _groupedData = groupByStockId(serialNumbers);
 
 function findStockIdBySerial(serial, groupedData) {
-  for (const stockId in groupedData) {
-    if (groupedData[stockId].includes(serial)) {
-      return parseInt(stockId); // sayı olarak döner
-    }
-  }
-  return null; // Bulunamazsa
+	for (const stockId in groupedData) {
+		const group = groupedData[stockId];
+		for (let i = 0; i < group.length; i++) {
+			if (group[i].SERIAL_NO === serial) {
+				return parseInt(stockId);
+			}
+		}
+	}
+	return null; // Bulunamazsa
 }
-function findAndMarkSerial(serialNo, groupedData) {
-  for (const stockId in groupedData) {
-    const group = groupedData[stockId];
-	console.log(`Stok ID: ${stockId}, Seri Numaraları: ${group.map(item => item.SERIAL_NO).join(', ')}`);
-    const item = group.find(obj => obj.SERIAL_NO === serialNo);
-	console.log(`Aranıyor: ${serialNo} - Bulunan: ${item ? item.SERIAL_NO : 'Yok'}`);
-    if (item) {
-      if (item.IS_READ === 1) {
-        console.warn(`⚠️ Seri numarası zaten okutulmuş: ${serialNo}`);
-        return false;
-      } else {
-        item.IS_READ = 1;
-        console.log(`✅ Seri numarası başarıyla okundu: ${serialNo} (STOCK_ID: ${stockId})`);
-        return true;
-      }
-    }
-  }
 
-  console.error(`❌ Seri numarası hiçbir stokta bulunamadı: ${serialNo}`);
-  return false;
+function findAndMarkSerial(serialNo, groupedData) {
+	console.log('=== FIND AND MARK SERIAL START ===');
+	console.log('Aranan seri numarası:', serialNo);
+	
+	for (const stockId in groupedData) {
+		const group = groupedData[stockId];
+		console.log(`Stok ID: ${stockId}, Grup içindeki eleman sayısı: ${group.length}`);
+		
+		// Grupta her bir objeyi kontrol et
+		for (let i = 0; i < group.length; i++) {
+			const item = group[i];
+			console.log(`  Kontrol edilen: ${item.SERIAL_NO} (IS_READ: ${item.IS_READ})`);
+			
+			if (item.SERIAL_NO === serialNo) {
+				console.log(`✅ Seri numarası bulundu: ${serialNo} (STOCK_ID: ${stockId})`);
+				
+				if (item.IS_READ === 1) {
+					console.warn(`⚠️ Seri numarası zaten okutulmuş: ${serialNo}`);
+					return false;
+				} else {
+					item.IS_READ = 1;
+					console.log(`✅ Seri numarası başarıyla işaretlendi: ${serialNo} (STOCK_ID: ${stockId})`);
+					return true;
+				}
+			}
+		}
+	}
+
+	console.error(`❌ Seri numarası hiçbir stokta bulunamadı: ${serialNo}`);
+	return false;
 }
 </script>
 
