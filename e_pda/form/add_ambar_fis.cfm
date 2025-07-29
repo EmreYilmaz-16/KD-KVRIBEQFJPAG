@@ -128,9 +128,9 @@
 
 	</cfform>
 </cf_box>
-
+<!-------------------
 <cfabort>
-
+-
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
@@ -233,7 +233,7 @@
     </tr>
   </table>
   </div>
-</cfform>
+</cfform>------------>
 <script language="javascript" type="text/javascript">
 $(document).ready(function(){
 $(".header").hide()
