@@ -434,7 +434,7 @@ function add_product_to_barkod(barcode, amount, type) {
 }
 function kontrol()
 {
-	document.getElementById("serials").value =_groupedData;
+	document.getElementById("serials").value = JSON.stringify(_groupedData);
 	for(i=1;i<=<cfoutput>#listlen(stock_id_list,',')#</cfoutput>;i++)
 	{
 		eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value = eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value
