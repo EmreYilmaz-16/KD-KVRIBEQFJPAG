@@ -355,6 +355,53 @@
   		</cfif>
         </tbody>
 	</table>
+    <cfif attributes.totalrecords gt attributes.maxrows>
+  		<table cellpadding="0" cellspacing="0" border="0" align="center" height="20">
+    		<tr align="left">
+      			<td width="60" nowrap="nowrap">
+	  				<cfset adres="#listgetat(attributes.fuseaction,1,'.')#.list_shipping&consumer_id=#attributes.consumer_id#&company_id=#attributes.company_id#&company=#attributes.company#">
+					<cfif isDefined('attributes.cat') and len(attributes.cat)>
+              			<cfset adres = adres & "&cat=" & attributes.cat>
+            		</cfif>
+					<cfif isdefined("attributes.DELIVER_PAPER_NO") and len(attributes.DELIVER_PAPER_NO)>
+                      <cfset adres = adres & "&DELIVER_PAPER_NO=" & attributes.DELIVER_PAPER_NO>
+                    </cfif>
+                    <cfif isDefined('attributes.department_id') and len(attributes.department_id)>
+                      <cfset adres = adres & '&department_id=' & attributes.department_id>
+                    </cfif>
+                    <cfif isdate(attributes.date1)>
+                      <cfset adres = "#adres#&date1=#dateformat(attributes.date1,'dd/mm/yyyy')#">
+                    </cfif>
+                    <cfif isdate(attributes.date2)>
+                      <cfset adres = "#adres#&date2=#dateformat(attributes.date2,'dd/mm/yyyy')#">
+                    </cfif>
+                    <cfif isdefined("attributes.deliver_emp") and len(attributes.deliver_emp)>
+                      <cfset adres = "#adres#&deliver_emp=#attributes.deliver_emp#">
+                      <cfset adres = "#adres#&deliver_emp_id=#attributes.deliver_emp_id#">
+                    </cfif>
+                    <cfif isDefined('attributes.delivered') and len(attributes.delivered) >
+                      <cfset adres = "#adres#&delivered=#attributes.delivered#" >
+                    </cfif>
+                    <cfif isDefined('attributes.kontrol_status') and len(attributes.kontrol_status) >
+                      <cfset adres = "#adres#&kontrol_status=#attributes.kontrol_status#" >
+                    </cfif>
+                    <cfif isDefined('attributes.keyword') and len(attributes.keyword) >
+                      <cfset adres = "#adres#&keyword=#attributes.keyword#" >
+                    </cfif>
+            		<cf_pages page="#attributes.page#" 
+						  maxrows="#attributes.maxrows#" 
+						  totalrecords="#attributes.totalrecords#" 
+						  startrow="#attributes.startrow#" 
+						  adres="#adres#&is_form_submitted=1">
+      			</td>
+      			<td>
+					<cfoutput>
+                        <cf_get_lang_main no='80.toplam'> : #attributes.totalrecords#&nbsp;-&nbsp;<cf_get_lang_main no='169.sayfa'> : #attributes.page#/#lastpage#
+                    </cfoutput>
+   				</td>
+    		</tr>
+  		</table>
+	</cfif>
 </cf_box>
 <div style="width:290px">
 	<cfform name="frm_search" method="post" action="#request.self#?fuseaction=#listgetat(attributes.fuseaction,1,'.')#.list_shipping">
