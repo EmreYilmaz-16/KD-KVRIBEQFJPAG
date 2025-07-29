@@ -101,8 +101,8 @@
   		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
   		<input type="hidden" name="kuponlist" value="" />
   		<input type="hidden" name="active_period" value="#session.ep.period_id#" />
-		<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
-    <tr class="color-list">
+		<table cellpadding="2" cellspacing="1" align="left"  width="99%">
+    <tr >
       <td colspan="4">
       	<table class="table">
           <tr>
@@ -112,7 +112,7 @@
             <td align="center">Raf</td>
             <td></td>
        	  </tr>
-          <tr class="color-list" height="20px">
+          <tr  height="20px">
             <td>
 				<div class="form-group">
 					<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" />
@@ -153,14 +153,14 @@
         </table>
       </td>
     </tr>
-    <tr class="color-list">
+    <tr >
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
-           <tr class="color-list" height="15px">
+      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
+           <tr  height="15px">
             <td align="center" width="50%">Çıkış Depo</td>
             <td align="center" width="50%">Giriş Depo</td>
            </tr>
-           <tr class="color-list" height="20px">
+           <tr  height="20px">
             <td>
 				<div class="form-group">
               <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
@@ -199,13 +199,13 @@
     </tr>
 	</table>
 	<cf_ajax_list>
-    <tr class="color-list" height="15px">
+    <tr  height="15px">
       <td width="55" align="center">Barkod</td>
       <td width="55" align="left">Ürün Adı</td>
       <td width="25" align="right">Mikt.</td>
       <td width="50" align="left">Raf</td>
     </tr>
-    <tr class="color-list" height="20px">
+    <tr  height="20px">
       <td align="left" colspan="4"><!---  kontrol edilen tablo--->
         <form name="product_row" id="product_row" method="post">
           <table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
@@ -213,7 +213,7 @@
         </form>
         <!---  kontrol edilen tablo---></td>
     </tr>
-    <tr class="color-list" height="15px">
+    <tr  height="15px">
       <td colspan="6" align="right">
       	<input type="hidden" id="department_in" name="department_in" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
@@ -229,18 +229,18 @@
   <input type="hidden" name="kuponlist" value="" />
   <input type="hidden" name="active_period" value="#session.ep.period_id#" />
   <div style="width:290px">
-  <table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
-    <tr class="color-list">
+  <table cellpadding="2" cellspacing="1" align="left"  width="99%">
+    <tr >
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
-          <tr class="color-list" height="15px">
+      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
+          <tr  height="15px">
             <td align="center" width="45px">Miktar</td>
             <td align="center" width="95px">Barcode</td>
 			<td>Seri No</td>
             <td align="center">Raf</td>
             <td></td>
        	  </tr>
-          <tr class="color-list" height="20px">
+          <tr  height="20px">
             <td><input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" /></td>
             <td><input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" ></td>
 			<td><input type="text" name="serial_number" id="serial_number"></td>
@@ -262,14 +262,14 @@
         </table>
       </td>
     </tr>
-    <tr class="color-list">
+    <tr >
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
-           <tr class="color-list" height="15px">
+      	<table border="0" cellpadding="0" cellspacing="0" width="100%" >
+           <tr  height="15px">
             <td align="center" width="50%">Çıkış Depo</td>
             <td align="center" width="50%">Giriş Depo</td>
            </tr>
-           <tr class="color-list" height="20px">
+           <tr  height="20px">
             <td>
               <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
@@ -302,13 +302,13 @@
         </table>
       </td>
     </tr>
-    <tr class="color-list" height="15px">
+    <tr  height="15px">
       <td width="55" align="center">Barkod</td>
       <td width="55" align="left">Ürün Adı</td>
       <td width="25" align="right">Mikt.</td>
       <td width="50" align="left">Raf</td>
     </tr>
-    <tr class="color-list" height="20px">
+    <tr  height="20px">
       <td align="left" colspan="4"><!---  kontrol edilen tablo--->
         <form name="product_row" id="product_row" method="post">
           <table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
@@ -316,7 +316,7 @@
         </form>
         <!---  kontrol edilen tablo---></td>
     </tr>
-    <tr class="color-list" height="15px">
+    <tr  height="15px">
       <td colspan="6" align="right">
       	<input type="hidden" id="department_in" name="department_in" value="" />
       	<input type="hidden" id="row_count" name="row_count" value="0" />
