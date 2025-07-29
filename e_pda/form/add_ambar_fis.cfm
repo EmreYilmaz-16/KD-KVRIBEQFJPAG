@@ -95,6 +95,28 @@
   var islemtipi = 0;//0-ekle 1-çıkar
   var buton = 0;// <1-buton pasif, >0-buton aktif
 </script>
+<cf_box title="Mal Kabulden Ambara">
+	<cfform name="form_basket">
+		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+  		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+  		<input type="hidden" name="kuponlist" value="" />
+  		<input type="hidden" name="active_period" value="#session.ep.period_id#" />		
+		<div style="display:flex">
+			<div class="form-group">
+				<label for="add_other_amount">Miktar</label>
+				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="1" />
+			</div>
+			<div class="form-group">
+				<label for="add_other_barcod">Barkod</label>
+				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" >
+			</div>	
+			
+		</div>
+	</cfform>
+</cf_box>
+
+<cfabort>
+
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
