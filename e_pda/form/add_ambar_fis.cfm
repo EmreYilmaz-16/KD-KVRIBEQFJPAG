@@ -125,7 +125,39 @@
 				</select>
 			</div>
 		</div>
-
+		<div>
+			<div class="form-group">
+				<label for="txt_department_out">Çıkış Depo</label>
+				<select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
+                <cfoutput query="get_all_location" group="department_id">
+                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
+                  <cfoutput>
+                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+                    <cfif not status>
+                      -
+                      <cf_get_lang_main no='82.Pasif'>
+                    </cfif>
+                    </option>
+                  </cfoutput> </cfoutput>
+              </select>
+			</div>
+			<div class="form-group">
+				<label for="txt_department_in">Giriş Depo</label>
+				<select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
+				<cfoutput query="get_all_location" group="department_id">
+				  <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
+				  <cfoutput>
+					<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+					<cfif not status>
+					  -
+					  <cf_get_lang_main no='82.Pasif'>
+					</cfif>
+					</option>
+				  </cfoutput> </cfoutput>
+			  </select>
+		</div>
+    <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
+          <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
 	</cfform>
 </cf_box>
 <!-------------------
