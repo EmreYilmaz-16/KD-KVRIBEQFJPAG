@@ -228,6 +228,7 @@ function processProductQuery(sql, datasource, errorMessage) {
 		</div>
 	</cfform>
 </cf_box>
+<!--------------
 <cfabort>
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
@@ -327,7 +328,7 @@ function processProductQuery(sql, datasource, errorMessage) {
     </tr>
   </table>
   </div>
-</cfform>
+</cfform>--------->
 <script type="text/javascript">
 $(document).ready(function() {
 	$(".header").hide();
