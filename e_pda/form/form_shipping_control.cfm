@@ -218,7 +218,7 @@
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
 					</div>
 					<div class="form-group col col-2">
-						<input type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
+						<input class="ui-wrk-btn ui-wrk-btn-extra" type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
 					</div>
 				<!----<div style="display:flex">
 					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
