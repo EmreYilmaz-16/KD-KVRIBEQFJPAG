@@ -199,21 +199,21 @@
 	<form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
 		<input type="hidden" id="serials" name="serials" value="">
 		<div>	
-			<div style="display:flex;align-items: baseline;justify-content: flex-end;">
-				<div class="form-group">
+			<div style="display:flex;align-items: baseline">
+				<div class="form-group col col-1">
 					<label for="add_other_amount">Miktar</label>
 					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
 				</div>
-				<div class="form-group">
+				<div class="form-group col col-9">
 					<label for="add_other_barcod">Ekle</label>
 					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
-					<div class="form-group">
+					<div class="form-group col col-1">
 						<label for="total_control_amount">Ok:</label>
 						<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="#get_total_control.CONTROL_AMOUNT#" />
 					</div>
-					<div class="form-group">
+					<div class="form-group col col-1">
 						<label for="total_control_packages">Paket Sayısı:</label>
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
 					</div>
