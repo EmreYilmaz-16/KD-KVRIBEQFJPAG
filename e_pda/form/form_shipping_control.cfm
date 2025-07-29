@@ -199,10 +199,18 @@
 <form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
 <input type="hidden" id="serials" name="serials" value="">
 <div>
-	<div class="form-group">
+	
 		<div style="display:flex">
-		<b>Ok:</b> <cfoutput><input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px !important;text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="" /> / #get_total_control.PAKETSAYISI#</b></cfoutput>
-		</div>
+<cfoutput>
+			<span style="font-weight:bold; color:##0000FF;">Ok:</span>
+			<div class="form-group">
+				<input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px !important;text-align:right;color:##FF0000; font-weight:bold" id="total_control_amount" value="" />
+			</div>
+			<span style="font-weight:bold; color:##0000FF;">#get_total_control.PAKETSAYISI#</span>
+</cfoutput>
+
+		 
+		
 	</div>
 </div>
 </form>
