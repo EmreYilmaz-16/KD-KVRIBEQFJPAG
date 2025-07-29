@@ -64,7 +64,10 @@
                     #now()#,
                     #session.ep.userid#
                 )
+        </cfquery>
+       </cfif>
         <!--- serial_item.SERIAL_NO, serial_item.STOCK_ID, serial_item.IS_READ değerlerine erişebilirsiniz --->
+
     </cfloop>
 </cfloop>
 
