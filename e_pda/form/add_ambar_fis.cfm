@@ -125,7 +125,7 @@
 				</select>
 			</div>
 		</div>
-		<div>
+		<div style="display:flex">
 			<div class="form-group">
 				<label for="txt_department_out">Çıkış Depo</label>
 				<select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
