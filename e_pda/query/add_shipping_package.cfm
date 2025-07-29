@@ -1,4 +1,6 @@
 ﻿<cfdump var="#attributes#">
+<cfset SERIAL_NUMBERS=serializeJSON(attributes.SERIALS)>
+<cfdump var="#SERIAL_NUMBERS#">
 <cfabort>
 <cfsetting showdebugoutput="yes">
 <cfif listlen(attributes.stock_id_list)>
