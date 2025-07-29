@@ -189,11 +189,12 @@
 </cfoutput>
 <cfset stock_id_list = ValueList(GET_SHIP_PACKAGE_LIST.STOCK_ID,',')>
 <cfset BASLIK="">
-<cfif attributes.is_type eq 1></cfif>
+<cfif attributes.is_type eq 1>
 	<cfset BASLIK = "Sevk No : #attributes.DELIVER_PAPER_NO#">
 <cfelse>
 	<cfset BASLIK = "Sevk Talep No : #attributes.DELIVER_PAPER_NO#">
 </cfif>
+
 <cf_box title="#BASLIK#">
 <form name="add_package" method="post" action="<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_package&SHIP_ID=#attributes.ship_id#&department_id=#attributes.department_id#&date1=#attributes.date1#&date2=#attributes.date2#&page=#attributes.page#&kontrol_status=#attributes.kontrol_status#&is_type=#attributes.is_type#</cfoutput>">
 <input type="hidden" id="serials" name="serials" value="">
