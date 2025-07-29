@@ -46,6 +46,10 @@
     <!--- Her bir seri numarası için işlem yap --->
     <cfloop array="#serial_array#" index="serial_item">
        <cfif serial_item.IS_READ eq 1>
+        <cfquery name="delete_serial" datasource="#dsn3#">
+            DELETE FROM PBS_SHIPPING_PACKAGE_LIST_SERIALS
+            WHERE SHIPPING_ID = #attributes.SHIP_ID# AND STOCK_ID = #stock_id# AND SERIAL_NUMBER = '#serial_item.SERIAL_NO#'
+        </cfquery>
         <cfquery name="ADD_SERIAL_LIST" datasource="#dsn3#">
             INSERT INTO 
                 PBS_SHIPPING_PACKAGE_LIST_SERIALS
