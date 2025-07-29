@@ -201,7 +201,7 @@
 <div>
 	<div class="form-group">
 		<div style="display:flex">
-		<b>Ok: <cfoutput><input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px;text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="" /> / #get_total_control.PAKETSAYISI#</b></cfoutput>
+		<b>Ok:</b> <cfoutput><input type="text" name="total_control_amount" readonly="readonly" class="box"  style="width:35px !important;text-align:right;color:FF0000; font-weight:bold" id="total_control_amount" value="" /> / #get_total_control.PAKETSAYISI#</b></cfoutput>
 		</div>
 	</div>
 </div>
