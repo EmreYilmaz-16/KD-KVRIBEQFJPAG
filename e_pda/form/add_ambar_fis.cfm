@@ -164,9 +164,9 @@
 			<thead>
 				<tr class="color-list" height="20px">
 					<th>Kod</th>
-					<th width="25px">Miktar</th>
-					<th width="25px">Kontrol</th>
-					<th width="25px">Raf</th>
+					<th >Miktar</th>
+					<th >Kontrol</th>
+					<th >Raf</th>
 					<th>Seri No</th>
 				</tr>
 				</thead>
