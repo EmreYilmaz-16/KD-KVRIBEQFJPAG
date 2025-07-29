@@ -485,6 +485,19 @@ WarehouseManager.init();
 			  				</select>
 							</div>
 	</div>
+	<cf_grid_list>
+		<thead>
+			<tr>
+				<th>Barkod</th>
+				<th>Ürün Adı</th>
+				<th>Miktar</th>
+				
+			</tr>
+		</thead>
+		<tbody id="table1">
+			<!--- Rows will be dynamically added here --->
+		</tbody>
+	</cf_grid_list>
 </cfform>
 </cf_box>
 <!--------------
