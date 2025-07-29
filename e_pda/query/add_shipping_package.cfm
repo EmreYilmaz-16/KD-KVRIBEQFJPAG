@@ -2,20 +2,9 @@
 <cfset SERIAL_NUMBERS=deserializeJSON(attributes.SERIALS)>
 <cfdump var="#SERIAL_NUMBERS#">
 
-<!--- SERIAL_NUMBERS struct yapısını işle --->
-<cfloop collection="#SERIAL_NUMBERS#" item="stock_id">
-    <cfset serial_array = SERIAL_NUMBERS[stock_id]>
-    <cfdump var="STOCK_ID: #stock_id#" label="Current Stock ID">
-    <cfdump var="#serial_array#" label="Serial Numbers for Stock #stock_id#">
-    
-    <!--- Her bir seri numarası için işlem yap --->
-    <cfloop array="#serial_array#" index="serial_item">
-        <cfdump var="#serial_item#" label="Serial Item">
-        <!--- serial_item.SERIAL_NO, serial_item.STOCK_ID, serial_item.IS_READ değerlerine erişebilirsiniz --->
-    </cfloop>
-</cfloop>
 
-<cfabort>
+
+
 <cfsetting showdebugoutput="yes">
 <cfif listlen(attributes.stock_id_list)>
 	<cfquery name="DELETE_PACKAGE_LIST" datasource="#DSN3#">
@@ -48,6 +37,40 @@
                 )
 		</cfquery>
 	</cfloop>
+
+    <!--- SERIAL_NUMBERS struct yapısını işle --->
+<cfloop collection="#SERIAL_NUMBERS#" item="stock_id">
+    <cfset serial_array = SERIAL_NUMBERS[stock_id]>
+    <cfdump var="STOCK_ID: #stock_id#" label="Current Stock ID">
+    <cfdump var="#serial_array#" label="Serial Numbers for Stock #stock_id#">
+    
+    <!--- Her bir seri numarası için işlem yap --->
+    <cfloop array="#serial_array#" index="serial_item">
+       <cfif serial_item.IS_READ eq 1>
+        <cfquery name="ADD_SERIAL_LIST" datasource="#dsn3#">
+            INSERT INTO 
+                EZGI_SHIPPING_PACKAGE_SERIAL
+                (
+                    SHIPPING_ID,
+                    STOCK_ID,
+                    SERIAL_NO,
+                    IS_READ,
+                    RECORD_DATE,
+                    RECORD_EMP
+                )
+            VALUES
+                (
+                    #attributes.SHIP_ID#,
+                    #stock_id#,
+                    '#serial_item.SERIAL_NO#',
+                    #serial_item.IS_READ#,
+                    #now()#,
+                    #session.ep.userid#
+                )
+        <!--- serial_item.SERIAL_NO, serial_item.STOCK_ID, serial_item.IS_READ değerlerine erişebilirsiniz --->
+    </cfloop>
+</cfloop>
+
 </cfif>
     
 <cfif isdefined('session.ep')>
