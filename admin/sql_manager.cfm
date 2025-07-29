@@ -638,7 +638,7 @@
                 tableName: currentTableName
             }, function(data) {
                 try {
-                    tableColumns = JSON.parse(data);
+                    tableColumns = data;
                     buildInsertForm();
                     $('#tableInfoModal').modal('hide');
                     $('#insertModal').modal('show');
