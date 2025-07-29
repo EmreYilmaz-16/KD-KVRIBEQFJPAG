@@ -149,6 +149,8 @@
 					   inputmode="text"
 					   enterkeyhint="done">
 			</div>
+		</div>
+		<div style="display:flex">
 			<div class="form-group">
 				<label for="add_other_shelf">Raf</label>
 				<input id="add_other_shelf"    autocomplete="off" 
@@ -220,7 +222,7 @@
 		<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
 	</cfform>
 </cf_box>
-<div id="loglar"></div>
+<div style="display:none" id="loglar"></div>
 
 <!-------------------
 <cfabort>
