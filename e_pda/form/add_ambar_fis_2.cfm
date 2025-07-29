@@ -178,17 +178,32 @@ function processProductQuery(sql, datasource, errorMessage) {
 			</div>
 			<div class="form-group">
 				<label for="add_other_barcod">Barkod</label>
-				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
+				<input id="add_other_barcod"   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done" name="add_other_barcod" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
 			</div>
 			<div class="form-group">
 				<label for="serial_number">Seri No</label>
-				<input id="serial_number" name="serial_number" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
+				<input id="serial_number"   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done" name="serial_number" type="text" value="" style="width:90px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" enterkeyhint="done">
 			</div>
 		</div>
 		<div style="display:flex;gap:10px;margin-top:10px;">
 			<div class="form-group">
 				<label for="add_other_shelf">Raf</label>
-				<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:60px;" value="" />
+				<input id="add_other_shelf"   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done" name="add_other_shelf" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:60px;" value="" />
 			</div>
 			<div id="shelf_select_td" style="display:none" class="form-group">
 				<select name="shelf_select" id="shelf_select" style="width:70px;height:20px;text-align:center">
