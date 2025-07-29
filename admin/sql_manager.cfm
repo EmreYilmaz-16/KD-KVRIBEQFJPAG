@@ -632,7 +632,7 @@
             $('#insertTableName').text(`${currentTableSchema}.${currentTableName}`);
             
             // Tablo sütun bilgilerini al
-            $.post('table_info_api.cfm', {
+            $.post('/AddOns/Partner/admin/table_info_api.cfm', {
                 action: 'getTableColumns',
                 schema: currentTableSchema,
                 tableName: currentTableName
