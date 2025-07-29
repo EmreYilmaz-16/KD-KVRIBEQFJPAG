@@ -284,6 +284,26 @@ function findStockIdBySerial(serial, groupedData) {
   }
   return null; // Bulunamazsa
 }
+function findAndMarkSerial(serialNo, groupedData) {
+  for (const stockId in groupedData) {
+    const group = groupedData[stockId];
+    const item = group.find(obj => obj.SERIAL_NO === serialNo);
+
+    if (item) {
+      if (item.IS_READ === 1) {
+        console.warn(`⚠️ Seri numarası zaten okutulmuş: ${serialNo}`);
+        return false;
+      } else {
+        item.IS_READ = 1;
+        console.log(`✅ Seri numarası başarıyla okundu: ${serialNo} (STOCK_ID: ${stockId})`);
+        return true;
+      }
+    }
+  }
+
+  console.error(`❌ Seri numarası hiçbir stokta bulunamadı: ${serialNo}`);
+  return false;
+}
 </script>
 
 
@@ -305,7 +325,9 @@ function add_product_to_barkod(barcode, amount, type) {
 	console.log('amount: ' + amount);
 	console.log('type: ' + type);
 	var SID = findStockIdBySerial(barcode, groupedData);
+	var isRead= findAndMarkSerial(barcode, groupedData);
 	console.log('SID: ' + SID);
+	console.log('isRead: ' + isRead);
 	if (SID != null) {
 		eval('row' + SID).style.background = '<cfoutput>#colorrow#</cfoutput>';
 			if (type == 1) { //ekleme ise
