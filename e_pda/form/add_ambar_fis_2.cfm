@@ -469,9 +469,14 @@ function addRow(useSerial = false) {
 		];
 	}
 	
-	cells.forEach(cellContent => {
+	cells.forEach((cellContent, index) => {
 		const cell = newRow.insertCell();
 		cell.innerHTML = cellContent;
+		
+		// Miktar kolonunu gizle (3. kolon, index 2)
+		if (index === 2) {
+			cell.style.display = 'none';
+		}
 	});
 	
 	return true;
