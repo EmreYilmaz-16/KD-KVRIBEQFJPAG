@@ -227,9 +227,51 @@
 				</div>---->
 				</cfoutput>	 		
 			</div>
-			<div style="display:flex;align-items: baseline;">
-				
-			</div>
+			<cfset COLORROW ="##f5ee73"> 
+			<cfset product_barcode_list = ''>
+			<input type="hidden" name="stock_id_list" value="<cfoutput>#stock_id_list#</cfoutput>">
+			<cf_ajax_list>
+				<thead>
+					<tr class="color-list" height="20px">
+						<th>Kod</th>
+						<th width="25px">Miktar</th>
+						<th width="25px">Kontrol</th>
+						<th width="25px">OK</th>
+					</tr>
+				</thead>
+					
+				<tbody>
+					<cfoutput query="GET_SHIP_PACKAGE_LIST">
+        <cfquery name="get_product_info" datasource="#dsn3#">
+            SELECT  	PIP.PROPERTY7, 
+                        PIP.PROPERTY13,
+                        S.STOCK_CODE_2
+            FROM       	STOCKS AS S LEFT OUTER JOIN
+                        PRODUCT_INFO_PLUS AS PIP ON S.PRODUCT_ID = PIP.PRODUCT_ID
+            WHERE     	(S.STOCK_ID = #STOCK_ID#)
+        </cfquery>
+        <tr id="row#STOCK_ID#" height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row">
+           	<td>#product_name#</td>        
+                <input type="hidden" id="PRODUCT_NAME#STOCK_ID#" name="PRODUCT_NAME#STOCK_ID#" value="#PRODUCT_NAME#" class="box" style="width:100;">
+                <cfquery name="GET_BARCODE" datasource="#DSN3#">
+                    SELECT TOP 1 BARCODE FROM  STOCKS_BARCODES WHERE STOCK_ID=#STOCK_ID#
+                </cfquery>
+                <cfset product_barcode_list = listdeleteduplicates(ListAppend(product_barcode_list,ValueList(GET_BARCODE.BARCODE),','))>	
+            <td>
+                <input type="text" name="amount#STOCK_ID#" id="amount#STOCK_ID#" value="#PAKETSAYISI#" readonly="yes" class="box" style="width:25px;text-align:right;">
+            </td>
+            <td>
+                <input type="text" id="control_amount#STOCK_ID#" name="control_amount#STOCK_ID#" readonly="yes" value="<cfif isdefined('control_amount#STOCK_ID#')>#Evaluate('control_amount#STOCK_ID#')#</cfif>" class="box"  style="width:25px;text-align:right;color:FF0000;">
+          	</td>
+            <td align="center" valign="middle">      
+                <img id="is_ok#STOCK_ID#" name="is_ok#STOCK_ID#"<cfif not isdefined('control_amount#STOCK_ID#') or (isdefined('control_amount#STOCK_ID#') and Evaluate('control_amount#STOCK_ID#') neq PAKETSAYISI)>style="display:none;"</cfif> align="center" src="images\c_ok.gif">
+                <img id="warning_#STOCK_ID#" name="warning_#STOCK_ID#"<cfif not isdefined('control_amount#STOCK_ID#') or (isdefined('control_amount#STOCK_ID#') and Evaluate('control_amount#STOCK_ID#') eq PAKETSAYISI)>style="display:none;"</cfif> align="center" src="images\warning.gif">
+                <img id="is_error#STOCK_ID#" name="is_error#STOCK_ID#"<cfif not isdefined('control_amount#STOCK_ID#') or (isdefined('control_amount#STOCK_ID#') and Evaluate('control_amount#STOCK_ID#') lte PAKETSAYISI)>style="display:none;"</cfif>align="center" src="images\closethin.gif">
+            </td>
+        </tr>
+	</cfoutput>
+				</tbody>
+			</cf_ajax_list>
 	</form>
 </cf_box>
 
