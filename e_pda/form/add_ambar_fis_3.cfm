@@ -157,6 +157,28 @@ var Config = {
 				</select>
 			</div>
 		</div>
+		<div style="display:flex;gap:10px;margin-top:10px;">
+			<div class="form-group">
+				<label for="txt_department_out">Çıkış Depo</label>
+				<select name="txt_department_out" id="txt_department_out" style="width:110px" onchange="document.getElementById('department_out').value=this.value;">
+					<option value="">Seçiniz</option>
+					<cfoutput query="qry_departments">
+						<option value="#DEPARTMENT_ID#">#DEPARTMENT_NAME#</option>
+					</cfoutput>
+				</select>
+			</div>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:10px;">
+			<div class="form-group">
+				<label for="txt_department_in">Giriş Depo</label>
+				<select name="txt_department_in" id="txt_department_in" style="width:110px" onchange="document.getElementById('department_in').value=this.value;">
+					<option value="">Seçiniz</option>
+					<cfoutput query="qry_departments">
+						<option value="#DEPARTMENT_ID#">#DEPARTMENT_NAME#</option>
+					</cfoutput>
+				</select>
+			</div>
+		</div>
 		<cf_ajax_list>
 			<thead>
 				<tr class="color-list">
