@@ -104,8 +104,8 @@
 		<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
     <tr class="color-list">
       <td colspan="4">
-      	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
-          <tr class="color-list" height="15px">
+      	<table class="table">
+          <tr>
             <td align="center" width="45px">Miktar</td>
             <td align="center" width="95px">Barcode</td>
 			<td>Seri No</td>
@@ -124,15 +124,25 @@
 				</div>
 			</td>
 
-			<td><input type="text" name="serial_number" id="serial_number"></td>
-            <td><input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" /></td>
+			<td>
+				<div class="form-group">
+				<input type="text" name="serial_number" id="serial_number">
+				</div>
+			</td>
+            <td>
+				<div class="form-group">
+					<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:60px;" value="" />
+				</div>
+			</td>
             <td>
               <table>
               	<tr>
                     <td id="shelf_select_td" style="display:none">
+						<div class="form-group">
                         <select name="shelf_select" id="shelf_select" style="width:70px;height:20px;text-align:center">
                             <option value="">Ürün Rafları</option>
                         </select>
+						</div>
                     </td>
                   </tr>
                 </table>
@@ -152,6 +162,7 @@
            </tr>
            <tr class="color-list" height="20px">
             <td>
+				<div class="form-group">
               <select name="txt_department_out" style="width:120px; height:20px" onchange="document.getElementById('department_out').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
@@ -164,8 +175,10 @@
                     </option>
                   </cfoutput> </cfoutput>
               </select>
+			</div>
           	</td>
             <td>
+				<div class="form-group">
               <select name="txt_department_in" style="width:120px; height:20px" onchange="document.getElementById('department_in').value = this.value">
                 <cfoutput query="get_all_location" group="department_id">
                   <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
@@ -178,7 +191,8 @@
                     </option>
                   </cfoutput> </cfoutput>
               </select>
-              </td>
+              </div>
+            </td>
           </tr>
         </table>
       </td>
