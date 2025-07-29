@@ -151,7 +151,12 @@
 			</div>
 			<div class="form-group">
 				<label for="add_other_shelf">Raf</label>
-				<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
+				<input id="add_other_shelf"    autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
 			</div>
 			<div id="shelf_select_td" style="display:none"  class="form-group">
 				<label for="shelf_select_td">Raf Seçimi</label>				
