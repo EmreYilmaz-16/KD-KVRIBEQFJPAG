@@ -377,7 +377,7 @@ function add_product_to_barkod(barcode, amount, type) {
 				if (document.getElementById('control_amount' + SID).value < document.getElementById('amount' + SID).value)
 					eval('document.all.is_ok' + SID).style.display = 'none';
 			}
-			document.getElementById("serials").value += barcode + ",";
+			//document.getElementById("serials").value += barcode + ",";
 			document.all.add_other_barcod.value = '';
 			/*document.all.del_other_barcod.value='';*/
 			document.all.changed_stock_id.value = SID;
@@ -434,7 +434,7 @@ function add_product_to_barkod(barcode, amount, type) {
 }
 function kontrol()
 {
-
+	document.getElementById("serials").value =_groupedData;
 	for(i=1;i<=<cfoutput>#listlen(stock_id_list,',')#</cfoutput>;i++)
 	{
 		eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value = eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value

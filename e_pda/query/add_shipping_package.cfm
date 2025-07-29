@@ -32,6 +32,26 @@
                 )
 		</cfquery>
 	</cfloop>
+    <cfloop list="#attributes.serials#" index="serial">
+        <cfquery name="ADD_SERIAL" datasource="#dsn3#">
+            INSERT INTO 
+                EZGI_SHIPPING_PACKAGE_SERIAL
+                (
+                    SHIPPING_ID,
+                    STOCK_ID,
+                    SERIAL_NUMBER,
+                    RECORD_DATE,
+                    RECORD_EMP
+                )
+            VALUES
+                (
+                    #attributes.SHIP_ID#,
+                    #attributes.stock_id#,
+                    '#trim(serial)#',
+                    #now()#,
+                    #session.ep.userid#
+                )
+        </cfquery>
 </cfif>
 <cfif isdefined('session.ep')>
 	<cflocation url="#request.self#?fuseaction=pda.list_shipping&department_id=#department_id#&date1=#date1#&date2=#date2#&page=#page#&is_form_submitted=1&kontrol_status=#kontrol_status#" addtoken="no">  
