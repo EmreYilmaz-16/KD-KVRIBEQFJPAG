@@ -193,6 +193,34 @@
                                 <p>Bu versiyon tamamen browser tabanlı çalışır ve Apache POI gerektirmez. Excel dosyası client-side'da işlenir ve JSON olarak server'a gönderilir.</p>
                             </div>
 
+                            <!-- Örnek Excel İndirme -->
+                            <div class="mb-4">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-download me-2"></i>Örnek Excel Dosyası İndir
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-3">Test etmek için örnek Excel dosyası indirin:</p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <a href="create_sample_excel.cfm?action=create&recordCount=10" class="btn btn-outline-info w-100 mb-2">
+                                                    <i class="fas fa-file-csv me-2"></i>
+                                                    CSV Format (10 Kayıt)
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a href="create_excel_advanced.cfm?action=create_xlsx&recordCount=10" class="btn btn-info w-100 mb-2">
+                                                    <i class="fas fa-file-excel me-2"></i>
+                                                    XLSX Format (10 Kayıt)
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="upload-area" id="uploadArea">
                                 <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
                                 <h5>Excel Dosyasını Buraya Sürükleyin</h5>

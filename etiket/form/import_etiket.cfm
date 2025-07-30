@@ -105,6 +105,45 @@
                             </small>
                         </div>
 
+                        <!-- Örnek Excel İndirme -->
+                        <div class="mb-4">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-download me-2"></i>Örnek Excel Dosyası İndir
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3">Test etmek için örnek verilerle dolu Excel dosyası indirin:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <a href="create_sample_excel.cfm?action=create&recordCount=10" class="btn btn-outline-success w-100 mb-2">
+                                                <i class="fas fa-file-csv me-2"></i>
+                                                CSV Format (10 Kayıt)
+                                            </a>
+                                            <small class="text-muted">Excel'de açılabilir, POI gerektirmez</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a href="create_excel_advanced.cfm?action=create_xlsx&recordCount=10" class="btn btn-success w-100 mb-2">
+                                                <i class="fas fa-file-excel me-2"></i>
+                                                XLSX Format (10 Kayıt)
+                                            </a>
+                                            <small class="text-muted">Gerçek Excel, formatlamalar dahil</small>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a href="create_sample_excel.cfm" class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="fas fa-cog me-1"></i>Daha Fazla Seçenek
+                                        </a>
+                                        <a href="create_excel_advanced.cfm" class="btn btn-sm btn-outline-success">
+                                            <i class="fas fa-magic me-1"></i>Gelişmiş Excel
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Upload Form -->
                         <form action="process_import.cfm" method="post" enctype="multipart/form-data" id="uploadForm">
                             <div class="upload-area" id="uploadArea">
