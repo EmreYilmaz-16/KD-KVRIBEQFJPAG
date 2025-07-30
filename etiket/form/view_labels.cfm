@@ -136,6 +136,15 @@
             text-align: center;
         }
 
+        .qr-data-text {
+            font-size: 8px;
+            color: #666;
+            margin-top: 5px;
+            word-break: break-all;
+            line-height: 1.2;
+            font-family: 'Courier New', monospace;
+        }
+
         /* Yazdırma Stilleri */
         @media print {
             .no-print {
@@ -151,6 +160,11 @@
                 border: 2px solid #000;
                 margin-bottom: 10px;
                 font-size: 11px;
+            }
+            
+            .qr-code canvas {
+                max-width: 80px !important;
+                max-height: 80px !important;
             }
             
             body {
@@ -366,18 +380,14 @@
                                 <strong>Miktar:</strong>
                                 <span>#NumberFormat(miktar, "0.00")#</span>
                             </div>
-                            
-                            <cfif len(trim(barkod)) gt 0>
-                                <div class="barcode-section">
-                                    <div style="font-size: 10px; margin-bottom: 5px;">BARKOD:</div>
-                                    <div class="barcode-display">*#barkod#*</div>
-                                    <div style="font-size: 9px; letter-spacing: 1px;">#barkod#</div>
-                                </div>
-                            </cfif>
 
-                            <!-- QR Code için placeholder -->
+                            <!-- QR Code ile Birleştirilmiş Veri -->
                             <div class="qr-code">
-                                <canvas id="qr_#temp_id#" width="80" height="80"></canvas>
+                                <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
+                                <canvas id="qr_#temp_id#" width="100" height="100"></canvas>
+                                <div style="font-size: 8px; margin-top: 5px; word-break: break-all; line-height: 1.2;">
+                                    #eta_kodu#_#seri_no#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#barkod#_#NumberFormat(miktar, "0.00")#_#marka#
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -460,23 +470,20 @@
         // QR kodlarını oluştur
         <cfloop query="getLabelData">
             document.addEventListener('DOMContentLoaded', function() {
-                const qrData = JSON.stringify({
-                    eta_kodu: '#JSStringFormat(eta_kodu)#',
-                    seri_no: '#JSStringFormat(seri_no)#',
-                    marka: '#JSStringFormat(marka)#',
-                    barkod: '#JSStringFormat(barkod)#'
-                });
+                // Birleştirilmiş veri formatı: EtaKodu_SeriNo_ÜretimTarihi_PaketTarihi_Barkod_Miktar_Marka
+                const qrData = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
                 
                 QRCode.toCanvas(document.getElementById('qr_#temp_id#'), qrData, {
-                    width: 80,
-                    height: 80,
-                    margin: 1,
+                    width: 100,
+                    height: 100,
+                    margin: 2,
                     color: {
                         dark: '#000000',
                         light: '#FFFFFF'
-                    }
+                    },
+                    errorCorrectionLevel: 'M'
                 }, function (error) {
-                    if (error) console.error(error);
+                    if (error) console.error('QR Kod oluşturma hatası:', error);
                 });
             });
         </cfloop>
