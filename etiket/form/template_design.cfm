@@ -336,7 +336,7 @@
                                 <h6><i class="fas fa-qrcode me-2"></i>QR Kod</h6>
                                 <div class="form-check field-toggle">
                                     <input class="form-check-input" type="checkbox" id="showQR" 
-                                           #iif(getSelectedTemplate.show_qr, 'checked', '')# 
+                                           <cfif(getSelectedTemplate.show_qr)>'checked'<cfelse>'unchecked'</cfif>
                                            onchange="updatePreview()">
                                     <label class="form-check-label" for="showQR">QR Kod Göster</label>
                                 </div>
