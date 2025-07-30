@@ -213,9 +213,10 @@
                             <i class="fas fa-tags me-2"></i>
                             Etiket Yazdırma
                         </h4>
-                        <small class="text-muted">
+                   <cfoutput>   <small class="text-muted">
                             Dosya: #getImportInfo.file_name# | 
                             İmport: #DateFormat(getImportInfo.import_date, "dd/mm/yyyy")# #TimeFormat(getImportInfo.import_date, "HH:mm")#
+                            </cfoutput>  
                         </small>
                     </div>
                     <div class="col-md-6 text-end">
@@ -253,7 +254,7 @@
                 <span class="step active">3</span>
                 <span>Etiket Yazdır</span>
             </div>
-
+<cfoutput> 
             <!-- İstatistikler -->
             <div class="row mb-4 no-print">
                 <div class="col-md-3">
@@ -289,7 +290,7 @@
                     </div>
                 </div>
             </div>
-
+</cfoutput>
             <!-- Sayfalama (Üst) -->
             <cfif totalPages gt 1>
                 <div class="row mb-3 no-print">
@@ -334,6 +335,7 @@
 
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer">
+                <cfoutput> 
                 <cfloop query="getLabelData">
                     <div class="label-item">
                         <div class="label-header">
@@ -380,6 +382,7 @@
                         </div>
                     </div>
                 </cfloop>
+                </cfoutput>
             </div>
 
             <cfif getLabelData.recordCount eq 0>
