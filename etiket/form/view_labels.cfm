@@ -4,7 +4,7 @@
 <cfparam name="url.per_page" default="20">
 
 <!--- Import bilgilerini al --->
-<cfquery name="getImportInfo" datasource="KD">
+<cfquery name="getImportInfo" datasource="w3Qa">
     SELECT 
         import_id,
         import_date,
@@ -25,7 +25,7 @@
 <cfset totalPages = ceiling(getImportInfo.success_records / url.per_page)>
 
 <!--- Etiket verilerini al --->
-<cfquery name="getLabelData" datasource="KD">
+<cfquery name="getLabelData" datasource="w3Qa">
     SELECT 
         temp_id,
         eta_kodu,
