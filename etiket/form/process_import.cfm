@@ -546,9 +546,9 @@
                                     <cfif arrayLen(importResult.errors) gt 0>
                                         <h6>Hatalar:</h6>
                                         <div class="log-container">
-                                            <cfloop array="#importResult.errors#" index="error">
+                                            <cfoutput><cfloop array="#importResult.errors#" index="error">
                                                 <div class="text-danger small">#error#</div>
-                                            </cfloop>
+                                            </cfloop></cfoutput>
                                         </div>
                                     </cfif>
                                 </div>
