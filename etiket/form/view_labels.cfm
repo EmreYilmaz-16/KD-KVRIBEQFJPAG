@@ -540,8 +540,8 @@
                             height: 100,
                             margin: 2,
                             color: {
-                                dark: '#000000',
-                                light: '#FFFFFF'
+                                dark: '##000000',
+                                light: '##FFFFFF'
                             },
                             errorCorrectionLevel: 'M'
                         }, function (error) {
