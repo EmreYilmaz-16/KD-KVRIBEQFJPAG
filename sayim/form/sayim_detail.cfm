@@ -1,3 +1,4 @@
+<cfdump var="#url#" label="URL Parameters">
 <!--- Sayım Detay İşlemi Sayfası --->
 <cfabort>
 <!--- URL'den sayım ID'sini al --->
