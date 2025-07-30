@@ -218,12 +218,12 @@
                                        title="Düzenle">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button type="button" 
+                                    <a type="button" 
                                             class="btn btn-outline-info" 
-                                            onclick="window.location.href='../form/sayim_detail.cfm?sayim_id=#SAYIM_ID#'"
+                                            href="../form/sayim_detail.cfm?sayim_id=#SAYIM_ID#"
                                             title="Sayım Yap">
                                         <i class="fas fa-clipboard-check"></i>
-                                    </button>
+                                </a>
                                     <button type="button" 
                                             class="btn btn-outline-danger" 
                                             onclick="confirmDelete(#SAYIM_ID#, '#PAPER_NUMBER#')"
