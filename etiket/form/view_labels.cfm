@@ -468,12 +468,14 @@
         }
 
         // QR kodlarını oluştur
-        <cfloop query="getLabelData">
-            document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            <cfloop query="getLabelData">
                 // Birleştirilmiş veri formatı: EtaKodu_SeriNo_ÜretimTarihi_PaketTarihi_Barkod_Miktar_Marka
-                const qrData = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
+                const qrData_#temp_id# = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
                 
-                QRCode.toCanvas(document.getElementById('qr_#temp_id#'), qrData, {
+                console.log('QR Data #temp_id#:', qrData_#temp_id#);
+                
+                QRCode.toCanvas(document.getElementById('qr_#temp_id#'), qrData_#temp_id#, {
                     width: 100,
                     height: 100,
                     margin: 2,
@@ -483,10 +485,14 @@
                     },
                     errorCorrectionLevel: 'M'
                 }, function (error) {
-                    if (error) console.error('QR Kod oluşturma hatası:', error);
+                    if (error) {
+                        console.error('QR Kod oluşturma hatası #temp_id#:', error);
+                    } else {
+                        console.log('QR Kod başarıyla oluşturuldu #temp_id#');
+                    }
                 });
-            });
-        </cfloop>
+            </cfloop>
+        });
 
         // Yazdırma öncesi ayarlar
         window.addEventListener('beforeprint', function() {
