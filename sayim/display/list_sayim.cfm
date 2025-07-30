@@ -220,9 +220,9 @@
                                     </a>
                                     <button type="button" 
                                             class="btn btn-outline-info" 
-                                            onclick="viewDetails(#SAYIM_ID#)"
-                                            title="Detay">
-                                        <i class="fas fa-eye"></i>
+                                            onclick="window.location.href='../form/sayim_detail.cfm?sayim_id=#SAYIM_ID#'"
+                                            title="Sayım Yap">
+                                        <i class="fas fa-clipboard-check"></i>
                                     </button>
                                     <button type="button" 
                                             class="btn btn-outline-danger" 
