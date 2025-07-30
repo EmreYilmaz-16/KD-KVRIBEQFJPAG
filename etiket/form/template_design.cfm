@@ -1,7 +1,7 @@
 <!--- Etiket Şablon Tasarım Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.template_id" default="1">
-
+    
 <!--- Mevcut şablonları al --->
 <cfquery name="getTemplates" datasource="w3Qa">
     SELECT * FROM etiket_templates_s 
@@ -213,7 +213,7 @@
                     <h5><i class="fas fa-list me-2"></i>Hazır Şablonlar</h5>
                     <div class="template-list">
                         <cfoutput query="getTemplates">
-                            <div class="template-item #iif(template_id eq url.template_id, 'active', '')#" 
+                            <div class="template-item <cfif(template_id eq url.template_id)> active</cfif>#" 
                                  onclick="selectTemplate(#template_id#)">
                                 <div class="d-flex justify-content-between">
                                     <strong>#template_name#</strong>
