@@ -2,7 +2,7 @@
 
 <!--- Sayım listesi için sorgu --->
 <cftry>
-    <cfquery name="getSayimList" datasource="w3Qa">
+    <cfquery name="getSayimList" datasource="w3Qa_1">
         SELECT 
             s.SAYIM_ID,
             s.PAPER_NUMBER,
