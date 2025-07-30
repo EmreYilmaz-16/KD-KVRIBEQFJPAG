@@ -3,6 +3,13 @@
 <cfparam name="url.page" default="1">
 <cfparam name="url.per_page" default="20">
 
+<!--- Custom tag için gerekli değişkenler --->
+<cfset upload_folder = ExpandPath(".")>
+<cfset dir_seperator = "/">
+<cfif FindNoCase("Windows", server.os.name)>
+    <cfset dir_seperator = "\">
+</cfif>
+
 <!--- Import bilgilerini al --->
 <cfquery name="getImportInfo" datasource="w3Qa">
     SELECT 
@@ -384,9 +391,31 @@
                             <!-- QR Code ile Birleştirilmiş Veri -->
                             <div class="qr-code">
                                 <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
-                                <canvas id="qr_#temp_id#" width="100" height="100"></canvas>
+                                
+                                <!--- Workcube Barcode Custom Tag ile QR kod oluştur --->
+                                <cfset qr_data = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'ddmmyyyy')#_#DateFormat(paket_tarihi, 'ddmmyyyy')#_#barkod#_#NumberFormat(miktar, '0.00')#_#marka#">
+                                <cfset qr_id = "qr_#temp_id#_#getTickCount()#">
+                                
+                                <cftry>
+                                    <cf_pbs_barcode 
+                                        value="#qr_data#" 
+                                        type="qrcode" 
+                                        width="100" 
+                                        height="100" 
+                                        show="1" 
+                                        id="#qr_id#"
+                                        path="#ExpandPath('../temp/')#"
+                                        format="png">
+                                <cfcatch>
+                                    <!--- Hata durumunda basit QR placeholder göster --->
+                                    <div style="width: 100px; height: 100px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
+                                        QR KOD<br>OLUŞTURULUYOR
+                                    </div>
+                                </cfcatch>
+                                </cftry>
+                                
                                 <div style="font-size: 8px; margin-top: 5px; word-break: break-all; line-height: 1.2;">
-                                    #eta_kodu#_#seri_no#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#barkod#_#NumberFormat(miktar, "0.00")#_#marka#
+                                    #qr_data#
                                 </div>
                             </div>
                         </div>
@@ -453,57 +482,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
-        // QRCode kütüphanesinin yüklendiğini kontrol et
-        function checkQRCodeLibrary() {
-            if (typeof QRCode === 'undefined') {
-                console.error('QRCode kütüphanesi yüklenemedi, basit QR kod gösterimi kullanılacak...');
-                showSimpleQRCodes();
-                return false;
-            }
-            return true;
-        }
-
-        function showSimpleQRCodes() {
-            console.log('Basit QR kod gösterimi başlatılıyor...');
-            document.querySelectorAll('[id^="qr_"]').forEach(canvas => {
-                try {
-                    const ctx = canvas.getContext('2d');
-                    // QR kod benzeri görsel oluştur
-                    ctx.fillStyle = '#000000';
-                    
-                    // QR kod benzeri desen çiz
-                    for(let i = 0; i < 10; i++) {
-                        for(let j = 0; j < 10; j++) {
-                            if((i + j) % 2 === 0) {
-                                ctx.fillRect(i * 10, j * 10, 8, 8);
-                            }
-                        }
-                    }
-                    
-                    // Köşe kareler (QR kod benzeri)
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(0, 0, 25, 25);
-                    ctx.fillRect(75, 0, 25, 25);
-                    ctx.fillRect(0, 75, 25, 25);
-                    
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(5, 5, 15, 15);
-                    ctx.fillRect(80, 5, 15, 15);
-                    ctx.fillRect(5, 80, 15, 15);
-                    
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(10, 10, 5, 5);
-                    ctx.fillRect(85, 10, 5, 5);
-                    ctx.fillRect(10, 85, 5, 5);
-                    
-                } catch(e) {
-                    console.error('Canvas çizimi hatası:', e);
-                }
-            });
-        }
-
         // Etiket boyutu değiştirme
         function changeLabelSize(size) {
             const container = document.getElementById('labelContainer');
@@ -516,119 +495,9 @@
             event.target.classList.add('active');
         }
 
-        // QR kodlarını oluştur
-        function generateQRCodes() {
-            console.log('QR kod oluşturma başlatılıyor...');
-            
-            <cfloop query="getLabelData">
-               <cfoutput>
-                try {
-                    const qrData_#temp_id# = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
-                    
-                    console.log('QR Data #temp_id#:', qrData_#temp_id#);
-                    
-                    const canvas = document.getElementById('qr_#temp_id#');
-                    if (!canvas) {
-                        console.error('Canvas bulunamadı: qr_#temp_id#');
-                        return;
-                    }
-                    
-                    if (typeof QRCode !== 'undefined' && QRCode.toCanvas) {
-                        // Ana QRCode kütüphanesi
-                        QRCode.toCanvas(canvas, qrData_#temp_id#, {
-                            width: 100,
-                            height: 100,
-                            margin: 2,
-                            color: {
-                                dark: '##000000',
-                                light: '##FFFFFF'
-                            },
-                            errorCorrectionLevel: 'M'
-                        }, function (error) {
-                            if (error) {
-                                console.error('QR Kod oluşturma hatası #temp_id#:', error);
-                                drawFallbackQR(canvas, qrData_#temp_id#);
-                            } else {
-                                console.log('QR Kod başarıyla oluşturuldu #temp_id#');
-                            }
-                        });
-                    } else {
-                        // Fallback: Basit görsel QR kod
-                        console.log('QRCode kütüphanesi bulunamadı, fallback çiziliyor #temp_id#');
-                        drawFallbackQR(canvas, qrData_#temp_id#);
-                    }
-                } catch (e) {
-                    console.error('QR kod oluşturma genel hatası #temp_id#:', e);
-                }
-                </cfoutput>
-            </cfloop>
-        }
-        
-        // Fallback QR kod çizimi
-        function drawFallbackQR(canvas, data) {
-            try {
-                const ctx = canvas.getContext('2d');
-                ctx.clearRect(0, 0, 100, 100);
-                
-                // Arka plan
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, 100, 100);
-                
-                // QR kod benzeri desen
-                ctx.fillStyle = '#000000';
-                
-                // Basit QR kod deseni oluştur
-                const size = 5;
-                const hash = data.split('').reduce((a, b) => {
-                    a = ((a << 5) - a) + b.charCodeAt(0);
-                    return a & a;
-                }, 0);
-                
-                for(let i = 0; i < 20; i++) {
-                    for(let j = 0; j < 20; j++) {
-                        if((hash + i + j) % 3 === 0) {
-                            ctx.fillRect(i * size, j * size, size - 1, size - 1);
-                        }
-                    }
-                }
-                
-                // Köşe işaretleri
-                ctx.fillStyle = '#000000';
-                ctx.fillRect(0, 0, 20, 20);
-                ctx.fillRect(80, 0, 20, 20);
-                ctx.fillRect(0, 80, 20, 20);
-                
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(5, 5, 10, 10);
-                ctx.fillRect(85, 5, 10, 10);
-                ctx.fillRect(5, 85, 10, 10);
-                
-                console.log('Fallback QR kod çizildi');
-            } catch(e) {
-                console.error('Fallback QR çizim hatası:', e);
-            }
-        }
-
         // Sayfa yüklendiğinde başlat
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Sayfa yüklendi, QR kodlar oluşturuluyor...');
-            
-            // DOM elementlerinin hazır olduğundan emin ol
-            setTimeout(() => {
-                console.log('Canvas elementleri kontrol ediliyor...');
-                const canvasElements = document.querySelectorAll('[id^="qr_"]');
-                console.log('Bulunan canvas sayısı:', canvasElements.length);
-                
-                if (canvasElements.length === 0) {
-                    console.error('Hiç canvas elementi bulunamadı!');
-                    return;
-                }
-                
-                // QRCode kütüphanesini kontrol et ve QR kodları oluştur
-                if (checkQRCodeLibrary()) {
-                    generateQRCodes();
-                }
-            }, 1000); // 1 saniye bekle
+            console.log('Etiket sayfası yüklendi - Workcube Barcode Custom Tag kullanılıyor');
         });
 
         // Yazdırma öncesi ayarlar
