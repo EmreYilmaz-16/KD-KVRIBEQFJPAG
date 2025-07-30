@@ -255,6 +255,9 @@
                         <button type="button" class="btn btn-success" onclick="window.print()">
                             <i class="fas fa-print me-2"></i>Yazdır
                         </button>
+                        <a href="template_design.cfm?import_id=#url.import_id#" class="btn btn-info">
+                            <i class="fas fa-palette me-2"></i>Şablon Tasarımı
+                        </a>
                         <a href="import_etiket.cfm" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
                         </a>
