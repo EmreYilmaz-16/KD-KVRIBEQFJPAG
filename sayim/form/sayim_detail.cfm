@@ -2,7 +2,7 @@
 <!--- Sayım Detay İşlemi Sayfası --->
 
 <!--- URL'den sayım ID'sini al --->
-<cfif not isDefined("url.sayim_id")>
+<cfif not isDefined("attributes.sayim_id")>
     <cflocation url="../display/list_sayim.cfm" addtoken="false">
 </cfif>
 
