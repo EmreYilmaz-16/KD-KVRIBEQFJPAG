@@ -249,6 +249,28 @@
 
         <!--- Sayım İstatistikleri --->
         <cfif getSayimList.recordCount gt 0>
+            <!--- Bugünkü sayım sayısını hesapla --->
+            <cfset todayCount = 0>
+            <cfset uniqueDepos = structNew()>
+            <cfset uniqueUsers = structNew()>
+            
+            <cfloop query="getSayimList">
+                <!--- Bugünkü kayıtları say --->
+                <cfif dateFormat(RECORD_DATE, "yyyy-mm-dd") eq dateFormat(now(), "yyyy-mm-dd")>
+                    <cfset todayCount = todayCount + 1>
+                </cfif>
+                
+                <!--- Unique depoları say --->
+                <cfif len(trim(DEPO_CODE))>
+                    <cfset uniqueDepos[DEPO_CODE] = true>
+                </cfif>
+                
+                <!--- Unique kullanıcıları say --->
+                <cfif len(trim(RECORD_EMP))>
+                    <cfset uniqueUsers[RECORD_EMP] = true>
+                </cfif>
+            </cfloop>
+            
             <div class="row mt-4">
                 <div class="col-md-3">
                     <div class="card text-center">
@@ -268,12 +290,7 @@
                                 <i class="fas fa-calendar-day"></i>
                             </h5>
                             <h3 class="text-success">
-                                <cfquery name="todayCount" dbtype="query">
-                                    SELECT COUNT(*) as TODAY_COUNT 
-                                    FROM getSayimList 
-                                    WHERE CAST(RECORD_DATE AS DATE) = CAST(GETDATE() AS DATE)
-                                </cfquery>
-                                <cfoutput>#todayCount.TODAY_COUNT#</cfoutput>
+                                <cfoutput>#todayCount#</cfoutput>
                             </h3>
                             <p class="card-text">Bugünkü Sayım</p>
                         </div>
@@ -286,10 +303,7 @@
                                 <i class="fas fa-warehouse"></i>
                             </h5>
                             <h3 class="text-warning">
-                                <cfquery name="depoCount" dbtype="query">
-                                    SELECT COUNT(DISTINCT DEPO_CODE) as DEPO_COUNT FROM getSayimList
-                                </cfquery>
-                                <cfoutput>#depoCount.DEPO_COUNT#</cfoutput>
+                                <cfoutput>#structCount(uniqueDepos)#</cfoutput>
                             </h3>
                             <p class="card-text">Farklı Depo</p>
                         </div>
@@ -302,10 +316,7 @@
                                 <i class="fas fa-users"></i>
                             </h5>
                             <h3 class="text-info">
-                                <cfquery name="userCount" dbtype="query">
-                                    SELECT COUNT(DISTINCT RECORD_EMP) as USER_COUNT FROM getSayimList
-                                </cfquery>
-                                <cfoutput>#userCount.USER_COUNT#</cfoutput>
+                                <cfoutput>#structCount(uniqueUsers)#</cfoutput>
                             </h3>
                             <p class="card-text">Kayıt Eden</p>
                         </div>
