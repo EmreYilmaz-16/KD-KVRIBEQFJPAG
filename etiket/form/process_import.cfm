@@ -529,7 +529,7 @@
                                     <cfelse>
                                         <div class="alert alert-danger">
                                             <h5><i class="fas fa-exclamation-triangle me-2"></i>İşlem Başarısız!</h5>
-                                            <p>#importResult.message#</p>
+                                            <p><cfoutput>#importResult.message#</cfoutput></p>
                                         </div>
                                         
                                         <div class="d-grid">
