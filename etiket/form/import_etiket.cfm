@@ -230,6 +230,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <cfoutput>
                                             <cfloop query="getRecentImports">
                                                 <tr>
                                                     <td><small>#DateFormat(import_date, "dd/mm/yyyy")# #TimeFormat(import_date, "HH:mm")#</small></td>
@@ -244,6 +245,7 @@
                                                     </td>
                                                 </tr>
                                             </cfloop>
+                                            </cfoutput>
                                         </tbody>
                                     </table>
                                 </div>
