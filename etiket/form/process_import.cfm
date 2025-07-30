@@ -496,6 +496,7 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <cfif importResult.success>
+                                       <cfoutput>
                                         <div class="alert alert-success">
                                             <h5><i class="fas fa-check-circle me-2"></i>İşlem Başarılı!</h5>
                                             <p>#importResult.message#</p>
@@ -514,7 +515,7 @@
                                                     <small>Hatalı</small>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div></cfoutput>
                                         
                                         <div class="d-grid gap-2">
                                             <a href="view_labels.cfm?import_id=#importResult.importId#" class="btn btn-success btn-lg">
