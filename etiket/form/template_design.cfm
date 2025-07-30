@@ -340,7 +340,7 @@
                                            onchange="updatePreview()">
                                     <label class="form-check-label" for="showQR">QR Kod Göster</label>
                                 </div>
-                                <div id="qrSizeControl" style="display: #iif(getSelectedTemplate.show_qr, 'block', 'none')#;">
+                                <div id="qrSizeControl" style="display: <cfif (getSelectedTemplate.show_qr)>block<cfelse>none</cfif>;">
                                     <label class="form-label">QR Boyutu: <span id="qrSizeValue">#getSelectedTemplate.qr_size#</span>px</label>
                                     <input type="range" class="form-range" id="qrSize" 
                                            min="60" max="200" value="#getSelectedTemplate.qr_size#" 
