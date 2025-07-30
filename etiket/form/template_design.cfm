@@ -353,7 +353,7 @@
                                 <h6><i class="fas fa-barcode me-2"></i>Barkod</h6>
                                 <div class="form-check field-toggle">
                                     <input class="form-check-input" type="checkbox" id="showBarcode" 
-                                           #iif(getSelectedTemplate.show_barcode, 'checked', '')# 
+                                           <cfif(getSelectedTemplate.show_barcode)>'checked'<cfelse>'unchecked'</cfif>
                                            onchange="updatePreview()">
                                     <label class="form-check-label" for="showBarcode">Barkod Göster</label>
                                 </div>
