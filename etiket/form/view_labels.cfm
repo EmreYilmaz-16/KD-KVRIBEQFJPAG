@@ -471,7 +471,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             <cfloop query="getLabelData">
                <cfoutput>
-                 // Birleştirilmiş veri formatı: EtaKodu_SeriNo_ÜretimTarihi_PaketTarihi_Barkod_Miktar_Marka
+                 
                 const qrData_#temp_id# = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
                 
                 console.log('QR Data #temp_id#:', qrData_#temp_id#);
@@ -481,8 +481,8 @@
                     height: 100,
                     margin: 2,
                     color: {
-                        dark: '#000000',
-                        light: '#FFFFFF'
+                        dark: '##000000',
+                        light: '##FFFFFF'
                     },
                     errorCorrectionLevel: 'M'
                 }, function (error) {
