@@ -402,7 +402,7 @@
                                             
                                             <!--- Validate and Insert --->
                                             <cfif (form.validateData eq "false") OR 
-                                                  (len(etaKodu) > 0 AND len(seriNo) > 0 AND miktar > 0)>
+                                                  (len(etaKodu) gt 0 AND len(seriNo) gt 0 AND miktar gt 0)>
                                                 
                                                 <cfquery name="insertTempData" datasource="KD">
                                                     INSERT INTO etiket_temp_data (
