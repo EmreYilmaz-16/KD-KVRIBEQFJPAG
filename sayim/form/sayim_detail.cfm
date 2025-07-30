@@ -125,6 +125,25 @@
 <!--- Sayımı tamamlama işlemi --->
 <cfif isDefined("form.action") and form.action eq "complete_sayim">
     <cfif getSayimDetails.recordCount gt 0>
+        <cfquery name="GETS" datasource="w3Qa_1">
+SELECT *,CASE WHEN DD=1 THEN 'BİŞEY YAPMA' ELSE CASE WHEN DD=0 OR DD=-1 THEN 'SAYIM FİŞİ EKLE' ELSE '' END END AS ISLEM FROM (
+SELECT PSSR.*,ISNULL((
+SELECT BKY FROM (
+SELECT SERIAL_NO,DEPARTMENT_ID,LOCATION_ID,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS BKY FROM w3Qa_1.SERVICE_GUARANTY_NEW
+GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
+  ) AS T WHERE DEPARTMENT_ID=PSS.DEPARTMENT_ID AND LOCATION_ID=PSS.LOCATION_ID AND SERIAL_NO=PSSR.SERIAL_NUMBER
+),-1) AS DD FROM w3Qa_1.PBS_SERIAL_SAYIM PSS
+INNER JOIN w3Qa_1.PBS_SERIAL_SAYIM_ROW PSSR ON PSS.SAYIM_ID=PSSR.SAYIM_ID
+
+WHERE PSS.SAYIM_ID =#sayimId#) AS TTT WHERE 1=1 AND DD<>1
+
+        </cfquery>
+        
+            
+
+    
+
+
         <cfset successMessage = "Sayım tamamlandı! Toplam #getSayimDetails.recordCount# adet seri numarası kaydedildi.">
         <!--- Burada isteğe bağlı olarak sayım durumu güncellenebilir --->
     <cfelse>
