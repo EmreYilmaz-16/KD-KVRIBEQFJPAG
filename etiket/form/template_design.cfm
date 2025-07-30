@@ -24,7 +24,7 @@
 
 <!--- Seçili şablon bilgilerini al --->
 <cfquery name="getSelectedTemplate" datasource="w3Qa">
-    SELECT * FROM etiket_templates 
+    SELECT * FROM etiket_templates_s 
     WHERE template_id = <cfqueryparam value="#url.template_id#" cfsqltype="cf_sql_integer">
 </cfquery>
 
@@ -400,10 +400,12 @@
         // Önizleme güncelleme
         function updatePreview() {
             const preview = document.getElementById('labelPreview');
-            const width = document.getElementById('labelWidth').value;
-            const height = document.getElementById('labelHeight').value;
-            const showQR = document.getElementById('showQR').checked;
-            const showBarcode = document.getElementById('showBarcode').checked;
+            if (!preview) return;
+            
+            const width = document.getElementById('labelWidth') ? document.getElementById('labelWidth').value : 300;
+            const height = document.getElementById('labelHeight') ? document.getElementById('labelHeight').value : 200;
+            const showQR = document.getElementById('showQR') ? document.getElementById('showQR').checked : true;
+            const showBarcode = document.getElementById('showBarcode') ? document.getElementById('showBarcode').checked : false;
             
             preview.style.width = width + 'px';
             preview.style.height = height + 'px';
@@ -421,23 +423,36 @@
             }
             
             // QR boyut kontrolü göster/gizle
-            document.getElementById('qrSizeControl').style.display = showQR ? 'block' : 'none';
+            const qrSizeControl = document.getElementById('qrSizeControl');
+            if (qrSizeControl) {
+                qrSizeControl.style.display = showQR ? 'block' : 'none';
+            }
         }
 
         // Font boyutu güncelleme
         function updateFontSize(size) {
-            document.getElementById('fontSizeValue').textContent = size;
-            const preview = document.getElementById('labelPreview');
-            const content = preview.querySelector('.label-content');
-            const header = preview.querySelector('.label-header');
+            const fontSizeValue = document.getElementById('fontSizeValue');
+            if (fontSizeValue) {
+                fontSizeValue.textContent = size;
+            }
             
-            content.style.fontSize = size + 'px';
-            header.style.fontSize = (parseInt(size) + 2) + 'px';
+            const preview = document.getElementById('labelPreview');
+            if (preview) {
+                const content = preview.querySelector('.label-content');
+                const header = preview.querySelector('.label-header');
+                
+                if (content) content.style.fontSize = size + 'px';
+                if (header) header.style.fontSize = (parseInt(size) + 2) + 'px';
+            }
         }
 
         // QR boyutu güncelleme
         function updateQRSize(size) {
-            document.getElementById('qrSizeValue').textContent = size;
+            const qrSizeValue = document.getElementById('qrSizeValue');
+            if (qrSizeValue) {
+                qrSizeValue.textContent = size;
+            }
+            
             const qrElement = document.querySelector('.qr-placeholder');
             if (qrElement) {
                 qrElement.style.width = size + 'px';
@@ -448,15 +463,21 @@
 
         // Şablon kaydetme
         function saveTemplate() {
+            // Kontrol elementlerinin varlığını kontrol et
+            const templateIdElement = document.querySelector('[data-template-id]');
+            const templateId = templateIdElement ? templateIdElement.dataset.templateId : <cfoutput>#url.template_id#</cfoutput>;
+            
             const templateData = {
-                template_id: <cfoutput>#url.template_id#</cfoutput>,
-                label_width: document.getElementById('labelWidth').value,
-                label_height: document.getElementById('labelHeight').value,
-                font_size: document.getElementById('fontSize').value,
-                qr_size: document.getElementById('qrSize').value,
-                show_qr: document.getElementById('showQR').checked ? 1 : 0,
-                show_barcode: document.getElementById('showBarcode').checked ? 1 : 0
+                template_id: templateId,
+                label_width: document.getElementById('labelWidth') ? document.getElementById('labelWidth').value : 300,
+                label_height: document.getElementById('labelHeight') ? document.getElementById('labelHeight').value : 200,
+                font_size: document.getElementById('fontSize') ? document.getElementById('fontSize').value : 12,
+                qr_size: document.getElementById('qrSize') ? document.getElementById('qrSize').value : 100,
+                show_qr: document.getElementById('showQR') ? (document.getElementById('showQR').checked ? 1 : 0) : 1,
+                show_barcode: document.getElementById('showBarcode') ? (document.getElementById('showBarcode').checked ? 1 : 0) : 0
             };
+            
+            console.log('Kaydedilecek şablon verisi:', templateData);
             
             // AJAX ile kaydet
             fetch('save_template.cfm', {
@@ -466,17 +487,24 @@
                 },
                 body: JSON.stringify(templateData)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('HTTP error! status: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     alert('Şablon başarıyla kaydedildi!');
+                    // Sayfayı yenile
+                    location.reload();
                 } else {
                     alert('Hata: ' + data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('Kaydetme sırasında hata oluştu');
+                console.error('Kaydetme hatası:', error);
+                alert('Kaydetme sırasında hata oluştu: ' + error.message);
             });
         }
 
@@ -484,12 +512,12 @@
         function previewWithData() {
             const templateData = {
                 template_id: <cfoutput>#url.template_id#</cfoutput>,
-                label_width: document.getElementById('labelWidth').value,
-                label_height: document.getElementById('labelHeight').value,
-                font_size: document.getElementById('fontSize').value,
-                qr_size: document.getElementById('qrSize').value,
-                show_qr: document.getElementById('showQR').checked ? 1 : 0,
-                show_barcode: document.getElementById('showBarcode').checked ? 1 : 0
+                label_width: document.getElementById('labelWidth') ? document.getElementById('labelWidth').value : 300,
+                label_height: document.getElementById('labelHeight') ? document.getElementById('labelHeight').value : 200,
+                font_size: document.getElementById('fontSize') ? document.getElementById('fontSize').value : 12,
+                qr_size: document.getElementById('qrSize') ? document.getElementById('qrSize').value : 100,
+                show_qr: document.getElementById('showQR') ? (document.getElementById('showQR').checked ? 1 : 0) : 1,
+                show_barcode: document.getElementById('showBarcode') ? (document.getElementById('showBarcode').checked ? 1 : 0) : 0
             };
             
             const params = new URLSearchParams(templateData);
@@ -499,11 +527,45 @@
         // Yeni şablon oluştur
         function createNewTemplate() {
             const name = prompt('Yeni şablon adı:');
-            if (name) {
-                // Yeni şablon oluşturma işlemi
-                window.location.href = 'create_template.cfm?name=' + encodeURIComponent(name) + '&import_id=<cfoutput>#url.import_id#</cfoutput>';
+            if (name && name.trim() !== '') {
+                window.location.href = 'create_template.cfm?name=' + encodeURIComponent(name.trim()) + '&import_id=<cfoutput>#url.import_id#</cfoutput>';
             }
         }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Şablon tasarım sayfası yüklendi');
+            
+            // Event listener'ları ekle
+            const elements = {
+                'labelWidth': updatePreview,
+                'labelHeight': updatePreview,
+                'showQR': updatePreview,
+                'showBarcode': updatePreview
+            };
+            
+            Object.keys(elements).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', elements[id]);
+                }
+            });
+            
+            // Range slider'lar için oninput event'leri
+            const fontSize = document.getElementById('fontSize');
+            if (fontSize) {
+                fontSize.addEventListener('input', function() {
+                    updateFontSize(this.value);
+                });
+            }
+            
+            const qrSize = document.getElementById('qrSize');
+            if (qrSize) {
+                qrSize.addEventListener('input', function() {
+                    updateQRSize(this.value);
+                });
+            }
+        });
     </script>
 </body>
 </html>
