@@ -30,7 +30,8 @@
         )
         WHERE s.SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
     </cfquery>
-    
+    <cfdump var="#getSayimInfo#" label="Sayım Bilgileri">
+    <cfabort>
     <cfif getSayimInfo.recordCount eq 0>
         <cflocation url="../display/list_sayim.cfm" addtoken="false">
     </cfif>
