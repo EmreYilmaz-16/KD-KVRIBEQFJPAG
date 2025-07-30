@@ -1,9 +1,4 @@
-<cfdump var="#url#" label="URL Parameters">
-<cfdump var="#attributes#" label="Form Parameters">
-<!--- Sayım Detay İşlemi Sayfası --->
-<cfoutput>
-    #isDefined("attributes.sayim_id")#
-</cfoutput>
+
 
 <!--- URL'den sayım ID'sini al --->
 
@@ -30,7 +25,7 @@
         )
         WHERE s.SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
     </cfquery>
-    <cfdump var="#getSayimInfo#" label="Sayım Bilgileri">
+    
     
     <cfif getSayimInfo.recordCount eq 0>
         <cflocation url="../display/list_sayim.cfm" addtoken="false">
