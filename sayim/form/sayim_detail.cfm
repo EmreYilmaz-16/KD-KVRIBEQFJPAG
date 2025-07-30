@@ -37,8 +37,9 @@
     </cfif>
     
     <cfcatch>
+        <cfdump var="#cfcatch#" label="Hata Detayları">
         <cfset errorMessage = "Sayım bilgileri alınamadı: #cfcatch.message#">
-        <cflocation url="../display/list_sayim.cfm" addtoken="false">
+        <!---<cflocation url="../display/list_sayim.cfm" addtoken="false">---->
     </cfcatch>
 </cftry>
 
