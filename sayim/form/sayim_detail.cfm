@@ -31,7 +31,7 @@
         WHERE s.SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfdump var="#getSayimInfo#" label="Sayım Bilgileri">
-    <cfabort>
+    
     <cfif getSayimInfo.recordCount eq 0>
         <cflocation url="../display/list_sayim.cfm" addtoken="false">
     </cfif>
@@ -45,13 +45,13 @@
 
 <!--- Mevcut sayım detaylarını getir --->
 <cftry>
-    <cfquery name="getSayimDetails" datasource="w3Qa">
+    <cfquery name="getSayimDetails" datasource="w3Qa_1">
         SELECT 
             SAYIM_ROW_ID,
             SAYIM_ID,
             SERIAL_NUMBER,
             IN_OUT
-        FROM PBS_SERIAL_SAYIM_DETAIL
+        FROM PBS_SERIAL_SAYIM_ROW
         WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
         ORDER BY SAYIM_ROW_ID DESC
     </cfquery>
@@ -67,7 +67,7 @@
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
             <cfquery name="checkSerial" datasource="w3Qa">
                 SELECT COUNT(*) as SERIAL_COUNT
-                FROM PBS_SERIAL_SAYIM_DETAIL
+                FROM PBS_SERIAL_SAYIM_ROW
                 WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
                 AND SERIAL_NUMBER = <cfqueryparam value="#trim(form.serial_number)#" cfsqltype="cf_sql_varchar">
             </cfquery>
@@ -75,7 +75,7 @@
             <cfif checkSerial.SERIAL_COUNT eq 0>
                 <!--- Yeni seri numarası ekle --->
                 <cfquery datasource="w3Qa">
-                    INSERT INTO PBS_SERIAL_SAYIM_DETAIL (
+                    INSERT INTO PBS_SERIAL_SAYIM_ROW (
                         SAYIM_ID,
                         SERIAL_NUMBER,
                         IN_OUT
@@ -97,7 +97,7 @@
                     SAYIM_ID,
                     SERIAL_NUMBER,
                     IN_OUT
-                FROM PBS_SERIAL_SAYIM_DETAIL
+                FROM PBS_SERIAL_SAYIM_ROW
                 WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
                 ORDER BY SAYIM_ROW_ID DESC
             </cfquery>
