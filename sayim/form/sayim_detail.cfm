@@ -1,6 +1,10 @@
 <cfdump var="#url#" label="URL Parameters">
+<cfdump var="#attributes#" label="Form Parameters">
 <!--- Sayım Detay İşlemi Sayfası --->
-
+<cfoutput>
+    #isDefined("attributes.sayim_id")#
+</cfoutput>
+<cfabort>
 <!--- URL'den sayım ID'sini al --->
 <cfif not isDefined("attributes.sayim_id")>
     <cflocation url="../display/list_sayim.cfm" addtoken="false">
