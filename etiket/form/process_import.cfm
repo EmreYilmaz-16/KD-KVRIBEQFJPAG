@@ -111,7 +111,7 @@
                                 </cfif>
 
                                 <!--- Create Import Log Entry --->
-                                <cfquery name="createImportLog" datasource="KD" result="logResult">
+                                <cfquery name="createImportLog" datasource="w3Qa" result="logResult">
                                     INSERT INTO etiket_import_log (
                                         import_date,
                                         file_name,
@@ -129,7 +129,7 @@
 
                                 <!--- Clear existing temp data if requested --->
                                 <cfif form.clearTable eq "true">
-                                    <cfquery name="clearTempTable" datasource="KD">
+                                    <cfquery name="clearTempTable" datasource="w3Qa">
                                         DELETE FROM etiket_temp_data WHERE import_id = <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">
                                     </cfquery>
                                 </cfif>
@@ -404,7 +404,7 @@
                                             <cfif (form.validateData eq "false") OR 
                                                   (len(etaKodu) gt 0 AND len(seriNo) gt 0 AND miktar gt 0)>
                                                 
-                                                <cfquery name="insertTempData" datasource="KD">
+                                                <cfquery name="insertTempData" datasource="w3Qa">
                                                     INSERT INTO etiket_temp_data (
                                                         import_id,
                                                         eta_kodu,
@@ -462,7 +462,7 @@
                                 </cfscript>
 
                                 <!--- Update Import Log --->
-                                <cfquery name="updateImportLog" datasource="KD">
+                                <cfquery name="updateImportLog" datasource="w3Qa">
                                     UPDATE etiket_import_log SET
                                         total_records = <cfqueryparam value="#importResult.totalRecords#" cfsqltype="cf_sql_integer">,
                                         success_records = <cfqueryparam value="#importResult.successRecords#" cfsqltype="cf_sql_integer">,
@@ -481,7 +481,7 @@
                                     
                                     <!--- Update log with error --->
                                     <cfif importResult.importId gt 0>
-                                        <cfquery name="updateErrorLog" datasource="KD">
+                                        <cfquery name="updateErrorLog" datasource="w3Qa">
                                             UPDATE etiket_import_log SET
                                                 status = 'ERROR',
                                                 error_message = <cfqueryparam value="#cfcatch.message#" cfsqltype="cf_sql_varchar">,
