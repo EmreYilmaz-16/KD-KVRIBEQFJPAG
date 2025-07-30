@@ -408,7 +408,7 @@
                                         format="png">
                                 <cfcatch>
                                     <!--- Hata durumunda basit QR placeholder göster --->
-                                    <div style="width: 100px; height: 100px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
+                                    <div style="width: 100px; height: 100px; border: 2px solid ##000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
                                         QR KOD<br>OLUŞTURULUYOR
                                     </div>
                                 </cfcatch>
