@@ -631,10 +631,11 @@
                                         </div></cfoutput>
                                         
                                         <div class="d-grid gap-2">
-                                            <a href="view_labels.cfm?import_id=#importResult.importId#" class="btn btn-success btn-lg">
+                                           <cfoutput> <a href="view_labels.cfm?import_id=#importResult.importId#" class="btn btn-success btn-lg">
                                                 <i class="fas fa-print me-2"></i>
                                                 Etiketleri Görüntüle ve Yazdır
                                             </a>
+                                            </cfoutput>
                                             <a href="import_etiket.cfm" class="btn btn-outline-primary">
                                                 <i class="fas fa-upload me-2"></i>
                                                 Yeni Import
