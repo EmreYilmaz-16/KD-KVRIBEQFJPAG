@@ -20,7 +20,7 @@
         <cfset locationId = depoValues[2]>
         
         <!--- Veritabanına kayıt ekleme --->
-        <cfquery datasource="w3Qa" result="insertResult">
+        <cfquery datasource="w3Qa_1" result="insertResult">
             INSERT INTO PBS_SERIAL_SAYIM (
                 PAPER_NUMBER,
                 DEPARTMENT_ID,
