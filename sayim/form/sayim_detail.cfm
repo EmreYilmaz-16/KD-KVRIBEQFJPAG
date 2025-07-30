@@ -60,7 +60,7 @@
     <cfif isDefined("form.serial_number") and len(trim(form.serial_number))>
         <cftry>
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
-            <cfquery name="checkSerial" datasource="w3Qa">
+            <cfquery name="checkSerial" datasource="w3Qa_1">
                 SELECT COUNT(*) as SERIAL_COUNT
                 FROM PBS_SERIAL_SAYIM_ROW
                 WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
@@ -69,7 +69,7 @@
             
             <cfif checkSerial.SERIAL_COUNT eq 0>
                 <!--- Yeni seri numarası ekle --->
-                <cfquery datasource="w3Qa">
+                <cfquery datasource="w3Qa_1">
                     INSERT INTO PBS_SERIAL_SAYIM_ROW (
                         SAYIM_ID,
                         SERIAL_NUMBER,
@@ -86,7 +86,7 @@
             </cfif>
             
             <!--- Sayım detaylarını yeniden getir --->
-            <cfquery name="getSayimDetails" datasource="w3Qa">
+            <cfquery name="getSayimDetails" datasource="w3Qa_1">
                 SELECT 
                     SAYIM_ROW_ID,
                     SAYIM_ID,
@@ -109,8 +109,8 @@
 <!--- Seri numarası silme işlemi --->
 <cfif isDefined("url.action") and url.action eq "delete_serial" and isDefined("url.row_id")>
     <cftry>
-        <cfquery datasource="w3Qa">
-            DELETE FROM PBS_SERIAL_SAYIM_DETAIL
+        <cfquery datasource="w3Qa_1">
+            DELETE FROM PBS_SERIAL_SAYIM_ROW
             WHERE SAYIM_ROW_ID = <cfqueryparam value="#url.row_id#" cfsqltype="cf_sql_integer">
             AND SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
         </cfquery>
