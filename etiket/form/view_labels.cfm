@@ -455,6 +455,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
+        // QRCode kütüphanesinin yüklendiğini kontrol et
+        function checkQRCodeLibrary() {
+            if (typeof QRCode === 'undefined') {
+                console.error('QRCode kütüphanesi yüklenemedi, alternatif yükleme deneniyor...');
+                // Alternatif CDN dene
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+                script.onload = function() {
+                    console.log('Alternatif QR kütüphanesi yüklendi');
+                    generateQRCodes();
+                };
+                script.onerror = function() {
+                    console.error('QR kütüphanesi yüklenemedi');
+                    showQRError();
+                };
+                document.head.appendChild(script);
+                return false;
+            }
+            return true;
+        }
+
+        function showQRError() {
+            document.querySelectorAll('[id^="qr_"]').forEach(canvas => {
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#f8f9fa';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = '#6c757d';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('QR Kod', 50, 45);
+                ctx.fillText('Yüklenemedi', 50, 60);
+            });
+        }
+
         // Etiket boyutu değiştirme
         function changeLabelSize(size) {
             const container = document.getElementById('labelContainer');
@@ -468,32 +502,52 @@
         }
 
         // QR kodlarını oluştur
-        document.addEventListener('DOMContentLoaded', function() {
+        function generateQRCodes() {
             <cfloop query="getLabelData">
                <cfoutput>
-                 
-                const qrData_#temp_id# = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
-                
-                console.log('QR Data #temp_id#:', qrData_#temp_id#);
-                
-                QRCode.toCanvas(document.getElementById('qr_#temp_id#'), qrData_#temp_id#, {
-                    width: 100,
-                    height: 100,
-                    margin: 2,
-                    color: {
-                        dark: '##000000',
-                        light: '##FFFFFF'
-                    },
-                    errorCorrectionLevel: 'M'
-                }, function (error) {
-                    if (error) {
-                        console.error('QR Kod oluşturma hatası #temp_id#:', error);
+                try {
+                    const qrData_#temp_id# = '#JSStringFormat(eta_kodu)#_#JSStringFormat(seri_no)#_<cfif isDate(uretim_tarihi)>#DateFormat(uretim_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_<cfif isDate(paket_tarihi)>#DateFormat(paket_tarihi, "ddmmyyyy")#<cfelse>-</cfif>_#JSStringFormat(barkod)#_#NumberFormat(miktar, "0.00")#_#JSStringFormat(marka)#';
+                    
+                    console.log('QR Data #temp_id#:', qrData_#temp_id#);
+                    
+                    const canvas = document.getElementById('qr_#temp_id#');
+                    if (canvas && typeof QRCode !== 'undefined') {
+                        QRCode.toCanvas(canvas, qrData_#temp_id#, {
+                            width: 100,
+                            height: 100,
+                            margin: 2,
+                            color: {
+                                dark: '#000000',
+                                light: '#FFFFFF'
+                            },
+                            errorCorrectionLevel: 'M'
+                        }, function (error) {
+                            if (error) {
+                                console.error('QR Kod oluşturma hatası #temp_id#:', error);
+                            } else {
+                                console.log('QR Kod başarıyla oluşturuldu #temp_id#');
+                            }
+                        });
                     } else {
-                        console.log('QR Kod başarıyla oluşturuldu #temp_id#');
+                        console.error('Canvas veya QRCode bulunamadı #temp_id#');
                     }
-                });
+                } catch (e) {
+                    console.error('QR kod oluşturma genel hatası #temp_id#:', e);
+                }
                 </cfoutput>
             </cfloop>
+        }
+
+        // Sayfa yüklendiğinde başlat
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sayfa yüklendi, QR kodlar oluşturuluyor...');
+            
+            // QRCode kütüphanesini kontrol et ve QR kodları oluştur
+            setTimeout(() => {
+                if (checkQRCodeLibrary()) {
+                    generateQRCodes();
+                }
+            }, 500); // 500ms bekle ki kütüphane tam yüklensin
         });
 
         // Yazdırma öncesi ayarlar
