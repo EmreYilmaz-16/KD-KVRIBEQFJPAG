@@ -160,7 +160,7 @@
                         <!-- Geçmiş İmportlar -->
                         <div class="mt-4">
                             <h6>Son İmportlar:</h6>
-                            <cfquery name="getRecentImports" datasource="KD">
+                            <cfquery name="getRecentImports" datasource="w3Qa">
                                 SELECT TOP 5 
                                     import_id,
                                     import_date,
