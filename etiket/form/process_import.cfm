@@ -241,9 +241,19 @@
                                             if (structKeyExists(columnMap, "Üretim Tarihi")) {
                                                 cell = row.getCell(columnMap["Üretim Tarihi"]);
                                                 if (!isNull(cell)) {
-                                                    if (DateUtil.isCellDateFormatted(cell)) {
-                                                        uretimTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
-                                                    } else {
+                                                    try {
+                                                        if (DateUtil.isCellDateFormatted(cell)) {
+                                                            uretimTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
+                                                        } else {
+                                                            cellType = cell.getCellType().toString();
+                                                            if (cellType == "NUMERIC") {
+                                                                // Excel tarih serial numarası
+                                                                uretimTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
+                                                            } else {
+                                                                uretimTarihi = trim(cell.toString());
+                                                            }
+                                                        }
+                                                    } catch (any e) {
                                                         uretimTarihi = trim(cell.toString());
                                                     }
                                                 }
@@ -253,9 +263,19 @@
                                             if (structKeyExists(columnMap, "Paket Tarihi")) {
                                                 cell = row.getCell(columnMap["Paket Tarihi"]);
                                                 if (!isNull(cell)) {
-                                                    if (DateUtil.isCellDateFormatted(cell)) {
-                                                        paketTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
-                                                    } else {
+                                                    try {
+                                                        if (DateUtil.isCellDateFormatted(cell)) {
+                                                            paketTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
+                                                        } else {
+                                                            cellType = cell.getCellType().toString();
+                                                            if (cellType == "NUMERIC") {
+                                                                // Excel tarih serial numarası
+                                                                paketTarihi = dateFormat(cell.getDateCellValue(), "yyyy-mm-dd");
+                                                            } else {
+                                                                paketTarihi = trim(cell.toString());
+                                                            }
+                                                        }
+                                                    } catch (any e) {
                                                         paketTarihi = trim(cell.toString());
                                                     }
                                                 }
@@ -265,7 +285,18 @@
                                             if (structKeyExists(columnMap, "Barkod")) {
                                                 cell = row.getCell(columnMap["Barkod"]);
                                                 if (!isNull(cell)) {
-                                                    barkod = trim(cell.toString());
+                                                    try {
+                                                        // Barkod her zaman string olarak işle
+                                                        cellType = cell.getCellType().toString();
+                                                        if (cellType == "NUMERIC") {
+                                                            // Sayısal barkodu decimal notation olmadan string'e çevir
+                                                            barkod = numberFormat(cell.getNumericCellValue(), "0");
+                                                        } else {
+                                                            barkod = trim(cell.toString());
+                                                        }
+                                                    } catch (any e) {
+                                                        barkod = trim(cell.toString());
+                                                    }
                                                 }
                                             }
                                             
@@ -273,7 +304,25 @@
                                             if (structKeyExists(columnMap, "Miktar")) {
                                                 cell = row.getCell(columnMap["Miktar"]);
                                                 if (!isNull(cell)) {
-                                                    miktar = val(cell.toString());
+                                                    try {
+                                                        // Hücre tipini kontrol et
+                                                        cellType = cell.getCellType().toString();
+                                                        if (cellType == "NUMERIC") {
+                                                            miktar = cell.getNumericCellValue();
+                                                        } else {
+                                                            // String ise sayıya çevir
+                                                            miktarStr = trim(cell.toString());
+                                                            if (isNumeric(miktarStr)) {
+                                                                miktar = parseFloat(miktarStr);
+                                                            } else {
+                                                                miktar = 0;
+                                                            }
+                                                        }
+                                                    } catch (any e) {
+                                                        // Hata durumunda string olarak al ve çevir
+                                                        miktarStr = trim(cell.toString());
+                                                        miktar = isNumeric(miktarStr) ? parseFloat(miktarStr) : 0;
+                                                    }
                                                 }
                                             }
                                             
@@ -301,7 +350,8 @@
                                             // Insert into temp table (use cfquery within cfscript)
                                         } catch (any e) {
                                             errorRows++;
-                                            arrayAppend(errorMessages, e.message);
+                                            errorMessage = "Satır " & (rowIndex + 1) & ": " & e.message;
+                                            arrayAppend(errorMessages, errorMessage);
                                             continue;
                                         }
                                     }
@@ -355,43 +405,106 @@
                                             <!--- Üretim Tarihi --->
                                             <cfset cell = row.getCell(columnMap["Üretim Tarihi"])>
                                             <cfif not isNull(cell)>
-                                                <cfif DateUtil.isCellDateFormatted(cell)>
-                                                    <cfset uretimTarihi = cell.getDateCellValue()>
-                                                <cfelse>
-                                                    <cfset uretimTarihi = trim(cell.toString())>
-                                                    <cfif isDate(uretimTarihi)>
-                                                        <cfset uretimTarihi = parseDateTime(uretimTarihi)>
+                                                <cftry>
+                                                    <cfif DateUtil.isCellDateFormatted(cell)>
+                                                        <cfset uretimTarihi = cell.getDateCellValue()>
                                                     <cfelse>
-                                                        <cfset uretimTarihi = "">
+                                                        <cfset cellType = cell.getCellType().toString()>
+                                                        <cfif cellType eq "NUMERIC">
+                                                            <!--- Excel tarih serial numarası --->
+                                                            <cfset uretimTarihi = cell.getDateCellValue()>
+                                                        <cfelse>
+                                                            <cfset uretimTarihi = trim(cell.toString())>
+                                                            <cfif isDate(uretimTarihi)>
+                                                                <cfset uretimTarihi = parseDateTime(uretimTarihi)>
+                                                            <cfelse>
+                                                                <cfset uretimTarihi = "">
+                                                            </cfif>
+                                                        </cfif>
                                                     </cfif>
-                                                </cfif>
+                                                    <cfcatch>
+                                                        <cfset uretimTarihi = trim(cell.toString())>
+                                                        <cfif isDate(uretimTarihi)>
+                                                            <cfset uretimTarihi = parseDateTime(uretimTarihi)>
+                                                        <cfelse>
+                                                            <cfset uretimTarihi = "">
+                                                        </cfif>
+                                                    </cfcatch>
+                                                </cftry>
                                             </cfif>
                                             
                                             <!--- Paket Tarihi --->
                                             <cfset cell = row.getCell(columnMap["Paket Tarihi"])>
                                             <cfif not isNull(cell)>
-                                                <cfif DateUtil.isCellDateFormatted(cell)>
-                                                    <cfset paketTarihi = cell.getDateCellValue()>
-                                                <cfelse>
-                                                    <cfset paketTarihi = trim(cell.toString())>
-                                                    <cfif isDate(paketTarihi)>
-                                                        <cfset paketTarihi = parseDateTime(paketTarihi)>
+                                                <cftry>
+                                                    <cfif DateUtil.isCellDateFormatted(cell)>
+                                                        <cfset paketTarihi = cell.getDateCellValue()>
                                                     <cfelse>
-                                                        <cfset paketTarihi = "">
+                                                        <cfset cellType = cell.getCellType().toString()>
+                                                        <cfif cellType eq "NUMERIC">
+                                                            <!--- Excel tarih serial numarası --->
+                                                            <cfset paketTarihi = cell.getDateCellValue()>
+                                                        <cfelse>
+                                                            <cfset paketTarihi = trim(cell.toString())>
+                                                            <cfif isDate(paketTarihi)>
+                                                                <cfset paketTarihi = parseDateTime(paketTarihi)>
+                                                            <cfelse>
+                                                                <cfset paketTarihi = "">
+                                                            </cfif>
+                                                        </cfif>
                                                     </cfif>
-                                                </cfif>
+                                                    <cfcatch>
+                                                        <cfset paketTarihi = trim(cell.toString())>
+                                                        <cfif isDate(paketTarihi)>
+                                                            <cfset paketTarihi = parseDateTime(paketTarihi)>
+                                                        <cfelse>
+                                                            <cfset paketTarihi = "">
+                                                        </cfif>
+                                                    </cfcatch>
+                                                </cftry>
                                             </cfif>
                                             
                                             <!--- Barkod --->
                                             <cfset cell = row.getCell(columnMap["Barkod"])>
                                             <cfif not isNull(cell)>
-                                                <cfset barkod = trim(cell.toString())>
+                                                <cftry>
+                                                    <!--- Barkod her zaman string olarak işle --->
+                                                    <cfset cellType = cell.getCellType().toString()>
+                                                    <cfif cellType eq "NUMERIC">
+                                                        <!--- Sayısal barkodu decimal notation olmadan string'e çevir --->
+                                                        <cfset barkod = numberFormat(cell.getNumericCellValue(), "0")>
+                                                    <cfelse>
+                                                        <cfset barkod = trim(cell.toString())>
+                                                    </cfif>
+                                                    <cfcatch>
+                                                        <cfset barkod = trim(cell.toString())>
+                                                    </cfcatch>
+                                                </cftry>
                                             </cfif>
                                             
                                             <!--- Miktar --->
                                             <cfset cell = row.getCell(columnMap["Miktar"])>
                                             <cfif not isNull(cell)>
-                                                <cfset miktar = val(cell.toString())>
+                                                <cftry>
+                                                    <!--- Hücre tipini kontrol et --->
+                                                    <cfset cellType = cell.getCellType().toString()>
+                                                    <cfif cellType eq "NUMERIC">
+                                                        <cfset miktar = cell.getNumericCellValue()>
+                                                    <cfelse>
+                                                        <!--- String ise sayıya çevir --->
+                                                        <cfset miktarStr = trim(cell.toString())>
+                                                        <cfif isNumeric(miktarStr)>
+                                                            <cfset miktar = val(miktarStr)>
+                                                        <cfelse>
+                                                            <cfset miktar = 0>
+                                                        </cfif>
+                                                    </cfif>
+                                                    <cfcatch>
+                                                        <!--- Hata durumunda string olarak al ve çevir --->
+                                                        <cfset miktarStr = trim(cell.toString())>
+                                                        <cfset miktar = isNumeric(miktarStr) ? val(miktarStr) : 0>
+                                                    </cfcatch>
+                                                </cftry>
                                             </cfif>
                                             
                                             <!--- Marka --->

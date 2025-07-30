@@ -84,25 +84,30 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <ul class="mb-0">
-                                        <li><strong>EtaKodu</strong> - Ürün ETA kodu</li>
-                                        <li><strong>SeriNo</strong> - Seri numarası</li>
-                                        <li><strong>Üretim Tarihi</strong> - Üretim tarihi</li>
-                                        <li><strong>Paket Tarihi</strong> - Paketleme tarihi</li>
+                                        <li><strong>EtaKodu</strong> - Ürün ETA kodu (Metin)</li>
+                                        <li><strong>SeriNo</strong> - Seri numarası (Metin)</li>
+                                        <li><strong>Üretim Tarihi</strong> - Üretim tarihi (Tarih)</li>
+                                        <li><strong>Paket Tarihi</strong> - Paketleme tarihi (Tarih)</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
                                     <ul class="mb-0">
-                                        <li><strong>Barkod</strong> - Ürün barkodu</li>
-                                        <li><strong>Miktar</strong> - Ürün miktarı</li>
-                                        <li><strong>Marka</strong> - Ürün markası</li>
+                                        <li><strong>Barkod</strong> - Ürün barkodu (Metin/Sayı)</li>
+                                        <li><strong>Miktar</strong> - Ürün miktarı (Sayı)</li>
+                                        <li><strong>Marka</strong> - Ürün markası (Metin)</li>
                                     </ul>
                                 </div>
                             </div>
                             <hr>
-                            <small class="text-muted">
-                                <i class="fas fa-exclamation-triangle me-1"></i>
-                                İlk satır başlık satırı olmalıdır. Desteklenen formatlar: .xlsx, .xls
-                            </small>
+                            <div class="alert alert-warning mb-0">
+                                <small>
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    <strong>Önemli:</strong> İlk satır başlık satırı olmalıdır. 
+                                    Miktar alanı sayısal değer içermeli (örn: 25.50). 
+                                    Barkod alanı büyük sayılar içeriyorsa metin formatında olmalıdır.
+                                    Desteklenen formatlar: .xlsx, .xls
+                                </small>
+                            </div>
                         </div>
 
                         <!-- Örnek Excel İndirme -->
