@@ -213,7 +213,7 @@
                     <h5><i class="fas fa-list me-2"></i>Hazır Şablonlar</h5>
                     <div class="template-list">
                         <cfoutput query="getTemplates">
-                            <div class="template-item <cfif(template_id eq url.template_id)> active</cfif>#" 
+                            <div class="template-item <cfif(template_id eq url.template_id)> active</cfif>" 
                                  onclick="selectTemplate(#template_id#)">
                                 <div class="d-flex justify-content-between">
                                     <strong>#template_name#</strong>
