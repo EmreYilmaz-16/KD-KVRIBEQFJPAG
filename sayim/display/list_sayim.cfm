@@ -14,7 +14,7 @@
             s.RECORD_DATE,
             s.RECORD_EMP
         FROM PBS_SERIAL_SAYIM s
-        LEFT JOIN STOCKS_LOCATION sl ON (
+        LEFT JOIN w3Qa.STOCKS_LOCATION sl ON (
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
             s.LOCATION_ID = sl.LOCATION_ID
         )
