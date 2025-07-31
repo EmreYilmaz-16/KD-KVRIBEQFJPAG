@@ -394,11 +394,12 @@ WHERE PSS.SAYIM_ID =#sayimId#) AS TTT WHERE 1=1 AND DD<>1
         </cfif>
     </div>
 </div>
-
+<script src="/AddOns/Partner/js/barcodeMenager.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+const barcodeManager = new BarcodeManager();
 // Sayfa yüklendiğinde input'a fokus ver
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('serialInput').focus();
@@ -406,6 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Form submit edildikten sonra input'u temizle ve fokus ver
 document.getElementById('serialForm').addEventListener('submit', function(e) {
+    alert("Burası Çalıştı");
     setTimeout(function() {
         const input = document.getElementById('serialInput');
         input.value = '';
