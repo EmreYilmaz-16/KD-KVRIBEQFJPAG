@@ -397,7 +397,7 @@
                                     FROM PBS_GETSTOCK 
                                     WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
                                     </cfquery>
-                                <span <cfif getStok.recordCount>style='color:red;font-weight:bold'</cfif>><cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
+                                <span <cfif getStok.recordCount><cfelse>style='color:red;font-weight:bold'</cfif> > <cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
                             </div>
 
                             <!-- QR Code ile Birleştirilmiş Veri -->
