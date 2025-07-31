@@ -167,6 +167,7 @@
                 border: 2px solid #000;
                 margin-bottom: 10px;
                 font-size: 11px;
+                page-break-after: always;
             }
             
             .qr-code canvas {
