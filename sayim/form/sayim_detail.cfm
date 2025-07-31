@@ -73,7 +73,7 @@
                     SELECT COUNT(*) as SERIAL_COUNT
                     FROM PBS_SERIAL_SAYIM_ROW
                     WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
-                    AND SERIAL_NUMBER = <cfqueryparam value="#trim(form.serial_number)#" cfsqltype="cf_sql_varchar">
+                    AND SERIAL_NUMBER = <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">
                 </cfquery>
                 
                 <cfif checkSerial.SERIAL_COUNT eq 0>
