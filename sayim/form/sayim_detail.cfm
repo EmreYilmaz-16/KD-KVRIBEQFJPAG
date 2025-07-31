@@ -57,6 +57,7 @@
 
 <!--- Seri numarası ekleme işlemi --->
 <cfif isDefined("form.action") and form.action eq "add_serial">
+    burası çalıştı
     <cfif isDefined("form.serial_number") and len(trim(form.serial_number))>
         <cftry>
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
