@@ -66,7 +66,7 @@
             SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#result.urunKodu#'
         </cfquery>
         <cfdump var="#getStok#">
-        <cfabort>
+        <cfif getStok.recordCount>
         <cftry>
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
             <cfquery name="checkSerial" datasource="w3Qa_1">
@@ -112,6 +112,9 @@
         </cftry>
     <cfelse>
         <cfset errorMessage = "Lütfen geçerli bir seri numarası giriniz.">
+    </cfif>
+<cfelse>
+    <cfset errorMessage = "Ürün Sisteme Kayıtlı Değil">
     </cfif>
 </cfif>
 
