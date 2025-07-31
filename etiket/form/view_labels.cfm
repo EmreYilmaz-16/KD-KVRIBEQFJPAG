@@ -390,6 +390,15 @@
                                 <strong>Miktar:</strong>
                                 <span>#NumberFormat(miktar, "0.00")#</span>
                             </div>
+                             <div class="label-field">
+                                <strong>Ürün:</strong>
+                                <cfquery name="getStok" datasource="w3Qa">
+                                    SELECT TOP 1 PRODUCT_NAME 
+                                    FROM PBS_GETSTOCK 
+                                    WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
+                                    </cfquery>
+                                <span <cfif getStok.recordCount>style='color:red;font-weight:bold'</cfif>><cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
+                            </div>
 
                             <!-- QR Code ile Birleştirilmiş Veri -->
                             <div class="qr-code">
