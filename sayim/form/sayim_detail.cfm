@@ -55,7 +55,7 @@
     </cfcatch>
 </cftry>
 <!----------<cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>------->
-<cfset barcodeMenager =createObject("component", "AddOns.Partner.cfc.BarcodeManager")>
+<cfset barcodeManager = createObject("component", "AddOns.Partner.cfc.BarcodeManager").init()>
 <!--- Seri numarası ekleme işlemi --->
 <cfif isDefined("form.action") and form.action eq "add_serial">
     
