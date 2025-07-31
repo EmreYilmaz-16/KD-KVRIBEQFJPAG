@@ -81,7 +81,7 @@
                         <cfqueryparam value="1" cfsqltype="cf_sql_bit">
                     )
                 </cfquery>
-                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(form.serial_number)#">
+                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(form.serial_number)# 1111111111111">
             <cfelse>
                 <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(form.serial_number)#">
             </cfif>
