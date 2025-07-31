@@ -66,55 +66,55 @@
             SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#result.urunKodu#'
         </cfquery>
         <cfdump var="#getStok#">
-        <cfif getStok.recordCount>
-        <cftry>
-            <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
-            <cfquery name="checkSerial" datasource="w3Qa_1">
-                SELECT COUNT(*) as SERIAL_COUNT
-                FROM PBS_SERIAL_SAYIM_ROW
-                WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
-                AND SERIAL_NUMBER = <cfqueryparam value="#trim(form.serial_number)#" cfsqltype="cf_sql_varchar">
-            </cfquery>
-            
-            <cfif checkSerial.SERIAL_COUNT eq 0>
-                <!--- Yeni seri numarası ekle --->
-                <cfquery datasource="w3Qa_1">
-                    INSERT INTO PBS_SERIAL_SAYIM_ROW (
+        <cfif getStok.recordCount gt 0>
+            <cftry>
+                <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
+                <cfquery name="checkSerial" datasource="w3Qa_1">
+                    SELECT COUNT(*) as SERIAL_COUNT
+                    FROM PBS_SERIAL_SAYIM_ROW
+                    WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
+                    AND SERIAL_NUMBER = <cfqueryparam value="#trim(form.serial_number)#" cfsqltype="cf_sql_varchar">
+                </cfquery>
+                
+                <cfif checkSerial.SERIAL_COUNT eq 0>
+                    <!--- Yeni seri numarası ekle --->
+                    <cfquery datasource="w3Qa_1">
+                        INSERT INTO PBS_SERIAL_SAYIM_ROW (
+                            SAYIM_ID,
+                            SERIAL_NUMBER,
+                            IN_OUT
+                        ) VALUES (
+                            <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+                        )
+                    </cfquery>
+                    <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(result.seriNo)#">
+                <cfelse>
+                    <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(result.seriNo)#">
+                </cfif>
+                
+                <!--- Sayım detaylarını yeniden getir --->
+                <cfquery name="getSayimDetails" datasource="w3Qa_1">
+                    SELECT 
+                        SAYIM_ROW_ID,
                         SAYIM_ID,
                         SERIAL_NUMBER,
                         IN_OUT
-                    ) VALUES (
-                        <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-                    )
+                    FROM PBS_SERIAL_SAYIM_ROW
+                    WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
+                    ORDER BY SAYIM_ROW_ID DESC
                 </cfquery>
-                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(result.seriNo)#">
-            <cfelse>
-                <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(result.seriNo)#">
-            </cfif>
-            
-            <!--- Sayım detaylarını yeniden getir --->
-            <cfquery name="getSayimDetails" datasource="w3Qa_1">
-                SELECT 
-                    SAYIM_ROW_ID,
-                    SAYIM_ID,
-                    SERIAL_NUMBER,
-                    IN_OUT
-                FROM PBS_SERIAL_SAYIM_ROW
-                WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
-                ORDER BY SAYIM_ROW_ID DESC
-            </cfquery>
-            
-            <cfcatch>
-                <cfset errorMessage = "Seri numarası eklenirken hata oluştu: #cfcatch.message#">
-            </cfcatch>
-        </cftry>
+                
+                <cfcatch>
+                    <cfset errorMessage = "Seri numarası eklenirken hata oluştu: #cfcatch.message#">
+                </cfcatch>
+            </cftry>
+        <cfelse>
+            <cfset errorMessage = "Ürün Sisteme Kayıtlı Değil">
+        </cfif>
     <cfelse>
         <cfset errorMessage = "Lütfen geçerli bir seri numarası giriniz.">
-    </cfif>
-<cfelse>
-    <cfset errorMessage = "Ürün Sisteme Kayıtlı Değil">
     </cfif>
 </cfif>
 
