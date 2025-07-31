@@ -65,7 +65,7 @@
         <cfquery name="getStok" datasource="w3Qa">
             SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#result.urunKodu#'
         </cfquery>
-        <cfdump var="#getStok#">
+        
         <cfif getStok.recordCount gt 0>
             <cftry>
                 <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
@@ -82,11 +82,15 @@
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
                             SAYIM_ID,
                             SERIAL_NUMBER,
-                            IN_OUT
+                            IN_OUT,
+                            PRODUCT_ID,
+                            STOCK_ID
                         ) VALUES (
                             <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+                            <cfqueryparam value="#getStok.PRODUCT_ID#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#getStok.STOCK_ID#" cfsqltype="cf_sql_integer">
                         )
                     </cfquery>
                     <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(result.seriNo)#">
