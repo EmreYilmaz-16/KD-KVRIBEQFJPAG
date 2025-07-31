@@ -85,13 +85,13 @@
                         IN_OUT
                     ) VALUES (
                         <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#trim(form.serial_number)#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="1" cfsqltype="cf_sql_bit">
                     )
                 </cfquery>
-                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(form.serial_number)#">
+                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(result.seriNo)#">
             <cfelse>
-                <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(form.serial_number)#">
+                <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(result.seriNo)#">
             </cfif>
             
             <!--- Sayım detaylarını yeniden getir --->
