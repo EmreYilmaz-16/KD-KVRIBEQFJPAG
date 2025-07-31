@@ -405,7 +405,7 @@
                                 <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
                                 
                                 <!--- Workcube Barcode Custom Tag ile QR kod oluştur --->
-                                <cfset qr_data = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'ddmmyyyy')#_#DateFormat(paket_tarihi, 'ddmmyyyy')#_#barkod#_#NumberFormat(miktar, '0.00')#_#marka#">
+                                <cfset qr_data = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_#NumberFormat(miktar, '0.00')#_#marka#">
                                 <cfset qr_id = "qr_#temp_id#_#getTickCount()#">
                                 
                                 <cftry>
