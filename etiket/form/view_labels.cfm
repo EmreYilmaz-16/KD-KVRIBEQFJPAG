@@ -159,25 +159,35 @@
             }
             
             .label-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                grid-template-columns: 1fr;
+                gap: 0;
             }
             
             .label-item {
                 border: 2px solid #000;
-                margin-bottom: 10px;
-                font-size: 11px;
+                margin: 0;
+                padding: 20px;
+                font-size: 12px;
                 page-break-after: always;
+                page-break-inside: avoid;
+                width: 100%;
+                height: auto;
+                min-height: 50vh;
+                display: block;
+            }
+            
+            .label-item:last-child {
+                page-break-after: auto;
             }
             
             .qr-code canvas {
-                max-width: 80px !important;
-                max-height: 80px !important;
+                max-width: 120px !important;
+                max-height: 120px !important;
             }
             
             body {
                 margin: 0;
-                padding: 10px;
+                padding: 0;
             }
             
             .container {
