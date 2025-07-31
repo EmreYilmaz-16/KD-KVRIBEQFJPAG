@@ -372,82 +372,93 @@
             <div class="label-container label-size-medium" id="labelContainer">
                 <cfoutput> 
                 <cfloop query="getLabelData">
-                    <div class="label-item">
-                        <div class="label-header">
-                            #marka# - ÜRÜN ETİKETİ
-                        </div>
-                        <div class="label-content">
-                            <div class="label-field">
-                                <strong>ETA Kodu:</strong>
-                                <span>#eta_kodu#</span>
+                    <!--- Ürün bilgisini bir kez al --->
+                    <cfquery name="getStok" datasource="w3Qa">
+                        SELECT TOP 1 PRODUCT_NAME 
+                        FROM PBS_GETSTOCK 
+                        WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
+                    </cfquery>
+                    
+                    <!--- Miktar kadar etiket oluştur --->
+                    <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
+                        <!--- Her etiket için yeni seri numarası üret --->
+                        <cfset yeni_seri_no = seri_no & "_" & NumberFormat(etiket_no, "000")>
+                        
+                        <div class="label-item">
+                            <div class="label-header">
+                                #marka# - ÜRÜN ETİKETİ
                             </div>
-                            <div class="label-field">
-                                <strong>Seri No:</strong>
-                                <span>#seri_no#</span>
-                            </div>
-                            <cfif isDate(uretim_tarihi)>
+                            <div class="label-content">
                                 <div class="label-field">
-                                    <strong>Üretim:</strong>
-                                    <span>#DateFormat(uretim_tarihi, "dd/mm/yyyy")#</span>
+                                    <strong>ETA Kodu:</strong>
+                                    <span>#eta_kodu#</span>
                                 </div>
-                            </cfif>
-                            <cfif isDate(paket_tarihi)>
                                 <div class="label-field">
-                                    <strong>Paket:</strong>
-                                    <span>#DateFormat(paket_tarihi, "dd/mm/yyyy")#</span>
+                                    <strong>Seri No:</strong>
+                                    <span>#yeni_seri_no#</span>
                                 </div>
-                            </cfif>
-                            <div class="label-field">
-                                <strong>Miktar:</strong>
-                                <span>#NumberFormat(miktar, "0.00")#</span>
-                            </div>
-                             <div class="label-field">
-                                <strong>Ürün:</strong>
-                                <cfquery name="getStok" datasource="w3Qa">
-                                    SELECT TOP 1 PRODUCT_NAME 
-                                    FROM PBS_GETSTOCK 
-                                    WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
-                                    </cfquery>
-                                <span <cfif getStok.recordCount><cfelse>style='color:red;font-weight:bold'</cfif> > <cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
-                            </div>
-
-                            <!-- QR Code ile Birleştirilmiş Veri -->
-                            <div class="qr-code">
-                                <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
-                                
-                                <!--- Workcube Barcode Custom Tag ile QR kod oluştur --->
-                                <cfset qr_data = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_#NumberFormat(miktar, '0.00')#_#marka#">
-                                <cfset qr_id = "qr_#temp_id#_#getTickCount()#">
-                                
-                                <cftry>
-                                    <cf_pbs_barcode 
-                                        value="#qr_data#" 
-                                        type="qrcode" 
-                                        width="100" 
-                                        height="100" 
-                                        show="1" 
-                                        id="#qr_id#"
-                                        path="#ExpandPath('../temp/')#"
-                                        format="png">
-                                <cfcatch>
-                                    <!--- Hata durumunda basit QR placeholder göster --->
-                                    <div style="width: 100px; height: 100px; border: 2px solid ##000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
-                                        QR KOD<br>OLUŞTURULUYOR
+                                <cfif isDate(uretim_tarihi)>
+                                    <div class="label-field">
+                                        <strong>Üretim:</strong>
+                                        <span>#DateFormat(uretim_tarihi, "dd/mm/yyyy")#</span>
                                     </div>
-                                </cfcatch>
-                                </cftry>
+                                </cfif>
+                                <cfif isDate(paket_tarihi)>
+                                    <div class="label-field">
+                                        <strong>Paket:</strong>
+                                        <span>#DateFormat(paket_tarihi, "dd/mm/yyyy")#</span>
+                                    </div>
+                                </cfif>
+                                <div class="label-field">
+                                    <strong>Miktar:</strong>
+                                    <span>1.00</span> <!--- Her etiket için miktar 1 --->
+                                </div>
+                                <div class="label-field">
+                                    <strong>Etiket:</strong>
+                                    <span>#etiket_no# / #Int(miktar)#</span> <!--- Kaçıncı etiket olduğunu göster --->
+                                </div>
+                                <div class="label-field">
+                                    <strong>Ürün:</strong>
+                                    <span <cfif getStok.recordCount><cfelse>style='color:red;font-weight:bold'</cfif> > <cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
+                                </div>
+
+                                <!-- QR Code ile Birleştirilmiş Veri -->
+                                <div class="qr-code">
+                                    <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
+                                    
+                                    <!--- Workcube Barcode Custom Tag ile QR kod oluştur --->
+                                    <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+                                    <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
                                 
-                                <div style="font-size: 8px; margin-top: 5px; word-break: break-all; line-height: 1.2;">
-                                    #qr_data#
+                                    
+                                    <cftry>
+                                        <cf_pbs_barcode 
+                                            value="#qr_data#" 
+                                            type="qrcode" 
+                                            width="100" 
+                                            height="100" 
+                                            show="1" 
+                                            id="#qr_id#"
+                                            path="#ExpandPath('../temp/')#"
+                                            format="png">
+                                    <cfcatch>
+                                        <!--- Hata durumunda basit QR placeholder göster --->
+                                        <div style="width: 100px; height: 100px; border: 2px solid ##000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
+                                            QR KOD<br>OLUŞTURULUYOR
+                                        </div>
+                                    </cfcatch>
+                                    </cftry>
+                                    
+                                    <div style="font-size: 8px; margin-top: 5px; word-break: break-all; line-height: 1.2;">
+                                        #qr_data#
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </cfloop>
+                    </cfloop> <!--- Etiket sayısı döngüsü sonu --->
+                </cfloop> <!--- Ana veri döngüsü sonu --->
                 </cfoutput>
-            </div>
-
-            <cfif getLabelData.recordCount eq 0>
+            </div>            <cfif getLabelData.recordCount eq 0>
                 <div class="alert alert-warning text-center">
                     <h5><i class="fas fa-exclamation-triangle me-2"></i>Etiket Bulunamadı</h5>
                     <p>Bu import için etiket verisi bulunamadı.</p>
