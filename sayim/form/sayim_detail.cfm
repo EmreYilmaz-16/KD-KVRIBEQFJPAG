@@ -62,6 +62,10 @@
     <cfif isDefined("form.serial_number") and len(trim(form.serial_number))>
         <cfset result = barcodeManager.parseBarcode("#form.serial_number#", "firma1")>
         <cfdump var="#result#">
+        <cfquery name="getStok" datasource="w3Qa">
+            SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#result.urunKodu#'
+        </cfquery>
+        <cfdump var="#getStok#">
         <cfabort>
         <cftry>
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
