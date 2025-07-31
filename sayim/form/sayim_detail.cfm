@@ -54,11 +54,15 @@
         <cfset getSayimDetails = queryNew("SAYIM_ROW_ID,SAYIM_ID,SERIAL_NUMBER,IN_OUT", "integer,integer,varchar,bit")>
     </cfcatch>
 </cftry>
-
+<!----------<cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>------->
+<cfset barcodeMenager =createObject("component", "AddOns.Partner.cfc.BarcodeManager")>
 <!--- Seri numarası ekleme işlemi --->
 <cfif isDefined("form.action") and form.action eq "add_serial">
-    burası çalıştı
+    
     <cfif isDefined("form.serial_number") and len(trim(form.serial_number))>
+        <cfset result = barcodeManager.parseBarcode("#form.serial_number#", "firma1")>
+        <cfdump var="#result#">
+        <cfabort>
         <cftry>
             <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
             <cfquery name="checkSerial" datasource="w3Qa_1">
@@ -81,7 +85,7 @@
                         <cfqueryparam value="1" cfsqltype="cf_sql_bit">
                     )
                 </cfquery>
-                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(form.serial_number)# 1111111111111">
+                <cfset successMessage = "Seri numarası başarıyla eklendi: #trim(form.serial_number)#">
             <cfelse>
                 <cfset warningMessage = "Bu seri numarası zaten eklenmiş: #trim(form.serial_number)#">
             </cfif>
