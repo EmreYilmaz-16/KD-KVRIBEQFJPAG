@@ -111,6 +111,8 @@
                 </cfquery>
                 
                 <cfcatch>
+
+                    <cfdump var="#cfcatch#">
                     <cfset errorMessage = "Seri numarası eklenirken hata oluştu: #cfcatch.message#">
                 </cfcatch>
             </cftry>
