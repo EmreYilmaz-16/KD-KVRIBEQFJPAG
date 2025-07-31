@@ -88,7 +88,7 @@
                         ) VALUES (
                             <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#trim(result.seriNo)#" cfsqltype="cf_sql_varchar">,
-                            <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+                            <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
                             <cfqueryparam value="#getStok.PRODUCT_ID#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#getStok.STOCK_ID#" cfsqltype="cf_sql_integer">
                         )
