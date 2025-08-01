@@ -17,6 +17,9 @@
     <cfset var baseSerial = "">
     <cfset var counter = 1>
     
+    <!--- Debug: Log function call --->
+    <cflog file="etiket_import" text="generateSerialNumbers called: etaKodu=#etaKodu#, miktar=#miktar#, prefix=#prefix#">
+    
     <!--- Get last serial number for this eta kodu and date --->
     <cfquery name="getLastSerial" datasource="w3Qa">
         SELECT TOP 1 seri_no 
@@ -33,6 +36,9 @@
         <cfif isNumeric(counterPart)>
             <cfset counter = val(counterPart) + 1>
         </cfif>
+        <cflog file="etiket_import" text="Found last serial: #lastSerial#, counter will start from: #counter#">
+    <cfelse>
+        <cflog file="etiket_import" text="No previous serial found, starting from: #counter#">
     </cfif>
     
     <!--- Generate serial numbers --->
@@ -41,6 +47,8 @@
         <cfset arrayAppend(serialNumbers, serialNumber)>
         <cfset counter = counter + 1>
     </cfloop>
+    
+    <cflog file="etiket_import" text="Generated #arrayLen(serialNumbers)# serial numbers: #arrayToList(serialNumbers)#">
     
     <cfreturn serialNumbers>
 </cffunction>
@@ -556,7 +564,9 @@
                                                 
                                                 <!--- Generate serial numbers if empty --->
                                                 <cfif len(trim(seriNo)) eq 0 AND miktar gt 0>
+                                                    <cflog file="etiket_import" text="Row #rowIndex + 1#: SeriNo is empty, generating #miktar# serials for etaKodu: #etaKodu#">
                                                     <cfset generatedSerials = generateSerialNumbers(etaKodu, miktar, importResult.importId)>
+                                                    <cflog file="etiket_import" text="Row #rowIndex + 1#: Generated serials: #arrayToList(generatedSerials)#">
                                                     
                                                     <!--- Insert multiple records for generated serials --->
                                                     <cfloop array="#generatedSerials#" index="generatedSerial">
@@ -594,6 +604,7 @@
                                                             )
                                                         </cfquery>
                                                         <cfset successCount = successCount + 1>
+                                                        <cflog file="etiket_import" text="Inserted record with serial: #generatedSerial# for import_id: #importResult.importId#">
                                                     </cfloop>
                                                 <cfelse>
                                                     <!--- Normal single record insert --->
@@ -652,7 +663,18 @@
                                     importResult.errorRecords = errorRows;
                                     importResult.success = true;
                                     importResult.message = "Excel dosyası başarıyla işlendi.";
+                                    
+                                    // Debug: Log final results
+                                    writeLog("file=etiket_import", "Import completed: totalRecords=#sheet2.getLastRowNum()#, successCount=#successCount#, errorRows=#errorRows#, importId=#importResult.importId#");
                                 </cfscript>
+
+                                <!--- Verify actual records in database --->
+                                <cfquery name="verifyRecords" datasource="w3Qa">
+                                    SELECT COUNT(*) as actual_count
+                                    FROM etiket_temp_data 
+                                    WHERE import_id = <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">
+                                </cfquery>
+                                <cflog file="etiket_import" text="Actual records in database for import_id #importResult.importId#: #verifyRecords.actual_count#">
 
                                 <!--- Update Import Log --->
                                 <cfquery name="updateImportLog" datasource="w3Qa">
@@ -695,15 +717,19 @@
                                             <p>#importResult.message#</p>
                                             <hr>
                                             <div class="row text-center">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <h3 class="text-primary">#importResult.totalRecords#</h3>
                                                     <small>Toplam Satır</small>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <h3 class="text-success">#importResult.successRecords#</h3>
-                                                    <small>Başarılı</small>
+                                                <div class="col-md-3">
+                                                    <h3 class="text-info">#verifyRecords.actual_count#</h3>
+                                                    <small>Oluşturulan Etiket</small>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                    <h3 class="text-success">#importResult.successRecords#</h3>
+                                                    <small>Başarılı İşlem</small>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <h3 class="text-danger">#importResult.errorRecords#</h3>
                                                     <small>Hatalı</small>
                                                 </div>

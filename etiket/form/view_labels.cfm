@@ -27,9 +27,16 @@
     <cflocation url="import_etiket.cfm" addtoken="false">
 </cfif>
 
-<!--- Sayfalama hesaplamaları --->
+<!--- Sayfalama hesaplamaları - gerçek kayıt sayısına göre yap --->
+<cfquery name="getTotalRecordsForPaging" datasource="w3Qa">
+    SELECT COUNT(*) as total_count
+    FROM etiket_temp_data 
+    WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
+</cfquery>
+
 <cfset offset = (url.page - 1) * url.per_page>
-<cfset totalPages = ceiling(getImportInfo.success_records / url.per_page)>
+<cfset totalPages = ceiling(getTotalRecordsForPaging.total_count / url.per_page)>
+<cflog file="etiket_import" text="view_labels.cfm: Pagination - total_count=#getTotalRecordsForPaging.total_count#, totalPages=#totalPages#, offset=#offset#">
 
 <!--- Etiket verilerini al --->
 <cfquery name="getLabelData" datasource="w3Qa">
@@ -45,10 +52,21 @@
         row_number
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
-    ORDER BY row_number
+    ORDER BY row_number, temp_id
     OFFSET #offset# ROWS 
     FETCH NEXT #url.per_page# ROWS ONLY
 </cfquery>
+
+<!--- Debug: Log query results --->
+<cflog file="etiket_import" text="view_labels.cfm: import_id=#url.import_id#, found #getLabelData.recordCount# records">
+
+<!--- Debug: Total records in temp table for this import --->
+<cfquery name="getTotalRecords" datasource="w3Qa">
+    SELECT COUNT(*) as total_count
+    FROM etiket_temp_data 
+    WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
+</cfquery>
+<cflog file="etiket_import" text="view_labels.cfm: Total records in temp table for import_id #url.import_id#: #getTotalRecords.total_count#">
 
 <!DOCTYPE html>
 <html lang="tr">
