@@ -6,6 +6,45 @@
 <cfset uploadPath = "c:\temp\excel_imports\">
 <cfset maxFileSize = 10 * 1024 * 1024> <!--- 10MB --->
 
+<!--- Serial Number Generator Function --->
+<cffunction name="generateSerialNumbers" returntype="array" access="public">
+    <cfargument name="etaKodu" type="string" required="true">
+    <cfargument name="miktar" type="numeric" required="true">
+    <cfargument name="importId" type="numeric" required="true">
+    
+    <cfset var serialNumbers = []>
+    <cfset var prefix = left(etaKodu, 3) & dateFormat(now(), "yymmdd")>
+    <cfset var baseSerial = "">
+    <cfset var counter = 1>
+    
+    <!--- Get last serial number for this eta kodu and date --->
+    <cfquery name="getLastSerial" datasource="w3Qa">
+        SELECT TOP 1 seri_no 
+        FROM etiket_temp_data 
+        WHERE eta_kodu = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
+        AND seri_no LIKE <cfqueryparam value="#prefix#%" cfsqltype="cf_sql_varchar">
+        ORDER BY seri_no DESC
+    </cfquery>
+    
+    <cfif getLastSerial.recordCount gt 0>
+        <!--- Extract counter from last serial --->
+        <cfset lastSerial = getLastSerial.seri_no>
+        <cfset counterPart = right(lastSerial, 4)>
+        <cfif isNumeric(counterPart)>
+            <cfset counter = val(counterPart) + 1>
+        </cfif>
+    </cfif>
+    
+    <!--- Generate serial numbers --->
+    <cfloop from="1" to="#miktar#" index="i">
+        <cfset serialNumber = prefix & numberFormat(counter, "0000")>
+        <cfset arrayAppend(serialNumbers, serialNumber)>
+        <cfset counter = counter + 1>
+    </cfloop>
+    
+    <cfreturn serialNumbers>
+</cffunction>
+
 <!--- Create upload directory if it doesn't exist --->
 <cfif not directoryExists(uploadPath)>
     <cfdirectory action="create" directory="#uploadPath#">
@@ -339,9 +378,7 @@
                                                 if (len(etaKodu) == 0) {
                                                     throw("Satır " & (rowIndex + 1) & ": EtaKodu boş olamaz");
                                                 }
-                                                if (len(seriNo) == 0) {
-                                                    throw("Satır " & (rowIndex + 1) & ": SeriNo boş olamaz");
-                                                }
+                                                // SeriNo validation removed - will be auto-generated if empty
                                                 if (miktar <= 0) {
                                                     throw("Satır " & (rowIndex + 1) & ": Miktar 0'dan büyük olmalıdır");
                                                 }
@@ -515,43 +552,86 @@
                                             
                                             <!--- Validate and Insert --->
                                             <cfif (form.validateData eq "false") OR 
-                                                  (len(etaKodu) gt 0 AND len(seriNo) gt 0 AND miktar gt 0)>
+                                                  (len(etaKodu) gt 0 AND miktar gt 0)>
                                                 
-                                                <cfquery name="insertTempData" datasource="w3Qa">
-                                                    INSERT INTO etiket_temp_data (
-                                                        import_id,
-                                                        eta_kodu,
-                                                        seri_no,
-                                                        uretim_tarihi,
-                                                        paket_tarihi,
-                                                        barkod,
-                                                        miktar,
-                                                        marka,
-                                                        row_number,
-                                                        created_date
-                                                    ) VALUES (
-                                                        <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">,
-                                                        <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">,
-                                                        <cfqueryparam value="#seriNo#" cfsqltype="cf_sql_varchar">,
-                                                        <cfif isDate(uretimTarihi)>
-                                                            <cfqueryparam value="#uretimTarihi#" cfsqltype="cf_sql_timestamp">
-                                                        <cfelse>
-                                                            NULL
-                                                        </cfif>,
-                                                        <cfif isDate(paketTarihi)>
-                                                            <cfqueryparam value="#paketTarihi#" cfsqltype="cf_sql_timestamp">
-                                                        <cfelse>
-                                                            NULL
-                                                        </cfif>,
-                                                        <cfqueryparam value="#barkod#" cfsqltype="cf_sql_varchar">,
-                                                        <cfqueryparam value="#miktar#" cfsqltype="cf_sql_decimal">,
-                                                        <cfqueryparam value="#marka#" cfsqltype="cf_sql_varchar">,
-                                                        <cfqueryparam value="#rowIndex + 1#" cfsqltype="cf_sql_integer">,
-                                                        GETDATE()
-                                                    )
-                                                </cfquery>
-                                                
-                                                <cfset successCount = successCount + 1>
+                                                <!--- Generate serial numbers if empty --->
+                                                <cfif len(trim(seriNo)) eq 0 AND miktar gt 0>
+                                                    <cfset generatedSerials = generateSerialNumbers(etaKodu, miktar, importResult.importId)>
+                                                    
+                                                    <!--- Insert multiple records for generated serials --->
+                                                    <cfloop array="#generatedSerials#" index="generatedSerial">
+                                                        <cfquery name="insertTempData" datasource="w3Qa">
+                                                            INSERT INTO etiket_temp_data (
+                                                                import_id,
+                                                                eta_kodu,
+                                                                seri_no,
+                                                                uretim_tarihi,
+                                                                paket_tarihi,
+                                                                barkod,
+                                                                miktar,
+                                                                marka,
+                                                                row_number,
+                                                                created_date
+                                                            ) VALUES (
+                                                                <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">,
+                                                                <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="#generatedSerial#" cfsqltype="cf_sql_varchar">,
+                                                                <cfif isDate(uretimTarihi)>
+                                                                    <cfqueryparam value="#uretimTarihi#" cfsqltype="cf_sql_timestamp">
+                                                                <cfelse>
+                                                                    NULL
+                                                                </cfif>,
+                                                                <cfif isDate(paketTarihi)>
+                                                                    <cfqueryparam value="#paketTarihi#" cfsqltype="cf_sql_timestamp">
+                                                                <cfelse>
+                                                                    NULL
+                                                                </cfif>,
+                                                                <cfqueryparam value="#barkod#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="1" cfsqltype="cf_sql_decimal">,
+                                                                <cfqueryparam value="#marka#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="#rowIndex + 1#" cfsqltype="cf_sql_integer">,
+                                                                GETDATE()
+                                                            )
+                                                        </cfquery>
+                                                        <cfset successCount = successCount + 1>
+                                                    </cfloop>
+                                                <cfelse>
+                                                    <!--- Normal single record insert --->
+                                                    <cfquery name="insertTempData" datasource="w3Qa">
+                                                        INSERT INTO etiket_temp_data (
+                                                            import_id,
+                                                            eta_kodu,
+                                                            seri_no,
+                                                            uretim_tarihi,
+                                                            paket_tarihi,
+                                                            barkod,
+                                                            miktar,
+                                                            marka,
+                                                            row_number,
+                                                            created_date
+                                                        ) VALUES (
+                                                            <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">,
+                                                            <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">,
+                                                            <cfqueryparam value="#seriNo#" cfsqltype="cf_sql_varchar">,
+                                                            <cfif isDate(uretimTarihi)>
+                                                                <cfqueryparam value="#uretimTarihi#" cfsqltype="cf_sql_timestamp">
+                                                            <cfelse>
+                                                                NULL
+                                                            </cfif>,
+                                                            <cfif isDate(paketTarihi)>
+                                                                <cfqueryparam value="#paketTarihi#" cfsqltype="cf_sql_timestamp">
+                                                            <cfelse>
+                                                                NULL
+                                                            </cfif>,
+                                                            <cfqueryparam value="#barkod#" cfsqltype="cf_sql_varchar">,
+                                                            <cfqueryparam value="#miktar#" cfsqltype="cf_sql_decimal">,
+                                                            <cfqueryparam value="#marka#" cfsqltype="cf_sql_varchar">,
+                                                            <cfqueryparam value="#rowIndex + 1#" cfsqltype="cf_sql_integer">,
+                                                            GETDATE()
+                                                        )
+                                                    </cfquery>
+                                                    <cfset successCount = successCount + 1>
+                                                </cfif>
                                             </cfif>
                                         </cfif>
                                         
