@@ -121,6 +121,7 @@
                                         </cfif>
                                         
                                         <cfcatch>
+                                            <cfdump var="#cfcatch#">
                                             <cfset errorCount++>
                                             <cfset arrayAppend(errors, "Satır #row#: #cfcatch.message#")>
                                         </cfcatch>
@@ -180,7 +181,9 @@
                                 </div>
                                 
                                 <cfcatch>
+                                    <cfdump var="#cfcatch#">
                                     <div class="alert alert-danger">
+                                        
                                         <h5><i class="fas fa-exclamation-triangle me-2"></i>Hata!</h5>
                                         <p><cfoutput>#cfcatch.message#</cfoutput></p>
                                     </div>
