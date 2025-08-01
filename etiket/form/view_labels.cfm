@@ -494,12 +494,12 @@
                             <ul class="pagination justify-content-center">
                                 <cfif url.page gt 1>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=1&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=1&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-angle-double-left"></i> İlk
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-left"></i> Önceki
                                         </a>
                                     </li>
@@ -507,20 +507,20 @@
                                 
                                 <cfloop from="#max(1, url.page - 5)#" to="#min(totalPages, url.page + 5)#" index="pageNum">
                                     <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#">
-                                            #pageNum#
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                           <cfoutput>#pageNum#</cfoutput>
                                         </a>
                                     </li>
                                 </cfloop>
                                 
                                 <cfif url.page lt totalPages>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
                                             Sonraki <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#</cfoutput>">
                                             Son <i class="fas fa-angle-double-right"></i>
                                         </a>
                                     </li>
@@ -571,12 +571,12 @@
             }
             if (e.key === 'ArrowLeft' && e.altKey) {
                 <cfif url.page gt 1>
-                    window.location.href = '?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#';
+                    window.location.href = '<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>';
                 </cfif>
             }
             if (e.key === 'ArrowRight' && e.altKey) {
                 <cfif url.page lt totalPages>
-                    window.location.href = '?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#';
+                    window.location.href = '<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>';
                 </cfif>
             }
         });
