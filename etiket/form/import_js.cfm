@@ -58,7 +58,7 @@
                                 <cfset excelData = deserializeJSON(form.jsonData)>
                                 
                                 <!--- Import log oluştur --->
-                                <cfquery name="createImportLog" datasource="KD" result="logResult">
+                                <cfquery name="createImportLog" datasource="w3Qa" result="logResult">
                                     INSERT INTO etiket_import_log (
                                         import_date,
                                         file_name,
@@ -81,7 +81,7 @@
                                 <cfloop array="#excelData.data#" index="row" item="rowData">
                                     <cftry>
                                         <cfif structKeyExists(rowData, "EtaKodu") AND len(trim(rowData.EtaKodu)) gt 0>
-                                            <cfquery name="insertData" datasource="KD">
+                                            <cfquery name="insertData" datasource="w3Qa">
                                                 INSERT INTO etiket_temp_data (
                                                     import_id,
                                                     eta_kodu,
@@ -128,7 +128,7 @@
                                 </cfloop>
                                 
                                 <!--- Import log güncelle --->
-                                <cfquery name="updateImportLog" datasource="KD">
+                                <cfquery name="updateImportLog" datasource="w3Qa">
                                     UPDATE etiket_import_log SET
                                         total_records = <cfqueryparam value="#arrayLen(excelData.data)#" cfsqltype="cf_sql_integer">,
                                         success_records = <cfqueryparam value="#successCount#" cfsqltype="cf_sql_integer">,
