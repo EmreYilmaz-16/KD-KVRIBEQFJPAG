@@ -284,7 +284,7 @@
                         <button type="button" class="btn btn-success" onclick="window.print()">
                             <i class="fas fa-print me-2"></i>Yazdır
                         </button>
-                        <a href="template_design.cfm?import_id=#url.import_id#" class="btn btn-info">
+                        <a href="<cfoutput>template_design.cfm?import_id=#url.import_id#</cfoutput>" class="btn btn-info">
                             <i class="fas fa-palette me-2"></i>Şablon Tasarımı
                         </a>
                         <a href="import_etiket.cfm" class="btn btn-outline-primary">
@@ -349,9 +349,9 @@
                 <div class="row mb-3 no-print">
                     <div class="col-md-6">
                         <div class="pagination-info">
-                            <span>Sayfa #url.page# / #totalPages#</span>
+                            <span><cfoutput>Sayfa #url.page# / #totalPages#</cfoutput></span>
                             <span class="text-muted">|</span>
-                            <span>Toplam #getImportInfo.success_records# etiket</span>
+                            <span><cfoutput>Toplam #getImportInfo.success_records# etiket</cfoutput></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -359,7 +359,7 @@
                             <ul class="pagination pagination-sm justify-content-end mb-0">
                                 <cfif url.page gt 1>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
@@ -367,15 +367,15 @@
                                 
                                 <cfloop from="#max(1, url.page - 2)#" to="#min(totalPages, url.page + 2)#" index="pageNum">
                                     <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#">
-                                            #pageNum#
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                            <cfoutput>#pageNum#</cfoutput>
                                         </a>
                                     </li>
                                 </cfloop>
                                 
                                 <cfif url.page lt totalPages>
                                     <li class="page-item">
-                                        <a class="page-link" href="?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#">
+                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
