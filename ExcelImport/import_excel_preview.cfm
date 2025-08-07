@@ -330,6 +330,7 @@
                 
                 <cfcatch type="any">
                     <!--- Veritabanı hatası --->
+                    <cfdump var="#cfcatch#">
                     <cfset errorCount = errorCount + 1>
                     <cfset arrayAppend(errorDetails, "Satır #currentRow#: #cfcatch.message#")>
                 </cfcatch>
