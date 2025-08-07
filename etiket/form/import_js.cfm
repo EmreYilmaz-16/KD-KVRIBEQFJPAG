@@ -1,6 +1,45 @@
 <!--- JavaScript Tabanlı Excel Import (Apache POI alternatifi) --->
 <cfparam name="form.jsonData" default="">
 
+<!--- Serial Number Generator Function --->
+<cffunction name="generateSerialNumbers" returntype="array" access="public">
+    <cfargument name="etaKodu" type="string" required="true">
+    <cfargument name="miktar" type="numeric" required="true">
+    <cfargument name="importId" type="numeric" required="true">
+    
+    <cfset var serialNumbers = []>
+    <cfset var prefix = left(etaKodu, 3) & dateFormat(now(), "yymmdd")>
+    <cfset var baseSerial = "">
+    <cfset var counter = 1>
+    
+    <!--- Get last serial number for this eta kodu and date --->
+    <cfquery name="getLastSerial" datasource="w3Qa">
+        SELECT TOP 1 seri_no 
+        FROM etiket_temp_data 
+        WHERE eta_kodu = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
+        AND seri_no LIKE <cfqueryparam value="#prefix#%" cfsqltype="cf_sql_varchar">
+        ORDER BY seri_no DESC
+    </cfquery>
+    
+    <cfif getLastSerial.recordCount gt 0>
+        <!--- Extract counter from last serial --->
+        <cfset lastSerial = getLastSerial.seri_no>
+        <cfset counterPart = right(lastSerial, 4)>
+        <cfif isNumeric(counterPart)>
+            <cfset counter = val(counterPart) + 1>
+        </cfif>
+    </cfif>
+    
+    <!--- Generate serial numbers --->
+    <cfloop from="1" to="#miktar#" index="i">
+        <cfset serialNumber = prefix & numberFormat(counter, "0000")>
+        <cfset arrayAppend(serialNumbers, serialNumber)>
+        <cfset counter = counter + 1>
+    </cfloop>
+    
+    <cfreturn serialNumbers>
+</cffunction>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -81,40 +120,91 @@
                                 <cfloop array="#excelData.data#" index="row" item="rowData">
                                     <cftry>
                                         <cfif structKeyExists(rowData, "EtaKodu") AND len(trim(rowData.EtaKodu)) gt 0>
-                                            <cfquery name="insertData" datasource="w3Qa">
-                                                INSERT INTO etiket_temp_data (
-                                                    import_id,
-                                                    eta_kodu,
-                                                    seri_no,
-                                                    uretim_tarihi,
-                                                    paket_tarihi,
-                                                    barkod,
-                                                    miktar,
-                                                    marka,
-                                                    row_number,
-                                                    created_date
-                                                ) VALUES (
-                                                    <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">,
-                                                    <cfqueryparam value="#trim(rowData.EtaKodu)#" cfsqltype="cf_sql_varchar">,
-                                                    <cfqueryparam value="#trim(rowData.SeriNo ?: '')#" cfsqltype="cf_sql_varchar">,
-                                                    <cfif structKeyExists(rowData, "UretimTarihi") AND isDate(rowData.UretimTarihi)>
-                                                        <cfqueryparam value="#parseDateTime(rowData.UretimTarihi)#" cfsqltype="cf_sql_timestamp">
-                                                    <cfelse>
-                                                        NULL
-                                                    </cfif>,
-                                                    <cfif structKeyExists(rowData, "PaketTarihi") AND isDate(rowData.PaketTarihi)>
-                                                        <cfqueryparam value="#parseDateTime(rowData.PaketTarihi)#" cfsqltype="cf_sql_timestamp">
-                                                    <cfelse>
-                                                        NULL
-                                                    </cfif>,
-                                                    <cfqueryparam value="#trim(rowData.Barkod ?: '')#" cfsqltype="cf_sql_varchar">,
-                                                    <cfqueryparam value="#val(rowData.Miktar ?: 0)#" cfsqltype="cf_sql_decimal">,
-                                                    <cfqueryparam value="#trim(rowData.Marka ?: '')#" cfsqltype="cf_sql_varchar">,
-                                                    <cfqueryparam value="#row#" cfsqltype="cf_sql_integer">,
-                                                    GETDATE()
-                                                )
-                                            </cfquery>
-                                            <cfset successCount++>
+                                            
+                                            <!--- Seri numarası boşsa otomatik üret --->
+                                            <cfif not structKeyExists(rowData, "SeriNo") OR len(trim(rowData.SeriNo ?: "")) eq 0>
+                                                <cfset miktar = val(rowData.Miktar ?: 1)>
+                                                <cfif miktar gt 0>
+                                                    <cfset generatedSerials = generateSerialNumbers(trim(rowData.EtaKodu), miktar, importId)>
+                                                    
+                                                    <!--- Her seri numarası için ayrı kayıt oluştur --->
+                                                    <cfloop array="#generatedSerials#" index="generatedSerial">
+                                                        <cfquery name="insertData" datasource="w3Qa">
+                                                            INSERT INTO etiket_temp_data (
+                                                                import_id,
+                                                                eta_kodu,
+                                                                seri_no,
+                                                                uretim_tarihi,
+                                                                paket_tarihi,
+                                                                barkod,
+                                                                miktar,
+                                                                marka,
+                                                                row_number,
+                                                                created_date
+                                                            ) VALUES (
+                                                                <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">,
+                                                                <cfqueryparam value="#trim(rowData.EtaKodu)#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="#generatedSerial#" cfsqltype="cf_sql_varchar">,
+                                                                <cfif structKeyExists(rowData, "UretimTarihi") AND isDate(rowData.UretimTarihi)>
+                                                                    <cfqueryparam value="#parseDateTime(rowData.UretimTarihi)#" cfsqltype="cf_sql_timestamp">
+                                                                <cfelse>
+                                                                    NULL
+                                                                </cfif>,
+                                                                <cfif structKeyExists(rowData, "PaketTarihi") AND isDate(rowData.PaketTarihi)>
+                                                                    <cfqueryparam value="#parseDateTime(rowData.PaketTarihi)#" cfsqltype="cf_sql_timestamp">
+                                                                <cfelse>
+                                                                    NULL
+                                                                </cfif>,
+                                                                <cfqueryparam value="#trim(rowData.Barkod ?: '')#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="1" cfsqltype="cf_sql_decimal">,
+                                                                <cfqueryparam value="#trim(rowData.Marka ?: '')#" cfsqltype="cf_sql_varchar">,
+                                                                <cfqueryparam value="#row#" cfsqltype="cf_sql_integer">,
+                                                                GETDATE()
+                                                            )
+                                                        </cfquery>
+                                                        <cfset successCount++>
+                                                    </cfloop>
+                                                <cfelse>
+                                                    <cfset errorCount++>
+                                                    <cfset arrayAppend(errors, "Satır #row#: Miktar 0'dan büyük olmalı")>
+                                                </cfif>
+                                            <cfelse>
+                                                <!--- Normal tek kayıt insert --->
+                                                <cfquery name="insertData" datasource="w3Qa">
+                                                    INSERT INTO etiket_temp_data (
+                                                        import_id,
+                                                        eta_kodu,
+                                                        seri_no,
+                                                        uretim_tarihi,
+                                                        paket_tarihi,
+                                                        barkod,
+                                                        miktar,
+                                                        marka,
+                                                        row_number,
+                                                        created_date
+                                                    ) VALUES (
+                                                        <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">,
+                                                        <cfqueryparam value="#trim(rowData.EtaKodu)#" cfsqltype="cf_sql_varchar">,
+                                                        <cfqueryparam value="#trim(rowData.SeriNo ?: '')#" cfsqltype="cf_sql_varchar">,
+                                                        <cfif structKeyExists(rowData, "UretimTarihi") AND isDate(rowData.UretimTarihi)>
+                                                            <cfqueryparam value="#parseDateTime(rowData.UretimTarihi)#" cfsqltype="cf_sql_timestamp">
+                                                        <cfelse>
+                                                            NULL
+                                                        </cfif>,
+                                                        <cfif structKeyExists(rowData, "PaketTarihi") AND isDate(rowData.PaketTarihi)>
+                                                            <cfqueryparam value="#parseDateTime(rowData.PaketTarihi)#" cfsqltype="cf_sql_timestamp">
+                                                        <cfelse>
+                                                            NULL
+                                                        </cfif>,
+                                                        <cfqueryparam value="#trim(rowData.Barkod ?: '')#" cfsqltype="cf_sql_varchar">,
+                                                        <cfqueryparam value="#val(rowData.Miktar ?: 0)#" cfsqltype="cf_sql_decimal">,
+                                                        <cfqueryparam value="#trim(rowData.Marka ?: '')#" cfsqltype="cf_sql_varchar">,
+                                                        <cfqueryparam value="#row#" cfsqltype="cf_sql_integer">,
+                                                        GETDATE()
+                                                    )
+                                                </cfquery>
+                                                <cfset successCount++>
+                                            </cfif>
                                         <cfelse>
                                             <cfset errorCount++>
                                             <cfset arrayAppend(errors, "Satır #row#: EtaKodu boş")>
@@ -139,19 +229,30 @@
                                     WHERE import_id = <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">
                                 </cfquery>
                                 
+                                <!--- Gerçek etiket sayısını kontrol et --->
+                                <cfquery name="getActualCount" datasource="w3Qa">
+                                    SELECT COUNT(*) as actual_count
+                                    FROM etiket_temp_data 
+                                    WHERE import_id = <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">
+                                </cfquery>
+                                
                                 <!--- Sonuçları göster --->
                                 <div class="alert alert-success">
                                     <h5><i class="fas fa-check-circle me-2"></i>Import Başarılı!</h5>
                                     <div class="row text-center">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <h3 class="text-primary">#arrayLen(excelData.data)#</h3>
                                             <small>Toplam Satır</small>
                                         </div>
-                                        <div class="col-md-4">
-                                            <h3 class="text-success">#successCount#</h3>
-                                            <small>Başarılı</small>
+                                        <div class="col-md-3">
+                                            <h3 class="text-info">#getActualCount.actual_count#</h3>
+                                            <small>Oluşturulan Etiket</small>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <h3 class="text-success">#successCount#</h3>
+                                            <small>Başarılı İşlem</small>
+                                        </div>
+                                        <div class="col-md-3">
                                             <h3 class="text-danger">#errorCount#</h3>
                                             <small>Hatalı</small>
                                         </div>
@@ -313,6 +414,7 @@
     <script>
         let excelData = null;
         let processedData = [];
+        let originalFileSize = 0; // Original file size in bytes
 
         // Upload area event listeners
         const uploadArea = document.getElementById('uploadArea');
@@ -381,6 +483,7 @@
         }
 
         function processExcelFile(file) {
+            originalFileSize = file.size; // Store original file size
             document.getElementById('processingIndicator').classList.remove('d-none');
             
             const reader = new FileReader();
@@ -477,13 +580,11 @@
                             if (!rowData.EtaKodu) {
                                 hasError = true;
                                 errorMessage = 'EtaKodu boş';
-                            } else if (!rowData.SeriNo) {
-                                hasError = true;
-                                errorMessage = 'SeriNo boş';
                             } else if (rowData.Miktar <= 0) {
                                 hasError = true;
                                 errorMessage = 'Miktar 0\'dan büyük olmalı';
                             }
+                            // SeriNo validation removed - will be auto-generated if empty
 
                             if (hasError) {
                                 errorRows++;
@@ -598,7 +699,7 @@
 
             const exportData = {
                 fileName: document.getElementById('fileName').textContent,
-                fileSize: document.querySelector('#fileInfo strong + span').textContent,
+                fileSize: originalFileSize, // Use original file size in bytes
                 data: validData
             };
 
