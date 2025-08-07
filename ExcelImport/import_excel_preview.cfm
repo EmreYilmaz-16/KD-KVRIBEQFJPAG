@@ -236,7 +236,7 @@
     
     <div class="info-box">
         <h3>⏳ Veritabanına Aktarılıyor...</h3>
-        <p>Onaylanan veriler PRODUCT_OEMS tablosuna aktarılıyor. Lütfen bekleyin...</p>
+        <p>Onaylanan veriler OEM tablosuna aktarılıyor. Lütfen bekleyin...</p>
     </div>
     
     <cftry>
@@ -291,13 +291,30 @@
                     <cfloop from="1" to="50" index="i">
                         <cfset oemColumn = "OEM #i#">
                         <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
-                            
+                            <cfquery name="getExistingRecord" datasource="#dsn#">
+                               SELECT BARCODE,STOCK_ID,UNIT_ID FROM [w3Qa_product].[STOCKS_BARCODES]  WHERE BARCODE=<cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                               
+                                -- SELECT * FROM PRODUCT_OEMS 
+                                -- WHERE ETA_KODU = <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar"> 
+                                -- AND OEM_NO = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                            </cfquery>
+                            <cfif getExistingRecord.recordCount GT 0>
+                                <cfset errorCount = errorCount + 1>
+                                <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU '#etaKoduValue#' ve OEM '#trim(importData[oemColumn][currentRow])#' zaten mevcut")>
+                                <cfcontinue>
+                            </cfif>
+
                             <!--- PRODUCT_OEMS tablosuna INSERT (her OEM için ayrı satır) --->
-                            <cfquery name="insertQuery" datasource="#dsn#">
-                                INSERT INTO PRODUCT_OEMS (ETA_KODU, OEM_NO)
-                                VALUES (
-                                    <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">,
-                                    <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                            <cfquery name="insertQuery" datasource="#dsn#_product">
+                                -- INSERT INTO PRODUCT_OEMS (ETA_KODU, OEM_NO)
+                                -- VALUES (
+                                --     <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">,
+                                --     <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                                -- )
+                                INSERT INTO STOCKS_BARCODES (BARCODE,STOCK_ID,UNIT_ID) values (
+                                    <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">,
+                                    <cfqueryparam value="#getProduct.STOCK_ID#" cfsqltype="cf_sql_integer">,
+                                    <cfqueryparam value="#getProduct.PRODUCT_UNIT_ID#" cfsqltype="cf_sql_integer">
                                 )
                             </cfquery>
                             
@@ -324,7 +341,7 @@
         <!--- Başarı mesajı --->
         <div class="success-box">
             <h3>🎉 İçe Aktarım Başarıyla Tamamlandı!</h3>
-            <cfoutput><p><strong>#successCount#</strong> adet OEM kaydı başarıyla PRODUCT_OEMS tablosuna eklendi.</p></cfoutput>
+            <cfoutput><p><strong>#successCount#</strong> adet OEM kaydı başarıyla OEM tablosuna eklendi.</p></cfoutput>
             <cfif errorCount GT 0>
             <cfoutput>    <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
             <p>Hatalar için lütfen aşağıdaki detaylara bakın.</p>
