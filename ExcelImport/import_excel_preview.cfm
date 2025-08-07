@@ -305,7 +305,7 @@
         <cfcatch type="any">
             <div class="error-box">
                 <h3>❌ İçe Aktarım Hatası</h3>
-                <p>#cfcatch.message#</p>
+              <cfoutput> <p>#cfcatch.message#</p></cfoutput> 
             </div>
         </cfcatch>
     </cftry>
@@ -501,7 +501,7 @@
 <cfif len(errorMessage)>
     <div class="error-box">
         <h3>❌ Hata Oluştu</h3>
-        <p>#errorMessage#</p>
+       <cfoutput> <p>#errorMessage#</p></cfoutput>
     </div>
     
     <div class="button-group">
