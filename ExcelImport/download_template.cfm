@@ -7,7 +7,7 @@
     <!--- Basit CSV template oluştur (her ColdFusion sürümünde çalışır) --->
     <cfset csvContent = "ETA_KODU">
     <cfloop from="1" to="50" index="i">
-        <cfset csvContent = csvContent & ",OEM_#i#">
+        <cfset csvContent = csvContent & ",OEM #i#">
     </cfloop>
     <cfset csvContent = csvContent & chr(13) & chr(10)>
     
