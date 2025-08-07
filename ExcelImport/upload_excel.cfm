@@ -193,11 +193,11 @@
                 <li><strong>Maksimum Dosya Boyutu:</strong> 10MB</li>
                 <li><strong>Zorunlu Kolon:</strong> ETA_KODU (A kolonu)</li>
             </ul>
-            <div style="text-align: center; margin-top: 15px;">
+            <!---<div style="text-align: center; margin-top: 15px;">
                 <a href="download_template.cfm" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
                     📥 Örnek Excel Şablonu İndir
                 </a>
-            </div>
+            </div>---->
         </div>
         
         <div class="warning-box">
