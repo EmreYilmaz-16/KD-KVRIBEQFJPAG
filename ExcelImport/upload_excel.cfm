@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel Dosyası Yükle - PRODUCT_OEMS İçe Aktarım</title>
+    <title>Excel Dosyası Yükle - OEM İçe Aktarım</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -182,7 +182,7 @@
     <div class="container">
         <div class="header">
             <h1>📊 Excel Dosyası Yükleme</h1>
-            <p>PRODUCT_OEMS tablosuna veri aktarımı için Excel dosyanızı yükleyin</p>
+            <p>OEM tablosuna veri aktarımı için Excel dosyanızı yükleyin</p>
         </div>
         
         <div class="info-box">
@@ -201,7 +201,7 @@
         </div>
         
         <div class="warning-box">
-            <strong>⚠️ Uyarı:</strong> Yükleme işlemi mevcut PRODUCT_OEMS tablosuna yeni kayıtlar ekleyecektir. 
+            <strong>⚠️ Uyarı:</strong> Yükleme işlemi mevcut OEM tablosuna yeni kayıtlar ekleyecektir. 
             Duplicate kayıtlar için kontrol yapılmayacaktır.
         </div>
         
@@ -226,7 +226,7 @@
         </form>
         
         <div class="table-structure">
-            <h4>🗂️ PRODUCT_OEMS Tablo Yapısı (51 Kolon)</h4>
+            <h4>🗂️ OEM Tablo Yapısı (51 Kolon)</h4>
             <p>Excel dosyanızın aşağıdaki kolon yapısına uygun olması gerekmektedir:</p>
             
             <div class="columns-grid">
@@ -273,7 +273,7 @@
             
             // Kullanıcıya onay mesajı
             const confirmation = confirm(
-                'Dosya yüklenecek ve PRODUCT_OEMS tablosuna aktarılacak.\n\n' +
+                'Dosya yüklenecek ve OEM tablosuna aktarılacak.\n\n' +
                 'Bu işlem geri alınamaz. Devam etmek istediğinizden emin misiniz?'
             );
             
