@@ -319,6 +319,7 @@
         <cfcatch type="any">
             <div class="error-box">
                 <h3>❌ İçe Aktarım Hatası</h3>
+                <cfdump var="#cfcatch#">
               <cfoutput> <p>#cfcatch.message#</p></cfoutput> 
             </div>
         </cfcatch>
