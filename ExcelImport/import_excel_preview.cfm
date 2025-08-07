@@ -242,7 +242,9 @@
     
     <cftry>
         <!--- Preview verilerini deserialize et --->
-        <cfset importData = deserializeJSON(form.previewData)>
+        <!--- URL encoded karakterleri decode et --->
+        <cfset cleanPreviewData = urlDecode(form.previewData)>
+        <cfset importData = deserializeJSON(cleanPreviewData)>
         
         <!--- İstatistikler için sayaçlar --->
         <cfset totalRows = arrayLen(importData)>
@@ -483,7 +485,7 @@
                 <cfif hasEtaKodu AND validRowCount GT 0>
                     <form method="post" action="import_excel_preview.cfm">
                         <input type="hidden" name="confirmImport" value="true">
-                        <input type="hidden" name="previewData" value="#previewData#">
+                        <input type="hidden" name="previewData" value="#urlEncodedFormat(previewData)#">
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-success">
