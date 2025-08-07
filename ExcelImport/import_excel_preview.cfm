@@ -444,7 +444,7 @@
                                         <td <cfif columnName EQ "ETA_KODU" AND NOT len(trim(cellValue))>class="required-column"</cfif>
                                             <cfif NOT len(trim(cellValue))>class="empty-cell"</cfif>>
                                             <cfif len(trim(cellValue))>
-                                                #htmlEditFormat(cellValue)#
+                                               <cfoutput> #htmlEditFormat(cellValue)#</cfoutput>
                                             <cfelse>
                                                 (boş)
                                             </cfif>
@@ -458,7 +458,7 @@
                 
                 <cfif excelData.recordCount GT 10>
                     <p style="text-align: center; color: #666; font-style: italic;">
-                        ... ve #excelData.recordCount - 10# satır daha var
+                       <cfoutput>  ... ve #excelData.recordCount - 10# satır daha var</cfoutput>
                     </p>
                 </cfif>
                 
