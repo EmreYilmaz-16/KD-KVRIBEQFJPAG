@@ -327,6 +327,12 @@
             <cfoutput><p><strong>#successCount#</strong> adet OEM kaydı başarıyla PRODUCT_OEMS tablosuna eklendi.</p></cfoutput>
             <cfif errorCount GT 0>
             <cfoutput>    <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
+            <p>Hatalar için lütfen aşağıdaki detaylara bakın.</p>
+            <ul>
+                <cfloop array="#errorDetails#" index="errorDetail">
+                    <li>#errorDetail#</li>
+                </cfloop>
+            </ul>
             </cfoutput>
             </cfif>
         </div>
