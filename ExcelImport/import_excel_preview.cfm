@@ -11,7 +11,7 @@
 <cfsetting requesttimeout="300" showdebugoutput="false">
 
 <!--- Veritabanı bağlantı ayarları (projenize göre düzenleyin) --->
-<cfset dsn = "YOUR_DSN">
+<cfset dsn = "W3Qa">
 
 <!--- Upload klasörü ayarları --->
 <cfset uploadPath = expandPath("./uploads/")>
