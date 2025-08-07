@@ -254,12 +254,20 @@
         <cfloop array="#importData#" index="rowData">
             <cftry>
                 <!--- ETA_KODU kontrolü (zorunlu alan) --->
-                <cfif structKeyExists(rowData, "ETA_KODU") AND len(trim(rowData.ETA_KODU))>
+                <cfif (structKeyExists(rowData, "ETA_KODU") AND len(trim(rowData.ETA_KODU))) OR (structKeyExists(rowData, "ETA KODU") AND len(trim(rowData["ETA KODU"])))>
+                    
+                    <!--- ETA_KODU değerini al (hangi formatta olursa olsun) --->
+                    <cfset etaKoduValue = "">
+                    <cfif structKeyExists(rowData, "ETA_KODU") AND len(trim(rowData.ETA_KODU))>
+                        <cfset etaKoduValue = trim(rowData.ETA_KODU)>
+                    <cfelseif structKeyExists(rowData, "ETA KODU") AND len(trim(rowData["ETA KODU"]))>
+                        <cfset etaKoduValue = trim(rowData["ETA KODU"])>
+                    </cfif>
                     
                     <!--- Dinamik sorgu oluştur --->
                     <cfset insertColumns = "ETA_KODU">
                     <cfset insertValues = "?">
-                    <cfset queryParams = [rowData.ETA_KODU]>
+                    <cfset queryParams = [etaKoduValue]>
                     
                     <!--- OEM kolonlarını ekle --->
                     <cfloop from="1" to="50" index="i">
@@ -358,7 +366,15 @@
                 
                 <!--- Kolon isimlerini al --->
                 <cfset columnList = excelData.columnList>
-                <cfset hasEtaKodu = listFindNoCase(columnList, "ETA_KODU")>
+                <cfset hasEtaKodu = listFindNoCase(columnList, "ETA KODU") OR listFindNoCase(columnList, "ETA_KODU")>
+                
+                <!--- ETA KODU kolon adını standartlaştır --->
+                <cfset etaKoduColumn = "">
+                <cfif listFindNoCase(columnList, "ETA KODU")>
+                    <cfset etaKoduColumn = "ETA KODU">
+                <cfelseif listFindNoCase(columnList, "ETA_KODU")>
+                    <cfset etaKoduColumn = "ETA_KODU">
+                </cfif>
                 
                 <cfloop query="excelData">
                     <cfset rowStruct = structNew()>
@@ -371,7 +387,7 @@
                     <cfset arrayAppend(previewArray, rowStruct)>
                     
                     <!--- ETA_KODU kontrolü --->
-                    <cfif hasEtaKodu AND len(trim(excelData.ETA_KODU))>
+                    <cfif hasEtaKodu AND len(trim(excelData[etaKoduColumn][currentRow]))>
                         <cfset validRowCount = validRowCount + 1>
                     <cfelse>
                         <cfset invalidRowCount = invalidRowCount + 1>
@@ -407,7 +423,7 @@
                 <cfif NOT hasEtaKodu>
                     <div class="error-box">
                         <h4>❌ Kritik Hata</h4>
-                        <p>Excel dosyasında <strong>ETA_KODU</strong> kolonu bulunamadı. Bu kolon zorunludur.</p>
+                        <p>Excel dosyasında <strong>ETA KODU</strong> veya <strong>ETA_KODU</strong> kolonu bulunamadı. Bu kolon zorunludur.</p>
                     </div>
                 <cfelseif invalidRowCount GT 0>
                     <div class="warning-box">
@@ -428,9 +444,9 @@
                             <tr>
                                 <th style="background: #dc3545;">Satır</th>
                                 <cfloop list="#columnList#" index="columnName">
-                                    <th <cfif columnName EQ "ETA_KODU">class="required-column"</cfif>>
+                                    <th <cfif columnName EQ "ETA KODU" OR columnName EQ "ETA_KODU">class="required-column"</cfif>>
                                       <cfoutput>  #columnName#</cfoutput>
-                                        <cfif columnName EQ "ETA_KODU">*</cfif>
+                                        <cfif columnName EQ "ETA KODU" OR columnName EQ "ETA_KODU">*</cfif>
                                     </th>
                                 </cfloop>
                             </tr>
@@ -438,10 +454,10 @@
                         <tbody>
                             <cfloop query="excelData" startrow="1" endrow="#min(10, excelData.recordCount)#">
                                 <tr>
-                                    <td style="background: #f8f9fa; font-weight: bold;">#currentRow#</td>
+                                    <td style="background: #f8f9fa; font-weight: bold;"><cfoutput>#currentRow#</cfoutput></td>
                                     <cfloop list="#columnList#" index="columnName">
                                         <cfset cellValue = excelData[columnName][currentRow]>
-                                        <td <cfif columnName EQ "ETA_KODU" AND NOT len(trim(cellValue))>class="required-column"</cfif>
+                                        <td <cfif (columnName EQ "ETA KODU" OR columnName EQ "ETA_KODU") AND NOT len(trim(cellValue))>class="required-column"</cfif>
                                             <cfif NOT len(trim(cellValue))>class="empty-cell"</cfif>>
                                             <cfif len(trim(cellValue))>
                                                <cfoutput> #htmlEditFormat(cellValue)#</cfoutput>
