@@ -5,7 +5,7 @@
 
 <cfparam name="form.excelFile" default="">
 <cfparam name="form.confirmImport" default="false">
-<cfparam name="form.previewData" default="">
+<cfparam name="form.uploadedFile" default="">
 
 <!--- Sayfa başlangıç ayarları --->
 <cfsetting requesttimeout="300" showdebugoutput="false">
@@ -33,7 +33,6 @@
 <cfset errorCount = 0>
 <cfset uploadedFileName = "">
 <cfset errorDetails = arrayNew(1)>
-<cfset previewData = "">
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -233,7 +232,7 @@
         </div>
 
 <!--- Onay sonrası veritabanına aktarım --->
-<cfif form.confirmImport EQ "true" AND len(form.previewData)>
+<cfif form.confirmImport EQ "true" AND len(form.uploadedFile)>
     
     <div class="info-box">
         <h3>⏳ Veritabanına Aktarılıyor...</h3>
@@ -241,30 +240,36 @@
     </div>
     
     <cftry>
-        <!--- Preview verilerini deserialize et --->
-        <!--- URL encoded karakterleri decode et --->
-        <cfset cleanPreviewData = urlDecode(form.previewData)>
-        <cfset importData = deserializeJSON(cleanPreviewData)>
+        <!--- Excel dosyasını tekrar oku --->
+        <cfspreadsheet action="read"
+                      src="#uploadPath##form.uploadedFile#"
+                      query="importData"
+                      headerrow="1"
+                      sheet="1">
         
         <!--- İstatistikler için sayaçlar --->
-        <cfset totalRows = arrayLen(importData)>
+        <cfset totalRows = importData.recordCount>
         <cfset successCount = 0>
         <cfset errorCount = 0>
         <cfset errorDetails = arrayNew(1)>
         
+        <!--- Kolon isimlerini al --->
+        <cfset columnList = importData.columnList>
+        <cfset etaKoduColumn = "">
+        <cfif listFindNoCase(columnList, "ETA KODU")>
+            <cfset etaKoduColumn = "ETA KODU">
+        <cfelseif listFindNoCase(columnList, "ETA_KODU")>
+            <cfset etaKoduColumn = "ETA_KODU">
+        </cfif>
+        
         <!--- Her satır için veritabanı işlemi --->
-        <cfloop array="#importData#" index="rowData">
+        <cfloop query="importData">
             <cftry>
                 <!--- ETA_KODU kontrolü (zorunlu alan) --->
-                <cfif (structKeyExists(rowData, "ETA_KODU") AND len(trim(rowData.ETA_KODU))) OR (structKeyExists(rowData, "ETA KODU") AND len(trim(rowData["ETA KODU"])))>
+                <cfif len(trim(importData[etaKoduColumn][currentRow]))>
                     
-                    <!--- ETA_KODU değerini al (hangi formatta olursa olsun) --->
-                    <cfset etaKoduValue = "">
-                    <cfif structKeyExists(rowData, "ETA_KODU") AND len(trim(rowData.ETA_KODU))>
-                        <cfset etaKoduValue = trim(rowData.ETA_KODU)>
-                    <cfelseif structKeyExists(rowData, "ETA KODU") AND len(trim(rowData["ETA KODU"]))>
-                        <cfset etaKoduValue = trim(rowData["ETA KODU"])>
-                    </cfif>
+                    <!--- ETA_KODU değerini al --->
+                    <cfset etaKoduValue = trim(importData[etaKoduColumn][currentRow])>
                     
                     <!--- Dinamik sorgu oluştur --->
                     <cfset insertColumns = "ETA_KODU">
@@ -274,10 +279,10 @@
                     <!--- OEM kolonlarını ekle --->
                     <cfloop from="1" to="50" index="i">
                         <cfset oemColumn = "OEM_#i#">
-                        <cfif structKeyExists(rowData, oemColumn) AND len(trim(rowData[oemColumn]))>
+                        <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
                             <cfset insertColumns = insertColumns & ", " & oemColumn>
                             <cfset insertValues = insertValues & ", ?">
-                            <cfset arrayAppend(queryParams, trim(rowData[oemColumn]))>
+                            <cfset arrayAppend(queryParams, trim(importData[oemColumn][currentRow]))>
                         </cfif>
                     </cfloop>
                     
@@ -296,13 +301,13 @@
                 <cfelse>
                     <!--- ETA_KODU boş ise hata kaydet --->
                     <cfset errorCount = errorCount + 1>
-                    <cfset arrayAppend(errorDetails, "Satır #arrayFind(importData, rowData)#: ETA_KODU boş veya geçersiz")>
+                    <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU boş veya geçersiz")>
                 </cfif>
                 
                 <cfcatch type="any">
                     <!--- Veritabanı hatası --->
                     <cfset errorCount = errorCount + 1>
-                    <cfset arrayAppend(errorDetails, "Satır #arrayFind(importData, rowData)#: #cfcatch.message#")>
+                    <cfset arrayAppend(errorDetails, "Satır #currentRow#: #cfcatch.message#")>
                 </cfcatch>
             </cftry>
         </cfloop>
@@ -363,7 +368,6 @@
                 <cfset totalRows = excelData.recordCount>
                 
                 <!--- Önizleme verilerini hazırla --->
-                <cfset previewArray = arrayNew(1)>
                 <cfset validRowCount = 0>
                 <cfset invalidRowCount = 0>
                 
@@ -380,15 +384,6 @@
                 </cfif>
                 
                 <cfloop query="excelData">
-                    <cfset rowStruct = structNew()>
-                    
-                    <!--- Her kolonu struct'a aktar --->
-                    <cfloop list="#columnList#" index="columnName">
-                        <cfset rowStruct[columnName] = excelData[columnName][currentRow]>
-                    </cfloop>
-                    
-                    <cfset arrayAppend(previewArray, rowStruct)>
-                    
                     <!--- ETA_KODU kontrolü --->
                     <cfif hasEtaKodu AND len(trim(excelData[etaKoduColumn][currentRow]))>
                         <cfset validRowCount = validRowCount + 1>
@@ -396,9 +391,6 @@
                         <cfset invalidRowCount = invalidRowCount + 1>
                     </cfif>
                 </cfloop>
-                
-                <!--- Önizleme verilerini JSON olarak sakla --->
-                <cfset previewData = serializeJSON(previewArray)>
                 
                 <!--- İstatistikleri göster --->
                 <div class="stats-summary">
@@ -485,7 +477,7 @@
                 <cfif hasEtaKodu AND validRowCount GT 0>
                     <form method="post" action="import_excel_preview.cfm">
                         <input type="hidden" name="confirmImport" value="true">
-                        <input type="hidden" name="previewData" value="#urlEncodedFormat(previewData)#">
+                        <input type="hidden" name="uploadedFile" value="#uploadedFileName#">
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-success">
