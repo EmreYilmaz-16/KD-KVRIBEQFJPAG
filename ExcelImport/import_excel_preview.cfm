@@ -240,9 +240,15 @@
     </div>
     
     <cftry>
+        <!--- Debug: Dosya yolunu kontrol et --->
+        <cfset fullFilePath = uploadPath & form.uploadedFile>
+        <cfif NOT fileExists(fullFilePath)>
+            <cfthrow message="Dosya bulunamadı: #fullFilePath#">
+        </cfif>
+        
         <!--- Excel dosyasını tekrar oku --->
         <cfspreadsheet action="read"
-                      src="#uploadPath##form.uploadedFile#"
+                      src="#fullFilePath#"
                       query="importData"
                       headerrow="1"
                       sheet="1">
@@ -477,7 +483,7 @@
                 <cfif hasEtaKodu AND validRowCount GT 0>
                     <form method="post" action="import_excel_preview.cfm">
                         <input type="hidden" name="confirmImport" value="true">
-                        <input type="hidden" name="uploadedFile" value="#uploadedFileName#">
+                        <input type="hidden" name="uploadedFile" value="<cfoutput>#uploadedFileName#</cfoutput>">
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-success">
