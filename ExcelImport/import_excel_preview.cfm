@@ -269,7 +269,7 @@
         </cfif>
         
         <!--- Her satır için veritabanı işlemi --->
-        <cfloop query="importData">
+        <cfloop query="importData" startrow="2">
             <cftry>
                 <!--- ETA_KODU kontrolü (zorunlu alan) --->
                 <cfif len(trim(importData[etaKoduColumn][currentRow]))>
