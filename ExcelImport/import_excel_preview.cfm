@@ -294,9 +294,6 @@
                             <cfquery name="getExistingRecord" datasource="#dsn#_product">
                                SELECT BARCODE,STOCK_ID,UNIT_ID FROM [w3Qa_product].[STOCKS_BARCODES]  WHERE BARCODE=<cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
                                
-                                -- SELECT * FROM PRODUCT_OEMS 
-                                -- WHERE ETA_KODU = <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar"> 
-                                -- AND OEM_NO = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
                             </cfquery>
                             <cfif getExistingRecord.recordCount GT 0>
                                 <cfset errorCount = errorCount + 1>
@@ -306,11 +303,7 @@
 
                             <!--- PRODUCT_OEMS tablosuna INSERT (her OEM için ayrı satır) --->
                             <cfquery name="insertQuery" datasource="#dsn#_product">
-                                -- INSERT INTO PRODUCT_OEMS (ETA_KODU, OEM_NO)
-                                -- VALUES (
-                                --     <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">,
-                                --     <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
-                                -- )
+                               
                                 INSERT INTO STOCKS_BARCODES (BARCODE,STOCK_ID,UNIT_ID) values (
                                     <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">,
                                     <cfqueryparam value="#getProduct.STOCK_ID#" cfsqltype="cf_sql_integer">,
