@@ -279,7 +279,7 @@
                     
                     <!--- Her OEM kolonu için ayrı satır ekle --->
                     <cfloop from="1" to="50" index="i">
-                        <cfset oemColumn = "OEM_#i#">
+                        <cfset oemColumn = "OEM #i#">
                         <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
                             
                             <!--- PRODUCT_OEMS tablosuna INSERT (her OEM için ayrı satır) --->
