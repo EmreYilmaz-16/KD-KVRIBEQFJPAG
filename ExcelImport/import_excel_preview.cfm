@@ -323,9 +323,10 @@
         <!--- Başarı mesajı --->
         <div class="success-box">
             <h3>🎉 İçe Aktarım Başarıyla Tamamlandı!</h3>
-            <p><strong>#successCount#</strong> kayıt başarıyla PRODUCT_OEMS tablosuna eklendi.</p>
+            <cfoutput><p><strong>#successCount#</strong> kayıt başarıyla PRODUCT_OEMS tablosuna eklendi.</p></cfoutput>
             <cfif errorCount GT 0>
-                <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
+            <cfoutput>    <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
+            </cfoutput>
             </cfif>
         </div>
         
