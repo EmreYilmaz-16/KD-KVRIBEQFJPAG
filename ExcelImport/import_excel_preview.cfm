@@ -277,32 +277,23 @@
                     <!--- ETA_KODU değerini al --->
                     <cfset etaKoduValue = trim(importData[etaKoduColumn][currentRow])>
                     
-                    <!--- Dinamik sorgu oluştur --->
-                    <cfset insertColumns = "ETA_KODU">
-                    <cfset insertValues = "?">
-                    <cfset queryParams = [etaKoduValue]>
-                    
-                    <!--- OEM kolonlarını ekle --->
+                    <!--- Her OEM kolonu için ayrı satır ekle --->
                     <cfloop from="1" to="50" index="i">
                         <cfset oemColumn = "OEM_#i#">
                         <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
-                            <cfset insertColumns = insertColumns & ", " & oemColumn>
-                            <cfset insertValues = insertValues & ", ?">
-                            <cfset arrayAppend(queryParams, trim(importData[oemColumn][currentRow]))>
+                            
+                            <!--- PRODUCT_OEMS tablosuna INSERT (her OEM için ayrı satır) --->
+                            <cfquery name="insertQuery" datasource="#dsn#">
+                                INSERT INTO PRODUCT_OEMS (ETA_KODU, OEM_NO)
+                                VALUES (
+                                    <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">,
+                                    <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                                )
+                            </cfquery>
+                            
+                            <cfset successCount = successCount + 1>
                         </cfif>
                     </cfloop>
-                    
-                    <!--- PRODUCT_OEMS tablosuna INSERT --->
-                    <cfquery name="insertQuery" datasource="#dsn#">
-                        INSERT INTO PRODUCT_OEMS (#insertColumns#)
-                        VALUES (#insertValues#)
-                        <cfloop array="#queryParams#" index="paramIndex" item="paramValue">
-                            <cfqueryparam value="#paramValue#" cfsqltype="cf_sql_varchar">
-                            <cfif paramIndex LT arrayLen(queryParams)>,</cfif>
-                        </cfloop>
-                    </cfquery>
-                    
-                    <cfset successCount = successCount + 1>
                     
                 <cfelse>
                     <!--- ETA_KODU boş ise hata kaydet --->
@@ -323,7 +314,7 @@
         <!--- Başarı mesajı --->
         <div class="success-box">
             <h3>🎉 İçe Aktarım Başarıyla Tamamlandı!</h3>
-            <cfoutput><p><strong>#successCount#</strong> kayıt başarıyla PRODUCT_OEMS tablosuna eklendi.</p></cfoutput>
+            <cfoutput><p><strong>#successCount#</strong> adet OEM kaydı başarıyla PRODUCT_OEMS tablosuna eklendi.</p></cfoutput>
             <cfif errorCount GT 0>
             <cfoutput>    <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
             </cfoutput>
