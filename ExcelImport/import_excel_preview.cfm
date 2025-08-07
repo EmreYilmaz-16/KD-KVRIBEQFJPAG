@@ -15,6 +15,12 @@
 
 <!--- Upload klasörü ayarları --->
 <cfset uploadPath = expandPath("./uploads/")>
+
+<!--- Upload klasörünü kontrol et ve oluştur --->
+<cfif not directoryExists(uploadPath)>
+    <cfdirectory action="create" directory="#uploadPath#">
+</cfif>
+
 <cfset allowedExtensions = "xlsx,xls">
 <cfset maxFileSize = 10485760> <!--- 10MB --->
 
