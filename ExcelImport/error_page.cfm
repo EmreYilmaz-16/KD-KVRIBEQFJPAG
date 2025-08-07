@@ -136,7 +136,7 @@
         </p>
         
         <cfif isDefined("errorDetails")>
-            <div class="error-details">
+           <cfoutput> <div class="error-details">
                 <h4>🔍 Hata Detayları</h4>
                 <p><strong>Hata Türü:</strong> <code>#htmlEditFormat(errorDetails.type)#</code></p>
                 <p><strong>Mesaj:</strong> #htmlEditFormat(errorDetails.message)#</p>
@@ -155,6 +155,7 @@
                 
                 <p><strong>Zaman:</strong> #dateFormat(errorDetails.timestamp, "dd/mm/yyyy")# #timeFormat(errorDetails.timestamp, "HH:mm:ss")#</p>
             </div>
+            </cfoutput>
         </cfif>
         
         <div class="helpful-tips">

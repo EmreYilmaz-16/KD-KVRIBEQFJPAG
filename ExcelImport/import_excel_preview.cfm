@@ -482,7 +482,7 @@
                 <cfif hasEtaKodu AND validRowCount GT 0>
                     <form method="post" action="import_excel_preview.cfm">
                         <input type="hidden" name="confirmImport" value="true">
-                        <input type="hidden" name="previewData" value="#htmlEditFormat(previewData)#">
+                        <input type="hidden" name="previewData" value="<cfoutput>#htmlEditFormat(previewData)#</cfoutput>">
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-success">
