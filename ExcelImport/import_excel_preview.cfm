@@ -270,13 +270,23 @@
         
         <!--- Her satır için veritabanı işlemi --->
         <cfloop query="importData" startrow="2">
+
             <cftry>
+               
                 <!--- ETA_KODU kontrolü (zorunlu alan) --->
                 <cfif len(trim(importData[etaKoduColumn][currentRow]))>
                     
                     <!--- ETA_KODU değerini al --->
                     <cfset etaKoduValue = trim(importData[etaKoduColumn][currentRow])>
-                    
+                     <cfquery name="getProduct" datasource="W3Qa_1">
+                    SELECT * FROM STOCKS WHERE PRODUCT_CODE_2= <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">
+                </cfquery>
+                    <cfif getProduct.recordCount EQ 0>
+                        <cfset errorCount = errorCount + 1>
+                        <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU '#etaKoduValue#' bulunamadı")>
+                        <cfcontinue>
+                    </cfif>
+
                     <!--- Her OEM kolonu için ayrı satır ekle --->
                     <cfloop from="1" to="50" index="i">
                         <cfset oemColumn = "OEM #i#">
