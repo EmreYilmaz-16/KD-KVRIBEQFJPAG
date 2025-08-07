@@ -429,7 +429,7 @@
                                 <th style="background: #dc3545;">Satır</th>
                                 <cfloop list="#columnList#" index="columnName">
                                     <th <cfif columnName EQ "ETA_KODU">class="required-column"</cfif>>
-                                        #columnName#
+                                      <cfoutput>  #columnName#</cfoutput>
                                         <cfif columnName EQ "ETA_KODU">*</cfif>
                                     </th>
                                 </cfloop>
