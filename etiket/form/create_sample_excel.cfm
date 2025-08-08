@@ -96,15 +96,13 @@
                         
                         <!--- Ana navigasyon --->
                         <div class="mb-4">
-                            <a href="import_etiket.cfm" class="btn btn-outline-primary me-2">
+                            <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary me-2">
                                 <i class="fas fa-upload me-2"></i>Excel Import
                             </a>
-                            <a href="import_js.cfm" class="btn btn-outline-info me-2">
+                            <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label_js" class="btn btn-outline-info me-2">
                                 <i class="fas fa-code me-2"></i>JS Import
                             </a>
-                            <a href="setup_help.cfm" class="btn btn-outline-secondary">
-                                <i class="fas fa-question-circle me-2"></i>Yardım
-                            </a>
+                            
                         </div>
 
                         <!--- Format Bilgisi --->
@@ -305,7 +303,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="d-grid">
-                                                <a href="import_etiket.cfm" class="btn btn-primary">
+                                                <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-primary">
                                                     <i class="fas fa-upload me-2"></i>
                                                     Excel Import (Apache POI)
                                                 </a>
@@ -315,7 +313,7 @@
                                         
                                         <div class="col-md-6">
                                             <div class="d-grid">
-                                                <a href="import_js.cfm" class="btn btn-success">
+                                                <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label_js" class="btn btn-success">
                                                     <i class="fas fa-code me-2"></i>
                                                     JavaScript Import
                                                 </a>
