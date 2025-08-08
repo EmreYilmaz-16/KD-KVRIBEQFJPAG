@@ -205,7 +205,7 @@
             Duplicate kayıtlar için kontrol yapılmayacaktır.
         </div>
         
-        <form action="import_excel_preview.cfm" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form action="index.cfm?fuseaction=objects.emptypopup_oem_import_process" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="upload-section">
                 <div class="form-group">
                     <label for="excelFile">Excel Dosyası Seçin:</label>

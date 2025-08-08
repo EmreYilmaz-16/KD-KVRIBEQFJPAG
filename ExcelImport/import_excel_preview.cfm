@@ -500,7 +500,7 @@
                 
                 <!--- Onay butonları --->
                 <cfif hasEtaKodu AND validRowCount GT 0>
-                    <form method="post" action="import_excel_preview.cfm">
+                    <form method="post" action="index.cfm?fuseaction=objects.emptypopup_oem_import_process">
                         <input type="hidden" name="confirmImport" value="true">
                         <input type="hidden" name="uploadedFile" value="<cfoutput>#uploadedFileName#</cfoutput>">
                         
@@ -508,14 +508,14 @@
                             <button type="submit" class="btn btn-success">
                                 ✅ Onayla ve Veritabanına Aktar (<cfoutput>#validRowCount#</cfoutput> kayıt)
                             </button>
-                            <a href="upload_excel.cfm" class="btn btn-secondary">
+                            <a href="index.cfm?fuseaction=objects.emptypopup_oem_import" class="btn btn-secondary">
                                 🔙 İptal Et
                             </a>
                         </div>
                     </form>
                 <cfelse>
                     <div class="button-group">
-                        <a href="upload_excel.cfm" class="btn btn-secondary">
+                        <a href="index.cfm?fuseaction=objects.emptypopup_oem_import" class="btn btn-secondary">
                             🔙 Yeni Dosya Seç
                         </a>
                     </div>
@@ -547,14 +547,14 @@
     </div>
     
     <div class="button-group">
-        <a href="upload_excel.cfm" class="btn btn-primary">🔙 Tekrar Dene</a>
+        <a href="index.cfm?fuseaction=objects.emptypopup_oem_import" class="btn btn-primary">🔙 Tekrar Dene</a>
     </div>
 </cfif>
 
 <!--- İçe aktarım başarılı ise tekrar yükleme linki --->
 <cfif importSuccess>
     <div class="button-group">
-        <a href="upload_excel.cfm" class="btn btn-primary">📄 Yeni Dosya Yükle</a>
+        <a href="index.cfm?fuseaction=objects.emptypopup_oem_import" class="btn btn-primary">📄 Yeni Dosya Yükle</a>
     </div>
 </cfif>
 
