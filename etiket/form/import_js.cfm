@@ -271,11 +271,11 @@
                                 </cfif>
                                 
                                 <div class="d-grid gap-2">
-                                    <a href="view_labels.cfm?import_id=#importId#" class="btn btn-success btn-lg">
+                                  <cfoutput>  <a href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#importId#" class="btn btn-success btn-lg">
                                         <i class="fas fa-print me-2"></i>
                                         Etiketleri Görüntüle ve Yazdır
-                                    </a>
-                                    <a href="import_js.cfm" class="btn btn-outline-primary">
+                                    </a></cfoutput>
+                                    <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label_js" class="btn btn-outline-primary">
                                         <i class="fas fa-upload me-2"></i>
                                         Yeni Import
                                     </a>
@@ -309,13 +309,13 @@
                                         <p class="mb-3">Test etmek için örnek Excel dosyası indirin:</p>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <a href="create_sample_excel.cfm?action=create&recordCount=10" class="btn btn-outline-info w-100 mb-2">
+                                                <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket&action=create&recordCount=10" class="btn btn-outline-info w-100 mb-2">
                                                     <i class="fas fa-file-csv me-2"></i>
                                                     CSV Format (10 Kayıt)
                                                 </a>
                                             </div>
                                             <div class="col-md-6">
-                                                <a href="create_excel_advanced.cfm?action=create_xlsx&recordCount=10" class="btn btn-info w-100 mb-2">
+                                                <a href="index.cfm?fuseaction=objects.emptypopup_generate_excell_advanced&action=create_xlsx&recordCount=10" class="btn btn-info w-100 mb-2">
                                                     <i class="fas fa-file-excel me-2"></i>
                                                     XLSX Format (10 Kayıt)
                                                 </a>
