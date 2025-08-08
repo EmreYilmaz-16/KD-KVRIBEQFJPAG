@@ -122,14 +122,14 @@
                                     <p class="mb-3">Test etmek için örnek verilerle dolu Excel dosyası indirin:</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <a href="create_sample_excel.cfm?action=create&recordCount=10" class="btn btn-outline-success w-100 mb-2">
+                                            <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket&action=create&recordCount=10" class="btn btn-outline-success w-100 mb-2">
                                                 <i class="fas fa-file-csv me-2"></i>
                                                 CSV Format (10 Kayıt)
                                             </a>
                                             <small class="text-muted">Excel'de açılabilir, POI gerektirmez</small>
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="create_excel_advanced.cfm?action=create_xlsx&recordCount=10" class="btn btn-success w-100 mb-2">
+                                            <a href="index.cfm?fuseaction=objects.emptypopup_generate_excell_advanced&action=create_xlsx&recordCount=10" class="btn btn-success w-100 mb-2">
                                                 <i class="fas fa-file-excel me-2"></i>
                                                 XLSX Format (10 Kayıt)
                                             </a>
@@ -138,10 +138,10 @@
                                     </div>
                                     <hr>
                                     <div class="text-center">
-                                        <a href="create_sample_excel.cfm" class="btn btn-sm btn-outline-primary me-2">
+                                        <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket" class="btn btn-sm btn-outline-primary me-2">
                                             <i class="fas fa-cog me-1"></i>Daha Fazla Seçenek
                                         </a>
-                                        <a href="create_excel_advanced.cfm" class="btn btn-sm btn-outline-success">
+                                        <a href="index.cfm?fuseaction=objects.emptypopup_generate_excell_advanced" class="btn btn-sm btn-outline-success">
                                             <i class="fas fa-magic me-1"></i>Gelişmiş Excel
                                         </a>
                                     </div>
@@ -150,7 +150,7 @@
                         </div>
 
                         <!-- Upload Form -->
-                        <form action="process_import.cfm" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <form action="<cfoutput>#request.self#?fuseaction=objects.emptypopup_import_label_process</cfoutput>" method="post" enctype="multipart/form-data" id="uploadForm">
                             <div class="upload-area" id="uploadArea">
                                 <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
                                 <h5>Excel Dosyasını Buraya Sürükleyin</h5>
