@@ -229,15 +229,13 @@
 
                         <!--- Navigasyon --->
                         <div class="mb-4">
-                            <a href="create_sample_excel.cfm" class="btn btn-outline-success me-2">
+                            <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket" class="btn btn-outline-success me-2">
                                 <i class="fas fa-file-csv me-2"></i>Basit CSV
                             </a>
-                            <a href="import_etiket.cfm" class="btn btn-outline-primary me-2">
+                            <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary me-2">
                                 <i class="fas fa-upload me-2"></i>Excel Import
                             </a>
-                            <a href="setup_help.cfm" class="btn btn-outline-secondary">
-                                <i class="fas fa-question-circle me-2"></i>Yardım
-                            </a>
+                          
                         </div>
 
                         <!--- Ana Excel oluşturma formu --->
@@ -246,8 +244,8 @@
                                 <i class="fas fa-magic me-2"></i>
                                 Profesyonel Excel Dosyası Oluştur
                             </h5>
-                            
-                            <form method="get" class="row g-3">
+
+                            <cfform action="#request.self#?fuseaction=#attributes.fuseaction#&action=create_xlsx" class="row g-3">
                                 <input type="hidden" name="action" value="create_xlsx">
                                 
                                 <div class="col-md-3">
@@ -280,7 +278,7 @@
                                         XLSX Dosyası Oluştur ve İndir
                                     </button>
                                 </div>
-                            </form>
+                            </cfform>
                             
                             <div class="mt-3">
                                 <small class="text-success">
