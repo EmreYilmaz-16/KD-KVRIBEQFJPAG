@@ -737,12 +737,12 @@
                                         </div></cfoutput>
                                         
                                         <div class="d-grid gap-2">
-                                           <cfoutput> <a href="view_labels.cfm?import_id=#importResult.importId#" class="btn btn-success btn-lg">
+                                           <cfoutput> <a href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#importResult.importId#" class="btn btn-success btn-lg">
                                                 <i class="fas fa-print me-2"></i>
                                                 Etiketleri Görüntüle ve Yazdır
                                             </a>
                                             </cfoutput>
-                                            <a href="import_etiket.cfm" class="btn btn-outline-primary">
+                                            <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary">
                                                 <i class="fas fa-upload me-2"></i>
                                                 Yeni Import
                                             </a>
@@ -754,7 +754,7 @@
                                         </div>
                                         
                                         <div class="d-grid">
-                                            <a href="import_etiket.cfm" class="btn btn-primary">
+                                            <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-primary">
                                                 <i class="fas fa-arrow-left me-2"></i>
                                                 Geri Dön
                                             </a>
@@ -781,7 +781,7 @@
                             </div>
                             
                             <div class="d-grid">
-                                <a href="import_etiket.cfm" class="btn btn-primary">
+                                <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-primary">
                                     <i class="fas fa-arrow-left me-2"></i>
                                     Geri Dön
                                 </a>
