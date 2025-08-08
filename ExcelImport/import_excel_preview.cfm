@@ -420,7 +420,7 @@
                 
                 <!--- İstatistikleri göster --->
                 <div class="stats-summary">
-                    <h3>📈 Veri Özeti</h3>
+                <cfoutput>    <h3>📈 Veri Özeti</h3>
                     <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-number">#totalRows#</div>
@@ -439,6 +439,7 @@
                             <div class="stat-label">Kolon Sayısı</div>
                         </div>
                     </div>
+                    </cfoutput>
                 </div>
                 
                 <cfif NOT hasEtaKodu>
