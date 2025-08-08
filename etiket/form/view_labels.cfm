@@ -356,7 +356,7 @@
                             <ul class="pagination pagination-sm justify-content-end mb-0">
                                 <cfif url.page gt 1>
                                     <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
@@ -364,7 +364,7 @@
                                 
                                 <cfloop from="#max(1, url.page - 2)#" to="#min(totalPages, url.page + 2)#" index="pageNum">
                                     <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
                                             <cfoutput>#pageNum#</cfoutput>
                                         </a>
                                     </li>
@@ -372,7 +372,7 @@
                                 
                                 <cfif url.page lt totalPages>
                                     <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
@@ -491,12 +491,12 @@
                             <ul class="pagination justify-content-center">
                                 <cfif url.page gt 1>
                                <cfoutput>    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels&import_id=#url.import_id#&page=1&per_page=#url.per_page#">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=1&per_page=#url.per_page#">
                                             <i class="fas fa-angle-double-left"></i> İlk
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
                                             <i class="fas fa-chevron-left"></i> Önceki
                                         </a>
                                     </li>
