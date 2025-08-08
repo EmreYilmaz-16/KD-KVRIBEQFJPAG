@@ -374,8 +374,9 @@
         
         <div class="success-box">
             <h3>✅ Dosya Başarıyla Yüklendi</h3>
-            <p><strong>Dosya Adı:</strong> #uploadedFileName#</p>
+          <cfoutput>  <p><strong>Dosya Adı:</strong> #uploadedFileName#</p> 
             <p><strong>Dosya Boyutu:</strong> #numberFormat(cffile.fileSize/1024, "999,999")# KB</p>
+            </cfoutput>
         </div>
         
         <!--- Excel dosyasını okuma --->
