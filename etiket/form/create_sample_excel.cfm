@@ -139,8 +139,8 @@
                             </div>
                             <div class="card-body">
                                 <p>Test etmek için örnek verilerle dolu bir Excel dosyası oluşturun ve indirin.</p>
-                                
-                                <form method="POST" action="index.cfm?fuseaction=<cfoutput>#attributes.fuseaction#</cfoutput>" class="row g-3">
+
+                                <form method="POST" action="index.cfm?fuseaction=<cfoutput>#attributes.fuseaction#</cfoutput>&action=create" class="row g-3">
                                     <input type="hidden" name="action" value="create">
                                     
                                     <div class="col-md-4">
