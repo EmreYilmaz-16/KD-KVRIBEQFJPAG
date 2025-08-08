@@ -235,7 +235,7 @@
                                     FROM etiket_temp_data 
                                     WHERE import_id = <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">
                                 </cfquery>
-                                
+                                <cfoutput>
                                 <!--- Sonuçları göster --->
                                 <div class="alert alert-success">
                                     <h5><i class="fas fa-check-circle me-2"></i>Import Başarılı!</h5>
@@ -258,7 +258,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+                                </cfoutput>
                                 <cfif arrayLen(errors) gt 0>
                                     <div class="alert alert-warning">
                                         <h6>Hatalar:</h6>
