@@ -24,7 +24,7 @@
 </cfquery>
 
 <cfif getImportInfo.recordCount eq 0>
-    <cflocation url="import_etiket.cfm" addtoken="false">
+    <cflocation url="index.cfm?fuseaction=objects.emptypopup_import_write_label" addtoken="false">
 </cfif>
 
 <!--- Sayfalama hesaplamaları - gerçek kayıt sayısına göre yap --->
@@ -284,10 +284,7 @@
                         <button type="button" class="btn btn-success" onclick="window.print()">
                             <i class="fas fa-print me-2"></i>Yazdır
                         </button>
-                        <a href="<cfoutput>template_design.cfm?import_id=#url.import_id#</cfoutput>" class="btn btn-info">
-                            <i class="fas fa-palette me-2"></i>Şablon Tasarımı
-                        </a>
-                        <a href="import_etiket.cfm" class="btn btn-outline-primary">
+                        <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary">
                             <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
                         </a>
                     </div>
@@ -359,7 +356,7 @@
                             <ul class="pagination pagination-sm justify-content-end mb-0">
                                 <cfif url.page gt 1>
                                     <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
@@ -367,7 +364,7 @@
                                 
                                 <cfloop from="#max(1, url.page - 2)#" to="#min(totalPages, url.page + 2)#" index="pageNum">
                                     <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
                                             <cfoutput>#pageNum#</cfoutput>
                                         </a>
                                     </li>
@@ -375,7 +372,7 @@
                                 
                                 <cfif url.page lt totalPages>
                                     <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
@@ -480,7 +477,7 @@
                 <div class="alert alert-warning text-center">
                     <h5><i class="fas fa-exclamation-triangle me-2"></i>Etiket Bulunamadı</h5>
                     <p>Bu import için etiket verisi bulunamadı.</p>
-                    <a href="import_etiket.cfm" class="btn btn-primary">
+                    <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-primary">
                         <i class="fas fa-arrow-left me-2"></i>Ana Sayfaya Dön
                     </a>
                 </div>
@@ -493,21 +490,22 @@
                         <nav aria-label="Sayfalama">
                             <ul class="pagination justify-content-center">
                                 <cfif url.page gt 1>
-                                    <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=1&per_page=#url.per_page#</cfoutput>">
+                               <cfoutput>    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels&import_id=#url.import_id#&page=1&per_page=#url.per_page#">
                                             <i class="fas fa-angle-double-left"></i> İlk
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.objects.emptypopup_view_labels&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
                                             <i class="fas fa-chevron-left"></i> Önceki
                                         </a>
                                     </li>
+                                    </cfoutput> 
                                 </cfif>
                                 
                                 <cfloop from="#max(1, url.page - 5)#" to="#min(totalPages, url.page + 5)#" index="pageNum">
                                     <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
                                            <cfoutput>#pageNum#</cfoutput>
                                         </a>
                                     </li>
@@ -515,12 +513,12 @@
                                 
                                 <cfif url.page lt totalPages>
                                     <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
                                             Sonraki <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="<cfoutput>?import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#</cfoutput>">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#</cfoutput>">
                                             Son <i class="fas fa-angle-double-right"></i>
                                         </a>
                                     </li>
@@ -571,12 +569,12 @@
             }
             if (e.key === 'ArrowLeft' && e.altKey) {
                 <cfif url.page gt 1>
-                    window.location.href = '<cfoutput>?import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>';
+                    window.location.href = 'index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>';
                 </cfif>
             }
             if (e.key === 'ArrowRight' && e.altKey) {
                 <cfif url.page lt totalPages>
-                    window.location.href = '<cfoutput>?import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>';
+                    window.location.href = 'index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>';
                 </cfif>
             }
         });
