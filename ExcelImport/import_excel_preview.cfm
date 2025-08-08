@@ -1,3 +1,4 @@
+<cfabort>
 <!---
     CFML Excel Preview Script
     Bu dosya upload_excel.cfm'den gelen Excel dosyasını önce gösterir, kullanıcı onayından sonra veritabanına aktarır
