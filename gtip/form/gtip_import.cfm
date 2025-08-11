@@ -136,7 +136,7 @@
                 <input type="submit" value="Import Et" class="btn">
             </cfform>
         </div>
-        
+            <cfoutput>
         <!--- Sonuçları Göster --->
         <cfif isDefined("results") and arrayLen(results) gt 0>
             <div style="margin-bottom: 20px;">
@@ -146,7 +146,7 @@
                 <p><strong>Uyarı:</strong> <span style="color: orange;">#warningCount#</span></p>
                 <p><strong>Hata:</strong> <span style="color: red;">#errorCount#</span></p>
             </div>
-            <cfoutput>
+        
             <table class="result-table">
                 <thead>
                     <tr>
@@ -207,7 +207,7 @@
                 </div>
             </cfif>
         </cfif>
-        </cfoutput>
+        
         <!--- Zorla güncelleme işlemi --->
         <cfif isDefined("form.force_update") and form.force_update>
             <!--- Veritabanı bağlantısını tespit et --->
@@ -251,7 +251,7 @@
                 <p><strong>Toplam #forceUpdateCount# ürün zorla güncellendi.</strong></p>
             </div>
         </cfif>
-        
+        </cfoutput>
         <!--- Kullanım Talimatları --->
         <div style="margin-top: 30px; padding: 15px; background-color: #e7f3ff; border-radius: 5px;">
             <h4>Kullanım Talimatları:</h4>
