@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GTIP Kodu Import Sistemi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .upload-form { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .result-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .result-table th, .result-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .result-table th { background-color: #4CAF50; color: white; }
+        .error { color: red; background-color: #ffe6e6; padding: 5px; border-radius: 3px; }
+        .warning { color: orange; background-color: #fff3cd; padding: 5px; border-radius: 3px; }
+        .success { color: green; background-color: #d4edda; padding: 5px; border-radius: 3px; }
+        .btn { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GTIP Kodu Import Sistemi</h1>
+        
+        <cfif isDefined("form.upload_file")>
+            <cfset results = arrayNew(1)>
+            <cfset totalProcessed = 0>
+            <cfset successCount = 0>
+            <cfset errorCount = 0>
+            <cfset warningCount = 0>
+            
+            <cftry>
+                <!--- Excel dosyasını okuma --->
+                <cfspreadsheet action="read" src="#form.upload_file#" query="excelData" headerrow="1">
+                
+                <!--- Her satır için işlem yap --->
+                <cfloop query="excelData">
+                    <cfset totalProcessed = totalProcessed + 1>
+                    <cfset currentResult = structNew()>
+                    <cfset currentResult.etaKodu = trim(excelData.ETA_KODU)>
+                    <cfset currentResult.gtipNumarasi = trim(excelData.GTIP_NUMARASI)>
+                    <cfset currentResult.status = "">
+                    <cfset currentResult.message = "">
+                    
+                    <!--- ETA Kodu ve GTIP Numarası boş kontrolü --->
+                    <cfif len(currentResult.etaKodu) eq 0 or len(currentResult.gtipNumarasi) eq 0>
+                        <cfset currentResult.status = "error">
+                        <cfset currentResult.message = "ETA Kodu veya GTIP Numarası boş olamaz">
+                        <cfset errorCount = errorCount + 1>
+                    <cfelse>
+                        <!--- Ürünü veritabanında ara --->
+                        <cftry>
+                            <!--- Veritabanı bağlantısını tespit et --->
+                            <cfset dsn = "">
+                            <cfif isDefined("application.datasource")>
+                                <cfset dsn = application.datasource>
+                            <cfelseif isDefined("request.datasource")>
+                                <cfset dsn = request.datasource>
+                            <cfelse>
+                                <!--- Varsayılan datasource adını buraya yazın --->
+                                <cfset dsn = "kd_database">
+                            </cfif>
+                            
+                            <cfquery name="checkProduct" datasource="#dsn#">
+                                SELECT GTIP_NUMBER, PRODUCT_ID 
+                                FROM PRODUCT 
+                                WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
+                            </cfquery>
+                            
+                            <cfif checkProduct.recordCount eq 0>
+                                <!--- Ürün bulunamadı --->
+                                <cfset currentResult.status = "error">
+                                <cfset currentResult.message = "Ürün bulunamadı">
+                                <cfset errorCount = errorCount + 1>
+                            <cfelse>
+                                <!--- Ürün bulundu, GTIP numarası kontrolü --->
+                                <cfif len(checkProduct.GTIP_NUMBER) gt 0 and checkProduct.GTIP_NUMBER neq currentResult.gtipNumarasi>
+                                    <!--- Farklı GTIP numarası var, uyarı ver --->
+                                    <cfset currentResult.status = "warning">
+                                    <cfset currentResult.message = "Mevcut GTIP: #checkProduct.GTIP_NUMBER# - Yeni GTIP: #currentResult.gtipNumarasi# (Farklı GTIP numarası!)">
+                                    <cfset currentResult.mevcutGtip = checkProduct.GTIP_NUMBER>
+                                    <cfset warningCount = warningCount + 1>
+                                <cfelse>
+                                    <!--- GTIP numarasını güncelle --->
+                                    <cftry>
+                                        <cfquery name="updateGtip" datasource="#dsn#">
+                                            UPDATE PRODUCT 
+                                            SET GTIP_NUMBER = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
+                                            WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
+                                        </cfquery>
+                                        
+                                        <cfset currentResult.status = "success">
+                                        <cfif len(checkProduct.GTIP_NUMBER) eq 0>
+                                            <cfset currentResult.message = "GTIP numarası başarıyla eklendi">
+                                        <cfelse>
+                                            <cfset currentResult.message = "GTIP numarası başarıyla güncellendi">
+                                        </cfif>
+                                        <cfset successCount = successCount + 1>
+                                        
+                                        <cfcatch type="any">
+                                            <cfset currentResult.status = "error">
+                                            <cfset currentResult.message = "Veritabanı güncelleme hatası: #cfcatch.message#">
+                                            <cfset errorCount = errorCount + 1>
+                                        </cfcatch>
+                                    </cftry>
+                                </cfif>
+                            </cfif>
+                            
+                            <cfcatch type="any">
+                                <cfset currentResult.status = "error">
+                                <cfset currentResult.message = "Veritabanı sorgu hatası: #cfcatch.message#">
+                                <cfset errorCount = errorCount + 1>
+                            </cfcatch>
+                        </cftry>
+                    </cfif>
+                    
+                    <cfset arrayAppend(results, currentResult)>
+                </cfloop>
+                
+                <cfcatch type="any">
+                    <div class="error">
+                        <strong>Excel dosyası okuma hatası:</strong> #cfcatch.message#<br>
+                        Lütfen dosyanın Excel formatında olduğundan ve "ETA_KODU" ile "GTIP_NUMARASI" sütunlarını içerdiğinden emin olun.
+                    </div>
+                </cfcatch>
+            </cftry>
+        </cfif>
+        
+        <!--- Upload Formu --->
+        <div class="upload-form">
+            <h3>Excel Dosyası Yükle</h3>
+            <p><strong>Gerekli Sütunlar:</strong> ETA_KODU, GTIP_NUMARASI</p>
+            
+            <cfform enctype="multipart/form-data" method="post">
+                <cfinput type="file" name="upload_file" accept=".xlsx,.xls" required="yes">
+                <br><br>
+                <input type="submit" value="Import Et" class="btn">
+            </cfform>
+        </div>
+        
+        <!--- Sonuçları Göster --->
+        <cfif isDefined("results") and arrayLen(results) gt 0>
+            <div style="margin-bottom: 20px;">
+                <h3>Import Özeti</h3>
+                <p><strong>Toplam İşlenen:</strong> #totalProcessed#</p>
+                <p><strong>Başarılı:</strong> <span style="color: green;">#successCount#</span></p>
+                <p><strong>Uyarı:</strong> <span style="color: orange;">#warningCount#</span></p>
+                <p><strong>Hata:</strong> <span style="color: red;">#errorCount#</span></p>
+            </div>
+            
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>Sıra</th>
+                        <th>ETA Kodu</th>
+                        <th>GTIP Numarası</th>
+                        <th>Mevcut GTIP</th>
+                        <th>Durum</th>
+                        <th>Mesaj</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <cfloop from="1" to="#arrayLen(results)#" index="i">
+                        <cfset result = results[i]>
+                        <tr>
+                            <td>#i#</td>
+                            <td>#result.etaKodu#</td>
+                            <td>#result.gtipNumarasi#</td>
+                            <td>
+                                <cfif structKeyExists(result, "mevcutGtip")>
+                                    #result.mevcutGtip#
+                                <cfelse>
+                                    -
+                                </cfif>
+                            </td>
+                            <td>
+                                <cfif result.status eq "success">
+                                    <span class="success">Başarılı</span>
+                                <cfelseif result.status eq "warning">
+                                    <span class="warning">Uyarı</span>
+                                <cfelse>
+                                    <span class="error">Hata</span>
+                                </cfif>
+                            </td>
+                            <td>#result.message#</td>
+                        </tr>
+                    </cfloop>
+                </tbody>
+            </table>
+            
+            <!--- Uyarı durumları için onay formu --->
+            <cfif warningCount gt 0>
+                <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 5px;">
+                    <h4>Uyarı: Farklı GTIP Numaraları Tespit Edildi</h4>
+                    <p>Yukarıda listelenen ürünlerde mevcut GTIP numaralarından farklı değerler bulundu.</p>
+                    <p>Bu değerleri güncellemek istiyorsanız aşağıdaki butona tıklayın:</p>
+                    
+                    <cfform method="post">
+                        <cfloop from="1" to="#arrayLen(results)#" index="i">
+                            <cfif results[i].status eq "warning">
+                                <cfinput type="hidden" name="force_update_eta_#i#" value="#results[i].etaKodu#">
+                                <cfinput type="hidden" name="force_update_gtip_#i#" value="#results[i].gtipNumarasi#">
+                            </cfif>
+                        </cfloop>
+                        <cfinput type="hidden" name="force_update" value="true">
+                        <input type="submit" value="Tüm Uyarıları Yok Say ve Güncelle" class="btn" style="background-color: #ff9800;">
+                    </cfform>
+                </div>
+            </cfif>
+        </cfif>
+        
+        <!--- Zorla güncelleme işlemi --->
+        <cfif isDefined("form.force_update") and form.force_update>
+            <!--- Veritabanı bağlantısını tespit et --->
+            <cfset dsn = "">
+            <cfif isDefined("application.datasource")>
+                <cfset dsn = application.datasource>
+            <cfelseif isDefined("request.datasource")>
+                <cfset dsn = request.datasource>
+            <cfelse>
+                <!--- Varsayılan datasource adını buraya yazın --->
+                <cfset dsn = "kd_database">
+            </cfif>
+            
+            <div class="success">
+                <h4>Zorla Güncelleme Sonuçları:</h4>
+                <cfset forceUpdateCount = 0>
+                
+                <cfloop collection="#form#" item="fieldName">
+                    <cfif left(fieldName, 17) eq "force_update_eta_">
+                        <cfset itemIndex = right(fieldName, len(fieldName) - 17)>
+                        <cfset etaKodu = form["force_update_eta_#itemIndex#"]>
+                        <cfset gtipNumarasi = form["force_update_gtip_#itemIndex#"]>
+                        
+                        <cftry>
+                            <cfquery name="forceUpdate" datasource="#dsn#">
+                                UPDATE PRODUCT 
+                                SET GTIP_NUMBER = <cfqueryparam value="#gtipNumarasi#" cfsqltype="cf_sql_varchar">
+                                WHERE PRODUCT_CODE_2 = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
+                            </cfquery>
+                            
+                            <p>✓ #etaKodu# - GTIP numarası #gtipNumarasi# olarak güncellendi</p>
+                            <cfset forceUpdateCount = forceUpdateCount + 1>
+                            
+                            <cfcatch type="any">
+                                <p style="color: red;">✗ #etaKodu# - Güncelleme hatası: #cfcatch.message#</p>
+                            </cfcatch>
+                        </cftry>
+                    </cfif>
+                </cfloop>
+                
+                <p><strong>Toplam #forceUpdateCount# ürün zorla güncellendi.</strong></p>
+            </div>
+        </cfif>
+        
+        <!--- Kullanım Talimatları --->
+        <div style="margin-top: 30px; padding: 15px; background-color: #e7f3ff; border-radius: 5px;">
+            <h4>Kullanım Talimatları:</h4>
+            <ol>
+                <li>Excel dosyanızda <strong>"ETA_KODU"</strong> ve <strong>"GTIP_NUMARASI"</strong> sütunları olmalıdır</li>
+                <li>İlk satır başlık satırı olarak kullanılacaktır</li>
+                <li>Sistem her ETA kodu için veritabanında ürün arayacaktır</li>
+                <li>Ürün bulunamazsa hata mesajı verecektir</li>
+                <li>Mevcut GTIP numarası varsa ve farklıysa uyarı verecektir</li>
+                <li>Diğer durumlarda GTIP numarasını güncelleyecektir</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
