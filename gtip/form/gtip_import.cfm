@@ -189,7 +189,7 @@
             
             <!--- Uyarı durumları için onay formu --->
             <cfif warningCount gt 0>
-                <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 5px;">
+                <div style="margin-top: 20px; padding: 15px; background-color: ##fff3cd; border-radius: 5px;">
                     <h4>Uyarı: Farklı GTIP Numaraları Tespit Edildi</h4>
                     <p>Yukarıda listelenen ürünlerde mevcut GTIP numaralarından farklı değerler bulundu.</p>
                     <p>Bu değerleri güncellemek istiyorsanız aşağıdaki butona tıklayın:</p>
