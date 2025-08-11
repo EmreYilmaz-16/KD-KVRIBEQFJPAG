@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
+<cf_box title="GTIP Kodu Import Sistemi">
+
     <meta charset="utf-8">
     <title>GTIP Kodu Import Sistemi</title>
     <style>
@@ -16,10 +15,9 @@
         .btn { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
         .btn:hover { background-color: #45a049; }
     </style>
-</head>
-<body>
+
     <div class="container">
-        <h1>GTIP Kodu Import Sistemi</h1>
+        <h1></h1>
         
         <cfif isDefined("form.upload_file")>
             <cfset results = arrayNew(1)>
@@ -249,5 +247,5 @@
             </ol>
         </div>
     </div>
-</body>
-</html>
+
+</cf_box>
