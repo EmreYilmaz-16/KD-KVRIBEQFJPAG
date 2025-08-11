@@ -52,7 +52,7 @@
                             <!--- Veritabanı bağlantısını tespit et --->
                            
                             
-                            <cfquery name="checkProduct" datasource="#dsn_1#">
+                            <cfquery name="checkProduct" datasource="#dsn1#">
                                 SELECT CUSTOMS_RECIPE_CODE AS GTIP_NUMBER, PRODUCT_ID 
                                 FROM PRODUCT 
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
@@ -74,7 +74,7 @@
                                 <cfelse>
                                     <!--- GTIP numarasını güncelle --->
                                     <cftry>
-                                        <cfquery name="updateGtip" datasource="#dsn_1#">
+                                        <cfquery name="updateGtip" datasource="#dsn1#">
                                             UPDATE PRODUCT 
                                             SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                             WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
@@ -216,7 +216,7 @@
                         <cfset gtipNumarasi = form["force_update_gtip_#itemIndex#"]>
                         
                         <cftry>
-                            <cfquery name="forceUpdate" datasource="#dsn_1#">
+                            <cfquery name="forceUpdate" datasource="#dsn1#">
                                 UPDATE PRODUCT 
                                 SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
