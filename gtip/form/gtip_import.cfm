@@ -50,17 +50,9 @@
                         <!--- Ürünü veritabanında ara --->
                         <cftry>
                             <!--- Veritabanı bağlantısını tespit et --->
-                            <cfset dsn = "">
-                            <cfif isDefined("application.datasource")>
-                                <cfset dsn = application.datasource>
-                            <cfelseif isDefined("request.datasource")>
-                                <cfset dsn = request.datasource>
-                            <cfelse>
-                                <!--- Varsayılan datasource adını buraya yazın --->
-                                <cfset dsn = "w3Qa_product">
-                            </cfif>
+                           
                             
-                            <cfquery name="checkProduct" datasource="#dsn#">
+                            <cfquery name="checkProduct" datasource="#dsn_1#">
                                 SELECT CUSTOMS_RECIPE_CODE AS GTIP_NUMBER, PRODUCT_ID 
                                 FROM PRODUCT 
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
@@ -82,7 +74,7 @@
                                 <cfelse>
                                     <!--- GTIP numarasını güncelle --->
                                     <cftry>
-                                        <cfquery name="updateGtip" datasource="#dsn#">
+                                        <cfquery name="updateGtip" datasource="#dsn_1#">
                                             UPDATE PRODUCT 
                                             SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                             WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
@@ -130,7 +122,7 @@
             <h3>Excel Dosyası Yükle</h3>
             <p><strong>Gerekli Sütunlar:</strong> ETA_KODU, GTIP_NUMARASI</p>
             
-            <cfform enctype="multipart/form-data" method="post">
+            <cfform action="#request.self#?fuseaction=#attributes.fuseaction#" enctype="multipart/form-data" method="post">
                 <cfinput type="file" name="upload_file" accept=".xlsx,.xls" required="yes">
                 <br><br>
                 <input type="submit" value="Import Et" class="btn">
@@ -211,15 +203,7 @@
         <!--- Zorla güncelleme işlemi --->
         <cfif isDefined("form.force_update") and form.force_update>
             <!--- Veritabanı bağlantısını tespit et --->
-            <cfset dsn = "">
-            <cfif isDefined("application.datasource")>
-                <cfset dsn = application.datasource>
-            <cfelseif isDefined("request.datasource")>
-                <cfset dsn = request.datasource>
-            <cfelse>
-                <!--- Varsayılan datasource adını buraya yazın --->
-                <cfset dsn = "w3Qa_product">
-            </cfif>
+            
             
             <div class="success">
                 <h4>Zorla Güncelleme Sonuçları:</h4>
@@ -232,7 +216,7 @@
                         <cfset gtipNumarasi = form["force_update_gtip_#itemIndex#"]>
                         
                         <cftry>
-                            <cfquery name="forceUpdate" datasource="#dsn#">
+                            <cfquery name="forceUpdate" datasource="#dsn_1#">
                                 UPDATE PRODUCT 
                                 SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
