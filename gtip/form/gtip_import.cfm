@@ -57,7 +57,7 @@
                                 <cfset dsn = request.datasource>
                             <cfelse>
                                 <!--- Varsayılan datasource adını buraya yazın --->
-                                <cfset dsn = "kd_database">
+                                <cfset dsn = "w3Qa_product">
                             </cfif>
                             
                             <cfquery name="checkProduct" datasource="#dsn#">
@@ -146,7 +146,7 @@
                 <p><strong>Uyarı:</strong> <span style="color: orange;">#warningCount#</span></p>
                 <p><strong>Hata:</strong> <span style="color: red;">#errorCount#</span></p>
             </div>
-            
+            <cfoutput>
             <table class="result-table">
                 <thead>
                     <tr>
@@ -207,7 +207,7 @@
                 </div>
             </cfif>
         </cfif>
-        
+        </cfoutput>
         <!--- Zorla güncelleme işlemi --->
         <cfif isDefined("form.force_update") and form.force_update>
             <!--- Veritabanı bağlantısını tespit et --->
@@ -218,7 +218,7 @@
                 <cfset dsn = request.datasource>
             <cfelse>
                 <!--- Varsayılan datasource adını buraya yazın --->
-                <cfset dsn = "kd_database">
+                <cfset dsn = "w3Qa_product">
             </cfif>
             
             <div class="success">
