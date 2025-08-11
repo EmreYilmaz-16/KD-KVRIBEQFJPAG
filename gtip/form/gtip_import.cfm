@@ -202,7 +202,7 @@
                             </cfif>
                         </cfloop>
                         <cfinput type="hidden" name="force_update" value="true">
-                        <input type="submit" value="Tüm Uyarıları Yok Say ve Güncelle" class="btn" style="background-color: #ff9800;">
+                        <input type="submit" value="Tüm Uyarıları Yok Say ve Güncelle" class="btn" style="background-color: ##ff9800;">
                     </cfform>
                 </div>
             </cfif>
