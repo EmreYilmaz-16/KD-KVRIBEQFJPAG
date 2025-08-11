@@ -61,7 +61,7 @@
                             </cfif>
                             
                             <cfquery name="checkProduct" datasource="#dsn#">
-                                SELECT GTIP_NUMBER, PRODUCT_ID 
+                                SELECT CUSTOMS_RECIPE_CODE AS GTIP_NUMBER, PRODUCT_ID 
                                 FROM PRODUCT 
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
                             </cfquery>
@@ -84,7 +84,7 @@
                                     <cftry>
                                         <cfquery name="updateGtip" datasource="#dsn#">
                                             UPDATE PRODUCT 
-                                            SET GTIP_NUMBER = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
+                                            SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                             WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
                                         </cfquery>
                                         
@@ -234,7 +234,7 @@
                         <cftry>
                             <cfquery name="forceUpdate" datasource="#dsn#">
                                 UPDATE PRODUCT 
-                                SET GTIP_NUMBER = <cfqueryparam value="#gtipNumarasi#" cfsqltype="cf_sql_varchar">
+                                SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#gtipNumarasi#" cfsqltype="cf_sql_varchar">
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
                             </cfquery>
                             
