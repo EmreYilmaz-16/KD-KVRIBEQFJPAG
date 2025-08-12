@@ -294,6 +294,7 @@
                         <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
                             <cfquery name="getExistingRecord" datasource="#dsn#_product">
                                SELECT BARCODE,STOCK_ID,UNIT_ID FROM [w3Qa_product].[STOCKS_BARCODES]  WHERE BARCODE=<cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                               AND STOCK_ID=<cfqueryparam value="#getProduct.STOCK_ID#" cfsqltype="cf_sql_integer">
                                
                             </cfquery>
                             <cfif getExistingRecord.recordCount GT 0>
