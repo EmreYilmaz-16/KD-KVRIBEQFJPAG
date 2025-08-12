@@ -91,12 +91,7 @@
                                         <cfquery name="updateGtip" datasource="#dsn1#">
                                             UPDATE PRODUCT 
                                             SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
-                                                -- <cfif len(currentResult.urunIsmiIngilizce) gt 0>
-                                                --     , PRODUCT_NAME_ENGLISH = <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">
-                                                -- </cfif>
-                                                -- <cfif len(currentResult.urunAgirlik) gt 0 and isNumeric(currentResult.urunAgirlik)>
-                                                --     , PRODUCT_NET_WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric">
-                                                -- </cfif>
+                                               
                                             WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
                                         </cfquery>
 
