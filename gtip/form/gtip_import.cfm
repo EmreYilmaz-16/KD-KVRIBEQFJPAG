@@ -139,15 +139,12 @@
                                                     <!--- Mevcut kayıt varsa güncelle --->
                                                     <cfquery name="updateWeight" datasource="#dsn1#">
                                                         UPDATE w3Qa_product.PRODUCT_UNIT 
-                                                        SET WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_decimal"> 
+                                                        SET WEIGHT = #currentResult.urunAgirlik#
                                                         WHERE PRODUCT_ID = #checkProduct.PRODUCT_ID#
                                                     </cfquery>
                                                 <cfelse>
                                                     <!--- Yeni kayıt ekle --->
-                                                    <cfquery name="insertWeight" datasource="#dsn1#">
-                                                        INSERT INTO w3Qa_product.PRODUCT_UNIT (PRODUCT_ID, WEIGHT)
-                                                        VALUES (#checkProduct.PRODUCT_ID#, <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric">)
-                                                    </cfquery>
+                                                    
                                                 </cfif>
                                                 
                                                 <cfcatch type="any">
