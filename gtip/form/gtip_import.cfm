@@ -139,7 +139,7 @@
                                                     <!--- Mevcut kayıt varsa güncelle --->
                                                     <cfquery name="updateWeight" datasource="#dsn1#">
                                                         UPDATE w3Qa_product.PRODUCT_UNIT 
-                                                        SET WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric"> 
+                                                        SET WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_decimal"> 
                                                         WHERE PRODUCT_ID = #checkProduct.PRODUCT_ID#
                                                     </cfquery>
                                                 <cfelse>
