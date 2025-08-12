@@ -185,6 +185,7 @@
                                         <cfset successCount = successCount + 1>
                                         
                                         <cfcatch type="any">
+                                            <cfdump var="#cfcatch#">
                                             <cfset currentResult.status = "error">
                                             <cfset currentResult.message = "Veritabanı güncelleme hatası: #cfcatch.message#">
                                             <cfset errorCount = errorCount + 1>
@@ -194,6 +195,7 @@
                             </cfif>
                             
                             <cfcatch type="any">
+
                                 <cfset currentResult.status = "error">
                                 <cfset currentResult.message = "Veritabanı sorgu hatası: #cfcatch.message#">
                                 <cfset errorCount = errorCount + 1>
