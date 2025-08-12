@@ -36,6 +36,22 @@
                     <cfset currentResult = structNew()>
                     <cfset currentResult.etaKodu = trim(excelData.ETA_KODU)>
                     <cfset currentResult.gtipNumarasi = trim(excelData.GTIP_NUMARASI)>
+                    
+                    <!--- İsteğe bağlı sütunlar için güvenli okuma --->
+                    <cftry>
+                        <cfset currentResult.urunIsmiIngilizce = trim(excelData.URUN_ISMI_INGILIZCE)>
+                        <cfcatch type="any">
+                            <cfset currentResult.urunIsmiIngilizce = "">
+                        </cfcatch>
+                    </cftry>
+                    
+                    <cftry>
+                        <cfset currentResult.urunAgirlik = trim(excelData.URUN_AGIRLIK)>
+                        <cfcatch type="any">
+                            <cfset currentResult.urunAgirlik = "">
+                        </cfcatch>
+                    </cftry>
+                    
                     <cfset currentResult.status = "">
                     <cfset currentResult.message = "">
                     
@@ -51,7 +67,7 @@
                            
                             
                             <cfquery name="checkProduct" datasource="#dsn1#">
-                                SELECT CUSTOMS_RECIPE_CODE AS GTIP_NUMBER, PRODUCT_ID 
+                                SELECT CUSTOMS_RECIPE_CODE AS GTIP_NUMBER, PRODUCT_ID ,PRODUCT_NAME
                                 FROM PRODUCT 
                                 WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
                             </cfquery>
@@ -75,8 +91,77 @@
                                         <cfquery name="updateGtip" datasource="#dsn1#">
                                             UPDATE PRODUCT 
                                             SET CUSTOMS_RECIPE_CODE = <cfqueryparam value="#currentResult.gtipNumarasi#" cfsqltype="cf_sql_varchar">
+                                                -- <cfif len(currentResult.urunIsmiIngilizce) gt 0>
+                                                --     , PRODUCT_NAME_ENGLISH = <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">
+                                                -- </cfif>
+                                                -- <cfif len(currentResult.urunAgirlik) gt 0 and isNumeric(currentResult.urunAgirlik)>
+                                                --     , PRODUCT_NET_WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric">
+                                                -- </cfif>
                                             WHERE PRODUCT_CODE_2 = <cfqueryparam value="#currentResult.etaKodu#" cfsqltype="cf_sql_varchar">
                                         </cfquery>
+
+                                        <cfif len(currentResult.urunIsmiIngilizce) gt 0>
+                                            <cftry>
+                                                <cfquery name="getPns" datasource="#dsn#">
+                                                    SELECT * FROM w3Qa.SETUP_LANGUAGE_INFO 
+                                                    WHERE TABLE_NAME='PRODUCT' 
+                                                    AND COLUMN_NAME='PRODUCT_NAME' 
+                                                    AND UNIQUE_COLUMN_ID=#checkProduct.PRODUCT_ID# 
+                                                    AND LANGUAGE='eng'
+                                                </cfquery>
+                                                
+                                                <cfif getPns.recordCount>
+                                                    <cfquery name="upd" datasource="#dsn#">
+                                                        UPDATE w3Qa.SETUP_LANGUAGE_INFO 
+                                                        SET ITEM = <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">
+                                                        WHERE TABLE_NAME='PRODUCT' AND COLUMN_NAME='PRODUCT_NAME' AND UNIQUE_COLUMN_ID=#checkProduct.PRODUCT_ID# AND LANGUAGE='eng'
+                                                    </cfquery>
+                                                <cfelse>
+                                                    <cfquery name="ins" datasource="#dsn#">
+                                                        INSERT INTO w3Qa.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
+                                                        VALUES ('PRODUCT', 'PRODUCT_NAME', #checkProduct.PRODUCT_ID#, 'eng', <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">)
+                                                    </cfquery>
+                                                    <cfquery name="insTr" datasource="#dsn#">
+                                                        INSERT INTO w3Qa.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
+                                                        VALUES ('PRODUCT', 'PRODUCT_NAME', #checkProduct.PRODUCT_ID#, 'tr', <cfqueryparam value="#checkProduct.PRODUCT_NAME#" cfsqltype="cf_sql_varchar">)
+                                                    </cfquery>
+                                                </cfif>
+                                                
+                                                <cfcatch type="any">
+                                                    <!--- İngilizce isim güncelleme hatası, ama ana işlemi durdurmayalım --->
+                                                    <cfset currentResult.message = currentResult.message & " (İngilizce isim güncellenemedi: #cfcatch.message#)">
+                                                </cfcatch>
+                                            </cftry>
+                                        </cfif>
+                                        <cfif len(currentResult.urunAgirlik) gt 0 and isNumeric(currentResult.urunAgirlik)>
+                                            <cftry>
+                                                <!--- Ürün birim tablosunda ağırlık kontrolü --->
+                                                <cfquery name="checkWeight" datasource="#dsn1#">
+                                                    SELECT WEIGHT FROM w3Qa_product.PRODUCT_UNIT WHERE PRODUCT_ID=#checkProduct.PRODUCT_ID#
+                                                </cfquery>
+                                                
+                                                <cfif checkWeight.recordCount gt 0>
+                                                    <!--- Mevcut kayıt varsa güncelle --->
+                                                    <cfquery name="updateWeight" datasource="#dsn1#">
+                                                        UPDATE w3Qa_product.PRODUCT_UNIT 
+                                                        SET WEIGHT = <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric"> 
+                                                        WHERE PRODUCT_ID = #checkProduct.PRODUCT_ID#
+                                                    </cfquery>
+                                                <cfelse>
+                                                    <!--- Yeni kayıt ekle --->
+                                                    <cfquery name="insertWeight" datasource="#dsn1#">
+                                                        INSERT INTO w3Qa_product.PRODUCT_UNIT (PRODUCT_ID, WEIGHT)
+                                                        VALUES (#checkProduct.PRODUCT_ID#, <cfqueryparam value="#currentResult.urunAgirlik#" cfsqltype="cf_sql_numeric">)
+                                                    </cfquery>
+                                                </cfif>
+                                                
+                                                <cfcatch type="any">
+                                                    <!--- Ağırlık güncelleme hatası, ama ana işlemi durdurmayalım --->
+                                                    <cfset currentResult.message = currentResult.message & " (Ağırlık güncellenemedi: #cfcatch.message#)">
+                                                </cfcatch>
+                                            </cftry>
+                                        </cfif>
+
                                         
                                         <cfset currentResult.status = "success">
                                         <cfif len(checkProduct.GTIP_NUMBER) eq 0>
@@ -84,6 +169,19 @@
                                         <cfelse>
                                             <cfset currentResult.message = "GTIP numarası başarıyla güncellendi">
                                         </cfif>
+                                        
+                                        <!--- Ek alanlar için mesaj ekle --->
+                                        <cfset updateDetails = "">
+                                        <cfif len(currentResult.urunIsmiIngilizce) gt 0>
+                                            <cfset updateDetails = updateDetails & ", İngilizce isim güncellendi">
+                                        </cfif>
+                                        <cfif len(currentResult.urunAgirlik) gt 0 and isNumeric(currentResult.urunAgirlik)>
+                                            <cfset updateDetails = updateDetails & ", Ağırlık güncellendi">
+                                        </cfif>
+                                        <cfif len(updateDetails) gt 0>
+                                            <cfset currentResult.message = currentResult.message & updateDetails>
+                                        </cfif>
+                                        
                                         <cfset successCount = successCount + 1>
                                         
                                         <cfcatch type="any">
@@ -109,7 +207,8 @@
                 <cfcatch type="any">
                     <div class="error">
                         <strong>Excel dosyası okuma hatası:</strong> #cfcatch.message#<br>
-                        Lütfen dosyanın Excel formatında olduğundan ve "ETA_KODU" ile "GTIP_NUMARASI" sütunlarını içerdiğinden emin olun.
+                        Lütfen dosyanın Excel formatında olduğundan ve "ETA_KODU" ile "GTIP_NUMARASI" sütunlarını içerdiğinden emin olun.<br>
+                        İsteğe bağlı sütunlar: "URUN_ISMI_INGILIZCE", "URUN_AGIRLIK"
                     </div>
                 </cfcatch>
             </cftry>
@@ -119,6 +218,7 @@
         <div class="upload-form">
             <h3>Excel Dosyası Yükle</h3>
             <p><strong>Gerekli Sütunlar:</strong> ETA_KODU, GTIP_NUMARASI</p>
+            <p><strong>İsteğe Bağlı Sütunlar:</strong> URUN_ISMI_INGILIZCE, URUN_AGIRLIK</p>
             
             <cfform action="#request.self#?fuseaction=#attributes.fuseaction#" enctype="multipart/form-data" method="post">
                 <cfinput type="file" name="upload_file" accept=".xlsx,.xls" required="yes">
@@ -143,6 +243,8 @@
                         <th>Sıra</th>
                         <th>ETA Kodu</th>
                         <th>GTIP Numarası</th>
+                        <th>İngilizce İsim</th>
+                        <th>Ağırlık</th>
                         <th>Mevcut GTIP</th>
                         <th>Durum</th>
                         <th>Mesaj</th>
@@ -155,6 +257,20 @@
                             <td>#i#</td>
                             <td>#result.etaKodu#</td>
                             <td>#result.gtipNumarasi#</td>
+                            <td>
+                                <cfif structKeyExists(result, "urunIsmiIngilizce") and len(result.urunIsmiIngilizce) gt 0>
+                                    #result.urunIsmiIngilizce#
+                                <cfelse>
+                                    -
+                                </cfif>
+                            </td>
+                            <td>
+                                <cfif structKeyExists(result, "urunAgirlik") and len(result.urunAgirlik) gt 0>
+                                    #result.urunAgirlik#
+                                <cfelse>
+                                    -
+                                </cfif>
+                            </td>
                             <td>
                                 <cfif structKeyExists(result, "mevcutGtip")>
                                     #result.mevcutGtip#
@@ -238,12 +354,13 @@
         <div style="margin-top: 30px; padding: 15px; background-color: #e7f3ff; border-radius: 5px;">
             <h4>Kullanım Talimatları:</h4>
             <ol>
-                <li>Excel dosyanızda <strong>"ETA_KODU"</strong> ve <strong>"GTIP_NUMARASI"</strong> sütunları olmalıdır</li>
+                <li>Excel dosyanızda <strong>"ETA_KODU"</strong> ve <strong>"GTIP_NUMARASI"</strong> sütunları olmalıdır (zorunlu)</li>
+                <li>İsteğe bağlı olarak <strong>"URUN_ISMI_INGILIZCE"</strong> ve <strong>"URUN_AGIRLIK"</strong> sütunları ekleyebilirsiniz</li>
                 <li>İlk satır başlık satırı olarak kullanılacaktır</li>
                 <li>Sistem her ETA kodu için veritabanında ürün arayacaktır</li>
                 <li>Ürün bulunamazsa hata mesajı verecektir</li>
                 <li>Mevcut GTIP numarası varsa ve farklıysa uyarı verecektir</li>
-                <li>Diğer durumlarda GTIP numarasını güncelleyecektir</li>
+                <li>Diğer durumlarda GTIP numarası ve varsa diğer alanları güncelleyecektir</li>
             </ol>
         </div>
     </div>
