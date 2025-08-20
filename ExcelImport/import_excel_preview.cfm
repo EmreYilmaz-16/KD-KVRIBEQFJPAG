@@ -259,7 +259,7 @@
         <cfset successCount = 0>
         <cfset errorCount = 0>
         <cfset errorDetails = arrayNew(1)>
-        <cfset batchSize = 500>
+        <cfset batchSize = 200>
         <cfset currentBatch = 1>
         <cfset totalBatches = ceiling((totalRows - 1) / batchSize)> <!--- -1 çünkü header hariç --->
         
