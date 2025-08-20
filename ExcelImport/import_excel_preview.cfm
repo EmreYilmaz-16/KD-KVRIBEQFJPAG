@@ -324,13 +324,20 @@
                                AND STOCK_ID=<cfqueryparam value="#getProduct.STOCK_ID#" cfsqltype="cf_sql_integer">
                                
                             </cfquery>
-                            <cfquery name="getBrandExRecord" datasource="#dsn#_product">
-                                SELECT SB.* FROM w3Qa_product.STOCKS_BARCODES AS SB 
-INNER JOIN w3Qa_product.STOCKS AS S ON S.STOCK_ID=SB.STOCK_ID
-INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
-WHERE P.BRAND_ID = <cfqueryparam value="#getProduct.BRAND_ID#" cfsqltype="cf_sql_integer">
-AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
-                            </cfquery>
+                            
+                            <!--- Marka kontrolü sadece BRAND_ID varsa yapılacak --->
+                            <cfif isDefined("getProduct.BRAND_ID") AND len(trim(getProduct.BRAND_ID)) AND isNumeric(getProduct.BRAND_ID)>
+                                <cfquery name="getBrandExRecord" datasource="#dsn#_product">
+                                    SELECT SB.* FROM w3Qa_product.STOCKS_BARCODES AS SB 
+    INNER JOIN w3Qa_product.STOCKS AS S ON S.STOCK_ID=SB.STOCK_ID
+    INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
+    WHERE P.BRAND_ID = <cfqueryparam value="#getProduct.BRAND_ID#" cfsqltype="cf_sql_integer">
+    AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                                </cfquery>
+                            <cfelse>
+                                <!--- BRAND_ID yoksa boş query oluştur --->
+                                <cfset getBrandExRecord = queryNew("STOCK_ID", "integer")>
+                            </cfif>
 
                             <!--- Aynı stok için aynı OEM kontrolü --->
                             <cfif getExistingRecord.recordCount GT 0>
@@ -340,11 +347,15 @@ AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#"
                                 <cfcontinue>
                             </cfif>
 
-                            <!--- Aynı marka içinde OEM tekrarı kontrolü --->
+                            <!--- Aynı marka içinde OEM tekrarı kontrolü (sadece BRAND_ID varsa) --->
                             <cfif getBrandExRecord.recordCount GT 0>
                                 <cfset errorCount = errorCount + 1>
                                 <cfset batchErrorCount = batchErrorCount + 1>
-                                <cfset arrayAppend(errorDetails, "Satır #currentRow#: OEM '#trim(importData[oemColumn][currentRow])#' aynı marka içinde başka bir üründe zaten kullanılıyor (STOCK_ID: #getBrandExRecord.STOCK_ID#)")>
+                                <cfif isDefined("getProduct.BRAND_ID") AND len(trim(getProduct.BRAND_ID))>
+                                    <cfset arrayAppend(errorDetails, "Satır #currentRow#: OEM '#trim(importData[oemColumn][currentRow])#' aynı marka (BRAND_ID: #getProduct.BRAND_ID#) içinde başka bir üründe zaten kullanılıyor (STOCK_ID: #getBrandExRecord.STOCK_ID#)")>
+                                <cfelse>
+                                    <cfset arrayAppend(errorDetails, "Satır #currentRow#: OEM '#trim(importData[oemColumn][currentRow])#' başka bir üründe zaten kullanılıyor (STOCK_ID: #getBrandExRecord.STOCK_ID#)")>
+                                </cfif>
                                 <cfcontinue>
                             </cfif>
 
