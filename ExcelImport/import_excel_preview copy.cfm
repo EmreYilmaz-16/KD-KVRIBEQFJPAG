@@ -259,9 +259,6 @@
         <cfset successCount = 0>
         <cfset errorCount = 0>
         <cfset errorDetails = arrayNew(1)>
-        <cfset batchSize = 500>
-        <cfset currentBatch = 1>
-        <cfset totalBatches = ceiling((totalRows - 1) / batchSize)> <!--- -1 çünkü header hariç --->
         
         <!--- Kolon isimlerini al --->
         <cfset columnList = importData.columnList>
@@ -272,31 +269,8 @@
             <cfset etaKoduColumn = "ETA_KODU">
         </cfif>
         
-        <!--- Batch işleme başlangıç mesajı --->
-        <div class="info-box">
-            <h4>📦 Batch İşleme Modu</h4>
-            <cfoutput>
-                <p><strong>Toplam Satır:</strong> #totalRows - 1# (header hariç)</p>
-                <p><strong>Batch Boyutu:</strong> #batchSize# satır</p>
-                <p><strong>Toplam Batch:</strong> #totalBatches# batch</p>
-            </cfoutput>
-        </div>
-        
-        <!--- Her batch için döngü --->
-        <cfloop from="1" to="#totalBatches#" index="batchIndex">
-            <cfset startRow = ((batchIndex - 1) * batchSize) + 2> <!--- +2 çünkü header var ve 1-based indexing --->
-            <cfset endRow = min(startRow + batchSize - 1, totalRows)>
-            <cfset batchSuccessCount = 0>
-            <cfset batchErrorCount = 0>
-            
-            <!--- Batch başlangıç mesajı --->
-            <div class="warning-box">
-                <h5>⏳ Batch #batchIndex# / #totalBatches# İşleniyor...</h5>
-                <cfoutput><p>Satır #startRow# - #endRow# arası işleniyor (#endRow - startRow + 1# kayıt)</p></cfoutput>
-            </div>
-            
-            <!--- Her satır için veritabanı işlemi --->
-            <cfloop query="importData" startrow="#startRow#" endrow="#endRow#">
+        <!--- Her satır için veritabanı işlemi --->
+        <cfloop query="importData" startrow="2">
 
             <cftry>
                
@@ -310,7 +284,6 @@
                 </cfquery>
                     <cfif getProduct.recordCount EQ 0>
                         <cfset errorCount = errorCount + 1>
-                        <cfset batchErrorCount = batchErrorCount + 1>
                         <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU '#etaKoduValue#' bulunamadı")>
                         <cfcontinue>
                     </cfif>
@@ -335,7 +308,6 @@ AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#"
                             <!--- Aynı stok için aynı OEM kontrolü --->
                             <cfif getExistingRecord.recordCount GT 0>
                                 <cfset errorCount = errorCount + 1>
-                                <cfset batchErrorCount = batchErrorCount + 1>
                                 <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU '#etaKoduValue#' ve OEM '#trim(importData[oemColumn][currentRow])#' zaten mevcut")>
                                 <cfcontinue>
                             </cfif>
@@ -343,7 +315,6 @@ AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#"
                             <!--- Aynı marka içinde OEM tekrarı kontrolü --->
                             <cfif getBrandExRecord.recordCount GT 0>
                                 <cfset errorCount = errorCount + 1>
-                                <cfset batchErrorCount = batchErrorCount + 1>
                                 <cfset arrayAppend(errorDetails, "Satır #currentRow#: OEM '#trim(importData[oemColumn][currentRow])#' aynı marka içinde başka bir üründe zaten kullanılıyor (STOCK_ID: #getBrandExRecord.STOCK_ID#)")>
                                 <cfcontinue>
                             </cfif>
@@ -359,14 +330,12 @@ AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#"
                             </cfquery>
                             
                             <cfset successCount = successCount + 1>
-                            <cfset batchSuccessCount = batchSuccessCount + 1>
                         </cfif>
                     </cfloop>
                     
                 <cfelse>
                     <!--- ETA_KODU boş ise hata kaydet --->
                     <cfset errorCount = errorCount + 1>
-                    <cfset batchErrorCount = batchErrorCount + 1>
                     <cfset arrayAppend(errorDetails, "Satır #currentRow#: ETA_KODU boş veya geçersiz")>
                 </cfif>
                 
@@ -374,53 +343,17 @@ AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#"
                     <!--- Veritabanı hatası --->
                     <cfdump var="#cfcatch#">
                     <cfset errorCount = errorCount + 1>
-                    <cfset batchErrorCount = batchErrorCount + 1>
                     <cfset arrayAppend(errorDetails, "Satır #currentRow#: #cfcatch.message#")>
                 </cfcatch>
             </cftry>
         </cfloop>
         
-        <!--- Batch sonuç raporu --->
-        <div class="success-box">
-            <h5>✅ Batch #batchIndex# Tamamlandı</h5>
-            <cfoutput>
-                <p><strong>Başarılı:</strong> #batchSuccessCount# kayıt</p>
-                <p><strong>Hatalı:</strong> #batchErrorCount# kayıt</p>
-                <p><strong>İşlenen Satır Aralığı:</strong> #startRow# - #endRow#</p>
-            </cfoutput>
-        </div>
-        
-        <!--- Memory temizliği için kısa bekleme --->
-        <cfset sleep(100)> <!--- 100ms bekleme --->
-        
-    </cfloop> <!--- Batch döngüsü sonu --->
-        
         <cfset importSuccess = true>
         
         <!--- Başarı mesajı --->
         <div class="success-box">
-            <h3>🎉 Tüm Batch'ler Başarıyla Tamamlandı!</h3>
-            <cfoutput>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number">#totalBatches#</div>
-                        <div class="stat-label">Toplam Batch</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">#successCount#</div>
-                        <div class="stat-label">Başarılı Kayıt</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">#errorCount#</div>
-                        <div class="stat-label">Hatalı Kayıt</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">#totalRows - 1#</div>
-                        <div class="stat-label">Toplam İşlenen</div>
-                    </div>
-                </div>
-                <p><strong>#successCount#</strong> adet OEM kaydı başarıyla STOCKS_BARCODES tablosuna eklendi.</p>
-            </cfoutput>
+            <h3>🎉 İçe Aktarım Başarıyla Tamamlandı!</h3>
+            <cfoutput><p><strong>#successCount#</strong> adet OEM kaydı başarıyla OEM tablosuna eklendi.</p></cfoutput>
             <cfif errorCount GT 0>
             <cfoutput>    <p><strong>#errorCount#</strong> kayıt işlenemedi.</p>
             <p>Hatalar için lütfen aşağıdaki detaylara bakın.</p>
