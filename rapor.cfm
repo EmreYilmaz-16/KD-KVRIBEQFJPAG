@@ -67,14 +67,7 @@ SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
 FROM (SELECT DISTINCT rn FROM w3qa.##B) d;
 
-IF @cols IS NULL OR LEN(@cols)=0
-BEGIN
-    -- Hiç barkod yoksa, boş set döndür
-    SELECT TOP (0)
-        PRODUCT_CODE_2, PRODUCT_CODE, PRODUCT_NAME;
-    DROP TABLE w3qa.##B;
-    RETURN;
-END
+
 
 -- 3) Dinamik pivotu çalıştır
 DECLARE @sql nvarchar(max) =
