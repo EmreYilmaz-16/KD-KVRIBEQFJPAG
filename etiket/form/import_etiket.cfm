@@ -137,6 +137,7 @@
                                         </div>
                                     </div>
                                     <hr>
+                                    <!----
                                     <div class="text-center">
                                         <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket" class="btn btn-sm btn-outline-primary me-2">
                                             <i class="fas fa-cog me-1"></i>Daha Fazla Seçenek
@@ -144,7 +145,7 @@
                                         <a href="index.cfm?fuseaction=objects.emptypopup_generate_excell_advanced" class="btn btn-sm btn-outline-success">
                                             <i class="fas fa-magic me-1"></i>Gelişmiş Excel
                                         </a>
-                                    </div>
+                                    </div>----->
                                 </div>
                             </div>
                         </div>
