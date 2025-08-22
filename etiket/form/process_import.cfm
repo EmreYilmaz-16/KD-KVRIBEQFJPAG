@@ -236,14 +236,14 @@
                                     }
                                 </cfscript>
 
-                                <!--- Process Data Rows --->
+                                <!--- Process Data Rows 
                                 <div class="processing">
                                     <div class="spinner-border text-primary mb-3" role="status">
                                         <span class="visually-hidden">İşleniyor...</span>
                                     </div>
                                     <h5>Excel verisi işleniyor...</h5>
                                     <p class="text-muted">Lütfen bekleyiniz...</p>
-                                </div>
+                                </div>--->
 
                                 <cfflush>
 
