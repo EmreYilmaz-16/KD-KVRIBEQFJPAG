@@ -397,7 +397,7 @@
                     <!--- Miktar kadar etiket oluştur --->
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
-                        <cfset yeni_seri_no = seri_no & "_" & NumberFormat(etiket_no, "000")>
+                        <cfset yeni_seri_no = seri_no >
                         
                         <div class="label-item">
                             <div class="label-header">
