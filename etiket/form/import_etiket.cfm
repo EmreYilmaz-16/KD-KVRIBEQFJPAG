@@ -244,7 +244,7 @@
                                                     <td><span class="badge bg-success">#success_records#</span></td>
                                                     <td><span class="badge bg-danger">#error_records#</span></td>
                                                     <td>
-                                                        <a href="#request.self#?fuseaction=objects.emptypopup_view_labels&import_id=#import_id#" class="btn btn-sm btn-outline-primary">
+                                                        <a href="#request.self#?fuseaction=objects.emptypopup_view_labels&import_id=#import_id#" class="btn btn-sm btn-primary">
                                                             <i class="fas fa-print"></i>
                                                         </a>
                                                     </td>
