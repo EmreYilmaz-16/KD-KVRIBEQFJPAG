@@ -15,6 +15,10 @@
             background-color: #f8f9fa;
             transition: all 0.3s ease;
         }
+        a:link {
+    color: white !important; 
+    text-decoration: none;
+}
         .upload-area:hover {
             border-color: #007bff;
             background-color: #e7f3ff;
