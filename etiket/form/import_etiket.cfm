@@ -121,13 +121,13 @@
                                 <div class="card-body">
                                     <p class="mb-3">Test etmek için örnek verilerle dolu Excel dosyası indirin:</p>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                       <!---- <div class="col-md-6">
                                             <a href="index.cfm?fuseaction=objects.emptypopup_create_sample_excel_etiket&action=create&recordCount=10" class="btn btn-outline-success w-100 mb-2">
                                                 <i class="fas fa-file-csv me-2"></i>
                                                 CSV Format (10 Kayıt)
                                             </a>
                                             <small class="text-muted">Excel'de açılabilir, POI gerektirmez</small>
-                                        </div>
+                                        </div>----->
                                         <div class="col-md-6">
                                             <a href="index.cfm?fuseaction=objects.emptypopup_generate_excell_advanced&action=create_xlsx&recordCount=10" class="btn btn-success w-100 mb-2">
                                                 <i class="fas fa-file-excel me-2"></i>
