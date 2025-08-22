@@ -19,6 +19,9 @@
     color: white !important; 
     text-decoration: none;
 }
+.btn i {
+     margin: 0px 0px 0px 0px; !important; 
+}
         .upload-area:hover {
             border-color: #007bff;
             background-color: #e7f3ff;
