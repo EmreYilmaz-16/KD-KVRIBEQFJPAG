@@ -27,9 +27,9 @@ SET NOCOUNT ON;
 DECLARE @orderByCol sysname;
 -- URL'den gelen orderBy'a göre kolon seçimi
 SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_sql_varchar">)
-                    WHEN 'created_at' THEN 'SB.CREATED_AT'
-                    WHEN 'barcode_id' THEN 'SB.BARCODE_ID'
-                    ELSE 'SB.BARCODE'
+                    WHEN 'created_at' THEN 'SB.STOCK_BARCODE_ID'
+                    WHEN 'barcode_id' THEN 'SB.STOCK_BARCODE_ID'
+                    ELSE 'SB.STOCK_BARCODE_ID'
                   END;
 
 -- 1) CTE ile RN ver, temp tabloya al
