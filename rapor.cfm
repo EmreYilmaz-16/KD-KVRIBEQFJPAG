@@ -58,21 +58,21 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
     INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
 )
 SELECT *
-INTO ##B
+INTO w3qa.##B
 FROM B;
 
 -- 2) Dinamik kolon listesini oluştur
 DECLARE @cols nvarchar(max);
 SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
-FROM (SELECT DISTINCT rn FROM ##B) d;
+FROM (SELECT DISTINCT rn FROM w3qa.##B) d;
 
 IF @cols IS NULL OR LEN(@cols)=0
 BEGIN
     -- Hiç barkod yoksa, boş set döndür
     SELECT TOP (0)
         PRODUCT_CODE_2, PRODUCT_CODE, PRODUCT_NAME;
-    DROP TABLE ##B;
+    DROP TABLE w3qa.##B;
     RETURN;
 END
 
@@ -89,7 +89,7 @@ N'SELECT
           PRODUCT_NAME,
           ''BARCODE'' + CAST(rn AS nvarchar(10)) AS colname,
           BARCODE
-      FROM ##B
+      FROM w3qa.##B
   ) src
   PIVOT (
       MAX(BARCODE) FOR colname IN (' + @cols + N')
@@ -98,7 +98,7 @@ N'SELECT
 
 EXEC sys.sp_executesql @sql;
 
-DROP TABLE ##B;
+DROP TABLE w3qa.##B;
 </cfquery>
 
 <!--- HTML tabloyu yaz (Excel açar) --->
