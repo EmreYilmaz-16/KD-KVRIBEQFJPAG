@@ -29,7 +29,7 @@ DECLARE @orderByCol sysname;
 SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_sql_varchar">)
                     WHEN 'created_at' THEN 'SB.STOCK_BARCODE_ID'
                     WHEN 'barcode_id' THEN 'SB.STOCK_BARCODE_ID'
-                    ELSE 'SB.STOCK_BARCODE_ID'
+                    ELSE 'SB.BARCODE'
                   END;
 
 -- 1) CTE ile RN ver, temp tabloya al
@@ -43,11 +43,11 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
         ROW_NUMBER() OVER (
             PARTITION BY P.PRODUCT_ID
             ORDER BY
-                CASE WHEN @orderByCol = 'SB.CREATED_AT' THEN
-                    CAST(NULLIF(CONVERT(varchar(50), SB.CREATED_AT, 126),'') AS datetime)
+                CASE WHEN @orderByCol = 'SB.STOCK_BARCODE_ID' THEN
+                    SB.STOCK_BARCODE_ID
                 END,
-                CASE WHEN @orderByCol = 'SB.BARCODE_ID' THEN
-                    SB.BARCODE_ID
+                CASE WHEN @orderByCol = 'SB.STOCK_BARCODE_ID' THEN
+                    SB.STOCK_BARCODE_ID
                 END,
                 CASE WHEN @orderByCol = 'SB.BARCODE' THEN
                     SB.BARCODE
