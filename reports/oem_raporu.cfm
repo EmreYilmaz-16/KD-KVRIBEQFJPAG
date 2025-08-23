@@ -7,7 +7,7 @@
 <!--- DSN ve isteğe bağlı sıralama parametreleri --->
 
 
-<form method="POST" action="/AddOns/reports/query/oem_raporu_excell.cfm" name="search_product" id="search_product">
+<form method="POST" action="/AddOns/Partner/reports/query/oem_raporu_excell.cfm" name="search_product" id="search_product">
     <input type="hidden" name="is_submit" value="1">
     
     <cfquery name="getBrands" datasource="w3qa">
