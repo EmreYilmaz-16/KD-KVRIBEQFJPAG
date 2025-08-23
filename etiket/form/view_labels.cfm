@@ -398,8 +398,26 @@
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
-                        
-                        <div class="label-item">
+                        <div>
+                              <cftry>
+                                        <cf_pbs_barcode 
+                                            value="#qr_data#" 
+                                            type="qrcode" 
+                                            width="100" 
+                                            height="100" 
+                                            show="1" 
+                                            id="#qr_id#"
+                                            path="#ExpandPath('../temp/')#"
+                                            format="png">
+                                    <cfcatch>
+                                        <!--- Hata durumunda basit QR placeholder göster --->
+                                        <div style="width: 100px; height: 100px; border: 2px solid ##000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
+                                            QR KOD<br>OLUŞTURULUYOR
+                                        </div>
+                                    </cfcatch>
+                                    </cftry>
+                        </div>
+                        <!-----<div class="label-item">
                             <div class="label-header">
                                 #marka# - ÜRÜN ETİKETİ
                             </div>
@@ -469,7 +487,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>---->
                     </cfloop> <!--- Etiket sayısı döngüsü sonu --->
                 </cfloop> <!--- Ana veri döngüsü sonu --->
                 </cfoutput>
