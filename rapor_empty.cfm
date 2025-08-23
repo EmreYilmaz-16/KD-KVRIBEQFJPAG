@@ -1,0 +1,1 @@
+<cfinclude template="/AddOns/Partner/reports/oem_raporu.cfm">
