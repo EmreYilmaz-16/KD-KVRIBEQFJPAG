@@ -389,6 +389,16 @@
 
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer">
+                <style>
+                     @media print {
+            .no-print {
+                display: none !important;
+            }
+            .ediv{
+                border : none !important;
+            }
+        }
+                </style>
                 <cfoutput> 
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
