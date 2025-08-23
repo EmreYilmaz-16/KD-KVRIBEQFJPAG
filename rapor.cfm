@@ -5,7 +5,9 @@
      ============================= --->
 
 <!--- DSN ve isteğe bağlı sıralama parametreleri --->
+
 <form method="POST" name="search_product" id="search_product">
+    <input type="hidden" name="is_submit" value="1">
     <cfquery name="getBrands" datasource="w3qa">
         SELECT BRAND_NAME,BRAND_ID FROM w3Qa_product.PRODUCT_BRANDS
     </cfquery>
@@ -32,9 +34,15 @@
                         </div>
                     </div>
             </td>
+            <td>
+                <input type="submit" class="btn btn-primary" value="Excel Olarak İndir">
+            </td>
         </tr>
     </table>
 </form>
+<cfif isDefined("attributes.is_submit")>
+<cfdump var="#attributes#">
+</cfif>
 <cfabort>
 
 
