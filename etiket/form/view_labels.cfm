@@ -388,8 +388,7 @@
             </cfif>
 
             <!-- Etiketler -->
-            <div class="label-container label-size-medium" id="labelContainer">
-            
+            <div class="label-container label-size-medium" id="labelContainer" style="background-color: ##fff;">
                 <cfoutput> 
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
