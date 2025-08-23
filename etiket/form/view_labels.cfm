@@ -399,6 +399,8 @@
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
                         <div>
+                            <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+                                    <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
                               <cftry>
                                         <cf_pbs_barcode 
                                             value="#qr_data#" 
