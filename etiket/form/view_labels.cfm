@@ -418,8 +418,8 @@
                                         <cf_pbs_barcode 
                                             value="#qr_data#" 
                                             type="qrcode" 
-                                            width="100" 
-                                            height="100" 
+                                            width="80" 
+                                            height="80" 
                                             show="1" 
                                             id="#qr_id#"
                                             path="#ExpandPath('../temp/')#"
