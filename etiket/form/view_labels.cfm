@@ -420,8 +420,8 @@
                                         <cf_pbs_barcode 
                                             value="#qr_data#" 
                                             type="qrcode" 
-                                            width="70" 
-                                            height="70" 
+                                            width="75" 
+                                            height="75" 
                                             show="1" 
                                             id="#qr_id#"
                                             path="#ExpandPath('../temp/')#"
