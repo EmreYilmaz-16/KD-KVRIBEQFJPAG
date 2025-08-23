@@ -104,9 +104,9 @@
         /* Etiket Stilleri */
         .label-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 20px; */
         }
         
         .label-item {
@@ -177,7 +177,7 @@
             }
             
             .label-container {
-                grid-template-columns: 1fr;
+                /* grid-template-columns: 1fr; */
                 gap: 0;
             }
             
