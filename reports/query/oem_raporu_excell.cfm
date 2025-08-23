@@ -1,5 +1,7 @@
 
-
+<cfdump var="#url#">
+<cfdump var="#attributes#">
+<cfabort>
 
 <cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
