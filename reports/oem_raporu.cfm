@@ -19,6 +19,7 @@
                 <div class="form-group">
                     <label for="brand">Marka Seçin:</label>
                     <select name="brand" id="brand" class="form-control">
+                        <option value="">-- Tüm Markalar --</option>
                         <cfoutput query="getBrands">
                             <option value="#BRAND_ID#">#BRAND_NAME#</option>
                         </cfoutput>
