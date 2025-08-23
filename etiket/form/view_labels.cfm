@@ -389,16 +389,7 @@
 
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer">
-                <style>
-                     @media print {
-            .no-print {
-                display: none !important;
-            }
-            .ediv{
-                border : none !important;
-            }
-        }
-                </style>
+            
                 <cfoutput> 
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
@@ -412,7 +403,7 @@
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
-                        <div style="page-break-after: always;width:2.5cm;height:2.5cm;border: 1px solid ##000;">
+                        <div style="page-break-after: always;width:2.5cm;height:2.5cm;">
                            <table>
                             <tr>
                                 <td colspan="3" style="font-size:5pt">
