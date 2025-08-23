@@ -409,7 +409,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    
+                                   <div> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
                                 </td>
                                 <td>
                                     <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
@@ -431,7 +431,9 @@
                                     </cftry>
                                 </td>
                                 <td>
+                                    <div>
                                     #yeni_seri_no#
+                                    </div>
                                 </td>
                             </tr>
                            </table> 
