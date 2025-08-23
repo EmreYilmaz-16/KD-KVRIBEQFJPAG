@@ -175,7 +175,9 @@
             .no-print {
                 display: none !important;
             }
-            
+            .ediv{
+                border : none !important;
+            }
             .label-container {
                  grid-template-columns: 1fr;
                 gap: 0;
@@ -409,7 +411,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                   <div style="writing-mode: vertical-rl;font-size:5pt"> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
+                                   <div class="ediv" style="writing-mode: vertical-rl;font-size:5pt"> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
                                 </td>
                                 <td>
                                     <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
