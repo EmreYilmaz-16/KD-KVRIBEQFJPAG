@@ -285,7 +285,7 @@
                                 <i class="fas fa-expand-alt"></i> Büyük
                             </button>
                         </div>
-                        <button type="button" class="btn btn-success" onclick="window.print()">
+                        <button type="button" class="btn btn-success" onclick="printDivWithStyles('labelContainer')">
                             <i class="fas fa-print me-2"></i>Yazdır
                         </button>
                         <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary">
@@ -620,6 +620,22 @@
                 </cfif>
             }
         });
+function printDivWithStyles(divId) {
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // Sayfa içeriğini yazdırmak istediğimiz div ile değiştiriyoruz
+    document.body.innerHTML = printContents;
+
+    // Yazdırma komutunu çalıştırıyoruz
+    window.print();
+
+    // İşlem bittikten sonra sayfanın orijinal içeriğini geri yüklüyoruz
+    document.body.innerHTML = originalContents;
+}
+
     </script>
+
 </body>
 </html>
+
