@@ -53,8 +53,8 @@
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
     ORDER BY row_number, temp_id
-    OFFSET #offset# ROWS 
-    FETCH NEXT #url.per_page# ROWS ONLY
+    -- OFFSET #offset# ROWS 
+    -- FETCH NEXT #url.per_page# ROWS ONLY
 </cfquery>
 
 <!--- Debug: Log query results --->
