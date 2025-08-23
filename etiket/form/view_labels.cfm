@@ -309,7 +309,7 @@
                 <span>Etiket Yazdır</span>
             </div>
 <cfoutput> 
-            <!-- İstatistikler -->
+            <!--- İstatistikler
             <div class="row mb-4 no-print">
                 <div class="col-md-3">
                     <div class="card text-center">
@@ -343,7 +343,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --->
 </cfoutput>
             <!-- Sayfalama (Üst) -->
             <cfif totalPages gt 1>
