@@ -400,7 +400,7 @@
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
-                        <div style="page-break-after: always;width:2cm;height:2cm;border: 1px solid ##000;">
+                        
                            <table>
                             <tr>
                                 <td colspan="3" style="font-size:5pt">
@@ -438,7 +438,7 @@
                             </tr>
                            </table> 
                             
-                        </div>
+                        <div style="page-break-after: always"></div>
                         <!-----<div class="label-item">
                             <div class="label-header">
                                 #marka# - ÜRÜN ETİKETİ
