@@ -405,7 +405,7 @@
                         <div style="page-break-after: always;width:2.5cm;height:2.5cm;">
                            <table>
                             <tr>
-                                <td colspan="3" style="font-size:5pt">
+                                <td colspan="3" style="font-size:5pt;text-align:center">
                                     #eta_kodu#
                                 </td>
                             </tr>
