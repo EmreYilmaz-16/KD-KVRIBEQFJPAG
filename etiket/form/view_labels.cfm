@@ -1,7 +1,7 @@
 <!--- Etiket Görüntüleme ve Yazdırma Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.page" default="1">
-<cfparam name="url.per_page" default="20">
+<cfparam name="url.per_page" default="300">
 
 <!--- Custom tag için gerekli değişkenler --->
 <cfset upload_folder = ExpandPath(".")>
@@ -53,8 +53,8 @@
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
     ORDER BY row_number, temp_id
-    -- OFFSET #offset# ROWS 
-    -- FETCH NEXT #url.per_page# ROWS ONLY
+    OFFSET #offset# ROWS 
+    FETCH NEXT #url.per_page# ROWS ONLY
 </cfquery>
 
 <!--- Debug: Log query results --->
