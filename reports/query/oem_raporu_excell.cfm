@@ -7,9 +7,9 @@
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
 <cfparam name="url.orderBy" default="barcode"> 
 <cfparam name="url.is_submit" default="0">
-<cfparam name="cat_id" default="">
-<cfparam name="cat" default="">
-<cfparam name="brand" default="">
+<cfparam name="attributes.cat_id" default="">
+<cfparam name="attributes.cat" default="">
+<cfparam name="attributes.brand" default="">
 <!--- güvenli whitelist --->
 <cfset allowedOrder = "created_at,barcode_id,barcode">
 <cfif NOT listFindNoCase(allowedOrder, url.orderBy)>
@@ -58,12 +58,12 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
     FROM w3Qa_product.STOCKS_BARCODES SB
     INNER JOIN w3Qa_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
     INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
-    <cfif len(url.cat_id)>
+    <cfif len(attributes.cat_id)>
         INNER JOIN w3Qa_product.PRODUCT_CAT PC ON PC.PRODUCT_CATID = P.PRODUCT_CATID
-        WHERE PC.PRODUCT_CATID = <cfqueryparam value="#url.cat_id#" cfsqltype="cf_sql_integer">
+        WHERE PC.PRODUCT_CATID = <cfqueryparam value="#attributes.cat_id#" cfsqltype="cf_sql_integer">
     </cfif>
-    <cfif len(url.brand)>
-        AND P.BRAND_ID = <cfqueryparam value="#url.brand#" cfsqltype="cf_sql_integer">
+    <cfif len(attributes.brand)>
+        AND P.BRAND_ID = <cfqueryparam value="#attributes.brand#" cfsqltype="cf_sql_integer">
     </cfif>
 )
 SELECT *
