@@ -1,56 +1,13 @@
-<!--- =============================
-     Export: Product Barcodes (Dynamic Pivot to Excel)
-     File: export_product_barcodes.cfm
-     Author: Emre için örnek
-     ============================= --->
 
-<!--- DSN ve isteğe bağlı sıralama parametreleri --->
-
-
-<form method="POST" action="/AddOns/reports/query/oem_raporu_excell.cfm" name="search_product" id="search_product">
-    <input type="hidden" name="is_submit" value="1">
-    
-    <cfquery name="getBrands" datasource="w3qa">
-        SELECT BRAND_NAME,BRAND_ID FROM w3Qa_product.PRODUCT_BRANDS
-    </cfquery>
-    <table>
-        <tr>
-            <td>
-                <div class="form-group">
-                    <label for="brand">Marka Seçin:</label>
-                    <select name="brand" id="brand" class="form-control">
-                        <cfoutput query="getBrands">
-                            <option value="#BRAND_ID#">#BRAND_NAME#</option>
-                        </cfoutput>
-                    </select>
-                </div>
-            </td>
-            <td>
-                <div class="form-group" id="item-cat_id">
-                        <label>Kategori </label>
-                        <div class="input-group">
-                            <input type="hidden" name="cat_id" id="cat_id" value="">
-                            <input type="hidden" name="cat" id="cat" value="">
-                            <input name="category_name" type="text" id="category_name" onfocus="AutoComplete_Create('category_name','PRODUCT_CATID,PRODUCT_CAT,HIERARCHY','PRODUCT_CAT_NAME','get_product_cat','','PRODUCT_CATID,HIERARCHY','cat_id,cat','','3','200','','1');" value="" autocomplete="off"><div id="category_name_div_2" name="category_name_div_2" class="completeListbox" autocomplete="on" style="width: 599px; max-height: 150px; overflow: auto; position: absolute; left: 15px; top: 145px; z-index: 159; display: none;"></div>
-                            <span class="input-group-addon icon-ellipsis btnPointer" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_product_cat_names&is_sub_category=1&field_id=search_product.cat_id&field_code=search_product.cat&field_name=search_product.category_name');"></span>
-                        </div>
-                    </div>
-            </td>
-            <td>
-                <input type="submit" class="btn btn-primary" value="Excel Olarak İndir">
-            </td>
-        </tr>
-    </table>
-</form>
-<cfif isDefined("attributes.is_submit")>
-<cfdump var="#attributes#">
-</cfif>
-<cfabort>
 
 
 <cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
 <cfparam name="url.orderBy" default="barcode"> 
+<cfparam name="url.is_submit" default="0">
+<cfparam name="cat_id" default="">
+<cfparam name="cat" default="">
+<cfparam name="brand" default="">
 <!--- güvenli whitelist --->
 <cfset allowedOrder = "created_at,barcode_id,barcode">
 <cfif NOT listFindNoCase(allowedOrder, url.orderBy)>
@@ -99,6 +56,13 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
     FROM w3Qa_product.STOCKS_BARCODES SB
     INNER JOIN w3Qa_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
     INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
+    <cfif len(url.cat_id)>
+        INNER JOIN w3Qa_product.PRODUCT_CAT PC ON PC.PRODUCT_CATID = P.PRODUCT_CATID
+        WHERE PC.PRODUCT_CATID = <cfqueryparam value="#url.cat_id#" cfsqltype="cf_sql_integer">
+    </cfif>
+    <cfif len(url.brand)>
+        AND P.BRAND_ID = <cfqueryparam value="#url.brand#" cfsqltype="cf_sql_integer">
+    </cfif>
 )
 SELECT *
 INTO w3qa.##B
