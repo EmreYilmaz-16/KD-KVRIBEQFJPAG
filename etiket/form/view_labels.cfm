@@ -401,15 +401,25 @@
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
                         <div style="page-break-after: always;width:2cm;height:2cm;border: 1px solid ##000;">
-                            #eta_kodu#
-                            <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+                           <table>
+                            <tr>
+                                <td colspan="3">
+                                    #eta_kodu#
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
                                     <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
-                              <cftry>
+                                    <cftry>
                                         <cf_pbs_barcode 
                                             value="#qr_data#" 
                                             type="qrcode" 
-                                            width="75" 
-                                            height="75" 
+                                            width="100" 
+                                            height="100" 
                                             show="1" 
                                             id="#qr_id#"
                                             path="#ExpandPath('../temp/')#"
@@ -421,6 +431,13 @@
                                         </div>
                                     </cfcatch>
                                     </cftry>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                           </table> 
+                            
                         </div>
                         <!-----<div class="label-item">
                             <div class="label-header">
