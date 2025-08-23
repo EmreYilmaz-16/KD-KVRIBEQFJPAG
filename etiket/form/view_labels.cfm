@@ -403,13 +403,13 @@
                         <div style="page-break-after: always;width:2cm;height:2cm;border: 1px solid ##000;">
                            <table>
                             <tr>
-                                <td colspan="3">
+                                <td colspan="3" style="font-size:5pt">
                                     #eta_kodu#
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                   <div style="writing-mode: vertical-rl;"> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
+                                   <div style="writing-mode: vertical-rl;font-size:5pt"> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
                                 </td>
                                 <td>
                                     <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
@@ -431,7 +431,7 @@
                                     </cftry>
                                 </td>
                                 <td>
-                                    <div style="writing-mode: vertical-rl;">
+                                    <div style="writing-mode: vertical-rl;font-size:5pt">
                                     #yeni_seri_no#
                                     </div>
                                 </td>
