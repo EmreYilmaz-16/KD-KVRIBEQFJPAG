@@ -117,7 +117,7 @@
       
         <div style="height:100vh">
             <cfquery name="getOfferRows" datasource="#dsn3#">
-                SELECT * FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#' and PRODUCT_ID<>1055
+                SELECT * FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#' and PRODUCT_ID<>#session.kd.OFFER_PRODUCT_ID#
             </cfquery>
             <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
                 <input type="hidden" name="wrkRowId" value="<CFOUTPUT>#attributes.wrkRowId#</CFOUTPUT>">

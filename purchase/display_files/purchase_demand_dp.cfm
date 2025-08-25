@@ -1,5 +1,6 @@
 
 <script>
+var OFFER_PRODUCT=<cfoutput>#session.kd.OFFER_PRODUCT_ID#</cfoutput>;
 $(document).ready(function () {
     var btn=document.createElement("button")
 btn.setAttribute("type","button")
@@ -51,7 +52,7 @@ SanallariIsaretle();
         const $li = $("<li>").append($link);
     
         // <ul> içine <li> ekle
-            if(productId =="1055"){
+            if(productId ==OFFER_PRODUCT){
                 $ul.append($li);
             }else{
              //   $ul.append($link);
@@ -88,7 +89,7 @@ rows.forEach(function (row) {
   //console.log(row)
     var pid=row.querySelector("input[id='product_id']").value
     console.log(pid)
-    if(parseInt(pid)==1055){
+    if(parseInt(pid)==OFFER_PRODUCT){
         $(row).css("background","#ffa50069")
     }
 })

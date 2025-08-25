@@ -1,4 +1,6 @@
+
 <script>
+var OFFER_PRODUCT=<cfoutput>#session.kd.OFFER_PRODUCT_ID#</cfoutput>;
 $(document).ready(function () {
     var att = document.getElementById("satinalma_teklifi").getAttribute("onclick")
     console.log(att)
@@ -18,7 +20,7 @@ function SanalKontrol() {
             if (link.length > 0) {
                 var onclickAttr = link.attr("onclick");
                 var match = onclickAttr && onclickAttr.match(/pid=(\d+)/);
-                if (match && parseInt(match[1]) === 1055) {
+                if (match && parseInt(match[1]) === OFFER_PRODUCT) {
                     SanalCount++;
                     $row.css({
                     "background-color": "rgba(255, 0, 0, 0.2)",  // saydam kırmızı

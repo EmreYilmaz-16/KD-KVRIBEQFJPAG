@@ -1,7 +1,9 @@
+
 <cfquery name="qPurchaseOffer" datasource="#dsn3#" result="result">
     SELECT INTERNALDEMAND_ID FROM w3Qa_1.OFFER WHERE OFFER_ID=#attributes.offer_id#
 </cfquery>
 <script>
+var OFFER_PRODUCT=<cfoutput>#session.kd.OFFER_PRODUCT_ID#</cfoutput>;
 $(document).ready(function () {
     var btn=document.createElement("button")
 btn.setAttribute("type","button")
@@ -53,7 +55,7 @@ document.getElementById("workcube_button").appendChild(btn)
         const $li = $("<li>").append($link);
     
         // <ul> içine <li> ekle
-            if(productId =="1055"){
+            if(productId == OFFER_PRODUCT){
                 $ul.append($li);
             }else{
              //   $ul.append($link);
