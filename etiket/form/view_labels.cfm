@@ -53,8 +53,6 @@
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
     ORDER BY row_number, temp_id
-    OFFSET #offset# ROWS 
-    FETCH NEXT #url.per_page# ROWS ONLY
 </cfquery>
 
 <!--- Debug: Log query results --->
@@ -532,51 +530,7 @@
                 </div>
             </cfif>
 
-            <!-- Sayfalama (Alt) -->
-            <cfif totalPages gt 1>
-                <div class="row mt-4 no-print">
-                    <div class="col-12">
-                        <nav aria-label="Sayfalama">
-                            <ul class="pagination justify-content-center">
-                                <cfif url.page gt 1>
-                               <cfoutput>    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=1&per_page=#url.per_page#">
-                                            <i class="fas fa-angle-double-left"></i> İlk
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
-                                            <i class="fas fa-chevron-left"></i> Önceki
-                                        </a>
-                                    </li>
-                                    </cfoutput> 
-                                </cfif>
-                                
-                                <cfloop from="#max(1, url.page - 5)#" to="#min(totalPages, url.page + 5)#" index="pageNum">
-                                    <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="index.cfm?fuseaaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
-                                           <cfoutput>#pageNum#</cfoutput>
-                                        </a>
-                                    </li>
-                                </cfloop>
-                                
-                                <cfif url.page lt totalPages>
-                                    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
-                                            Sonraki <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#</cfoutput>">
-                                            Son <i class="fas fa-angle-double-right"></i>
-                                        </a>
-                                    </li>
-                                </cfif>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </cfif>
+            <!-- Alt sayfalama kaldırıldı: tüm etiketler tek sayfada gösteriliyor -->
         </div>
     </div>
 
