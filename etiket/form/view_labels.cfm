@@ -75,9 +75,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Adım göstergesi kapsayıcısı: üstteki süreç adımlarına boşluk bırakır */
         .step-indicator {
             margin-bottom: 30px;
         }
+        /* Adım balonları için temel görünüm */
         .step {
             display: inline-block;
             width: 30px;
@@ -90,16 +92,18 @@
             margin-right: 10px;
             font-weight: bold;
         }
+        /* Aktif adımın vurgusu */
         .step.active {
             background: #007bff;
             color: white;
         }
+        /* Tamamlanan adımların rengi */
         .step.completed {
             background: #28a745;
             color: white;
         }
 
-        /* Etiket Stilleri */
+        /* Etiket kartlarını listeleyen kapsayıcı: responsive grid düzeni */
         .label-container {
             display: grid;
              grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -107,6 +111,7 @@
             margin-top: 20px; 
         }
         
+        /* Tek bir etiket kartının görsel stili */
         .label-item {
             border: 2px solid #333;
             padding: 15px;
@@ -116,6 +121,7 @@
             font-family: 'Courier New', monospace;
         }
         
+        /* Etiket başlığı (üst bant) */
         .label-header {
             text-align: center;
             border-bottom: 1px solid #333;
@@ -125,21 +131,25 @@
             font-size: 16px;
         }
         
+        /* Etiket içeriği metin boyutu ve satır aralığı */
         .label-content {
             font-size: 12px;
             line-height: 1.4;
         }
         
+        /* Etiket içi satırlar: sol-sağ alanlar */
         .label-field {
             margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
         }
         
+        /* Sol taraftaki başlık alanı min genişlik */
         .label-field strong {
             min-width: 100px;
         }
         
+        /* Barkod/QR bölümünün üst sınırı ve hizası */
         .barcode-section {
             text-align: center;
             margin-top: 10px;
@@ -147,6 +157,7 @@
             border-top: 1px solid #333;
         }
         
+        /* Yazı tipi ve görünüm olarak Code39 tipli barkod yazısı */
         .barcode-display {
             font-family: 'Libre Barcode 39', monospace;
             font-size: 24px;
@@ -154,11 +165,13 @@
             margin: 5px 0;
         }
         
+        /* QR kod kapsayıcısı */
         .qr-code {
             margin: 10px auto;
             text-align: center;
         }
 
+        /* QR kodun altında veri metni (küçük puntolu) */
         .qr-data-text {
             font-size: 8px;
             color: #666;
@@ -168,14 +181,17 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Yazdırma Stilleri */
+        /* Yazdırma (print) için özel stiller */
         @media print {
+            /* Yazdırma sırasında görünmemesi gereken öğeler */
             .no-print {
                 display: none !important;
             }
+            /* Dikey yazı alanlarının kenarlığını yazdırmada kaldır */
             .ediv{
                 border : none !important;
             }
+            /* Yazdırmada grid tek sütuna düşsün, boşluklar kaldırılsın */
             .label-container {
                  grid-template-columns: 1fr;
                 gap: 0;
@@ -183,6 +199,7 @@
                 margin-top: 0px;
             }
             
+            /* Etiket kartı yazdırma: her kart yeni sayfada (bu sayfa düzeni için) */
             .label-item {
                 border: 2px solid #000;
                 margin: 0;
@@ -196,27 +213,31 @@
                 display: block;
             }
             
+            /* Son karttan sonra sayfa kırma uygulama */
             .label-item:last-child {
                 page-break-after: auto;
             }
             
+            /* QR görüntüsünün yazdırmada maksimum boyutu */
             .qr-code canvas {
                 max-width: 120px !important;
                 max-height: 120px !important;
             }
             
+            /* Yazdırmada sayfa kenar boşluklarını sıfırla (tarayıcı ayarlarına bağlıdır) */
             body {
                 margin: 0;
                 padding: 0;
             }
             
+            /* Kapsayıcı kenar boşluklarını kaldır */
             .container {
                 max-width: none;
                 padding: 0;
             }
         }
 
-        /* Etiket Boyut Seçenekleri */
+        /* Etiket Boyut Seçenekleri (butonlarla değişen sınıflar) */
         .label-size-small .label-item {
             padding: 8px;
             font-size: 10px;
@@ -236,6 +257,7 @@
             font-size: 13px;
         }
 
+        /* Üst araç çubuğu: sayfa kayarken üstte sabit kalsın */
         .toolbar {
             position: sticky;
             top: 0;
@@ -246,6 +268,7 @@
             margin-bottom: 20px;
         }
 
+        /* Sayfalama bilgisinin yatay hizalaması */
         .pagination-info {
             display: flex;
             align-items: center;
@@ -442,7 +465,7 @@
                             </tr>
                            </table> 
                         </div>
-                        <!--- Her 6 etikette bir sayfa sonu --->
+                        <!--- Her 5 etikette bir sayfa sonu --->
                         <cfif labelCounter MOD 5 EQ 0>
                             <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
                         </cfif>
