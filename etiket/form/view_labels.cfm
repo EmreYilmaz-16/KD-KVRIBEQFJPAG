@@ -1,7 +1,7 @@
 <!--- Etiket Görüntüleme ve Yazdırma Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.page" default="1">
-<cfparam name="url.per_page" default="6">
+<cfparam name="url.per_page" default="5">
 
 <!--- Custom tag için gerekli değişkenler --->
 <cfset upload_folder = ExpandPath(".")>
