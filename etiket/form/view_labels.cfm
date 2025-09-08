@@ -366,47 +366,8 @@
                 </div>
             </div> --->
 </cfoutput>
-            <!-- Sayfalama (Üst) -->
-            <cfif totalPages gt 1>
-                <div class="row mb-3 no-print">
-                    <div class="col-md-6">
-                        <div class="pagination-info">
-                            <span><cfoutput>Sayfa #url.page# / #totalPages#</cfoutput></span>
-                            <span class="text-muted">|</span>
-                            <span><cfoutput>Toplam #getImportInfo.success_records# etiket</cfoutput></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <nav aria-label="Sayfalama">
-                            <ul class="pagination pagination-sm justify-content-end mb-0">
-                                <cfif url.page gt 1>
-                                    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
-                                            <i class="fas fa-chevron-left"></i>
-                                        </a>
-                                    </li>
-                                </cfif>
-                                
-                                <cfloop from="#max(1, url.page - 2)#" to="#min(totalPages, url.page + 2)#" index="pageNum">
-                                    <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
-                                            <cfoutput>#pageNum#</cfoutput>
-                                        </a>
-                                    </li>
-                                </cfloop>
-                                
-                                <cfif url.page lt totalPages>
-                                    <li class="page-item">
-                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
-                                            <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </cfif>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </cfif>
+            
+            
 
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer" style="background-color: ##fff;">
