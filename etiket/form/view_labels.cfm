@@ -390,6 +390,8 @@
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer" style="background-color: ##fff;">
                 <cfoutput> 
+                <!--- Sayfa başına 6 etiket olacak şekilde sayaç --->
+                <cfset labelCounter = 0>
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
                     <cfquery name="getStok" datasource="w3Qa">
@@ -402,7 +404,9 @@
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
-                        <div style="page-break-after: always;width:2.5cm;height:2.5cm;">
+                        <!--- Etiket bloğu: tek tek sayfa kırma KALDIRILDI, 6 adette bir kırılacak --->
+                        <cfset labelCounter = labelCounter + 1>
+                        <div style="width:2.5cm;height:2.5cm;display:inline-block;margin:0.1cm;page-break-inside:avoid;break-inside:avoid;">
                            <table>
                             <tr>
                                 <td colspan="3" style="font-size:5pt;text-align:center">
@@ -439,8 +443,11 @@
                                 </td>
                             </tr>
                            </table> 
-                            
                         </div>
+                        <!--- Her 6 etikette bir sayfa sonu --->
+                        <cfif labelCounter MOD 6 EQ 0>
+                            <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
+                        </cfif>
                         <!-----<div class="label-item">
                             <div class="label-header">
                                 #marka# - ÜRÜN ETİKETİ
