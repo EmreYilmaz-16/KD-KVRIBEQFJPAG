@@ -443,7 +443,7 @@
                            </table> 
                         </div>
                         <!--- Her 6 etikette bir sayfa sonu --->
-                        <cfif labelCounter MOD 6 EQ 0>
+                        <cfif labelCounter MOD 5 EQ 0>
                             <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
                         </cfif>
                         <!-----<div class="label-item">
