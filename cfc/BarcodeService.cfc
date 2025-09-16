@@ -83,6 +83,94 @@
         <cfreturn returndata>
     </cffunction>
 
+    <!--- ZPL Barkod yazdır --->
+    <cffunction name="printBarcodeZPL" access="public" returntype="struct" hint="ZPL ile barkod yazdırır.">
+        <cfargument name="barcodeData" type="string"  required="true">
+        <cfargument name="barcodeType" type="string"  required="false" default="Code128">
+        <cfargument name="x"           type="numeric" required="false" default="50">
+        <cfargument name="y"           type="numeric" required="false" default="50">
+        <cfargument name="width"       type="numeric" required="false" default="2">
+        <cfargument name="height"      type="numeric" required="false" default="80">
+        <cfargument name="copies"      type="numeric" required="false" default="1">
+        
+        <cfset var returndata = structNew()>
+        <cftry>
+            <cfset var cmd = generateZPLBarcodeCommand(
+                arguments.barcodeData, arguments.barcodeType,
+                arguments.x, arguments.y, arguments.width, arguments.height, arguments.copies
+            )>
+            <cfset returndata = sendToPrinter(cmd)>
+            <cfset returndata.operation = "printBarcodeZPL">
+            <cfset returndata.barcodeData = arguments.barcodeData>
+            <cfset returndata.barcodeType = arguments.barcodeType>
+            <cfset returndata.language = "ZPL">
+
+            <cfcatch type="any">
+                <cfset returndata.success = false>
+                <cfset returndata.message = "ZPL Barkod yazdırma hatası: #cfcatch.message#">
+                <cfset returndata.operation = "printBarcodeZPL">
+                <cfset returndata.barcodeData = arguments.barcodeData>
+                <cfset returndata.language = "ZPL">
+                <cfset returndata.errorType = cfcatch.type>
+                <cfset returndata.errorDetail = cfcatch.detail>
+            </cfcatch>
+        </cftry>
+        <cfreturn returndata>
+    </cffunction>
+
+    <!--- ZPL Metin yazdır --->
+    <cffunction name="printTextZPL" access="public" returntype="struct" hint="ZPL ile metin yazdırır.">
+        <cfargument name="text"     type="string"  required="true">
+        <cfargument name="x"        type="numeric" required="false" default="50">
+        <cfargument name="y"        type="numeric" required="false" default="100">
+        <cfargument name="fontSize" type="string"  required="false" default="0">
+        <cfargument name="copies"   type="numeric" required="false" default="1">
+        
+        <cfset var returndata = structNew()>
+        <cftry>
+            <cfset var cmd = generateZPLTextCommand(arguments.text, arguments.x, arguments.y, arguments.fontSize, arguments.copies)>
+            <cfset returndata = sendToPrinter(cmd)>
+            <cfset returndata.operation = "printTextZPL">
+            <cfset returndata.text = arguments.text>
+            <cfset returndata.language = "ZPL">
+
+            <cfcatch type="any">
+                <cfset returndata.success = false>
+                <cfset returndata.message = "ZPL Metin yazdırma hatası: #cfcatch.message#">
+                <cfset returndata.operation = "printTextZPL">
+                <cfset returndata.text = arguments.text>
+                <cfset returndata.language = "ZPL">
+                <cfset returndata.errorType = cfcatch.type>
+                <cfset returndata.errorDetail = cfcatch.detail>
+            </cfcatch>
+        </cftry>
+        <cfreturn returndata>
+    </cffunction>
+
+    <!--- Ham ZPL komutu gönder --->
+    <cffunction name="sendRawZPL" access="public" returntype="struct" hint="Ham ZPL kodunu doğrudan gönderir.">
+        <cfargument name="zplCommand" type="string" required="true" hint="Ham ZPL komutu">
+        
+        <cfset var returndata = structNew()>
+        <cftry>
+            <cfset returndata = sendToPrinter(arguments.zplCommand)>
+            <cfset returndata.operation = "sendRawZPL">
+            <cfset returndata.commandLength = len(arguments.zplCommand)>
+            <cfset returndata.language = "ZPL">
+
+            <cfcatch type="any">
+                <cfset returndata.success = false>
+                <cfset returndata.message = "Ham ZPL gönderim hatası: #cfcatch.message#">
+                <cfset returndata.operation = "sendRawZPL">
+                <cfset returndata.language = "ZPL">
+                <cfset returndata.commandLength = len(arguments.zplCommand)>
+                <cfset returndata.errorType = cfcatch.type>
+                <cfset returndata.errorDetail = cfcatch.detail>
+            </cfcatch>
+        </cftry>
+        <cfreturn returndata>
+    </cffunction>
+
     <!--- Ağ ping testi --->
     <cffunction name="pingHost" access="public" returntype="struct" hint="Basit ping testi yapar">
         <cfset var returndata = structNew()>
@@ -245,6 +333,88 @@
         <!--- Yazdır & Bitiş --->
         <cfset sb &= "P1" & variables.EOL>
         <cfset sb &= ETX & variables.EOL>
+
+        <cfreturn sb>
+    </cffunction>
+
+    <!--- PRIVATE: ZPL Barkod Komutu --->
+    <cffunction name="generateZPLBarcodeCommand" access="private" returntype="string">
+        <cfargument name="barcodeData" type="string"  required="true">
+        <cfargument name="barcodeType" type="string"  required="true">
+        <cfargument name="x"           type="numeric" required="true">
+        <cfargument name="y"           type="numeric" required="true">
+        <cfargument name="width"       type="numeric" required="true">
+        <cfargument name="height"      type="numeric" required="true">
+        <cfargument name="copies"      type="numeric" required="true">
+
+        <cfset var sb = "">
+
+        <!--- ZPL Başlangıç --->
+        <cfset sb &= "^XA" & variables.EOL>  <!--- Start Format --->
+        <cfset sb &= "^PQ#arguments.copies#" & variables.EOL>  <!--- Print Quantity --->
+
+        <!--- ZPL Barkod komutları --->
+        <cfset var t = uCase(arguments.barcodeType)>
+        <cfif t EQ "CODE128">
+            <!--- ^BC = Code 128, o=orientation, h=height, f=print interpretation line, g=print interpretation line above --->
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>  <!--- Field Origin --->
+            <cfset sb &= "^BCN,#arguments.height#,Y,N,N" & variables.EOL>  <!--- Code 128 Barcode --->
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>  <!--- Field Data --->
+        <cfelseif t EQ "CODE39">
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^B3N,N,#arguments.height#,Y,N" & variables.EOL>  <!--- Code 39 Barcode --->
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>
+        <cfelseif t EQ "EAN13">
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^BEN,#arguments.height#,Y,N" & variables.EOL>  <!--- EAN-13 Barcode --->
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>
+        <cfelseif t EQ "EAN8">
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^B8N,#arguments.height#,Y,N" & variables.EOL>  <!--- EAN-8 Barcode --->
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>
+        <cfelseif t EQ "UPCA">
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^BUN,#arguments.height#,Y,N,Y" & variables.EOL>  <!--- UPC-A Barcode --->
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>
+        <cfelseif t EQ "QR" OR t EQ "QRCODE">
+            <!--- QR Code için özel işlem --->
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^BQN,2,#arguments.width#" & variables.EOL>  <!--- QR Code, quality=2, magnification --->
+            <cfset sb &= "^FDQA,#arguments.barcodeData#^FS" & variables.EOL>
+        <cfelse>
+            <!--- Varsayılan Code128 --->
+            <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>
+            <cfset sb &= "^BCN,#arguments.height#,Y,N,N" & variables.EOL>
+            <cfset sb &= "^FD#arguments.barcodeData#^FS" & variables.EOL>
+        </cfif>
+
+        <!--- ZPL Bitiş --->
+        <cfset sb &= "^XZ" & variables.EOL>  <!--- End Format --->
+
+        <cfreturn sb>
+    </cffunction>
+
+    <!--- PRIVATE: ZPL Metin Komutu --->
+    <cffunction name="generateZPLTextCommand" access="private" returntype="string">
+        <cfargument name="text"     type="string"  required="true">
+        <cfargument name="x"        type="numeric" required="true">
+        <cfargument name="y"        type="numeric" required="true">
+        <cfargument name="fontSize" type="string"  required="true">
+        <cfargument name="copies"   type="numeric" required="true">
+
+        <cfset var sb = "">
+
+        <!--- ZPL Başlangıç --->
+        <cfset sb &= "^XA" & variables.EOL>  <!--- Start Format --->
+        <cfset sb &= "^PQ#arguments.copies#" & variables.EOL>  <!--- Print Quantity --->
+
+        <!--- Metin alanı --->
+        <cfset sb &= "^FO#arguments.x#,#arguments.y#" & variables.EOL>  <!--- Field Origin --->
+        <cfset sb &= "^A#arguments.fontSize#N,30,20" & variables.EOL>  <!--- Font: 0=default, N=normal, height=30, width=20 --->
+        <cfset sb &= "^FD#arguments.text#^FS" & variables.EOL>  <!--- Field Data --->
+
+        <!--- ZPL Bitiş --->
+        <cfset sb &= "^XZ" & variables.EOL>  <!--- End Format --->
 
         <cfreturn sb>
     </cffunction>
