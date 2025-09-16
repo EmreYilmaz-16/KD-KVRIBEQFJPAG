@@ -142,7 +142,7 @@ try {
 writeOutput("<hr/>");
 writeOutput("<h2>ZPL vs PPL Karşılaştırması</h2>");
 writeOutput("<table border='1' style='border-collapse: collapse; width: 100%;'>");
-writeOutput("<tr style='background-color: #f0f0f0;'>");
+writeOutput("<tr style='background-color: ##f0f0f0;'>");
 writeOutput("<th>Özellik</th><th>PPL</th><th>ZPL</th>");
 writeOutput("</tr>");
 writeOutput("<tr>");
