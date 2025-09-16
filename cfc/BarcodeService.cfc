@@ -285,13 +285,15 @@
             <cfset returndata.targetIP = variables.printerIpAddress>
             <cfset returndata.targetPort = variables.printerPort>
 
-            <!--- Kapat --->
-            <cfif OutputStream>
+            <!--- Kapat - isDefined ve isObject kontrollerini kaldır --->
+            <cftry>
                 <cfset OutputStream.close()>
-            </cfif>
-            <cfif Socket>
+                <cfcatch><!--- Stream kapatma hatası önemli değil ---></cfcatch>
+            </cftry>
+            <cftry>
                 <cfset Socket.close()>
-            </cfif>
+                <cfcatch><!--- Socket kapatma hatası önemli değil ---></cfcatch>
+            </cftry>
 
             <cfcatch type="any">
                 <!--- Detaylı hata bilgisi --->
@@ -305,17 +307,13 @@
                 <cfset returndata.readTimeout = variables.readTimeout>
                 <cfset returndata.commandLength = len(arguments.command)>
                 
-                <!--- Socket'leri güvenli şekilde kapat --->
+                <!--- Socket'leri güvenli şekilde kapat - boolean kontrolleri kaldır --->
                 <cftry>
-                    <cfif isDefined("OutputStream") AND isObject(OutputStream)>
-                        <cfset OutputStream.close()>
-                    </cfif>
+                    <cfset OutputStream.close()>
                     <cfcatch><!--- Kapatma hatası önemli değil ---></cfcatch>
                 </cftry>
                 <cftry>
-                    <cfif isDefined("Socket") AND isObject(Socket)>
-                        <cfset Socket.close()>
-                    </cfif>
+                    <cfset Socket.close()>
                     <cfcatch><!--- Kapatma hatası önemli değil ---></cfcatch>
                 </cftry>
             </cfcatch>
