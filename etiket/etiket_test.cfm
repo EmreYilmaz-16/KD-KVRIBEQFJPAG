@@ -1,5 +1,5 @@
 <cfscript>
-svc = createObject("component", "BarcodeService").init("192.168.2.9", 9100);
+svc = createObject("component", "AddOns.Partner.cfc.BarcodeService").init("192.168.2.9", 9100);
 
 // Ping gibi: bağlantı kurulabiliyor mu?
 isUp = svc.checkPrinterStatus();
