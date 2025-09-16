@@ -18,7 +18,7 @@
     </cffunction>
 
     <!--- Barkod yazdır --->
-    <cffunction name="printBarcode" access="public" output="false"  hint="PPL ile barkod yazdırır.">
+    <cffunction name="printBarcode" access="public" output="false" returntype="boolean" hint="PPL ile barkod yazdırır.">
         <cfargument name="barcodeData" type="string"  required="true">
         <cfargument name="barcodeType" type="string"  required="false" default="Code128">
         <cfargument name="x"           type="numeric" required="false" default="10">
@@ -35,13 +35,13 @@
             <cfreturn sendToPrinter(cmd)>
 
             <cfcatch type="any">
-                <cfdump var="#cfcatch#">
+                <cfreturn false>
             </cfcatch>
         </cftry>
     </cffunction>
 
     <!--- Metin yazdır --->
-    <cffunction name="printText" access="public" output="false"  hint="PPL ile metin yazdırır.">
+    <cffunction name="printText" access="public" output="false" returntype="boolean" hint="PPL ile metin yazdırır.">
         <cfargument name="text"     type="string"  required="true">
         <cfargument name="x"        type="numeric" required="false" default="10">
         <cfargument name="y"        type="numeric" required="false" default="100">
@@ -59,7 +59,7 @@
     </cffunction>
 
     <!--- Yazıcı status (port erişilebilir mi) --->
-    <cffunction name="checkPrinterStatus" access="public" output="false" hint="TCP bağlantısı kurulabiliyor mu bakar.">
+    <cffunction name="checkPrinterStatus" access="public" output="false" returntype="boolean" hint="TCP bağlantısı kurulabiliyor mu bakar.">
         <cfset var socket = "">
         <cftry>
             <cfset var InetSocketAddress = createObject("java","java.net.InetSocketAddress")>
