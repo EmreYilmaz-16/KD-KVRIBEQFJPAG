@@ -35,7 +35,7 @@
             <cfreturn sendToPrinter(cmd)>
 
             <cfcatch type="any">
-                <cfthrow message="Barkod yazdırma hatası: #cfcatch.message#" detail="#cfcatch.detail#">
+                <cfthrow message="Barkod yazdırma hatası: #cfcatch.message#">
             </cfcatch>
         </cftry>
     </cffunction>
