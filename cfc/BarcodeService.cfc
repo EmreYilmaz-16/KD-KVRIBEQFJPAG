@@ -68,7 +68,7 @@
             <cfset var addr = InetSocketAddress.init( variables.printerIpAddress, javacast("int", variables.printerPort) )>
             <cfset Socket.connect( addr, javacast("int",1500) )>
             <cfset var connected = Socket.isConnected()>
-            <cfif Socket?><!--- CF versions vary --->
+            <cfif Socket><!--- CF versions vary --->
                 <cfset Socket.close()>
             </cfif>
             <cfreturn connected>
@@ -174,10 +174,10 @@
             <cfset OutputStream.flush()>
 
             <!--- Kapat --->
-            <cfif OutputStream?><!--- bazı CF sürümleri null check ister --->
+            <cfif OutputStream><!--- bazı CF sürümleri null check ister --->
                 <cfset OutputStream.close()>
             </cfif>
-            <cfif Socket?>
+            <cfif Socket>
                 <cfset Socket.close()>
             </cfif>
 
@@ -185,10 +185,10 @@
 
             <cfcatch type="any">
                 <!--- Bağlantı/kodlama problemi vb. --->
-                <cfif OutputStream?>
+                <cfif OutputStream>
                     <cfset OutputStream.close()>
                 </cfif>
-                <cfif Socket?>
+                <cfif Socket>
                     <cfset Socket.close()>
                 </cfif>
                 <cfthrow message="Yazıcı bağlantı hatası: #cfcatch.message#" detail="#cfcatch.detail#">
