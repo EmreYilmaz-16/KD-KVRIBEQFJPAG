@@ -26,17 +26,33 @@ try {
         readTimeout = 10000         // 10 saniye
     );
     
-    writeOutput("<h2>1. Bağlantı Testi</h2>");
+    writeOutput("<h2>1. Ping Testi</h2>");
+    pingResult = svc.pingHost();
+    
+    if (pingResult.status) {
+        writeOutput("<span style='color: green;'><strong>✓ Ping BAŞARILI</strong></span><br/>");
+        writeOutput("Mesaj: " & pingResult.message & "<br/>");
+    } else {
+        writeOutput("<span style='color: orange;'><strong>⚠ Ping BAŞARISIZ</strong></span><br/>");
+        writeOutput("Mesaj: " & pingResult.message & "<br/>");
+        if (structKeyExists(pingResult, "errorType")) {
+            writeOutput("Hata Tipi: " & pingResult.errorType & "<br/>");
+        }
+    }
+    writeOutput("Host IP: " & pingResult.hostIP & "<br/>");
+    writeOutput("<hr/>");
+    
+    writeOutput("<h2>2. Port Bağlantı Testi</h2>");
     statusResult = svc.checkPrinterStatus();
     
     if (statusResult.status) {
-        writeOutput("<span style='color: green;'><strong>✓ Bağlantı BAŞARILI</strong></span><br/>");
+        writeOutput("<span style='color: green;'><strong>✓ Port Bağlantısı BAŞARILI</strong></span><br/>");
         writeOutput("Mesaj: " & statusResult.message & "<br/>");
     } else {
-        writeOutput("<span style='color: red;'><strong>✗ Bağlantı BAŞARISIZ</strong></span><br/>");
+        writeOutput("<span style='color: red;'><strong>✗ Port Bağlantısı BAŞARISIZ</strong></span><br/>");
         writeOutput("Hata: " & statusResult.message & "<br/>");
         writeOutput("Hata Tipi: " & statusResult.errorType & "<br/>");
-        if (structKeyExists(statusResult, "errorDetail")) {
+        if (structKeyExists(statusResult, "errorDetail") && len(statusResult.errorDetail)) {
             writeOutput("Detay: " & statusResult.errorDetail & "<br/>");
         }
     }
@@ -46,9 +62,9 @@ try {
     writeOutput("Connection Timeout: " & statusResult.connectionTimeout & "ms<br/>");
     writeOutput("<hr/>");
     
-    // Eğer bağlantı başarılıysa devam et
+    // Eğer port bağlantısı başarılıysa devam et
     if (statusResult.status) {
-        writeOutput("<h2>2. Barkod Yazdırma Testi</h2>");
+        writeOutput("<h2>3. Barkod Yazdırma Testi</h2>");
         
         barcodeResult = svc.printBarcode(
             barcodeData = "TEST123456789",
@@ -74,7 +90,7 @@ try {
         writeOutput("Target IP: " & barcodeResult.targetIP & "<br/>");
         writeOutput("<hr/>");
         
-        writeOutput("<h2>3. Metin Yazdırma Testi</h2>");
+        writeOutput("<h2>4. Metin Yazdırma Testi</h2>");
         
         textResult = svc.printText(
             text = "Test Mesajı - " & dateFormat(now(), "dd/mm/yyyy") & " " & timeFormat(now(), "HH:nn:ss"),
@@ -98,7 +114,7 @@ try {
         writeOutput("Metin: " & textResult.text & "<br/>");
         writeOutput("Target IP: " & textResult.targetIP & "<br/>");
     } else {
-        writeOutput("<h2>⚠️ Bağlantı başarısız olduğu için yazdırma testleri atlandı</h2>");
+        writeOutput("<h2>⚠️ Port bağlantısı başarısız olduğu için yazdırma testleri atlandı</h2>");
         
         writeOutput("<h3>Troubleshooting Önerileri:</h3>");
         writeOutput("<ul>");

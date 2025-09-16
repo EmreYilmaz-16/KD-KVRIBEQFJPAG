@@ -83,31 +83,72 @@
         <cfreturn returndata>
     </cffunction>
 
-    <!--- Yazıcı status (port erişilebilir mi) --->
-    <cffunction name="checkPrinterStatus" access="public"  returntype="struct" hint="TCP bağlantısı kurulabiliyor mu bakar.">
-        <cfset var socket = "">
+    <!--- Ağ ping testi --->
+    <cffunction name="pingHost" access="public" returntype="struct" hint="Basit ping testi yapar">
         <cfset var returndata = structNew()>
         
         <cftry>
-            <cfset var InetSocketAddress = createObject("java","java.net.InetSocketAddress")>
-            <cfset var Socket            = createObject("java","java.net.Socket")>
+            <cfset var InetAddress = createObject("java","java.net.InetAddress")>
+            <cfset var host = InetAddress.getByName(variables.printerIpAddress)>
+            <!--- 3 saniye timeout ile ping --->
+            <cfset var reachable = host.isReachable(javacast("int", 3000))>
+            
+            <cfif reachable>
+                <cfset returndata.status = true>
+                <cfset returndata.message = "Host erişilebilir: #variables.printerIpAddress#">
+            <cfelse>
+                <cfset returndata.status = false>
+                <cfset returndata.message = "Host erişilemez: #variables.printerIpAddress#">
+            </cfif>
+            
+            <cfset returndata.hostIP = variables.printerIpAddress>
+            
+            <cfcatch type="any">
+                <cfset returndata.status = false>
+                <cfset returndata.message = "Ping hatası: #cfcatch.message#">
+                <cfset returndata.errorType = cfcatch.type>
+                <cfset returndata.hostIP = variables.printerIpAddress>
+            </cfcatch>
+        </cftry>
+        
+        <cfreturn returndata>
+    </cffunction>
+
+    <!--- Yazıcı status (port erişilebilir mi) --->
+    <cffunction name="checkPrinterStatus" access="public"  returntype="struct" hint="TCP bağlantısı kurulabiliyor mu bakar.">
+        <cfset var returndata = structNew()>
+        
+        <cftry>
+            <!--- Basit socket testi - bağlantı kurup hemen kapat --->
+            <cfset var Socket = createObject("java","java.net.Socket")>
             
             <!--- Timeout ayarlarını uygula --->
             <cfset Socket.setSoTimeout(javacast("int", variables.readTimeout))>
             
-            <!--- Bağlantı kur --->
-            <cfset var addr = InetSocketAddress.init( variables.printerIpAddress, javacast("int", variables.printerPort) )>
-            <cfset Socket.connect( addr, javacast("int", variables.connectionTimeout) )>
-            <cfset var connected = Socket.isConnected()>
+            <!--- Direkt IP ve port ile bağlan --->
+            <cfset Socket.connect(
+                createObject("java","java.net.InetSocketAddress").init(
+                    variables.printerIpAddress, 
+                    javacast("int", variables.printerPort)
+                ), 
+                javacast("int", variables.connectionTimeout)
+            )>
             
+            <!--- Bağlantı başarılı --->
             <cfset returndata.status = true>
             <cfset returndata.message = "Bağlantı başarılı - IP: #variables.printerIpAddress#:#variables.printerPort#">
             <cfset returndata.connectionTimeout = variables.connectionTimeout>
             <cfset returndata.readTimeout = variables.readTimeout>
+            <cfset returndata.targetIP = variables.printerIpAddress>
+            <cfset returndata.targetPort = variables.printerPort>
             
-            <cfif Socket><!--- CF versions vary --->
+            <!--- Socket'i güvenli şekilde kapat --->
+            <cftry>
                 <cfset Socket.close()>
-            </cfif>
+                <cfcatch>
+                    <!--- Socket kapatma hatası önemli değil --->
+                </cfcatch>
+            </cftry>
             
             <cfcatch type="any">
                 <cfset returndata.status = false>
@@ -120,7 +161,7 @@
                 
                 <!--- Socket kapatmayı dene --->
                 <cftry>
-                    <cfif isDefined("Socket") AND isObject(Socket)>
+                    <cfif isDefined("Socket")>
                         <cfset Socket.close()>
                     </cfif>
                     <cfcatch>
