@@ -53,6 +53,7 @@
             <cfreturn sendToPrinter(cmd)>
 
             <cfcatch type="any">
+                <cfreturn false>
                 <cfthrow message="Metin yazdırma hatası: #cfcatch.message#" detail="#cfcatch.detail#">
             </cfcatch>
         </cftry>
