@@ -1,7 +1,7 @@
 <!--- Etiket Görüntüleme ve Yazdırma Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.page" default="1">
-<cfparam name="url.per_page" default="5">
+<cfparam name="url.per_page" default="20">
 
 <!--- Custom tag için gerekli değişkenler --->
 <cfset upload_folder = ExpandPath(".")>
@@ -53,6 +53,8 @@
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
     ORDER BY row_number, temp_id
+    OFFSET #offset# ROWS 
+    FETCH NEXT #url.per_page# ROWS ONLY
 </cfquery>
 
 <!--- Debug: Log query results --->
@@ -75,11 +77,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Adım göstergesi kapsayıcısı: üstteki süreç adımlarına boşluk bırakır */
         .step-indicator {
             margin-bottom: 30px;
         }
-        /* Adım balonları için temel görünüm */
         .step {
             display: inline-block;
             width: 30px;
@@ -92,26 +92,23 @@
             margin-right: 10px;
             font-weight: bold;
         }
-        /* Aktif adımın vurgusu */
         .step.active {
             background: #007bff;
             color: white;
         }
-        /* Tamamlanan adımların rengi */
         .step.completed {
             background: #28a745;
             color: white;
         }
 
-        /* Etiket kartlarını listeleyen kapsayıcı: yoğun akışlı düzen */
+        /* Etiket Stilleri */
         .label-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1mm; /* mini etiketler için küçük boşluk */
-            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        /* Tek bir etiket kartının görsel stili */
         .label-item {
             border: 2px solid #333;
             padding: 15px;
@@ -121,7 +118,6 @@
             font-family: 'Courier New', monospace;
         }
         
-        /* Etiket başlığı (üst bant) */
         .label-header {
             text-align: center;
             border-bottom: 1px solid #333;
@@ -131,25 +127,21 @@
             font-size: 16px;
         }
         
-        /* Etiket içeriği metin boyutu ve satır aralığı */
         .label-content {
             font-size: 12px;
             line-height: 1.4;
         }
         
-        /* Etiket içi satırlar: sol-sağ alanlar */
         .label-field {
             margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
         }
         
-        /* Sol taraftaki başlık alanı min genişlik */
         .label-field strong {
             min-width: 100px;
         }
         
-        /* Barkod/QR bölümünün üst sınırı ve hizası */
         .barcode-section {
             text-align: center;
             margin-top: 10px;
@@ -157,7 +149,6 @@
             border-top: 1px solid #333;
         }
         
-        /* Yazı tipi ve görünüm olarak Code39 tipli barkod yazısı */
         .barcode-display {
             font-family: 'Libre Barcode 39', monospace;
             font-size: 24px;
@@ -165,13 +156,11 @@
             margin: 5px 0;
         }
         
-        /* QR kod kapsayıcısı */
         .qr-code {
             margin: 10px auto;
             text-align: center;
         }
 
-        /* QR kodun altında veri metni (küçük puntolu) */
         .qr-data-text {
             font-size: 8px;
             color: #666;
@@ -181,24 +170,17 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Yazdırma (print) için özel stiller */
+        /* Yazdırma Stilleri */
         @media print {
-            /* Yazdırma sırasında görünmemesi gereken öğeler */
             .no-print {
                 display: none !important;
             }
-            /* Dikey yazı alanlarının kenarlığını yazdırmada kaldır */
-            .ediv{
-                border : none !important;
-            }
-            /* Yazdırmada boşluklar kaldırılsın */
+            
             .label-container {
+                grid-template-columns: 1fr;
                 gap: 0;
-                padding-top: 0;
-                margin-top: 0;
             }
             
-            /* Etiket kartı yazdırma: her kart yeni sayfada (bu sayfa düzeni için) */
             .label-item {
                 border: 2px solid #000;
                 margin: 0;
@@ -212,31 +194,27 @@
                 display: block;
             }
             
-            /* Son karttan sonra sayfa kırma uygulama */
             .label-item:last-child {
                 page-break-after: auto;
             }
             
-            /* QR görüntüsünün yazdırmada maksimum boyutu */
             .qr-code canvas {
                 max-width: 120px !important;
                 max-height: 120px !important;
             }
             
-            /* Yazdırmada sayfa kenar boşluklarını sıfırla (tarayıcı ayarlarına bağlıdır) */
             body {
                 margin: 0;
                 padding: 0;
             }
             
-            /* Kapsayıcı kenar boşluklarını kaldır */
             .container {
                 max-width: none;
                 padding: 0;
             }
         }
 
-        /* Etiket Boyut Seçenekleri (butonlarla değişen sınıflar) */
+        /* Etiket Boyut Seçenekleri */
         .label-size-small .label-item {
             padding: 8px;
             font-size: 10px;
@@ -256,7 +234,6 @@
             font-size: 13px;
         }
 
-        /* Üst araç çubuğu: sayfa kayarken üstte sabit kalsın */
         .toolbar {
             position: sticky;
             top: 0;
@@ -267,89 +244,10 @@
             margin-bottom: 20px;
         }
 
-        /* Sayfalama bilgisinin yatay hizalaması */
         .pagination-info {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        /* 25mm x 25mm kompakt etiket (tablosuz) */
-        .mini-label {
-            width: 25mm;
-            height: 25mm;
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: 2.5mm 1fr 2.5mm;
-            grid-template-rows: 3mm 1fr;
-            grid-template-areas:
-                "top top top"
-                "left qr right";
-            align-items: center;
-            justify-items: center;
-            gap: 0.2mm;
-            margin: 0.5mm 0.5mm 0.5mm 0;
-            padding: 0.3mm;
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-
-        .mini-label .top-code {
-            grid-area: top;
-            font-size: 3pt;
-            line-height: 0.9;
-            text-align: center;
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-
-        .mini-label .left-meta,
-        .mini-label .right-meta {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 3pt;
-            line-height: 0.9;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-        }
-
-        .mini-label .qr-wrap { 
-            grid-area: qr; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* QR resmi için sıkı kırpma (quiet zone'u çok bozmadan) */
-        .mini-label .qr-crop {
-            /* Ayarlanabilir değerler */
-            --qr-size: 20.5mm;   /* hedef QR alanı - daha büyük */
-            --qr-crop: 0.4mm;    /* kırpma miktarı - daha az kırpma */
-            width: calc(var(--qr-size) - var(--qr-crop));
-            height: calc(var(--qr-size) - var(--qr-crop));
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mini-label .qr-crop img,
-        .mini-label .qr-crop canvas {
-            width: calc(var(--qr-size) + var(--qr-crop));
-            height: calc(var(--qr-size) + var(--qr-crop));
-            transform: translate(calc(-1 * var(--qr-crop) / 2), calc(-1 * var(--qr-crop) / 2));
-            display: block;
-            margin: 0;
-        }
-
-        @media print {
-            .mini-label {
-                margin: 0;
-            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
@@ -383,7 +281,7 @@
                                 <i class="fas fa-expand-alt"></i> Büyük
                             </button>
                         </div>
-                        <button type="button" class="btn btn-success" onclick="printDivWithStyles('labelContainer')">
+                        <button type="button" class="btn btn-success" onclick="window.print()">
                             <i class="fas fa-print me-2"></i>Yazdır
                         </button>
                         <a href="index.cfm?fuseaction=objects.emptypopup_import_write_label" class="btn btn-outline-primary">
@@ -407,7 +305,7 @@
                 <span>Etiket Yazdır</span>
             </div>
 <cfoutput> 
-            <!--- İstatistikler
+            <!-- İstatistikler -->
             <div class="row mb-4 no-print">
                 <div class="col-md-3">
                     <div class="card text-center">
@@ -441,16 +339,53 @@
                         </div>
                     </div>
                 </div>
-            </div> --->
+            </div>
 </cfoutput>
-            
-            
+            <!-- Sayfalama (Üst) -->
+            <cfif totalPages gt 1>
+                <div class="row mb-3 no-print">
+                    <div class="col-md-6">
+                        <div class="pagination-info">
+                            <span><cfoutput>Sayfa #url.page# / #totalPages#</cfoutput></span>
+                            <span class="text-muted">|</span>
+                            <span><cfoutput>Toplam #getImportInfo.success_records# etiket</cfoutput></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <nav aria-label="Sayfalama">
+                            <ul class="pagination pagination-sm justify-content-end mb-0">
+                                <cfif url.page gt 1>
+                                    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#</cfoutput>">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                </cfif>
+                                
+                                <cfloop from="#max(1, url.page - 2)#" to="#min(totalPages, url.page + 2)#" index="pageNum">
+                                    <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                            <cfoutput>#pageNum#</cfoutput>
+                                        </a>
+                                    </li>
+                                </cfloop>
+                                
+                                <cfif url.page lt totalPages>
+                                    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </cfif>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </cfif>
 
             <!-- Etiketler -->
-            <div class="label-container label-size-medium" id="labelContainer" style="background-color: ##fff;">
+            <div class="label-container label-size-medium" id="labelContainer">
                 <cfoutput> 
-                <!--- Sayfa başına 6 etiket olacak şekilde sayaç --->
-                <cfset labelCounter = 0>
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
                     <cfquery name="getStok" datasource="w3Qa">
@@ -463,38 +398,8 @@
                     <cfloop from="1" to="#Int(miktar)#" index="etiket_no">
                         <!--- Her etiket için yeni seri numarası üret --->
                         <cfset yeni_seri_no = seri_no >
-                        <!--- Etiket bloğu: tek tek sayfa kırma KALDIRILDI, 6 adette bir kırılacak --->
-                        <cfset labelCounter = labelCounter + 1>
-                        <div class="mini-label">
-                            <div class="top-code">#eta_kodu#</div>
-                            <div class="left-meta ediv">#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
-                            <div class="qr-wrap">
-                                <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
-                                <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
-                                <div class="qr-crop">
-                                    <cftry>
-                                        <cf_pbs_barcode
-                                            value="#qr_data#"
-                                            type="qrcode"
-                                            width="206"  
-                                            height="206" 
-                                            show="1"
-                                            id="#qr_id#"
-                                            path="#ExpandPath('../temp/')#"
-                                            format="png">
-                                        <cfcatch>
-                                            <!--- Hata durumunda basit QR placeholder --->
-                                        </cfcatch>
-                                        </cftry>
-                                </div>
-                            </div>
-                            <div class="right-meta">#yeni_seri_no#</div>
-                        </div>
-                        <!--- Her 5 etikette bir sayfa sonu --->
-                        <cfif labelCounter MOD 5 EQ 0>
-                            <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
-                        </cfif>
-                        <!-----<div class="label-item">
+                        
+                        <div class="label-item">
                             <div class="label-header">
                                 #marka# - ÜRÜN ETİKETİ
                             </div>
@@ -564,7 +469,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>---->
+                        </div>
                     </cfloop> <!--- Etiket sayısı döngüsü sonu --->
                 </cfloop> <!--- Ana veri döngüsü sonu --->
                 </cfoutput>
@@ -578,7 +483,51 @@
                 </div>
             </cfif>
 
-            <!-- Alt sayfalama kaldırıldı: tüm etiketler tek sayfada gösteriliyor -->
+            <!-- Sayfalama (Alt) -->
+            <cfif totalPages gt 1>
+                <div class="row mt-4 no-print">
+                    <div class="col-12">
+                        <nav aria-label="Sayfalama">
+                            <ul class="pagination justify-content-center">
+                                <cfif url.page gt 1>
+                               <cfoutput>    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=1&per_page=#url.per_page#">
+                                            <i class="fas fa-angle-double-left"></i> İlk
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels&import_id=#url.import_id#&page=#url.page - 1#&per_page=#url.per_page#">
+                                            <i class="fas fa-chevron-left"></i> Önceki
+                                        </a>
+                                    </li>
+                                    </cfoutput> 
+                                </cfif>
+                                
+                                <cfloop from="#max(1, url.page - 5)#" to="#min(totalPages, url.page + 5)#" index="pageNum">
+                                    <li class="page-item #iif(pageNum eq url.page, 'active', '')#">
+                                        <a class="page-link" href="index.cfm?fuseaaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#pageNum#&per_page=#url.per_page#</cfoutput>">
+                                           <cfoutput>#pageNum#</cfoutput>
+                                        </a>
+                                    </li>
+                                </cfloop>
+                                
+                                <cfif url.page lt totalPages>
+                                    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#url.page + 1#&per_page=#url.per_page#</cfoutput>">
+                                            Sonraki <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="index.cfm?fuseaction=objects.emptypopup_view_labels<cfoutput>&import_id=#url.import_id#&page=#totalPages#&per_page=#url.per_page#</cfoutput>">
+                                            Son <i class="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                </cfif>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </cfif>
         </div>
     </div>
 
@@ -629,68 +578,6 @@
                 </cfif>
             }
         });
-function printDivWithStyles(divId) {
-    const node = document.getElementById(divId);
-    if (!node) return window.print();
-
-    // İçeriği klonla ve varsa canvas'ları resme dönüştür
-    const clone = node.cloneNode(true);
-    const canvases = clone.querySelectorAll('canvas');
-    canvases.forEach((cv) => {
-        try {
-            const img = document.createElement('img');
-            img.src = cv.toDataURL('image/png');
-            img.style.width = cv.style.width || (cv.width ? cv.width + 'px' : '');
-            img.style.height = cv.style.height || (cv.height ? cv.height + 'px' : '');
-            cv.replaceWith(img);
-        } catch (e) {
-            // toDataURL başarısızsa canvas'ı olduğu gibi bırak
-        }
-    });
-
-    const printWindow = window.open('', '', 'width=900,height=700');
-    const baseTag = '<base href="' + document.baseURI + '">';
-    const headHTML = baseTag + document.head.innerHTML;
-
-    // Yeni pencerede sayfayı oluştur
-    printWindow.document.open();
-    printWindow.document.write('<!DOCTYPE html><html><head>' + headHTML + '</head><body>' + clone.outerHTML + '</body></html>');
-    printWindow.document.close();
-
-    const triggerPrint = () => {
-        try { printWindow.focus(); } catch (e) {}
-        printWindow.print();
-        // Bazı tarayıcılarda print asenkron olabilir; küçük gecikme sonrasında kapat
-        setTimeout(() => { try { printWindow.close(); } catch (e) {} }, 250);
-    };
-
-    // Resimlerin yüklenmesini bekle
-    const waitForImages = () => {
-        const imgs = Array.from(printWindow.document.images || []);
-        if (imgs.length === 0) { triggerPrint(); return; }
-        let doneCount = 0;
-        const done = () => { doneCount++; if (doneCount >= imgs.length) triggerPrint(); };
-        imgs.forEach(img => {
-            if (img.complete && img.naturalWidth > 0) { done(); }
-            else {
-                img.addEventListener('load', done, { once: true });
-                img.addEventListener('error', done, { once: true });
-            }
-        });
-        // Emniyet süresi: 2sn sonra yine de yazdır
-        setTimeout(triggerPrint, 2000);
-    };
-
-    // Yeni pencere tamamen yüklenince kontrol et
-    if (printWindow.document.readyState === 'complete') {
-        waitForImages();
-    } else {
-        printWindow.addEventListener('load', waitForImages, { once: true });
-    }
-}
-
     </script>
-
 </body>
 </html>
-

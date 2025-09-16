@@ -103,12 +103,12 @@
             color: white;
         }
 
-        /* Etiket kartlarını listeleyen kapsayıcı: yoğun akışlı düzen */
+        /* Etiket kartlarını listeleyen kapsayıcı: responsive grid düzeni */
         .label-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1mm; /* mini etiketler için küçük boşluk */
-            margin-top: 10px;
+            display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px; 
         }
         
         /* Tek bir etiket kartının görsel stili */
@@ -191,11 +191,12 @@
             .ediv{
                 border : none !important;
             }
-            /* Yazdırmada boşluklar kaldırılsın */
+            /* Yazdırmada grid tek sütuna düşsün, boşluklar kaldırılsın */
             .label-container {
+                 grid-template-columns: 1fr;
                 gap: 0;
-                padding-top: 0;
-                margin-top: 0;
+                padding-top:0px;
+                margin-top: 0px;
             }
             
             /* Etiket kartı yazdırma: her kart yeni sayfada (bu sayfa düzeni için) */
@@ -272,84 +273,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        /* 25mm x 25mm kompakt etiket (tablosuz) */
-        .mini-label {
-            width: 25mm;
-            height: 25mm;
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: 2.5mm 1fr 2.5mm;
-            grid-template-rows: 3mm 1fr;
-            grid-template-areas:
-                "top top top"
-                "left qr right";
-            align-items: center;
-            justify-items: center;
-            gap: 0.2mm;
-            margin: 0.5mm 0.5mm 0.5mm 0;
-            padding: 0.3mm;
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-
-        .mini-label .top-code {
-            grid-area: top;
-            font-size: 3pt;
-            line-height: 0.9;
-            text-align: center;
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-
-        .mini-label .left-meta,
-        .mini-label .right-meta {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 3pt;
-            line-height: 0.9;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-        }
-
-        .mini-label .qr-wrap { 
-            grid-area: qr; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* QR resmi için sıkı kırpma (quiet zone'u çok bozmadan) */
-        .mini-label .qr-crop {
-            /* Ayarlanabilir değerler */
-            --qr-size: 20.5mm;   /* hedef QR alanı - daha büyük */
-            --qr-crop: 0.4mm;    /* kırpma miktarı - daha az kırpma */
-            width: calc(var(--qr-size) - var(--qr-crop));
-            height: calc(var(--qr-size) - var(--qr-crop));
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mini-label .qr-crop img,
-        .mini-label .qr-crop canvas {
-            width: calc(var(--qr-size) + var(--qr-crop));
-            height: calc(var(--qr-size) + var(--qr-crop));
-            transform: translate(calc(-1 * var(--qr-crop) / 2), calc(-1 * var(--qr-crop) / 2));
-            display: block;
-            margin: 0;
-        }
-
-        @media print {
-            .mini-label {
-                margin: 0;
-            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
@@ -465,30 +388,45 @@
                         <cfset yeni_seri_no = seri_no >
                         <!--- Etiket bloğu: tek tek sayfa kırma KALDIRILDI, 6 adette bir kırılacak --->
                         <cfset labelCounter = labelCounter + 1>
-                        <div class="mini-label">
-                            <div class="top-code">#eta_kodu#</div>
-                            <div class="left-meta ediv">#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
-                            <div class="qr-wrap">
-                                <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
-                                <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
-                                <div class="qr-crop">
+                        <div style="display:inline-block;;page-break-inside:avoid;break-inside:avoid;margin-left:0mm">
+                           <table>
+                            <tr>
+                                <td colspan="3" style="font-size:4pt; text-align:center;">
+                                    #eta_kodu#
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="margin:0;">
+                                   <div class="ediv" style="writing-mode: vertical-rl;font-size:4pt;font-weight: bold; font-family: Arial;"> #DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
+                                </td>
+                                <td style="padding:0;">
+                            
+                                    <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+                                    <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
                                     <cftry>
                                         <cf_pbs_barcode
-                                            value="#qr_data#"
-                                            type="qrcode"
-                                            width="206"  
-                                            height="206" 
-                                            show="1"
+                                            value="#qr_data#" 
+                                            type="qrcode" 
+                                            width="41" 
+                                            height="41" 
+                                            show="1" 
                                             id="#qr_id#"
                                             path="#ExpandPath('../temp/')#"
-                                            format="png">
-                                        <cfcatch>
-                                            <!--- Hata durumunda basit QR placeholder --->
-                                        </cfcatch>
-                                        </cftry>
-                                </div>
-                            </div>
-                            <div class="right-meta">#yeni_seri_no#</div>
+                                            format="png"
+                                            >
+                                    <cfcatch>
+                                        <!--- Hata durumunda basit QR placeholder göster --->
+                                        
+                                    </cfcatch>
+                                    </cftry>
+                                </td>
+                                <td style="">
+                                    <div style="writing-mode: vertical-rl;font-size:4.3pt; font-weight: bold; ">
+                                    #yeni_seri_no#
+                                    </div>
+                                </td>
+                            </tr>
+                           </table> 
                         </div>
                         <!--- Her 5 etikette bir sayfa sonu --->
                         <cfif labelCounter MOD 5 EQ 0>
@@ -630,63 +568,17 @@
             }
         });
 function printDivWithStyles(divId) {
-    const node = document.getElementById(divId);
-    if (!node) return window.print();
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
 
-    // İçeriği klonla ve varsa canvas'ları resme dönüştür
-    const clone = node.cloneNode(true);
-    const canvases = clone.querySelectorAll('canvas');
-    canvases.forEach((cv) => {
-        try {
-            const img = document.createElement('img');
-            img.src = cv.toDataURL('image/png');
-            img.style.width = cv.style.width || (cv.width ? cv.width + 'px' : '');
-            img.style.height = cv.style.height || (cv.height ? cv.height + 'px' : '');
-            cv.replaceWith(img);
-        } catch (e) {
-            // toDataURL başarısızsa canvas'ı olduğu gibi bırak
-        }
-    });
+    // Sayfa içeriğini yazdırmak istediğimiz div ile değiştiriyoruz
+    document.body.innerHTML = printContents;
 
-    const printWindow = window.open('', '', 'width=900,height=700');
-    const baseTag = '<base href="' + document.baseURI + '">';
-    const headHTML = baseTag + document.head.innerHTML;
+    // Yazdırma komutunu çalıştırıyoruz
+    window.print();
 
-    // Yeni pencerede sayfayı oluştur
-    printWindow.document.open();
-    printWindow.document.write('<!DOCTYPE html><html><head>' + headHTML + '</head><body>' + clone.outerHTML + '</body></html>');
-    printWindow.document.close();
-
-    const triggerPrint = () => {
-        try { printWindow.focus(); } catch (e) {}
-        printWindow.print();
-        // Bazı tarayıcılarda print asenkron olabilir; küçük gecikme sonrasında kapat
-        setTimeout(() => { try { printWindow.close(); } catch (e) {} }, 250);
-    };
-
-    // Resimlerin yüklenmesini bekle
-    const waitForImages = () => {
-        const imgs = Array.from(printWindow.document.images || []);
-        if (imgs.length === 0) { triggerPrint(); return; }
-        let doneCount = 0;
-        const done = () => { doneCount++; if (doneCount >= imgs.length) triggerPrint(); };
-        imgs.forEach(img => {
-            if (img.complete && img.naturalWidth > 0) { done(); }
-            else {
-                img.addEventListener('load', done, { once: true });
-                img.addEventListener('error', done, { once: true });
-            }
-        });
-        // Emniyet süresi: 2sn sonra yine de yazdır
-        setTimeout(triggerPrint, 2000);
-    };
-
-    // Yeni pencere tamamen yüklenince kontrol et
-    if (printWindow.document.readyState === 'complete') {
-        waitForImages();
-    } else {
-        printWindow.addEventListener('load', waitForImages, { once: true });
-    }
+    // İşlem bittikten sonra sayfanın orijinal içeriğini geri yüklüyoruz
+    document.body.innerHTML = originalContents;
 }
 
     </script>

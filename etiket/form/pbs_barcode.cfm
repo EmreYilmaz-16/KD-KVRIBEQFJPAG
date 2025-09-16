@@ -38,6 +38,8 @@
     </cfswitch>
     
     <cfset Reader.setModuleWidth(JavaCast('int',1))>
+    <cfset Reader.setQuietZone(JavaCast('int',0))>
+    <cfset Reader.setQuietZoneEnabled(JavaCast('boolean',false))>
     
     <cfswitch expression="#attributes.shape#">
         <cfcase value="SQUARE">
@@ -114,7 +116,12 @@
         <cfset qr_value = ReplaceList(#attributes.value#,'Ş,ş,İ,ı,Ğ,ğ','S,s,I,i,G,g')>
         <cfset BarcodeFormat = createObject("java","com.google.zxing.BarcodeFormat") />
         
-        <cfset bitMatrix = writer.encode(qr_value,evaluate(b_format), attributes.width, attributes.height)>
+        <!--- Margin ayarları --->
+        <cfset hints = createObject("java", "java.util.HashMap").init()>
+        <cfset EncodeHintType = createObject("java", "com.google.zxing.EncodeHintType")>
+        <cfset hints.put(EncodeHintType.MARGIN, JavaCast("int", 0))>
+        
+        <cfset bitMatrix = writer.encode(qr_value,evaluate(b_format), attributes.width, attributes.height, hints)>
         <cfset converter = createObject("java","com.google.zxing.client.j2se.MatrixToImageWriter")>
         <cfset buff = converter.toBufferedImage( bitMatrix ) />
         <cfset img = ImageNew( buff ) /> 
