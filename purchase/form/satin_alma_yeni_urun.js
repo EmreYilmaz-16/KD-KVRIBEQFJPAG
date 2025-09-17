@@ -150,6 +150,7 @@ uniqueProducts.forEach(productId => {
 
     const lastPriceCell = document.createElement('td');
     lastPriceCell.setAttribute('data-hucre', "lastPriceCell");
+    
     if (last_price === 0) {
         lastPriceCell.textContent = "-";
     } else {
@@ -192,6 +193,7 @@ uniqueProducts.forEach(productId => {
         var net2=selectedKey?.split('|')[8];
         console.log("Net2",net2)
         var converted = 0;
+        console.log(selectedCells);
         if (!isNaN(net) && !isNaN(marj)) {
             const calculatedSalePrice = net + (net * marj / 100);
 
