@@ -560,6 +560,9 @@ row.appendChild(salePriceCell);
         : `<div><strong>${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</strong></div>`;
 
       let netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+        if(DEMAND_MONEY==product.OTHER_MONEY){
+                netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${product.PRICE_OTHER.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+            }
       if (product.NET_PRICE === lowestNetPrice) {
         netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
         cell.title = 'En iyi teklif'+product.WRK_ROW_ID;
