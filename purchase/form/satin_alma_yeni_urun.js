@@ -167,6 +167,7 @@ uniqueProducts.forEach(productId => {
     salePriceCell.setAttribute('data-hucre', "salePriceCell");
     const salePriceInput = document.createElement('input');
     salePriceInput.type = 'text';
+    console.log("slpInfo", slpInfo);
     salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2) : "";
     salePriceInput.className = 'form-control form-control-sm sale-price-input';
     salePriceInput.style.width = '100px';
