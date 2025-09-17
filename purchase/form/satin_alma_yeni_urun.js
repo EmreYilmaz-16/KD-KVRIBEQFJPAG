@@ -188,7 +188,7 @@ uniqueProducts.forEach(productId => {
         const selectedKey = selectedCells.get(productId);
         const net = parseFloat(selectedKey?.split('|')[6]);
         const marj = parseFloat(marjInput.value);
-        var net2=parseFloat(selectedKey?.split('|')[8]);
+        var net2=selectedKey?.split('|')[8];
         console.log("Net2",net2)
         var converted = 0;
         if (!isNaN(net) && !isNaN(marj)) {
