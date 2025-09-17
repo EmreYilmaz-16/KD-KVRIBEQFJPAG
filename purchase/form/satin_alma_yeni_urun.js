@@ -446,6 +446,7 @@ function updateOutput() {
         var At = getAktifTeklif(wrkRowId);
         try {
             const currency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === demandMoney);
+            console.log("Currency line 449", currency, At);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
             convertedsalePriceOther = (parseFloat(salePrice) * rate2) / rate1;
