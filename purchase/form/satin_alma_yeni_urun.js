@@ -242,7 +242,7 @@ uniqueProducts.forEach(productId => {
         const convertedSalePrice = (salePrice * rate2) / rate1;
 
         //var sm=convertedSalePrice/(netPrice*100)
-        var smx = convertedSalePrice.toFixed(2) - netPrice
+        var smx = parseFloat(convertedSalePrice.toFixed(2)) - netPrice
         var smx2 = smx / netPrice;
         var smx3 = smx2 * 100
         // smx3=smx3.toFixed(2)
