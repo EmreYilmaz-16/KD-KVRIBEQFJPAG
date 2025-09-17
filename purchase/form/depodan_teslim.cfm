@@ -1,3 +1,6 @@
+<div style="display:none" id="current_template_path">
+  <cfoutput>#getCurrentTemplatePath()#</cfoutput>
+</div>
 <cfquery name="HAZIRLIK1" datasource="#dsn#">
    IF OBJECT_ID('CMP_PRICE_ALL', 'U') IS NOT NULL
     DROP TABLE CMP_PRICE_ALL;
