@@ -461,6 +461,7 @@ uniqueProducts.forEach(productId => {
         const cell = document.createElement('td');
 
         if (product) {
+            console.log("Ürün Bulundu:", product, "Tedarikçi:", supplier.FULLNAME);
             const cmqurrency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
             const cmqrate1 = parseFloat(cmqurrency?.RATE1 || 1);
             const cmqrate2 = parseFloat(cmqurrency?.RATE2 || 1);
