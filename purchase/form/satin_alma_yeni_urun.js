@@ -1,5 +1,5 @@
-﻿  data=mergeCompanies(data);
-    var ww_data=data;
+﻿data = mergeCompanies(data);
+var ww_data = data;
 
 
 
@@ -197,10 +197,10 @@ uniqueProducts.forEach(productId => {
             const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
-            if(otherMoney!=DEMAND_MONEY){
-            const converted = (calculatedSalePrice * rate1) / rate2;
-            }else{
-            const converted = calculatedSalePrice;
+            if (otherMoney != DEMAND_MONEY) {
+                const converted = (calculatedSalePrice * rate1) / rate2;
+            } else {
+                const converted = calculatedSalePrice;
             }
 
 
@@ -217,7 +217,7 @@ uniqueProducts.forEach(productId => {
         const rate2 = parseFloat(currency?.RATE2 || 1);
 
         const convertedSalePrice = (salePrice * rate2) / rate1;
-       
+
         //var sm=convertedSalePrice/(netPrice*100)
         var smx = convertedSalePrice - netPrice
         var smx2 = smx / netPrice;
@@ -269,17 +269,17 @@ uniqueProducts.forEach(productId => {
 
             let netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
 
-            if(DEMAND_MONEY==product.OTHER_MONEY){
+            if (DEMAND_MONEY == product.OTHER_MONEY) {
                 console.log("Aynı para birimi", DEMAND_MONEY, product.OTHER_MONEY);
                 netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${product.PRICE_OTHER.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
             }
 
             if (product.NET_PRICE === lowestNetPrice) {
                 netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
-                if(DEMAND_MONEY==product.OTHER_MONEY){
+                if (DEMAND_MONEY == product.OTHER_MONEY) {
                     console.log("Aynı para birimi 2", DEMAND_MONEY, product.OTHER_MONEY);
                     netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${product.PRICE_OTHER.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
-                
+
                 }
                 cell.title = 'En iyi teklif' + product.WRK_ROW_ID;
             }
@@ -311,8 +311,8 @@ uniqueProducts.forEach(productId => {
             }
 
             if (product.IS_SATINALMA === 1) {
-               // $("#send-btn").hide();
-               // $("#send-btn3").hide();
+                // $("#send-btn").hide();
+                // $("#send-btn3").hide();
             }
             if (!rowHasSatinalma && !rowHasOS) {
                 cell.classList.add('selectable');
@@ -534,7 +534,7 @@ document.getElementById('send-btn3').addEventListener('click', () => {
 
 updateBestSupplier();
 
-function SatinalmaSiparis(params,last_offer_id) {
+function SatinalmaSiparis(params, last_offer_id) {
     /* $.ajax({
        url: '/AddOns/Partner/purchase/cfc/purchase_Service.cfc?method=SAVEORDER_gpt&internal_id='+params,
        type: 'POST',
@@ -552,7 +552,7 @@ function SatinalmaSiparis(params,last_offer_id) {
        console.log("İşlem tamamlandı.");
      });*/
 
-    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&last_offer_id='+last_offer_id+'&internal_id=' + params, { // Correct endpoint
+    fetch('/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&last_offer_id=' + last_offer_id + '&internal_id=' + params, { // Correct endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
