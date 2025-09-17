@@ -234,7 +234,8 @@ uniqueProducts.forEach(productId => {
         const salePrice = parseFloat(salePriceInput.value.replace(',', '.')) || 0;
         const otherMoney = selectedKey?.split('|')[9];
         const netPrice = parseFloat(selectedKey?.split('|')[6]);
-        const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+        var At=getAktifTeklif(selectedKey?.split('|')[3]);
+        const currency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === DEMAND_MONEY);
         const rate1 = parseFloat(currency?.RATE1 || 1);
         const rate2 = parseFloat(currency?.RATE2 || 1);
 
