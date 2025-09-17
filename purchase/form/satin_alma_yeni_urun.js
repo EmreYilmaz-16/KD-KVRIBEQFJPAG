@@ -1,7 +1,21 @@
 ﻿data = mergeCompanies(data);
 var ww_data = data;
 
-
+function getAktifTeklif(wrkRowId) {
+    var AktifTeklif = null;
+    for (let i = 0; i < ww_data.length; i++) {
+        console.log(ww_data[i])
+        var pr = ww_data[i].URUNLER
+        console.log(pr)
+        var px = pr.findIndex(p => p.WRK_ROW_ID == wrkRowId)
+        console.log(px)
+        if (px >= 0) {
+            AktifTeklif = ww_data[i]
+            break;
+        }
+    }
+    return AktifTeklif;
+}
 
 var table = document.getElementById('price-table');
 var output = document.getElementById('output');
@@ -150,7 +164,7 @@ uniqueProducts.forEach(productId => {
 
     const lastPriceCell = document.createElement('td');
     lastPriceCell.setAttribute('data-hucre', "lastPriceCell");
-    
+
     if (last_price === 0) {
         lastPriceCell.textContent = "-";
     } else {
@@ -190,8 +204,13 @@ uniqueProducts.forEach(productId => {
         const selectedKey = selectedCells.get(productId);
         const net = parseFloat(selectedKey?.split('|')[6]);
         const marj = parseFloat(marjInput.value);
-        var net2=selectedKey?.split('|')[8];
-        console.log("Net2",net2)
+        var net2 = selectedKey?.split('|')[8];
+
+        var At=getAktifTeklif(selectedKey?.split('|')[3]);
+        console.log("Aktif Teklif", At)
+
+
+        console.log("Net2", net2)
         var converted = 0;
         console.log(selectedCells);
         if (!isNaN(net) && !isNaN(marj)) {
@@ -203,9 +222,9 @@ uniqueProducts.forEach(productId => {
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
             if (otherMoney != DEMAND_MONEY) {
-                 converted = (calculatedSalePrice * rate1) / rate2;
+                converted = (calculatedSalePrice * rate1) / rate2;
             } else {
-                 converted = calculatedSalePrice;
+                converted = calculatedSalePrice;
             }
 
 
