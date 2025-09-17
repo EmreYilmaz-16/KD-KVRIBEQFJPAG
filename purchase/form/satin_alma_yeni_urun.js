@@ -210,6 +210,7 @@ uniqueProducts.forEach(productId => {
         console.log("Aktif Teklif", At)
 
 
+
         console.log("Net2", net2)
         var converted = 0;
         console.log(selectedCells);
@@ -218,7 +219,7 @@ uniqueProducts.forEach(productId => {
 
             // Kur bilgisi için diğerMoney ve ilgili döviz kurları
             const otherMoney = selectedKey?.split('|')[9]; // 9. index = OTHER_MONEY
-            const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+            const currency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === DEMAND_MONEY);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
             if (otherMoney != DEMAND_MONEY) {
