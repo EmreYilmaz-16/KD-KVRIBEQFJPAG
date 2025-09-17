@@ -164,6 +164,7 @@ uniqueProducts.forEach(productId => {
     marjCell.appendChild(marjInput);
 
     const salePriceCell = document.createElement('td');
+    salePriceCell.setAttribute('data-hucre', "salePriceCell");
     const salePriceInput = document.createElement('input');
     salePriceInput.type = 'text';
     salePriceInput.value = slpInfo.SALE_PRICE != null ? slpInfo.SALE_PRICE.toFixed(2) : "";
@@ -211,6 +212,7 @@ uniqueProducts.forEach(productId => {
         const rate2 = parseFloat(currency?.RATE2 || 1);
 
         const convertedSalePrice = (salePrice * rate2) / rate1;
+       
         //var sm=convertedSalePrice/(netPrice*100)
         var smx = convertedSalePrice - netPrice
         var smx2 = smx / netPrice;
@@ -272,6 +274,7 @@ uniqueProducts.forEach(productId => {
                 if(DEMAND_MONEY==product.OTHER_MONEY){
                     console.log("Aynı para birimi 2", DEMAND_MONEY, product.OTHER_MONEY);
                     netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${product.PRICE_OTHER.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                
                 }
                 cell.title = 'En iyi teklif' + product.WRK_ROW_ID;
             }
