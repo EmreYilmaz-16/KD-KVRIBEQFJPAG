@@ -279,7 +279,8 @@ uniqueProducts.forEach(productId => {
         const cell = document.createElement('td');
 
         if (product) {
-            const cmqurrency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+            var At = getAktifTeklif(product.WRK_ROW_ID);
+            const cmqurrency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === DEMAND_MONEY);
             const cmqrate1 = parseFloat(cmqurrency?.RATE1 || 1);
             const cmqrate2 = parseFloat(cmqurrency?.RATE2 || 1);
             const cmqconvertedPrice = (parseFloat(product.NET_PRICE) / cmqrate2) * cmqrate1;
