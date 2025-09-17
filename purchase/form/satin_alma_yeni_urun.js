@@ -263,6 +263,7 @@ uniqueProducts.forEach(productId => {
             let netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
 
             if(DEMAND_MONEY==product.OTHER_MONEY){
+                console.log("Aynı para birimi", DEMAND_MONEY, product.OTHER_MONEY);
                 netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${product.PRICE_OTHER.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
             }
 
