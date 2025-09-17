@@ -12,6 +12,7 @@
     <cfargument name="OFFER_WRK_ROW_ID">
     <cfargument name="IS_FROM_DEMAND" default="0">
     <cfargument name="eta_kodu" default="">
+    <cfargument name="acc_code_cat" default="">
 <cftry>
     <cfquery name="GETPCAT" datasource="#DSN#_product">
         SELECT * FROM PRODUCT_CAT WHERE PRODUCT_CATID=#arguments.PRODUCT_CATID#
@@ -57,6 +58,7 @@
         sales_money = "TL"
         cesit_adi='';
         purchase_money = "TL"
+        account_code = "#arguments.acc_code_cat#"
     </cfscript>
     <cfset attributes.HIERARCHY =GETPCAT.HIERARCHY>
     
