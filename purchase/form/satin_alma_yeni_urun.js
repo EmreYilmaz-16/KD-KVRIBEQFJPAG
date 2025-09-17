@@ -149,6 +149,7 @@ uniqueProducts.forEach(productId => {
     marjCell.appendChild(marjInput);
 
     const lastPriceCell = document.createElement('td');
+    lastPriceCell.setAttribute('data-hucre', "lastPriceCell");
     if (last_price === 0) {
         lastPriceCell.textContent = "-";
     } else {
