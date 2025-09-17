@@ -188,7 +188,7 @@ uniqueProducts.forEach(productId => {
         const selectedKey = selectedCells.get(productId);
         const net = parseFloat(selectedKey?.split('|')[6]);
         const marj = parseFloat(marjInput.value);
-
+        var converted = 0;
         if (!isNaN(net) && !isNaN(marj)) {
             const calculatedSalePrice = net + (net * marj / 100);
 
@@ -198,9 +198,9 @@ uniqueProducts.forEach(productId => {
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
             if (otherMoney != DEMAND_MONEY) {
-                const converted = (calculatedSalePrice * rate1) / rate2;
+                 converted = (calculatedSalePrice * rate1) / rate2;
             } else {
-                const converted = calculatedSalePrice;
+                 converted = calculatedSalePrice;
             }
 
 
