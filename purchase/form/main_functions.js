@@ -10,6 +10,7 @@ function mergeCompanies(data) {
             result.push({
                 FULLNAME: entry.FULLNAME,
                 COMPANY_ID: entry.COMPANY_ID,
+                OFFER_MONEY_ARR: entry.OFFER_MONEY_ARR,
                 URUNLER: [...entry.URUNLER]
             });
         }
