@@ -163,7 +163,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   </div>
   </div>
   
-
+test
   <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
 SELECT C.FULLNAME, C.COMPANY_ID, OFFER_ID,
