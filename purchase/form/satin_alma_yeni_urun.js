@@ -443,10 +443,9 @@ function updateOutput() {
             salePrice = parseFloat(salePriceInput.value) || 0;
         }
         let convertedsalePriceOther = 0;
-        var At = getAktifTeklif(wrkRowId);
+        
         try {
-            const currency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === demandMoney);
-            console.log("Currency line 449", currency, At);
+            const currency = MONEYARRRR.find(c => c.MONEY === demandMoney);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
             convertedsalePriceOther = (parseFloat(salePrice) * rate2) / rate1;
