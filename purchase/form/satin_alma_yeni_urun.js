@@ -197,8 +197,12 @@ uniqueProducts.forEach(productId => {
             const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
-
+            if(otherMoney!=DEMAND_MONEY){
             const converted = (calculatedSalePrice * rate1) / rate2;
+            }else{
+            const converted = calculatedSalePrice;
+            }
+
 
             salePriceInput.value = converted.toFixed(2);
         }
