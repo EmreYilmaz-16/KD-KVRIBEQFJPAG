@@ -222,12 +222,9 @@ uniqueProducts.forEach(productId => {
             const currency = At.OFFER_MONEY_ARR.find(c => c.MONEY_TYPE === DEMAND_MONEY);
             const rate1 = parseFloat(currency?.RATE1 || 1);
             const rate2 = parseFloat(currency?.RATE2 || 1);
-            if (otherMoney != DEMAND_MONEY) {
+            
                 converted = (calculatedSalePrice * rate1) / rate2;
-            } else {
-                converted = calculatedSalePrice;
-            }
-
+          
 
             salePriceInput.value = converted.toFixed(2);
         }
