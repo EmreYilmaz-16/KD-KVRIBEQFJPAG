@@ -1,3 +1,4 @@
+<cfinclude template="/v16/product/query/get_code_cat.cfm">
 <cfparam name="main_unit_id" default="0">
 <cfparam name="tax_purchase" default="20">
 <cfparam name="attributes.product_code2" default="">
@@ -180,6 +181,15 @@
                                         </cfoutput>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label ><cf_get_lang dictionary_id='37257.Muh Kod Grubu'></label>
+                                    <select name="acc_code_cat" id="acc_code_cat">
+									<option value=""><cf_get_lang dictionary_id='57734.Seçiniz'></option>
+									<cfoutput query="get_code_cat">
+										<option value="#pro_code_catid#" <cfif isdefined("product_period_cat_id") and product_period_cat_id eq pro_code_catid>selected</cfif>>#pro_code_cat_name#</option>
+									</cfoutput>
+								</select>
                                 </div>
                                 <div class="form-group" id="item-tax_purchase">
                                     <label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='37631.Alis KDV'>*</label>

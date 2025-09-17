@@ -407,52 +407,20 @@
                 <span>Etiket Yazdır</span>
             </div>
 <cfoutput> 
-            <!--- İstatistikler
-            <div class="row mb-4 no-print">
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary">#getImportInfo.total_records#</h5>
-                            <p class="card-text small">Toplam Satır</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title text-success">#getImportInfo.success_records#</h5>
-                            <p class="card-text small">Başarılı</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title text-danger">#getImportInfo.error_records#</h5>
-                            <p class="card-text small">Hatalı</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title text-info">#getLabelData.recordCount#</h5>
-                            <p class="card-text small">Bu Sayfada</p>
-                        </div>
-                    </div>
-                </div>
-            </div> --->
+    
 </cfoutput>
             
-            
-
+            <cfset AllPrint="">
+<cfset ZPL_DATA_FULL="">
             <!-- Etiketler -->
             <div class="label-container label-size-medium" id="labelContainer" style="background-color: ##fff;">
                 <cfoutput> 
                 <!--- Sayfa başına 6 etiket olacak şekilde sayaç --->
                 <cfset labelCounter = 0>
+                <cfset ps=0>
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
+                    
                     <cfquery name="getStok" datasource="w3Qa">
                         SELECT TOP 1 PRODUCT_NAME 
                         FROM PBS_GETSTOCK 
@@ -465,6 +433,12 @@
                         <cfset yeni_seri_no = seri_no >
                         <!--- Etiket bloğu: tek tek sayfa kırma KALDIRILDI, 6 adette bir kırılacak --->
                         <cfset labelCounter = labelCounter + 1>
+                        <cfset ps = ps + 1>
+                        <cfset "TARIH#ps#"="#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#">
+                        <cfset "URUNKODU#ps#"="#eta_kodu#">
+                        <cfset "SERINO#ps#"="#yeni_seri_no#">
+                        <cfset "BARKOD#ps#"="#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+
                         <div class="mini-label">
                             <div class="top-code">#eta_kodu#</div>
                             <div class="left-meta ediv">#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#</div>
@@ -473,15 +447,8 @@
                                 <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
                                 <div class="qr-crop">
                                     <cftry>
-                                        <cf_pbs_barcode
-                                            value="#qr_data#"
-                                            type="qrcode"
-                                            width="206"  
-                                            height="206" 
-                                            show="1"
-                                            id="#qr_id#"
-                                            path="#ExpandPath('../temp/')#"
-                                            format="png">
+                                        #labelCounter# -- #ps#<br>
+                                        Metin1#ps# =#evaluate("Metin1#ps#")#
                                         <cfcatch>
                                             <!--- Hata durumunda basit QR placeholder --->
                                         </cfcatch>
@@ -491,82 +458,147 @@
                             <div class="right-meta">#yeni_seri_no#</div>
                         </div>
                         <!--- Her 5 etikette bir sayfa sonu --->
+                        
+                        <cfif ps eq 5>
+                            <cfsavecontent variable="zd">
+                                CT~~CD,~CC^~CT~
+                                ^XA
+                                ~TA000
+                                ~JSN
+                                ^LT0
+                                ^MNW
+                                ^MTD
+                                ^PON
+                                ^PMN
+                                ^LH0,0
+                                ^JMA
+                                ^PR4,4
+                                ~SD15
+                                ^JUS
+                                ^LRN
+                                ^CI27
+                                ^PA0,1,1,0
+                                ^XZ
+                                ^XA
+                                ^MMT
+                                ^PW1181
+                                ^LL236
+                                ^LS0
+                                ^FT34,228^BQN,2,6
+                                ^FH\^FDLA,#BARKOD1#^FS
+                                ^FT34,31^A0N,8,35^FH\^CI28^FD#URUNKODU1#^FS^CI27
+                                ^FT221,209^A0B,10,35^FH\^CI28^FD#SERINO1#^FS^CI27
+                                ^FT29,205^A0B,8,35^FH\^CI28^FD#TARIH1#^FS^CI27
+                                ^FT270,228^BQN,2,6
+                                ^FH\^FDLA,#BARKOD2#^FS
+                                ^FT270,31^A0N,8,35^FH\^CI28^FD#URUNKODU2#^FS^CI27
+                                ^FT457,209^A0B,10,35^FH\^CI28^FD#SERINO2#^FS^CI27
+                                ^FT265,205^A0B,8,35^FH\^CI28^FD#TARIH2#^FS^CI27
+                                ^FT506,228^BQN,2,6
+                                ^FH\^FDLA,#BARKOD3#^FS
+                                ^FT506,31^A0N,8,35^FH\^CI28^FD#URUNKODU3#^FS^CI27
+                                ^FT693,209^A0B,10,35^FH\^CI28^FD#SERINO3#^FS^CI27
+                                ^FT501,205^A0B,8,35^FH\^CI28^FD#TARIH3#^FS^CI27
+                                ^FT743,228^BQN,2,6
+                                ^FH\^FDLA,#BARKOD4#^FS
+                                ^FT743,31^A0N,8,35^FH\^CI28^FD#URUNKODU4#^FS^CI27
+                                ^FT930,209^A0B,10,35^FH\^CI28^FD#SERINO4#^FS^CI27
+                                ^FT738,205^A0B,8,35^FH\^CI28^FD#TARIH4#^FS^CI27
+                                ^FT979,228^BQN,2,6
+                                ^FH\^FDLA,#BARKOD5#^FS
+                                ^FT979,31^A0N,8,35^FH\^CI28^FD#URUNKODU5#^FS^CI27
+                                ^FT1166,209^A0B,10,35^FH\^CI28^FD#SERINO5#^FS^CI27
+                                ^FT974,205^A0B,8,35^FH\^CI28^FD#TARIH5#^FS^CI27
+                                ^PQ1,0,1,Y
+                                ^XZ
+                                
+                            </cfsavecontent>
+                            <cfset ZPL_DATA_FULL=ZPL_DATA_FULL&zd>
+                        </cfif>
                         <cfif labelCounter MOD 5 EQ 0>
+                            <cfset ps=0>
                             <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
                         </cfif>
-                        <!-----<div class="label-item">
-                            <div class="label-header">
-                                #marka# - ÜRÜN ETİKETİ
-                            </div>
-                            <div class="label-content">
-                                <div class="label-field">
-                                    <strong>ETA Kodu:</strong>
-                                    <span>#eta_kodu#</span>
-                                </div>
-                                <div class="label-field">
-                                    <strong>Seri No:</strong>
-                                    <span>#yeni_seri_no#</span>
-                                </div>
-                                <cfif isDate(uretim_tarihi)>
-                                    <div class="label-field">
-                                        <strong>Üretim:</strong>
-                                        <span>#DateFormat(uretim_tarihi, "dd/mm/yyyy")#</span>
-                                    </div>
-                                </cfif>
-                                <cfif isDate(paket_tarihi)>
-                                    <div class="label-field">
-                                        <strong>Paket:</strong>
-                                        <span>#DateFormat(paket_tarihi, "dd/mm/yyyy")#</span>
-                                    </div>
-                                </cfif>
-                                <div class="label-field">
-                                    <strong>Miktar:</strong>
-                                    <span>1.00</span> <!--- Her etiket için miktar 1 --->
-                                </div>
-                                <div class="label-field">
-                                    <strong>Etiket:</strong>
-                                    <span>#etiket_no# / #Int(miktar)#</span> <!--- Kaçıncı etiket olduğunu göster --->
-                                </div>
-                                <div class="label-field">
-                                    <strong>Ürün:</strong>
-                                    <span <cfif getStok.recordCount><cfelse>style='color:red;font-weight:bold'</cfif> > <cfif getStok.recordCount> #getStok.PRODUCT_NAME#<cfelse>Ürün Sisteme Kayıtlı Değil </cfif></span>
-                                </div>
-
-                                <!-- QR Code ile Birleştirilmiş Veri -->
-                                <div class="qr-code">
-                                    <div style="font-size: 10px; margin-bottom: 8px; font-weight: bold;">QR KOD:</div>
-                                    
-                                    <!--- Workcube Barcode Custom Tag ile QR kod oluştur --->
-                                    <cfset qr_data = "#eta_kodu#_#yeni_seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
-                                    <cfset qr_id = "qr_#temp_id#_#etiket_no#_#getTickCount()#">
-                                
-                                    
-                                    <cftry>
-                                        <cf_pbs_barcode 
-                                            value="#qr_data#" 
-                                            type="qrcode" 
-                                            width="100" 
-                                            height="100" 
-                                            show="1" 
-                                            id="#qr_id#"
-                                            path="#ExpandPath('../temp/')#"
-                                            format="png">
-                                    <cfcatch>
-                                        <!--- Hata durumunda basit QR placeholder göster --->
-                                        <div style="width: 100px; height: 100px; border: 2px solid ##000; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center;">
-                                            QR KOD<br>OLUŞTURULUYOR
-                                        </div>
-                                    </cfcatch>
-                                    </cftry>
-                                    
-                                    <div style="font-size: 8px; margin-top: 5px; word-break: break-all; line-height: 1.2;">
-                                        #qr_data#
-                                    </div>
-                                </div>
-                            </div>
-                        </div>---->
+                        
                     </cfloop> <!--- Etiket sayısı döngüsü sonu --->
                 </cfloop> <!--- Ana veri döngüsü sonu --->
+                
+                <!--- Kalan etiketler için ZPL oluştur (5'in katı olmayan durumlar için) --->
+                <cfif ps GT 0>
+                    <!--- Eksik pozisyonlar için boş değerler ayarla --->
+                    <cfloop from="#ps+1#" to="5" index="empty_pos">
+                        <cfset "TARIH#empty_pos#"="">
+                        <cfset "URUNKODU#empty_pos#"="">
+                        <cfset "SERINO#empty_pos#"="">
+                        <cfset "BARKOD#empty_pos#"="">
+                    </cfloop>
+                    
+                    <!--- Son grup için ZPL oluştur --->
+                    <cfsavecontent variable="zd_final">
+                        CT~~CD,~CC^~CT~
+                        ^XA
+                        ~TA000
+                        ~JSN
+                        ^LT0
+                        ^MNW
+                        ^MTD
+                        ^PON
+                        ^PMN
+                        ^LH0,0
+                        ^JMA
+                        ^PR4,4
+                        ~SD15
+                        ^JUS
+                        ^LRN
+                        ^CI27
+                        ^PA0,1,1,0
+                        ^XZ
+                        ^XA
+                        ^MMT
+                        ^PW1181
+                        ^LL236
+                        ^LS0
+                        <cfif evaluate("BARKOD1") NEQ "">
+                        ^FT34,228^BQN,2,6
+                        ^FH\^FDLA,#evaluate("BARKOD1")#^FS
+                        ^FT34,31^A0N,8,35^FH\^CI28^FD#evaluate("URUNKODU1")#^FS^CI27
+                        ^FT221,209^A0B,10,35^FH\^CI28^FD#evaluate("SERINO1")#^FS^CI27
+                        ^FT29,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH1")#^FS^CI27
+                        </cfif>
+                        <cfif evaluate("BARKOD2") NEQ "">
+                        ^FT270,228^BQN,2,6
+                        ^FH\^FDLA,#evaluate("BARKOD2")#^FS
+                        ^FT270,31^A0N,8,35^FH\^CI28^FD#evaluate("URUNKODU2")#^FS^CI27
+                        ^FT457,209^A0B,10,35^FH\^CI28^FD#evaluate("SERINO2")#^FS^CI27
+                        ^FT265,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH2")#^FS^CI27
+                        </cfif>
+                        <cfif evaluate("BARKOD3") NEQ "">
+                        ^FT506,228^BQN,2,6
+                        ^FH\^FDLA,#evaluate("BARKOD3")#^FS
+                        ^FT506,31^A0N,8,35^FH\^CI28^FD#evaluate("URUNKODU3")#^FS^CI27
+                        ^FT693,209^A0B,10,35^FH\^CI28^FD#evaluate("SERINO3")#^FS^CI27
+                        ^FT501,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH3")#^FS^CI27
+                        </cfif>
+                        <cfif evaluate("BARKOD4") NEQ "">
+                        ^FT743,228^BQN,2,6
+                        ^FH\^FDLA,#evaluate("BARKOD4")#^FS
+                        ^FT743,31^A0N,8,35^FH\^CI28^FD#evaluate("URUNKODU4")#^FS^CI27
+                        ^FT930,209^A0B,10,35^FH\^CI28^FD#evaluate("SERINO4")#^FS^CI27
+                        ^FT738,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH4")#^FS^CI27
+                        </cfif>
+                        <cfif evaluate("BARKOD5") NEQ "">
+                        ^FT979,228^BQN,2,6
+                        ^FH\^FDLA,#evaluate("BARKOD5")#^FS
+                        ^FT979,31^A0N,8,35^FH\^CI28^FD#evaluate("URUNKODU5")#^FS^CI27
+                        ^FT1166,209^A0B,10,35^FH\^CI28^FD#evaluate("SERINO5")#^FS^CI27
+                        ^FT974,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH5")#^FS^CI27
+                        </cfif>
+                        ^PQ1,0,1,Y
+                        ^XZ
+                        
+                    </cfsavecontent>
+                    <cfset ZPL_DATA_FULL=ZPL_DATA_FULL&zd_final>
+                </cfif>
                 </cfoutput>
             </div>            <cfif getLabelData.recordCount eq 0>
                 <div class="alert alert-warning text-center">
@@ -577,10 +609,31 @@
                     </a>
                 </div>
             </cfif>
-
+<cfoutput>ZPL_DATA=#ZPL_DATA_FULL#</cfoutput>
             <!-- Alt sayfalama kaldırıldı: tüm etiketler tek sayfada gösteriliyor -->
         </div>
     </div>
+    <cfset zplData = trim(ZPL_DATA_FULL)>
+    <cfif 1 EQ 1>
+      <!--- Tüm satır sonlarını CRLF yap (ZPL yazıcıları genelde sever) --->
+      <cfset zplData = replace(zplData, chr(13), "", "all")>
+      <cfset zplData = replace(zplData, chr(10), chr(13)&chr(10), "all")>
+    </cfif>
+      <cfset InetSocketAddress = createObject("java","java.net.InetSocketAddress")>
+    <cfset Socket            = createObject("java","java.net.Socket")>
+    <cfset addr = InetSocketAddress.init( trim("192.168.2.9"), javacast("int", 9100) )>
+    <cfset Socket.connect( addr, javacast("int", 5000 ) )>
+    <cfset Socket.setSoTimeout( javacast("int", 5000 ) )>
+
+<cfset os    = Socket.getOutputStream()>
+    <cfset bytes = createObject("java","java.lang.String").init( zplData ).getBytes( javacast("string", "US-ASCII" ) )>
+
+    <cfset os.write( bytes )>
+    <cfset os.flush()>
+    <cfset os.close()>
+    <cfset Socket.close()>
+
+    <p class="ok">✅ Gönderildi.</p>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
