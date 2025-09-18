@@ -307,7 +307,7 @@ FOR JSON PATH
   var BEI = 4;
 </script>
 <script>
-  <cfinclude template="depodan_teslim.js">
+  <cfinclude template="depodan_tedarik.js">
 </script>
 
 
