@@ -116,6 +116,7 @@ LEFT JOIN
                     P.PRICE_CATID							GPA_PRICE_CATID,
                     P.CATALOG_ID							GPA_CATALOG_ID,
                     CAST(P.PRICE_DISCOUNT AS DECIMAL(18,2))	GPA_DISCOUNT,
+                    w3qa_1.GET_DISCOUNT_RATE(TRY_CAST(REPLACE(O.OFFER_TO, ',', '') AS INT),P.PRICE_CATID,P.PRODUCT_ID) AS DSC_OX,
                     (			SELECT 
             
              (SELECT  CONVERT(DECIMAL(18,2),RATE2)  RATE2 FROM w3Qa.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
