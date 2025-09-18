@@ -61,8 +61,8 @@ function calculateFinalSalePrice(productId) {
     let rate2 = 1;
 
     if (DEMAND_MONEY != gpaMoney) {
-         rate1 = parseFloat(currency?.RATE1 || 1);
-         rate2 = parseFloat(currency?.RATE2 || 1);
+        rate1 = parseFloat(currency?.RATE1 || 1);
+        rate2 = parseFloat(currency?.RATE2 || 1);
     }
     // İlgili inputları bul
     const row = [...document.querySelectorAll('td.product-name')].find(td => td.dataset.productid == productId)?.parentElement;
@@ -174,15 +174,15 @@ headerRow.innerHTML += `
     Marj (%)<br>
     <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
-  <th>İskonto 1 (%)<br>
+  <th>Özel İskonto (%)<br>
     <input id="global-dsc1-input" onchange="setAllDsc1Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     
     </th>
-  <th>İskonto 2
+  <th>İskonto 1
     (%)<br>
     <input id="global-dsc2-input" onchange="setAllDsc2Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     </th>
-  <th>İskonto 3
+  <th>İskonto 2
     (%)<br>
     <input id="global-dsc3-input" onchange="setAllDsc3Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     </th>
@@ -297,7 +297,7 @@ uniqueProducts.forEach(productId => {
             }
 
 
-            convertedListPrice = product.NET_PRICE/ rate2;
+            convertedListPrice = product.NET_PRICE / rate2;
             listMoney = product.GPA_MONEY;
             //listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
             listPriceCell.innerHTML = `<div><span class="list-price-value">${listPrice.toFixed(2)}</span> <span class="list-price-money">${listMoney}</span></div>
@@ -343,7 +343,11 @@ uniqueProducts.forEach(productId => {
     const dsc1Cell = document.createElement('td');
     const dsc1Input = document.createElement('input');
     dsc1Input.type = 'number';
-    dsc1Input.value = slpInfo.DSC1 || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
+    if (slpInfo.DSC1) {
+        dsc1Input.value = slpInfo.DSC1 || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
+    } else {
+        dsc1Input.value = product.DSC_OX || 0;
+    } //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
     dsc1Input.className = 'form-control form-control-sm dsc1-input';
     dsc1Input.style.width = '80px';
     dsc1Cell.appendChild(dsc1Input);
@@ -454,7 +458,7 @@ uniqueProducts.forEach(productId => {
     });
 
     // Tek tedarikçi kontrolü - bu ürün için kaç tedarikçi var?
-    const suppliersWithThisProduct = data.filter(supplier => 
+    const suppliersWithThisProduct = data.filter(supplier =>
         supplier.URUNLER.find(p => p.PRODUCT_ID === productId)
     );
     const isSingleSupplier = suppliersWithThisProduct.length === 1;
@@ -513,8 +517,8 @@ uniqueProducts.forEach(productId => {
             }
 
             if (product.IS_SATINALMA === 1) {
-               // $("#send-btn").hide();
-              //  $("#send-btn3").hide();
+                // $("#send-btn").hide();
+                //  $("#send-btn3").hide();
             }
             if (!rowHasSatinalma && !rowHasOS) {
                 cell.classList.add('selectable');
@@ -590,7 +594,7 @@ uniqueProducts.forEach(productId => {
                     selectedCells.set(productId, cellKey);
                 }
             }
-            
+
             // Tek tedarikçi varsa otomatik seç
             if (isSingleSupplier && !rowHasSatinalma && !rowHasOS) {
                 const checkIcon = document.createElement('div');
