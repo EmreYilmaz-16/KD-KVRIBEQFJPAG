@@ -80,7 +80,7 @@ function calculateFinalSalePrice(productId) {
     const d3 = parseFloat(dsc3Input?.value) || 0;
 
     // Marj + kur dönüşümü
-    const base = gpaPrice1 + (gpaPrice1 * marj / 100);
+    const base = net + (net * marj / 100);
     const converted = (base * rate1) / rate2;
 
     // İskontolar
