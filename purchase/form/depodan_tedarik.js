@@ -343,10 +343,15 @@ uniqueProducts.forEach(productId => {
     const dsc1Cell = document.createElement('td');
     const dsc1Input = document.createElement('input');
     dsc1Input.type = 'number';
+    let productInfo = null;
+for (const supplier of data) {
+    productInfo = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+    if (productInfo) break;
+}
     if (slpInfo.DSC1) {
         dsc1Input.value = slpInfo.DSC1 || 0; //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
     } else {
-        dsc1Input.value = product.DSC_OX || 0;
+        dsc1Input.value = productInfo.DSC_OX || 0;
     } //#TODO: Burası İskonto 1 Kontrol Edecek Tabloya EKlenecek
     dsc1Input.className = 'form-control form-control-sm dsc1-input';
     dsc1Input.style.width = '80px';
