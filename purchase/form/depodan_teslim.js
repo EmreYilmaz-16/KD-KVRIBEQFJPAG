@@ -277,7 +277,8 @@ uniqueProducts.forEach(productId => {
     let listPriceCell = document.createElement('td');
     listPriceCell.className = 'product-list-price';
     listPriceCell.dataset.productid = productId;
-    listPriceCell.textContent = "-"; // Varsayılan olarak boş göster
+    listPriceCell.textContent = "-";
+    console.log(p)// Varsayılan olarak boş göster
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
         if (product && product.GPA_PRICE) {
