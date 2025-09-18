@@ -278,9 +278,10 @@ uniqueProducts.forEach(productId => {
     listPriceCell.className = 'product-list-price';
     listPriceCell.dataset.productid = productId;
     listPriceCell.textContent = "-";
-    console.log(p)// Varsayılan olarak boş göster
+    // Varsayılan olarak boş göster
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+        console.log("Liste Fiyatı Kontrol Ediliyor:", productId, product);
         if (product && product.GPA_PRICE) {
             listPrice = product.GPA_PRICE;
             const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
