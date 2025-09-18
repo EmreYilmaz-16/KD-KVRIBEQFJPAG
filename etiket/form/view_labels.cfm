@@ -562,44 +562,42 @@
 ^FT45,206^BQN,2,5
 ^FH\^FDLA,#BARKOD1#^FS
 ^FT45,36^A0N,9,8^FH\^CI28^FD#URUNKODU1#^FS^CI27
-^FT203,191^A0B,7,5^FH\^CI28^FDSERINO1#^FS^CI27
-^FT35,191^A0B,8,8^FH\^CI28^FDTARIH1#^FS^CI27
+^FT203,191^A0B,7,5^FH\^CI28^FD#SERINO1#^FS^CI27
+^FT35,191^A0B,8,8^FH\^CI28^FD#TARIH1#^FS^CI27
 </cfif>
 <cfif evaluate("BARKOD2") NEQ "">
 ^FT281,206^BQN,2,5
 ^FH\^FDLA,#BARKOD2#^FS
 ^FT281,36^A0N,9,8^FH\^CI28^FD#URUNKODU2#^FS^CI27
-^FT439,191^A0B,7,5^FH\^CI28^FDSERINO2#^FS^CI27
-^FT271,191^A0B,8,8^FH\^CI28^FDTARIH2#^FS^CI27
+^FT439,191^A0B,7,5^FH\^CI28^FD#SERINO2#^FS^CI27
+^FT271,191^A0B,8,8^FH\^CI28^FD#TARIH2#^FS^CI27
 </cfif>
 <cfif evaluate("BARKOD3") NEQ "">
 ^FT517,206^BQN,2,5
 ^FH\^FDLA,#BARKOD3#^FS
 ^FT517,36^A0N,9,8^FH\^CI28^FD#URUNKODU3#^FS^CI27
-^FT675,191^A0B,7,5^FH\^CI28^FDSERINO3#^FS^CI27
-^FT507,191^A0B,8,8^FH\^CI28^FDTARIH3#^FS^CI27
+^FT675,191^A0B,7,5^FH\^CI28^FD#SERINO3#^FS^CI27
+^FT507,191^A0B,8,8^FH\^CI28^FD#TARIH3#^FS^CI27
 </cfif>
 <cfif evaluate("BARKOD4") NEQ "">
 ^FT754,206^BQN,2,5
 ^FH\^FDLA,#BARKOD4#^FS
 ^FT754,36^A0N,9,8^FH\^CI28^FD#URUNKODU4#^FS^CI27
-^FT912,191^A0B,7,5^FH\^CI28^FDSERINO4#^FS^CI27
-^FT744,191^A0B,8,8^FH\^CI28^FDTARIH4#^FS^CI27
+^FT912,191^A0B,7,5^FH\^CI28^FD#SERINO4#^FS^CI27
+^FT744,191^A0B,8,8^FH\^CI28^FD#TARIH4#^FS^CI27
 </cfif>
 <cfif evaluate("BARKOD5") NEQ "">
 ^FT990,206^BQN,2,5
 ^FH\^FDLA,#BARKOD5#^FS
 ^FT990,36^A0N,9,8^FH\^CI28^FD#URUNKODU5#^FS^CI27
-^FT1148,191^A0B,7,5^FH\^CI28^FDSERINO5#^FS^CI27
-^FT980,191^A0B,8,8^FH\^CI28^FDTARIH5#^FS^CI27
+^FT1148,191^A0B,7,5^FH\^CI28^FD#SERINO5#^FS^CI27
+^FT980,191^A0B,8,8^FH\^CI28^FD#TARIH5#^FS^CI27
 </cfif>
 ^PQ1,0,1,Y
-^XZ                        
-                    </cfsavecontent>
-                    <cfsavecontent variable="zd_finalAA">
-                        
-                      
-                      
+^XZ
+</cfsavecontent>
+
+                      <cfsavecontent variable="zd2_final">
                       
                         CT~~CD,~CC^~CT~
                         ^XA
@@ -661,6 +659,7 @@
                         </cfif>
                         ^PQ1,0,1,Y
                         ^XZ
+                        
                     </cfsavecontent>
                     <cfset ZPL_DATA_FULL=ZPL_DATA_FULL&zd_final>
                 </cfif>
