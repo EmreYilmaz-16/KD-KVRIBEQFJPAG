@@ -118,7 +118,7 @@ LEFT JOIN
                     P.PRICE_CATID							GPA_PRICE_CATID,
                     P.CATALOG_ID							GPA_CATALOG_ID,
                     CAST(P.PRICE_DISCOUNT AS DECIMAL(18,2))	GPA_DISCOUNT,
-                    ,(			SELECT 
+                    (			SELECT 
             
              (SELECT  CONVERT(DECIMAL(18,2),RATE2)  RATE2 FROM w3Qa.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
              SELECT MAX(MONEY_HISTORY_ID) FROM w3Qa.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2
