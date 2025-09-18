@@ -40,6 +40,7 @@ function calculateFinalSalePrice(productId) {
     if (!selectedKey) return;
 
     const net = parseFloat(selectedKey?.split('|')[6]);
+    console.log("Net Price Extracted:", net);
     const gpaPrice = parseFloat(selectedKey?.split('|')[16]);
     const gpaPrice1 = parseFloat(selectedKey?.split('|')[17]);
     const gpaMoney = selectedKey?.split('|')[18];
