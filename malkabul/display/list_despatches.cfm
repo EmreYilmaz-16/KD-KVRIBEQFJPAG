@@ -4,7 +4,7 @@
     <button type="submit">Ara</button>
 </form>
 
-<cfquery name="getDespatches" datasource="#application.dsn#">
+<cfquery name="getDespatches" datasource="#dsn2#">
     SELECT S.SHIP_ID,
            S.SHIP_NUMBER,
            C.NICKNAME,
