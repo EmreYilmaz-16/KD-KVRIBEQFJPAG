@@ -1,6 +1,6 @@
-<form method="get" action="list_despatches.cfm" style="margin-bottom: 1rem;">
+<form method="get" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs" style="margin-bottom: 1rem;">
     <label for="search">Ara:</label>
-    <input type="text" id="search" name="search" placeholder="Sevk No veya Firma" value="#EncodeForHTML(URL.search)#">
+    <input type="text" id="search" name="search" placeholder="Sevk No veya Firma" value="<cfoutput>#EncodeForHTML(URL.search)#</cfoutput>">
     <button type="submit">Ara</button>
 </form>
 
