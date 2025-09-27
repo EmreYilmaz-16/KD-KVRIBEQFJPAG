@@ -1,3 +1,4 @@
+<cfparam name="url.search" default="">
 <form method="get" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs" style="margin-bottom: 1rem;">
     <label for="search">Ara:</label>
     <input type="text" id="search" name="search" placeholder="Sevk No veya Firma" value="<cfoutput>#EncodeForHTML(URL.search)#</cfoutput>">
