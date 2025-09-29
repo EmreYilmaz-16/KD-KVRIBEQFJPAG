@@ -47,7 +47,7 @@ WHERE SHIP_ID=3
 <script>
 var parser="";
 $(document).ready(function(){
-    
+    openBoxDraggable('index.cfm?fuseaction=purchase._emptypopup_read_despatch_rows_pbs&show_parser=1');
 });
 function setparser(params) {
     parser=params;
