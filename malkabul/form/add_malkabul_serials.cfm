@@ -1,3 +1,11 @@
+<cfif isDefined("attributes.show_parser")>
+    <cf_box title="Barkod Seç" scroll="1" collapsable="1" resize="1" popup_box="1">
+<button class="btn btn-primary" onclick="setparser(1)">Dönmez</button>
+<button class="btn btn-primary" onclick="setparser(2)">Diğerleri</button>
+</cf_box>
+<cfabort>
+</cfif>
+
 <cfquery name="getDespatchRow" datasource="#dsn2#">
    SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,
 (SELECT COUNT(*) FROM w3Qa_1.SERVICE_GUARANTY_NEW AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID) AS OMIK
@@ -37,6 +45,14 @@ WHERE SHIP_ID=3
     </cfoutput>
 </cf_grid_list>
 <script>
+var parser="";
+$(document).ready(function(){
+    
+});
+function setparser(params) {
+    parser=params;
+    console.log(parser);
+}
     function toggleSerials(productId) {
         var row = document.getElementById('serials_' + productId);
         if (row.style.display === 'none' || row.style.display === '') {
@@ -58,6 +74,7 @@ function checkSerial(input, event) {
        input.value = ''; // Giriş alanını temizle
    }
 }
+
 </script>
 
 </cf_box>
