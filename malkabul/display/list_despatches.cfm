@@ -6,15 +6,35 @@
 </form>
 
 <cfquery name="getDespatches" datasource="#dsn2#">
-    SELECT S.SHIP_ID,
-           S.SHIP_NUMBER,
-           C.NICKNAME,
-           S.SHIP_DATE
-      FROM w3Qa_2025_1.SHIP AS S
-      LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID = S.COMPANY_ID
-     WHERE PURCHASE_SALES = 0
-       AND DEPARTMENT_IN = 2
-       AND LOCATION_IN = 1
+   SELECT
+    S.SHIP_ID,
+    S.SHIP_NUMBER,
+    C.NICKNAME,
+    S.SHIP_DATE,
+    COALESCE(T.TotalAmount, 0)  AS TOTAL_AMOUNT,
+    COALESCE(G.GuaranteeCnt, 0) AS GUARANTY_COUNT
+FROM w3Qa_2025_1.SHIP AS S
+LEFT JOIN w3Qa.COMPANY AS C
+       ON C.COMPANY_ID = S.COMPANY_ID
+LEFT JOIN (
+    SELECT SR.SHIP_ID, SUM(SR.AMOUNT) AS TotalAmount
+    FROM w3Qa_2025_1.SHIP_ROW AS SR
+    GROUP BY SR.SHIP_ID
+) AS T
+       ON T.SHIP_ID = S.SHIP_ID
+LEFT JOIN (
+    SELECT SR.SHIP_ID, COUNT(*) AS GuaranteeCnt
+    FROM w3Qa_2025_1.SHIP_ROW AS SR
+    INNER JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG
+            ON SG.WRK_ROW_ID = SR.WRK_ROW_ID
+    GROUP BY SR.SHIP_ID
+) AS G
+       ON G.SHIP_ID = S.SHIP_ID
+WHERE S.PURCHASE_SALES = 0
+  AND S.DEPARTMENT_IN  = 2
+  AND S.LOCATION_IN    = 1
+ORDER BY S.SHIP_DATE DESC;
+
        <cfif StructKeyExists(URL, 'search') AND Len(Trim(URL.search)) GT 0>
            AND (S.SHIP_NUMBER LIKE '%#Trim(URL.search)#%' OR C.NICKNAME LIKE '%#Trim(URL.search)#%')
        </cfif>
@@ -62,6 +82,7 @@
                 <th>Sevk No</th>
                 <th>Firma</th>
                 <th>Sevk Tarihi</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
