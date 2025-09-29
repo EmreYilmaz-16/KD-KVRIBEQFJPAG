@@ -123,10 +123,11 @@ function checkSerial(input, event) {
                     console.log("Bulunan Seri No:", element.firstChild.innerText);
                     if(existingSerialNo === serial_no){
                         alert('Bu Seri No Daha Önce Girilmiştir.');
+                         input.value = ''; // Giriş alanını temizle
                         return;
                     }
                 }
-                
+
             if(serialsTable){
                 serialsTable.appendChild(tr);
             }
