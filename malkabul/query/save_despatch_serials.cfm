@@ -13,7 +13,7 @@
             <cfdump var="#serial#">
             <cfdump var="#isreaded#">
             <cfif isreaded eq "0">
-                <cfquery name="insSerial" datasource="#application.dsn#">
+                <cfquery name="insSerial" datasource="#dsn3#">
                     INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW (
     STOCK_ID,
     SERIAL_NO,
