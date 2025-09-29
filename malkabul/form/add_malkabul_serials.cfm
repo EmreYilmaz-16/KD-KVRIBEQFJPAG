@@ -86,7 +86,7 @@ function checkSerial(input, event) {
         paketleme_tarihi=serialNo.split("_")[3] //Paketleme Tarihi
         console.table({product_code_2,serial_no,uretim_tarihi,paketleme_tarihi});
         var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
-          console.log(row)
+          console.log("Bulunan Satır:", row);
        }
   
 
