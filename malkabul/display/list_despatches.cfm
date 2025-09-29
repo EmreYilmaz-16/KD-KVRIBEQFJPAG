@@ -95,14 +95,14 @@ ORDER BY S.SHIP_DATE DESC;
                     <td>
                         <cfif GUARANTY_COUNT GT 0>
                                 <cfif GUARANTY_COUNT EQ TOTAL_AMOUNT>
-                              <div style="background: ##00ff03;width: 25px;height: 25px;border-radius: 50%;"></div>
+                              <div style="background: ##00ff03;width: 25px;height: 25px;border-radius: 50%;" title="Tamamlandı"></div>
                         <cfelseif GUARANTY_COUNT LT TOTAL_AMOUNT>
-                            <div style="background: orange;width: 25px;height: 25px;border-radius: 50%;"></div>
-                        <cfelseif GUARANTY_COUNT EQ TOTAL_AMOUNT>
-                            <div style="background: ##0037ff;width: 25px;height: 25px;border-radius: 50%;"></div>
+                            <div style="background: orange;width: 25px;height: 25px;border-radius: 50%;" title="Eksik Giriş"></div>
+                        <cfelseif GUARANTY_COUNT GT TOTAL_AMOUNT>
+                            <div style="background: ##0037ff;width: 25px;height: 25px;border-radius: 50%;" title="Fazla Giriş"></div>
                         </cfif>
                         <cfelse>
-                            <div style="background: red;width: 25px;height: 25px;border-radius: 50%;"></div>
+                            <div style="background: red;width: 25px;height: 25px;border-radius: 50%;" title="Giriş Yok"></div>
                         </cfif>
                     </td>
                 </tr>
