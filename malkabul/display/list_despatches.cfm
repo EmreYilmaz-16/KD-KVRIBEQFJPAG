@@ -68,7 +68,7 @@
             <cfoutput query="getDespatches">
                 <tr>
                     <td>#EncodeForHTML(SHIP_ID)#</td>
-                    <td>#EncodeForHTML(SHIP_NUMBER)#</td>
+                    <td><a href="">"#EncodeForHTML(SHIP_NUMBER)#</a></td>
                     <td>#EncodeForHTML(NICKNAME)#</td>
                     <td>#EncodeForHTML(DateFormat(SHIP_DATE, "dd.mm.yyyy"))#</td>
                 </tr>
