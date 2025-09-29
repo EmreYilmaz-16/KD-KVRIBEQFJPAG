@@ -34,14 +34,15 @@
     PURCHASE_PARTNER_ID,
     IS_SARF,
     IS_SERI_SONU,
-    WRK_ID,
+    WRK_ROW_ID,
     RECORD_DATE,
     RECORD_EMP,
     RECORD_IP,
     UPDATE_DATE,
     UPDATE_IP,
     UNIT_TYPE,
-    UNIT_ROW_QUANTITY
+    UNIT_ROW_QUANTITY,
+    WRK_ID
 )
 VALUES (
     #row.stock_id#,
@@ -70,7 +71,8 @@ VALUES (
     NULL, -- UPDATE_DATE genellikle başlangıçta NULL'dur
     NULL, -- UPDATE_IP genellikle başlangıçta NULL'dur
     1,
-    1
+    1,
+    'WRK_#dateFormat(now(),"ddmmyyyy")#_#timeFormat(now(),"HHMMSS")#_#randRange(1000,9999)#'  -- WRK_ID benzersiz bir değer olmalıdır
 );
                 </cfquery>
             </cfif>
