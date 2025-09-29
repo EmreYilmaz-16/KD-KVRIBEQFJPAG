@@ -88,7 +88,7 @@ function setparser(params,modal_id) {
 
         if (((i + 2) % 2) == 0) {
             var rw = tablo.rows[i];
-        }
+        
         if (rw) {
             var wrk_row_id = rw.getAttribute("data-wrk_row_id");
             var product_id = rw.getAttribute("data-product_id");
@@ -117,6 +117,7 @@ function setparser(params,modal_id) {
             };  
             console.log(O);
         }
+    }
 
     }
 }
