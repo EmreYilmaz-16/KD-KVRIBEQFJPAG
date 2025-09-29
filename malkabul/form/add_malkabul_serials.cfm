@@ -202,11 +202,12 @@ function GetRows() {
                         var cells = rows[j].getElementsByTagName('td');
                         if (cells.length > 0) {
                             var serialNo = cells[0].innerText.trim();
+                            var isreaded = rows[j].getAttribute("data-readed");
                             if (serialNo) {
-                                serials.push(serialNo);
+                                serials.push(serialNo+"||"+isreaded);
                             }
                         }
-                        var isreaded = rows[j].getAttribute("data-readed");
+                        
                     }
                 }
                 var O = {
