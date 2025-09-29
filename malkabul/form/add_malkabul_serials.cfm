@@ -15,7 +15,7 @@ WHERE SHIP_ID=3
 </cf_box>
 <cf_box title="Despatch Row Details">
 
-<table>
+<cf_grid_list>
     <cfoutput query="getDespatchRow" group="PRODUCT_ID">
         <tr data-wrk_row_id="#WRK_ROW_ID#" data-product_id="#PRODUCT_ID#" data-stock_id="#STOCK_ID#" data-product_code_2="#PRODUCT_CODE_2#">
             
@@ -35,7 +35,7 @@ WHERE SHIP_ID=3
             </cfoutput>
         </cfif>
     </cfoutput>
-</table>
+</cf_grid_list>
 <script>
     function toggleSerials(productId) {
         var row = document.getElementById('serials_' + productId);
