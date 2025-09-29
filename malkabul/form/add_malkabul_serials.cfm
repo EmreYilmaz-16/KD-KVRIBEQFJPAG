@@ -7,13 +7,13 @@ LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID=SR.WRK_ROW_ID
 WHERE SHIP_ID=3
  ORDER BY PRODUCT_ID
 </cfquery>
-
+<cf_box>
 <div class="form-group">
     <label for="despatch_serials">Seri No</label>
     <input type="text" class="form-control" id="seri_no" name="seri_no" placeholder="Seri No" onkeydown="checkSerial(this,event)">
 </div>
-
-
+</cf_box>
+<cf_box title="Despatch Row Details">
 
 <table>
     <cfoutput query="getDespatchRow" group="PRODUCT_ID">
@@ -59,3 +59,5 @@ function checkSerial(input, event) {
    }
 }
 </script>
+
+</cf_box>
