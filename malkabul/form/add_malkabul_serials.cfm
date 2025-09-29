@@ -36,11 +36,18 @@ WHERE SHIP_ID=3
             
         </tr>
         <cfif OMIK GT 0>
-           <cfoutput> <tr id="serials_#PRODUCT_ID#">
+            <tr>
+                <td>
+                    <table id="serials_#PRODUCT_ID#">
+              
+           <cfoutput> <tr >
                 
-                <td colspan="2" style="font-style: italic;">#EncodeForHTML(SERIAL_NO)#</td>
+                <td colspan="4" style="font-style: italic;">#EncodeForHTML(SERIAL_NO)#</td>
             </tr>
             </cfoutput>
+            </table>
+              </td>
+            </tr>
         </cfif>
     </cfoutput>
 </cf_grid_list>
@@ -87,6 +94,14 @@ function checkSerial(input, event) {
         console.table({product_code_2,serial_no,uretim_tarihi,paketleme_tarihi});
         var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
           console.log("Bulunan Satır:", row);
+          if(row){
+            console.log("Satır bulundu, seri numarası ekleniyor.");
+            var wrk_row_id = row.getAttribute('data-wrk_row_id');
+            var product_id = row.getAttribute('data-product_id');
+            var stock_id = row.getAttribute('data-stock_id');
+
+
+          }
        }
   
 
