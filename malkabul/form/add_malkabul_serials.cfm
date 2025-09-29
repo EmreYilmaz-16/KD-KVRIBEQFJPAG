@@ -111,11 +111,16 @@ function checkSerial(input, event) {
             var wrk_row_id = row.getAttribute('data-wrk_row_id');
             var product_id = row.getAttribute('data-product_id');
             var stock_id = row.getAttribute('data-stock_id');
-
-
-          }
+            var tr=document.createElement("tr");
+            var td=document.createElement("td");
+            td.innerText=serial_no;
+            tr.appendChild(td);
+            var serialsTable = document.getElementById('serials_' + product_id);
+            if(serialsTable){
+                serialsTable.appendChild(tr);
+            }
        }
-  
+   }
 
        
        // Burada seri numarasını doğrulama ve ekleme işlemlerini yapabilirsiniz.
