@@ -119,8 +119,14 @@ function checkSerial(input, event) {
             var rws=serialsTable.getElementsByTagName("tr").length;
                 for (let index = 0; index < rws; index++) {
                     const element = serialsTable.getElementsByTagName("tr")[index];
+                    var existingSerialNo = element.firstChild.innerText;
                     console.log("Bulunan Seri No:", element.firstChild.innerText);
+                    if(existingSerialNo === serial_no){
+                        alert('Bu Seri No Daha Önce Girilmiştir.');
+                        return;
+                    }
                 }
+                
             if(serialsTable){
                 serialsTable.appendChild(tr);
             }
