@@ -68,7 +68,7 @@
             <cfoutput query="getDespatches">
                 <tr>
                     <td>#EncodeForHTML(SHIP_ID)#</td>
-                    <td><a href="">"#EncodeForHTML(SHIP_NUMBER)#</a></td>
+                    <td><a href="/index.cfm?fuseaction=purchase._emptypopup_read_despatch_rows_pbs&shipId=#EncodeForURL(SHIP_ID)#">"#EncodeForHTML(SHIP_NUMBER)#</a></td>
                     <td>#EncodeForHTML(NICKNAME)#</td>
                     <td>#EncodeForHTML(DateFormat(SHIP_DATE, "dd.mm.yyyy"))#</td>
                 </tr>
