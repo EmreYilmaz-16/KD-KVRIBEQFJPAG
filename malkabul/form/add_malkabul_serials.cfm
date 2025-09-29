@@ -38,14 +38,14 @@ WHERE SHIP_ID=3
         <cfif OMIK GT 0>
             <tr>
                 <td>
-                    <table id="serials_#PRODUCT_ID#">
-              
-           <cfoutput> <tr >
-                
-                <td colspan="4" style="font-style: italic;">#EncodeForHTML(SERIAL_NO)#</td>
-            </tr>
-            </cfoutput>
-            </table>
+                    <table id="serials_#PRODUCT_ID#">              
+                    <cfoutput> 
+                        <tr>
+                            
+                            <td colspan="4" style="font-style: italic;">#EncodeForHTML(SERIAL_NO)#</td>
+                        </tr>
+                    </cfoutput>
+                    </table>
               </td>
             </tr>
         </cfif>
