@@ -105,6 +105,7 @@ function checkSerial(input, event) {
         paketleme_tarihi=serialNo.split("_")[3] //Paketleme Tarihi
         console.table({product_code_2,serial_no,uretim_tarihi,paketleme_tarihi});
         var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
+        var totalQuantity=parseInt(row.children[1].innerText);
           console.log("Bulunan Satır:", row);
           if(row){
             console.log("Satır bulundu, seri numarası ekleniyor.");
@@ -126,7 +127,28 @@ function checkSerial(input, event) {
                          input.value = ''; // Giriş alanını temizle
                         return;
                     }
-                }
+                    var smc=parseInt(row.lastElementChild.innerText);
+                    smc++
+                    row.lastElementChild.innerText=smc;
+                    if(smc > totalQuantity){
+                        row.lastElementChild.setAttribute("style","background:ff00008a;font-weight:bold");
+                        input.value = ''; // Giriş alanını temizle
+                    }else if(smc == totalQuantity){
+                        row.lastElementChild.setAttribute("style","background:#00800063;font-weight:bold");
+                        input.value = ''; // Giriş alanını temizle
+                    }else{
+                        row.lastElementChild.setAttribute("style","background:#0079ff70;font-weight:bold;font-weight:bold");
+                        input.value = ''; // Giriş alanını temizle
+                    }
+                        
+/*
+row.lastElementChild.setAttribute("style","background:ff00008a;font-weight:bold");
+row.lastElementChild.setAttribute("style","background:#0079ff70;font-weight:bold");
+row.lastElementChild.setAttribute("style","background:#00800063;font-weight:bold");
+
+*/
+
+                
 
             if(serialsTable){
                 serialsTable.appendChild(tr);
