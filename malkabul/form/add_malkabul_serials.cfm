@@ -215,8 +215,8 @@ function GetRows() {
                     product_id: product_id,
                     stock_id: stock_id,
                     product_code_2: product_code_2,
-                    serials: serials,
-                    isreaded: isreaded
+                    serials: serials
+                   
                 };
                 console.log(O);
                 SendingArray.push(O);
