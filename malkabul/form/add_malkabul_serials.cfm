@@ -229,6 +229,7 @@ function GetRows() {
 }
 function savePaper() {
     var data = GetRows();
+    var paperData=getPaperData;
     // AJAX ile verileri sunucuya gönder
     console.log('Gönderilecek Veri:', data);
     var form=document.createElement("form");
@@ -238,7 +239,14 @@ function savePaper() {
     var input=document.createElement("input");
     input.type="hidden";
     input.name="data";
+    
     input.value=JSON.stringify(data);
+    form.appendChild(input);
+     var input=document.createElement("input");
+    input.type="hidden";
+    input.name="paperData";
+    
+    input.value=JSON.stringify(paperData);
     form.appendChild(input);
     form.submit();
     document.body.removeChild(form);
