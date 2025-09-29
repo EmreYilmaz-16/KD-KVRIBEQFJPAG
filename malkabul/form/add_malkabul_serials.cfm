@@ -371,6 +371,7 @@ WHERE SHIP_ID=#attributes.shipId#
                                 </h6>
                                 <table class="serial-table" id="serials_#PRODUCT_ID#">              
                                     <cfoutput> 
+                                        <cfif len(trim(SERIAL_NO)) NEQ 0>
                                         <tr data-readed="1" title="Önceden kaydedilmiş">
                                             <td>
                                                 <i class="fas fa-history"></i>
@@ -378,6 +379,7 @@ WHERE SHIP_ID=#attributes.shipId#
                                                 <small class="text-muted">(Mevcut)</small>
                                             </td>
                                         </tr>
+                                    </cfif>
                                     </cfoutput>
                                 </table>
                             </div>
