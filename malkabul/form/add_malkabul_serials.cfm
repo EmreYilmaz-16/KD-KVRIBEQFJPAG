@@ -18,7 +18,7 @@ WHERE SHIP_ID=3
 <table>
     <cfoutput query="getDespatchRow" group="PRODUCT_ID">
         <tr data-wrk_row_id="#WRK_ROW_ID#">
-            <th colspan="3" style="text-align: left; background-color: #f0f0f0; padding: 8px;">
+            <th colspan="3" style="text-align: left; background-color: ##f0f0f0; padding: 8px;">
                <a onclick="toggleSerials('#PRODUCT_ID#')"> #EncodeForHTML(PRODUCT_NAME)#</a>
             </th>
             <td>#EncodeForHTML(AMOUNT)#</td>
