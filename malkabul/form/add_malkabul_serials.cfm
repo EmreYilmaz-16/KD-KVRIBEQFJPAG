@@ -204,7 +204,7 @@ function GetRows() {
                             var serialNo = cells[0].innerText.trim();
                             var isreaded = rows[j].getAttribute("data-readed");
                             if (serialNo) {
-                                serials.push(serialNo+"||"+isreaded);
+                                serials.push(serialNo+"|"+isreaded);
                             }
                         }
                         
