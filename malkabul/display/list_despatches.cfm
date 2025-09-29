@@ -393,7 +393,7 @@
                 </thead>
                 <tbody>
                     <cfoutput query="getDespatches">
-                        <cfset formattedTotal = LSNumberFormat(TOTAL_AMOUNT, "#,##0.00")>
+                        <cfset formattedTotal = tlformat(TOTAL_AMOUNT)>
                         <cfset statusLabel = "Giriş Yok">
                         <cfset statusClass = "status-missing">
 
