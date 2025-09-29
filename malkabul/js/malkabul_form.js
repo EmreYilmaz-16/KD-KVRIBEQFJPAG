@@ -83,3 +83,5 @@ function checkSerial(input, event) {
         input.value = ''; // Giriş alanını temizle
     }
 }
+
+
