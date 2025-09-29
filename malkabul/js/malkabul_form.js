@@ -85,3 +85,46 @@ function checkSerial(input, event) {
 }
 
 
+function GetRows() {
+    var SendingArray = [];
+    var tablo = document.querySelector("#despatch_rows_table")
+    for (let i = 0; i < tablo.rows.length; i++) {
+
+        if (((i + 2) % 2) == 0) {
+            var rw = tablo.rows[i];
+
+            if (rw) {
+                var wrk_row_id = rw.getAttribute("data-wrk_row_id");
+                var product_id = rw.getAttribute("data-product_id");
+                var stock_id = rw.getAttribute("data-stock_id");
+                var product_code_2 = rw.getAttribute("data-product_code_2");
+                var serials = [];
+                var serialTable = document.getElementById('serials_' + product_id);
+                if (serialTable) {
+                    var rows = serialTable.getElementsByTagName('tr');
+                    for (var j = 0; j < rows.length; j++) {
+                        var cells = rows[j].getElementsByTagName('td');
+                        if (cells.length > 0) {
+                            var serialNo = cells[0].innerText.trim();
+                            if (serialNo) {
+                                serials.push(serialNo);
+                            }
+                        }
+                    }
+                }
+                var O = {
+                    wrk_row_id: wrk_row_id,
+                    product_id: product_id,
+                    stock_id: stock_id,
+                    product_code_2: product_code_2,
+                    serials: serials
+                };
+                console.log(O);
+                SendingArray.push(O);
+            }
+        }
+
+
+    }
+    console.log(SendingArray);
+}
