@@ -89,7 +89,7 @@ INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] (
 VALUES (
     '#serial#',    -- Metin/String değerler tırnak içinde olmalıdır
     1,             -- IS_ALIVE (Genellikle bit/boolean tipindedir)
-    #insResult.GENERATED_KEY#, -- Sayısal değerler tırnak içinde olmamalıdır
+    #insResult.IDENTITYCOL#, -- Sayısal değerler tırnak içinde olmamalıdır
     NULL,
     GETDATE(), -- Tarih değerleri tırnak içinde olmalıdır (Örn: '2025-09-29')
     NULL,                         -- Eğer henüz satılmadıysa NULL kullanabilirsiniz.
