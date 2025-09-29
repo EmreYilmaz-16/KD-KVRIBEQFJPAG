@@ -13,7 +13,7 @@
             <cfdump var="#serial#">
             <cfdump var="#isreaded#">
             <cfif isreaded eq "0">
-                <cfquery name="insSerial" datasource="#dsn3#">
+                <cfquery name="insSerial" datasource="#dsn3#" result="insResult">
                     INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW (
     STOCK_ID,
     SERIAL_NO,
@@ -75,7 +75,31 @@ VALUES (
     'WRK_#dateFormat(now(),"ddmmyyyy")#_#timeFormat(now(),"HHMMSS")#_#randRange(1000,9999)#'  -- WRK_ID benzersiz bir değer olmalıdır
 );
                 </cfquery>
+                <cfquery name="ins2">
+
+INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] (
+    [SERIAL_NUMBER],
+    [IS_ALIVE],
+    [IN_GUARANTY_ID],
+    [OUT_GUARANTY_ID],
+    [PURCHASE_DATE],
+    [SALE_DATE],
+    [STOCK_ID]
+)
+VALUES (
+    '#serial#',    -- Metin/String değerler tırnak içinde olmalıdır
+    1,             -- IS_ALIVE (Genellikle bit/boolean tipindedir)
+    #insResult.GENERATED_KEY#, -- Sayısal değerler tırnak içinde olmamalıdır
+    NULL,
+    GETDATE(), -- Tarih değerleri tırnak içinde olmalıdır (Örn: '2025-09-29')
+    NULL,                         -- Eğer henüz satılmadıysa NULL kullanabilirsiniz.
+    #row.stock_id#
+);
+                </cfquery>
             </cfif>
         </cfloop>
 </cfloop>
+<script>
+    window.location.href="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs";
+</script>
 <cfabort>
