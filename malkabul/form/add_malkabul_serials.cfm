@@ -65,7 +65,7 @@ function checkSerial(input, event) {
    if(event.key === 'Enter') {
        var serialNo = input.value.trim();
        if(serialNo === '') {
-           alert('Seri No boş olamaz.');,
+           alert('Seri No boş olamaz.');
            
            return;
        }
