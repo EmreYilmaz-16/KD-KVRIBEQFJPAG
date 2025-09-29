@@ -75,7 +75,7 @@ VALUES (
     'WRK_#dateFormat(now(),"ddmmyyyy")#_#timeFormat(now(),"HHMMSS")#_#randRange(1000,9999)#'  -- WRK_ID benzersiz bir değer olmalıdır
 );
                 </cfquery>
-                <cfquery name="ins2">
+                <cfquery name="ins2" datasource="#dsn3#">
 
 INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] (
     [SERIAL_NUMBER],
