@@ -63,7 +63,7 @@ function checkSerial(input, event) {
                 smc++
                 row.lastElementChild.innerText = smc;
                 if (smc > totalQuantity) {
-                    row.lastElementChild.setAttribute("style", "background:ff00008a;font-weight:bold");
+                    row.lastElementChild.setAttribute("style", "background:#ff00008a;font-weight:bold");
                     input.value = ''; // Giriş alanını temizle
                 } else if (smc == totalQuantity) {
                     row.lastElementChild.setAttribute("style", "background:#00800063;font-weight:bold");
