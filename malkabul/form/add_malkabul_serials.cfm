@@ -81,7 +81,7 @@ function setparser(params) {
         }
     }
 
-<cfinclude template="../js/malkabul_serials.js">
+<cfinclude template="/AddOns/Partner/malkabul/js/malkabul_form.js">
 </script>
 
 
