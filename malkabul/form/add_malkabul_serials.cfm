@@ -65,8 +65,26 @@ function checkSerial(input, event) {
    if(event.key === 'Enter') {
        var serialNo = input.value.trim();
        if(serialNo === '') {
-           alert('Seri No boş olamaz.');
+           alert('Seri No boş olamaz.');,
+           
            return;
+       }
+       if(parser === '') {
+           alert('Barkod Türü Seçmediniz Lütfen Sayfayı Yenileyiniz.');
+           return;
+       }
+       var product_code_2="";
+       var serial_no;
+       var uretim_tarihi="";
+       var paketleme_tarihi="";
+       if(parser==1){
+
+       }if(parser==2){
+        product_code_2=serialNo.split("_")[0] //Eta Kodu
+        serial_no=serialNo.split("_")[1] //Seri No
+        uretim_tarihi=serialNo.split("_")[2] //Üretim Tarihi
+        paketleme_tarihi=serialNo.split("_")[3] //Paketleme Tarihi
+        console.table({product_code_2,serial_no,uretim_tarihi,paketleme_tarihi});
        }
        // Burada seri numarasını doğrulama ve ekleme işlemlerini yapabilirsiniz.
        // Örneğin, AJAX ile sunucuya gönderip kontrol edebilirsiniz.
