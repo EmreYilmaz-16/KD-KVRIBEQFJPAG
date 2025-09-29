@@ -116,9 +116,15 @@ function checkSerial(input, event) {
             td.innerText=serial_no;
             tr.appendChild(td);
             var serialsTable = document.getElementById('serials_' + product_id);
+            var rws=serialsTable.getElementsByTagName("tr").length;
+                for (let index = 0; index < rws; index++) {
+                    const element = serialsTable.getElementsByTagName("tr")[index];
+                    console.log("Seri No:", element.firstChild.innerText);
+                }
             if(serialsTable){
                 serialsTable.appendChild(tr);
             }
+
        }
    }
 
