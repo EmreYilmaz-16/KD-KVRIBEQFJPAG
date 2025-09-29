@@ -1,7 +1,8 @@
 <cfif isDefined("attributes.show_parser")>
     <cf_box title="Barkod Seç" scroll="1" collapsable="1" resize="1" popup_box="1">
-<button class="btn btn-primary" onclick="setparser(1)">Dönmez</button>
-<button class="btn btn-primary" onclick="setparser(2)">Diğerleri</button>
+<button class="btn btn-primary" onclick="setparser(1,'<cfoutput>#attributes.modal_id#</cfoutput>')">Dönmez</button>
+<button class="btn btn-primary" onclick="setparser(2,'<cfoutput>#attributes.modal_id#</cfoutput>')">Diğerleri</button>
+
 </cf_box>
 <cfabort>
 </cfif>
@@ -56,9 +57,10 @@ var parser="";
 $(document).ready(function(){
     openBoxDraggable('index.cfm?fuseaction=purchase._emptypopup_read_despatch_rows_pbs&show_parser=1');
 });
-function setparser(params) {
+function setparser(params,modal_id) {
     parser=params;
     console.log(parser);
+    closeBoxDraggable(modal_id);
 }
     function toggleSerials(productId) {
         var serialTable = document.getElementById('serials_' + productId);
