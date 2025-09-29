@@ -7,7 +7,9 @@
     <cfdump var="#row#">
         <cfloop from="1" to="#arrayLen(row.serials)#" index="j">
             <cfset serial=row.serials[j]>
-            <cfdump var="#serial#">
+            <cfset serial=listFirst(serial,"||")>
+            <cfset isreaded=listLast(serial,"||")>
+            <cfif isreaded eq "0">
                 <cfquery name="insSerial" datasource="#application.dsn#">
                     INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW (
     STOCK_ID,
@@ -68,6 +70,7 @@ VALUES (
     1
 );
                 </cfquery>
+            </cfif>
         </cfloop>
 </cfloop>
 <cfabort>
