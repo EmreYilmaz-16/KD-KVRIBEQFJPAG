@@ -61,11 +61,23 @@ function setparser(params) {
     console.log(parser);
 }
     function toggleSerials(productId) {
-        var row = document.getElementById('serials_' + productId);
-        if (row.style.display === 'none' || row.style.display === '') {
-            row.style.display = 'table-row';
+        var serialTable = document.getElementById('serials_' + productId);
+        if (!serialTable) {
+            console.warn('Seri listesi bulunamadı:', productId);
+            return;
+        }
+
+        var containerRow = serialTable.closest('tr');
+        var target = containerRow || serialTable;
+
+        var isHidden = target.style.display === 'none' || window.getComputedStyle(target).display === 'none';
+
+        if (isHidden) {
+            target.style.display = '';
+            target.setAttribute('aria-hidden', 'false');
         } else {
-            row.style.display = 'none';
+            target.style.display = 'none';
+            target.setAttribute('aria-hidden', 'true');
         }
     }
 function checkSerial(input, event) {
