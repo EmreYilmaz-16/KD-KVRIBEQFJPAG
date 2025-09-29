@@ -83,6 +83,7 @@ function setparser(params,modal_id) {
         }
     }
     function GetRows() {
+        var SendingArray = [];
     var tablo = document.querySelector("#despatch_rows_table")
     for (let i = 0; i < tablo.rows.length; i++) {
 
@@ -116,8 +117,10 @@ function setparser(params,modal_id) {
                 serials: serials
             };  
             console.log(O);
+            SendingArray.push(O);
         }
     }
+    console.log(SendingArray);
 
     }
 }
