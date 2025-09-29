@@ -149,7 +149,7 @@ function setparser(params,modal_id) {
 
 
                     if (serialsTable) {
-
+                        tr.setAttribute("data-readed", "0");
                         serialsTable.appendChild(tr);
                     }
 
