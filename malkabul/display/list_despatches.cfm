@@ -92,6 +92,11 @@ ORDER BY S.SHIP_DATE DESC;
                     <td><a href="/index.cfm?fuseaction=purchase._emptypopup_read_despatch_rows_pbs&shipId=#EncodeForURL(SHIP_ID)#">"#EncodeForHTML(SHIP_NUMBER)#</a></td>
                     <td>#EncodeForHTML(NICKNAME)#</td>
                     <td>#EncodeForHTML(DateFormat(SHIP_DATE, "dd.mm.yyyy"))#</td>
+                    <td>
+                        <cfif GUARANTY_COUNT GT 0>
+                              1
+                        </cfif>
+                    </td>
                 </tr>
             </cfoutput>
         </tbody>
