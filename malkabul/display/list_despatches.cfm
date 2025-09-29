@@ -94,7 +94,15 @@ ORDER BY S.SHIP_DATE DESC;
                     <td>#EncodeForHTML(DateFormat(SHIP_DATE, "dd.mm.yyyy"))#</td>
                     <td>
                         <cfif GUARANTY_COUNT GT 0>
-                              1
+                                <cfif GUARANTY_COUNT EQ TOTAL_AMOUNT>
+                              <div style="background: ##00ff03;width: 25px;height: 25px;border-radius: 50%;"></div>
+                        <cfelseif GUARANTY_COUNT LT TOTAL_AMOUNT>
+                            <div style="background: orange;width: 25px;height: 25px;border-radius: 50%;"></div>
+                        <cfelseif GUARANTY_COUNT EQ TOTAL_AMOUNT>
+                            <div style="background: ##0037ff;width: 25px;height: 25px;border-radius: 50%;"></div>
+                        </cfif>
+                        <cfelse>
+                            <div style="background: red;width: 25px;height: 25px;border-radius: 50%;"></div>
                         </cfif>
                     </td>
                 </tr>
