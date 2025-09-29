@@ -25,6 +25,7 @@ function checkSerial(input, event) {
             var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
             var totalQuantity = parseInt(row.children[1].innerText);
             console.log("Bulunan Satır:", row);
+            var smc = parseInt(row.lastElementChild.innerText);
             if (row) {
                 console.log("Satır bulundu, seri numarası ekleniyor.");
                 var wrk_row_id = row.getAttribute('data-wrk_row_id');
@@ -45,30 +46,34 @@ function checkSerial(input, event) {
                         input.value = ''; // Giriş alanını temizle
                         return;
                     }
-                    var smc = parseInt(row.lastElementChild.innerText);
-                    smc++
-                    row.lastElementChild.innerText = smc;
-                    if (smc > totalQuantity) {
-                        row.lastElementChild.setAttribute("style", "background:ff00008a;font-weight:bold");
-                        input.value = ''; // Giriş alanını temizle
-                    } else if (smc == totalQuantity) {
-                        row.lastElementChild.setAttribute("style", "background:#00800063;font-weight:bold");
-                        input.value = ''; // Giriş alanını temizle
-                    } else {
-                        row.lastElementChild.setAttribute("style", "background:#0079ff70;font-weight:bold;font-weight:bold");
-                        input.value = ''; // Giriş alanını temizle
-                    }
+
+
 
 
 
 
 
                     if (serialsTable) {
+
                         serialsTable.appendChild(tr);
                     }
 
+
+                }
+                smc++
+                row.lastElementChild.innerText = smc;
+                if (smc > totalQuantity) {
+                    row.lastElementChild.setAttribute("style", "background:ff00008a;font-weight:bold");
+                    input.value = ''; // Giriş alanını temizle
+                } else if (smc == totalQuantity) {
+                    row.lastElementChild.setAttribute("style", "background:#00800063;font-weight:bold");
+                    input.value = ''; // Giriş alanını temizle
+                } else {
+                    row.lastElementChild.setAttribute("style", "background:#0079ff70;font-weight:bold;font-weight:bold");
+                    input.value = ''; // Giriş alanını temizle
                 }
             }
+
         }
 
 
