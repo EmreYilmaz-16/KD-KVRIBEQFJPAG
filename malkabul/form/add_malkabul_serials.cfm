@@ -536,7 +536,7 @@ function checkSerial(input, event) {
             input.value = '';
             return;
         }
-
+console.log(row);
         var totalQuantity = parseInt(row.children[3].innerText);
         var wrk_row_id = row.getAttribute('data-wrk_row_id');
         var product_id = row.getAttribute('data-product_id');
