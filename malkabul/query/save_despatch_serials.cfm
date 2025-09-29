@@ -7,8 +7,9 @@
     <cfdump var="#row#">
         <cfloop from="1" to="#arrayLen(row.serials)#" index="j">
             <cfset serial=row.serials[j]>
-            <cfset serial=listFirst(serial,"|")>
             <cfset isreaded=listLast(serial,"|")>
+            <cfset serial=listFirst(serial,"|")>
+            
             <cfdump var="#serial#">
             <cfdump var="#isreaded#">
             <cfif isreaded eq "0">
