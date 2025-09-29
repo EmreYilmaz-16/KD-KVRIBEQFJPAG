@@ -1,6 +1,6 @@
 <cfdump var="#attributes#" >
 <cfset FormData=deserializeJson(attributes.DATA)>
-<cfset paperData=deserializeJson(attributes.paperData)>
+<cfset BpaperData=deserializeJson(attributes.paperData)>
 <cfdump var="#FormData#">
 <cfloop from="1" to="#arrayLen(FormData)#" index="i">
     <cfset row=FormData[i]>
@@ -51,16 +51,16 @@ VALUES (
     0,
     0,
     0,
-    #paperData.SHIP_TYPE#,
-    #paperData.SHIP_ID#,
-    '#paperData.SHIP_NUMBER#',
+    #BpaperData.SHIP_TYPE#,
+    #BpaperData.SHIP_ID#,
+    '#BpaperData.SHIP_NUMBER#',
     #session.ep.period_id#,
-    #paperData.DEPARTMENT_IN#,
-    #paperData.LOCATION_IN#,
+    #BpaperData.DEPARTMENT_IN#,
+    #BpaperData.LOCATION_IN#,
     3,
     GETDATE(), -- Tarih ise tırnak içinde olmalı
-    #paperData.COMPANY_ID#,
-    #paperData.PARTNER_ID#,
+    #BpaperData.COMPANY_ID#,
+    #BpaperData.PARTNER_ID#,
     0,
     0,
     '#row.wrk_row_id#',
