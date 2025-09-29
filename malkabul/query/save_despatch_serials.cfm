@@ -1,6 +1,6 @@
 <cfdump var="#attributes#" >
 <cfset FormData=deserializeJson(attributes.DATA)>
-<cfset BpaperData=deserializeJson(attributes.paperData)>
+<cfset BpaperData=deserializeJson(attributes.paperData)[1]>
 <cfdump var="#FormData#">
 <cfloop from="1" to="#arrayLen(FormData)#" index="i">
     <cfset row=FormData[i]>
