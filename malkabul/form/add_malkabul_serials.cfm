@@ -141,12 +141,7 @@ function checkSerial(input, event) {
                         input.value = ''; // Giriş alanını temizle
                     }
                         
-/*
-row.lastElementChild.setAttribute("style","background:ff00008a;font-weight:bold");
-row.lastElementChild.setAttribute("style","background:#0079ff70;font-weight:bold");
-row.lastElementChild.setAttribute("style","background:#00800063;font-weight:bold");
 
-*/
 
                 
 
@@ -155,6 +150,7 @@ row.lastElementChild.setAttribute("style","background:#00800063;font-weight:bold
             }
 
        }
+    }
    }
 
        
