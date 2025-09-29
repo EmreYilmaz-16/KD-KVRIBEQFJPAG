@@ -1,3 +1,4 @@
+
 <cfif isDefined("attributes.show_parser")>
     <cf_box title="Barkod Seç" scroll="1" collapsable="1" resize="1" popup_box="1">
 <button class="btn btn-primary" onclick="setparser(1,'<cfoutput>#attributes.modal_id#</cfoutput>')">Dönmez</button>
@@ -6,6 +7,15 @@
 </cf_box>
 <cfabort>
 </cfif>
+<cfquery name="getPaperData" datasource="#dsn2#">
+  SELECT ( select SHIP_NUMBER,SHIP_TYPE,DEPARTMENT_IN,LOCATION_IN,COMPANY_ID,PARTNER_ID,SHIP_ID from w3Qa_2025_1.SHIP WHERE SHIP_ID=3 FOR JSON PATH) AS jsonData
+
+</cfquery>
+<script>
+    var getPaperData = <cfoutput>#getPaperData.jsonData#</cfoutput>;
+</script>
+
+
 
 <cfquery name="getDespatchRow" datasource="#dsn2#">
    SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,
