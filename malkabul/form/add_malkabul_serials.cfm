@@ -35,7 +35,7 @@ WHERE SHIP_ID=3
             <td>#EncodeForHTML(OMIK)#</td>
             
         </tr>
-        <cfif OMIK GT 0>
+        
             <tr>
                 <td>
                     <table id="serials_#PRODUCT_ID#">              
@@ -48,7 +48,7 @@ WHERE SHIP_ID=3
                     </table>
               </td>
             </tr>
-        </cfif>
+        
     </cfoutput>
 </cf_grid_list>
 <script>
