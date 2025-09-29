@@ -85,12 +85,12 @@ function checkSerial(input, event) {
         uretim_tarihi=serialNo.split("_")[2] //Üretim Tarihi
         paketleme_tarihi=serialNo.split("_")[3] //Paketleme Tarihi
         console.table({product_code_2,serial_no,uretim_tarihi,paketleme_tarihi});
-        var row = document.querySelector(
-  `tr[data-product_code_2="${product_code_2}"]`
-  console.log(row)
-  
-);
+        var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
+          console.log(row)
        }
+  
+
+       
        // Burada seri numarasını doğrulama ve ekleme işlemlerini yapabilirsiniz.
        // Örneğin, AJAX ile sunucuya gönderip kontrol edebilirsiniz.
        console.log('Girilen Seri No:', serialNo);
