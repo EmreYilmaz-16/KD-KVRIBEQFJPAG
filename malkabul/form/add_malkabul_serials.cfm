@@ -24,7 +24,7 @@ WHERE SHIP_ID=3
 </cf_box>
 <cf_box title="Despatch Row Details">
 
-<cf_grid_list>
+<cf_grid_list id="despatch_rows_table">
     <cfoutput query="getDespatchRow" group="PRODUCT_ID">
         <tr data-wrk_row_id="#WRK_ROW_ID#" data-product_id="#PRODUCT_ID#" data-stock_id="#STOCK_ID#" data-product_code_2="#PRODUCT_CODE_2#">
             
