@@ -9,6 +9,8 @@
             <cfset serial=row.serials[j]>
             <cfset serial=listFirst(serial,"||")>
             <cfset isreaded=listLast(serial,"||")>
+            <cfdump var="#serial#">
+            <cfdump var="#isreaded#">
             <cfif isreaded eq "0">
                 <cfquery name="insSerial" datasource="#application.dsn#">
                     INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW (
