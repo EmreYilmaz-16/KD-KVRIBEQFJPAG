@@ -512,7 +512,18 @@ function checkSerial(input, event) {
         // Barkod tipine göre parsing
         if (parser == 1) {
             // Dönmez barkod formatı
-            serial_no = serialNo;
+            //var barcode="700 382 0016-1-3-23.05.2025-3ZEZPKYRGEEZ"
+            var barcodeArr=serialNo.split("-")
+            if (barcodeArr.length < 2) {
+                showNotification('Geçersiz barkod formatı! Beklenen format: ETA_SERI_URETIM_PAKETLEME', 'error');
+                return;
+            }
+             product_code_2=barcodeArr[0].slice(0,7)
+             uretim_tarihi=barcodeArr[3] || "";
+             paketleme_tarihi=barcodeArr[3] || "";
+             serial_no=barcodeArr[4]
+            console.table({product_code_2,uretim_tarihi,paketleme_tarihi,serial_no})
+            //serial_no = serialNo;
             // Burada Dönmez'e özel parsing yapılabilir
         } else if (parser == 2) {
             // Diğer barkod formatı: ETA_SERI_URETIM_PAKETLEME
