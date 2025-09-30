@@ -11,7 +11,7 @@ document.getElementById("workcube_button").appendChild(btn)
 var txt=document.createElement("span")
 txt.innerText="Belge Para Biriminde Değişikllik Yaptıktan Sonra Fiyat Karşılaştırma Ekranını Kontrol Etmeyi Unutmayınız !"
 txt.setAttribute("style","color:red;font-weight:bold;margin-left:10px")
-document.querySelector("#item-doviz").appendChild(txt)
+document.getElementsByClassName("totalBox")[0].appendChild(txt)
 SanallariIsaretle();
 
 // Sepet tablosundaki tüm <tr> satırlarını gez
