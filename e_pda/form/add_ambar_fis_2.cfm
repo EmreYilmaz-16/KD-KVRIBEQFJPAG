@@ -517,7 +517,7 @@ document.addEventListener('keydown', function(e) {
 	if (e.keyCode === 13) { // Enter key
 		const barcode = DOM.getValue('add_other_barcod');
 		const shelf = DOM.getValue('add_other_shelf');
-		const serialNo = DOM.getValue('serial_number');
+		var serialNo = DOM.getValue('serial_number');
 		
 		// Priority: Serial No > Barcode
 		if (serialNo) {
