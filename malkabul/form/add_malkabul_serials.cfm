@@ -538,9 +538,13 @@ function checkSerial(input, event) {
         var existingRows = serialsTable.getElementsByTagName("tr");
         console.log("Mevcut Seri Satırları:", existingRows);
         
+        console.log("Seri Numaraları Kontrol Ediliyor ...");
         for (let i = 0; i < existingRows.length; i++) {
+            console.log("Mevcut Seri Satırı:", existingRows[i]);
             var existingSerialNo = existingRows[i].firstElementChild.innerText.replace(/.*?>/, '').trim();
+            console.log("Karşılaştırılıyor:", existingSerialNo, "==", parseResult.serial_no);
             if (existingSerialNo === parseResult.serial_no) {
+                console.log("Seri numarası zaten mevcut:", existingSerialNo);
                 showNotification('Bu seri numarası daha önce girilmiş!', 'error');
                 input.value = '';
                 return;
