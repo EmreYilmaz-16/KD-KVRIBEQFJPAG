@@ -341,7 +341,7 @@
 var bm=null;
 $(document).ready(function(){
 $(".header").hide()
-var bm=new BarcodeManager();
+ bm=new BarcodeManager();
 var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
