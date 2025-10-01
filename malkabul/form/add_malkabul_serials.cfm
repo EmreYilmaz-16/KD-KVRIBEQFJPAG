@@ -800,7 +800,7 @@ function parseBarcode(barcode, parserType) {
     if (parserType == 1) {
         return bm.parseWith(barcode,1);
     } else if (parserType == 2) {
-        return b.parseWith(barcode,2);
+        return bm.parseWith(barcode,2);
     }else if (parserType == 3) {
         return bm.parseWith(barcode,3);
     } 

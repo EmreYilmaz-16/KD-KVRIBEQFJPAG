@@ -622,6 +622,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 	
 	function add_row(barcode)
 	{
+		console.log('add_row called with barcode: ' + barcode);
 		{
 			  amount = document.getElementById('add_other_amount').value;
 			  if(amount == 0)
@@ -662,6 +663,7 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 	}
 	function add_row_with_serial_no(serialc_)
 	{
+		console.log('add_row_with_serial_no called with serial: ' + serialc_);
 		{
 			  amount = document.getElementById('add_other_amount').value;
 			  if(amount == 0)
