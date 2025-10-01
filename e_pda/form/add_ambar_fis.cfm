@@ -405,7 +405,7 @@ for(var i=0;i<parsers.length;i++){
 
 		
 		if(serial.length>0){
-			var SerialObject = bm.parseWith(barkod, parseInt(document.getElementById('BarcodeParser').value));
+			var SerialObject = bm.parseWith(serial, parseInt(document.getElementById('BarcodeParser').value));
 			console.log('Barcode parsed for serial number:', SerialObject);
 			if(SerialObject && SerialObject.serial_no){
 				serial = SerialObject.serial_no;
