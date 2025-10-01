@@ -316,59 +316,59 @@ class BarcodeManager {
 // ---- Kullanım Örnekleri ----
 
 // 1) Otomatik tespit
-const bm = new BarcodeManager({ normalizeDates: true, strict: false });
+// const bm = new BarcodeManager({ normalizeDates: true, strict: false });
 
-console.log('--- Auto Detect (Dönmez) ---');
-console.log(
-  bm.parse('K03.0791-A-1-2025-09-01-ABC123') // not: fazla parça varsa da ilk 5’i işler
-);
+// console.log('--- Auto Detect (Dönmez) ---');
+// console.log(
+//   bm.parse('K03.0791-A-1-2025-09-01-ABC123') // not: fazla parça varsa da ilk 5’i işler
+// );
 
-console.log('--- Auto Detect (Diğer) ---');
-console.log(
-  bm.parse('ETA12345_000987_01.09.2025_2025/09/02')
-);
+// console.log('--- Auto Detect (Diğer) ---');
+// console.log(
+//   bm.parse('ETA12345_000987_01.09.2025_2025/09/02')
+// );
 
-// 2) Zorunlu parser ile
-console.log('--- Force Parser 1 ---');
-console.log(
-  bm.parse('K03.0791-A-1-20250901-XYZ999', 1)
-);
+// // 2) Zorunlu parser ile
+// console.log('--- Force Parser 1 ---');
+// console.log(
+//   bm.parse('K03.0791-A-1-20250901-XYZ999', 1)
+// );
 
-// 3) tryAll ile tüm sonuçları gör
-console.log('--- Try All ---');
-console.table(
-  bm.tryAll('ETA555_123456_20250901_02.09.2025').map(x => ({
-    parser: x.parser.name,
-    success: x.result.success,
-    serial_no: x.result.serial_no,
-    uretim_tarihi: x.result.uretim_tarihi,
-    paketleme_tarihi: x.result.paketleme_tarihi,
-    error: x.result.error || ''
-  }))
-);
+// // 3) tryAll ile tüm sonuçları gör
+// console.log('--- Try All ---');
+// console.table(
+//   bm.tryAll('ETA555_123456_20250901_02.09.2025').map(x => ({
+//     parser: x.parser.name,
+//     success: x.result.success,
+//     serial_no: x.result.serial_no,
+//     uretim_tarihi: x.result.uretim_tarihi,
+//     paketleme_tarihi: x.result.paketleme_tarihi,
+//     error: x.result.error || ''
+//   }))
+// );
 
-// 4) Yeni bir parser eklemek (örnek)
-// Format: ABC|SERI|URETIM|PAKET
-bm.registerParser({
-  id: 3,
-  name: 'PipeFormat',
-  priority: 150,
-  canParse: (s) => s.split('|').length >= 2,
-  parse: (s) => {
-    const p = s.split('|');
-    if (p.length < 2) {
-      return { success: false, error: 'Geçersiz PipeFormat (ABC|SERI|... )' };
-    }
-    return {
-      success: true,
-      product_code_2: p[0] || '',
-      serial_no: p[1] || '',
-      uretim_tarihi: p[2] || '',
-      paketleme_tarihi: p[3] || ''
-    };
-  }
-});
+// // 4) Yeni bir parser eklemek (örnek)
+// // Format: ABC|SERI|URETIM|PAKET
+// bm.registerParser({
+//   id: 3,
+//   name: 'PipeFormat',
+//   priority: 150,
+//   canParse: (s) => s.split('|').length >= 2,
+//   parse: (s) => {
+//     const p = s.split('|');
+//     if (p.length < 2) {
+//       return { success: false, error: 'Geçersiz PipeFormat (ABC|SERI|... )' };
+//     }
+//     return {
+//       success: true,
+//       product_code_2: p[0] || '',
+//       serial_no: p[1] || '',
+//       uretim_tarihi: p[2] || '',
+//       paketleme_tarihi: p[3] || ''
+//     };
+//   }
+// });
 
-// Test
-console.log('--- New Parser Test ---');
-console.log(bm.parse('ABC987|SR123|2025.09.03|03/09/2025'));
+// // Test
+// console.log('--- New Parser Test ---');
+// console.log(bm.parse('ABC987|SR123|2025.09.03|03/09/2025'));
