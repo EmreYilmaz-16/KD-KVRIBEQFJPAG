@@ -202,7 +202,7 @@
 		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Parser</option>
-				
+
 			</select>
 		</div>
     <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
@@ -338,9 +338,14 @@
   </div>
 </cfform>------------>
 <script language="javascript" type="text/javascript">
+var bm=null;
 $(document).ready(function(){
 $(".header").hide()
-})
+var bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
 
 	document.getElementById('add_other_barcod').focus();
 	setTimeout("document.getElementById('add_other_barcod').select();",1000);
