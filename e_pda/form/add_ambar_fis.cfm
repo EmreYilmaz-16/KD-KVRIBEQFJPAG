@@ -664,6 +664,10 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 	function add_row_with_serial_no(serialc_)
 	{
 		console.log('add_row_with_serial_no called with serial: ' + serialc_);
+		var serialObj=bm.parseWith(serialc_,parseInt(document.getElementById('BarcodeParser').value));
+		if(serialObj && serialObj.serial_no){
+			serialc_=serialObj.serial_no;
+		}
 		{
 			  amount = document.getElementById('add_other_amount').value;
 			  if(amount == 0)
