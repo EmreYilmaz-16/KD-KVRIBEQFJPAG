@@ -518,7 +518,7 @@ document.addEventListener('keydown', function(e) {
 		const barcode = DOM.getValue('add_other_barcod');
 		const shelf = DOM.getValue('add_other_shelf');
 		const serialNo = DOM.getValue('serial_number');
-		
+		console.log('Enter pressed. Barcode:', barcode, 'Shelf:', shelf, 'Serial No:', serialNo);
 		// Priority: Serial No > Barcode
 		if (serialNo) {
 			var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
