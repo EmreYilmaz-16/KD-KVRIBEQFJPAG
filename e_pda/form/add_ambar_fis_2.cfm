@@ -156,9 +156,9 @@ function processProductQuery(sql, datasource, errorMessage) {
 		return false;
 	}
 	
-	FormState.stockId = product.STOCK_ID;
-	FormState.stockCode = product.PRODUCT_NAME;
-	FormState.barcode = product.BARCODE || '';
+	FormState.stockId = product.STOCK_ID[0];
+	FormState.stockCode = product.PRODUCT_NAME[0];
+	FormState.barcode = product.BARCODE[0] || '';
 	
 	DOM.focus('add_other_shelf');
 	setShelfs(FormState.stockId);
@@ -618,10 +618,10 @@ function searchShelf(shelfCode, useSerial = false) {
 	}
 	
 	// Update FormState
-	FormState.stockId = product.STOCK_ID;
-	FormState.stockCode = product.PRODUCT_NAME;
-	FormState.barcode = product.BARCODE;
-	FormState.shelfCode = product.SHELF_CODE;
+	FormState.stockId = product.STOCK_ID[0];
+	FormState.stockCode = product.PRODUCT_NAME[0];
+	FormState.barcode = product.BARCODE[0];
+	FormState.shelfCode = product.SHELF_CODE[0];
 	
 	console.table(FormState);
 	
