@@ -190,6 +190,12 @@ var Config = {
 					</cfoutput>
 				</select>
 			</div>
+			<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Parser</option>
+
+			</select>
+		</div>
 		</div>
 		<cf_ajax_list>
 			<thead>
@@ -325,6 +331,7 @@ var Config = {
 </cfform>
 --------------->
 <script type="text/javascript">
+
 // Utility functions
 function getId(id) {
 	return document.getElementById(id);
@@ -353,12 +360,18 @@ function resetForm() {
 		useSerialNo: false
 	});
 }
-
+var bm=null;
 // Main application functions
 $(document).ready(function(){
 	$(".header").hide();
 	getId('add_other_barcod').focus();
 	setTimeout(function() { getId('add_other_barcod').select(); }, 1000);
+	 bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
+
 });
 
 function generateActionId() {
