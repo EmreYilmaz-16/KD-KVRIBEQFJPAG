@@ -395,6 +395,7 @@ for(var i=0;i<parsers.length;i++){
 			'raf': raf,
 			'serial': serial
 		});
+
 		/**
 		 * Undocumented unknown
 		 * Eğer Seri No Varsa Seri Nolu Fonksiyonu Çağır 
@@ -404,6 +405,10 @@ for(var i=0;i<parsers.length;i++){
 
 		
 		if(serial.length>0){
+			var SerialObject = bm.parse(barkod, parseInt(document.getElementById('BarcodeParser').value));
+			if(SerialObject && SerialObject.serial_no){
+				serial = SerialObject.serial_no;
+			}
 			console.log('Serial number detected: ' + serial);
 			$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
 			var StockId_=get_stock_with_serial_no(serial);
