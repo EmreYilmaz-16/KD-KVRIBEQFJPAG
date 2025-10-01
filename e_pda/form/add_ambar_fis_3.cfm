@@ -642,7 +642,7 @@ document.onkeydown = function(e) {
 		inShelf: getId('add_in_shelf').value,
 		serial: serial_
 	};
-	if()
+	
 	console.log('Current inputs:', inputs);
 	console.log('Current AppState:', AppState);
 	
