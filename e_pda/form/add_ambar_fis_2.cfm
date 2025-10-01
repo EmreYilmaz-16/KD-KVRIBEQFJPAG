@@ -522,6 +522,7 @@ document.addEventListener('keydown', function(e) {
 		// Priority: Serial No > Barcode
 		if (serialNo) {
 			var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
+			console.log('Parsed Serial Object:', SerialObject);
 			if(SerialObject && SerialObject.serialNo){
 				handleSerialNoInput(SerialObject.serialNo, shelf);
 			}
