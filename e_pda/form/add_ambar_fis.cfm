@@ -552,9 +552,9 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		 	else
 		 	{	
 				
-				stockid = get_product.STOCK_ID;
-				stockcode = get_product.PRODUCT_NAME;
-				barcode = get_product.BARCODE;
+				stockid = get_product.STOCK_ID[0];
+				stockcode = get_product.PRODUCT_NAME[0];
+				barcode = get_product.BARCODE[0];
 				document.getElementById('add_other_shelf').focus();
 				set_shelfs_with_serial_no(serialno,stockid);
 				buton_kontrol();
