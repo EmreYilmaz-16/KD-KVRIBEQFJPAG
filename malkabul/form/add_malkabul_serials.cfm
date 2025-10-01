@@ -9,6 +9,9 @@
                 <button class="btn btn-success btn-lg parser-btn" onclick="setparser(1,'<cfoutput>#attributes.modal_id#</cfoutput>')">
                     <i class="fas fa-barcode"></i> Dönmez Barkod
                 </button>
+                <button class="btn btn-success btn-lg parser-btn" onclick="setparser(3,'<cfoutput>#attributes.modal_id#</cfoutput>')">
+                    <i class="fas fa-barcode"></i> Dönmez Yeni Barkod
+                </button>
                 <button class="btn btn-primary btn-lg parser-btn" onclick="setparser(2,'<cfoutput>#attributes.modal_id#</cfoutput>')">
                     <i class="fas fa-qrcode"></i> Diğer Barkodlar
                 </button>
@@ -793,11 +796,15 @@ function parseOtherBarcode(barcode) {
  * @returns {object} Parse edilen veri
  */
 function parseBarcode(barcode, parserType) {
+    var bm=new new BarcodeManager();
     if (parserType == 1) {
-        return parseDonmezBarcode(barcode);
+        return bm.parseWith(barcode,1);
     } else if (parserType == 2) {
-        return parseOtherBarcode(barcode);
-    } else {
+        return b.parseWith(barcode,2);
+    }else if (parserType == 3) {
+        return bm.parseWith(barcode,3);
+    } 
+    else {
         return {
             success: false,
             error: 'Geçersiz parser tipi: ' + parserType
