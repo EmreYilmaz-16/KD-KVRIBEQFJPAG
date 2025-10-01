@@ -33,6 +33,7 @@ class BarcodeManager {
     // Varsayılan parser'ları kaydet
     this.registerParser(BarcodeManager.defaultDonmezParser());
     this.registerParser(BarcodeManager.defaultOtherParser());
+    this.registerParser(BarcodeManager.defaultYeniDonmezParser());
   }
 
   /**
@@ -276,6 +277,36 @@ class BarcodeManager {
           uretim_tarihi: barcodeArr[3] || '',
           paketleme_tarihi: barcodeArr[3] || '',
           parser_type: 1
+        };
+        return result;
+      }
+    };
+  }
+    static defaultYeniDonmezParser() {
+    return {
+      id: 3,
+      name: 'Dönmez Yeni',
+      priority: 300,
+      canParse: (barcode) => {
+        // Heuristik: en az 5 parça ve 3.-4. kısımlar kısa, tarih/seri sonda
+        const parts = barcode.split('-');
+        return parts.length >= 5;
+      },
+      parse: (barcode) => {
+        const barcodeArr = barcode.split('-');
+        if (barcodeArr.length < 5) {
+          return {
+            success: false,
+            error: 'Geçersiz Dönmez barkod formatı! Beklenen: XXXXXX-X-X-TARİH-SERİ'
+          };
+        }
+        const result = {
+          success: true,
+          product_code_2: (barcodeArr[0]+" "+barcodeArr[1]),
+          serial_no: barcodeArr[5] || '',
+          uretim_tarihi: barcodeArr[4] || '',
+          paketleme_tarihi: barcodeArr[4] || '',
+          parser_type: 3
         };
         return result;
       }
