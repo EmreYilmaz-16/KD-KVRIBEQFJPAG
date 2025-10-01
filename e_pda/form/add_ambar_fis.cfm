@@ -347,6 +347,8 @@ for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
 
+})
+
 	document.getElementById('add_other_barcod').focus();
 	setTimeout("document.getElementById('add_other_barcod').select();",1000);
 	
