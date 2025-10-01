@@ -629,7 +629,7 @@ document.onkeydown = function(e) {
 	}
 	var serial_=getId('serial_number').value
 	if(getId('serial_number').value.length>0){
-		var SerialObject = bm.parseWith(serial, parseInt(document.getElementById('BarcodeParser').value));
+		var SerialObject = bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
 			console.log('Barcode parsed for serial number:', SerialObject);
 			if(SerialObject && SerialObject.serial_no){
 				serial_ = SerialObject.serial_no;
