@@ -744,10 +744,10 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 					}
 					else
 					{	
-						stockid = get_product.STOCK_ID;
-						stockcode = get_product.PRODUCT_NAME;
-						barcode = get_product.BARCODE;
-						shelf_code = get_product.SHELF_CODE; 
+						stockid = get_product.STOCK_ID[0];
+						stockcode = get_product.PRODUCT_NAME[0];
+						barcode = get_product.BARCODE[0];
+						shelf_code = get_product.SHELF_CODE[0]; 
 						buton_kontrol();
 						add_row(barcode);
 						document.getElementById('add_other_barcod').value = '';
@@ -807,10 +807,10 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 					}
 					else
 					{	
-						stockid = get_product.STOCK_ID;
-						stockcode = get_product.PRODUCT_NAME;
-						barcode = get_product.BARCODE;
-						shelf_code = get_product.SHELF_CODE; 
+						stockid = get_product.STOCK_ID[0];
+						stockcode = get_product.PRODUCT_NAME[0];
+						barcode = get_product.BARCODE[0];
+						shelf_code = get_product.SHELF_CODE[0];
 						serial_no = document.getElementById('serial_number').value;
 						buton_kontrol();
 						add_row_with_serial_no(serial_no);
