@@ -199,6 +199,12 @@
 				  </cfoutput> </cfoutput>
 			  </select>
 		</div>
+		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Parser</option>
+				
+			</select>
+		</div>
     <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
           <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
 	</div>
