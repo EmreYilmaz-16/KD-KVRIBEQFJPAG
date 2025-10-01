@@ -384,7 +384,7 @@ for(var i=0;i<parsers.length;i++){
 	
 	// Mobil uyumlu barcode işleme fonksiyonu
 	function processBarcode() {
-		console.log('Enter key pressed');
+		console.log('387 - Enter key pressed');
 		$("#loglar").append('<p>Enter key pressed</p>');
 		var barkod=$("#add_other_barcod").val().trim();
 		var raf=$("#add_other_shelf").val().trim();
@@ -405,7 +405,7 @@ for(var i=0;i<parsers.length;i++){
 
 		
 		if(serial.length>0){
-			var SerialObject = bm.parse(barkod, parseInt(document.getElementById('BarcodeParser').value));
+			var SerialObject = bm.parseWith(barkod, parseInt(document.getElementById('BarcodeParser').value));
 			console.log('Barcode parsed for serial number:', SerialObject);
 			if(SerialObject && SerialObject.serial_no){
 				serial = SerialObject.serial_no;
