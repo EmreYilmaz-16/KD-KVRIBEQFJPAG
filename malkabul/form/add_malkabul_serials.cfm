@@ -524,16 +524,19 @@ function checkSerial(input, event) {
             input.value = '';
             return;
         }
-        
-        console.log(row);
+
+        console.log("Satır Bilgileri Alınıyor ...");
         var totalQuantity = parseInt(row.children[1].innerText);
         var wrk_row_id = row.getAttribute('data-wrk_row_id');
         var product_id = row.getAttribute('data-product_id');
         var stock_id = row.getAttribute('data-stock_id');
+        console.log({totalQuantity, wrk_row_id, product_id, stock_id});
         
         // Seri numarasının daha önce girilip girilmediğini kontrol et
+        console.log("Seri numarası kontrol ediliyor:", parseResult.serial_no);
         var serialsTable = document.getElementById('serials_' + product_id);
         var existingRows = serialsTable.getElementsByTagName("tr");
+        console.log("Mevcut Seri Satırları:", existingRows);
         
         for (let i = 0; i < existingRows.length; i++) {
             var existingSerialNo = existingRows[i].firstElementChild.innerText.replace(/.*?>/, '').trim();
