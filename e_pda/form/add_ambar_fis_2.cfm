@@ -521,7 +521,10 @@ document.addEventListener('keydown', function(e) {
 		
 		// Priority: Serial No > Barcode
 		if (serialNo) {
-			handleSerialNoInput(serialNo, shelf);
+			var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
+			if(SerialObject && SerialObject.serialNo){
+				handleSerialNoInput(SerialObject.serialNo, shelf);
+			}
 		} else if (barcode) {
 			handleBarcodeInput(barcode, shelf);
 		}
