@@ -796,7 +796,7 @@ function parseOtherBarcode(barcode) {
  * @returns {object} Parse edilen veri
  */
 function parseBarcode(barcode, parserType) {
-    var bm=new new BarcodeManager();
+    var bm=new BarcodeManager();
     if (parserType == 1) {
         return bm.parseWith(barcode,1);
     } else if (parserType == 2) {
