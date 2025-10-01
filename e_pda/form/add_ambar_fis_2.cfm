@@ -243,6 +243,12 @@ function processProductQuery(sql, datasource, errorMessage) {
                   </cfoutput> </cfoutput>
               </select>
 			</div>
+			<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Parser</option>
+
+			</select>
+		</div>
 		</div>
 		<cf_ajax_list>
 			<thead>
@@ -363,10 +369,17 @@ function processProductQuery(sql, datasource, errorMessage) {
   </div>
 </cfform>--------->
 <script type="text/javascript">
+var bm=null;
 $(document).ready(function() {
 	$(".header").hide();
 	DOM.focus('add_other_barcod');
 	setTimeout(() => DOM.get('add_other_barcod').select(), 1000);
+ bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
+
 });
 
 function generateActionId() {
@@ -517,6 +530,7 @@ document.addEventListener('keydown', function(e) {
 
 function handleSerialNoInput(serialNo, shelf) {
 	console.log('Searching by Serial No:', serialNo);
+	var bm=new BarcodeManager();
 	const hasStock = getStockWithSerialNo(serialNo);
 	console.log('Stock found:', hasStock);
 	console.table(FormState);

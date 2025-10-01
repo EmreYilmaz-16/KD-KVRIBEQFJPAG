@@ -453,7 +453,7 @@ POZİSYON=SATIRLAR
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
-<cfabort>
-	<cflocation url="#request.self#?fuseaction=pda.form_add_ambar_fis" addtoken="No">
 
+	<cflocation url="#request.self#?fuseaction=pda.pda_welcome" addtoken="No">
+<cfabort>
 </cfif>
