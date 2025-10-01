@@ -117,6 +117,7 @@
   var islemtipi = 0;//0-ekle 1-çıkar
   var buton = 0;// <1-buton pasif, >0-buton aktif
 </script>
+<div style="display:none" name="PagePathPbs">e_pda\form\add_ambar_fis.cfm</div>
 <cf_box title="Mal Kabulden Ambara">
 	<cfform name="form_basket">
 		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
