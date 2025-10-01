@@ -504,52 +504,24 @@ function checkSerial(input, event) {
             return;
         }
 
-        var product_code_2 = "";
-        var serial_no;
-        var uretim_tarihi = "";
-        var paketleme_tarihi = "";
+        // Barkodu parse et
+        var parseResult = parseBarcode(serialNo, parser);
         
-        // Barkod tipine göre parsing
-        if (parser == 1) {
-            // Dönmez barkod formatı
-            //var barcode="700 382 0016-1-3-23.05.2025-3ZEZPKYRGEEZ"
-            var barcodeArr=serialNo.split("-")
-            if (barcodeArr.length < 2) {
-                showNotification('Geçersiz barkod formatı! Beklenen format: ETA_SERI_URETIM_PAKETLEME', 'error');
-                return;
-            }
-             product_code_2=barcodeArr[0].slice(0,7)
-             uretim_tarihi=barcodeArr[3] || "";
-             paketleme_tarihi=barcodeArr[3] || "";
-             serial_no=barcodeArr[4]
-            console.table({product_code_2,uretim_tarihi,paketleme_tarihi,serial_no})
-            //serial_no = serialNo;
-            // Burada Dönmez'e özel parsing yapılabilir
-        } else if (parser == 2) {
-            // Diğer barkod formatı: ETA_SERI_URETIM_PAKETLEME
-            var parts = serialNo.split("_");
-            if (parts.length < 2) {
-                showNotification('Geçersiz barkod formatı! Beklenen format: ETA_SERI_URETIM_PAKETLEME', 'error');
-                return;
-            }
-            
-            product_code_2 = parts[0]; // ETA Kodu
-            serial_no = parts[1]; // Seri No
-            uretim_tarihi = parts[2] || ""; // Üretim Tarihi
-            paketleme_tarihi = parts[3] || ""; // Paketleme Tarihi
-            
-            console.table({ product_code_2, serial_no, uretim_tarihi, paketleme_tarihi });
+        if (!parseResult.success) {
+            showNotification(parseResult.error, 'error');
+            return;
         }
 
         // Ürün satırını bul
-        var row = document.querySelector(`tr[data-product_code_2="${product_code_2}"]`);
+        var row = document.querySelector(`tr[data-product_code_2="${parseResult.product_code_2}"]`);
         
         if (!row) {
             showNotification('Bu ETA koduna ait ürün bulunamadı!', 'error');
             input.value = '';
             return;
         }
-console.log(row);
+        
+        console.log(row);
         var totalQuantity = parseInt(row.children[1].innerText);
         var wrk_row_id = row.getAttribute('data-wrk_row_id');
         var product_id = row.getAttribute('data-product_id');
@@ -561,7 +533,7 @@ console.log(row);
         
         for (let i = 0; i < existingRows.length; i++) {
             var existingSerialNo = existingRows[i].firstElementChild.innerText.replace(/.*?>/, '').trim();
-            if (existingSerialNo === serial_no) {
+            if (existingSerialNo === parseResult.serial_no) {
                 showNotification('Bu seri numarası daha önce girilmiş!', 'error');
                 input.value = '';
                 return;
@@ -576,7 +548,7 @@ console.log(row);
         var newCell = document.createElement("td");
         newCell.innerHTML = `
             <i class="fas fa-plus-circle text-success"></i>
-            ${serial_no}
+            ${parseResult.serial_no}
             <small class="text-success">(Yeni eklendi)</small>
         `;
         
@@ -709,6 +681,99 @@ function savePaper() {
     
     form.submit();
     document.body.removeChild(form);
+}
+
+/**
+ * Dönmez barkod formatını parse eder
+ * Format: 700 382 0016-1-3-23.05.2025-3ZEZPKYRGEEZ
+ * @param {string} barcode - Parse edilecek barkod
+ * @returns {object|null} Parse edilen veri veya null (hata durumunda)
+ */
+function parseDonmezBarcode(barcode) {
+    try {
+        var barcodeArr = barcode.split("-");
+        
+        if (barcodeArr.length < 5) {
+            return {
+                success: false,
+                error: 'Geçersiz Dönmez barkod formatı! Beklenen format: XXXXXX-X-X-TARİH-SERİ'
+            };
+        }
+        
+        var result = {
+            success: true,
+            product_code_2: barcodeArr[0].slice(0, 7),
+            serial_no: barcodeArr[4],
+            uretim_tarihi: barcodeArr[3] || "",
+            paketleme_tarihi: barcodeArr[3] || "",
+            parser_type: 1
+        };
+        
+        console.table(result);
+        return result;
+        
+    } catch (error) {
+        return {
+            success: false,
+            error: 'Dönmez barkod parse hatası: ' + error.message
+        };
+    }
+}
+
+/**
+ * Diğer barkod formatlarını parse eder
+ * Format: ETA_SERI_URETIM_PAKETLEME
+ * @param {string} barcode - Parse edilecek barkod
+ * @returns {object|null} Parse edilen veri veya null (hata durumunda)
+ */
+function parseOtherBarcode(barcode) {
+    try {
+        var parts = barcode.split("_");
+        
+        if (parts.length < 2) {
+            return {
+                success: false,
+                error: 'Geçersiz barkod formatı! Beklenen format: ETA_SERI_URETIM_PAKETLEME'
+            };
+        }
+        
+        var result = {
+            success: true,
+            product_code_2: parts[0], // ETA Kodu
+            serial_no: parts[1], // Seri No
+            uretim_tarihi: parts[2] || "", // Üretim Tarihi
+            paketleme_tarihi: parts[3] || "", // Paketleme Tarihi
+            parser_type: 2
+        };
+        
+        console.table(result);
+        return result;
+        
+    } catch (error) {
+        return {
+            success: false,
+            error: 'Barkod parse hatası: ' + error.message
+        };
+    }
+}
+
+/**
+ * Parser tipine göre barkodu parse eder
+ * @param {string} barcode - Parse edilecek barkod
+ * @param {number} parserType - Parser tipi (1: Dönmez, 2: Diğer)
+ * @returns {object} Parse edilen veri
+ */
+function parseBarcode(barcode, parserType) {
+    if (parserType == 1) {
+        return parseDonmezBarcode(barcode);
+    } else if (parserType == 2) {
+        return parseOtherBarcode(barcode);
+    } else {
+        return {
+            success: false,
+            error: 'Geçersiz parser tipi: ' + parserType
+        };
+    }
 }
 
 // Klavye kısayolları
