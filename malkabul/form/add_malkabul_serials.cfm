@@ -541,8 +541,19 @@ function checkSerial(input, event) {
         console.log("Seri Numaraları Kontrol Ediliyor ...");
         for (let i = 0; i < existingRows.length; i++) {
             console.log("Mevcut Seri Satırı:", existingRows[i]);
-            var existingSerialNo = existingRows[i].firstElementChild.innerText.replace(/.*?>/, '').trim();
+            
+            // HTML etiketlerini ve parantez içindeki metinleri temizle
+            var cellContent = existingRows[i].firstElementChild.innerText || existingRows[i].firstElementChild.textContent;
+            var existingSerialNo = cellContent
+                .replace(/<[^>]*>/g, '') // HTML etiketlerini kaldır
+                .replace(/\([^)]*\)/g, '') // Parantez içindeki metinleri kaldır
+                .replace(/\s+/g, ' ') // Birden fazla boşluğu tek boşluğa çevir
+                .trim();
+            
+            console.log("Ham içerik:", cellContent);
+            console.log("Temizlenmiş seri no:", existingSerialNo);
             console.log("Karşılaştırılıyor:", existingSerialNo, "==", parseResult.serial_no);
+            
             if (existingSerialNo === parseResult.serial_no) {
                 console.log("Seri numarası zaten mevcut:", existingSerialNo);
                 showNotification('Bu seri numarası daha önce girilmiş!', 'error');
@@ -610,7 +621,14 @@ function GetRows() {
                     for (var j = 0; j < rows.length; j++) {
                         var cells = rows[j].getElementsByTagName('td');
                         if (cells.length > 0) {
-                            var serialNo = cells[0].innerText.replace(/.*?>/, '').replace(/\(.*?\)/, '').trim();
+                            // HTML etiketlerini ve parantez içindeki metinleri temizle
+                            var cellContent = cells[0].innerText || cells[0].textContent;
+                            var serialNo = cellContent
+                                .replace(/<[^>]*>/g, '') // HTML etiketlerini kaldır
+                                .replace(/\([^)]*\)/g, '') // Parantez içindeki metinleri kaldır
+                                .replace(/\s+/g, ' ') // Birden fazla boşluğu tek boşluğa çevir
+                                .trim();
+                            
                             var isreaded = rows[j].getAttribute("data-readed") || "1";
                             if (serialNo) {
                                 serials.push(serialNo + "|" + isreaded);
