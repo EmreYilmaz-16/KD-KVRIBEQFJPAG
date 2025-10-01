@@ -36,12 +36,12 @@ h5{
     </tr>
         <tr>
     <td>
-     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/down30.png"><h5>Mal Kabulden Ambara</h5>&nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
+     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/down30.png"><h5>Mal Kabulden Ambara</h5>&nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span> <span style="color:red;font-weight:bold">Barkod Parçalama Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
     <td>
-     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_2</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/exit30.png"><h5>Ambardan Mal Kabule</h5> &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
+     <a href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_2</cfoutput>" class="tableyazi btncls"><img src="../../images/e-pd/exit30.png"><h5>Ambardan Mal Kabule</h5> &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span> <span style="color:red;font-weight:bold">Barkod Parçalama Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
@@ -60,7 +60,7 @@ h5{
 
     <td>  
 
-     <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_3</cfoutput>">  <img src="../../images/e-pd/shelf30.png"><h5>Raf Değiştir</h5>  &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span></a>
+     <a class="tableyazi btncls" href="<cfoutput>#request.self#?fuseaction=pda.form_add_ambar_fis_3</cfoutput>">  <img src="../../images/e-pd/shelf30.png"><h5>Raf Değiştir</h5>  &nbsp;<span style="color:green;font-weight:bold">Yapıldı !</span><span style="color:red;font-weight:bold">Barkod Parçalama Yapıldı !</span></a>
     </td>
     </tr>
         <tr>
