@@ -505,7 +505,9 @@ function checkSerial(input, event) {
         }
 
         // Barkodu parse et
+        console.log('Barkod parse ediliyor:', serialNo, 'Parser tipi:', parser);
         var parseResult = parseBarcode(serialNo, parser);
+        console.log('Parse sonucu:', parseResult);
         
         if (!parseResult.success) {
             showNotification(parseResult.error, 'error');
@@ -513,7 +515,9 @@ function checkSerial(input, event) {
         }
 
         // Ürün satırını bul
+        console.log("Ürün Satırı Aranıyor:", parseResult.product_code_2);
         var row = document.querySelector(`tr[data-product_code_2="${parseResult.product_code_2}"]`);
+        console.log("Bulunan Satır:", row);
         
         if (!row) {
             showNotification('Bu ETA koduna ait ürün bulunamadı!', 'error');
