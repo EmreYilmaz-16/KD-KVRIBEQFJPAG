@@ -1,6 +1,6 @@
 <cfscript>
 component output="false" {
-    public struct function isRegistered(required string serialNo) {
+    remote struct function isRegistered(required string serialNo) {
         var result = {exists = false};
         var q = queryExecute(
             "IF EXISTS (SELECT 1 FROM SERIAL_IN_OUT_PBS WITH (NOLOCK) WHERE SERIAL_NUMBER = :serial) SELECT 1 AS found",
