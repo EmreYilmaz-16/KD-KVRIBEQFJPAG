@@ -441,3 +441,16 @@
     </cfif>
 </div>
 
+<script>
+    document.addEventListener("keydown", getC);
+var fullText="";
+function getC(ev) {
+    //console.log("Key pressed:", ev.key, "KeyCode:", ev.keyCode);
+    //console.log("Full event object:", ev);
+    if(ev.keyCode !=13){
+        fullText+=ev.key;
+    }else{
+        console.log(fullText)
+    }
+}
+</script>
