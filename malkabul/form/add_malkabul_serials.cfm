@@ -517,6 +517,11 @@ function checkSerial(input, event) {
             return;
         }
         
+        if (await isSerialRegistered(parseResult.serial_no)) {
+            showNotification('Seri numarası sistemde mevcut.', 'error');
+            input.value = '';
+            return;
+        }
 
         // Ürün satırını bul
         console.log("Ürün Satırı Aranıyor:", parseResult.product_code_2);
