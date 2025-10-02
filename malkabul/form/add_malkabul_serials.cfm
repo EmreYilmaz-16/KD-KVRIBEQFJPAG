@@ -491,7 +491,7 @@ function updateProductStatus(productId, currentCount, totalQuantity) {
     }
 }
 
-function checkSerial(input, event) {
+async function checkSerial(input, event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         
