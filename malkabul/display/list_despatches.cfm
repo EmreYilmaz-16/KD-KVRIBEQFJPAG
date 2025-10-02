@@ -12,7 +12,7 @@
         </cfif>
     </div>
 
-    <form class="search-card" method="post" name="pfrom" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
+    <form class="search-card" method="post" name="pform" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
         <div class="search-input-group">
             <label for="search">Sevk No veya Firma</label>
             <div class="search-field">
@@ -486,6 +486,10 @@
                 }
 
                 console.log("Parsed keyword:", keyword, parsed ? parsed : "(not JSON)");
+                 if (parsed && parsed.no) {
+                        document.pform.search.value=keyword;
+                        document.pform.submit();
+                    }
                 resetBuffer();
                 return;
             }
