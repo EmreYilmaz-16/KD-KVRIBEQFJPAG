@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mal Kabul Seri Giriş Ekranı - Kullanım Kılavuzu</title>
+
+  <!-- Typography & Layout -->
+  <style>
+    :root{
+      --bg:#0f172a;         /* slate-900 */
+      --panel:#111827;      /* gray-900 */
+      --card:#0b1220;       /* custom dark card */
+      --text:#e5e7eb;       /* gray-200 */
+      --muted:#94a3b8;      /* slate-400 */
+      --accent:#22d3ee;     /* cyan-400 */
+      --accent-2:#86efac;   /* green-300 */
+      --danger:#f87171;     /* red-400 */
+      --warn:#fbbf24;       /* amber-400 */
+      --code:#1f2937;       /* gray-800 */
+      --table:#0b1220;
+      --link:#7dd3fc;       /* sky-300 */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg:#f8fafc;
+        --panel:#ffffff;
+        --card:#ffffff;
+        --text:#0f172a;
+        --muted:#475569;
+        --accent:#0ea5e9;
+        --accent-2:#16a34a;
+        --danger:#dc2626;
+        --warn:#d97706;
+        --code:#0f172a10;
+        --table:#ffffff;
+        --link:#0369a1;
+        --shadow: 0 10px 30px rgba(2,8,23,.08);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font: 16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background: radial-gradient(1200px 800px at 70% -10%, #0ea5e955, transparent 60%), var(--bg);
+    }
+    .container{max-width: 1000px; margin: 3rem auto; padding: 0 1.2rem;}
+    header{
+      position: sticky; top:0; z-index:999;
+      background: linear-gradient(180deg, rgba(15,23,42,.95), rgba(15,23,42,.75));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .header-inner{max-width:1000px; margin:0 auto; padding: .75rem 1.2rem; display:flex; align-items:center; gap:1rem}
+    .logo{
+      width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+      background: radial-gradient(120% 120% at 20% 20%, var(--accent), transparent 60%), radial-gradient(120% 120% at 80% 80%, var(--accent-2), transparent 60%), var(--card);
+      box-shadow: var(--shadow);
+      font-weight: 800; color:#001; letter-spacing:.5px;
+    }
+    .title{font-size: clamp(1rem, 1.4vw + .9rem, 1.5rem); font-weight:700; color:var(--text)}
+    .actions{margin-left:auto; display:flex; gap:.5rem}
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, #ffffff09, transparent);
+      color:var(--text); padding:.55rem .9rem; border-radius:12px; cursor:pointer; transition: all .2s ease;
+    }
+    .btn:hover{transform: translateY(-1px); border-color:rgba(255,255,255,.3)}
+    .btn.primary{border-color:transparent; background:linear-gradient(180deg, var(--accent), var(--accent-2)); color:#032; font-weight:700}
+    main{margin-top: 2rem;}
+    .hero{
+      background: linear-gradient(180deg, #0ea5e91a, transparent 60%), var(--panel);
+      padding: 1.4rem; border-radius: var(--radius); box-shadow: var(--shadow); border:1px solid rgba(255,255,255,.07);
+    }
+    .hero h1{margin:.2rem 0 0; font-size: clamp(1.2rem, 2.3vw + 1rem, 2rem)}
+    .hero p{margin:.4rem 0 0; color:var(--muted)}
+    .grid{display:grid; grid-template-columns: 280px 1fr; gap:1.4rem; margin-top:1.4rem}
+    @media (max-width: 900px){ .grid{grid-template-columns: 1fr} }
+
+    /* TOC */
+    .toc{
+      position:sticky; top:80px; align-self:start; background: var(--panel); border:1px solid rgba(255,255,255,.07);
+      border-radius: var(--radius); padding:1rem; box-shadow: var(--shadow);
+      max-height: calc(100vh - 120px); overflow:auto;
+    }
+    .toc h3{margin:0 0 .6rem; font-size: .95rem; letter-spacing:.3px; color: var(--muted)}
+    .toc a{
+      display:block; color:var(--text); text-decoration:none; padding:.35rem .5rem; border-radius:10px; margin:.1rem 0; font-size:.95rem
+    }
+    .toc a:hover{ background: #ffffff12 }
+    .toc .depth-3{ padding-left: 1.4rem; font-size:.9rem; color:var(--muted) }
+
+    /* Article */
+    article{
+      background: var(--panel); border:1px solid rgba(255,255,255,.07); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1.2rem 1.2rem;
+    }
+    article h2{ margin: 1.6rem 0 .4rem; font-size: 1.4rem; border-bottom:1px dashed rgba(255,255,255,.12); padding-bottom:.4rem }
+    article h3{ margin: 1rem 0 .3rem; font-size: 1.1rem; color: var(--accent) }
+    article p, article li{ color: var(--text) }
+    article code{ background: var(--code); padding:.15rem .35rem; border-radius:6px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: .95em }
+    pre{ background: var(--code); padding:1rem; border-radius:14px; overflow:auto; border:1px solid rgba(255,255,255,.06) }
+    blockquote{
+      margin: 1rem 0; padding: .8rem 1rem; background: linear-gradient(180deg, #22d3ee20, transparent 80%);
+      border-left: 4px solid var(--accent); border-radius: 12px;
+    }
+    .kdb{ display:inline-block; border:1px solid rgba(255,255,255,.18); background:#ffffff12; padding:.15rem .45rem; border-radius:8px; font-weight:600 }
+    table{ width:100%; border-collapse: collapse; background: var(--table); border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; }
+    thead th{ background: linear-gradient(180deg, #ffffff14, #00000002); text-align:left; padding:.7rem; font-size:.95rem }
+    tbody td, tbody th{ padding:.65rem .7rem; border-top:1px solid rgba(255,255,255,.06) }
+    tbody tr:hover{ background:#ffffff06 }
+    .badge{ display:inline-block; border-radius:999px; padding:.2rem .6rem; font-size:.8rem; border:1px solid rgba(255,255,255,.18); background:#ffffff10 }
+    .footer{
+      color:var(--muted); font-size:.9rem; margin-top:1rem; display:flex; gap:.7rem; flex-wrap:wrap;
+      justify-content:space-between; align-items:center
+    }
+    .sep{ opacity:.3 }
+    .top{
+      position: fixed; right: 18px; bottom: 18px; border-radius: 999px; padding:.6rem .8rem;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2)); color:#012; border:0; box-shadow:var(--shadow); cursor:pointer; font-weight:800
+    }
+    .label{ color: var(--muted); font-weight:600; font-size:.9rem }
+    .callout{ background:linear-gradient(180deg, #fbbf2418, transparent 70%); border:1px solid rgba(255,255,255,.12); padding:.9rem 1rem; border-radius: 12px; }
+    .kbd{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#ffffff18; padding:.15rem .4rem; border-radius:6px; border:1px solid rgba(255,255,255,.2) }
+    a{ color: var(--link) }
+    hr{ border:0; border-top:1px dashed rgba(255,255,255,.15); margin: 1.6rem 0 }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">MK</div>
+      <div class="title">Mal Kabul Seri Giriş Ekranı • Kullanım Kılavuzu</div>
+      <div class="actions">
+        <button class="btn" onclick="document.documentElement.requestFullscreen?.()">Tam ekran</button>
+        <button class="btn" onclick="window.print()">PDF olarak yazdır</button>
+        <button class="btn primary" onclick="location.hash='#icerik'">İçeriğe atla</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Mal Kabul Seri Giriş Ekranı Kullanım Kılavuzu</h1>
+      <p>Bu doküman, <code>add_malkabul_serials.cfm</code> sayfasını kullanan depo ve mal kabul personeli için hazırlanmıştır. Aşağıdaki adımlar barkod seçimi, seri numarası girişi ve kaydetme işlemlerinin tamamını kapsar.</p>
+      <div class="footer">
+        <span><span class="label">Sürüm:</span> <span class="badge">1.0</span></span>
+        <span class="sep">•</span>
+        <span><span class="label">Tema:</span> Sistem (Karanlık/Açık uyumlu)</span>
+        <span class="sep">•</span>
+        <span><span class="label">Kısayollar:</span> <span class="kbd">Ctrl</span> + <span class="kbd">S</span>, <span class="kbd">Esc</span></span>
+      </div>
+    </section>
+
+    <div class="grid">
+      <nav class="toc" id="toc">
+        <h3>İçindekiler</h3>
+        <!-- JS will inject -->
+      </nav>
+
+      <main>
+        <article id="icerik">
+          <h2 id="hazirlik">1. Hazırlık</h2>
+          <ul>
+            <li>Barkod okuyucunuzun klavye modu (keyboard wedge) ile çalıştığından emin olun.</li>
+            <li>İnternet tarayıcınızda açılan sayfayı kapatmadan önce tüm seri numaralarını tamamlayın; aksi durumda yaptığınız girişler kaybolur.</li>
+            <li>Seri numarasını manuel girecekseniz, numarayı eksiksiz kopyalayacak şekilde hazır bulundurun.</li>
+          </ul>
+
+          <h2 id="barkod-turu-secimi">2. Barkod Türü Seçimi</h2>
+          <p>Sayfa açılır açılmaz bir seçenek kutusu görüntülenir. Okutacağınız barkod yapısına göre aşağıdakilerden birini tıklayın:</p>
+          <ol>
+            <li><strong>Dönmez Barkod</strong> – Klasik Dönmez formatı (<code>XXXXXX-X-X-TARİH-SERİ</code>).</li>
+            <li><strong>Dönmez Yeni Barkod</strong> – Yeni Dönmez formatı (ürün bilgisi iki parçadan oluşur).</li>
+            <li><strong>Diğer Barkodlar</strong> – Alt çizgi (<code>_</code>) ile ayrılmış ETA kodları (<code>ETA_SERI_URETIM_PAKETLEME</code>).</li>
+          </ol>
+          <p>Seçimi yaptıktan sonra ekranın sağ üstünde kısa süreli <em>"Barkod türü seçildi"</em> bildirimi görünecek ve seri girişi alanına odak alınacaktır.</p>
+
+          <h2 id="seri-numarasi">3. Seri Numarası Okutma / Girme</h2>
+          <ol>
+            <li><strong>Seri Numarası</strong> alanına barkodu okutun veya manuel yazın.</li>
+            <li>Giriş tamamlandığında <span class="kbd">Enter</span> tuşuna basın.</li>
+            <li>Sistem barkodu doğrular ve şu kontrolleri sırasıyla yapar:
+              <ul>
+                <li>Barkod formatı seçtiğiniz türe uygun mu?</li>
+                <li>Seri numarası sistemde daha önce kayıtlı mı?</li>
+                <li>Barkoddaki ürün kodu listede bulunan satırlardan biriyle eşleşiyor mu?</li>
+                <li>Aynı seri numarası bu oturumda daha önce girildi mi?</li>
+              </ul>
+            </li>
+            <li>Tüm kontroller başarılıysa seri ilgili ürün satırının altına eklenir ve <em>"Yeni eklendi"</em> etiketiyle yeşil renkte görünür.</li>
+          </ol>
+
+          <h2 id="urun-satirlari">4. Ürün Satırlarını Görüntüleme</h2>
+          <ul>
+            <li>Ürün başlığının bulunduğu satıra tıklayarak seri listelerini açıp kapatabilirsiniz.</li>
+            <li>Başlık satırındaki <strong>Seri / Okunan</strong> göstergesi, mevcut seri sayısını ve durum rengini (eksik, tamam, fazla) gösterir.</li>
+          </ul>
+
+          <h2 id="kaydetme">5. Kaydetme İşlemi</h2>
+          <ol>
+            <li>Tüm seri numaralarını girdikten sonra sayfanın altındaki <strong>Kaydet ve Tamamla</strong> butonuna tıklayın (veya <span class="kbd">Ctrl</span> + <span class="kbd">S</span>).</li>
+            <li>Sistem yeni seri numarası eklenmediğini tespit ederse onay sorar; emin değilseniz <strong>İptal</strong> edip kontrol edin.</li>
+            <li>Kaydetme süresince ekranda <em>"Kaydediliyor"</em> uyarısı ve dönen ikon görünecektir. İşlem bitene kadar sayfayı kapatmayın.</li>
+          </ol>
+
+          <h2 id="kisayollar">6. Hızlı Kısayollar</h2>
+          <ul>
+            <li><span class="kbd">Ctrl</span> + <span class="kbd">S</span> → Kaydetme formunu gönderir.</li>
+            <li><span class="kbd">ESC</span> → Odak tekrar seri numarası giriş alanına taşınır.</li>
+          </ul>
+
+          <h2 id="uyarilar">7. Sık Karşılaşılan Uyarılar</h2>
+          <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Mesaj</th>
+                <th>Anlamı</th>
+                <th>Yapılması Gereken</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Seri numarası boş olamaz</td>
+                <td>Enter'a basmadan önce alan boş bırakıldı.</td>
+                <td>Barkodu tekrar okutun veya numarayı yazın.</td>
+              </tr>
+              <tr>
+                <td>Önce barkod türünü seçmelisiniz</td>
+                <td>Barkod türü seçilmeden Enter'a basıldı.</td>
+                <td>Sayfayı yenileyip barkod türünü seçin.</td>
+              </tr>
+              <tr>
+                <td>Seri numarası sistemde mevcut</td>
+                <td>Numara daha önce kayıt altına alınmış.</td>
+                <td>Seri numarasını doğrulayın, hata yoksa kayıtlı olduğunu kabul edin.</td>
+              </tr>
+              <tr>
+                <td>Bu ETA koduna ait ürün bulunamadı</td>
+                <td>Barkoddaki ürün kodu listede yok.</td>
+                <td>Yanlış barkod seçtiyseniz doğru ürünü seçin; sorun devam ederse amirinize bildirin.</td>
+              </tr>
+              <tr>
+                <td>Bu seri numarası daha önce girilmiş</td>
+                <td>Aynı oturumda aynı numarayı tekrar eklemeye çalıştınız.</td>
+                <td>Listeyi kontrol edin, gerekirse yanlış satırı silmek için sayfayı yenileyin ve yeniden başlayın.</td>
+              </tr>
+              <tr>
+                <td>Girilen seri sayısı beklenen miktarı aştı</td>
+                <td>Seri adedi, sevkiyat miktarını geçti.</td>
+                <td>Girdiğiniz listeleri kontrol edin ve fazla olanları çıkarmak için sayfayı yenileyin.</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+
+          <h2 id="duzeltme">8. Yanlış Girişleri Düzeltme</h2>
+          <ul>
+            <li>Sayfada mevcut seriyi silme butonu bulunmaz. Yanlış seri girdiyseniz <strong>sayfayı yenileyin</strong> ve baştan girin.</li>
+            <li>Kayıt yapılmadığı sürece tüm yeni seri girişleri sadece bu ekranda tutulur.</li>
+          </ul>
+
+          <h2 id="destek">9. Destek</h2>
+          <ul>
+            <li>Teknik sorun yaşarsanız IT ekibiyle iletişime geçmeden önce tarayıcıyı yenileyip işlemi tekrar deneyin.</li>
+            <li>Hata mesajı devam ediyorsa ekrandaki uyarıyı not alın (veya ekran görüntüsü alın) ve destek talebinizde paylaşın.</li>
+          </ul>
+
+          <blockquote><strong>Not:</strong> Bu kılavuz yalnızca kullanıcı işlemlerini anlatır. Teknik ayrıntılar için aynı klasördeki <code>README.md</code> dosyasına başvurabilirsiniz.</blockquote>
+        </article>
+
+        <div class="footer">
+          <span>© 2025 Mal Kabul • Kılavuz</span>
+          <span>Hazırlayan: EBD Tech</span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <button class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    // Build TOC from h2/h3
+    const toc = document.getElementById('toc');
+    const article = document.getElementById('icerik');
+    const headers = article.querySelectorAll('h2, h3');
+    const frag = document.createDocumentFragment();
+    headers.forEach(h => {
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      if(h.tagName === 'H3') a.classList.add('depth-3');
+      frag.appendChild(a);
+    });
+    toc.appendChild(frag);
+  </script>
+</body>
+</html>
