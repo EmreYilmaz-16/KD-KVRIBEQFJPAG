@@ -602,9 +602,12 @@ async function checkSerial(input, event) {
         
         // Ses efekti (isteğe bağlı)
         try {
-            var audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBj2T2fLNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiR1/LMeSwFJ');
-            audio.play();
-        } catch(e) {}
+            const audio = new Audio();
+            audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+            if (audio.canPlayType('audio/wav')) {
+                audio.play().catch(() => {});
+            }
+        } catch (e) { /* sessiz geç */ }
     }
 }
 async function isSerialRegistered(serialNo) {
