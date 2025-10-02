@@ -12,7 +12,7 @@
         </cfif>
     </div>
 
-    <form class="search-card" method="get" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
+    <form class="search-card" method="post" name="pfrom" action="/index.cfm?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
         <div class="search-input-group">
             <label for="search">Sevk No veya Firma</label>
             <div class="search-field">
