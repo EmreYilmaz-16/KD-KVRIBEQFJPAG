@@ -218,6 +218,16 @@
             </span>
         </a>
 
+        <a class="action-card tableyazi" href="#request.self#?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
+            <span class="icon"><img src="../../images/e-pd/malkabul.png" alt="Mal kabul"></span>
+            <span class="details">
+                <span class="title">Mal Kabul</span>
+                <span class="badge-row">
+                    <span class="status-badge status-success">Yapıldı!</span>
+                    
+                </span>
+            </span>
+        </a>
         <a class="action-card tableyazi" href="#request.self#?fuseaction=pda.form_add_ambar_fis">
             <span class="icon"><img src="../../images/e-pd/down30.png" alt="Mal kabulden ambara"></span>
             <span class="details">
