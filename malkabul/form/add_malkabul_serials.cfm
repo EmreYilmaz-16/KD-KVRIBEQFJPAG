@@ -504,7 +504,7 @@ WHERE SHIP_ID=#attributes.shipId#
             <h5><i class="fas fa-book-open"></i> Kullanım Kılavuzu</h5>
             <button type="button" class="guide-modal-close" aria-label="Kapat" onclick="closeUserGuide()">&times;</button>
         </div>
-        <iframe src="/AddOns/Partner/malkabul/form/USER_GUIDE.md" title="Mal Kabul Kullanım Kılavuzu"></iframe>
+        <iframe src="/AddOns/Partner/malkabul/form/mal-kabul-kilavuz.html" title="Mal Kabul Kullanım Kılavuzu"></iframe>
     </div>
 </div>
 <script>
