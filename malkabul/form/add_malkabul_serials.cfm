@@ -303,6 +303,97 @@ body {
 #loading-overlay > div {
     animation: fadeIn 0.5s ease-out;
 }
+
+.guide-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.guide-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(135deg, #6c5ce7, #0984e3);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(9, 132, 227, 0.35);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.guide-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(9, 132, 227, 0.35);
+}
+
+.guide-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 11000;
+}
+
+.guide-modal.is-visible {
+    display: block;
+}
+
+.guide-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+}
+
+.guide-modal-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(900px, 92vw);
+    height: min(600px, 85vh);
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.guide-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #0984e3, #6c5ce7);
+    color: #fff;
+}
+
+.guide-modal-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.guide-modal-close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.guide-modal iframe {
+    flex: 1;
+    border: none;
+    width: 100%;
+    background: #f0f2f5;
+}
 </style>
 
 <script>
@@ -321,6 +412,12 @@ WHERE SHIP_ID=#attributes.shipId#
  ORDER BY PRODUCT_ID
 </cfquery>
 <div class="main-container">
+    <div class="guide-button-wrapper">
+        <button type="button" class="guide-btn" onclick="openUserGuide()">
+            <i class="fas fa-question-circle"></i>
+            Kullanım Kılavuzu
+        </button>
+    </div>
     <cf_box>
         <div class="serial-input-section fade-in">
             <div class="form-group">
@@ -400,6 +497,16 @@ WHERE SHIP_ID=#attributes.shipId#
         </div>
     </cf_box>
 </div>
+<div id="user-guide-modal" class="guide-modal" aria-hidden="true" role="dialog">
+    <div class="guide-modal-backdrop" onclick="closeUserGuide()"></div>
+    <div class="guide-modal-dialog" aria-label="Kullanım Kılavuzu">
+        <div class="guide-modal-header">
+            <h5><i class="fas fa-book-open"></i> Kullanım Kılavuzu</h5>
+            <button type="button" class="guide-modal-close" aria-label="Kapat" onclick="closeUserGuide()">&times;</button>
+        </div>
+        <iframe src="https://github.com/EmreYilmaz-16/KD-KVRIBEQFJPAG/blob/serial_operations/malkabul/form/USER_GUIDE.md" title="Mal Kabul Kullanım Kılavuzu"></iframe>
+    </div>
+</div>
 <script>
 var parser = "";
 
@@ -444,6 +551,34 @@ function showNotification(message, type) {
             $(this).remove();
         });
     }, 3000);
+}
+
+function openUserGuide() {
+    var modal = document.getElementById('user-guide-modal');
+    if (!modal) {
+        return;
+    }
+    modal.classList.add('is-visible');
+    modal.setAttribute('aria-hidden', 'false');
+    if (typeof document.body.dataset.guideOverflow === 'undefined') {
+        document.body.dataset.guideOverflow = document.body.style.overflow || '';
+    }
+    document.body.style.overflow = 'hidden';
+}
+
+function closeUserGuide() {
+    var modal = document.getElementById('user-guide-modal');
+    if (!modal) {
+        return;
+    }
+    modal.classList.remove('is-visible');
+    modal.setAttribute('aria-hidden', 'true');
+    if (typeof document.body.dataset.guideOverflow !== 'undefined') {
+        document.body.style.overflow = document.body.dataset.guideOverflow;
+        delete document.body.dataset.guideOverflow;
+    } else {
+        document.body.style.overflow = '';
+    }
 }
 
 function toggleSerials(productId) {
@@ -841,6 +976,12 @@ $(document).keydown(function(e) {
     
     // ESC ile focus'u seri input'a ver
     if (e.which === 27) {
+        var modal = document.getElementById('user-guide-modal');
+        if (modal && modal.classList.contains('is-visible')) {
+            closeUserGuide();
+            e.preventDefault();
+            return;
+        }
         $('#seri_no').focus();
     }
 });
