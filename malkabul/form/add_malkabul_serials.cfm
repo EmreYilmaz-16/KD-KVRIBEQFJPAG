@@ -618,7 +618,7 @@ async function isSerialRegistered(serialNo) {
         body
     });
     const data = await res.json();
-    return data.exists === true;
+    return data.EXISTS === true;
 }
 
 function GetRows() {
