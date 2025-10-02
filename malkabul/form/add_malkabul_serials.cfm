@@ -516,6 +516,11 @@ function checkSerial(input, event) {
             showNotification(parseResult.error, 'error');
             return;
         }
+        if (await isSerialRegistered(parseResult.serial_no)) {
+    showNotification('Seri numarası sistemde mevcut.', 'error');
+    input.value = '';
+    return;
+}
 
         // Ürün satırını bul
         console.log("Ürün Satırı Aranıyor:", parseResult.product_code_2);
@@ -600,6 +605,16 @@ function checkSerial(input, event) {
             audio.play();
         } catch(e) {}
     }
+}
+async function isSerialRegistered(serialNo) {
+    const body = new URLSearchParams({ serialNo });
+    const res = await fetch('/AddOns/Partner/cfc/serialservice.cfc?method=isRegistered&returnformat=json', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body
+    });
+    const data = await res.json();
+    return data.exists === true;
 }
 
 function GetRows() {
