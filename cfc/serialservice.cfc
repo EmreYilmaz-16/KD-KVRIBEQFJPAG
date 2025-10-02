@@ -7,7 +7,7 @@ component output="false" {
             {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
             {datasource = "w3Qa_1", maxrows = 1}
         );
-        result.exists = q.recordCount > 0;
+        result.exists = q.recordCount gt 0;
         return result;
     }
 }
