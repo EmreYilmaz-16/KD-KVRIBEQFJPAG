@@ -230,7 +230,7 @@ FOR JSON PATH
 
 
   </cfquery>
-  <cfdump var="#getMainPurchaseOffer#" label="getMainPurchaseOffer">
+  
   <input type="hidden" id="offer_id" name="offer_id" value="<cfoutput>#attributes.internal_id#</cfoutput>">
 
   <cfset MONEYARRRR=arrayNew(1)>
