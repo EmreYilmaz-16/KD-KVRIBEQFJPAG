@@ -182,7 +182,8 @@ class BarcodeManager {
 
   /**
    * Pek çok yaygın tarih formatını ISO'ya (YYYY-MM-DD) çevirir.
-   * Destek: YYYYMMDD, DDMMYYYY, DD.MM.YYYY, YYYY-MM-DD, DD/MM/YYYY, 2025.9.1 vb.
+  * Destek: YYYYMMDD, DDMMYYYY, DD.MM.YYYY, YYYY-MM-DD, DD/MM/YYYY, 2025.9.1, MM.YYYY, MM/YY vb.
+  * Ay+Yıl formatlarında gün otomatik olarak 1 kabul edilir.
    * Anlaşılamazsa null döner.
    * @param {string} s
    * @returns {string|null}
@@ -225,6 +226,17 @@ class BarcodeManager {
       return BarcodeManager._toIso(y, mo, d);
     }
 
+    // MM.YYYY, MM/YY, MM-YYYY ... (ay + yıl, gün varsayılan 1)
+    m = t.match(/^(\d{1,2})[.\-/](\d{2}|\d{4})$/);
+    if (m) {
+      const mo = Number(m[1]);
+      let y = Number(m[2]);
+      if (m[2].length === 2) {
+        y = BarcodeManager._expandTwoDigitYear(y);
+      }
+      return BarcodeManager._toIso(y, mo, 1);
+    }
+
     // DDMMYYYY (heuristic – 8 haneli ve yıl makul aralıkta ise)
     if (/^\d{8}$/.test(t)) {
       const d = Number(t.slice(0, 2));
@@ -234,6 +246,13 @@ class BarcodeManager {
     }
 
     return null; // tanınamadı
+  }
+
+  static _expandTwoDigitYear(y) {
+    if (!Number.isFinite(y)) return y;
+    if (y < 0) return y;
+    if (y > 99) return y;
+    return y >= 70 ? 1900 + y : 2000 + y;
   }
 
   static _toIso(y, m, d) {
