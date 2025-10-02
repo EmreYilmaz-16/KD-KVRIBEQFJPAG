@@ -56,53 +56,340 @@
 	</script>
 </cfif>
 <style type="text/css">
-.boxtext {
-	text-decoration: none;
-	background-color: #e6e6fe;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 0px;
-	border-right-width: 0px;
-	border-bottom-width: 0px;
-	border-left-width: 0px;
-}
-.tablo {
-	text-decoration: none;
-	margin: 0px;
-	padding: 0px;
-	border-top-width: 1px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	border-left-width: 0px;
-	border-top-color: aec7f0;
-	border-right-color: aec7f0;
-	border-bottom-color: aec7f0;
-	border-left-color: aec7f0;
-}
-    .header{
-        display:none;
-    }
-    
-    /* Mobil uyumluluk CSS */
-    @media (max-width: 768px) {
-        input[type="text"], select {
-            min-height: 44px; /* Touch-friendly minimum size */
-            font-size: 16px; /* Prevent zoom on iOS */
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            padding: 8px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        #add_other_barcod, #serial_number {
-            -webkit-appearance: none;
-            appearance: none;
-        }
-    }
-</style>
+	:root {
+		--pda-bg: linear-gradient(165deg, #eef2ff 0%, #f8fbff 100%);
+		--pda-card-bg: rgba(255, 255, 255, 0.86);
+		--pda-text: #1f2937;
+		--pda-muted: #64748b;
+		--pda-border: rgba(148, 163, 184, 0.28);
+		--pda-primary: #0b72ec;
+		--pda-primary-dark: #0750a6;
+		--pda-success: #0f9d58;
+		--pda-alert: #d93025;
+		--pda-radius: 18px;
+		--pda-shadow: 0 16px 35px rgba(15, 23, 42, 0.16);
+	}
+
+	body {
+		margin: 0;
+		font-family: "Segoe UI", Roboto, sans-serif;
+		background: var(--pda-bg);
+		color: var(--pda-text);
+		line-height: 1.5;
+	}
+
+	.header {
+		display: none;
+	}
+
+	.pda-theme {
+		min-height: calc(100vh - 40px);
+		padding: 26px 20px 34px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.pda-wrapper {
+		width: min(560px, 100%);
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.pda-page-header {
+		background: rgba(255, 255, 255, 0.72);
+		border-radius: var(--pda-radius);
+		padding: 20px 22px;
+		box-shadow: var(--pda-shadow);
+		backdrop-filter: blur(16px);
+		position: sticky;
+		top: 12px;
+		z-index: 2;
+	}
+
+	.pda-page-header h2 {
+		margin: 0 0 6px;
+		font-size: 24px;
+		font-weight: 700;
+		letter-spacing: 0.25px;
+	}
+
+	.pda-page-header p {
+		margin: 0;
+		font-size: 13px;
+		color: var(--pda-muted);
+	}
+
+	.pda-card {
+		background: var(--pda-card-bg);
+		border-radius: var(--pda-radius);
+		padding: 20px 22px 24px;
+		box-shadow: var(--pda-shadow);
+		backdrop-filter: blur(18px);
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		border: 1px solid var(--pda-border);
+	}
+
+	.form-grid {
+		display: grid;
+		gap: 18px;
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		position: relative;
+	}
+
+	.field label {
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.4px;
+		text-transform: uppercase;
+		color: var(--pda-muted);
+	}
+
+	.field input,
+	.field select {
+		width: 100%;
+		padding: 12px 14px;
+		border-radius: 12px;
+		border: 1px solid var(--pda-border);
+		background: #ffffff;
+		font-size: 15px;
+		color: var(--pda-text);
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.field select {
+		appearance: none;
+		background-image: url('data:image/svg+xml;utf8,<svg fill="%2364748b" height="12" viewBox="0 0 20 20" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.484 4.57 4.484-4.57 1.414 1.414L10 14.014 4.102 8.962z"/></svg>');
+		background-repeat: no-repeat;
+		background-position: right 14px center;
+		background-size: 12px;
+		padding-right: 42px;
+	}
+
+	.field input:focus,
+	.field select:focus {
+		border-color: rgba(11, 114, 236, 0.65);
+		box-shadow: 0 0 0 3px rgba(11, 114, 236, 0.18);
+		outline: none;
+	}
+
+	.field-hint {
+		font-size: 11px;
+		color: var(--pda-muted);
+		opacity: 0.8;
+	}
+
+	.field--compact label {
+		white-space: nowrap;
+	}
+
+	.field--compact select {
+		min-width: 160px;
+	}
+
+	.data-card {
+		background: var(--pda-card-bg);
+		border-radius: var(--pda-radius);
+		padding: 20px 22px;
+		box-shadow: var(--pda-shadow);
+		border: 1px solid var(--pda-border);
+		backdrop-filter: blur(18px);
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.data-card-header {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.data-card-header h3 {
+		margin: 0;
+		font-size: 17px;
+		font-weight: 700;
+	}
+
+	.data-card-header p {
+		margin: 0;
+		font-size: 12px;
+		color: var(--pda-muted);
+	}
+
+	.data-scroll {
+		max-height: 320px;
+		overflow-y: auto;
+		padding-right: 4px;
+	}
+
+	.data-card table,
+	.data-card thead,
+	.data-card tbody,
+	.data-card tr,
+	.data-card th,
+	.data-card td {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.data-card thead th {
+		text-align: left;
+		font-size: 11px;
+		letter-spacing: 0.35px;
+		text-transform: uppercase;
+		color: var(--pda-muted);
+		padding-bottom: 10px;
+		border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+	}
+
+	.data-card tbody td {
+		padding: 12px 0;
+		font-size: 14px;
+		border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+	}
+
+	.data-card tbody tr:last-child td {
+		border-bottom: none;
+	}
+
+	.data-card input.boxtext {
+		border: none;
+		background: transparent;
+		padding: 0;
+		font-size: 14px;
+		color: var(--pda-text);
+	}
+
+	.primary-button {
+		border: none;
+		border-radius: 14px;
+		background: var(--pda-primary);
+		color: #ffffff;
+		font-size: 16px;
+		font-weight: 600;
+		padding: 14px 22px;
+		min-width: 160px;
+		transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.primary-button:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	.primary-button:not(:disabled) {
+		cursor: pointer;
+		box-shadow: 0 12px 24px rgba(11, 114, 236, 0.32);
+	}
+
+	.primary-button:not(:disabled):hover {
+		background: var(--pda-primary-dark);
+		transform: translateY(-1px);
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 18px;
+	}
+
+	.boxtext {
+		text-decoration: none;
+		background: transparent;
+		margin: 0;
+		padding: 0;
+	}
+
+	.tablo {
+		text-decoration: none;
+		margin: 0;
+		padding: 0;
+		border: none;
+	}
+
+	#loglar {
+		display: none;
+	}
+
+	@media (max-width: 520px) {
+		.pda-page-header,
+		.pda-card,
+		.data-card {
+			padding: 18px;
+		}
+
+		.primary-button {
+			width: 100%;
+		}
+
+		.form-actions {
+			margin-top: 14px;
+			justify-content: stretch;
+		}
+
+		.field select {
+			padding-right: 34px;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		body {
+			background: linear-gradient(165deg, #141a2d 0%, #101625 100%);
+			color: #e2e8f0;
+		}
+
+		.pda-page-header,
+		.pda-card,
+		.data-card {
+			background: rgba(26, 33, 54, 0.82);
+			border-color: rgba(94, 103, 135, 0.36);
+			box-shadow: 0 18px 40px rgba(3, 7, 18, 0.66);
+		}
+
+		.field input,
+		.field select {
+			background: rgba(15, 23, 42, 0.78);
+			color: #f1f5f9;
+			border-color: rgba(94, 103, 135, 0.42);
+		}
+
+		.field select {
+			background-image: url('data:image/svg+xml;utf8,<svg fill="%2394a3b8" height="12" viewBox="0 0 20 20" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548l4.484 4.57 4.484-4.57 1.414 1.414L10 14.014 4.102 8.962z"/></svg>');
+		}
+
+		.field label,
+		.field-hint,
+		.data-card-header p,
+		.data-card thead th {
+			color: #94a3b8;
+		}
+
+		.data-card tbody td {
+			border-bottom-color: rgba(148, 163, 184, 0.24);
+		}
+
+		.primary-button:not(:disabled) {
+			box-shadow: 0 18px 28px rgba(11, 114, 236, 0.38);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		* {
+			transition-duration: 0.01ms !important;
+			animation-duration: 0.01ms !important;
+		}
+	}
 </style>
 <script language="javascript" type="text/javascript">
   var row_count = 0;
@@ -119,115 +406,149 @@
 </script>
 <div style="display:none" name="PagePathPbs">e_pda\form\add_ambar_fis.cfm</div>
 <cf_box title="Mal Kabulden Ambara">
-	<cfform name="form_basket">
-		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
-  		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
-  		<input type="hidden" name="kuponlist" value="" />
-  		<input type="hidden" name="active_period" value="#session.ep.period_id#" />		
-		<div style="display:flex">
-			<div class="form-group">
-				<label for="add_other_amount">Miktar</label>
-				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="text-align:right" value="1" />
-			</div>
-			<div class="form-group">
-				<label for="add_other_barcod">Barkod</label>
-				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" 
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false"
-					   inputmode="text"
-					   enterkeyhint="done"
-					   style="" >
-			</div>	
-			<div class="form-group">
-				<label for="serial_number">Seri No</label>
-				<input type="text" name="serial_number" id="serial_number"
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false"
-					   inputmode="text"
-					   enterkeyhint="done">
-			</div>
-		</div>
-		<div style="display:flex">
-			<div class="form-group">
-				<label for="add_other_shelf">Raf</label>
-				<input id="add_other_shelf"    autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false"
-					   inputmode="text"
-					   enterkeyhint="done" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
-			</div>
-			<div id="shelf_select_td" style="display:none"  class="form-group">
-				<label for="shelf_select_td">Raf Seçimi</label>				
-				<select name="shelf_select" id="shelf_select" style="text-align:center">
-					<option value="">Ürün Rafları</option>
-				</select>
-			</div>
-		</div>
-		<div style="display:flex">
-			<div class="form-group">
-				<label for="txt_department_out">Çıkış Depo</label>
-				<select name="txt_department_out"  onchange="document.getElementById('department_out').value = this.value">
-                <cfoutput query="get_all_location" group="department_id">
-                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
-                  <cfoutput>
-                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
-                    <cfif not status>
-                      -
-                      <cf_get_lang_main no='82.Pasif'>
-                    </cfif>
-                    </option>
-                  </cfoutput> </cfoutput>
-              </select>
-			</div>
-			<div class="form-group">
-				<label for="txt_department_in">Giriş Depo</label>
-				<select name="txt_department_in"  onchange="document.getElementById('department_in').value = this.value">
-				<cfoutput query="get_all_location" group="department_id">
-				  <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
-				  <cfoutput>
-					<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
-					<cfif not status>
-					  -
-					  <cf_get_lang_main no='82.Pasif'>
-					</cfif>
-					</option>
-				  </cfoutput> </cfoutput>
-			  </select>
-		</div>
-		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
-			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Parser</option>
+	<div class="pda-theme">
+		<div class="pda-wrapper">
+			<header class="pda-page-header">
+				<h2>Mal Kabulden Ambara</h2>
+				<p>Barkod veya seri numarası ile ürünlerinizi hızlıca ambara aktarın. Varsayılan depolar otomatik doludur.</p>
+			</header>
+			<cfform name="form_basket" class="pda-form">
+				<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+				<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+				<input type="hidden" name="kuponlist" value="" />
+				<input type="hidden" name="active_period" value="#session.ep.period_id#" />
 
-			</select>
+				<section class="pda-card" aria-label="Mal kabul formu">
+					<div class="form-grid">
+						<div class="field">
+							<label for="add_other_amount">Miktar</label>
+							<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="text-align:right" value="1" />
+							<span class="field-hint">Varsayılan değer 1, gerekirse değiştirin.</span>
+						</div>
+						<div class="field">
+							<label for="add_other_barcod">Barkod</label>
+							<input id="add_other_barcod" name="add_other_barcod" type="text" value=""
+								   autocomplete="off"
+								   autocorrect="off"
+								   autocapitalize="off"
+								   spellcheck="false"
+								   inputmode="text"
+								   enterkeyhint="done">
+							<span class="field-hint">Barkodu okutup giriş yaptıktan sonra raf seçimine geçin.</span>
+						</div>
+						<div class="field">
+							<label for="serial_number">Seri No</label>
+							<input type="text" name="serial_number" id="serial_number"
+								   autocomplete="off"
+								   autocorrect="off"
+								   autocapitalize="off"
+								   spellcheck="false"
+								   inputmode="text"
+								   enterkeyhint="done">
+							<span class="field-hint">Seri numarası olan ürünler için kullanın.</span>
+						</div>
+					</div>
+
+					<div class="form-grid">
+						<div class="field">
+							<label for="add_other_shelf">Raf</label>
+							<input id="add_other_shelf"
+								   autocomplete="off"
+								   autocorrect="off"
+								   autocapitalize="off"
+								   spellcheck="false"
+								   inputmode="text"
+								   enterkeyhint="done"
+								   name="add_other_shelf"
+								   type="text"
+								   class="moneybox"
+								   onfocus="islemtipi=0;"
+								   value="" />
+						</div>
+						<div class="field" id="shelf_select_td" style="display:none;">
+							<label for="shelf_select">Raf Seçimi</label>
+							<select name="shelf_select" id="shelf_select" style="text-align:center">
+								<option value="">Ürün Rafları</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-grid">
+						<div class="field">
+							<label for="txt_department_out">Çıkış Depo</label>
+							<select name="txt_department_out" id="txt_department_out" onchange="document.getElementById('department_out').value = this.value">
+								<cfoutput query="get_all_location" group="department_id">
+									<option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id> selected</cfif>>#department_head#</option>
+									<cfoutput>
+										<option <cfif not status>style="color:#FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+											<cfif not status>
+												-
+												<cf_get_lang_main no='82.Pasif'>
+											</cfif>
+										</option>
+									</cfoutput>
+								</cfoutput>
+							</select>
+						</div>
+						<div class="field">
+							<label for="txt_department_in">Giriş Depo</label>
+							<select name="txt_department_in" id="txt_department_in" onchange="document.getElementById('department_in').value = this.value">
+								<cfoutput query="get_all_location" group="department_id">
+									<option disabled="disabled" value="#department_id#"<cfif attributes.department_in_id eq department_id> selected</cfif>>#department_head#</option>
+									<cfoutput>
+										<option <cfif not status>style="color:#FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+											<cfif not status>
+												-
+												<cf_get_lang_main no='82.Pasif'>
+											</cfif>
+										</option>
+									</cfoutput>
+								</cfoutput>
+							</select>
+						</div>
+						<div class="field field--compact">
+							<label for="BarcodeParser">Barkod Parser</label>
+							<select name="BarcodeParser" id="BarcodeParser">
+								<option value="0">Barkod Parser</option>
+							</select>
+						</div>
+					</div>
+
+					<input id="del_other_amount" name="del_other_amount" type="hidden" onfocus="islemtipi=1;" value="1" />
+					<input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" />
+				</section>
+
+				<section class="data-card" aria-live="polite">
+					<div class="data-card-header">
+						<h3>Eklenen Ürünler</h3>
+						<p>Okunan barkod ve seri numaraları burada listelenir.</p>
+					</div>
+					<div class="data-scroll">
+						<cf_ajax_list>
+							<thead>
+								<tr class="color-list" height="20px">
+									<th>Seri No</th>
+									<th>Ürün</th>
+									<th style="display:none">Miktar</th>
+									<th>Raf</th>
+								</tr>
+							</thead>
+							<tbody id="table1"></tbody>
+						</cf_ajax_list>
+					</div>
+				</section>
+
+				<input type="hidden" id="department_out" name="department_out" value="" />
+				<input type="hidden" id="department_in" name="department_in" value="" />
+				<input type="hidden" id="row_count" name="row_count" value="0" />
+				<input type="hidden" id="action_id" name="action_id" value="" />
+
+				<div class="form-actions">
+					<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" class="primary-button" disabled="disabled" onClick="kontrol_kayit();" />
+				</div>
+			</cfform>
 		</div>
-    <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
-          <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
 	</div>
-	
-		<cf_ajax_list>
-			<thead>
-				<tr class="color-list" height="20px">
-					<th>Seri No</th>				
-					<th >Ürün</th>
-					<th style="display:none">Miktar</th>
-					<th >Raf</th>
-					
-				</tr>
-				</thead>
-				<tbody id="table1"></tbody>
-					
-		</cf_ajax_list>
-	
-	<input type="hidden" id="department_in" name="department_in" value="" />
-      	<input type="hidden" id="row_count" name="row_count" value="0" />
-        <input type="hidden" id="action_id" name="action_id" value="" />
-		<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
-	</cfform>
 </cf_box>
 <div style="display:none" id="loglar"></div>
 
