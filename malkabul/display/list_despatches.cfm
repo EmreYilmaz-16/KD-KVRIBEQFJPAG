@@ -442,25 +442,63 @@
 </div>
 
 <script>
-    document.addEventListener("keydown", getC);
-    var fullText="";
-    function getC(ev) {    
-        if(ev.keyCode !=13){
-            fullText+=ev.key;
-        }else{
-            console.log(fullText)
-            var isjson=false;
-            var Jo=null;
-            try{
-                Jo=JSON.parse(fullText)
-                isjson=true
-            }catch{};
-            console.log(Jo)
-            var keyword=fullText;
-            if(isjson){
-                keyword=Jo.no;
-            };
-            consoloe.log(keyword)
+    (function () {
+        var scanBuffer = "";
+        var timeoutId = null;
+        var bufferResetDelay = 250;
+
+        function resetBuffer() {
+            scanBuffer = "";
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
         }
-    }
+
+        function handleScanKey(event) {
+            var target = event.target;
+            var tagName = target && target.tagName ? target.tagName.toLowerCase() : "";
+
+            if (tagName === "input" || tagName === "textarea" || target.isContentEditable) {
+                return;
+            }
+
+            if (event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta") {
+                return;
+            }
+
+            if (event.key === "Enter") {
+                if (scanBuffer.length === 0) {
+                    return;
+                }
+
+                console.log("Raw scan:", scanBuffer);
+
+                var keyword = scanBuffer;
+                var parsed;
+                try {
+                    parsed = JSON.parse(scanBuffer);
+                    if (parsed && parsed.no) {
+                        keyword = parsed.no;
+                    }
+                } catch (error) {
+                    parsed = null;
+                }
+
+                console.log("Parsed keyword:", keyword, parsed ? parsed : "(not JSON)");
+                resetBuffer();
+                return;
+            }
+
+            if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                scanBuffer += event.key;
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                timeoutId = setTimeout(resetBuffer, bufferResetDelay);
+            }
+        }
+
+        document.addEventListener("keydown", handleScanKey);
+    })();
 </script>
