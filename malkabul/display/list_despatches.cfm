@@ -1,5 +1,6 @@
+<cfparam name="attributes.search" default="">
 <cfparam name="url.search" default="">
-<cfset searchTerm = Trim(URL.search)>
+<cfset searchTerm = Trim(attributes.search)>
 
 <div class="page-wrapper">
     <div class="page-header">
@@ -17,7 +18,7 @@
             <label for="search">Sevk No veya Firma</label>
             <div class="search-field">
                 <span class="search-icon" aria-hidden="true">🔍</span>
-                <input type="text" id="search" name="search" placeholder="Örn. PBS-12345 ya da Partner" value="<cfoutput>#EncodeForHTML(URL.search)#</cfoutput>">
+                <input type="text" id="search" name="search" placeholder="Örn. PBS-12345 ya da Partner" value="<cfoutput>#EncodeForHTML(attributes.search)#</cfoutput>">
             </div>
         </div>
         <div class="search-actions">
