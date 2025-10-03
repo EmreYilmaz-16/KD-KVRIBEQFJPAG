@@ -486,6 +486,7 @@
 
                         <cfif GUARANTY_COUNT GT 0>
                             <cfif GUARANTY_COUNT EQ TOTAL_AMOUNT>
+                                <cfset statusLabel = "Tamamlandı">
                                 <cfset statusClass = "status-ok">
                             <cfelseif GUARANTY_COUNT LT TOTAL_AMOUNT>
                                 <cfset statusLabel = "Eksik Giriş">
