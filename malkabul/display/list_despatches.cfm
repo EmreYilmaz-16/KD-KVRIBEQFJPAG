@@ -30,10 +30,10 @@
     </form>
 
     <div class="guide-trigger-bar" role="toolbar" aria-label="Sevk kılavuzları">
-        <button type="button" class="btn btn-ghost" data-guide-url="/malkabul/guides/despatch_technical.html" data-guide-title="Teknik Kılavuz">
+        <button type="button" class="btn btn-ghost" data-guide-url="/addons/partner/malkabul/guides/despatch_technical.html" data-guide-title="Teknik Kılavuz">
             🔧 Teknik Kılavuz
         </button>
-        <button type="button" class="btn btn-ghost" data-guide-url="/malkabul/guides/despatch_user.html" data-guide-title="Kullanıcı Kılavuzu">
+        <button type="button" class="btn btn-ghost" data-guide-url="/addons/partner/malkabul/guides/despatch_user.html" data-guide-title="Kullanıcı Kılavuzu">
             👤 Kullanıcı Kılavuzu
         </button>
     </div>
