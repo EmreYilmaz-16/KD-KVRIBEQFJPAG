@@ -473,7 +473,7 @@
                         <th>Sevk No</th>
                         <th>Firma</th>
                         <th>Sevk Tarihi</th>
-                        <th>Toplam Tutar</th>
+                        <th>Toplam Miktar</th>
                         <th>Garanti Girişi</th>
                         <th>Durum</th>
                     </tr>
