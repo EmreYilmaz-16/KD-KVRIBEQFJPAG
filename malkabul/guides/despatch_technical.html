@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sevk Listesi Teknik Kılavuzu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            padding: 2.5rem;
+            color: #1f2933;
+            background: linear-gradient(160deg, #f5f7fb 0%, #ffffff 100%);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.9rem;
+            color: #312e81;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            font-size: 1.25rem;
+            color: #4338ca;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin: 0.5rem 0 1.25rem 1.5rem;
+            line-height: 1.55;
+        }
+
+        code {
+            padding: 0.15rem 0.35rem;
+            background: rgba(99, 102, 241, 0.12);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .note {
+            border-left: 4px solid #6366f1;
+            background: rgba(99, 102, 241, 0.08);
+            padding: 0.75rem 1rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            margin: 1rem 0;
+        }
+
+        .card {
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+            padding: 1rem 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sevk Listesi Teknik Kılavuzu</h1>
+    <p>Bu doküman, <strong>`malkabul/display/list_despatches.cfm`</strong> sayfasındaki sevk listesi ekranını teknik bakış açısıyla analiz eder.</p>
+
+    <h2>Veri Kaynakları</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>SHIP</h3>
+            <p><code>w3Qa_2025_1.SHIP</code> tablosu sevk başlık kayıtlarını sağlar (ID, numara, tarih, şirket).</p>
+        </div>
+        <div class="card">
+            <h3>COMPANY</h3>
+            <p><code>w3Qa.COMPANY</code> tablosu bağlı şirket takma adını getirir.</p>
+        </div>
+        <div class="card">
+            <h3>SHIP_ROW</h3>
+            <p><code>w3Qa_2025_1.SHIP_ROW</code> alt sorgusu satır miktarlarının toplamını üretir.</p>
+        </div>
+        <div class="card">
+            <h3>SERVICE_GUARANTY_NEW</h3>
+            <p><code>w3Qa_1.SERVICE_GUARANTY_NEW</code> tablosu garanti girişi yapılmış satır sayısını verir.</p>
+        </div>
+    </div>
+
+    <h2>Sorgu Mantığı</h2>
+    <ol>
+        <li><code>PURCHASE_SALES = 0</code> ile satınalma sevkleri filtrelenir.</li>
+        <li><code>DEPARTMENT_IN</code> ve <code>LOCATION_IN</code> kriterleri depo/kabul alanını sınırlar.</li>
+        <li>Arama girdisi varsa sevk numarası ve firma takma adı için <code>LIKE '%terim%'</code> filtresi uygulanır.</li>
+        <li>Alt sorgular toplam tutarı (<code>SUM(SHIP_ROW.AMOUNT)</code>) ve garanti sayısını (<code>COUNT(*)</code>) hesaplar.</li>
+    </ol>
+
+    <h2>Durum Rozetleri</h2>
+    <p>Tablodaki durum sütunu aşağıdaki CFScript mantığına dayanır:</p>
+    <ul>
+        <li>Miktar ve garanti sayıları eşit → <em>status-ok</em></li>
+        <li>Garanti sayısı sıfır → <em>status-missing</em></li>
+        <li>Garanti sayısı kısmi → <em>status-partial</em></li>
+        <li>Garanti sayısı beklenenin üzerinde → <em>status-over</em></li>
+    </ul>
+
+    <h2>Uyarlama Notları</h2>
+    <ul>
+        <li>Farklı depo/konum desteklenecekse parametreler CF parametre olarak alınmalı.</li>
+        <li>Performans için <code>SHIP_ROW</code> ve <code>SERVICE_GUARANTY_NEW</code> tablolarında index kontrolü yapılmalı.</li>
+        <li>Garanti verileri farklı şemaya taşınırsa JOIN koşulları güncellenmeli.</li>
+        <li>Güncel yıl değiştiğinde kullanılan veritabanı şemasının (<code>w3Qa_2025_1</code>) güncellenmesi gerekir.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Not:</strong> Ekrana yeni alan eklenecekse, hem SQL sorgusu hem de tabloda gösterim için CFOUTPUT bloğu güncellenmelidir.
+    </div>
+</body>
+</html>

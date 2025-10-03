@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sevk Listesi Kullanıcı Kılavuzu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            padding: 2.5rem;
+            color: #1f2933;
+            background: linear-gradient(160deg, #fef9f5 0%, #ffffff 100%);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.9rem;
+            color: #b45309;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            font-size: 1.25rem;
+            color: #d97706;
+        }
+
+        ul, ol {
+            margin: 0.5rem 0 1.25rem 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tips {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            margin: 1.25rem 0;
+        }
+
+        .tip {
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            background: rgba(249, 168, 37, 0.15);
+            border: 1px solid rgba(217, 119, 6, 0.35);
+            box-shadow: 0 14px 28px rgba(217, 119, 6, 0.18);
+        }
+
+        .legend {
+            margin: 1rem 0;
+            padding: 1rem 1.25rem;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .legend ul {
+            margin: 0.75rem 0 0 1.25rem;
+        }
+
+        strong {
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sevk Listesi Kullanıcı Kılavuzu</h1>
+    <p>Bu kılavuz, sevk listeleme ekranında hızlı ve doğru işlemler yapmanıza yardımcı olur.</p>
+
+    <h2>Başlarken</h2>
+    <ol>
+        <li>Arama kutusuna sevk numarası (örn. <strong>PBS-12345</strong>) veya firma adı girin.</li>
+        <li><strong>Ara</strong> düğmesine basın. Sonuçlar, girilen terime göre filtrelenir.</li>
+        <li>Filtreyi temizlemek için <strong>Temizle</strong> bağlantısını kullanın.</li>
+    </ol>
+
+    <h2>Tablo Alanları</h2>
+    <ul>
+        <li><strong>Sevk ID / Sevk No:</strong> Kaydın benzersiz numarası. Üzerine tıklayarak detay pop-up'ını açabilirsiniz.</li>
+        <li><strong>Firma:</strong> Sevkin ait olduğu tedarikçi.</li>
+        <li><strong>Sevk Tarihi:</strong> Gönderim tarihi (en güncel kayıt üstte).</li>
+        <li><strong>Toplam Tutar:</strong> Satırlardaki miktarların TL formatında toplamı.</li>
+        <li><strong>Garanti Girişi:</strong> Garanti kaydı bulunan satır sayısı.</li>
+        <li><strong>Durum:</strong> Aşağıdaki renkli rozetlerle gösterilir.</li>
+    </ul>
+
+    <div class="legend">
+        <strong>Durum Renkleri</strong>
+        <ul>
+            <li>Yeşil: Tüm garanti girişleri tamamlanmış.</li>
+            <li>Sarı: Kısmi garanti girişi yapılmış.</li>
+            <li>Mavi: Beklenenin üzerinde kayıt var (kontrol edin).</li>
+            <li>Kırmızı: Garanti girişi bulunmuyor.</li>
+        </ul>
+    </div>
+
+    <h2>Sık Kullanılan İşlemler</h2>
+    <ul>
+        <li>Detay inceleme: Sevk numarasına tıklayın.</li>
+        <li>Raporlama: Tarayıcı yazdır seçeneğiyle PDF alın.</li>
+        <li>Garanti tamamlama: İlgili satırı servis modülünden güncelleyin.</li>
+    </ul>
+
+    <h2>İpucu Kutusu</h2>
+    <div class="tips">
+        <div class="tip">
+            <strong>Sonuç yok mu?</strong>
+            <p>Arama terimini kısaltın veya farklı bir anahtar kelime deneyin.</p>
+        </div>
+        <div class="tip">
+            <strong>Farklı depo mu?</strong>
+            <p>Destek ekibinden ekranın depo/konum filtrelerini güncellemesini isteyin.</p>
+        </div>
+        <div class="tip">
+            <strong>Uzun liste?</strong>
+            <p>Tarayıcı arama kısayolunu (Ctrl+F) kullanarak hızlıca satır bulun.</p>
+        </div>
+    </div>
+</body>
+</html>
