@@ -29,78 +29,15 @@
         </div>
     </form>
 
-    <div class="guide-panels" role="complementary" aria-label="Sayfa kılavuzları">
-        <details class="guide-card" open>
-            <summary>🔧 Teknik Kılavuz</summary>
-            <div class="guide-content">
-                <h3>Veri Kaynakları</h3>
-                <ul>
-                    <li><code>w3Qa_2025_1.SHIP</code>: Sevk başlık bilgileri (ID, numara, tarih).</li>
-                    <li><code>w3Qa.COMPANY</code>: Firma unvanı eşlemesi.</li>
-                    <li><code>w3Qa_2025_1.SHIP_ROW</code>: Satır bazlı miktarların toplandığı görünüm.</li>
-                    <li><code>w3Qa_1.SERVICE_GUARANTY_NEW</code>: Garanti giriş kontrolü (<code>WRK_ROW_ID</code> eşleştirmesi).</li>
-                </ul>
-
-                <h3>Sorgu Mantığı</h3>
-                <ol>
-                    <li><code>PURCHASE_SALES = 0</code> koşulu ile satınalma sevkleri filtrelenir.</li>
-                    <li><code>DEPARTMENT_IN</code> ve <code>LOCATION_IN</code> değerleri depo/kabul alanını kısıtlar.</li>
-                    <li>Arama alanı, sevk numarası veya firma takma adında <code>LIKE</code> filtresi uygular.</li>
-                    <li>İki alt sorgu ile toplam miktar ve garanti satırı sayısı hesaplanıp ana sorguya bağlanır.</li>
-                </ol>
-
-                <h3>Durum Hesaplaması</h3>
-                <p>Tablodaki durum rozetleri, satır miktarları ve garanti kayıt adedine göre <code>statusLabel</code>/<code>statusClass</code> değişkenleriyle belirlenir. Ek durum kuralları için ilgili CFScript bloğunu genişletebilirsiniz.</p>
-
-                <h3>Uyarlama Noktaları</h3>
-                <ul>
-                    <li>Yeni depo/konum desteklenecekse, sorgu koşullarına parametrik değer eklenmelidir.</li>
-                    <li>Performans için <code>SHIP_ROW</code> alt sorguları endeksli kolonlarla desteklenmelidir.</li>
-                    <li>Garanti denetimi farklı şemaya taşınırsa, <code>JOIN</code> eşleşmesi güncellenmelidir.</li>
-                </ul>
-            </div>
-        </details>
-
-        <details class="guide-card">
-            <summary>👤 Kullanıcı Kılavuzu</summary>
-            <div class="guide-content">
-                <h3>Hızlı Başlangıç</h3>
-                <ol>
-                    <li>Üstteki arama alanına sevk numarası veya firma adı yazın.</li>
-                    <li><strong>Ara</strong> düğmesine basın; filtrelenen sevkler listede gösterilir.</li>
-                    <li>Aramayı sıfırlamak için <strong>Temizle</strong> bağlantısını kullanın.</li>
-                </ol>
-
-                <h3>Tabloyu Okuma</h3>
-                <ul>
-                    <li><strong>Toplam Tutar</strong>: Satır miktarlarının TL formatında toplamı.</li>
-                    <li><strong>Garanti Girişi</strong>: Garanti kaydı olan satır sayısı.</li>
-                    <li><strong>Durum</strong> rozetleri:
-                        <ul>
-                            <li><span class="legend-dot legend-ok"></span> Tüm garanti girişleri mevcut.</li>
-                            <li><span class="legend-dot legend-partial"></span> Kısmi giriş yapılmış.</li>
-                            <li><span class="legend-dot legend-over"></span> Beklenenin üzerinde giriş var.</li>
-                            <li><span class="legend-dot legend-missing"></span> Giriş bulunmuyor.</li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <h3>Sık Kullanılan İşlemler</h3>
-                <ul>
-                    <li>Sevk numarasına tıklayarak detay pop-up'ını açabilirsiniz.</li>
-                    <li>Listeyi dışa aktarmak için tarayıcıdan yazdırma/PDF alma fonksiyonunu kullanın.</li>
-                    <li>Garanti çevrimini tamamlamak için ilgili satırı servis modülünde güncelleyin.</li>
-                </ul>
-
-                <h3>İpuçları</h3>
-                <ul>
-                    <li>Boş sonuç dönüyorsa arama terimini kısaltmayı deneyin.</li>
-                    <li>Depo/konum farklı ise IT ekibinden filtre parametrelerinin güncellenmesini talep edin.</li>
-                    <li>Liste çok uzun olduğunda tarayıcının yerleşik arama kısayolunu (Ctrl+F) kullanın.</li>
-                </ul>
-            </div>
-        </details>
+    <div class="guide-trigger-bar" role="toolbar" aria-label="Sevk kılavuzları">
+        <button type="button" class="btn btn-ghost" data-guide-url="/malkabul/guides/despatch_technical.html" data-guide-title="Teknik Kılavuz">
+            🔧 Teknik Kılavuz
+        </button>
+        <button type="button" class="btn btn-ghost" data-guide-url="/malkabul/guides/despatch_user.html" data-guide-title="Kullanıcı Kılavuzu">
+            👤 Kullanıcı Kılavuzu
+        </button>
     </div>
+
 
     <cfquery name="getDespatches" datasource="#dsn2#">
         SELECT
@@ -299,63 +236,80 @@
             color: #1f2933;
         }
 
-        .guide-panels {
-            display: grid;
-            gap: 1rem;
-            margin: 2rem 0 2.5rem;
-        }
-
-        .guide-card {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
-            padding: 0.25rem 1.25rem 1.25rem;
-            transition: box-shadow 0.2s ease;
-        }
-
-        .guide-card[open] {
-            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.15);
-        }
-
-        .guide-card summary {
-            list-style: none;
-            cursor: pointer;
-            font-weight: 700;
-            color: #3730a3;
-            font-size: 1.05rem;
+        .guide-trigger-bar {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 0;
-        }
-
-        .guide-card summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .guide-content {
-            color: #475569;
-            display: grid;
+            flex-wrap: wrap;
             gap: 0.75rem;
+            margin: 0 0 1.75rem;
         }
 
-        .guide-content h3 {
-            margin: 0.75rem 0 0.25rem;
-            font-size: 0.95rem;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-            color: #334155;
+        .btn-ghost {
+            background: #ffffff;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #4338ca;
+            box-shadow: 0 10px 18px rgba(99, 102, 241, 0.12);
         }
 
-        .guide-content ul,
-        .guide-content ol {
+        .btn-ghost:hover {
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .guide-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.45);
+            padding: 2rem;
+            z-index: 9999;
+        }
+
+        .guide-modal.is-active {
+            display: flex;
+        }
+
+        .guide-modal__dialog {
+            width: min(960px, 100%);
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guide-modal__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.08));
+        }
+
+        .guide-modal__title {
             margin: 0;
-            padding-left: 1.25rem;
+            font-size: 1.1rem;
+            color: #312e81;
         }
 
-        .guide-content li {
-            margin: 0.25rem 0;
+        .guide-modal__close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        .guide-frame {
+            width: 100%;
+            height: 70vh;
+            border: 0;
+        }
+
+        body.modal-open {
+            overflow: hidden;
         }
 
         .table-container {
@@ -532,7 +486,6 @@
 
                         <cfif GUARANTY_COUNT GT 0>
                             <cfif GUARANTY_COUNT EQ TOTAL_AMOUNT>
-                                <cfset statusLabel = "Tamamlandı">
                                 <cfset statusClass = "status-ok">
                             <cfelseif GUARANTY_COUNT LT TOTAL_AMOUNT>
                                 <cfset statusLabel = "Eksik Giriş">
@@ -572,7 +525,71 @@
     <cfelse>
         <p class="despatch-empty">Listelenecek sevk kaydı bulunamadı.</p>
     </cfif>
+
+    <div id="guide-modal" class="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
+        <div class="guide-modal__dialog">
+            <div class="guide-modal__header">
+                <h2 id="guide-modal-title" class="guide-modal__title">Kılavuz</h2>
+                <button id="guide-modal-close" class="guide-modal__close" type="button" aria-label="Pencereyi kapat">×</button>
+            </div>
+            <iframe id="guide-frame" class="guide-frame" title="Sevk kılavuzu"></iframe>
+        </div>
+    </div>
 </div>
+
+<script>
+    (function () {
+        var modal = document.getElementById("guide-modal");
+        if (!modal) {
+            return;
+        }
+
+        var frame = document.getElementById("guide-frame");
+        var titleEl = document.getElementById("guide-modal-title");
+        var closeBtn = document.getElementById("guide-modal-close");
+
+        function openGuide(url, title) {
+            if (frame) {
+                frame.src = url;
+            }
+            if (titleEl) {
+                titleEl.textContent = title || "Kılavuz";
+            }
+            modal.classList.add("is-active");
+            document.body.classList.add("modal-open");
+        }
+
+        function closeGuide() {
+            modal.classList.remove("is-active");
+            document.body.classList.remove("modal-open");
+            if (frame) {
+                frame.src = "";
+            }
+        }
+
+        document.querySelectorAll("[data-guide-url]").forEach(function (trigger) {
+            trigger.addEventListener("click", function () {
+                var url = trigger.getAttribute("data-guide-url");
+                var title = trigger.getAttribute("data-guide-title");
+                openGuide(url, title);
+            });
+        });
+
+        closeBtn && closeBtn.addEventListener("click", closeGuide);
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                closeGuide();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && modal.classList.contains("is-active")) {
+                closeGuide();
+            }
+        });
+    })();
+</script>
 
 <script>
     (function () {
