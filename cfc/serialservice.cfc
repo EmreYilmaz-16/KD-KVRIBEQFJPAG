@@ -10,7 +10,7 @@ component output="false" {
         try {
            result.exists = q.recordCount gt 0;
         return result; 
-        } catch (exType exName) {
+        } catch (any exName) {
            // result.exists = q.recordCount gt 0;
         return result;
         }
