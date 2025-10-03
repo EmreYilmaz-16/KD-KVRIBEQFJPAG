@@ -29,6 +29,79 @@
         </div>
     </form>
 
+    <div class="guide-panels" role="complementary" aria-label="Sayfa kılavuzları">
+        <details class="guide-card" open>
+            <summary>🔧 Teknik Kılavuz</summary>
+            <div class="guide-content">
+                <h3>Veri Kaynakları</h3>
+                <ul>
+                    <li><code>w3Qa_2025_1.SHIP</code>: Sevk başlık bilgileri (ID, numara, tarih).</li>
+                    <li><code>w3Qa.COMPANY</code>: Firma unvanı eşlemesi.</li>
+                    <li><code>w3Qa_2025_1.SHIP_ROW</code>: Satır bazlı miktarların toplandığı görünüm.</li>
+                    <li><code>w3Qa_1.SERVICE_GUARANTY_NEW</code>: Garanti giriş kontrolü (<code>WRK_ROW_ID</code> eşleştirmesi).</li>
+                </ul>
+
+                <h3>Sorgu Mantığı</h3>
+                <ol>
+                    <li><code>PURCHASE_SALES = 0</code> koşulu ile satınalma sevkleri filtrelenir.</li>
+                    <li><code>DEPARTMENT_IN</code> ve <code>LOCATION_IN</code> değerleri depo/kabul alanını kısıtlar.</li>
+                    <li>Arama alanı, sevk numarası veya firma takma adında <code>LIKE</code> filtresi uygular.</li>
+                    <li>İki alt sorgu ile toplam miktar ve garanti satırı sayısı hesaplanıp ana sorguya bağlanır.</li>
+                </ol>
+
+                <h3>Durum Hesaplaması</h3>
+                <p>Tablodaki durum rozetleri, satır miktarları ve garanti kayıt adedine göre <code>statusLabel</code>/<code>statusClass</code> değişkenleriyle belirlenir. Ek durum kuralları için ilgili CFScript bloğunu genişletebilirsiniz.</p>
+
+                <h3>Uyarlama Noktaları</h3>
+                <ul>
+                    <li>Yeni depo/konum desteklenecekse, sorgu koşullarına parametrik değer eklenmelidir.</li>
+                    <li>Performans için <code>SHIP_ROW</code> alt sorguları endeksli kolonlarla desteklenmelidir.</li>
+                    <li>Garanti denetimi farklı şemaya taşınırsa, <code>JOIN</code> eşleşmesi güncellenmelidir.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="guide-card">
+            <summary>👤 Kullanıcı Kılavuzu</summary>
+            <div class="guide-content">
+                <h3>Hızlı Başlangıç</h3>
+                <ol>
+                    <li>Üstteki arama alanına sevk numarası veya firma adı yazın.</li>
+                    <li><strong>Ara</strong> düğmesine basın; filtrelenen sevkler listede gösterilir.</li>
+                    <li>Aramayı sıfırlamak için <strong>Temizle</strong> bağlantısını kullanın.</li>
+                </ol>
+
+                <h3>Tabloyu Okuma</h3>
+                <ul>
+                    <li><strong>Toplam Tutar</strong>: Satır miktarlarının TL formatında toplamı.</li>
+                    <li><strong>Garanti Girişi</strong>: Garanti kaydı olan satır sayısı.</li>
+                    <li><strong>Durum</strong> rozetleri:
+                        <ul>
+                            <li><span class="legend-dot legend-ok"></span> Tüm garanti girişleri mevcut.</li>
+                            <li><span class="legend-dot legend-partial"></span> Kısmi giriş yapılmış.</li>
+                            <li><span class="legend-dot legend-over"></span> Beklenenin üzerinde giriş var.</li>
+                            <li><span class="legend-dot legend-missing"></span> Giriş bulunmuyor.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Sık Kullanılan İşlemler</h3>
+                <ul>
+                    <li>Sevk numarasına tıklayarak detay pop-up'ını açabilirsiniz.</li>
+                    <li>Listeyi dışa aktarmak için tarayıcıdan yazdırma/PDF alma fonksiyonunu kullanın.</li>
+                    <li>Garanti çevrimini tamamlamak için ilgili satırı servis modülünde güncelleyin.</li>
+                </ul>
+
+                <h3>İpuçları</h3>
+                <ul>
+                    <li>Boş sonuç dönüyorsa arama terimini kısaltmayı deneyin.</li>
+                    <li>Depo/konum farklı ise IT ekibinden filtre parametrelerinin güncellenmesini talep edin.</li>
+                    <li>Liste çok uzun olduğunda tarayıcının yerleşik arama kısayolunu (Ctrl+F) kullanın.</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
     <cfquery name="getDespatches" datasource="#dsn2#">
         SELECT
             S.SHIP_ID,
@@ -224,6 +297,65 @@
         .summary-bar strong {
             font-size: 1.05rem;
             color: #1f2933;
+        }
+
+        .guide-panels {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0 2.5rem;
+        }
+
+        .guide-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+            padding: 0.25rem 1.25rem 1.25rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .guide-card[open] {
+            box-shadow: 0 18px 36px rgba(79, 70, 229, 0.15);
+        }
+
+        .guide-card summary {
+            list-style: none;
+            cursor: pointer;
+            font-weight: 700;
+            color: #3730a3;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 0;
+        }
+
+        .guide-card summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .guide-content {
+            color: #475569;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .guide-content h3 {
+            margin: 0.75rem 0 0.25rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #334155;
+        }
+
+        .guide-content ul,
+        .guide-content ol {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .guide-content li {
+            margin: 0.25rem 0;
         }
 
         .table-container {
