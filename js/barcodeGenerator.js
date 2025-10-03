@@ -261,4 +261,4 @@ console.log(barcode, parse);
 
 ----------------------------------------- */
 
-export { BarcodeGenerator };
+
