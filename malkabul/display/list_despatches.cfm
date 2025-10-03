@@ -507,7 +507,7 @@
                             <td>#EncodeForHTML(NICKNAME)#</td>
                             <td>#EncodeForHTML(DateFormat(SHIP_DATE, "dd.mm.yyyy"))#</td>
                             <td>#EncodeForHTML(formattedTotal)#</td>
-                            <td>#EncodeForHTML(GUARANTY_COUNT)#</td>
+                            <td>#EncodeForHTML(tlformat(GUARANTY_COUNT))#</td>
                             <td class="status-cell">
                                 <span class="status-badge #statusClass#">#statusLabel#</span>
                             </td>
