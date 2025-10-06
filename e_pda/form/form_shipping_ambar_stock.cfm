@@ -168,7 +168,7 @@
 					Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
 				</cfif>
 			</div>
-            <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+            <div class="form-group">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Parser</option>
 
@@ -221,6 +221,11 @@ var formArgs = {
 // DOM Ready
 $(document).ready(function(){
     $(".header").hide();
+     bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
 });
 
 // Klavye Kontrolü
