@@ -244,7 +244,9 @@ function processSerialNumber() {
     var serial_number = document.getElementById('serial_number').value;
     	var SerialObject = bm.parseWith(serial_number, parseInt(document.getElementById('BarcodeParser').value));
 			console.log('Barcode parsed for serial number:', SerialObject);
-    
+    if(SerialObject && SerialObject.serial_no){
+				serial_number = SerialObject.serial_no;
+			}
     if (!serial_number) {
         alert('Seri numarası giriniz!');
         return false;
