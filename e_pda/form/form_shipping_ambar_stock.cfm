@@ -168,6 +168,12 @@
 					Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
 				</cfif>
 			</div>
+            <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Parser</option>
+
+			</select>
+		</div>
 			
 			<cf_grid_list id="table1" name="table1">
 				<thead><tr><th>Seri No</th><th>Barkod</th><th>Miktar</th><th>Raf</th></tr></thead>
@@ -179,12 +185,7 @@
 				<button type="submit" class="btn btn-primary" onclick="submitForm()">Kaydet</button>
 				<button type="button" class="btn btn-secondary" onclick="clearAllInputs()">Temizle</button>
 			</div>
-            <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
-			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Parser</option>
-
-			</select>
-		</div>
+            
 		</cfform>
         
 	</div>
