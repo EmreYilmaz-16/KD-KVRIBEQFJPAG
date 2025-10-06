@@ -242,6 +242,8 @@ document.onkeydown = function(e) {
 function processSerialNumber() {
     var miktar = document.getElementById('miktar').value;
     var serial_number = document.getElementById('serial_number').value;
+    	var SerialObject = bm.parseWith(serial_number, parseInt(document.getElementById('BarcodeParser').value));
+			console.log('Barcode parsed for serial number:', SerialObject);
     
     if (!serial_number) {
         alert('Seri numarası giriniz!');
