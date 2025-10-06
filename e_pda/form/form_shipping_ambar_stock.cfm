@@ -155,6 +155,7 @@
 					</div>
 				</cfif>
 			</div>
+            
 			
 			<div class="form-group">
 				<cfif get_store_type.raf gt 0>
@@ -178,7 +179,14 @@
 				<button type="submit" class="btn btn-primary" onclick="submitForm()">Kaydet</button>
 				<button type="button" class="btn btn-secondary" onclick="clearAllInputs()">Temizle</button>
 			</div>
+            <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Parser</option>
+
+			</select>
+		</div>
 		</cfform>
+        
 	</div>
 </div>
 <script>
