@@ -18,6 +18,7 @@
             PAKET_ID AS STOCK_ID, 
             BARCOD, 
             STOCK_CODE, 
+            PRODUCT_CODE_2,
             PRODUCT_NAME,
          	ISNULL((
             SELECT        
@@ -41,6 +42,7 @@
                 BARCOD, 
                 STOCK_CODE, 
                 PRODUCT_NAME, 
+				PRODUCT_CODE_2,
                 PRODUCT_TREE_AMOUNT, 
                 SHIP_RESULT_ID
                 <cfif get_shelf.recordcount>
@@ -78,6 +80,7 @@
                     S.BARCOD, 
                     S.STOCK_CODE, 
                     S.PRODUCT_NAME, 
+					S.PRODUCT_CODE_2,
                     S.PRODUCT_TREE_AMOUNT, 
                     ESR.SHIP_RESULT_ID,
                     ESRR.ORDER_ROW_ID
@@ -94,6 +97,7 @@
                     S.BARCOD, 
                     S.STOCK_CODE, 
                     S.PRODUCT_NAME, 
+					S.PRODUCT_CODE_2,
                     S.PRODUCT_TREE_AMOUNT, 
                     ESR.SHIP_RESULT_ID,
                     ESRR.ORDER_ROW_ID
@@ -102,6 +106,7 @@
             	PAKET_ID, 
                 BARCOD, 
                 STOCK_CODE, 
+				PRODUCT_CODE_2,
                 PRODUCT_NAME, 
                 PRODUCT_TREE_AMOUNT, 
 
