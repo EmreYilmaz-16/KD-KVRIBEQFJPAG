@@ -1,6 +1,6 @@
 ﻿
 <cfdump var="#attributes#">
-<cfabort>
+
 <cfif isdefined("attributes.dep_in") and listlen(attributes.dep_in) eq 2>
     <cfset attributes.dep_in=listgetat(attributes.dep_in,1)>
 </cfif>
@@ -10,6 +10,9 @@
 <cfif attributes.process_cat eq "90fuseaction=pda.add_ambar_fis,90">
     <cfset attributes.process_cat=90>
 </cfif>
+<cfset AttStruct=StructNew()>
+<cfset AttStruct2=StructNew()>
+<cfset AttStruct3=StructNew()>
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset form.process_cat = attributes.process_cat>
@@ -83,17 +86,31 @@ POZİSYON=BENİM DÖNGÜM
           	<cfset 'attributes.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT> 
            	<cfset 'attributes.TO_SHELF_NUMBER#i#' = SHELF_ID_IN>  
           	<cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
+            
+            <cfset 'AttStruct.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
+          	<cfset 'AttStruct.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT> 
+           	<cfset 'AttStruct.TO_SHELF_NUMBER#i#' = SHELF_ID_IN>  
+          	<cfset 'AttStruct.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
+            
         <cfelse>
 			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
                 <cfset 'attributes.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
                 <cfset 'attributes.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT > 
                 <cfset 'attributes.TO_SHELF_NUMBER#i#' = ''>  
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = ''>
+                  <cfset 'AttStruct2.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
+          	<cfset 'AttStruct2.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT> 
+           	<cfset 'AttStruct2.TO_SHELF_NUMBER#i#' = SHELF_ID_IN>  
+          	<cfset 'AttStruct2.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
             <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
                 <cfset 'attributes.SHELF_NUMBER#i#' = ''>  
                 <cfset 'attributes.SHELF_NUMBER_TXT#i#' = ''> 
                 <cfset 'attributes.TO_SHELF_NUMBER#i#' = SHELF_ID_IN >  
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
+                <cfset 'AttStruct3.SHELF_NUMBER#i#' = SHELF_ID_OUT>  
+          	<cfset 'AttStruct3.SHELF_NUMBER_TXT#i#' = SHELF_CODE_OUT> 
+           	<cfset 'AttStruct3.TO_SHELF_NUMBER#i#' = SHELF_ID_IN>  
+          	<cfset 'AttStruct3.TO_SHELF_NUMBER_TXT#i#' = SHELF_CODE_IN>
             </cfif>
        	</cfif>
 
@@ -102,11 +119,11 @@ POZİSYON=BENİM DÖNGÜM
 
 
 
-    
 
-    
-    
-    
+<cfdump var="#AttStruct#">
+<cfdump var="#AttStruct2#">
+<cfdump var="#AttStruct3#">
+<cfabort>
     <cfquery name="GET_LOT_K_KONT_ID" datasource="#dsn3#">
         SELECT     
             PU.PRODUCT_UNIT_ID, 
