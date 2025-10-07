@@ -183,9 +183,9 @@ POZİSYON=BENİM DÖNGÜM
         <cfset 'SPECT_NAME#i#' = ''>
     </cfif>
 </cfloop>
-<cfdump var="#AttStruct#">
-<cfdump var="#AttStruct2#">
-<cfdump var="#AttStruct3#">
+<cfdump var="#AttStruct#" label="change_shelf_fis">
+<cfdump var="#AttStruct2#" label="Ambardan Mal Kabule">
+<cfdump var="#AttStruct3#" label="Mal Kabulden Ambara">
 
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
 
