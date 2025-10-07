@@ -186,13 +186,14 @@ POZİSYON=BENİM DÖNGÜM
 <cfdump var="#AttStruct#">
 <cfdump var="#AttStruct2#">
 <cfdump var="#AttStruct3#">
-<cfabort>
+
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
 
 <br>current row list 
 POZİSYON=SATIRLAR 
 <cfdump var="#current_row_list#">
 <br>
+<cfabort>
 <cfif ListLen(current_row_list)>
     <cf_papers paper_type="stock_fis">
     <cfif isdefined("paper_full") and isdefined("paper_number")>
