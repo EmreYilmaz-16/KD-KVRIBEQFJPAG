@@ -347,6 +347,7 @@
             <div class="title-row">
                 <h1>Sayım Listesi</h1>
                 <span class="badge">#totalRecords# Kayıt</span>
+                <span class="badge">Yeni Kayıt</span>
             </div>
 
             <ul class="stat-list">
