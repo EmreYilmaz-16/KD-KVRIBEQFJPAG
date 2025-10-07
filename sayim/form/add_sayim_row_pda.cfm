@@ -32,7 +32,7 @@ var AllShelves=[];
         var rafNo = document.getElementById("rafNo").value;
        if(ev.key === 'Enter' && rafNo.length >= 2){
            console.log(rafNo);
-        var ActiveShelf=AllShelves.find(p=>p.SHELF_CODE==rafNo)
+        var ActiveShelf=AllShelves.find(p=>p.SHELF_CODE.toLowerCase() == rafNo.toLowerCase())
        console.log(ActiveShelf);
        $("#activeShelfID").val(ActiveShelf.PRODUCT_PLACE_ID);
        $("#activeShelfCode").val(ActiveShelf.SHELF_CODE);
