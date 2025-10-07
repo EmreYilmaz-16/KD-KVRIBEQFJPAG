@@ -193,7 +193,7 @@ POZİSYON=BENİM DÖNGÜM
 POZİSYON=SATIRLAR 
 <cfdump var="#current_row_list#">
 <br>
-<cfabort>
+
 <cfif ListLen(current_row_list)>
     <cf_papers paper_type="stock_fis">
     <cfif isdefined("paper_full") and isdefined("paper_number")>
@@ -384,21 +384,21 @@ POZİSYON=SATIRLAR
             </cfif>
        	</cfif>------>
          <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
-        	<cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
-          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT> 
-           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN>  
-          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+        	<cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct.SHELF_NUMBER#k#")>  
+          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.SHELF_NUMBER_TXT#k#")> 
+           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct.TO_SHELF_NUMBER#k#")>  
+          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.TO_SHELF_NUMBER_TXT#k#")>
         <cfelse>
 			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
-                <cfset 'attributes.SHELF_NUMBER#k#' = SHELF_ID_OUT>  
-                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = SHELF_CODE_OUT > 
+                <cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct2.SHELF_NUMBER#k#")>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct2.SHELF_NUMBER_TXT#k#")> 
                 <cfset 'attributes.TO_SHELF_NUMBER#k#' = ''>  
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = ''>
             <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
                 <cfset 'attributes.SHELF_NUMBER#k#' = ''>  
                 <cfset 'attributes.SHELF_NUMBER_TXT#k#' = ''> 
-                <cfset 'attributes.TO_SHELF_NUMBER#k#' = SHELF_ID_IN >  
-                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = SHELF_CODE_IN>
+                <cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER#k#") >  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER_TXT#k#")>
             </cfif>
        	</cfif>
         <cfset 'attributes.SPECIAL_CODE#k#' = ''>  
