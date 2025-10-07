@@ -28,9 +28,31 @@ var bm=null;
  function checkBarcode(ev,el){
     var barcode = el.value;
     if(ev.key === 'Enter' && barcode.length >= 3){
-
+        var Rw=wrk_query()
     }
 }
+var O=new Object();
+$(document).ready(function(){
+     var sh=wrk_query("SELECT * FROM PRODUCT_PLACE_ROWS","DSN3");
+
+O.recordcount=sh.recordcount
+O.SHELVES=[];
+for(let i=0;i<sh.recordcount;i++){
+    console.log(sh)
+    var ix=O.SHELVES.findIndex(p=>p.SHELF_ID==sh.PRODUCT_PLACE_ID[i]);
+    var SHELF_ID=sh.PRODUCT_PLACE_ID[i]
+    var STOCK_ID=sh.STOCK_ID[i]
+    if(ix ==-1){
+        O.SHELVES.push({
+            SHELF_ID,
+            STOCKS:[STOCK_ID]
+        })
+    }else{
+        O.SHELVES[ix].STOCKS.push(STOCK_ID)
+    }
+}
+console.log(O)
+});
 </script>
 
 
