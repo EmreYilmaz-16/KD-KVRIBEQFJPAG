@@ -120,10 +120,7 @@ POZİSYON=BENİM DÖNGÜM
 
 
 
-<cfdump var="#AttStruct#">
-<cfdump var="#AttStruct2#">
-<cfdump var="#AttStruct3#">
-<cfabort>
+
     <cfquery name="GET_LOT_K_KONT_ID" datasource="#dsn3#">
         SELECT     
             PU.PRODUCT_UNIT_ID, 
@@ -186,6 +183,10 @@ POZİSYON=BENİM DÖNGÜM
         <cfset 'SPECT_NAME#i#' = ''>
     </cfif>
 </cfloop>
+<cfdump var="#AttStruct#">
+<cfdump var="#AttStruct2#">
+<cfdump var="#AttStruct3#">
+<cfabort>
 <cfset session.ep.our_company_info.is_cost = 1><!---Dikkat Firmaya Göre Değişir--->
 
 <br>current row list 
