@@ -1,5 +1,5 @@
 <div class="form-group">
-    <input type="text" class="form-control" id="rafNo" placeholder="Raf No" onkeyup="CheckRaf()">
+    <input type="text" class="form-control" id="rafNo" placeholder="Raf No" onkeyup="CheckRaf(this,event)">
 </div>
 <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm">
     <input type="hidden" name="sayimID" value="#sayimID#">        
@@ -28,14 +28,17 @@ var AllShelves=[];
         
     }
 }
-  function CheckRaf() {
+  function CheckRaf(el,ev) {
         var rafNo = document.getElementById("rafNo").value;
+       if(ev.key === 'Enter' && rafNo.length >= 2){
+           
         var ActiveShelf=AllShelves.find(p=>p.SHELF_CODE==rafNo)
        $("#activeShelfID").val(ActiveShelf.PRODUCT_PLACE_ID);
        $("#activeShelfCode").val(ActiveShelf.SHELF_CODE);
          $("#activeShelfLabel").text("Aktif Raf: "+ActiveShelf.SHELF_CODE);
             $("#rafNo").val('');
             $("#barcode").focus();
+            }
     }
 
 $(document).ready(function(){
