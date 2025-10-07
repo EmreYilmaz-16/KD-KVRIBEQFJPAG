@@ -12,12 +12,7 @@
 
 </div>
 </cfform>
-<script>
-    function CheckRaf() {
-        var rafNo = document.getElementById("rafNo").value;
-       
-    }
-</script>
+
 <div class="form-group">
     <input type="text" class="form-control" id="barcode" placeholder="Barkod" onkeyup="checkBarcode(event,this)">
 </div>
@@ -25,14 +20,24 @@
 
 <script>
 var bm=null;
+var O=new Object();
+var AllShelves=[];
  function checkBarcode(ev,el){
     var barcode = el.value;
     if(ev.key === 'Enter' && barcode.length >= 3){
         
     }
 }
-var O=new Object();
-var AllShelves=[];
+  function CheckRaf() {
+        var rafNo = document.getElementById("rafNo").value;
+        var ActiveShelf=AllShelves.find(p=>p.SHELF_CODE==rafNo)
+       $("#activeShelfID").val(ActiveShelf.PRODUCT_PLACE_ID);
+       $("#activeShelfCode").val(ActiveShelf.SHELF_CODE);
+         $("#activeShelfLabel").text("Aktif Raf: "+ActiveShelf.SHELF_CODE);
+            $("#rafNo").val('');
+            $("#barcode").focus();
+    }
+
 $(document).ready(function(){
      var sh=wrk_query("SELECT * FROM PRODUCT_PLACE_ROWS","DSN3");
 
