@@ -28,10 +28,11 @@ var bm=null;
  function checkBarcode(ev,el){
     var barcode = el.value;
     if(ev.key === 'Enter' && barcode.length >= 3){
-        var Rw=wrk_query()
+        
     }
 }
 var O=new Object();
+var AllShelves=[];
 $(document).ready(function(){
      var sh=wrk_query("SELECT * FROM PRODUCT_PLACE_ROWS","DSN3");
 
@@ -52,6 +53,14 @@ for(let i=0;i<sh.recordcount;i++){
     }
 }
 console.log(O)
+var r=wrk_query("SELECT SHELF_CODE,PRODUCT_PLACE_ID FROM PRODUCT_PLACE","DSN3")
+
+for(let i=0;i<r.recordcount;i++){
+    var SHELF_CODE=r.SHELF_CODE[i];
+    var PRODUCT_PLACE_ID=r.PRODUCT_PLACE_ID[i];
+    AllShelves.push({SHELF_CODE,PRODUCT_PLACE_ID})
+}
+console.log(AllShelves)
 });
 </script>
 
