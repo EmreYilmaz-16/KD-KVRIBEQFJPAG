@@ -1,4 +1,6 @@
-﻿<cfdump var="#attributes#">
+﻿
+<cfdump var="#attributes#">
+<cfabort>
 <cfif isdefined("attributes.dep_in") and listlen(attributes.dep_in) eq 2>
     <cfset attributes.dep_in=listgetat(attributes.dep_in,1)>
 </cfif>
