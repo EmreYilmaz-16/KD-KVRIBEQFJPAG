@@ -215,6 +215,11 @@
             <span class="icon"><img src="../../images/e-pd/up30.png" alt="Ambardan sevkiyata"></span>
             <span class="details">
                 <span class="title">Ambardan Sevkiyata</span>
+                <span class="badge-row">
+                    <span class="status-badge status-success">Yapıldı!</span>
+                    
+                </span>
+                
             </span>
         </a>
 
@@ -224,7 +229,7 @@
                 <span class="title">Mal Kabul</span>
                 <span class="badge-row">
                     <span class="status-badge status-success">Yapıldı!</span>
-                    
+                    <span class="status-badge status-alert">Barkod Parçalama Yapıldı!</span>
                 </span>
             </span>
         </a>
