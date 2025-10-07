@@ -382,7 +382,7 @@
             </div>
 
             <section class="cards" id="sayimCards">
-                <cfoutput query="getSayimList">
+                <cfloop query="getSayimList">
                     <cfset filterText = lcase(trim(SAYIM_ID & " " & PAPER_NUMBER & " " & DEPO_CODE & " " & DEPO_NAME & " " & dateFormat(SAYIM_DATE, "dd.mm.yyyy") & " " & dateFormat(RECORD_DATE, "dd.mm.yyyy") & " " & RECORD_EMP))>
                     <article class="sayim-card" data-filter="#encodeForHtmlAttribute(filterText)#">
                         <div class="card-head">
@@ -429,7 +429,7 @@
                             <a href="detail_sayim_pda.cfm?sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
                         </div>
                     </article>
-                </cfoutput>
+                </cfloop>
             </section>
             <p id="emptyFilterState" class="empty-search hidden">Aramanızla eşleşen kayıt bulunamadı.</p>
         <cfelse>
