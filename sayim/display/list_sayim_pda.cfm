@@ -51,13 +51,7 @@
     <cfset userCount = structCount(uniqueUsers)>
 </cfif>
 
-<cfoutput>
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Sayım Listesi (PDA)</title>
+
     <style>
         :root {
             --surface: #ffffff;
@@ -351,8 +345,7 @@
             }
         }
     </style>
-</head>
-<body>
+<cfoutput>
     <div class="wrapper">
         <header class="topbar">
             <div class="title-row">
