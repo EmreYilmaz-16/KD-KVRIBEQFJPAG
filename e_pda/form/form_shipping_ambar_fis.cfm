@@ -242,7 +242,7 @@
 <cfset adres = "pda.list_shipping_ambar&date1=#date1#&date2=#date2#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&keyword=#attributes.keyword#&is_form_submitted=1">
 <cf_box title="#BASLIK# #attributes.DELIVER_PAPER_NO#">
 <form name="add_fis" method="post" action="<cfoutput>#request.self#?fuseaction=#adres#</cfoutput>">
-	<cfdump  var="#GET_SHIP_PACKAGE_LIST#" label="GET_SHIP_PACKAGE_LIST">
+	
 	<cf_grid_list>
 	<thead>
 		<tr>			
