@@ -31,7 +31,8 @@ var AllShelves=[];
  function checkBarcode(ev,el){
     var barcode = el.value;
     if(ev.key === 'Enter' && barcode.length >= 3){
-        
+        var SerialObject = bm.parseWith(barcode, parseInt(document.getElementById('BarcodeParser').value));
+        console.log(SerialObject);
     }
 }
   function CheckRaf(el,ev) {
