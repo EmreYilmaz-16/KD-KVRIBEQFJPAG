@@ -59,8 +59,12 @@ var ActiveShelf=null;
         var SerialObject = bm.parseWith(barcode, parseInt(document.getElementById('BarcodeParser').value));
         console.log(SerialObject);
         if(SerialObject && SerialObject.serial_no){
-				
-			
+				var ix=O.SHELVES.find(p=>p.SHELF_ID==ActiveShelf.PRODUCT_PLACE_ID).STOCKS.findIndex(p=>p.PRODUCT_CODE_2.toLowerCase().trim()==SerialObject.product_code_2.toLowerCase().trim())
+			if(ix==-1){
+				alert("Bu ürün bu rafta değil! Raf: "+ActiveShelf.SHELF_CODE+" Stok Kodu: "+SerialObject.product_code_2);
+				el.value='';
+				return;
+			}
 			var tr=document.createElement('tr');
                 tr.innerHTML='<td>'+SerialObject.serial_no+'</td><td>'+SerialObject.product_code_2+'</td><td id="shelfCodeCell">'+$("#activeShelfCode").val()+'</td>';
 				document.getElementById('sayimRows').appendChild(tr);
