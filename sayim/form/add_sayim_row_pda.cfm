@@ -26,10 +26,7 @@
             
             <th>
                 Stok Kodu
-            </th>
-            <th>
-                Stok Adı
-            </th>
+            </th>            
             <th>
                 Raf
             </th>
@@ -56,6 +53,17 @@ var AllShelves=[];
     if(ev.key === 'Enter' && barcode.length >= 3){
         var SerialObject = bm.parseWith(barcode, parseInt(document.getElementById('BarcodeParser').value));
         console.log(SerialObject);
+        if(SerialObject && SerialObject.serial_no){
+				var tr=document.createElement('tr');
+                tr.innerHTML='<td>'+SerialObject.serial_no+'</td><td>'+SerialObject.product_code_2+'</td><td id="shelfCodeCell">'+$("#activeShelfCode").val()+'</td>';
+				document.getElementById('sayimRows').appendChild(tr);
+				el.value='';
+				var rowCount=parseInt(document.getElementById('rowCount').value)+1;
+				document.getElementById('rowCount').value=rowCount;
+				document.getElementById('rowCountLabel').innerText=rowCount;
+				//var sayimForm=document.getElementById('sayimForm');
+				//sayimForm.submit();
+			}
 
     }
 }
