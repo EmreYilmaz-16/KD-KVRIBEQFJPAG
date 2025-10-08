@@ -49,13 +49,16 @@
 var bm=null;
 var O=new Object();
 var AllShelves=[];
+var ActiveShelf=null;
  function checkBarcode(ev,el){
     var barcode = el.value;
     if(ev.key === 'Enter' && barcode.length >= 3){
         var SerialObject = bm.parseWith(barcode, parseInt(document.getElementById('BarcodeParser').value));
         console.log(SerialObject);
         if(SerialObject && SerialObject.serial_no){
-				var tr=document.createElement('tr');
+				
+			
+			var tr=document.createElement('tr');
                 tr.innerHTML='<td>'+SerialObject.serial_no+'</td><td>'+SerialObject.product_code_2+'</td><td id="shelfCodeCell">'+$("#activeShelfCode").val()+'</td>';
 				document.getElementById('sayimRows').appendChild(tr);
 				el.value='';
@@ -72,13 +75,14 @@ var AllShelves=[];
         var rafNo = document.getElementById("rafNo").value;
        if(ev.key === 'Enter' && rafNo.length >= 2){
            console.log(rafNo);
-        var ActiveShelf=AllShelves.find(p=>p.SHELF_CODE.toLowerCase() == rafNo.toLowerCase())
+         ActiveShelf=AllShelves.find(p=>p.SHELF_CODE.toLowerCase() == rafNo.toLowerCase())
        console.log(ActiveShelf);
        $("#activeShelfID").val(ActiveShelf.PRODUCT_PLACE_ID);
        $("#activeShelfCode").val(ActiveShelf.SHELF_CODE);
          $("#activeShelfLabel").text("Aktif Raf: "+ActiveShelf.SHELF_CODE);
-            $("#rafNo").val('');
+            //$("#rafNo").val('');
             $("#barcode").focus();
+
             }
     }
 
