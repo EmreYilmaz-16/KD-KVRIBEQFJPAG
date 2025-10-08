@@ -12,6 +12,7 @@
 <cfset "attributes.STOCKID#i#"=getProductInfo.STOCK_ID>
 <CFSET "attributes.AMOUNT#i#"=arraylen(item.SerialNumbers)>
 <cfdump var="#getProductInfo#">
+<cfset i=i+1>
 </cfloop>
 
 <cfdump var="#attributes#">
