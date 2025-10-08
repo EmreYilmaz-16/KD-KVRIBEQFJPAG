@@ -1,14 +1,17 @@
+<div class="form-group">
+    <input type="text" class="form-control" id="rafNo" placeholder="Raf No" onkeyup="CheckRaf(this,event)">
+</div>
+<div style="display:none" id="barcodeSection">
 <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Parser</option>
 
 			</select>
 		</div>
-<div class="form-group">
-    <input type="text" class="form-control" id="rafNo" placeholder="Raf No" onkeyup="CheckRaf(this,event)">
-</div>
+
 <div class="form-group">
     <input type="text" class="form-control" id="barcode" placeholder="Barkod" onkeyup="checkBarcode(event,this)">
+</div>
 </div>
 <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm">
     <input type="hidden" name="sayimID" value="#sayimID#">        
@@ -81,6 +84,7 @@ var ActiveShelf=null;
        $("#activeShelfCode").val(ActiveShelf.SHELF_CODE);
          $("#activeShelfLabel").text("Aktif Raf: "+ActiveShelf.SHELF_CODE);
             //$("#rafNo").val('');
+			$("#barcodeSection").show();
             $("#barcode").focus();
 
             }
