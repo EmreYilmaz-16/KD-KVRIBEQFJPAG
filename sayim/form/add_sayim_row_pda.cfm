@@ -1,100 +1,148 @@
-<!-- Custom CSS for improved styling -->
+<!-- PDA Optimized CSS for Compact Design -->
 <style>
+    /* PDA-Optimized Compact Design */
+    body {
+        margin: 0;
+        padding: 5px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        font-size: 14px;
+        background: #f0f2f5;
+    }
+    
     .sayim-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        margin: 0;
+        padding: 8px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
     .form-section {
         background: white;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        border: 1px solid #e9ecef;
+        padding: 12px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        border: 1px solid #e1e5e9;
     }
     
     .section-title {
-        font-weight: bold;
-        color: #495057;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #007bff;
-        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a73e8;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #e1e5e9;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    /* Compact Input Groups */
+    .input-group {
+        margin-bottom: 8px;
     }
     
     .input-group-addon {
-        background: #007bff;
+        background: #1a73e8;
         color: white;
         border: none;
-        min-width: 45px;
+        min-width: 35px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
         justify-content: center;
     }
     
-    .status-badges {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
-    
-    .status-badge {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-weight: 500;
-        display: inline-block;
-        font-size: 0.9rem;
-    }
-    
-    .badge-info {
-        background: #17a2b8;
-        color: white;
-    }
-    
-    .badge-success {
-        background: #28a745;
-        color: white;
+    .form-control {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        padding: 12px;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        height: auto;
+        min-height: 44px; /* Touch-friendly */
     }
     
     .scanner-input {
         font-family: 'Courier New', monospace;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 16px !important;
+        text-align: center;
+        background: #f8f9fa;
     }
     
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        outline: none;
     }
     
-    .form-control.is-valid {
-        border-color: #28a745;
+    /* Compact Status Badges */
+    .status-badges {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
     }
     
-    .form-control.is-invalid {
-        border-color: #dc3545;
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        flex: 1;
+        text-align: center;
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
+    .badge-info {
+        background: #e8f0fe;
+        color: #1a73e8;
+        border: 1px solid #1a73e8;
+    }
+    
+    .badge-success {
+        background: #e6f4ea;
+        color: #137333;
+        border: 1px solid #137333;
+    }
+    
+    /* Compact Table */
     .table-container {
         background: white;
-        border-radius: 8px;
+        border-radius: 4px;
         overflow: hidden;
-        border: 1px solid #e9ecef;
-        max-height: 400px;
+        border: 1px solid #e1e5e9;
+        max-height: 200px;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        margin: 0;
+        font-size: 0.8rem;
     }
     
     .table thead th {
-        background: #007bff;
+        background: #1a73e8;
         color: white;
         border: none;
         font-weight: 600;
         position: sticky;
         top: 0;
         z-index: 10;
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+    
+    .table tbody td {
+        padding: 6px 4px;
+        border-bottom: 1px solid #e1e5e9;
+        font-size: 0.75rem;
+        word-break: break-all;
     }
     
     .table tbody tr:hover {
@@ -102,16 +150,45 @@
     }
     
     .table tbody tr:nth-child(even) {
-        background: #f8f9fa;
+        background: #fafbfc;
     }
     
+    /* Compact Buttons */
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        min-height: 36px;
+        margin: 2px;
+    }
+    
+    .btn-sm {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        min-height: 32px;
+    }
+    
+    /* Compact Debug Controls */
+    #debugControls {
+        margin-top: 8px;
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+    
+    #debugControls .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    /* Loading Overlay */
     .loading-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
         display: none;
         justify-content: center;
         align-items: center;
@@ -123,6 +200,92 @@
         padding: 20px;
         border-radius: 8px;
         text-align: center;
+        min-width: 200px;
+    }
+    
+    /* Small text helpers */
+    .form-text {
+        font-size: 0.7rem;
+        color: #5f6368;
+        margin-top: 4px;
+    }
+    
+    /* PDA specific optimizations */
+    select.form-control {
+        height: 44px;
+        font-size: 16px !important;
+    }
+    
+    /* Hide unnecessary elements on very small screens */
+    @media (max-width: 320px) {
+        .form-text {
+            display: none;
+        }
+        
+        .section-title {
+            font-size: 0.8rem;
+        }
+        
+        #debugControls {
+            display: none;
+        }
+    }
+    
+    /* Compact mode for PDA */
+    @media (max-height: 600px) {
+        .sayim-container {
+            padding: 4px;
+        }
+        
+        .form-section {
+            padding: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .table-container {
+            max-height: 150px;
+        }
+        
+        .section-title {
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+        }
+    }
+    
+    /* Touch-friendly interactive elements */
+    input, select, button {
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* High contrast for better visibility */
+    .form-control.is-valid {
+        border-color: #137333;
+        background-color: #e6f4ea;
+    }
+    
+    .form-control.is-invalid {
+        border-color: #d93025;
+        background-color: #fce8e6;
+    }
+    
+    /* Toast notifications - more compact */
+    .toast-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        z-index: 10000;
+    }
+    
+    .toast {
+        background: #1a73e8;
+        color: white;
+        padding: 8px 12px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
     /* Accessibility improvements */
@@ -138,252 +301,93 @@
         border: 0;
     }
     
-    /* Focus improvements for accessibility */
-    input:focus, select:focus {
-        outline: 2px solid #007bff;
-        outline-offset: 2px;
-    }
-    
-    /* High contrast support */
-    @media (prefers-contrast: high) {
-        .form-section {
-            border: 2px solid #000;
-        }
-        
-        .section-title {
-            border-bottom-color: #000;
-        }
-    }
-    
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-        .loading-spinner .spinner-border {
-            animation: none;
-        }
-        
-        .toast {
-            animation: none !important;
-        }
-    }
-    
-    /* Mobile-first responsive design */
-    @media (max-width: 576px) {
-        .sayim-container {
-            margin: 5px;
-            padding: 10px;
-        }
-        
-        .form-section {
-            padding: 15px;
-        }
-        
-        .section-title {
-            font-size: 1rem;
-        }
-        
-        .status-badges {
-            flex-direction: column;
-        }
-        
-        .status-badge {
-            text-align: center;
-            font-size: 0.8rem;
-        }
-        
-        .scanner-input {
-            font-size: 1rem;
-        }
-        
-        .table-container {
-            font-size: 0.85rem;
-        }
-        
-        .input-group-addon {
-            min-width: 40px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .sayim-container {
-            margin: 10px;
-            padding: 15px;
-        }
-        
-        .table-container {
-            max-height: 300px;
-        }
-        
-        .form-text {
-            font-size: 0.8rem;
-        }
-    }
-    
-    @media (min-width: 992px) {
-        .sayim-container {
-            max-width: 900px;
-        }
-        
-        .table-container {
-            max-height: 500px;
-        }
-    }
-    
-    /* Print styles */
-    @media print {
-        .sayim-container {
-            box-shadow: none;
-            background: white;
-        }
-        
-        .form-section {
-            border: 1px solid #000;
-            break-inside: avoid;
-        }
-        
-        .loading-overlay,
-        .toast-container {
-            display: none !important;
-        }
-    }
-    
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-        .sayim-container {
-            background: #2d3748;
-            color: #e2e8f0;
-        }
-        
-        .form-section {
-            background: #4a5568;
-            border-color: #6b7280;
-        }
-        
-        .form-control {
-            background: #374151;
-            border-color: #6b7280;
-            color: #e2e8f0;
-        }
-        
-        .form-control:focus {
-            background: #374151;
-            border-color: #3b82f6;
-            color: #e2e8f0;
-        }
-        
-        .table-container {
-            background: #374151;
-        }
-        
-        .table tbody tr:hover {
-            background: #4b5563;
-        }
-        
-        .table tbody tr:nth-child(even) {
-            background: #374151;
-        }
+    /* Focus improvements for touch devices */
+    input:focus, select:focus, button:focus {
+        outline: 2px solid #1a73e8;
+        outline-offset: 1px;
     }
 </style>
 
 <div class="sayim-container" role="main" aria-label="Sayım Uygulaması">
-    <!-- Raf Okuma Bölümü -->
+    <!-- Kompakt Raf Okuma -->
     <div class="form-section" role="region" aria-labelledby="shelf-section-title">
-        <h5 class="section-title" id="shelf-section-title">📦 Raf Okuma</h5>
-        <div class="form-group">
-            <label for="rafNo" class="sr-only">Raf Kodu</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text input-group-addon" aria-hidden="true">📋</span>
-                </div>
-                <input type="text" 
-                       class="form-control scanner-input" 
-                       id="rafNo" 
-                       placeholder="Raf Kodunu Okutun veya Yazın..." 
-                       onkeyup="SayimManager.checkShelf(this, event)"
-                       autocomplete="off"
-                       aria-describedby="shelf-help"
-                       aria-required="true">
+        <h6 class="section-title" id="shelf-section-title">📦 Raf</h6>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text input-group-addon" aria-hidden="true">📋</span>
             </div>
-            <small id="shelf-help" class="form-text text-muted">Raf kodunu okutun ve Enter'a basın</small>
+            <input type="text" 
+                   class="form-control scanner-input" 
+                   id="rafNo" 
+                   placeholder="Raf Kodu..." 
+                   onkeyup="SayimManager.checkShelf(this, event)"
+                   autocomplete="off"
+                   aria-label="Raf Kodu">
         </div>
     </div>
 
-    <!-- Barkod Okuma Bölümü -->
-    <div id="barcodeSection" class="form-section" style="display:none" role="region" aria-labelledby="barcode-section-title">
-        <h5 class="section-title" id="barcode-section-title">🔍 Barkod Okuma</h5>
+    <!-- Kompakt Barkod Okuma -->
+    <div id="barcodeSection" class="form-section" style="display:none" role="region">
+        <h6 class="section-title">🔍 Barkod</h6>
         
-        <div class="form-group">
-            <label for="BarcodeParser">Barkod Parser Seçimi:</label>
-            <select name="BarcodeParser" 
-                    id="BarcodeParser" 
-                    class="form-control"
-                    aria-describedby="parser-help">
-                <option value="0">Varsayılan Parser</option>
-            </select>
-            <small id="parser-help" class="form-text text-muted">Kullanılacak barkod parser'ını seçin</small>
-        </div>
+        <select name="BarcodeParser" id="BarcodeParser" class="form-control" style="margin-bottom:8px;">
+            <option value="0">Varsayılan Parser</option>
+        </select>
 
-        <div class="form-group">
-            <label for="barcode" class="sr-only">Ürün Barkodu</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text input-group-addon" aria-hidden="true">📱</span>
-                </div>
-                <input type="text" 
-                       class="form-control scanner-input" 
-                       id="barcode" 
-                       placeholder="Ürün Barkodunu Okutun..."
-                       onkeyup="SayimManager.checkBarcode(event, this)"
-                       autocomplete="off"
-                       aria-describedby="barcode-help"
-                       aria-required="true">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text input-group-addon" aria-hidden="true">📱</span>
             </div>
-            <small id="barcode-help" class="form-text text-muted">Ürün barkodunu okutun ve Enter'a basın</small>
+            <input type="text" 
+                   class="form-control scanner-input" 
+                   id="barcode" 
+                   placeholder="Barkod..."
+                   onkeyup="SayimManager.checkBarcode(event, this)"
+                   autocomplete="off"
+                   aria-label="Ürün Barkodu">
         </div>
     </div>
-    <!-- Durum Bilgileri -->
-    <div class="form-section" role="region" aria-labelledby="status-section-title">
-        <h5 class="section-title" id="status-section-title">📊 Sayım Durumu</h5>
+    <!-- Kompakt Durum -->
+    <div class="form-section" role="region">
         <div class="status-badges" role="status" aria-live="polite">
-            <span id="activeShelfLabel" class="status-badge badge-info" aria-label="Aktif raf durumu">Raf Okutunuz</span>
-            <span id="rowCountLabel" class="status-badge badge-success" aria-label="Sayılan ürün adedi">Sayılan: 0</span>
+            <span id="activeShelfLabel" class="status-badge badge-info">📍 Raf Okutun</span>
+            <span id="rowCountLabel" class="status-badge badge-success">📊 0</span>
         </div>
         
-        <!-- Debug/Manual controls -->
-        <div id="debugControls" style="margin-top: 10px;">
+        <!-- Kompakt Debug -->
+        <div id="debugControls">
             <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.manualInitialize()">
-                🔄 Sistemi Yeniden Başlat
+                🔄 Yenile
             </button>
-            <button type="button" class="btn btn-sm btn-outline-info" onclick="console.log('Status:', window.checkSayimManagerReady(), window.sayimManagerInstance)">
-                🔍 Durum Kontrol Et
+            <button type="button" class="btn btn-sm btn-outline-info" onclick="console.log('Status:', window.checkSayimManagerReady())">
+                ℹ️ Durum
             </button>
         </div>
     </div>
 
-    <!-- Sayım Formu -->
-    <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm" role="form" aria-label="Sayım formu">
+    <!-- Kompakt Form -->
+    <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm" role="form">
         <input type="hidden" name="sayimID" value="#sayimID#">        
         <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
         <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
         <input type="hidden" name="rowCount" id="rowCount" value="0">
 
-        <!-- Sayım Sonuçları Tablosu -->
-        <div class="form-section" role="region" aria-labelledby="results-section-title">
-            <h5 class="section-title" id="results-section-title">📋 Sayım Sonuçları</h5>
+        <!-- Kompakt Tablo -->
+        <div class="form-section">
+            <h6 class="section-title">📋 Sonuçlar</h6>
             <div class="table-container">
                 <cf_grid_list>
-                    <caption class="sr-only">Sayım yapılan ürünlerin listesi</caption>
                     <thead>
                         <tr>
-                            <th scope="col" width="35%" id="serial-header">🏷️ Seri No</th>
-                            <th scope="col" width="35%" id="product-header">📦 Stok Kodu</th>
-                            <th scope="col" width="30%" id="shelf-header">📍 Raf</th>
+                            <th scope="col">Seri</th>
+                            <th scope="col">Stok</th>
+                            <th scope="col">Raf</th>
                         </tr>
                     </thead>
-                    <tbody id="sayimRows" aria-live="polite" aria-label="Sayım sonuçları">
-                        <!-- Sayım satırları buraya eklenecek -->
+                    <tbody id="sayimRows" aria-live="polite">
                         <tr id="noDataRow">
-                            <td colspan="3" class="text-center text-muted">
-                                <em>Henüz ürün sayımı yapılmamış</em>
+                            <td colspan="3" class="text-center text-muted" style="padding:16px;">
+                                <small><em>Henüz sayım yok</em></small>
                             </td>
                         </tr>
                     </tbody>
@@ -417,12 +421,17 @@ const SayimConfig = {
     ENTER_KEY: 'Enter',
     DATA_SOURCE: 'DSN3',
     MESSAGES: {
-        PRODUCT_NOT_IN_SHELF: 'Bu ürün bu rafta değil! Raf: {shelf} Stok Kodu: {product}',
-        ENTER_SHELF_CODE: 'Raf Okutunuz',
-        ACTIVE_SHELF: 'Aktif Raf: {shelf}',
-        COUNTED_ITEMS: 'Sayılan: {count}',
-        LOADING: 'Veriler yükleniyor...',
-        NO_DATA: 'Henüz ürün sayımı yapılmamış'
+        PRODUCT_NOT_IN_SHELF: 'Ürün bu rafta değil!\nRaf: {shelf}\nStok: {product}',
+        ENTER_SHELF_CODE: '📍 Raf Okutun',
+        ACTIVE_SHELF: '📍 {shelf}',
+        COUNTED_ITEMS: '📊 {count}',
+        LOADING: 'Yükleniyor...',
+        NO_DATA: 'Henüz sayım yok',
+        SYSTEM_LOADING: 'Sistem yükleniyor...',
+        BARCODE_ERROR: 'Barkod okunamadı',
+        SHELF_NOT_FOUND: 'Raf bulunamadı: {shelf}',
+        DUPLICATE_SERIAL: 'Bu seri zaten sayılmış',
+        PRODUCT_ADDED: 'Ürün eklendi ✓'
     }
 };
 
@@ -1154,7 +1163,7 @@ class SayimManager {
         // Check if instance exists and is properly initialized
         if (!instance) {
             console.warn('SayimManager instance not yet initialized');
-            NotificationManager.showToast('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+            NotificationManager.showToast(SayimConfig.MESSAGES.SYSTEM_LOADING, 'warning');
             return;
         }
         
@@ -1173,7 +1182,11 @@ class SayimManager {
         try {
             const shelf = instance.shelfManager.findShelfByCode(shelfCode);
             if (!shelf) {
-                NotificationManager.showToast(`Raf bulunamadı: ${shelfCode}`, 'error');
+                const message = SayimUtils.formatMessage(
+                    SayimConfig.MESSAGES.SHELF_NOT_FOUND,
+                    { shelf: shelfCode }
+                );
+                NotificationManager.showToast(message, 'error');
                 element.value = '';
                 return;
             }
@@ -1182,7 +1195,11 @@ class SayimManager {
             document.getElementById('barcodeSection').style.display = 'block';
             document.getElementById('barcode').focus();
             
-            NotificationManager.showToast(`Raf aktif: ${shelf.SHELF_CODE}`, 'success');
+            const successMessage = SayimUtils.formatMessage(
+                SayimConfig.MESSAGES.ACTIVE_SHELF,
+                { shelf: shelf.SHELF_CODE }
+            );
+            NotificationManager.showToast(successMessage, 'success', 1500);
             console.log('Active shelf set:', shelf);
         } catch (error) {
             console.error('Error in checkShelf:', error);
@@ -1200,7 +1217,7 @@ class SayimManager {
         // Check if instance exists and is properly initialized
         if (!instance) {
             console.warn('SayimManager instance not yet initialized');
-            NotificationManager.showToast('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+            NotificationManager.showToast(SayimConfig.MESSAGES.SYSTEM_LOADING, 'warning');
             return;
         }
         
@@ -1227,7 +1244,7 @@ class SayimManager {
             const serialObject = instance.barcodeProcessor.parseBarcode(barcode, parserId);
             
             if (!serialObject || !serialObject.serial_no) {
-                NotificationManager.showToast('Barkod okunamadı veya geçersiz', 'error');
+                NotificationManager.showToast(SayimConfig.MESSAGES.BARCODE_ERROR, 'error');
                 element.value = '';
                 return;
             }
@@ -1249,14 +1266,14 @@ class SayimManager {
 
             // Check for duplicate entries
             if (instance.isDuplicateEntry(serialObject.serial_no)) {
-                NotificationManager.showToast('Bu seri numarası zaten sayılmış', 'warning');
+                NotificationManager.showToast(SayimConfig.MESSAGES.DUPLICATE_SERIAL, 'warning');
                 element.value = '';
                 return;
             }
 
             instance.addSayimRow(serialObject);
             element.value = '';
-            NotificationManager.showToast('Ürün başarıyla eklendi', 'success', 1500);
+            NotificationManager.showToast(SayimConfig.MESSAGES.PRODUCT_ADDED, 'success', 1000);
             
         } catch (error) {
             console.error('Barcode processing failed:', error);
