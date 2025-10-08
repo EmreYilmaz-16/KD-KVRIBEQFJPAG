@@ -6,7 +6,7 @@
 <cfset i=1>
 <cfloop array="#Data#" index="item">
 <cfquery name="getProductInfo" datasource="#dsn3#">
-    SELECT PRODUCT_ID,STOCK_ID,PRODUCT_NAME, FROM STOCKS WHERE PRODUCT_CODE_2='#item.Stok#'
+    SELECT PRODUCT_ID,STOCK_ID,PRODUCT_NAME FROM STOCKS WHERE PRODUCT_CODE_2='#item.Stok#'
 </cfquery>
 <cfset "attributes.SHELF_CODE_IN#i#"=item.Raf>
 <cfset "attributes.STOCKID#i#"=getProductInfo.STOCK_ID>
