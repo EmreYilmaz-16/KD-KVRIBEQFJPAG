@@ -1466,7 +1466,7 @@ window.checkSayimManagerReady = function() {
 window.openUserGuide = function() {
     // Kullanım kılavuzunu yeni pencerede aç
     const guideWindow = window.open(
-        'kullanim_klavuzu.html',
+        '/AddOns/Partner/sayim/form/kullanim_klavuzu.html',
         'userGuide',
         'width=900,height=700,scrollbars=yes,resizable=yes,location=no,menubar=no,toolbar=no,status=no'
     );
