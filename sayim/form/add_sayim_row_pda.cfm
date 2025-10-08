@@ -347,6 +347,16 @@
             <span id="activeShelfLabel" class="status-badge badge-info" aria-label="Aktif raf durumu">Raf Okutunuz</span>
             <span id="rowCountLabel" class="status-badge badge-success" aria-label="Sayılan ürün adedi">Sayılan: 0</span>
         </div>
+        
+        <!-- Debug/Manual controls -->
+        <div id="debugControls" style="margin-top: 10px;">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.manualInitialize()">
+                🔄 Sistemi Yeniden Başlat
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-info" onclick="console.log('Status:', window.checkSayimManagerReady(), window.sayimManagerInstance)">
+                🔍 Durum Kontrol Et
+            </button>
+        </div>
     </div>
 
     <!-- Sayım Formu -->
@@ -534,6 +544,52 @@ class SayimDataAccess {
         return result;
     }
 
+    // Synchronous versions (remove async/await)
+    static loadShelfStocksSync() {
+        const cacheKey = this.getCacheKey('shelf_stocks');
+        let cachedData = this.getCache(cacheKey);
+        
+        if (cachedData) {
+            console.log('Using cached shelf stocks data');
+            return cachedData;
+        }
+
+        const query = `
+            SELECT PPR.STOCK_ID, PPR.PRODUCT_PLACE_ID, S.PRODUCT_CODE_2 
+            FROM PRODUCT_PLACE_ROWS AS PPR 
+            LEFT JOIN STOCKS AS S ON S.STOCK_ID = PPR.STOCK_ID
+            ORDER BY PPR.PRODUCT_PLACE_ID, S.PRODUCT_CODE_2
+        `;
+        
+        const result = this.executeQuery(query);
+        if (result) {
+            this.setCache(cacheKey, result);
+            console.log('Shelf stocks data loaded and cached');
+        }
+        
+        return result;
+    }
+
+    static loadShelvesSync() {
+        const cacheKey = this.getCacheKey('shelves');
+        let cachedData = this.getCache(cacheKey);
+        
+        if (cachedData) {
+            console.log('Using cached shelves data');
+            return cachedData;
+        }
+
+        const query = `SELECT SHELF_CODE, PRODUCT_PLACE_ID FROM PRODUCT_PLACE ORDER BY SHELF_CODE`;
+        const result = this.executeQuery(query);
+        
+        if (result) {
+            this.setCache(cacheKey, result);
+            console.log('Shelves data loaded and cached');
+        }
+        
+        return result;
+    }
+
     static clearCache() {
         this.cache.clear();
         console.log('Cache cleared');
@@ -570,6 +626,69 @@ class ShelfManager {
             NotificationManager.showToast('Sistem başlatılırken hata oluştu', 'error');
             SayimUtils.showLoading(false);
         }
+    }
+
+    // Synchronous version for better compatibility
+    initializeSync() {
+        return new Promise((resolve, reject) => {
+            try {
+                console.log('ShelfManager: Starting sync initialization...');
+                
+                // Load shelf data first
+                const shelfResult = SayimDataAccess.loadShelvesSync();
+                if (shelfResult && shelfResult.recordcount > 0) {
+                    this.shelves = [];
+                    for (let i = 0; i < shelfResult.recordcount; i++) {
+                        this.shelves.push({
+                            SHELF_CODE: shelfResult.SHELF_CODE[i],
+                            PRODUCT_PLACE_ID: shelfResult.PRODUCT_PLACE_ID[i]
+                        });
+                    }
+                    console.log(`Loaded ${this.shelves.length} shelves`);
+                }
+                
+                // Load stock data
+                const stockResult = SayimDataAccess.loadShelfStocksSync();
+                if (stockResult && stockResult.recordcount > 0) {
+                    this.shelfStocks.recordcount = stockResult.recordcount;
+                    this.shelfStocks.SHELVES = [];
+
+                    // Use Map for faster grouping
+                    const shelfMap = new Map();
+
+                    for (let i = 0; i < stockResult.recordcount; i++) {
+                        const shelfId = stockResult.PRODUCT_PLACE_ID[i];
+                        const stockId = stockResult.STOCK_ID[i];
+                        const productCode = stockResult.PRODUCT_CODE_2[i];
+
+                        if (!shelfMap.has(shelfId)) {
+                            shelfMap.set(shelfId, {
+                                SHELF_ID: shelfId,
+                                STOCKS: []
+                            });
+                        }
+
+                        shelfMap.get(shelfId).STOCKS.push({
+                            STOCK_ID: stockId,
+                            PRODUCT_CODE_2: productCode
+                        });
+                    }
+
+                    this.shelfStocks.SHELVES = Array.from(shelfMap.values());
+                    console.log(`Loaded ${this.shelfStocks.recordcount} stock records`);
+                }
+                
+                // Build lookup tables
+                this.buildLookupTables();
+                console.log('ShelfManager: Lookup tables built');
+                
+                resolve();
+                
+            } catch (error) {
+                console.error('ShelfManager sync initialization failed:', error);
+                reject(error);
+            }
+        });
     }
 
     buildLookupTables() {
@@ -685,6 +804,40 @@ class BarcodeProcessor {
         } catch (error) {
             console.error('Barcode manager initialization failed:', error);
         }
+    }
+
+    // Synchronous version for better compatibility
+    initializeSync() {
+        return new Promise((resolve, reject) => {
+            try {
+                console.log('BarcodeProcessor: Starting sync initialization...');
+                
+                this.barcodeManager = new BarcodeManager();
+                console.log('BarcodeManager created');
+                
+                // Load parsers synchronously
+                const parsers = this.barcodeManager.listParsers();
+                const select = document.getElementById('BarcodeParser');
+                
+                if (select) {
+                    parsers.forEach(parser => {
+                        const option = document.createElement('option');
+                        option.value = parser.id;
+                        option.textContent = parser.name;
+                        select.appendChild(option);
+                    });
+                    console.log(`Loaded ${parsers.length} barcode parsers`);
+                }
+                
+                resolve();
+                
+            } catch (error) {
+                console.error('BarcodeProcessor sync initialization failed:', error);
+                // Don't reject here as barcode processor is not critical
+                console.log('Continuing without barcode processor...');
+                resolve();
+            }
+        });
     }
 
     async loadParsers() {
@@ -900,6 +1053,38 @@ class SayimManager {
             console.error('SayimManager initialization failed:', error);
             NotificationManager.showToast('Sistem başlatılamadı', 'error');
         }
+    }
+
+    // Synchronous version for better compatibility
+    initializeSync() {
+        return new Promise((resolve, reject) => {
+            try {
+                console.log('Starting synchronous initialization...');
+                
+                // Initialize shelf manager first
+                this.shelfManager.initializeSync()
+                    .then(() => {
+                        console.log('ShelfManager initialized');
+                        // Initialize barcode processor
+                        return this.barcodeProcessor.initializeSync();
+                    })
+                    .then(() => {
+                        console.log('BarcodeProcessor initialized');
+                        // Setup event listeners
+                        this.setupEventListeners();
+                        console.log('Event listeners setup complete');
+                        resolve();
+                    })
+                    .catch((error) => {
+                        console.error('Sync initialization failed:', error);
+                        reject(error);
+                    });
+                    
+            } catch (error) {
+                console.error('Critical sync initialization error:', error);
+                reject(error);
+            }
+        });
     }
 
     setupEventListeners() {
@@ -1155,36 +1340,82 @@ class SayimManager {
 
 // Global instance
 let sayimManagerInstance = null;
+let isInitializing = false;
+let initializationComplete = false;
 
-// Initialize when document is ready
-$(document).ready(async function() {
+// Simple initialization function without async/await
+function initializeSayimManager() {
+    if (isInitializing || initializationComplete) {
+        return;
+    }
+    
+    isInitializing = true;
+    console.log('Starting SayimManager initialization...');
+    
     try {
         // Show loading immediately
         SayimUtils.showLoading(true);
         
-        // Initialize the manager
+        // Create instance
         sayimManagerInstance = new SayimManager();
-        
-        // Set global reference immediately after creation
         window.sayimManagerInstance = sayimManagerInstance;
         
-        // Initialize the instance
-        await sayimManagerInstance.initialize();
+        console.log('SayimManager instance created');
         
-        console.log('Application initialized successfully');
-        
+        // Initialize without async/await - use traditional callbacks
+        sayimManagerInstance.initializeSync()
+            .then(() => {
+                initializationComplete = true;
+                isInitializing = false;
+                SayimUtils.showLoading(false);
+                console.log('Application initialized successfully');
+                NotificationManager.showToast('Sistem başarıyla yüklendi', 'success');
+            })
+            .catch((error) => {
+                console.error('Failed to initialize application:', error);
+                isInitializing = false;
+                SayimUtils.showLoading(false);
+                NotificationManager.showToast('Uygulama başlatılamadı: ' + error.message, 'error');
+            });
+            
     } catch (error) {
-        console.error('Failed to initialize application:', error);
-        NotificationManager.showToast('Uygulama başlatılamadı', 'error');
-        
-        // Ensure loading is hidden even on error
+        console.error('Critical initialization error:', error);
+        isInitializing = false;
         SayimUtils.showLoading(false);
+        alert('Kritik hata: ' + error.message);
     }
-});
+}
+
+// Multiple initialization triggers
+if (typeof jQuery !== 'undefined') {
+    $(document).ready(initializeSayimManager);
+} else {
+    // Fallback without jQuery
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeSayimManager);
+    } else {
+        initializeSayimManager();
+    }
+}
+
+// Additional fallback with timeout
+setTimeout(() => {
+    if (!initializationComplete && !isInitializing) {
+        console.log('Fallback initialization triggered');
+        initializeSayimManager();
+    }
+}, 1000);
+
+// Add a manual initialization function
+window.manualInitialize = function() {
+    initializationComplete = false;
+    isInitializing = false;
+    initializeSayimManager();
+};
 
 // Add a safety check for early access
 window.checkSayimManagerReady = function() {
-    return window.sayimManagerInstance && window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
+    return initializationComplete && window.sayimManagerInstance && window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
 };
 </script>
 
