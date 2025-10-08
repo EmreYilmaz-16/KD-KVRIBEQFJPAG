@@ -398,6 +398,7 @@
         <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
         <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
         <input type="hidden" name="rowCount" id="rowCount" value="0">
+		<input type="hidden" name="formData" id="formData" value="">
 
         <!-- Kompakt Tablo -->
         <div class="form-section">
@@ -420,6 +421,13 @@
                     </tbody>
                 </cf_grid_list>
             </div>
+        </div>
+        
+        <!-- Kaydet Butonu -->
+        <div class="form-section">
+            <button type="button" class="btn btn-outline-success btn-block" onclick="kaydetSayim(this,event)">
+                💾 Kaydet
+            </button>
         </div>
     </cfform>
 </div>
@@ -1481,6 +1489,34 @@ window.openUserGuide = function() {
         guideWindow.focus();
     }
 };
+
+// Kaydet fonksiyonu - kullanıcı tarafından doldurulacak
+function kaydetSayim(button, event) {
+	event.preventDefault();
+	var sepetim=[];
+var sepet=document.getElementById("sayimRows")
+var sepetSatirlari=sepet.children
+for(let i=0;i<sepetSatirlari.length;i++){
+    var sepetSatiri=sepetSatirlari[i]
+    var Serial=sepetSatiri.children[0].innerText;
+    var Stok=sepetSatiri.children[1].innerText;
+    var Raf=sepetSatiri.children[2].innerText;
+    var ix=sepetim.findIndex(p=>p.Stok==Stok && p.Raf==Raf);
+    if(ix==-1){
+        sepetim.push({"Stok":Stok,"Raf":Raf,"SerialNumbers":[Serial]});        
+    }else{
+        //console.log(sepetim[ix])
+        sepetim[ix].SerialNumbers.push(Serial)
+    }
+   
+   // console.log(filtered)
+    
+}
+document.getElementById("formData").value=JSON.stringify(sepetim);
+$("#sayimForm").submit();
+    // Bu fonksiyonu kendiniz dolduracaksınız
+    console.log('Kaydet fonksiyonu çağrıldı');
+}
 </script>
 
 
