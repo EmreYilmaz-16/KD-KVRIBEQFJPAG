@@ -18,4 +18,5 @@
 <cfset i=i+1>
 </cfloop>
 <cfset attributes.fromSayim=1>
+<cfset attributes.row_count=i-1>
 <cfdump var="#attributes#">
