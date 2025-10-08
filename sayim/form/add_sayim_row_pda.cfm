@@ -428,10 +428,14 @@ class SayimUtils {
     }
 
     static showMessage(message, type = 'info') {
-        // You can implement toast notifications here
-        console.log(`[${type.toUpperCase()}] ${message}`);
-        if (type === 'error') {
-            alert(message);
+        // Fallback to NotificationManager if available, otherwise use alert
+        if (typeof NotificationManager !== 'undefined' && NotificationManager.showToast) {
+            NotificationManager.showToast(message, type);
+        } else {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            if (type === 'error') {
+                alert(message);
+            }
         }
     }
 
@@ -917,11 +921,25 @@ class SayimManager {
             shelfInput.addEventListener('input', (e) => {
                 this.validateShelfInput(e.target);
             });
+            
+            // Add a safety check for Enter key if static method fails
+            shelfInput.addEventListener('keyup', (e) => {
+                if (e.key === SayimConfig.ENTER_KEY && !window.sayimManagerInstance) {
+                    SayimUtils.showMessage('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+                }
+            });
         }
 
         if (barcodeInput) {
             barcodeInput.addEventListener('input', (e) => {
                 this.validateBarcodeInput(e.target);
+            });
+            
+            // Add a safety check for Enter key if static method fails  
+            barcodeInput.addEventListener('keyup', (e) => {
+                if (e.key === SayimConfig.ENTER_KEY && !window.sayimManagerInstance) {
+                    SayimUtils.showMessage('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+                }
             });
         }
     }
@@ -947,6 +965,14 @@ class SayimManager {
         if (event.key !== SayimConfig.ENTER_KEY) return;
         
         const instance = window.sayimManagerInstance;
+        
+        // Check if instance exists and is properly initialized
+        if (!instance) {
+            console.warn('SayimManager instance not yet initialized');
+            NotificationManager.showToast('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+            return;
+        }
+        
         if (instance.isProcessing) return;
 
         const shelfCode = element.value.trim();
@@ -973,6 +999,9 @@ class SayimManager {
             
             NotificationManager.showToast(`Raf aktif: ${shelf.SHELF_CODE}`, 'success');
             console.log('Active shelf set:', shelf);
+        } catch (error) {
+            console.error('Error in checkShelf:', error);
+            NotificationManager.showToast('Raf kontrolünde hata oluştu', 'error');
         } finally {
             instance.isProcessing = false;
         }
@@ -982,6 +1011,14 @@ class SayimManager {
         if (event.key !== SayimConfig.ENTER_KEY) return;
         
         const instance = window.sayimManagerInstance;
+        
+        // Check if instance exists and is properly initialized
+        if (!instance) {
+            console.warn('SayimManager instance not yet initialized');
+            NotificationManager.showToast('Sistem henüz yükleniyor, lütfen bekleyin...', 'warning');
+            return;
+        }
+        
         if (instance.isProcessing) return;
 
         const barcode = element.value.trim();
@@ -1122,14 +1159,33 @@ let sayimManagerInstance = null;
 // Initialize when document is ready
 $(document).ready(async function() {
     try {
+        // Show loading immediately
+        SayimUtils.showLoading(true);
+        
+        // Initialize the manager
         sayimManagerInstance = new SayimManager();
+        
+        // Set global reference immediately after creation
         window.sayimManagerInstance = sayimManagerInstance;
+        
+        // Initialize the instance
         await sayimManagerInstance.initialize();
+        
+        console.log('Application initialized successfully');
+        
     } catch (error) {
         console.error('Failed to initialize application:', error);
-        SayimUtils.showMessage('Uygulama başlatılamadı', 'error');
+        NotificationManager.showToast('Uygulama başlatılamadı', 'error');
+        
+        // Ensure loading is hidden even on error
+        SayimUtils.showLoading(false);
     }
 });
+
+// Add a safety check for early access
+window.checkSayimManagerReady = function() {
+    return window.sayimManagerInstance && window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
+};
 </script>
 
 
