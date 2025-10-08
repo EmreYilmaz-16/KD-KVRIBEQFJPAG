@@ -330,6 +330,58 @@
         background: #28a745;
         color: white;
     }
+    
+    /* Save Button Styles */
+    .save-section {
+        position: sticky;
+        bottom: 10px;
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #e1e5e9;
+        margin-top: 10px;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+    
+    .btn-save {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-save:hover {
+        background: linear-gradient(135deg, #218838, #1dc2a0);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-save:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-save:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .save-info {
+        text-align: center;
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-top: 6px;
+    }
 </style>
 
 <div class="sayim-container" role="main" aria-label="Sayım Uygulaması">
@@ -398,6 +450,7 @@
         <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
         <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
         <input type="hidden" name="rowCount" id="rowCount" value="0">
+        <input type="hidden" name="sayimData" id="sayimData" value="">
 
         <!-- Kompakt Tablo -->
         <div class="form-section">
@@ -419,6 +472,16 @@
                         </tr>
                     </tbody>
                 </cf_grid_list>
+            </div>
+        </div>
+        
+        <!-- Kaydet Butonu -->
+        <div class="save-section">
+            <button type="submit" id="saveButton" class="btn-save" onclick="return confirmSave()">
+                💾 Sayımı Kaydet
+            </button>
+            <div class="save-info">
+                <span id="saveStatus">Sayılan ürün: <span id="saveCount">0</span></span>
             </div>
         </div>
     </cfform>
@@ -1373,6 +1436,11 @@ class SayimManager {
             { count: this.rowCount }
         );
         document.getElementById('rowCountLabel').textContent = label;
+        
+        // Update save counter
+        if (typeof window.updateSaveCounter === 'function') {
+            window.updateSaveCounter();
+        }
     }
 
     escapeHtml(text) {
@@ -1479,6 +1547,123 @@ window.openUserGuide = function() {
     // Focus kılavuz penceresine
     if (guideWindow) {
         guideWindow.focus();
+    }
+};
+
+// Save Functions
+window.confirmSave = function() {
+    const rowCount = parseInt(document.getElementById('rowCount').value) || 0;
+    const activeShelf = document.getElementById('activeShelfCode').value;
+    
+    if (rowCount === 0) {
+        NotificationManager.showToast('Henüz hiç ürün sayılmamış!', 'warning');
+        return false;
+    }
+    
+    if (!activeShelf) {
+        NotificationManager.showToast('Aktif raf seçilmemiş!', 'warning');
+        return false;
+    }
+    
+    // Onay mesajı
+    const confirmMsg = `Sayım Kayıt Onayı:\n\n` +
+                      `📍 Raf: ${activeShelf}\n` +
+                      `📊 Toplam Ürün: ${rowCount}\n\n` +
+                      `Kaydetmek istediğinize emin misiniz?`;
+    
+    if (confirm(confirmMsg)) {
+        // Sayım verilerini hazırla
+        prepareSaveData();
+        
+        // Kaydet butonunu devre dışı bırak
+        const saveButton = document.getElementById('saveButton');
+        saveButton.disabled = true;
+        saveButton.innerHTML = '⏳ Kaydediliyor...';
+        
+        // Başarı mesajı göster
+        NotificationManager.showToast('Sayım kaydediliyor...', 'info');
+        
+        // Form submit ediliyor
+        return true;
+    }
+    
+    return false;
+};
+
+// Sayım verilerini hazırla
+window.prepareSaveData = function() {
+    // Tablo verilerini topla
+    const tableBody = document.querySelector('#sayimTable tbody');
+    const rows = tableBody.querySelectorAll('tr');
+    const sayimData = [];
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 3) {
+            const urunID = cells[0].textContent.trim();
+            const urunKodu = cells[1].textContent.trim();
+            const miktarInput = cells[2].querySelector('input');
+            const miktar = miktarInput ? miktarInput.value : cells[2].textContent.trim();
+
+            if (urunID && urunKodu && miktar && miktar !== '0') {
+                sayimData.push({
+                    urunID: urunID,
+                    urunKodu: urunKodu,
+                    miktar: miktar
+                });
+            }
+        }
+    });
+
+    // Gizli alanlara aktar
+    const activeShelfID = document.getElementById('activeShelfID');
+    const activeShelfCode = document.getElementById('activeShelfCode');
+    const rowCountField = document.getElementById('rowCount');
+    const sayimDataField = document.getElementById('sayimData');
+
+    if (activeShelfID && sayimManager) {
+        activeShelfID.value = sayimManager.activeShelfID || '';
+    }
+    
+    if (activeShelfCode && sayimManager) {
+        activeShelfCode.value = sayimManager.activeShelfCode || '';
+    }
+    
+    if (rowCountField) {
+        rowCountField.value = sayimData.length;
+    }
+    
+    if (sayimDataField) {
+        sayimDataField.value = JSON.stringify(sayimData);
+    }
+
+    console.log('Sayım verileri hazırlandı:', {
+        rafID: sayimManager?.activeShelfID,
+        rafKodu: sayimManager?.activeShelfCode,
+        urunSayisi: sayimData.length,
+        veriler: sayimData
+    });
+};
+
+// Update save counter when products are added
+window.updateSaveCounter = function() {
+    const rowCount = parseInt(document.getElementById('rowCount').value) || 0;
+    const saveCount = document.getElementById('saveCount');
+    const saveButton = document.getElementById('saveButton');
+    
+    if (saveCount) {
+        saveCount.textContent = rowCount;
+    }
+    
+    // Kaydet butonunu aktif/pasif yap
+    if (saveButton) {
+        if (rowCount > 0) {
+            saveButton.disabled = false;
+            saveButton.innerHTML = `💾 Sayımı Kaydet (${rowCount} ürün)`;
+        } else {
+            saveButton.disabled = true;
+            saveButton.innerHTML = '💾 Sayımı Kaydet';
+        }
     }
 };
 </script>
