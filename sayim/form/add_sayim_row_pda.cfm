@@ -1,4 +1,4 @@
-<!-- PDA Optimized CSS for Compact Design -->
+﻿<!-- PDA Optimized CSS for Compact Design -->
 <style>
     /* PDA-Optimized Compact Design */
     body {
