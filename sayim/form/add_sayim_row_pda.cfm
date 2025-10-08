@@ -378,7 +378,7 @@
 				<span id="rowCountLabel" class="status-pill status-pill--counter" data-label="Toplam Satır">0</span>
 			</div>
 		</div>
-		<cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm" class="sayim-form">
+		
 			<input type="hidden" name="sayimID" value="#sayimID#">
 			<div class="sayim-card__body">
 				<section class="sayim-fields">
