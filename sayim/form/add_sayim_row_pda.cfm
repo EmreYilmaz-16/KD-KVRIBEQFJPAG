@@ -17,6 +17,29 @@
 <input type="hidden" name="rowCount" id="rowCount" value="0">
 
 </div>
+<cf_grid_list>
+    <thead>
+        <tr>
+            <th>
+                Seri No
+            </th>
+            
+            <th>
+                Stok Kodu
+            </th>
+            <th>
+                Stok Adı
+            </th>
+            <th>
+                Raf
+            </th>
+
+        </tr>
+    </thead>
+    <tbody id="sayimRows">
+        <!-- Sayım satırları buraya eklenecek -->
+</tbody>
+</cf_grid_list>
 </cfform>
 
 <div class="form-group">
@@ -33,6 +56,7 @@ var AllShelves=[];
     if(ev.key === 'Enter' && barcode.length >= 3){
         var SerialObject = bm.parseWith(barcode, parseInt(document.getElementById('BarcodeParser').value));
         console.log(SerialObject);
+
     }
 }
   function CheckRaf(el,ev) {

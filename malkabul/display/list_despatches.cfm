@@ -5,7 +5,7 @@
 <div class="page-wrapper">
     <div class="page-header">
         <div>
-            <h1>Sevk Listesi</h1>
+            <h1>Mal Kabul Listesi</h1>
             <p class="page-subtitle">Satın alma sevkiyatlarını hızlıca arayın, durumunu inceleyin.</p>
         </div>
         <cfif Len(searchTerm)>
