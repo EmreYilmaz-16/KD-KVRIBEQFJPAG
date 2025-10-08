@@ -393,7 +393,7 @@
     </div>
 
     <!-- Kompakt Form -->
-    <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm" role="form">
+    <cfform id="sayimForm" method="post" action="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_action_pda" role="form">
         <input type="hidden" name="sayimID" value="#sayimID#">        
         <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
         <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
