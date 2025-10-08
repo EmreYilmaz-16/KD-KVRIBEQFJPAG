@@ -301,10 +301,34 @@
         border: 0;
     }
     
-    /* Focus improvements for touch devices */
-    input:focus, select:focus, button:focus {
-        outline: 2px solid #1a73e8;
-        outline-offset: 1px;
+    .btn-outline-primary {
+        border-color: #1a73e8;
+        color: #1a73e8;
+    }
+    
+    .btn-outline-primary:hover {
+        background: #1a73e8;
+        color: white;
+    }
+    
+    .btn-outline-info {
+        border-color: #17a2b8;
+        color: #17a2b8;
+    }
+    
+    .btn-outline-info:hover {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .btn-outline-success {
+        border-color: #28a745;
+        color: #28a745;
+    }
+    
+    .btn-outline-success:hover {
+        background: #28a745;
+        color: white;
     }
 </style>
 
@@ -356,6 +380,9 @@
         
         <!-- Kompakt Debug -->
         <div id="debugControls">
+            <button type="button" class="btn btn-sm btn-outline-success" onclick="openUserGuide()">
+                📖 Kılavuz
+            </button>
             <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.manualInitialize()">
                 🔄 Yenile
             </button>
@@ -1433,6 +1460,26 @@ window.manualInitialize = function() {
 // Add a safety check for early access
 window.checkSayimManagerReady = function() {
     return initializationComplete && window.sayimManagerInstance && window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
+};
+
+// User Guide Function
+window.openUserGuide = function() {
+    // Kullanım kılavuzunu yeni pencerede aç
+    const guideWindow = window.open(
+        'kullanim_klavuzu.html',
+        'userGuide',
+        'width=900,height=700,scrollbars=yes,resizable=yes,location=no,menubar=no,toolbar=no,status=no'
+    );
+    
+    // Eğer popup engellenmişse, yeni sekmede aç
+    if (!guideWindow) {
+        window.open('/AddOns/Partner/sayim/form/kullanim_klavuzu.html', '_blank');
+    }
+    
+    // Focus kılavuz penceresine
+    if (guideWindow) {
+        guideWindow.focus();
+    }
 };
 </script>
 
