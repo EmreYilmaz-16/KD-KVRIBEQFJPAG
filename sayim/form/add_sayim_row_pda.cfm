@@ -447,10 +447,14 @@
     <!-- Kompakt Form -->
     <cfform id="sayimForm" method="post" action="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_action_pda" role="form">
         <input type="hidden" name="sayimID" value="#sayimID#">        
-        <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
-        <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
+        <input type="hidden" name="shelfCode" id="shelfCode" value="">
         <input type="hidden" name="rowCount" id="rowCount" value="0">
         <input type="hidden" name="sayimData" id="sayimData" value="">
+        
+        <!-- Ayrıca ayrı alanlar da ekleyelim -->
+        <input type="hidden" name="product_codes" id="product_codes" value="">
+        <input type="hidden" name="serial_nos" id="serial_nos" value="">
+        <input type="hidden" name="shelf_codes" id="shelf_codes" value="">
 
         <!-- Kompakt Tablo -->
         <div class="form-section">
@@ -1596,37 +1600,49 @@ window.prepareSaveData = function() {
     const tableBody = document.querySelector('#sayimTable tbody');
     const rows = tableBody.querySelectorAll('tr');
     const sayimData = [];
+    const productCodes = [];
+    const serialNos = [];
+    const shelfCodes = [];
 
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
         if (cells.length >= 3) {
-            const urunID = cells[0].textContent.trim();
-            const urunKodu = cells[1].textContent.trim();
-            const miktarInput = cells[2].querySelector('input');
-            const miktar = miktarInput ? miktarInput.value : cells[2].textContent.trim();
+            // Tablo yapısına göre verileri al
+            const serial_no = cells[0].textContent.trim(); // Seri Numarası (1. sütun)
+            const product_code_2 = cells[1].textContent.trim(); // Stok Kodu (2. sütun)
+            const shelfCode = cells[2].textContent.trim(); // Raf Kodu (3. sütun)
+            
+            // Seri numarası olduğu için miktar her zaman 1
+            const miktar = '1';
 
-            if (urunID && urunKodu && miktar && miktar !== '0') {
+            if (product_code_2 && serial_no && shelfCode) {
+                // JSON formatı için
                 sayimData.push({
-                    urunID: urunID,
-                    urunKodu: urunKodu,
+                    product_code_2: product_code_2,
+                    serial_no: serial_no,
+                    shelfCode: shelfCode,
                     miktar: miktar
                 });
+                
+                // Ayrı listeler için
+                productCodes.push(product_code_2);
+                serialNos.push(serial_no);
+                shelfCodes.push(shelfCode);
             }
         }
     });
 
     // Gizli alanlara aktar
-    const activeShelfID = document.getElementById('activeShelfID');
-    const activeShelfCode = document.getElementById('activeShelfCode');
+    const shelfCodeField = document.getElementById('shelfCode');
     const rowCountField = document.getElementById('rowCount');
     const sayimDataField = document.getElementById('sayimData');
-
-    if (activeShelfID && sayimManager) {
-        activeShelfID.value = sayimManager.activeShelfID || '';
-    }
+    const productCodesField = document.getElementById('product_codes');
+    const serialNosField = document.getElementById('serial_nos');
+    const shelfCodesField = document.getElementById('shelf_codes');
     
-    if (activeShelfCode && sayimManager) {
-        activeShelfCode.value = sayimManager.activeShelfCode || '';
+    // Ana raf kodu (varsayılan)
+    if (shelfCodeField && sayimManager) {
+        shelfCodeField.value = sayimManager.activeShelfCode || '';
     }
     
     if (rowCountField) {
@@ -1636,12 +1652,28 @@ window.prepareSaveData = function() {
     if (sayimDataField) {
         sayimDataField.value = JSON.stringify(sayimData);
     }
+    
+    // Ayrı alanları doldur (virgülle ayrılmış)
+    if (productCodesField) {
+        productCodesField.value = productCodes.join(',');
+    }
+    
+    if (serialNosField) {
+        serialNosField.value = serialNos.join(',');
+    }
+    
+    if (shelfCodesField) {
+        shelfCodesField.value = shelfCodes.join(',');
+    }
 
     console.log('Sayım verileri hazırlandı:', {
-        rafID: sayimManager?.activeShelfID,
-        rafKodu: sayimManager?.activeShelfCode,
+        sayimID: document.querySelector('input[name="sayimID"]')?.value,
+        varsayilanShelfCode: sayimManager?.activeShelfCode,
         urunSayisi: sayimData.length,
-        veriler: sayimData
+        veriler: sayimData,
+        productCodes: productCodes,
+        serialNos: serialNos,
+        shelfCodes: shelfCodes
     });
 };
 
