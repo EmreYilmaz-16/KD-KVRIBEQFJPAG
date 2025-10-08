@@ -7,6 +7,9 @@
 <div class="form-group">
     <input type="text" class="form-control" id="rafNo" placeholder="Raf No" onkeyup="CheckRaf(this,event)">
 </div>
+<div class="form-group">
+    <input type="text" class="form-control" id="barcode" placeholder="Barkod" onkeyup="checkBarcode(event,this)">
+</div>
 <cfform id="sayimForm" method="post" action="add_sayim_row_action_pda.cfm">
     <input type="hidden" name="sayimID" value="#sayimID#">        
 <div id="activeShelf">
@@ -39,9 +42,7 @@
 </cf_grid_list>
 </cfform>
 
-<div class="form-group">
-    <input type="text" class="form-control" id="barcode" placeholder="Barkod" onkeyup="checkBarcode(event,this)">
-</div>
+
 
 
 <script>
@@ -82,7 +83,7 @@ var AllShelves=[];
     }
 
 $(document).ready(function(){
-     var sh=wrk_query("SELECT * FROM PRODUCT_PLACE_ROWS","DSN3");
+     var sh=wrk_query("SELECT PPR.STOCK_ID,PPR.PRODUCT_PLACE_ID,S.PRODUCT_CODE_2 FROM PRODUCT_PLACE_ROWS AS PPR LEFT JOIN STOCKS AS S ON S.STOCK_ID=PPR.STOCK_ID","DSN3");
 
 O.recordcount=sh.recordcount
 O.SHELVES=[];
@@ -91,13 +92,14 @@ for(let i=0;i<sh.recordcount;i++){
     var ix=O.SHELVES.findIndex(p=>p.SHELF_ID==sh.PRODUCT_PLACE_ID[i]);
     var SHELF_ID=sh.PRODUCT_PLACE_ID[i]
     var STOCK_ID=sh.STOCK_ID[i]
+	var PRODUCT_CODE_2=sh.PRODUCT_CODE_2[i]
     if(ix ==-1){
         O.SHELVES.push({
             SHELF_ID,
-            STOCKS:[STOCK_ID]
+            STOCKS:[{STOCK_ID,PRODUCT_CODE_2}]
         })
     }else{
-        O.SHELVES[ix].STOCKS.push(STOCK_ID)
+        O.SHELVES[ix].STOCKS.push({STOCK_ID,PRODUCT_CODE_2})
     }
 }
 console.log(O)
