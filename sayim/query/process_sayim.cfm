@@ -39,7 +39,8 @@ select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY,PRODUCT_CODE_2 from
 <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 
 <cfquery name="getrows" datasource="#dsn3#">
-SELECT SERIAL_NUMBER,STOCK_ID,SHELF_NUMBER FROM w3Qa_1.PBS_SERIAL_SAYIM_ROW
+SELECT SERIAL_NUMBER,STOCK_ID,SHELF_NUMBER,PP.PRODUCT_PLACE_ID FROM w3Qa_1.PBS_SERIAL_SAYIM_ROW
+LEFT JOIN w3Qa_1.PRODUCT_PLACE AS PP ON PP.SHELF_CODE=PBS_SERIAL_SAYIM_ROW.SHELF_NUMBER
 WHERE SAYIM_ID=#attributes.sayim_id#
 </cfquery>
 <cfdump var="#WS#">
@@ -47,7 +48,7 @@ WHERE SAYIM_ID=#attributes.sayim_id#
 <cfloop query="getrows">
     <cfset STOCK_ID_SER=getrows.STOCK_ID>
     <cfset SERI_NO_SER=getrows.SERIAL_NUMBER>
-    <cfset GIRIS_RAF_ID=getrows.SHELF_NUMBER>
+    <cfset GIRIS_RAF_ID=getrows.PRODUCT_PLACE_ID>
     
     
         <cfset WRK_ROW_ID_SER=EVALUATE("WS.SID#getrows.STOCK_ID#_#getrows.SHELF_NUMBER#.WRK_ROW_ID")>
