@@ -334,6 +334,7 @@
             .checkbox-cell {
                 align-self: center;
                 margin-right: 8px;
+                padding: 4px; /* Add padding for easier clicking */
             }
 
             .custom-checkbox {
@@ -341,6 +342,7 @@
                 display: inline-block;
                 width: 20px;
                 height: 20px;
+                cursor: pointer; /* Make sure cursor shows it's clickable */
             }
 
             .custom-checkbox input[type="checkbox"] {
@@ -350,6 +352,7 @@
                 height: 100%;
                 margin: 0;
                 cursor: pointer;
+                z-index: 1; /* Ensure checkbox is on top */
             }
 
             .custom-checkbox .checkmark {
@@ -362,6 +365,7 @@
                 border: 2px solid #e2e8f0;
                 border-radius: 4px;
                 transition: all 0.2s ease;
+                pointer-events: none; /* Let clicks go through to the input */
             }
 
             .custom-checkbox:hover .checkmark {
@@ -561,38 +565,46 @@
     </div>
 
     <script>
-        const searchInput = document.getElementById('searchInput');
-        const recordContainer = document.getElementById('sayimList');
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const mergeActions = document.getElementById('mergeActions');
-        const selectedCountElement = document.getElementById('selectedCount');
+        // Global variables
+        let searchInput, recordContainer, selectAllCheckbox, mergeActions, selectedCountElement;
+        
+        // Initialize DOM elements
+        function initializeElements() {
+            searchInput = document.getElementById('searchInput');
+            recordContainer = document.getElementById('sayimList');
+            selectAllCheckbox = document.getElementById('selectAll');
+            mergeActions = document.getElementById('mergeActions');
+            selectedCountElement = document.getElementById('selectedCount');
+        }
 
         // Search functionality
-        if (searchInput && recordContainer) {
-            const items = Array.from(recordContainer.querySelectorAll('.record-item'));
-            const emptyMessage = document.getElementById('emptyFilterState');
+        function initializeSearch() {
+            if (searchInput && recordContainer) {
+                const items = Array.from(recordContainer.querySelectorAll('.record-item'));
+                const emptyMessage = document.getElementById('emptyFilterState');
 
-            const applyFilter = () => {
-                const query = searchInput.value.trim().toLowerCase();
-                let visibleCount = 0;
+                const applyFilter = () => {
+                    const query = searchInput.value.trim().toLowerCase();
+                    let visibleCount = 0;
 
-                items.forEach(item => {
-                    const matches = item.dataset.filter.includes(query);
-                    item.classList.toggle('hidden', !matches);
-                    if (matches) {
-                        visibleCount++;
+                    items.forEach(item => {
+                        const matches = item.dataset.filter.includes(query);
+                        item.classList.toggle('hidden', !matches);
+                        if (matches) {
+                            visibleCount++;
+                        }
+                    });
+
+                    if (emptyMessage) {
+                        emptyMessage.classList.toggle('hidden', visibleCount !== 0);
                     }
-                });
 
-                if (emptyMessage) {
-                    emptyMessage.classList.toggle('hidden', visibleCount !== 0);
-                }
+                    // Update select all checkbox state after filtering
+                    updateSelectAllState();
+                };
 
-                // Update select all checkbox state after filtering
-                updateSelectAllState();
-            };
-
-            searchInput.addEventListener('input', applyFilter);
+                searchInput.addEventListener('input', applyFilter);
+            }
         }
 
         // Checkbox functionality
@@ -634,17 +646,19 @@
         }
 
         // Select all functionality
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('.sayim-checkbox');
-                const visibleCheckboxes = Array.from(checkboxes).filter(cb => !cb.closest('.record-item').classList.contains('hidden'));
-                
-                visibleCheckboxes.forEach(checkbox => {
-                    checkbox.checked = this.checked;
+        function initializeSelectAll() {
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.sayim-checkbox');
+                    const visibleCheckboxes = Array.from(checkboxes).filter(cb => !cb.closest('.record-item').classList.contains('hidden'));
+                    
+                    visibleCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                    
+                    updateSelectedCount();
                 });
-                
-                updateSelectedCount();
-            });
+            }
         }
 
         // Individual checkbox change events
@@ -654,6 +668,31 @@
                 updateSelectAllState();
             }
         });
+
+        // Add event listeners to all existing checkboxes after DOM is loaded
+        function initializeCheckboxEvents() {
+            // Re-initialize all checkbox listeners
+            const individualCheckboxes = document.querySelectorAll('.sayim-checkbox');
+            console.log('Found checkboxes:', individualCheckboxes.length); // Debug log
+            
+            individualCheckboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    console.log('Checkbox changed:', this.value, this.checked); // Debug log
+                    updateSelectedCount();
+                    updateSelectAllState();
+                });
+            });
+        }
+
+        // Main initialization function
+        function initialize() {
+            initializeElements();
+            initializeSearch();
+            initializeSelectAll();
+            initializeCheckboxEvents();
+            updateSelectedCount();
+            updateSelectAllState();
+        }
 
         // Merge functionality
         function mergeSayimlar() {
@@ -690,9 +729,12 @@
             }
         }
 
-        // Initialize
-        updateSelectedCount();
-        updateSelectAllState();
+        // Initialize when everything is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initialize);
+        } else {
+            initialize();
+        }
     </script>
 
 </cfoutput>
