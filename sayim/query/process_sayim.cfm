@@ -24,6 +24,7 @@ select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY from w3Qa_1.PBS_SER
     <cfset i=i+1>
     <cfset "attributes.SHELF_CODE#i#"=getRows1.SHELF_NUMBER>
     <cfset "attributes.STOCK_ID#i#"=getRows1.STOCK_ID>
+    <cfset "attributes.STOCKID#i#"=getRows1.STOCK_ID>
     <cfset "attributes.AMOUNT#i#"=getRows1.QUANTITY>
     <cfset "attributes.PRODUCT_ID#i#"=getRows1.PRODUCT_ID>
 </cfloop>
