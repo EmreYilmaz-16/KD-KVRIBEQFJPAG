@@ -16,7 +16,7 @@
             <cfset item.productID=getStok.PRODUCT_ID[1]>
             <cfset item.productName=getStok.PRODUCT_NAME[1]>
             <cfloop array="#item.SerialNumbers#" index="sn">
-                <cfif item.isReadedBefore eq 1>
+                <cfif sn.isReadedBefore eq 1>
                     <!--- Daha önce okunduysa atla --->
                     <cfcontinue>
                 </cfif>
