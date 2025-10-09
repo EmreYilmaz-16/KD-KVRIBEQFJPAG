@@ -577,7 +577,7 @@ a:link {
                         </div>
                         <div class="item-action">
                             <a href="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_pbs&sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
-                            <a href="/index.cfm?fuseaction=stock.process_sayim&sayim_id=#SAYIM_ID#" class="process-button">Sayımı İşle</a>
+                            <a href="/index.cfm?fuseaction=stock.emptypopup_process_sayim&sayim_id=#SAYIM_ID#" class="process-button">Sayımı İşle</a>
                         </div>
                     </li>
                 </cfloop>
