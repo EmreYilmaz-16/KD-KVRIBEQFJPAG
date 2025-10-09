@@ -477,5 +477,5 @@ POZİSYON=SATIRLAR
 
 
 	<cflocation url="#request.self#?fuseaction=pda.pda_welcome" addtoken="No">----->
-<cfabort>
+
 
