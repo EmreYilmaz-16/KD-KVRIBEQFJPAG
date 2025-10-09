@@ -3,6 +3,54 @@
 
 <cfset Data=deserializeJSON(attributes.FORMDATA)>
 <cfdump var="#Data#">
+<cfset ErrorArray= arrayNew(1)>
+<cfloop array="#Data#" index="item">
+    <cfquery name="getStok" datasource="w3Qa">
+            SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#item.stock#'
+    </cfquery>
+    <cfif getStok.recordCount>
+        <cfif getStok.recordCount gt 1>
+            <cfset arrayAppend(ErrorArray, "Birden fazla ürün bulundu: " & item.stock)>
+        <cfelse>
+            <cfset item.stockID=getStok.STOCK_ID[1]>
+            <cfset item.productID=getStok.PRODUCT_ID[1]>
+            <cfset item.productName=getStok.PRODUCT_NAME[1]>
+            <cfloop array="#item.SerialNumbers#" index="sn">
+                <cfquery name="checkSerial" datasource="w3Qa_1">
+                    SELECT COUNT(*) as SERIAL_COUNT
+                    FROM PBS_SERIAL_SAYIM_ROW
+                    WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
+                    AND SERIAL_NUMBER = <cfqueryparam value="#trim(sn)#" cfsqltype="cf_sql_varchar">
+                </cfquery>
+                <cfif checkSerial.SERIAL_COUNT eq 0>
+                    <!--- Yeni seri numarası ekle --->
+                    <cfquery datasource="w3Qa_1">
+                        INSERT INTO PBS_SERIAL_SAYIM_ROW (
+                            SAYIM_ID,
+                            SERIAL_NUMBER,
+                            IN_OUT,
+                            PRODUCT_ID,
+                            STOCK_ID
+                        ) VALUES (
+                            <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#trim(sn)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
+                            <cfqueryparam value="#item.productID#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#item.stockID#" cfsqltype="cf_sql_integer">
+                        )
+                    </cfquery>
+                    
+                </cfif>
+
+            </cfloop>
+    <cfelse>
+        <cfset arrayAppend(ErrorArray, "Ürün bulunamadı: " & item.stock)>
+    </cfif>
+</cfloop>
+
+
+
+<cfabort>
 <cfset i=1>
 <cfloop array="#Data#" index="item">
 <cfquery name="getProductInfo" datasource="#dsn3#">
