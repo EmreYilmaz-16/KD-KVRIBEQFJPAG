@@ -16,13 +16,11 @@
             <cfset item.productID=getStok.PRODUCT_ID[1]>
             <cfset item.productName=getStok.PRODUCT_NAME[1]>
             <cfloop array="#item.SerialNumbers#" index="sn">
-                <cfquery name="checkSerial" datasource="w3Qa_1">
-                    SELECT COUNT(*) as SERIAL_COUNT
-                    FROM PBS_SERIAL_SAYIM_ROW
-                    WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
-                    AND SERIAL_NUMBER = <cfqueryparam value="#trim(sn)#" cfsqltype="cf_sql_varchar">
-                </cfquery>
-                <cfif checkSerial.SERIAL_COUNT eq 0>
+                <cfif item.isReadedBefore eq 1>
+                    <!--- Daha önce okunduysa atla --->
+                    <cfcontinue>
+                </cfif>
+               
                     <!--- Yeni seri numarası ekle --->
                     <cfquery datasource="w3Qa_1">
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
@@ -35,7 +33,7 @@
                             STOCK_ID
                         ) VALUES (
                             <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#trim(sn)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#trim(sn.Serial)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#trim(item.Raf)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#trim(item.Stok)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
@@ -44,7 +42,7 @@
                         )
                     </cfquery>
                     
-                </cfif>
+                
 
             </cfloop>
         </cfif>
