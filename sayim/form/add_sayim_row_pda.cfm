@@ -425,7 +425,7 @@
                         </tr>
                     </thead>
                     <tbody id="sayimRows" aria-live="polite">
-                        <cfif getSayimRowsgetSayimRows gt 0>
+                        <cfif getSayimRows.recordCount gt 0>
                         <cfloop query="getSayimRows">
                         <tr>
                             <td headers="serial-header"><cfoutput>#getSayimRows.SERIAL_NUMBER#</cfoutput></td>
