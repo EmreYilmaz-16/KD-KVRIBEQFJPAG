@@ -6,10 +6,26 @@
         <cfset departmentId = depoValues[1]>
         <cfset locationId = depoValues[2]>
         <cfset attributes.dep_in=arrayToList(depoValues)>
+        <cfset attributes.dep_out=arrayToList(depoValues)>
         <cfdump var="#depoValues#">
         <cfdump var="#attributes#">
 
+        <cfset attributes.process_cat = 93>
+    <cfset attributes.action_id = ''>
+    <cfset attributes.is_mobile = 1>
+    <cfset attributes.tersfis = 1>
+    
 <cfquery name="getRows1" datasource="#dsn3#">
 select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY from w3Qa_1.PBS_SERIAL_SAYIM_ROW GROUP BY PRODUCT_ID,STOCK_ID,SHELF_NUMBER
 </cfquery>
 
+
+<cfloop query="getRows1">
+    <cfset "attributes.SHELF_CODE#i#"=getRows1.SHELF_NUMBER>
+    <cfset "attributes.STOCK_ID#i#"=getRows1.STOCK_ID>
+    <cfset "attributes.AMOUNT#i#"=getRows1.QUANTITY>
+    <cfset "attributes.PRODUCT_ID#i#"=getRows1.PRODUCT_ID>
+</cfloop>
+<cfset attributes.row_count=getRows1.recordcount>
+
+<cfinclude template="add_ambar_fis.cfm">

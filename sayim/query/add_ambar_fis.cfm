@@ -411,7 +411,7 @@ POZİSYON=SATIRLAR
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
     POZİSYON=SERVİS İMPORT EDİLDİ
-    <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
+<!----------    <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
     <cfloop list="#current_row_list#" index="k">
         <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
         <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
@@ -441,7 +441,7 @@ POZİSYON=SATIRLAR
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
         <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
       </cfif>
-    </cfif>
+    </cfif>------------>
 <!---------
     <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
@@ -451,10 +451,10 @@ POZİSYON=SATIRLAR
     
     ----------->
 <cfset recordEmp = session.ep.userid>
-
+<!----
 
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
-<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
+<cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)>
 
 <cfdump var="#result#">
 <cfif result>
@@ -462,7 +462,7 @@ POZİSYON=SATIRLAR
 <cfelse>
 
     <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
-</cfif>
+</cfif>---->
 
     </cfloop>
 
@@ -470,11 +470,12 @@ POZİSYON=SATIRLAR
 
 
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
+<!-----
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
 
-	<cflocation url="#request.self#?fuseaction=pda.pda_welcome" addtoken="No">
+	<cflocation url="#request.self#?fuseaction=pda.pda_welcome" addtoken="No">----->
 <cfabort>
 </cfif>
