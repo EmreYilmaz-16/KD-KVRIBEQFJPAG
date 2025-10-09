@@ -5,8 +5,8 @@
    <cfset depoValues = listToArray(getSayim.DEPO, "-")>
         <cfset departmentId = depoValues[1]>
         <cfset locationId = depoValues[2]>
-        <cfset attributes.dep_in=arrayToList(depoValues)>
-        <cfset attributes.dep_out=arrayToList(depoValues)>
+        <cfset attributes.dep_in=depo_kontrol.DEPO>
+        <cfset attributes.dep_out=depo_kontrol.DEPO>
         <cfdump var="#depoValues#">
         <cfdump var="#attributes#">
 
