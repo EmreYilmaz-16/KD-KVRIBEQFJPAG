@@ -1,5 +1,5 @@
 <cfquery name="getSayim" datasource="#dsn3#">
-    SELECT *,DISTINCT CAST(DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar) AS DEPO FROM PBS_SERIAL_SAYIM WHERE SAYIM_ID=#attributes.sayim_id#
+    SELECT *,CAST(DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar) AS DEPO FROM PBS_SERIAL_SAYIM WHERE SAYIM_ID=#attributes.sayim_id#
 </cfquery>
 
    <cfset depoValues = listToArray(getSayim.DEPO, "-")>
