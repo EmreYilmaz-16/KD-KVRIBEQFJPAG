@@ -6,11 +6,11 @@
 <cfset ErrorArray= arrayNew(1)>
 <cfloop array="#Data#" index="item">
     <cfquery name="getStok" datasource="w3Qa">
-            SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#item.stock#'
+            SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#item.Stok#'
     </cfquery>
     <cfif getStok.recordCount>
         <cfif getStok.recordCount gt 1>
-            <cfset arrayAppend(ErrorArray, "Birden fazla ürün bulundu: " & item.stock)>
+            <cfset arrayAppend(ErrorArray, "Birden fazla ürün bulundu: " & item.Stok)>
         <cfelse>
             <cfset item.stockID=getStok.STOCK_ID[1]>
             <cfset item.productID=getStok.PRODUCT_ID[1]>
