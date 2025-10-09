@@ -29,7 +29,7 @@ select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY,PRODUCT_CODE_2 from
     <cfset "attributes.AMOUNT#i#"=getRows1.QUANTITY>
     <cfset "attributes.PRODUCT_ID#i#"=getRows1.PRODUCT_ID>
     <cfset 'attributes.WRK_ROW_ID#i#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
-    <CFSET "WS.SID#getRows1.STOCK_ID#_#SHELF_CODE#.WRK_ROW_ID"=evaluate('attributes.WRK_ROW_ID#i#')>
+    <CFSET "WS.SID#getRows1.STOCK_ID#_#getRows1.SHELF_CODE#.WRK_ROW_ID"=evaluate('attributes.WRK_ROW_ID#i#')>
 </cfloop>
 <cfset attributes.row_count=getRows1.recordcount>
 <!---
