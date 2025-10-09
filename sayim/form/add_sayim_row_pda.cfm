@@ -428,9 +428,11 @@
                         <cfif getSayimRows.recordCount gt 0>
                         <cfloop query="getSayimRows">
                         <tr>
+                            
                             <td headers="serial-header"><cfoutput>#getSayimRows.SERIAL_NUMBER#</cfoutput></td>
                             <td headers="product-header"><cfoutput>#getSayimRows.PRODUCT_CODE_2#</cfoutput></td>
                             <td headers="shelf-header"><cfoutput>#getSayimRows.SHELF_NUMBER#</cfoutput></td>
+                            <td style="display:none" headers="is-read"><cfoutput>1</cfoutput></td>
                         </tr>
                         </cfloop>
                         <cfelse>
@@ -1365,6 +1367,7 @@ class SayimManager {
             <td headers="serial-header">${this.escapeHtml(serialObject.serial_no)}</td>
             <td headers="product-header">${this.escapeHtml(serialObject.product_code_2)}</td>
             <td headers="shelf-header">${this.escapeHtml(this.shelfManager.activeShelf.SHELF_CODE)}</td>
+            <td style="display:none" headers="is-read">0</td>
         `;
         
         tbody.appendChild(row);
