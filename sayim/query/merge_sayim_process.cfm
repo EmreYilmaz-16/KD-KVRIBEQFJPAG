@@ -5,7 +5,7 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
 
 <cfset yeni_tablo=queryNew("SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2","integer,varchar,integer,integer,varchar,varchar")>
 <cfloop query="getrows">
-    <cfif not listfind(yeni_tablo.SERIAL_NUMBER,getrows.SERIAL_NUMBER)>
+    <cfif not listfind(valueList( yeni_tablo.SERIAL_NUMBER),getrows.SERIAL_NUMBER)>
         <cfset temp=queryAddRow(yeni_tablo)>
         <cfset temp=querySetCell(yeni_tablo,"SAYIM_ID",getrows.SAYIM_ID)>
         <cfset temp=querySetCell(yeni_tablo,"SERIAL_NUMBER",getrows.SERIAL_NUMBER)>
