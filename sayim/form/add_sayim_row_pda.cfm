@@ -1527,12 +1527,13 @@ for(let i=0;i<sepetSatirlari.length;i++){
     var Serial=sepetSatiri.children[0].innerText;
     var Stok=sepetSatiri.children[1].innerText;
     var Raf=sepetSatiri.children[2].innerText;
+    var isReadedBefore=sepetSatiri.children[3].innerText;
     var ix=sepetim.findIndex(p=>p.Stok==Stok && p.Raf==Raf);
     if(ix==-1){
-        sepetim.push({"Stok":Stok,"Raf":Raf,"SerialNumbers":[Serial]});        
+        sepetim.push({"Stok":Stok,"Raf":Raf,"SerialNumbers":[{Serial,isReadedBefore}]});        
     }else{
         //console.log(sepetim[ix])
-        sepetim[ix].SerialNumbers.push(Serial)
+        sepetim[ix].SerialNumbers.push({Serial,isReadedBefore});
     }
    
    // console.log(filtered)
