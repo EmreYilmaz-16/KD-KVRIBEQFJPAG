@@ -10,6 +10,20 @@
     --------------->
 
 <!--- Form işlemi kontrol --->
+<cfquery name="GETPAPER" datasource="w3Qa_1">
+            select SAYIM_NO,SAYIM_NUMBER from w3Qa_1.PBS_PAPER_NUMBERS
+        </cfquery>
+        <cfset zero_Count=0>
+        <cfif len(GETPAPER.SAYIM_NUMBER) eq 1>
+            <cfset zero_Count=3>
+        <cfelseif len(GETPAPER.SAYIM_NUMBER) eq 2>
+            <cfset zero_Count=2>
+        <cfelseif len(GETPAPER.SAYIM_NUMBER) eq 3>
+            <cfset zero_Count=1>   
+        </cfif>
+            <cfset Spaper_number=REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(GETPAPER.SAYIM_NUMBER,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9','')>
+            <cfset Spaper_number=GETPAPER.SAYIM_NO & REPEATSTRING('0',zero_Count) & (GETPAPER.SAYIM_NUMBER+1)>
+
 <cfif isDefined("form.submit")>
     <cftry>
         <!--- Kayıt tarihini şu anki tarih olarak ayarla --->
@@ -135,7 +149,7 @@
                                name="paper_number" 
                                required
                                maxlength="50"
-                               value="<cfoutput>#isDefined('form.paper_number') ? form.paper_number : ''#</cfoutput>">
+                               value="<cfoutput>#isDefined('form.paper_number') ? form.paper_number : '#Spaper_number#'#</cfoutput>">
                         <div class="form-text">Sayım evrak numarasını giriniz</div>
                     </div>
                 </div>
