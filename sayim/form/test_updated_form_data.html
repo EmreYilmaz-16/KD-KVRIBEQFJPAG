@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Güncellenen Form Verileri - Satır Bazlı Raf Kodları</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .data-format {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .json-example {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        .field-list {
+            list-style: none;
+            padding: 0;
+        }
+        .field-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .field-name {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .field-type {
+            color: #666;
+            font-style: italic;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+        .table-example {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .table-example th, .table-example td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .table-example th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Güncellenen Form Verileri - Satır Bazlı Raf Kodları</h1>
+
+    <div class="test-card">
+        <h3>🔄 Yapılan Değişiklikler</h3>
+        <div class="highlight">
+            <h4>✅ Yeni Özellikler:</h4>
+            <ul>
+                <li><strong>Satır Bazlı Raf Kodları:</strong> Her satırda farklı raf kodu olabilir</li>
+                <li><strong>Miktar Kaldırıldı:</strong> Seri numarası olduğu için her zaman 1</li>
+                <li><strong>3 Sütunlu Tablo:</strong> Seri | Stok | Raf</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>📊 Tablo Yapısı</h3>
+        <table class="table-example">
+            <thead>
+                <tr>
+                    <th>Seri</th>
+                    <th>Stok</th>
+                    <th>Raf</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SN123456</td>
+                    <td>PRD001</td>
+                    <td>RAF-A01</td>
+                </tr>
+                <tr>
+                    <td>SN789012</td>
+                    <td>PRD002</td>
+                    <td>RAF-B05</td>
+                </tr>
+                <tr>
+                    <td>SN345678</td>
+                    <td>PRD001</td>
+                    <td>RAF-C12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="test-card">
+        <h3>📤 Gönderilecek Form Alanları</h3>
+        <ul class="field-list">
+            <li>
+                <span class="field-name">sayimID</span>
+                <span class="field-type">Hidden - Sayım oturumu ID'si</span>
+            </li>
+            <li>
+                <span class="field-name">shelfCode</span>
+                <span class="field-type">Hidden - Varsayılan raf kodu</span>
+            </li>
+            <li>
+                <span class="field-name">rowCount</span>
+                <span class="field-type">Hidden - Toplam satır sayısı</span>
+            </li>
+            <li>
+                <span class="field-name">sayimData</span>
+                <span class="field-type">Hidden - JSON formatında tüm veriler</span>
+            </li>
+            <li>
+                <span class="field-name">product_codes</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış stok kodları</span>
+            </li>
+            <li>
+                <span class="field-name">serial_nos</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış seri numaraları</span>
+            </li>
+            <li>
+                <span class="field-name">shelf_codes</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış raf kodları</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="test-card">
+        <h3>📊 JSON Veri Formatı (sayimData)</h3>
+        <div class="json-example">
+[
+  {
+    "product_code_2": "PRD001",
+    "serial_no": "SN123456",
+    "shelfCode": "RAF-A01",
+    "miktar": "1"
+  },
+  {
+    "product_code_2": "PRD002", 
+    "serial_no": "SN789012",
+    "shelfCode": "RAF-B05",
+    "miktar": "1"
+  },
+  {
+    "product_code_2": "PRD001",
+    "serial_no": "SN345678", 
+    "shelfCode": "RAF-C12",
+    "miktar": "1"
+  }
+]
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>📝 Ayrı Alan Formatı</h3>
+        <div class="data-format">
+<strong>product_codes:</strong> "PRD001,PRD002,PRD001"
+<strong>serial_nos:</strong> "SN123456,SN789012,SN345678"
+<strong>shelf_codes:</strong> "RAF-A01,RAF-B05,RAF-C12"
+<strong>shelfCode:</strong> "RAF-A01" (varsayılan)
+<strong>sayimID:</strong> "SAY2024001"
+<strong>rowCount:</strong> "3"
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>🔧 Backend'de Kullanım</h3>
+        <h4>JSON Formatı ile:</h4>
+        <div class="data-format">
+var sayimData = JSON.parse(form.sayimData);
+for(var i=0; i&lt;sayimData.length; i++) {
+    var item = sayimData[i];
+    var productCode = item.product_code_2;
+    var serialNo = item.serial_no;
+    var shelfCode = item.shelfCode;
+    var miktar = item.miktar; // Her zaman "1"
+    
+    // Veritabanına kaydet
+}
+        </div>
+        
+        <h4>Ayrı Alanlar ile:</h4>
+        <div class="data-format">
+var productCodes = form.product_codes.split(',');
+var serialNos = form.serial_nos.split(',');
+var shelfCodes = form.shelf_codes.split(',');
+
+for(var i=0; i&lt;productCodes.length; i++) {
+    var productCode = productCodes[i];
+    var serialNo = serialNos[i];
+    var shelfCode = shelfCodes[i];
+    var miktar = 1; // Her zaman 1
+    
+    // Veritabanına kaydet
+}
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>💡 Önemli Notlar</h3>
+        <ul>
+            <li><strong>Satır Bazlı Raf:</strong> Her ürün farklı rafta olabilir</li>
+            <li><strong>Seri Numarası:</strong> Her ürün benzersiz seri numarasına sahip</li>
+            <li><strong>Miktar Sabit:</strong> Seri numarası olduğu için her zaman 1</li>
+            <li><strong>Esnek Yapı:</strong> Hem JSON hem ayrı alanlar mevcut</li>
+        </ul>
+    </div>
+
+    <div class="test-card">
+        <h3>🎯 Kullanım Senaryosu</h3>
+        <ol>
+            <li><strong>Ürün Tarama:</strong> Seri numarası barkodu taranır</li>
+            <li><strong>Ürün Bilgisi:</strong> Stok kodu ve raf bilgisi otomatik gelir</li>
+            <li><strong>Tabloya Ekleme:</strong> Seri-Stok-Raf olarak listelenir</li>
+            <li><strong>Farklı Raflar:</strong> Her ürün farklı rafta olabilir</li>
+            <li><strong>Kaydetme:</strong> Tüm satırlar toplu olarak kaydedilir</li>
+        </ol>
+    </div>
+
+    <div class="test-card">
+        <h3>✅ Avantajlar</h3>
+        <ul>
+            <li><strong>Gerçekçi Senaryo:</strong> Ürünler farklı raflarda olabilir</li>
+            <li><strong>Seri Takibi:</strong> Her ürün benzersiz şekilde takip edilir</li>
+            <li><strong>Basit Miktar:</strong> Seri numarası = 1 adet</li>
+            <li><strong>Esnek Veri:</strong> Backend için iki farklı format</li>
+        </ul>
+    </div>
+
+    <script>
+        console.log('Güncellenen form veri yapısı hazır! 📋✅');
+        
+        // Örnek veri yapısı
+        const ornekVeri = {
+            sayimID: "SAY2024001",
+            shelfCode: "RAF-A01", // Varsayılan raf
+            rowCount: 3,
+            sayimData: JSON.stringify([
+                {
+                    product_code_2: "PRD001",
+                    serial_no: "SN123456", 
+                    shelfCode: "RAF-A01",
+                    miktar: "1"
+                },
+                {
+                    product_code_2: "PRD002",
+                    serial_no: "SN789012",
+                    shelfCode: "RAF-B05", 
+                    miktar: "1"
+                },
+                {
+                    product_code_2: "PRD001",
+                    serial_no: "SN345678",
+                    shelfCode: "RAF-C12",
+                    miktar: "1"
+                }
+            ]),
+            product_codes: "PRD001,PRD002,PRD001",
+            serial_nos: "SN123456,SN789012,SN345678",
+            shelf_codes: "RAF-A01,RAF-B05,RAF-C12"
+        };
+        
+        console.log('Örnek form verisi:', ornekVeri);
+        console.log('Her satırda farklı raf kodu destekleniyor! 🏷️');
+    </script>
+</body>
+</html>

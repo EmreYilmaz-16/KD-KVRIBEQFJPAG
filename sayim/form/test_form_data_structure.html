@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Verileri Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .data-format {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .json-example {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        .field-list {
+            list-style: none;
+            padding: 0;
+        }
+        .field-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .field-name {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .field-type {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Form Verileri - Backend'e Gönderilecek Veriler</h1>
+
+    <div class="test-card">
+        <h3>🎯 İstenen Veri Yapısı</h3>
+        <p><strong>Satır Verileri:</strong> product_code_2, serial_no, shelfCode</p>
+        <p><strong>Belge Verisi:</strong> sayimID</p>
+    </div>
+
+    <div class="test-card">
+        <h3>📤 Gönderilecek Form Alanları</h3>
+        <ul class="field-list">
+            <li>
+                <span class="field-name">sayimID</span>
+                <span class="field-type">Hidden - Sayım oturumu ID'si</span>
+            </li>
+            <li>
+                <span class="field-name">shelfCode</span>
+                <span class="field-type">Hidden - Aktif raf kodu</span>
+            </li>
+            <li>
+                <span class="field-name">rowCount</span>
+                <span class="field-type">Hidden - Toplam ürün sayısı</span>
+            </li>
+            <li>
+                <span class="field-name">sayimData</span>
+                <span class="field-type">Hidden - JSON formatında tüm veriler</span>
+            </li>
+            <li>
+                <span class="field-name">product_codes</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış ürün kodları</span>
+            </li>
+            <li>
+                <span class="field-name">serial_nos</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış seri numaraları</span>
+            </li>
+            <li>
+                <span class="field-name">quantities</span>
+                <span class="field-type">Hidden - Virgülle ayrılmış miktarlar</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="test-card">
+        <h3>📊 JSON Veri Formatı (sayimData)</h3>
+        <div class="json-example">
+[
+  {
+    "product_code_2": "PRD001",
+    "serial_no": "123456",
+    "shelfCode": "RAF-A01",
+    "miktar": "5"
+  },
+  {
+    "product_code_2": "PRD002", 
+    "serial_no": "789012",
+    "shelfCode": "RAF-A01",
+    "miktar": "3"
+  }
+]
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>📝 Ayrı Alan Formatı</h3>
+        <div class="data-format">
+<strong>product_codes:</strong> "PRD001,PRD002,PRD003"
+<strong>serial_nos:</strong> "123456,789012,345678"
+<strong>quantities:</strong> "5,3,2"
+<strong>shelfCode:</strong> "RAF-A01"
+<strong>sayimID:</strong> "SAY2024001"
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>🔧 Backend'de Kullanım</h3>
+        <h4>JSON Formatı ile:</h4>
+        <div class="data-format">
+var sayimData = JSON.parse(form.sayimData);
+for(var i=0; i&lt;sayimData.length; i++) {
+    var item = sayimData[i];
+    // item.product_code_2
+    // item.serial_no
+    // item.shelfCode
+    // item.miktar
+}
+        </div>
+        
+        <h4>Ayrı Alanlar ile:</h4>
+        <div class="data-format">
+var productCodes = form.product_codes.split(',');
+var serialNos = form.serial_nos.split(',');
+var quantities = form.quantities.split(',');
+
+for(var i=0; i&lt;productCodes.length; i++) {
+    var productCode = productCodes[i];
+    var serialNo = serialNos[i];
+    var quantity = quantities[i];
+    var shelfCode = form.shelfCode;
+}
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h3>✅ Avantajlar</h3>
+        <ul>
+            <li><strong>İki Format:</strong> Hem JSON hem ayrı alanlar</li>
+            <li><strong>Esneklik:</strong> Backend'de hangi format uygunsa o kullanılabilir</li>
+            <li><strong>Güvenlik:</strong> Tüm veriler gizli alanlarda</li>
+            <li><strong>Bütünlük:</strong> Tüm gerekli veriler mevcut</li>
+        </ul>
+    </div>
+
+    <div class="test-card">
+        <h3>🚀 Form Gönderim Akışı</h3>
+        <ol>
+            <li><strong>Kullanıcı Kaydet Butonuna Basar</strong></li>
+            <li><strong>confirmSave() çalışır</strong> - Doğrulama yapar</li>
+            <li><strong>prepareSaveData() çalışır</strong> - Verileri toplar</li>
+            <li><strong>Gizli alanlar doldurulur</strong> - Hem JSON hem ayrı alanlar</li>
+            <li><strong>Form submit edilir</strong> - Backend'e gönderilir</li>
+        </ol>
+    </div>
+
+    <script>
+        console.log('Form veri yapısı hazır! 📋✅');
+        
+        // Örnek veri yapısı
+        const ornekVeri = {
+            sayimID: "SAY2024001",
+            shelfCode: "RAF-A01", 
+            rowCount: 2,
+            sayimData: JSON.stringify([
+                {
+                    product_code_2: "PRD001",
+                    serial_no: "123456", 
+                    shelfCode: "RAF-A01",
+                    miktar: "5"
+                },
+                {
+                    product_code_2: "PRD002",
+                    serial_no: "789012",
+                    shelfCode: "RAF-A01", 
+                    miktar: "3"
+                }
+            ]),
+            product_codes: "PRD001,PRD002",
+            serial_nos: "123456,789012",
+            quantities: "5,3"
+        };
+        
+        console.log('Örnek form verisi:', ornekVeri);
+    </script>
+</body>
+</html>
