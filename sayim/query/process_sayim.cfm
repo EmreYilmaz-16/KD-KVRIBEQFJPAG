@@ -72,7 +72,7 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
   
-</cfif>
+
 <cfdump var="#data2#">
 </cfloop>
 
