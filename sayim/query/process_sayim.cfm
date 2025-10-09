@@ -49,7 +49,7 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     <cfset GIRIS_RAF_ID=getrows.SHELF_NUMBER>
     
     
-        <cfset WRK_ROW_ID_SER=WS["SID#getrows.STOCK_ID#_#getrows.SHELF_NUMBER#.WRK_ROW_ID"]>
+        <cfset WRK_ROW_ID_SER=EVALUATE("WS.SID#getrows.STOCK_ID#_#getrows.SHELF_NUMBER#.WRK_ROW_ID")>
         <cfset STOCK_ID_SER=getrows.STOCK_ID>
         <cfset SERI_NO_SER=getrows.SERIAL_NUMBER>
     
