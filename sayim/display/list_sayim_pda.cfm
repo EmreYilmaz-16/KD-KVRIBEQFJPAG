@@ -330,6 +330,133 @@
                 display: none !important;
             }
 
+            /* Checkbox Styles */
+            .checkbox-cell {
+                align-self: center;
+                margin-right: 8px;
+            }
+
+            .custom-checkbox {
+                position: relative;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+            }
+
+            .custom-checkbox input[type="checkbox"] {
+                opacity: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                cursor: pointer;
+            }
+
+            .custom-checkbox .checkmark {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 20px;
+                width: 20px;
+                background-color: #fff;
+                border: 2px solid #e2e8f0;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+
+            .custom-checkbox:hover .checkmark {
+                border-color: var(--primary);
+            }
+
+            .custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+                background-color: var(--primary);
+                border-color: var(--primary);
+            }
+
+            .custom-checkbox .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+                left: 6px;
+                top: 2px;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+
+            .custom-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+                display: block;
+            }
+
+            /* Merge Actions */
+            .merge-actions {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: white;
+                border-radius: 16px;
+                padding: 12px 20px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+                display: none;
+                align-items: center;
+                gap: 12px;
+                z-index: 1000;
+                transition: all 0.3s ease;
+            }
+
+            .merge-actions.show {
+                display: flex;
+            }
+
+            .selected-count {
+                font-size: 0.9rem;
+                color: var(--text-muted);
+                font-weight: 600;
+            }
+
+            .merge-button {
+                background: linear-gradient(135deg, #059669, #047857);
+                color: white;
+                border: none;
+                padding: 10px 16px;
+                border-radius: 10px;
+                font-size: 0.95rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            }
+
+            .merge-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+            }
+
+            .merge-button:active {
+                transform: translateY(0);
+            }
+
+            .select-all-row {
+                background: var(--surface);
+                border-radius: 12px;
+                padding: 12px 16px;
+                box-shadow: var(--shadow);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 8px;
+            }
+
+            .select-all-label {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--text);
+                flex: 1;
+            }
+
             @media (min-width: 640px) {
                 body {
                     align-items: flex-start;
@@ -378,10 +505,24 @@
                 <input type="search" id="searchInput" inputmode="search" placeholder="Evrak, depo veya kullanıcı ara...">
             </div>
 
+            <div class="select-all-row">
+                <div class="custom-checkbox">
+                    <input type="checkbox" id="selectAll">
+                    <span class="checkmark"></span>
+                </div>
+                <label for="selectAll" class="select-all-label">Tümünü Seç / Kaldır</label>
+            </div>
+
             <ul class="record-list" id="sayimList">
                 <cfloop query="getSayimList">
                     <cfset filterText = lcase(trim(SAYIM_ID & " " & PAPER_NUMBER & " " & DEPO_CODE & " " & DEPO_NAME & " " & dateFormat(SAYIM_DATE, "dd.mm.yyyy") & " " & dateFormat(RECORD_DATE, "dd.mm.yyyy") & " " & RECORD_EMP))>
                     <li class="record-item" data-filter="#encodeForHtmlAttribute(filterText)#">
+                        <div class="checkbox-cell">
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="sayim-checkbox" value="#SAYIM_ID#" id="checkbox_#SAYIM_ID#">
+                                <span class="checkmark"></span>
+                            </div>
+                        </div>
                         <div class="item-info">
                             <div class="item-top">
                                 <span class="item-id">## #SAYIM_ID#</span>
@@ -413,10 +554,20 @@
         </cfif>
     </div>
 
+    <!-- Merge Actions Bar -->
+    <div class="merge-actions" id="mergeActions">
+        <span class="selected-count" id="selectedCount">0 sayım seçildi</span>
+        <button class="merge-button" onclick="mergeSayimlar()">Birleştir</button>
+    </div>
+
     <script>
         const searchInput = document.getElementById('searchInput');
         const recordContainer = document.getElementById('sayimList');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const mergeActions = document.getElementById('mergeActions');
+        const selectedCountElement = document.getElementById('selectedCount');
 
+        // Search functionality
         if (searchInput && recordContainer) {
             const items = Array.from(recordContainer.querySelectorAll('.record-item'));
             const emptyMessage = document.getElementById('emptyFilterState');
@@ -436,10 +587,112 @@
                 if (emptyMessage) {
                     emptyMessage.classList.toggle('hidden', visibleCount !== 0);
                 }
+
+                // Update select all checkbox state after filtering
+                updateSelectAllState();
             };
 
             searchInput.addEventListener('input', applyFilter);
         }
+
+        // Checkbox functionality
+        function updateSelectedCount() {
+            const checkboxes = document.querySelectorAll('.sayim-checkbox:not(.hidden)');
+            const visibleCheckboxes = Array.from(checkboxes).filter(cb => !cb.closest('.record-item').classList.contains('hidden'));
+            const checkedBoxes = visibleCheckboxes.filter(cb => cb.checked);
+            
+            const count = checkedBoxes.length;
+            selectedCountElement.textContent = count + ' sayım seçildi';
+            
+            if (count > 0) {
+                mergeActions.classList.add('show');
+            } else {
+                mergeActions.classList.remove('show');
+            }
+            
+            return count;
+        }
+
+        function updateSelectAllState() {
+            const checkboxes = document.querySelectorAll('.sayim-checkbox');
+            const visibleCheckboxes = Array.from(checkboxes).filter(cb => !cb.closest('.record-item').classList.contains('hidden'));
+            const checkedBoxes = visibleCheckboxes.filter(cb => cb.checked);
+            
+            if (visibleCheckboxes.length === 0) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = false;
+            } else if (checkedBoxes.length === visibleCheckboxes.length) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = true;
+            } else if (checkedBoxes.length > 0) {
+                selectAllCheckbox.indeterminate = true;
+                selectAllCheckbox.checked = false;
+            } else {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = false;
+            }
+        }
+
+        // Select all functionality
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.sayim-checkbox');
+                const visibleCheckboxes = Array.from(checkboxes).filter(cb => !cb.closest('.record-item').classList.contains('hidden'));
+                
+                visibleCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                
+                updateSelectedCount();
+            });
+        }
+
+        // Individual checkbox change events
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('sayim-checkbox')) {
+                updateSelectedCount();
+                updateSelectAllState();
+            }
+        });
+
+        // Merge functionality
+        function mergeSayimlar() {
+            const checkedBoxes = document.querySelectorAll('.sayim-checkbox:checked');
+            const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
+            
+            if (selectedIds.length < 2) {
+                alert('Birleştirmek için en az 2 sayım seçmelisiniz.');
+                return;
+            }
+            
+            if (selectedIds.length > 10) {
+                alert('En fazla 10 sayımı birleştirebilirsiniz.');
+                return;
+            }
+            
+            // Confirmation
+            if (confirm(selectedIds.length + ' adet sayımı birleştirmek istediğinizden emin misiniz?')) {
+                // Create form and submit
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/index.cfm?fuseaction=stock.merge_sayim_process'; // Birleştirme işlemini yapacak sayfa
+                
+                selectedIds.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'sayim_ids';
+                    input.value = id;
+                    form.appendChild(input);
+                });
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Initialize
+        updateSelectedCount();
+        updateSelectAllState();
     </script>
 
 </cfoutput>
