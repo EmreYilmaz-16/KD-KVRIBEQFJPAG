@@ -9,6 +9,7 @@
         <cfset attributes.dep_out=getSayim.DEPO>
         <cfdump var="#depoValues#">
         <cfdump var="#attributes#">
+        <CFSET recordEmp=session.ep.userid>
 
         <cfset attributes.process_cat = 93>
     <cfset attributes.action_id = ''>
@@ -32,9 +33,9 @@ select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY,PRODUCT_CODE_2 from
     <CFSET "WS.SID#getRows1.STOCK_ID#_#getRows1.SHELF_NUMBER#.WRK_ROW_ID"=evaluate('attributes.WRK_ROW_ID#i#')>
 </cfloop>
 <cfset attributes.row_count=getRows1.recordcount>
-<!---
+
 <cfinclude template="add_ambar_fis.cfm">
----->
+
 <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 
 <cfquery name="getrows" datasource="#dsn3#">
@@ -72,7 +73,11 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
   
-
+<cfset result = svc.saveServiceGuaranty(data2, recordEmp)>
 <cfdump var="#data2#">
 </cfloop>
+
+<cfquery name="UP" datasource="#DSN3#">
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
+</cfquery>
 
