@@ -462,9 +462,9 @@ POZİSYON=SATIRLAR
 <cfelse>
 
     <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
-</cfif>---->
+</cfif>
 
-    </cfloop>
+    </cfloop>---->
 
     FSDFSDF
 
