@@ -28,12 +28,15 @@
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
                             SAYIM_ID,
                             SERIAL_NUMBER,
+                            SHELF_NUMBER,
                             IN_OUT,
                             PRODUCT_ID,
+                            
                             STOCK_ID
                         ) VALUES (
                             <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#trim(sn)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#trim(item.Raf)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
                             <cfqueryparam value="#item.productID#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#item.stockID#" cfsqltype="cf_sql_integer">

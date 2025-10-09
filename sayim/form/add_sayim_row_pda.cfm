@@ -1,4 +1,14 @@
-﻿<!-- PDA Optimized CSS for Compact Design -->
+﻿<cfquery name="getSayimRows">
+    SELECT 
+                        SAYIM_ROW_ID,
+                        SAYIM_ID,
+                        SERIAL_NUMBER,
+                        IN_OUT
+                    FROM PBS_SERIAL_SAYIM_ROW
+                    WHERE SAYIM_ID = <cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
+                    ORDER BY SAYIM_ROW_ID DESC
+</cfquery>
+<!-- PDA Optimized CSS for Compact Design -->
 <style>
     /* PDA-Optimized Compact Design */
     body {
