@@ -1,6 +1,7 @@
-
+<cfdump var="#attributes#">
+<cfabort>
 <cfquery name="getrows" datasource="#dsn3#">
-select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 from  w3Qa_1.PBS_SERIAL_SAYIM_ROW
+select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 from  w3Qa_1.PBS_SERIAL_SAYIM_ROW WHERE SAYIM_ID IN (#ATTsayimId#)
 </cfquery>
 
 <cfset yeni_tablo=queryNew("SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2","integer,varchar,integer,integer,varchar,varchar")>
@@ -16,3 +17,8 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
     </cfif>
 </cfloop>
 <cfdump var="#yeni_tablo#">
+
+
+<cfquery name="del_mains" datasource="#dsn3#">
+    DELETE FROM PBS_SERIAL_SAYIM_ROW WHERE SAYIM_ID
+</cfquery>
