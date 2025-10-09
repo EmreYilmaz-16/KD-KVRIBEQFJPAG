@@ -1,4 +1,4 @@
-﻿<cfquery name="getSayimRows">
+﻿<cfquery name="getSayimRows" datasource="#dsn3#">
     SELECT 
                         SAYIM_ROW_ID,
                         SAYIM_ID,
