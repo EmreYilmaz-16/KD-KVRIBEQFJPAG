@@ -3,7 +3,9 @@
                         SAYIM_ROW_ID,
                         SAYIM_ID,
                         SERIAL_NUMBER,
-                        IN_OUT
+                        IN_OUT,
+                        SHELF_NUMBER,
+                        PRODUCT_CODE_2
                     FROM PBS_SERIAL_SAYIM_ROW
                     WHERE SAYIM_ID = <cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
                     ORDER BY SAYIM_ROW_ID DESC
@@ -385,7 +387,7 @@
     <div class="form-section" role="region">
         <div class="status-badges" role="status" aria-live="polite">
             <span id="activeShelfLabel" class="status-badge badge-info">📍 Raf Okutun</span>
-            <span id="rowCountLabel" class="status-badge badge-success">📊 0</span>
+            <span id="rowCountLabel" class="status-badge badge-success">📊 <cfoutput>#getSayimRows.recordCount#</cfoutput></span>
         </div>
         
         <!-- Kompakt Debug -->
@@ -407,7 +409,7 @@
         <input type="hidden" name="sayimID" value="<cfoutput>#attributes.sayim_id#</cfoutput>">        
         <input type="hidden" name="activeShelfID" id="activeShelfID" value="">
         <input type="hidden" name="activeShelfCode" id="activeShelfCode" value="">
-        <input type="hidden" name="rowCount" id="rowCount" value="0">
+        <input type="hidden" name="rowCount" id="rowCount" value="<CFOUTPUT>#getSayimRows.recordCount#</CFOUTPUT>">
 		<input type="hidden" name="formData" id="formData" value="">
 
         <!-- Kompakt Tablo -->
@@ -423,11 +425,22 @@
                         </tr>
                     </thead>
                     <tbody id="sayimRows" aria-live="polite">
+                        <cfif getSayimRowsgetSayimRows gt 0>
+                        <cfloop query="getSayimRows">
+                        <tr>
+                            <td headers="serial-header"><cfoutput>#getSayimRows.SERIAL_NUMBER#</cfoutput></td>
+                            <td headers="product-header"><cfoutput>#getSayimRows.PRODUCT_CODE_2#</cfoutput></td>
+                            <td headers="shelf-header"><cfoutput>#getSayimRows.SHELF_NUMBER#</cfoutput></td>
+                        </tr>
+                        </cfloop>
+                        <cfelse>
+                            
                         <tr id="noDataRow">
                             <td colspan="3" class="text-center text-muted" style="padding:16px;">
                                 <small><em>Henüz sayım yok</em></small>
                             </td>
                         </tr>
+                        </cfif>
                     </tbody>
                 </cf_grid_list>
             </div>
