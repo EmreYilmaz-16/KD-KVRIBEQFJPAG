@@ -280,6 +280,9 @@
 
             .item-action {
                 align-self: center;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
             }
 
             .primary-button {
@@ -297,11 +300,39 @@
                 letter-spacing: 0.01em;
                 box-shadow: 0 8px 16px rgba(37, 99, 235, 0.28);
                 transition: transform 0.15s ease, box-shadow 0.15s ease;
+                margin-bottom: 6px;
+            }
+
+            .process-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                text-decoration: none;
+                background: linear-gradient(135deg, #059669, #047857);
+                color: white;
+                padding: 8px 12px;
+                border-radius: 10px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                letter-spacing: 0.01em;
+                box-shadow: 0 6px 14px rgba(5, 150, 105, 0.25);
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
             }
 
             .primary-button:active {
                 transform: scale(0.97);
                 box-shadow: 0 4px 10px rgba(37, 99, 235, 0.26);
+            }
+
+            .process-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 18px rgba(5, 150, 105, 0.35);
+            }
+
+            .process-button:active {
+                transform: scale(0.97);
+                box-shadow: 0 4px 10px rgba(5, 150, 105, 0.22);
             }
 
             .empty-state {
@@ -544,6 +575,7 @@
                         </div>
                         <div class="item-action">
                             <a href="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_pbs&sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
+                            <a href="/index.cfm?fuseaction=stock.process_sayim&sayim_id=#SAYIM_ID#" class="process-button">Sayımı İşle</a>
                         </div>
                     </li>
                 </cfloop>
