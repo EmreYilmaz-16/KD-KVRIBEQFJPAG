@@ -51,7 +51,9 @@
                 <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
             )
         </cfquery>
-        
+        <cfquery name="updatepaper" datasource="w3Qa_1">
+                update PBS_PAPER_NUMBERS set SAYIM_NUMBER=SAYIM_NUMBER+1
+            </cfquery>
         <cfset successMessage = "Sayım kaydı başarıyla eklendi. Kayıt ID: #insertResult.generatedkey#">
         
         <cfcatch type="any">
