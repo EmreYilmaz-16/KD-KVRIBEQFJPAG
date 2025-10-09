@@ -106,3 +106,7 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
                         )
                     </cfquery>
         </cfloop>
+
+        <script>
+            window.location.href="index.cfm?fuseaction=stock.emptypopup_list_sayim_pbs";
+        </script>

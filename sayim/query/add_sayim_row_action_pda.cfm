@@ -51,7 +51,9 @@
     </cfif>
 </cfloop>
 
-
+<script>
+            window.location.href="index.cfm?fuseaction=stock.emptypopup_list_sayim_pbs";
+        </script>
 
 <cfabort>
 <cfset i=1>
