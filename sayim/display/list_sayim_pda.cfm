@@ -347,7 +347,7 @@
             <div class="title-row">
                 <h1>Sayım Listesi</h1>
                 <span class="badge">#totalRecords# Kayıt</span>
-                <span onclick="location.href='new_sayim_pda.cfm'" class="badge">Yeni Kayıt</span>
+                <span onclick="location.href='/index.cfm?fuseaction=stock.emptypopup_add_sayim_paper'" class="badge">Yeni Kayıt</span>
             </div>
 
             <ul class="stat-list">

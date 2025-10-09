@@ -20,3 +20,4 @@
 <cfset attributes.fromSayim=1>
 <cfset attributes.row_count=i-1>
 <cfdump var="#attributes#">
+<cfinclude template="add_ambar_fis.cfm">
