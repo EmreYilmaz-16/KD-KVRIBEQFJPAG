@@ -43,12 +43,23 @@ WHERE SAYIM_ID=#attributes.sayim_id#
 </cfquery>
 <cfdump var="#WS#">
 
+<cfloop query="getrows">
+    <cfset STOCK_ID_SER=getrows.STOCK_ID>
+    <cfset SERI_NO_SER=getrows.SERIAL_NUMBER>
+    <cfset GIRIS_RAF_ID=getrows.SHELF_NUMBER>
+    
+    
+        <cfset WRK_ROW_ID_SER=WS["SID#getrows.STOCK_ID#_#getrows.SHELF_NUMBER#.WRK_ROW_ID"]>
+        <cfset STOCK_ID_SER=getrows.STOCK_ID>
+        <cfset SERI_NO_SER=getrows.SERIAL_NUMBER>
+    
+
 <cfset data2 = {
     STOCK_ID = STOCK_ID_SER,
     SERIAL_NO = "#SERI_NO_SER#",
-    LOT_NO = "#GETSER.LOT_NO#",
+    LOT_NO = "",
     IN_OUT = 1,
-    PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+    PROCESS_CAT = 113,
     PROCESS_ID = 0,
     PROCESS_NO = "",
     PERIOD_ID = session.ep.period_id,
@@ -59,6 +70,9 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",
     WRK_ROW_ID = "#WRK_ROW_ID_SER#",
     UNIT_ROW_QUANTITY = 1,
-    SHELF_NUMBER = "#GIRIS_RAF_ID#"
-}>
+    SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
+  
+</cfif>
+<cfdump var="#data2#">
+</cfloop>
 
