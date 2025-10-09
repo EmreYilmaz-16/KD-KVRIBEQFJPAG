@@ -45,7 +45,7 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
         <cfset departmentId = depoValues[1]>
         <cfset locationId = depoValues[2]>
         
-        <cfquery name="GETPAPER">
+        <cfquery name="GETPAPER" datasource="w3Qa_1">
             select SAYIM_NO,SAYIM_NUMBER from w3Qa_1.PBS_PAPER_NUMBERS
         </cfquery>
         <cfset zero_Count=0>
