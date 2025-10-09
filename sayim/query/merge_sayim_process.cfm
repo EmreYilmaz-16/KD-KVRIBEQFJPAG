@@ -63,7 +63,7 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2,"C
                 update PBS_PAPER_NUMBERS set SAYIM_NUMBER=SAYIM_NUMBER+1
             </cfquery>
 
-        <CFSET paper_nuber="#GETPAPER.SAYIM_NO#">
+        
         <!--- Veritabanına kayıt ekleme --->
         <cfquery datasource="w3Qa_1" result="insertResult">
             INSERT INTO PBS_SERIAL_SAYIM (
@@ -82,3 +82,27 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2,"C
                 <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
             )
         </cfquery> 
+
+        <cfset newSayimId = insertResult.generatedKey>
+        <cfset rowCount = yeni_tablo.recordCount>
+        <cfloop query="yeni_tablo">
+            <cfquery datasource="w3Qa_1">
+                        INSERT INTO PBS_SERIAL_SAYIM_ROW (
+                            SAYIM_ID,
+                            SERIAL_NUMBER,
+                            SHELF_NUMBER,
+                            PRODUCT_CODE_2,
+                            IN_OUT,
+                            PRODUCT_ID,                            
+                            STOCK_ID
+                        ) VALUES (
+                            <cfqueryparam value="#newSayimId#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#trim(SERIAL_NUMBER)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#trim(SHELF_NUMBER)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#trim(PRODUCT_CODE_2)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
+                            <cfqueryparam value="#PRODUCT_ID#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#STOCK_ID#" cfsqltype="cf_sql_integer">
+                        )
+                    </cfquery>
+        </cfloop>
