@@ -398,7 +398,7 @@
                             <span>Kayıt: #dateFormat(RECORD_DATE, "dd.mm.yyyy")# • #timeFormat(RECORD_DATE, "HH:mm")#</span>
                         </div>
                         <div class="item-action">
-                            <a href="detail_sayim_pda.cfm?sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
+                            <a href="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_pbs&sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
                         </div>
                     </li>
                 </cfloop>
