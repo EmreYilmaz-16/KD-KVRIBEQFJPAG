@@ -196,7 +196,7 @@
                         <button type="reset" class="btn btn-outline-secondary">
                             <i class="fas fa-undo"></i> Temizle
                         </button>
-                        <a href="../display/list_sayim.cfm" class="btn btn-outline-primary">
+                        <a href="/index.cfm?fuseaction=stock.emptypopup_list_sayim_pbs" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Sayım Listesi
                         </a>
                     </div>
