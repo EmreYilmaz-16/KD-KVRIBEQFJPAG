@@ -19,8 +19,9 @@
 select PRODUCT_ID,STOCK_ID,SHELF_NUMBER,COUNT(*) AS QUANTITY from w3Qa_1.PBS_SERIAL_SAYIM_ROW GROUP BY PRODUCT_ID,STOCK_ID,SHELF_NUMBER
 </cfquery>
 
-
+<cfset i=0>
 <cfloop query="getRows1">
+    <cfset i=i+1>
     <cfset "attributes.SHELF_CODE#i#"=getRows1.SHELF_NUMBER>
     <cfset "attributes.STOCK_ID#i#"=getRows1.STOCK_ID>
     <cfset "attributes.AMOUNT#i#"=getRows1.QUANTITY>
