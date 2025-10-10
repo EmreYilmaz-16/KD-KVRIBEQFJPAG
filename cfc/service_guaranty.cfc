@@ -4,6 +4,7 @@
     <cffunction name="saveServiceGuaranty" access="public" returntype="boolean" >
         <cfargument name="data" type="struct" required="true" />
         <cfargument name="recordEmp" type="string" required="true" />
+        <cfargument name="fromApp" type="string" required="false" default="Ambar" /> <!--- Hangi uygulamadan geldiği bilgisi Uygulamalar Sayim / Ambar (opsiyonel) --->
         <cfset var success = false />
 <cfset dsn3="w3Qa_1">
         <!--- İş kuralları --->
@@ -14,7 +15,7 @@
 
         <!--- INSERT işlemi --->
         <cftry>
-            <cfquery name="q1" datasource="#dsn3#">
+            <cfquery name="q1" datasource="#dsn3#" result="queryResult">
                 INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW
                 (
                     STOCK_ID,
@@ -64,6 +65,38 @@
                     <cfif  arguments.data.SHELF_NUMBER eq 0>NULL <cfelseif arguments.data.SHELF_NUMBER gt 0>#arguments.data.SHELF_NUMBER#<cfelse>NULL</cfif>
                 )
             </cfquery>
+            <cfif arguments.fromApp eq "Sayim">
+                <cfquery name="ishv" datasource="#dsn3#">
+                    select * from w3Qa_1.SERIAL_IN_OUT_PBS where SERIAL_NUMBER='#data.SERIAL_NO#'
+                </cfquery>
+                <cfif ishv.recordcount eq 0>
+                    <cfquery name="insQ" datasource="#dsn3#">
+                        INSERT INTO w3Qa_1.SERIAL_IN_OUT_PBS
+                        (
+                             SERIAL_NUMBER, 
+                             IS_ALIVE, 
+                             IN_GUARANTY_ID, 
+                             OUT_GUARANTY_ID, 
+                             PURCHASE_DATE, 
+                             SALE_DATE, 
+                             STOCK_ID
+                        )
+                        VALUES
+                        (
+                                <cfqueryparam value="#data.SERIAL_NO#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
+                                <cfqueryparam value="#(data.IN_OUT eq 1 ? queryResult.generatedKey : 0)#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#(data.IN_OUT eq 0 ? queryResult.generatedKey : 0)#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#(data.IN_OUT eq 1 ? nowDate : null)#" cfsqltype="cf_sql_timestamp">,
+                                <cfqueryparam value="#(data.IN_OUT eq 0 ? nowDate : null)#" cfsqltype="cf_sql_timestamp">,
+                                <cfqueryparam value="#data.STOCK_ID#" cfsqltype="cf_sql_integer">
+                        )
+                    </cfquery>
+                </cfif>
+
+
+
+            </cfif>
 
             
 

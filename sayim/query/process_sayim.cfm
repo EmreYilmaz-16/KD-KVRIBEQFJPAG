@@ -61,7 +61,7 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     SERIAL_NO = "#SERI_NO_SER#",
     LOT_NO = "",
     IN_OUT = 1,
-    PROCESS_CAT = 113,
+    PROCESS_CAT = 115,
     PROCESS_ID = 0,
     PROCESS_NO = "",
     PERIOD_ID = session.ep.period_id,
@@ -74,11 +74,15 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     UNIT_ROW_QUANTITY = 1,
     SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
   
-<cfset result = svc.saveServiceGuaranty(data2, recordEmp)>
+<cfset result = svc.saveServiceGuaranty(data2, recordEmp,"Sayim")>
+
+
 <cfdump var="#data2#">
 </cfloop>
 
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
+
+
 
