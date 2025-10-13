@@ -45,7 +45,14 @@ HAVING STORE_LOCATION IS NOT NULL
                     <cfoutput query="getAllStocks">
                         <tr>
                             
-                            <td>#DEPO#</td>
+                            <td><cfif BK gt 0>
+                                <a onclick="getSerials('#getAllStocks.STOCK_ID#','#getAllStocks.STORE#','#getAllStocks.STORE_LOCATION#');" style="cursor: pointer; color: blue; text-decoration: underline;">
+                                    #DEPO#
+                                </a>
+                            <cfelse>
+                                #DEPO#  
+                            </cfif>
+                                </td>
                             <td>#tlformat(BK,2)#</td>
                         </tr>
                     </cfoutput>
@@ -58,8 +65,52 @@ HAVING STORE_LOCATION IS NOT NULL
                     </tr>
                 </table>
             </div>
+            <div id="serialsContainer">
+                <table id="serialsTable" style="display:none;">
+                    <tr></tr>
+                </table>
+                <!-- Serial numbers will be loaded here -->
+            </div>
         </div>
+<script>
+    function getSerials(stockId, departmentId, locationId) {
+        var sql_query=`
+        SELECT 
+SUM(CASE WHEN IN_OUT=1 THEN 1 ELSE -1 END)
+,SERIAL_NO
+,STOCK_ID
+,DEPARTMENT_ID
+,LOCATION_ID
+FROM w3Qa_1.SERVICE_GUARANTY_NEW
+GROUP BY
+SERIAL_NO,
+STOCK_ID
+,DEPARTMENT_ID
+,LOCATION_ID
+HAVING STOCK_ID=${stockId}
+AND DEPARTMENT_ID=${departmentId} AND LOCATION_ID=${locationId}
+AND SUM(CASE WHEN IN_OUT=1 THEN 1 ELSE -1 END)>0
+ORDER BY SERIAL_NO
+    
+`
+var result=wrk_query(sql_query,"dsn3")
+        var serialsTable = document.getElementById("serialsTable");
+        serialsTable.style.display = "table"; // Show the table
+        // Clear previous rows
+        while (serialsTable.rows.length > 1) {
+            serialsTable.deleteRow(1);
+        }
+        // Add new rows
+        for(let i=0;i<result.recordcount;i++){
+            var row = serialsTable.insertRow();
+            var cell1 = row.insertCell(0);
+            
+            cell1.innerHTML = result.SERIAL_NO[i];
+           
+        }
+    }
 
+</script>
 
 
     <cfelse>
