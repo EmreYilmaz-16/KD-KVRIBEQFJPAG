@@ -157,6 +157,7 @@
                                     WHERE SR.AMOUNT > 0
                                     AND S.PRODUCT_CODE_2 IS NOT NULL 
                                     AND S.PRODUCT_CODE_2 != ''
+                                    AND SR.SHIP_ID=#attributes.SHIP_ID#
                                     ORDER BY S.PRODUCT_CODE_2
                                 </cfquery>
 
@@ -221,6 +222,7 @@
 
                                         <div class="d-grid gap-2 mt-4">
                                             <input type="hidden" name="confirmImport" value="true">
+                                            <cfoutput><input type="hidden" name="SHIP_ID" value="#attributes.SHIP_ID#"></cfoutput>
                                             <button type="submit" class="btn btn-success btn-lg">
                                                 <i class="fas fa-play me-2"></i>
                                                 İmport İşlemini Başlat
@@ -313,6 +315,7 @@
                                     WHERE SR.AMOUNT > 0
                                     AND S.PRODUCT_CODE_2 IS NOT NULL 
                                     AND S.PRODUCT_CODE_2 != ''
+                                    AND SR.SHIP_ID=#attributes.SHIP_ID#
                                     ORDER BY S.PRODUCT_CODE_2
                                 </cfquery>
 
