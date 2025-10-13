@@ -1,6 +1,6 @@
 <script>
     $(document).on('ready',function(){
-        var fatid=getParameterByName('order_id');
+        var fatid=getParameterByName('ship_id');
         var elem=document.getElementsByClassName("detailHeadButton")
         $(elem[0].children).append("<li class='dropdown' id='transformation'><a style='color:#e303fc' title='Takip'onclick='pencereac(1,"+fatid+")'><i class='icon-bell'></i></a></li>")
     });
