@@ -312,7 +312,7 @@
                                         <tr>
                                             <td>
                                                 <cfif BK gt 0>
-                                                    <a href="#" onclick="getSerials('#getAllStocks.STOCK_ID#','#getAllStocks.STORE#','#getAllStocks.STORE_LOCATION#');" class="clickable-link">
+                                                    <a href="##" onclick="getSerials('#getAllStocks.STOCK_ID#','#getAllStocks.STORE#','#getAllStocks.STORE_LOCATION#');" class="clickable-link">
                                                         <i class="fas fa-search"></i> #DEPO#
                                                     </a>
                                                 <cfelse>
