@@ -170,7 +170,7 @@
 			</div>
             <div class="form-group">
 			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Parser</option>
+				<option value="0">Barkod Tipi</option>
 
 			</select>
 		</div>

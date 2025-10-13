@@ -201,7 +201,7 @@
 		</div>
 		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Parser</option>
+				<option value="0">Barkod Tipi</option>
 
 			</select>
 		</div>
