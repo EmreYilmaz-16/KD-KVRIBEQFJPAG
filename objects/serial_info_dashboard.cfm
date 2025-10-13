@@ -40,7 +40,7 @@ HAVING STORE_LOCATION IS NOT NULL
                 </cfquery>
                 <cf_box title="Stock Information">
                 <h3>Stock Information:</h3>
-                <table>
+                <cf_ajax_list>
                     <tr>
                                             
                         <th>Depo</th>
@@ -60,24 +60,24 @@ HAVING STORE_LOCATION IS NOT NULL
                             <td>#tlformat(BK,2)#</td>
                         </tr>
                     </cfoutput>
-                </table>
+                </cf_ajax_list>
                     </cf_box>
             </div>
                 
             
             <div class="col col-4" id="serialsContainer">
                 <cf_box title="Serial Numbers">
-                <table id="serialsTable" style="display:none;">
+                <cf_ajax_list id="serialscf_ajax_list" style="display:none;">
                     <tr></tr>
-                </table>
+                </cf_ajax_list>
                     </cf_box>
                 <!-- Serial numbers will be loaded here -->
             </div>
             <div class="col col-4" id="hareketContainer">
                 <cf_box title="Serial Movements">
-                <table id="hareketTable" style="display:none;">
+                <cf_ajax_list id="hareketcf_ajax_list" style="display:none;">
                     <tr></tr>
-                </table>
+                </cf_ajax_list>
                     </cf_box>
                 <!-- Serial numbers will be loaded here -->
         </div>
@@ -103,15 +103,15 @@ ORDER BY SERIAL_NO
     
 `
 var result=wrk_query(sql_query,"dsn3")
-        var serialsTable = document.getElementById("serialsTable");
-        serialsTable.style.display = "table"; // Show the table
+        var serialscf_ajax_list = document.getElementById("serialscf_ajax_list");
+        serialscf_ajax_list.style.display = "cf_ajax_list"; // Show the cf_ajax_list
         // Clear previous rows
-        while (serialsTable.rows.length > 1) {
-            serialsTable.deleteRow(1);
+        while (serialscf_ajax_list.rows.length > 1) {
+            serialscf_ajax_list.deleteRow(1);
         }
         // Add new rows
         for(let i=0;i<result.recordcount;i++){
-            var row = serialsTable.insertRow();
+            var row = serialscf_ajax_list.insertRow();
             var cell1 = row.insertCell(0);
             var a=document.createElement("a");
             a.href="#";
@@ -133,15 +133,15 @@ LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DE
     where SERIAL_NO='${serial_no}'
     `
     var result=wrk_query(sql_query,"dsn3")
-        var hareketTable = document.getElementById("hareketTable");
-        hareketTable.style.display = "table"; // Show the table
+        var hareketcf_ajax_list = document.getElementById("hareketcf_ajax_list");
+        hareketcf_ajax_list.style.display = "cf_ajax_list"; // Show the cf_ajax_list
         // Clear previous rows
-        while (hareketTable.rows.length > 1) {
-            hareketTable.deleteRow(1);
+        while (hareketcf_ajax_list.rows.length > 1) {
+            hareketcf_ajax_list.deleteRow(1);
         }
         // Add new rows
         for(let i=0;i<result.recordcount;i++){
-            var row = hareketTable.insertRow();
+            var row = hareketcf_ajax_list.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
