@@ -98,10 +98,10 @@ const DOM = {
 
 // Form Functions
 function clearForm() {
-	const fields = ['add_other_barcod', 'add_other_shelf', 'serial_number'];
+	const fields = ['serial_number', 'add_other_shelf'];
 	fields.forEach(field => DOM.setValue(field, ''));
 	DOM.setValue('add_other_amount', '1');
-	DOM.focus('add_other_barcod');
+	DOM.focus('serial_number');
 }
 
 function resetFormState() {
@@ -177,7 +177,7 @@ function processProductQuery(sql, datasource, errorMessage) {
 				<label for="add_other_amount">Miktar</label>
 				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="FormState.isAdd=true;" style="width:40px; text-align:right" value="1" />
 			</div>
-			<div class="form-group">
+			<div style="display:none" class="form-group">
 				<label for="add_other_barcod">Barkod</label>
 				<input id="add_other_barcod"   autocomplete="off" 
 					   autocorrect="off" 
@@ -372,8 +372,8 @@ function processProductQuery(sql, datasource, errorMessage) {
 var bm=null;
 $(document).ready(function() {
 	$(".header").hide();
-	DOM.focus('add_other_barcod');
-	setTimeout(() => DOM.get('add_other_barcod').select(), 1000);
+	DOM.focus('serial_number');
+	setTimeout(() => DOM.get('serial_number').select(), 1000);
  bm=new BarcodeManager();
 var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
@@ -515,7 +515,7 @@ function addRow(useSerial = false) {
 // Event Handlers
 document.addEventListener('keydown', function(e) {
 	if (e.keyCode === 13) { // Enter key
-		const barcode = DOM.getValue('add_other_barcod');
+		const barcode = DOM.getValue('serial_number');
 		const shelf = DOM.getValue('add_other_shelf');
 		var serialNo = DOM.getValue('serial_number');
 		
@@ -584,9 +584,9 @@ function searchShelf(shelfCode, useSerial = false) {
 	}
 	
 	// Validate input based on mode
-	const inputValue = useSerial ? DOM.getValue('serial_number') : DOM.getValue('add_other_barcod');
+	const inputValue = useSerial ? DOM.getValue('serial_number') : DOM.getValue('serial_number');
 	if (!inputValue) {
-		DOM.focus(useSerial ? 'serial_number' : 'add_other_barcod');
+		DOM.focus(useSerial ? 'serial_number' : 'serial_number');
 		return;
 	}
 	
