@@ -118,3 +118,73 @@ var result=wrk_query(sql_query,"dsn3")
     </cfif>
 </cfif>
 
+
+
+<script type="text/javascript">
+// Simplified AJAX query function
+function wrk_query(query, dataSource, maxRows) {
+	console.log('=== WRK_QUERY START ===');
+	console.log('Query:', query);
+	console.log('DataSource:', dataSource);
+	
+	dataSource = dataSource || 'dsn';
+	maxRows = maxRows || 0;
+	
+	var result = new Object();
+	var xhr = null;
+	
+	// Create XMLHttpRequest
+	if (window.XMLHttpRequest) {
+		try {
+			xhr = new XMLHttpRequest();
+		} catch(e) {
+			console.error('XMLHttpRequest creation failed:', e);
+			xhr = false;
+		}
+	} else if (window.ActiveXObject) {
+		try {
+			xhr = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch(e) {
+			try {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch(e) {
+				console.error('ActiveXObject creation failed:', e);
+				xhr = false;
+			}
+		}
+	}
+	
+	if (!xhr) {
+		console.error('XMLHttpRequest not supported');
+		return false;
+	}
+	
+	xhr.open("POST", '/index.cfm?fuseaction=objects2.emptypopup_get_js_query&isAjax=1&xmlhttp=1', false);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.setRequestHeader('pragma', 'nocache');
+	
+	var params = 'str_sql=' + encodeURIComponent(query) + 
+				 '&data_source=' + dataSource + 
+				 '&maxrows=' + maxRows;
+	
+	console.log('Request params:', params);
+	
+	try {
+		xhr.send(params);
+		console.log('XHR Status:', xhr.status, 'Ready State:', xhr.readyState);
+		console.log('Response Text:', xhr.responseText);
+		
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			eval(xhr.responseText.replace(/\u200B/g, ''));
+			result = get_js_query;
+			console.log('Query result:', result);
+		}
+	} catch(e) {
+		console.error('Query execution failed:', e);
+		result = false;
+	}
+	
+	console.log('=== WRK_QUERY END ===');
+	return result;
+}
+</script>
