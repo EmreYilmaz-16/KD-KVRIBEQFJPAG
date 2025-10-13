@@ -71,6 +71,11 @@ HAVING STORE_LOCATION IS NOT NULL
                 </table>
                 <!-- Serial numbers will be loaded here -->
             </div>
+            <div id="hareketContainer">
+                <table id="hareketTable" style="display:none;">
+                    <tr></tr>
+                </table>
+                <!-- Serial numbers will be loaded here -->
         </div>
 <script>
     function getSerials(stockId, departmentId, locationId) {
@@ -110,13 +115,33 @@ var result=wrk_query(sql_query,"dsn3")
             a.style.color="blue";
             a.style.textDecoration="underline";
             a.textContent=result.SERIAL_NO[i];
-            a.onclick=function(){ navigator.clipboard.writeText(result.SERIAL_NO[i]); alert('Serial number ' + result.SERIAL_NO[i] + ' copied to clipboard.');  };
+            a.onclick= function(){ getHareket(result.SERIAL_NO[i]); };
             cell1.appendChild(a);
             
            
         }
     }
 
+function getHareket(serial_no) {
+    var sql_query=`select CASE WHEN IN_OUT=1 THEN '+++' ELSE'---' END AS TR,DEPARTMENT_ID,LOCATION_ID,SERIAL_NO  from w3Qa_1.SERVICE_GUARANTY_NEW where SERIAL_NO='${serial_no}'
+    `
+    var result=wrk_query(sql_query,"dsn3")
+        var hareketTable = document.getElementById("hareketTable");
+        hareketTable.style.display = "table"; // Show the table
+        // Clear previous rows
+        while (hareketTable.rows.length > 1) {
+            hareketTable.deleteRow(1);
+        }
+        // Add new rows
+        for(let i=0;i<result.recordcount;i++){
+            var row = hareketTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = result.TR[i];
+            cell1.innerHTML = result.SERIAL_NO[i];
+        }
+
+}
 </script>
 
 
