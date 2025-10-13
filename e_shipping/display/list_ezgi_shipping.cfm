@@ -837,11 +837,11 @@
                 <cf_object_tr id="zone_id" title="#header_#">
                     <cf_object_td>
                         <select name="report_type_id" id="report_type_id" style="width:120px;height:20px">
-							<option value="" <cfif attributes.report_type_id eq ''>selected</cfif>><cf_get_lang_main no='296.Tümü'></option>
-							<option value="1" <cfif attributes.report_type_id eq '1'>selected</cfif>><cfoutput>#getLang('main',1305)# #getLang('main',3517)#</cfoutput></option>
-                            <option value="2" <cfif attributes.report_type_id eq '2'>selected</cfif>><cfoutput>#getLang('main',3272)# #getLang('main',3517)#</cfoutput></option>
-                            <option value="3" <cfif attributes.report_type_id eq '3'>selected</cfif>><cfoutput>#getLang('main',3518)#</cfoutput></option>
-                            <option value="4" <cfif attributes.report_type_id eq '4'>selected</cfif>><cfoutput>#getLang('main',3519)#</cfoutput></option>
+							<option value="" <cfif attributes.report_type_id eq ''>selected</cfif>><!---<cf_get_lang_main no='296.Tümü'>--->Tümü</option>
+							<option value="1" <cfif attributes.report_type_id eq '1'>selected</cfif>><!---<cfoutput>#getLang('main',1305)# #getLang('main',3517)#</cfoutput>--->Açık Sevkler</option>
+                            <option value="2" <cfif attributes.report_type_id eq '2'>selected</cfif>><!---<cfoutput>#getLang('main',3272)# #getLang('main',3517)#</cfoutput>--->Kapalı Sevkler</option>
+                            <option value="3" <cfif attributes.report_type_id eq '3'>selected</cfif>><!---<cfoutput>#getLang('main',3518)#</cfoutput>--->Hazır Sevkler</option>
+                            <option value="4" <cfif attributes.report_type_id eq '4'>selected</cfif>><!---<cfoutput>#getLang('main',3519)#</cfoutput>--->Kısmi Hazır Sevkler</option>
 					</select>                    
                     </cf_object_td>
                 </cf_object_tr>
@@ -869,7 +869,7 @@
                             <option value="2" <cfif attributes.sort_type eq 2>selected</cfif>><cfoutput>#getLang('prod',506)#</cfoutput></option>
                             <option value="3" <cfif attributes.sort_type eq 3>selected</cfif>><cfoutput>#getLang('main',3073)#</cfoutput></option>
                             <option value="4" <cfif attributes.sort_type eq 4>selected</cfif>><cfoutput>#getLang('main',3074)#</cfoutput></option>
-                            <option value="5" <cfif attributes.sort_type eq 5>selected</cfif>><cfoutput>#getLang('main',3520)#</cfoutput></option>
+                            <option value="5" <cfif attributes.sort_type eq 5>selected</cfif>><!---<cfoutput>#getLang('main',3520)#</cfoutput>--->Şirket Adına Göre Artan</option>
                         </select>                 
                     </cf_object_td>
                 </cf_object_tr>
@@ -879,9 +879,9 @@
                 <cf_object_tr id="form_ul_sort_type" title="#header_#">
                     <cf_object_td>
                         <select name="listing_type" id="listing_type" style="width:90px;height:20px">
-                            <option value="1" <cfif attributes.listing_type eq 1>selected</cfif>><cf_get_lang_main no='296.Tümü'></option>
-                            <option value="2" <cfif attributes.listing_type eq 2>selected</cfif>><cf_get_lang_main no='3521.Sevk Planları'></option>
-                            <option value="3" <cfif attributes.listing_type eq 3>selected</cfif>><cfoutput>#getLang('myhome',1276)#</cfoutput></option>
+                            <option value="1" <cfif attributes.listing_type eq 1>selected</cfif>><!---<cf_get_lang_main no='296.Tümü'>--->Tümü</option>
+                            <option value="2" <cfif attributes.listing_type eq 2>selected</cfif>><!---<cf_get_lang_main no='3521.Sevk Planları'>--->Sevk Planları</option>
+                            <option value="3" <cfif attributes.listing_type eq 3>selected</cfif>><!---<cfoutput>#getLang('myhome',1276)#</cfoutput>--->Sevk Talepleri</option>
                         </select>                 
                     </cf_object_td>
                 </cf_object_tr>
@@ -1075,13 +1075,13 @@
 
 			</tr>
             <tr height="10">
-                <th style="width:20px;text-align:center"><cf_get_lang_main no='3524.SVK.'></th>
+                <th style="width:20px;text-align:center"><!---<cf_get_lang_main no='3524.SVK.'>--->SVK.</th>
                 <cfif attributes.e_shipping_type eq 1>
-                <th style="width:20px;text-align:center"><cf_get_lang_main no='3525.HZR.'></th>
+                <th style="width:20px;text-align:center"><!---<cf_get_lang_main no='3525.HZR.'>--->HZR.</th>
                 </cfif>
-                <th style="width:20px;text-align:center"><cf_get_lang_main no='3180.KNT.'></th>
-                <th style="width:20px;text-align:center"><cf_get_lang_main no='3526.İRS.'></th>
-                <th style="width:20px;text-align:center"><cf_get_lang_main no='3527.FTR.'></th>
+                <th style="width:20px;text-align:center"><!---<cf_get_lang_main no='3180.KNT.'>--->KNT.</th>
+                <th style="width:20px;text-align:center"><!---<cf_get_lang_main no='3526.İRS.'>--->İRS.</th>
+                <th style="width:20px;text-align:center"><!---<cf_get_lang_main no='3527.FTR.'>--->FTR.</th>
 
             </tr>
 		</thead>
@@ -1927,7 +1927,7 @@
                                		<input type="text" name="send_date" id="send_date" value="#dateformat(DateAdd('d',1,now()),'dd/mm/yyyy')#" validate="eurodate" maxlength="10" style="width:65px;">
                                     <cf_wrk_date_image date_field="send_date">
                                     <input type="button" name="gonder" value="<cf_get_lang_main no='1331.Gönder'>" onClick="grupla(-4);">
-                                	<input type="button" name="birles" value="<cf_get_lang_main no='3551.Birleştir'>" onClick="grupla(-3);">
+                                	<input type="button" name="birles" value="<!---<cf_get_lang_main no='3551.Birleştir'>--->Birleştir" onClick="grupla(-3);">
                                     <input type="button" value="#getLang('prod',222)#" onClick="grupla(-2);">
                                 </td>
                             </cfoutput>
@@ -1939,7 +1939,7 @@
                                 	<input type="text" name="send_date" id="send_date" value="#dateformat(DateAdd('d',1,now()),'dd/mm/yyyy')#" validate="eurodate" maxlength="10" style="width:65px;">
                                     <cf_wrk_date_image date_field="send_date">
                                     <input type="button" name="gonder" value="<cf_get_lang_main no='1331.Gönder'>" onClick="grupla(-4);">
-                                    <input type="button" name="birles" value="<cf_get_lang_main no='3551.Birleştir'>" onClick="grupla(-3);">
+                                    <input type="button" name="birles" value="<!---<cf_get_lang_main no='3551.Birleştir'>--->Birleştir" onClick="grupla(-3);">
                                     <input type="button" value="#getLang('prod',222)#" onClick="grupla(-2);">
                                 </td>
                             </cfoutput>
