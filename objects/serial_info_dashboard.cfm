@@ -44,7 +44,7 @@ HAVING STORE_LOCATION IS NOT NULL
                         <tr>
                             
                             <td>#DEPO#</td>
-                            <td>#Round(BK,2)#</td>
+                            <td>#tlformat(BK,2)#</td>
                         </tr>
                     </cfoutput>
                 </table>
