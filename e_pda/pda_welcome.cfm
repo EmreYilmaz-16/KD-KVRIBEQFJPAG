@@ -151,6 +151,11 @@
         color: var(--pda-alert);
     }
 
+    .status-warning {
+        background: rgba(255, 193, 7, 0.12);
+        color: #d68500;
+    }
+
     .quick-hint {
         font-size: 12px;
         color: var(--pda-muted);
@@ -240,6 +245,7 @@
                 <span class="badge-row">
                     <span class="status-badge status-success">Yapıldı!</span>
                     <span class="status-badge status-alert">Barkod Parçalama Yapıldı!</span>
+                    <span class="status-badge status-warning">Barkod Alanı Kaldırıldı !</span>
                 </span>
             </span>
         </a>
