@@ -1,3 +1,4 @@
+<cf_box title="Serial Info Dashboard">
 <cfparam name="attributes.product_code_2" default="">
 <cfparam name="attributes.is_submitted" default="0">
 <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
@@ -16,10 +17,12 @@
 </cfquery>
 
     <cfif structKeyExists(getProduct, "PRODUCT_ID")>
+      <cf_box title="Product Details">
         <h3>Product Details:</h3>
         <p><strong>Product ID:</strong> <cfoutput>#getProduct.PRODUCT_ID#</cfoutput></p>
         <p><strong>Product Name:</strong> <cfoutput>#getProduct.PRODUCT_NAME#</cfoutput></p>
         <p><strong>Stock ID:</strong> <cfoutput>#getProduct.STOCK_ID#</cfoutput></p>
+        </cf_box>
         <div class="row">
             <div class="col col-3">
                 <cfquery name="getAllStocks" datasource="#dsn2#">
@@ -35,6 +38,7 @@ HAVING STORE_LOCATION IS NOT NULL
 
 --HAVING STOCK_ID=1193
                 </cfquery>
+                <cf_box title="Stock Information">
                 <h3>Stock Information:</h3>
                 <table>
                     <tr>
@@ -57,24 +61,24 @@ HAVING STORE_LOCATION IS NOT NULL
                         </tr>
                     </cfoutput>
                 </table>
-                <table>
-                    <tr>
-                        <td>
-                            
-                        </td>
-                    </tr>
-                </table>
+                    </cf_box>
             </div>
+                
+            
             <div class="col col-3" id="serialsContainer">
+                <cf_box title="Serial Numbers">
                 <table id="serialsTable" style="display:none;">
                     <tr></tr>
                 </table>
+                    </cf_box>
                 <!-- Serial numbers will be loaded here -->
             </div>
             <div class="col col-3" id="hareketContainer">
+                <cf_box title="Serial Movements">
                 <table id="hareketTable" style="display:none;">
                     <tr></tr>
                 </table>
+                    </cf_box>
                 <!-- Serial numbers will be loaded here -->
         </div>
 <script>
@@ -232,3 +236,4 @@ function wrk_query(query, dataSource, maxRows) {
 	return result;
 }
 </script>
+</cf_box>
