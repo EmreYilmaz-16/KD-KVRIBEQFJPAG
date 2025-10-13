@@ -63,4 +63,5 @@ HAVING STORE_LOCATION IS NOT NULL
     <cfelse>
         <p>No product found with the provided Product Code 2.</p>
     </cfif>
+</cfif>
 
