@@ -104,8 +104,15 @@ var result=wrk_query(sql_query,"dsn3")
         for(let i=0;i<result.recordcount;i++){
             var row = serialsTable.insertRow();
             var cell1 = row.insertCell(0);
+            var a=document.createElement("a");
+            a.href="#";
+            a.style.cursor="pointer";
+            a.style.color="blue";
+            a.style.textDecoration="underline";
+            a.textContent=result.SERIAL_NO[i];
+            a.onclick=function(){ navigator.clipboard.writeText(result.SERIAL_NO[i]); alert('Serial number ' + result.SERIAL_NO[i] + ' copied to clipboard.');  };
+            cell1.appendChild(a);
             
-            cell1.innerHTML = result.SERIAL_NO[i];
            
         }
     }
