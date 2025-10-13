@@ -428,7 +428,7 @@ for(var i=0;i<parsers.length;i++){
 			console.log('No barcode or serial number detected');
 				$("#loglar").append('<p>No barcode or serial number detected</p>');
 				alert('Lütfen Barkod veya Seri Numarası Giriniz');
-				document.getElementById('add_other_barcod').focus();
+				document.getElementById('serial_number').focus();
 				return false;
 			}
 
@@ -814,22 +814,22 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 						serial_no = document.getElementById('serial_number').value;
 						buton_kontrol();
 						add_row_with_serial_no(serial_no);
-						document.getElementById('add_other_barcod').value = '';
+						document.getElementById('serial_number').value = '';
 						document.getElementById('add_other_shelf').value = '';
 						document.getElementById('add_other_amount').value = 1;
-						document.getElementById('add_other_barcod').focus();
+						document.getElementById('serial_number').focus();
 					}
 				}
-				else if (document.getElementById('add_other_barcod').value.length == 0)
+				else if (document.getElementById('serial_number').value.length == 0)
 				{
-						document.getElementById('add_other_barcod').focus();	
+						document.getElementById('serial_number').focus();	
 				}
 				else
 				{
 						alert('Ürün Barkodu Hatalı');
-						document.getElementById('add_other_barcod').value = '';
+						document.getElementById('serial_number').value = '';
 						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_barcod').focus();
+						document.getElementById('serial_number').focus();
 				}
 			}
 		}
