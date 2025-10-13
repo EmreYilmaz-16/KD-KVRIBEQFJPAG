@@ -123,7 +123,10 @@ var result=wrk_query(sql_query,"dsn3")
     }
 
 function getHareket(serial_no) {
-    var sql_query=`select CASE WHEN IN_OUT=1 THEN '+++' ELSE'---' END AS TR,DEPARTMENT_ID,LOCATION_ID,SERIAL_NO  from w3Qa_1.SERVICE_GUARANTY_NEW where SERIAL_NO='${serial_no}'
+    var sql_query=`select CASE WHEN IN_OUT=1 THEN '+++' ELSE'---' END AS TR,DEPARTMENT_ID,LOCATION_ID,SERIAL_NO,DEPARTMENT_HEAD+'-'+COMMENT AS DEPO  from w3Qa_1.SERVICE_GUARANTY_NEW  AS SGN
+    LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SGN.DEPARTMENT_ID
+LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DEPARTMENT_ID=D.DEPARTMENT_ID
+    where SERIAL_NO='${serial_no}'
     `
     var result=wrk_query(sql_query,"dsn3")
         var hareketTable = document.getElementById("hareketTable");
@@ -137,8 +140,12 @@ function getHareket(serial_no) {
             var row = hareketTable.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell3.innerHTML = result.DEPO[i];
             cell2.innerHTML = result.TR[i];
             cell1.innerHTML = result.SERIAL_NO[i];
+
+
         }
 
 }
