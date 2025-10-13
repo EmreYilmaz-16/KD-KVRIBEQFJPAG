@@ -24,7 +24,7 @@
         <p><strong>Stock ID:</strong> <cfoutput>#getProduct.STOCK_ID#</cfoutput></p>
         </cf_box>
         <div class="row">
-            <div class="col col-3">
+            <div class="col col-4">
                 <cfquery name="getAllStocks" datasource="#dsn2#">
                    SELECT SUM(STOCK_IN-STOCK_OUT) AS BK,STOCK_ID,STORE,STORE_LOCATION ,
 DEPARTMENT_HEAD+'-'+COMMENT AS DEPO
@@ -65,7 +65,7 @@ HAVING STORE_LOCATION IS NOT NULL
             </div>
                 
             
-            <div class="col col-3" id="serialsContainer">
+            <div class="col col-4" id="serialsContainer">
                 <cf_box title="Serial Numbers">
                 <table id="serialsTable" style="display:none;">
                     <tr></tr>
@@ -73,7 +73,7 @@ HAVING STORE_LOCATION IS NOT NULL
                     </cf_box>
                 <!-- Serial numbers will be loaded here -->
             </div>
-            <div class="col col-3" id="hareketContainer">
+            <div class="col col-4" id="hareketContainer">
                 <cf_box title="Serial Movements">
                 <table id="hareketTable" style="display:none;">
                     <tr></tr>
