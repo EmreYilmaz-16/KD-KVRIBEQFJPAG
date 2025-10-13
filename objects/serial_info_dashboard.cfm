@@ -1,3 +1,5 @@
+<cfparam name="attributes.product_code_2" default="">
+<cfparam name="attributes.is_submitted" default="0">
 <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
     <div class="form-group">
         <label for="product_code_2">Ürün Kodu 2:</label>
