@@ -142,6 +142,11 @@ LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DE
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
             cell3.innerHTML = result.DEPO[i];
+            if(result.TR[i]==='+++'){
+                cell2.style.color="green";
+            } else {
+                cell2.style.color="red";
+            }
             cell2.innerHTML = result.TR[i];
             cell1.innerHTML = result.SERIAL_NO[i];
 
