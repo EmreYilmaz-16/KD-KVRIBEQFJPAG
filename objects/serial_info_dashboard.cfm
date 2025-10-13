@@ -67,7 +67,7 @@ HAVING STORE_LOCATION IS NOT NULL
             
             <div class="col col-4" id="serialsContainer">
                 <cf_box title="Serial Numbers">
-                <cf_ajax_list id="serialscf_ajax_list" style="display:none;">
+                <cf_ajax_list id="serialsTable" style="display:none;">
                     <tr></tr>
                 </cf_ajax_list>
                     </cf_box>
@@ -75,7 +75,7 @@ HAVING STORE_LOCATION IS NOT NULL
             </div>
             <div class="col col-4" id="hareketContainer">
                 <cf_box title="Serial Movements">
-                <cf_ajax_list id="hareketcf_ajax_list" style="display:none;">
+                <cf_ajax_list id="hareketTable" style="display:none;">
                     <tr></tr>
                 </cf_ajax_list>
                     </cf_box>
@@ -103,15 +103,15 @@ ORDER BY SERIAL_NO
     
 `
 var result=wrk_query(sql_query,"dsn3")
-        var serialscf_ajax_list = document.getElementById("serialscf_ajax_list");
-        serialscf_ajax_list.style.display = "cf_ajax_list"; // Show the cf_ajax_list
+        var serialsTable = document.getElementById("serialsTable");
+        serialsTable.style.display = "table"; // Show the table
         // Clear previous rows
-        while (serialscf_ajax_list.rows.length > 1) {
-            serialscf_ajax_list.deleteRow(1);
+        while (serialsTable.rows.length > 1) {
+            serialsTable.deleteRow(1);
         }
         // Add new rows
         for(let i=0;i<result.recordcount;i++){
-            var row = serialscf_ajax_list.insertRow();
+            var row = serialsTable.insertRow();
             var cell1 = row.insertCell(0);
             var a=document.createElement("a");
             a.href="#";
@@ -133,15 +133,15 @@ LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DE
     where SERIAL_NO='${serial_no}'
     `
     var result=wrk_query(sql_query,"dsn3")
-        var hareketcf_ajax_list = document.getElementById("hareketcf_ajax_list");
-        hareketcf_ajax_list.style.display = "cf_ajax_list"; // Show the cf_ajax_list
+        var hareketTable = document.getElementById("hareketTable");
+        hareketTable.style.display = "table"; // Show the table
         // Clear previous rows
-        while (hareketcf_ajax_list.rows.length > 1) {
-            hareketcf_ajax_list.deleteRow(1);
+        while (hareketTable.rows.length > 1) {
+            hareketTable.deleteRow(1);
         }
         // Add new rows
         for(let i=0;i<result.recordcount;i++){
-            var row = hareketcf_ajax_list.insertRow();
+            var row = hareketTable.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
