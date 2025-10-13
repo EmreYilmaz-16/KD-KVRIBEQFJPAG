@@ -129,7 +129,7 @@
 				<label for="add_other_amount">Miktar</label>
 				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="text-align:right" value="1" />
 			</div>
-			<div class="form-group">
+			<div style="display:none" class="form-group">
 				<label for="add_other_barcod">Barkod</label>
 				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" 
 					   autocomplete="off" 
@@ -349,11 +349,11 @@ for(var i=0;i<parsers.length;i++){
 
 })
 
-	document.getElementById('add_other_barcod').focus();
-	setTimeout("document.getElementById('add_other_barcod').select();",1000);
+	document.getElementById('serial_number').focus();
+	setTimeout("document.getElementById('serial_number').select();",1000);
 	
 	// Mobil uyumluluk için input event listeners ekle
-	document.getElementById('add_other_barcod').addEventListener('keydown', function(e) {
+	document.getElementById('serial_number').addEventListener('keydown', function(e) {
 		if (e.keyCode === 13 || e.which === 13) {
 			e.preventDefault();
 			processBarcode();
@@ -361,7 +361,7 @@ for(var i=0;i<parsers.length;i++){
 	});
 	
 	// Touch device desteği için blur event ekle
-	document.getElementById('add_other_barcod').addEventListener('blur', function(e) {
+	document.getElementById('serial_number').addEventListener('blur', function(e) {
 		var value = this.value.trim();
 		if (value.length > 0) {
 			setTimeout(function() { processBarcode(); }, 100);
