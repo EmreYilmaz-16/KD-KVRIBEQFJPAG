@@ -130,7 +130,7 @@ var Config = {
 			<label for="add_other_amount">Miktar</label>
 			<input id="add_other_amount" type="text" class="boxtext" onfocus="AppState.operationType=0;" style="text-align:right" value="1" />
 		</div>
-		<div class="form-group">
+		<div style="display:none" class="form-group">
 			<label for="add_other_barcod">Barkod</label>
 			<input id="add_other_barcod" type="text" class="boxtext" style="width:90px;" 
 				   autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -364,8 +364,8 @@ var bm=null;
 // Main application functions
 $(document).ready(function(){
 	$(".header").hide();
-	getId('add_other_barcod').focus();
-	setTimeout(function() { getId('add_other_barcod').select(); }, 1000);
+	getId('serial_number').focus();
+	setTimeout(function() { getId('serial_number').select(); }, 1000);
 	 bm=new BarcodeManager();
 var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
@@ -710,7 +710,7 @@ function handleBarcodeWorkflow(inputs) {
 		console.log('Case 2: Shelf code entered in barcode field');
 		showAlert('Önce Ürün Barkodu Okutunuz');
 		resetForm();
-		getId('add_other_barcod').focus();
+		getId('serial_number').focus();
 	}
 	else if (inputs.barcode.length === Config.BARCODE_LENGTH && 
 			 Config.SHELF_CODE_LENGTHS.includes(inputs.outShelf.length)) {
@@ -736,7 +736,7 @@ function handleBarcodeWorkflow(inputs) {
 		console.log('Barcode value:', inputs.barcode, 'Length:', inputs.barcode.length);
 		showAlert('Barkod Hatalı');
 		resetForm();
-		getId('add_other_barcod').focus();
+		getId('serial_number').focus();
 	}
 	console.log('=== BARCODE WORKFLOW END ===');
 }
@@ -774,7 +774,7 @@ function searchShelf(shelfCode, type, useSerial = false) {
 		console.log('ERROR: Department mismatch');
 		showAlert('Seçtiğiniz Raf ' + locationText + ' Lokasyonunda Yoktur!');
 		resetForm();
-		getId('add_other_barcod').focus();
+		getId('serial_number').focus();
 		return false;
 	}
 	
@@ -801,12 +801,12 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 			console.log('ERROR: Invalid barcode length');
 			if (inputValue.length === 0) {
 				console.log('Empty barcode, focusing input');
-				getId('add_other_barcod').focus();
+				getId('serial_number').focus();
 			} else {
 				console.log('Invalid barcode, showing error');
 				showAlert('Ürün Barkodu Hatalı');
 				resetForm();
-				getId('add_other_barcod').focus();
+				getId('serial_number').focus();
 			}
 			return false;
 		}
@@ -859,8 +859,8 @@ function validateProductInShelf(shelfCode, type, useSerial = false) {
 		addProductRow();
 		console.log('Calling resetForm');
 		resetForm();
-		console.log('Focusing on barcode input');
-		getId('add_other_barcod').focus();
+		console.log('Focusing on serial number input');
+		getId('serial_number').focus();
 	}
 	
 	console.log('=== VALIDATE PRODUCT IN SHELF END ===');
