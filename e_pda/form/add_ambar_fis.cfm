@@ -153,7 +153,7 @@
 		</div>
 		<div style="display:flex">
 			<div class="form-group">
-				<label for="add_other_shelf">Raf</label>
+				<label for="add_other_shelf">Raf Okutunuz</label>
 				<input id="add_other_shelf"    autocomplete="off" 
 					   autocorrect="off" 
 					   autocapitalize="off" 
@@ -162,7 +162,7 @@
 					   enterkeyhint="done" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
 			</div>
 			<div id="shelf_select_td" style="display:none"  class="form-group">
-				<label for="shelf_select_td">Raf Seçimi</label>				
+				<label for="shelf_select_td">Raflar</label>				
 				<select name="shelf_select" id="shelf_select" style="text-align:center">
 					<option value="">Ürün Rafları</option>
 				</select>
@@ -201,7 +201,7 @@
 		</div>
 		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Parser</option>
+				<option value="0">Barkod Tipi</option>
 
 			</select>
 		</div>
