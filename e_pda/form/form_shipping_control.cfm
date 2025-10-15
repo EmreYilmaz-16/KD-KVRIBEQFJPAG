@@ -392,7 +392,8 @@ function findStockIdBySerial(serial, groupedData) {
 			if(SerialObject && SerialObject.serial_no){
 				serial = SerialObject.serial_no;
 			}
-			
+			console.log('Searching for serial number:', serial);
+
 	for (const stockId in groupedData) {
 		const group = groupedData[stockId];
 		for (let i = 0; i < group.length; i++) {
