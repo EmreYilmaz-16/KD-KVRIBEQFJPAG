@@ -87,8 +87,23 @@
                                 <cfqueryparam value="1" cfsqltype="cf_sql_bit">,
                                 <cfqueryparam value="#(data.IN_OUT eq 1 ? queryResult.generatedKey : 0)#" cfsqltype="cf_sql_integer">,
                                 <cfqueryparam value="#(data.IN_OUT eq 0 ? queryResult.generatedKey : 0)#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#(data.IN_OUT eq 1 ? nowDate : null)#" cfsqltype="cf_sql_timestamp" null="true">,
-                                <cfqueryparam value="#(data.IN_OUT eq 0 ? nowDate : null)#" cfsqltype="cf_sql_timestamp" null="true">,
+                                <cfif data.IN_OUT eq 1>
+                                    <cfif len(nowDate)>
+                                        <cfqueryparam value="#nowDate#" cfsqltype="cf_sql_timestamp">
+                                        <cfelse>
+                                            NULL
+                                    </cfif>
+                                    NULL
+                                </cfif>,
+                                <cfif data.IN_OUT eq 0>
+                                    <cfif len(nowDate)>
+                                        <cfqueryparam value="#nowDate#" cfsqltype="cf_sql_timestamp">
+                                        <cfelse>
+                                            NULL
+                                        </cfif>
+                                    NULL
+                                </cfif>,
+                                
                                 <cfqueryparam value="#data.STOCK_ID#" cfsqltype="cf_sql_integer">
                         )
                     </cfquery>
