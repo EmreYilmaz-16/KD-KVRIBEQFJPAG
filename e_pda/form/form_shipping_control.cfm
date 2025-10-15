@@ -204,7 +204,7 @@
 					<label for="add_other_amount">Miktar</label>
 					<input name="add_other_amount" type="text" value="<cfoutput>#attributes.add_other_amount#</cfoutput>" class="moneybox" >
 				</div>
-				<div class="form-group col col-4">
+				<div class="form-group col col-3">
 					<label for="add_other_barcod">Ekle</label>
 					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
@@ -217,15 +217,16 @@
 						<label for="total_control_packages">Paket Sayısı:</label>
 						<input type="text" name="total_control_packages" readonly="readonly" class="box"  style="text-align:right;color:FF0000; font-weight:bold" id="total_control_packages" value="#get_total_control.PAKETSAYISI#" />
 					</div>
-					<div class="form-group col col-2">
-						<input class="ui-wrk-btn ui-wrk-btn-extra" type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
-					</div>
-					<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+					<div class="form-group col col-2" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Tipi</option>
 
 			</select>
 		</div>
+					<div class="form-group col col-1">
+						<input class="ui-wrk-btn ui-wrk-btn-extra" type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
+					</div>
+					
 				<!----<div style="display:flex">
 					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
 				
