@@ -493,7 +493,7 @@ function add_product_to_barkod(barcode, amount, type) {
 					alert(document.getElementById('PRODUCT_NAME' + SID).value + ' Ürününde Fazla Çıkış Var');
 				else {
 					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) + (amount * 1);
-					document.all.total_control_amount.value = (document.all.total_control_amount.value * 1) + (amount * 1);
+					document.getElementById('total_control_amount').value = (document.getElementById('total_control_amount').value * 1) + (amount * 1);
 				}
 				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value)
 					document.getElementById('row' + SID).style.display = 'none';
@@ -503,20 +503,23 @@ function add_product_to_barkod(barcode, amount, type) {
 				else
 					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) - (amount * 1);
 				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value) {
-					eval('document.all.is_ok' + SID).style.display = '';
-					eval('document.all.is_error' + SID).style.display = 'none';
+					document.getElementById('is_ok' + SID).style.display = '';
+					document.getElementById('is_error' + SID).style.display = 'none';
 				}
 				if (document.getElementById('control_amount' + SID).value > document.getElementById('amount' + SID).value) {
-					eval('document.all.is_ok' + SID).style.display = 'none';
-					eval('document.all.is_error' + SID).style.display = '';
+					document.getElementById('is_ok' + SID).style.display = 'none';
+					document.getElementById('is_error' + SID).style.display = '';
 				}
 				if (document.getElementById('control_amount' + SID).value < document.getElementById('amount' + SID).value)
-					eval('document.all.is_ok' + SID).style.display = 'none';
+					document.getElementById('is_ok' + SID).style.display = 'none';
 			}
 			//document.getElementById("serials").value += barcode + ",";
-			document.all.add_other_barcod.value = '';
-			/*document.all.del_other_barcod.value='';*/
-			document.all.changed_stock_id.value = SID;
+			document.getElementById('add_other_barcod').value = '';
+			/*document.getElementById('del_other_barcod').value='';*/
+			var changedStockIdElem = document.getElementById('changed_stock_id');
+			if (changedStockIdElem) {
+				changedStockIdElem.value = SID;
+			}
 			eval('row' + SID).style.background = 'FFCCCC';
 
 	} else if (uzunluk < 5 || uzunluk > 20) {
@@ -533,14 +536,15 @@ function add_product_to_barkod(barcode, amount, type) {
 		if (document.getElementById('control_amount' + SID) == undefined)
 			alert('Ürünün Barkodlarında Sorun Var.');
 		else {
-			if (document.all.changed_stock_id.value != "") //daha önceden bir satır eklenmişse alan dolmuş demektir ve yeni eklenecek alan için satırı renklendiyoruz bir alt satırda
-				eval('row' + document.all.changed_stock_id.value).style.background = '<cfoutput>#colorrow#</cfoutput>';
+			var changedStockIdElem = document.getElementById('changed_stock_id');
+			if (changedStockIdElem && changedStockIdElem.value != "") //daha önceden bir satır eklenmişse alan dolmuş demektir ve yeni eklenecek alan için satırı renklendiyoruz bir alt satırda
+				eval('row' + changedStockIdElem.value).style.background = '<cfoutput>#colorrow#</cfoutput>';
 			if (type == 1) { //ekleme ise
 				if ((document.getElementById('control_amount' + SID).value * 1) - (amount * -1) > (document.getElementById('amount' + SID).value * 1))
 					alert(document.getElementById('PRODUCT_NAME' + SID).value + ' Ürününde Fazla Çıkış Var');
 				else {
 					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) + (amount * 1);
-					document.all.total_control_amount.value = (document.all.total_control_amount.value * 1) + (amount * 1);
+					document.getElementById('total_control_amount').value = (document.getElementById('total_control_amount').value * 1) + (amount * 1);
 				}
 				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value)
 					document.getElementById('row' + SID).style.display = 'none';
@@ -550,19 +554,21 @@ function add_product_to_barkod(barcode, amount, type) {
 				else
 					document.getElementById('control_amount' + SID).value = (document.getElementById('control_amount' + SID).value * 1) - (amount * 1);
 				if (document.getElementById('control_amount' + SID).value == document.getElementById('amount' + SID).value) {
-					eval('document.all.is_ok' + SID).style.display = '';
-					eval('document.all.is_error' + SID).style.display = 'none';
+					document.getElementById('is_ok' + SID).style.display = '';
+					document.getElementById('is_error' + SID).style.display = 'none';
 				}
 				if (document.getElementById('control_amount' + SID).value > document.getElementById('amount' + SID).value) {
-					eval('document.all.is_ok' + SID).style.display = 'none';
-					eval('document.all.is_error' + SID).style.display = '';
+					document.getElementById('is_ok' + SID).style.display = 'none';
+					document.getElementById('is_error' + SID).style.display = '';
 				}
 				if (document.getElementById('control_amount' + SID).value < document.getElementById('amount' + SID).value)
-					eval('document.all.is_ok' + SID).style.display = 'none';
+					document.getElementById('is_ok' + SID).style.display = 'none';
 			}
-			document.all.add_other_barcod.value = '';
-			/*document.all.del_other_barcod.value='';*/
-			document.all.changed_stock_id.value = SID;
+			document.getElementById('add_other_barcod').value = '';
+			/*document.getElementById('del_other_barcod').value='';*/
+			if (changedStockIdElem) {
+				changedStockIdElem.value = SID;
+			}
 			eval('row' + SID).style.background = 'FFCCCC';
 		}
 	} else
@@ -573,7 +579,11 @@ function kontrol()
 	document.getElementById("serials").value = JSON.stringify(_groupedData);
 	for(i=1;i<=<cfoutput>#listlen(stock_id_list,',')#</cfoutput>;i++)
 	{
-		eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value = eval('document.all.control_amount'+list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",")).value
+		var stockId = list_getat("<cfoutput>#stock_id_list#</cfoutput>",i,",");
+		var controlAmountElem = document.getElementById('control_amount' + stockId);
+		if (controlAmountElem) {
+			controlAmountElem.value = controlAmountElem.value;
+		}
 	}
 	document.add_package.submit();
 }
