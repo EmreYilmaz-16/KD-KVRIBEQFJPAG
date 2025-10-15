@@ -371,6 +371,7 @@ SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#'
 	
 </script>
 <script>
+var bm=null;
 function groupByStockId(data) {
 	var result = {};
 	for (var i = 0; i < data.length; i++) {
@@ -438,6 +439,11 @@ function findAndMarkSerial(serialNo, groupedData) {
 document.getElementById('add_other_barcod').focus();
 $(document).ready(function(){
 	$(".header").hide()
+	 bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
 })
 setTimeout("document.getElementById('add_other_barcod').select();",1000);	
 function add_product_to_barkod(barcode, amount, type) {	
