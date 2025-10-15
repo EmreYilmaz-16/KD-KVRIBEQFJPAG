@@ -436,9 +436,10 @@ function findAndMarkSerial(serialNo, groupedData) {
 
 
 <script language="javascript">
-document.getElementById('add_other_barcod').focus();
+
 $(document).ready(function(){
 	$(".header").hide()
+	document.getElementById('add_other_barcod').focus();
 	 bm=new BarcodeManager();
 var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
