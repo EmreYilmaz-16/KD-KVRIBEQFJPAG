@@ -407,6 +407,11 @@ function findStockIdBySerial(serial, groupedData) {
 
 function findAndMarkSerial(serialNo, groupedData) {
 	console.log('=== FIND AND MARK SERIAL START ===');
+	var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
+	console.log('Barcode parsed for serial number:', SerialObject);
+	if(SerialObject && SerialObject.serial_no){
+		serialNo = SerialObject.serial_no;
+	}
 	console.log('Aranan seri numarası:', serialNo);
 	
 
