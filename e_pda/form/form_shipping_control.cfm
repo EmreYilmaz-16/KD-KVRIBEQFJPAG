@@ -206,7 +206,7 @@
 				</div>
 				<div class="form-group col col-4">
 					<label for="add_other_barcod">Ekle</label>
-					<input name="add_other_barcod" type="text" value="" onKeyDown="checkKeyCode()if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
+					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
 					<div class="form-group col col-2">
