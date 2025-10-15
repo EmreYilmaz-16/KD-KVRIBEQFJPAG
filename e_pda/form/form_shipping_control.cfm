@@ -220,6 +220,12 @@
 					<div class="form-group col col-2">
 						<input class="ui-wrk-btn ui-wrk-btn-extra" type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
 					</div>
+					<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Tipi</option>
+
+			</select>
+		</div>
 				<!----<div style="display:flex">
 					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
 				
@@ -394,6 +400,8 @@ function findAndMarkSerial(serialNo, groupedData) {
 	console.log('=== FIND AND MARK SERIAL START ===');
 	console.log('Aranan seri numarası:', serialNo);
 	
+
+
 	for (const stockId in groupedData) {
 		const group = groupedData[stockId];
 		console.log(`Stok ID: ${stockId}, Grup içindeki eleman sayısı: ${group.length}`);
