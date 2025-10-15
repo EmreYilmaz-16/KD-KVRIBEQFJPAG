@@ -1,7 +1,7 @@
 <!--- Etiket Görüntüleme ve Yazdırma Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.page" default="1">
-<cfparam name="url.per_page" default="5">
+<cfparam name="url.per_page" default="4">
 
 <!--- Custom tag için gerekli değişkenler --->
 <cfset upload_folder = ExpandPath(".")>
@@ -459,9 +459,9 @@
                         </div>
                         <!--- Her 5 etikette bir sayfa sonu --->
                         
-                        <cfif ps eq 5>
+                        <cfif ps eq 4>
                             <cfsavecontent variable="zd">
-                                CT~~CD,~CC^~CT~
+                                <!---CT~~CD,~CC^~CT~
                                 ^XA
                                 ~TA000
                                 ~JSN
@@ -510,12 +510,57 @@
                                 ^FT1166,209^A0B,10,35^FH\^CI28^FD#SERINO5#^FS^CI27
                                 ^FT974,205^A0B,8,35^FH\^CI28^FD#TARIH5#^FS^CI27
                                 ^PQ1,0,1,Y
-                                ^XZ
-                                
+                                ^XZ--->
+                                CT~~CD,~CC^~CT~
+                                    ^XA
+                                    ~TA000
+                                    ~JSN
+                                    ^LT0
+                                    ^MNW
+                                    ^MTD
+                                    ^PON
+                                    ^PMN
+                                    ^LH0,0
+                                    ^JMA
+                                    ^PR6,6
+                                    ~SD15
+                                    ^JUS
+                                    ^LRN
+                                    ^CI27
+                                    ^PA0,1,1,0
+                                    ^XZ
+                                    ^XA
+                                    ^MMT
+                                    ^PW1205
+                                    ^LL307
+                                    ^LS0
+                                    ^FT59,287^BQN,2,6
+                                    ^FH\^FDLA,#BARKOD1#^FS
+                                    ^FT292,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU1#^FS^CI27
+                                    ^FT47,258^A0B,29,28^FH\^CI28^FD#TARIH1#^FS^CI27
+                                    ^FT0,52^A0N,27,30^FB320,1,7,C^FH\^CI28^FD#SERINO1#^FS^CI27
+                                    ^FT354,287^BQN,2,6
+                                    ^FH\^FDLA,#BARKOD2#^FS
+                                    ^FT587,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU2#^FS^CI27
+                                    ^FT342,258^A0B,29,28^FH\^CI28^FD#TARIH2#^FS^CI27
+                                    ^FT0,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#SERINO2#^FS^CI27
+                                    ^FT649,287^BQN,2,6
+                                    ^FH\^FDLA,#BARKOD3#^FS
+                                    ^FT882,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU3#^FS^CI27
+                                    ^FT637,258^A0B,29,28^FH\^CI28^FD#TARIH3#^FS^CI27
+                                    ^FT295,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#SERINO3#^FS^CI27
+                                    ^FT945,287^BQN,2,6
+                                    ^FH\^FDLA,#BARKOD4#^FS
+                                    ^FT1178,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU4#^FS^CI27
+                                    ^FT933,258^A0B,29,28^FH\^CI28^FD#TARIH4#^FS^CI27
+                                    ^FT887,52^A0N,27,30^FB318,1,7,C^FH\^CI28^FD#SERINO4#^FS^CI27
+                                    ^PQ1,0,1,Y
+                                    ^XZ
+
                             </cfsavecontent>
                             <cfset ZPL_DATA_FULL=ZPL_DATA_FULL&zd>
                         </cfif>
-                        <cfif labelCounter MOD 5 EQ 0>
+                        <cfif labelCounter MOD 4 EQ 0>
                             <cfset ps=0>
                             <div style="display:block;width:100%;height:0;page-break-after:always;break-after:page;"></div>
                         </cfif>
@@ -526,7 +571,7 @@
                 <!--- Kalan etiketler için ZPL oluştur (5'in katı olmayan durumlar için) --->
                 <cfif ps GT 0>
                     <!--- Eksik pozisyonlar için boş değerler ayarla --->
-                    <cfloop from="#ps+1#" to="5" index="empty_pos">
+                    <cfloop from="#ps+1#" to="4" index="empty_pos">
                         <cfset "TARIH#empty_pos#"="">
                         <cfset "URUNKODU#empty_pos#"="">
                         <cfset "SERINO#empty_pos#"="">
@@ -535,7 +580,7 @@
                     
                     <!--- Son grup için ZPL oluştur --->
                     <cfsavecontent variable="zd_final">
-                      CT~~CD,~CC^~CT~
+                     <!---  CT~~CD,~CC^~CT~
 ^XA
 ~TA000
 ~JSN
@@ -594,12 +639,65 @@
 ^FT980,191^A0B,8,8^FH\^CI28^FD#TARIH5#^FS^CI27
 </cfif>
 ^PQ1,0,1,Y
-^XZ
-</cfsavecontent>
+^XZ --->
+                            CT~~CD,~CC^~CT~
+                            ^XA
+                            ~TA000
+                            ~JSN
+                            ^LT0
+                            ^MNW
+                            ^MTD
+                            ^PON
+                            ^PMN
+                            ^LH0,0
+                            ^JMA
+                            ^PR6,6
+                            ~SD15
+                            ^JUS
+                            ^LRN
+                            ^CI27
+                            ^PA0,1,1,0
+                            ^XZ
+                            ^XA
+                            ^MMT
+                            ^PW1205
+                            ^LL307
+                            ^LS0
+                            <cfif evaluate("BARKOD1") NEQ "">
+                            ^FT59,287^BQN,2,6
+                            ^FH\^FDLA,#BARKOD1#^FS
+                            ^FT292,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU1#^FS^CI27
+                            ^FT47,258^A0B,29,28^FH\^CI28^FD#TARIH1#^FS^CI27
+                            ^FT0,52^A0N,27,30^FB320,1,7,C^FH\^CI28^FD#SERINO1#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD2") NEQ "">
+                            ^FT354,287^BQN,2,6
+                            ^FH\^FDLA,#BARKOD2#^FS
+                            ^FT587,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU2#^FS^CI27
+                            ^FT342,258^A0B,29,28^FH\^CI28^FD#TARIH2#^FS^CI27
+                            ^FT0,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#SERINO2#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD3") NEQ "">
+                            ^FT649,287^BQN,2,6
+                            ^FH\^FDLA,#BARKOD3#^FS
+                            ^FT882,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU3#^FS^CI27
+                            ^FT637,258^A0B,29,28^FH\^CI28^FD#TARIH3#^FS^CI27
+                            ^FT295,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#SERINO3#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD4") NEQ "">
+                            ^FT945,287^BQN,2,6
+                            ^FH\^FDLA,#BARKOD4#^FS
+                            ^FT1178,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#URUNKODU4#^FS^CI27
+                            ^FT933,258^A0B,29,28^FH\^CI28^FD#TARIH4#^FS^CI27
+                            ^FT887,52^A0N,27,30^FB318,1,7,C^FH\^CI28^FD#SERINO4#^FS^CI27
+                            </cfif>
+                            ^PQ1,0,1,Y
+                            ^XZ
+                    </cfsavecontent>
 
                       <cfsavecontent variable="zd2_final">
                       
-                        CT~~CD,~CC^~CT~
+                        <!--- CT~~CD,~CC^~CT~
                         ^XA
                         ~TA000
                         ~JSN
@@ -658,8 +756,60 @@
                         ^FT974,205^A0B,8,35^FH\^CI28^FD#evaluate("TARIH5")#^FS^CI27
                         </cfif>
                         ^PQ1,0,1,Y
-                        ^XZ
-                        
+                        ^XZ --->
+                        CT~~CD,~CC^~CT~
+                            ^XA
+                            ~TA000
+                            ~JSN
+                            ^LT0
+                            ^MNW
+                            ^MTD
+                            ^PON
+                            ^PMN
+                            ^LH0,0
+                            ^JMA
+                            ^PR6,6
+                            ~SD15
+                            ^JUS
+                            ^LRN
+                            ^CI27
+                            ^PA0,1,1,0
+                            ^XZ
+                            ^XA
+                            ^MMT
+                            ^PW1205
+                            ^LL307
+                            ^LS0
+                            <cfif evaluate("BARKOD1") NEQ "">
+                            ^FT59,287^BQN,2,6
+                            ^FH\^FDLA,#evaluate("BARKOD1")#^FS
+                            ^FT292,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#evaluate("URUNKODU1")#^FS^CI27
+                            ^FT47,258^A0B,29,28^FH\^CI28^FD#evaluate("TARIH1")#^FS^CI27
+                            ^FT0,52^A0N,27,30^FB320,1,7,C^FH\^CI28^FD#evaluate("SERINO1")#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD2") NEQ "">
+                            ^FT354,287^BQN,2,6
+                            ^FH\^FDLA,#evaluate("BARKOD2")#^FS
+                            ^FT587,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#evaluate("URUNKODU2")#^FS^CI27
+                            ^FT342,258^A0B,29,28^FH\^CI28^FD#evaluate("TARIH2")#^FS^CI27
+                            ^FT0,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#evaluate("SERINO2")#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD3") NEQ "">
+                            ^FT649,287^BQN,2,6
+                            ^FH\^FDLA,#evaluate("BARKOD3")#^FS
+                            ^FT882,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#evaluate("URUNKODU3")#^FS^CI27
+                            ^FT637,258^A0B,29,28^FH\^CI28^FD#evaluate("TARIH3")#^FS^CI27
+                            ^FT295,52^A0N,27,30^FB910,1,7,C^FH\^CI28^FD#evaluate("SERINO3")#^FS^CI27
+                            </cfif>
+                            <cfif evaluate("BARKOD4") NEQ "">
+                            ^FT945,287^BQN,2,6
+                            ^FH\^FDLA,#evaluate("BARKOD4")#^FS
+                            ^FT1178,307^A0B,29,33^FB277,1,7,C^FH\^CI28^FD#evaluate("URUNKODU4")#^FS^CI27
+                            ^FT933,258^A0B,29,28^FH\^CI28^FD#evaluate("TARIH4")#^FS^CI27
+                            ^FT887,52^A0N,27,30^FB318,1,7,C^FH\^CI28^FD#evaluate("SERINO4")#^FS^CI27
+                            </cfif>
+                            ^PQ1,0,1,Y
+                            ^XZ
                     </cfsavecontent>
                     <cfset ZPL_DATA_FULL=ZPL_DATA_FULL&zd_final>
                 </cfif>

@@ -1,4 +1,16 @@
-﻿<cfquery name="getSayimRows" datasource="#dsn3#">
+﻿<cfquery name="getSayim" datasource="#dsn3#">
+    select *,
+    (
+        select count(*) from w3Qa_1.PRODUCT_PLACE 
+        where STORE_ID=PSS.DEPARTMENT_ID AND LOCATION_ID=PSS.LOCATION_ID
+    ) AS RAFLI 
+        from w3Qa_1.PBS_SERIAL_SAYIM PSS WHERE SAYIM_ID=<cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
+</cfquery>
+<cfset isRafliSayim = (getSayim.recordCount gt 0 and getSayim.RAFLI[1] eq 1)>
+<script>
+    var IS_RAFLI_SAYIM = <cfif isRafliSayim>1<cfelse>0</cfif>;
+</script>
+<cfquery name="getSayimRows" datasource="#dsn3#">
     SELECT 
                         SAYIM_ROW_ID,
                         SAYIM_ID,
@@ -10,6 +22,7 @@
                     WHERE SAYIM_ID = <cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
                     ORDER BY SAYIM_ROW_ID DESC
 </cfquery>
+
 <!-- PDA Optimized CSS for Compact Design -->
 <style>
     /* PDA-Optimized Compact Design */
@@ -346,7 +359,7 @@
 
 <div class="sayim-container" role="main" aria-label="Sayım Uygulaması">
     <!-- Kompakt Raf Okuma -->
-    <div class="form-section" role="region" aria-labelledby="shelf-section-title">
+    <div class="form-section" role="region" aria-labelledby="shelf-section-title"<cfif not isRafliSayim> style="display:none"</cfif>>
         <h6 class="section-title" id="shelf-section-title">📦 Raf</h6>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -363,7 +376,7 @@
     </div>
 
     <!-- Kompakt Barkod Okuma -->
-    <div id="barcodeSection" class="form-section" style="display:none" role="region">
+    <div id="barcodeSection" class="form-section"<cfif isRafliSayim> style="display:none"<cfelse> style="display:block"</cfif> role="region">
         <h6 class="section-title">🔍 Barkod</h6>
         
         <select name="BarcodeParser" id="BarcodeParser" class="form-control" style="margin-bottom:8px;">
@@ -386,7 +399,7 @@
     <!-- Kompakt Durum -->
     <div class="form-section" role="region">
         <div class="status-badges" role="status" aria-live="polite">
-            <span id="activeShelfLabel" class="status-badge badge-info">📍 Raf Okutun</span>
+            <span id="activeShelfLabel" class="status-badge badge-info"><cfif isRafliSayim>📍 Raf Okutun<cfelse>📦 Raf kontrolü kapalı</cfif></span>
             <span id="rowCountLabel" class="status-badge badge-success">📊 <cfoutput>#getSayimRows.recordCount#</cfoutput></span>
         </div>
         
@@ -480,6 +493,8 @@ const SayimConfig = {
     MIN_SHELF_CODE_LENGTH: 2,
     ENTER_KEY: 'Enter',
     DATA_SOURCE: 'DSN3',
+    IS_SHELF_COUNTING: (typeof IS_RAFLI_SAYIM !== 'undefined' ? IS_RAFLI_SAYIM === 1 : true),
+    DEFAULT_SHELF_CODE: '',
     MESSAGES: {
         PRODUCT_NOT_IN_SHELF: 'Ürün bu rafta değil!\nRaf: {shelf}\nStok: {product}',
         ENTER_SHELF_CODE: '📍 Raf Okutun',
@@ -491,7 +506,8 @@ const SayimConfig = {
         BARCODE_ERROR: 'Barkod okunamadı',
         SHELF_NOT_FOUND: 'Raf bulunamadı: {shelf}',
         DUPLICATE_SERIAL: 'Bu seri zaten sayılmış',
-        PRODUCT_ADDED: 'Ürün eklendi ✓'
+        PRODUCT_ADDED: 'Ürün eklendi ✓',
+        SHELF_DISABLED: '📦 Raf kontrolü kapalı'
     }
 };
 
@@ -842,6 +858,10 @@ class ShelfManager {
     }
 
     isProductInActiveShelf(productCode) {
+        if (!SayimConfig.IS_SHELF_COUNTING) {
+            return true;
+        }
+
         if (!this.activeShelf) return false;
         
         // Use lookup table for faster validation
@@ -943,6 +963,13 @@ class BarcodeProcessor {
  */
 class SayimValidator {
     static validateShelfCode(shelfCode) {
+        if (!SayimConfig.IS_SHELF_COUNTING) {
+            return {
+                isValid: true,
+                errors: []
+            };
+        }
+
         const errors = [];
         
         if (!shelfCode || shelfCode.trim().length === 0) {
@@ -973,6 +1000,13 @@ class SayimValidator {
     }
 
     static validateActiveShelf(shelfManager) {
+        if (!SayimConfig.IS_SHELF_COUNTING) {
+            return {
+                isValid: true,
+                errors: []
+            };
+        }
+
         if (!shelfManager.activeShelf) {
             return {
                 isValid: false,
@@ -1111,11 +1145,14 @@ class SayimManager {
 
     async initialize() {
         try {
-            await Promise.all([
-                this.shelfManager.initialize(),
-                this.barcodeProcessor.initialize()
-            ]);
+            const initTasks = [this.barcodeProcessor.initialize()];
+            if (SayimConfig.IS_SHELF_COUNTING) {
+                initTasks.push(this.shelfManager.initialize());
+            }
+
+            await Promise.all(initTasks);
             this.setupEventListeners();
+            this.configureShelfMode();
             NotificationManager.showToast('Sistem başarıyla yüklendi', 'success');
             console.log('SayimManager initialized successfully');
         } catch (error) {
@@ -1130,10 +1167,18 @@ class SayimManager {
             try {
                 console.log('Starting synchronous initialization...');
                 
-                // Initialize shelf manager first
-                this.shelfManager.initializeSync()
+                // Initialize shelf manager first when required
+                const shelfInitialization = SayimConfig.IS_SHELF_COUNTING
+                    ? this.shelfManager.initializeSync()
+                    : Promise.resolve();
+
+                shelfInitialization
                     .then(() => {
-                        console.log('ShelfManager initialized');
+                        if (SayimConfig.IS_SHELF_COUNTING) {
+                            console.log('ShelfManager initialized');
+                        } else {
+                            console.log('ShelfManager initialization skipped (raf kontrolü kapalı)');
+                        }
                         // Initialize barcode processor
                         return this.barcodeProcessor.initializeSync();
                     })
@@ -1141,6 +1186,7 @@ class SayimManager {
                         console.log('BarcodeProcessor initialized');
                         // Setup event listeners
                         this.setupEventListeners();
+                        this.configureShelfMode();
                         console.log('Event listeners setup complete');
                         resolve();
                     })
@@ -1159,8 +1205,14 @@ class SayimManager {
     setupEventListeners() {
         // Focus on shelf input by default
         const shelfInput = document.getElementById('rafNo');
-        if (shelfInput) {
-            shelfInput.focus();
+        const barcodeInput = document.getElementById('barcode');
+
+        if (SayimConfig.IS_SHELF_COUNTING) {
+            if (shelfInput) {
+                shelfInput.focus();
+            }
+        } else if (barcodeInput) {
+            barcodeInput.focus();
         }
 
         // Add input validation feedback
@@ -1171,7 +1223,7 @@ class SayimManager {
         const shelfInput = document.getElementById('rafNo');
         const barcodeInput = document.getElementById('barcode');
 
-        if (shelfInput) {
+        if (shelfInput && SayimConfig.IS_SHELF_COUNTING) {
             shelfInput.addEventListener('input', (e) => {
                 this.validateShelfInput(e.target);
             });
@@ -1215,10 +1267,57 @@ class SayimManager {
         }
     }
 
+    configureShelfMode() {
+        if (SayimConfig.IS_SHELF_COUNTING) {
+            return;
+        }
+
+        const barcodeSection = document.getElementById('barcodeSection');
+        if (barcodeSection) {
+            barcodeSection.style.display = 'block';
+        }
+
+        const barcodeInput = document.getElementById('barcode');
+        if (barcodeInput) {
+            barcodeInput.focus();
+        }
+
+        this.shelfManager.activeShelf = {
+            SHELF_CODE: SayimConfig.DEFAULT_SHELF_CODE,
+            PRODUCT_PLACE_ID: null
+        };
+
+        const activeShelfIdInput = document.getElementById('activeShelfID');
+        if (activeShelfIdInput) {
+            activeShelfIdInput.value = '';
+        }
+
+        const activeShelfCodeInput = document.getElementById('activeShelfCode');
+        if (activeShelfCodeInput) {
+            activeShelfCodeInput.value = '';
+        }
+
+        const label = document.getElementById('activeShelfLabel');
+        if (label) {
+            label.textContent = SayimConfig.MESSAGES.SHELF_DISABLED;
+        }
+    }
+
     static checkShelf(element, event) {
-        if (event.key !== SayimConfig.ENTER_KEY) return;
-        
         const instance = window.sayimManagerInstance;
+
+        if (!SayimConfig.IS_SHELF_COUNTING) {
+            if (!instance) {
+                console.warn('SayimManager instance not yet initialized');
+                NotificationManager.showToast(SayimConfig.MESSAGES.SYSTEM_LOADING, 'warning');
+                return;
+            }
+
+            instance.configureShelfMode();
+            return;
+        }
+
+        if (event.key !== SayimConfig.ENTER_KEY) return;
         
         // Check if instance exists and is properly initialized
         if (!instance) {
@@ -1291,10 +1390,16 @@ class SayimManager {
             return;
         }
 
-        const shelfValidation = SayimValidator.validateActiveShelf(instance.shelfManager);
-        if (!shelfValidation.isValid) {
-            NotificationManager.showToast(shelfValidation.errors.join(', '), 'error');
-            return;
+        if (!SayimConfig.IS_SHELF_COUNTING) {
+            instance.configureShelfMode();
+        }
+
+        if (SayimConfig.IS_SHELF_COUNTING) {
+            const shelfValidation = SayimValidator.validateActiveShelf(instance.shelfManager);
+            if (!shelfValidation.isValid) {
+                NotificationManager.showToast(shelfValidation.errors.join(', '), 'error');
+                return;
+            }
         }
 
         instance.isProcessing = true;
@@ -1311,7 +1416,7 @@ class SayimManager {
 
             console.log('Parsed barcode:', serialObject);
 
-            if (!instance.shelfManager.isProductInActiveShelf(serialObject.product_code_2)) {
+            if (SayimConfig.IS_SHELF_COUNTING && !instance.shelfManager.isProductInActiveShelf(serialObject.product_code_2)) {
                 const message = SayimUtils.formatMessage(
                     SayimConfig.MESSAGES.PRODUCT_NOT_IN_SHELF,
                     {
@@ -1363,10 +1468,13 @@ class SayimManager {
 
         const tbody = document.getElementById('sayimRows');
         const row = document.createElement('tr');
+        const shelfCode = (SayimConfig.IS_SHELF_COUNTING && this.shelfManager.activeShelf)
+            ? this.shelfManager.activeShelf.SHELF_CODE
+            : SayimConfig.DEFAULT_SHELF_CODE;
         row.innerHTML = `
             <td headers="serial-header">${this.escapeHtml(serialObject.serial_no)}</td>
             <td headers="product-header">${this.escapeHtml(serialObject.product_code_2)}</td>
-            <td headers="shelf-header">${this.escapeHtml(this.shelfManager.activeShelf.SHELF_CODE)}</td>
+            <td headers="shelf-header">${this.escapeHtml(shelfCode)}</td>
             <td style="display:none" headers="is-read">0</td>
         `;
         
@@ -1493,7 +1601,15 @@ window.manualInitialize = function() {
 
 // Add a safety check for early access
 window.checkSayimManagerReady = function() {
-    return initializationComplete && window.sayimManagerInstance && window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
+    if (!initializationComplete || !window.sayimManagerInstance) {
+        return false;
+    }
+
+    if (!SayimConfig.IS_SHELF_COUNTING) {
+        return true;
+    }
+
+    return window.sayimManagerInstance.shelfManager && window.sayimManagerInstance.shelfManager.shelves.length > 0;
 };
 
 // User Guide Function
