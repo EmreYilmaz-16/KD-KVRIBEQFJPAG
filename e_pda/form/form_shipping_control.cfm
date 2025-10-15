@@ -206,7 +206,7 @@
 				</div>
 				<div class="form-group col col-4">
 					<label for="add_other_barcod">Ekle</label>
-					<input name="add_other_barcod" type="text" value="" onKeyDown="if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
+					<input name="add_other_barcod" type="text" value="" onKeyDown="checkKeyCode()if(event.keyCode == 13) {return add_product_to_barkod(this.value,add_other_amount.value,1);}" >
 				</div>
 				<cfoutput>
 					<div class="form-group col col-2">
@@ -436,6 +436,12 @@ function add_product_to_barkod(barcode, amount, type) {
 	var ship_id = #attributes.ship_id#;
 	var is_type = #attributes.is_type#;
 	</cfoutput>
+	console.log('--- ADD PRODUCT TO BARKOD START ---');
+	console.log('ship_id:', ship_id);
+	console.log('is_type:', is_type);
+	console.log('barcode:', barcode);
+	console.log('amount:', amount);
+	console.log('type:', type);
 	var uzunluk = barcode.length;
 	var amount = amount;
 	console.log('barcode: ' + barcode);
