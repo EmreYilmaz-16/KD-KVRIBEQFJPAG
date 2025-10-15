@@ -387,6 +387,12 @@ function groupByStockId(data) {
 var _groupedData = groupByStockId(serialNumbers);
 
 function findStockIdBySerial(serial, groupedData) {
+		var SerialObject = bm.parseWith(serial, parseInt(document.getElementById('BarcodeParser').value));
+			console.log('Barcode parsed for serial number:', SerialObject);
+			if(SerialObject && SerialObject.serial_no){
+				serial = SerialObject.serial_no;
+			}
+			
 	for (const stockId in groupedData) {
 		const group = groupedData[stockId];
 		for (let i = 0; i < group.length; i++) {
@@ -452,6 +458,7 @@ function add_product_to_barkod(barcode, amount, type) {
 	var ship_id = #attributes.ship_id#;
 	var is_type = #attributes.is_type#;
 	</cfoutput>
+
 	console.log('--- ADD PRODUCT TO BARKOD START ---');
 	console.log('ship_id:', ship_id);
 	console.log('is_type:', is_type);
