@@ -383,7 +383,9 @@ function addRowToTable(serialNo, stockCode, amount, shelfCode,shelf_id) {
     var newRow = table.insertRow(table.rows.length);
     
     newRow.setAttribute("id", "frm_row" + row_count);
-    
+    if(!shelf_id){
+            shelf_id=row_count;
+        }
     // Hücreler
     var cells = [
         `<input type="hidden" value="${formArgs.stock_id}" name="stockid${row_count}" id="stockid${row_count}" />
