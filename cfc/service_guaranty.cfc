@@ -62,7 +62,11 @@
                     <cfqueryparam value="#arguments.data.WRK_ROW_ID#" cfsqltype="cf_sql_varchar">,
                     <cfqueryparam value="#unitType#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.UNIT_ROW_QUANTITY#" cfsqltype="cf_sql_decimal" scale="2">,
-                    <cfqueryparam value="#arguments.data.SHELF_NUMBER#" cfsqltype="cf_sql_integer" null="#(arguments.data.SHELF_NUMBER eq 0 OR arguments.data.SHELF_NUMBER eq '')#">
+                    <cfif len(trim(arguments.data.SHELF_NUMBER)) AND isNumeric(arguments.data.SHELF_NUMBER) AND val(arguments.data.SHELF_NUMBER) NEQ 0>
+                        <cfqueryparam value="#val(arguments.data.SHELF_NUMBER)#" cfsqltype="cf_sql_integer">
+                    <cfelse>
+                        <cfqueryparam null="true" cfsqltype="cf_sql_integer">
+                    </cfif>
                 )
             </cfquery>
             <cfif arguments.fromApp eq "Sayim">
