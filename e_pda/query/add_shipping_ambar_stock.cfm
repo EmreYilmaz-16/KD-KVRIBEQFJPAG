@@ -1,5 +1,5 @@
 <cfdump var="#attributes#">
-<cfabort>
+
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset attributes.dep_out=attributes.TXT_DEPARTMENT_OUT>
