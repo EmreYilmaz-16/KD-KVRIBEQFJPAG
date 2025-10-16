@@ -1,4 +1,5 @@
 <cfdump var="#attributes#">
+<cfabort>
 <cfset current_row_list = ''>
 <cfset stock_id_list = ''>
 <cfset attributes.dep_out=attributes.TXT_DEPARTMENT_OUT>
@@ -327,6 +328,7 @@
     <cfset "PBSATR.AWRK_ROW_ID#IX#" = evaluate('attributes.WRK_ROW_ID#k#')>
     <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('attributes.STOCK_ID#k#')>
     <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('attributes.SHELF_NUMBER#k#')>
+    
     <cfset SHID=Evaluate('attributes.SHELF_NUMBER#k#')>
     <cfset "PBSATR.ASERINO#IX#" = listgetat(Evaluate('attributes.serino#SHID#'),j)>
     
