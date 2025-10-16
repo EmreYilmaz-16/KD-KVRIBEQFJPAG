@@ -328,8 +328,12 @@
     <cfset "PBSATR.AWRK_ROW_ID#IX#" = evaluate('attributes.WRK_ROW_ID#k#')>
     <cfset "PBSATR.ASTOCK_ID#IX#" = Evaluate('attributes.STOCK_ID#k#')>
     <cfset "PBSATR.ASHELF_NUMBER#IX#" = Evaluate('attributes.SHELF_NUMBER#k#')>
+    <cfif attributes.SHELF_TYPE gt 0>
+        <cfset SHID=Evaluate('attributes.SHELF_NUMBER#k#')>
+    <cfelse>
+        <cfset SHID=Evaluate('attributes.STOCK_ID#k#')>
+    </cfif>
     
-    <cfset SHID=Evaluate('attributes.SHELF_NUMBER#k#')>
     <cfset "PBSATR.ASERINO#IX#" = listgetat(Evaluate('attributes.serino#SHID#'),j)>
     
     <cfset "PBSATR.AMOUNT#IX#" = 1>    
