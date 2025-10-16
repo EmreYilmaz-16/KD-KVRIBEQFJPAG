@@ -384,7 +384,7 @@ function addRowToTable(serialNo, stockCode, amount, shelfCode,shelf_id) {
     
     newRow.setAttribute("id", "frm_row" + row_count);
     if(!shelf_id){
-            shelf_id=row_count;
+            shelf_id=formArgs.stock_id;
         }
     // Hücreler
     var cells = [
