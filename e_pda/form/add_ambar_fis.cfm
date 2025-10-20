@@ -369,12 +369,18 @@ for(var i=0;i<parsers.length;i++){
 		}
 	});
 	
-	// Touch device desteği için blur event ekle
+	// Touch device desteği için blur event ekle (debounce ile)
 	document.getElementById('serial_number').addEventListener('blur', function(e) {
 		var value = this.value.trim();
-		if (value.length > 0) {
-			setTimeout(function() { processBarcode(); }, 100);
-		}
+		if (value.length === 0) return;
+		var now = Date.now();
+		try {
+			if (window._lastProcessedValue === value && window._lastProcessAt && (now - window._lastProcessAt) < 800) {
+				// Çok kısa sürede aynı değer yeniden işlenmeyecek
+				return;
+			}
+		} catch(_) {}
+		setTimeout(function() { processBarcode(); }, 120);
 	});
 	
 	document.onkeydown = checkKeycode
@@ -407,6 +413,7 @@ for(var i=0;i<parsers.length;i++){
 		var barkod=$("#add_other_barcod").val().trim();
 		var raf=$("#add_other_shelf").val().trim();
 		var serial=$("#serial_number").val().trim();
+		var _sig = 'S:'+serial+'|B:'+barkod+'|R:'+raf;
 
 		console.table({
 			'barkod': barkod,
@@ -441,6 +448,9 @@ for(var i=0;i<parsers.length;i++){
 			}
 			console.log('Serial number detected: ' + serial);
 			$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
+			// Update last processed markers
+			window._lastProcessedValue = serial;
+			window._lastProcessAt = Date.now();
 			var StockId_=get_stock_with_serial_no(serial);
 			if(raf.length > 0){
 				console.log('Shelf detected: ' + raf);
@@ -452,6 +462,8 @@ for(var i=0;i<parsers.length;i++){
 		}else if(barkod.length>0){
 			console.log('Barcode detected: ' + barkod);
 			$("#loglar").append('<p>Barcode detected: ' + barkod + '</p>');
+			window._lastProcessedValue = barkod;
+			window._lastProcessAt = Date.now();
 			get_stock_with_barcode(barkod);
 		}else{
 			console.log('No barcode or serial number detected');
@@ -526,12 +538,16 @@ for(var i=0;i<parsers.length;i++){
      	{
 			var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER, S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
 		 	var get_product = wrk_query(new_sql,'dsn3');
-		 	if (get_product.STOCK_ID == undefined)
+			if (get_product.STOCK_ID == undefined)
 		 	{
 				ekle = 1;
 				cikar = 1;
 				k_=1;
 				alert('Ürün Bulunamadı');
+				try { 
+					document.getElementById('serial_number').value = '';
+					document.getElementById('serial_number').focus(); 
+				} catch(_) {}
 		 	}
 		 	else
 		 	{	
@@ -575,12 +591,16 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 		 	
 		 	// Execute the query	
 			var get_product = wrk_query(new_sql,'dsn3');
-		 	if (get_product.STOCK_ID == undefined)
+			if (get_product.STOCK_ID == undefined)
 		 	{
 				ekle = 1;
 				cikar = 1;
 				k_=1;
 				alert('Ürün Bulunamadı');
+				try {
+					document.getElementById('serial_number').value='';
+					document.getElementById('serial_number').focus();
+				} catch(_) {}
 		 	}
 		 	else
 		 	{	
