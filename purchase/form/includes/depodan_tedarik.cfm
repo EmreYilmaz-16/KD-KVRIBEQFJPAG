@@ -224,7 +224,18 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
 <script>
   var DEMAND_MONEY = '<cfoutput>#GETDEMAND_MONEY.OTHER_MONEY#</cfoutput>';
 </script>
-
+<cfquery name="qcheck" datasource="#dsn3#">
+  SELECT 
+    I_ID,
+    CASE 
+        WHEN COUNT(*) = SUM(CASE WHEN SELECT_INFO_EXTRA = 3 THEN 1 ELSE 0 END)
+        THEN 1  -- tüm satırlar 3 ise
+        ELSE 0  -- farklı değer varsa
+    END AS TUMU_3_MU
+FROM w3Qa_1.INTERNALDEMAND_ROW
+WHERE I_ID = #attributes.INTERNAL_ID#
+GROUP BY I_ID;
+</cfquery>
 <cfif getOfferStage.recordCount>
 <cfelse>
   <cfquery name="upos" datasource="#dsn3#">
@@ -232,8 +243,10 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.inter
   </cfquery>
 </cfif>
             <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
-            <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
-          
+           <cfif qcheck.TUMU_3_MU EQ 0>
+              <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+          </CFIF>
+           <!--- <button class="btn btn-success" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button> --- IGNORE --->
           </CFIF>
           
         </div>

@@ -13,6 +13,18 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 )
 ORDER BY OFFER_ID DESC
 </cfquery>
+<cfquery name="qcheck" datasource="#dsn3#">
+  SELECT 
+    I_ID,
+    CASE 
+        WHEN COUNT(*) = SUM(CASE WHEN SELECT_INFO_EXTRA = 3 THEN 1 ELSE 0 END)
+        THEN 1  -- tüm satırlar 3 ise
+        ELSE 0  -- farklı değer varsa
+    END AS TUMU_3_MU
+FROM w3Qa_1.INTERNALDEMAND_ROW
+WHERE I_ID = #attributes.INTERNAL_ID#
+GROUP BY I_ID;
+</cfquery>
 <cfset last_offer_id = "">
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
@@ -71,7 +83,10 @@ SELECT
     </cfquery>
   </cfif>
   <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
-    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Satınalma Siparişlerini Oluştur</button>
+    <cfif qcheck.TUMU_3_MU EQ 0>
+      <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparisTum(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button>
+    </cfif>
+    
   </CFIF>
 </cfif>
 <input type="hidden" name="INTERNAL_ID" id="INTERNAL_ID" value="<cfoutput>#attributes.INTERNAL_ID#</cfoutput>">
