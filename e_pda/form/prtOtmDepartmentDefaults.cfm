@@ -23,7 +23,7 @@
 <div class="row myhomeBox" style="position: relative; height: 477px;">	 		
     <div class="col col-3 col-md-6 col-sm-12 homeSortArea ui-sortable" id="homeColumnLeft" style="position: absolute; left: 0px; top: 5px;">
 <cf_box title="Depo Tanımlama">
-<cfquery name="getD" datasource="#dsn3#">
+<cfquery name="getD" datasource="#dsn#">
     SELECT *,#dsn#.getEmployeeWithId(EPLOYEE_ID) AS EMP FROM EZGI_PDA_DEPARTMENT_DEFAULTS
 </cfquery>
 <cfquery name="GETDETTA" datasource="#DSN#">
