@@ -162,7 +162,7 @@
     <cfset attributes.BASKET_DISCOUNT_TOTAL = 0>
     <cfset attributes.BASKET_EMPLOYEE1 = ''>  
     <cfset attributes.BASKET_EMPLOYEE_ID1 = ''> 
-    <cfset attributes.BASKET_EXTRA_INFO1 = -1>  
+    <cfset attributes.BASKET_EXTRA_INFO1 = ''>  
     <cfset attributes.BASKET_GROSS_TOTAL = 0>  
     <cfset attributes.BASKET_ID = 12> 
     <cfset attributes.BASKET_MEMBER_PRICECAT = '' > 
