@@ -6,6 +6,8 @@
     ) AS RAFLI 
         from w3Qa_1.PBS_SERIAL_SAYIM PSS WHERE SAYIM_ID=<cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
 </cfquery>
+
+<cfdump var="#getSayim#">
 <cfset isRafliSayim = (getSayim.recordCount gt 0 and getSayim.RAFLI[1] eq 1)>
 <script>
     var IS_RAFLI_SAYIM = <cfif isRafliSayim>1<cfelse>0</cfif>;
