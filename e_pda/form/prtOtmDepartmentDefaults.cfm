@@ -1,4 +1,5 @@
-﻿<cfparam name="attributes.department_id" default="">
+﻿
+<cfparam name="attributes.department_id" default="">
 <cfparam name="attributes.location_name" default="">
 <cfparam name="attributes.location_id" default="">
 
@@ -19,6 +20,23 @@
 <cfparam name="attributes.record_cons_id " default="">
 <cfparam name="attributes.record_part_id " default="">
 <cfparam name="attributes.record_name " default="">
+
+<cfif isDefined("attributes.is_submit")>
+    <cfdump var="#attributes#">
+    <cfquery name="del" datasource="#dsn#">
+        DELETE FROM EZGI_PDA_DEPARTMENT_DEFAULTS WHERE EPLOYEE_ID=#attributes.record_emp_id#
+    </cfquery>
+    <cfquery name="ins" datasource="#dsn#" result="res">
+        INSERT  INTO EZGI_PDA_DEPARTMENT_DEFAULTS( DEFAULT_MK_TO_RF_DEP,
+            DEFAULT_MK_TO_RF_LOC,
+            DEFAULT_RF_TO_SV_DEP,
+            DEFAULT_RF_TO_SV_LOC,
+            EPLOYEE_ID) VALUES (N'#attributes.department_id#,#attributes.department_id2#','#attributes.location_id#,#attributes.location_id2#',
+            '#attributes.department_id3#,#attributes.department_id4#','#attributes.location_id3#,#attributes.location_id4#',#attributes.record_emp_id#)
+    </cfquery>
+    
+</cfif>
+
 
 <div class="row myhomeBox" style="position: relative; height: 477px;">	 		
     <div class="col col-3 col-md-6 col-sm-12 homeSortArea ui-sortable" id="homeColumnLeft" style="position: absolute; left: 0px; top: 5px;">
@@ -246,21 +264,7 @@ LEFT JOIN DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 <input type="submit">
 
 </cfform>
-<cfif isDefined("attributes.is_submit")>
-    <cfdump var="#attributes#">
-    <cfquery name="del" datasource="#dsn#">
-        DELETE FROM EZGI_PDA_DEPARTMENT_DEFAULTS WHERE EPLOYEE_ID=#attributes.record_emp_id#
-    </cfquery>
-    <cfquery name="ins" datasource="#dsn#" result="res">
-        INSERT  INTO EZGI_PDA_DEPARTMENT_DEFAULTS( DEFAULT_MK_TO_RF_DEP,
-            DEFAULT_MK_TO_RF_LOC,
-            DEFAULT_RF_TO_SV_DEP,
-            DEFAULT_RF_TO_SV_LOC,
-            EPLOYEE_ID) VALUES (N'#attributes.department_id#,#attributes.department_id2#','#attributes.location_id#,#attributes.location_id2#',
-            '#attributes.department_id3#,#attributes.department_id4#','#attributes.location_id3#,#attributes.location_id4#',#attributes.record_emp_id#)
-    </cfquery>
-    <cfdump var="#res#">
-</cfif>
+
 
 </cf_box>
 
