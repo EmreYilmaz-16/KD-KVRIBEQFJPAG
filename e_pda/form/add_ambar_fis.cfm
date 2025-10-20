@@ -347,6 +347,14 @@ for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
 
+	// Bind Enter key on relevant inputs and stop propagation to prevent duplicate handling
+	$('#serial_number, #add_other_shelf').on('keydown', function(e) {
+		if (e.key === 'Enter' || e.keyCode === 13) {
+			e.preventDefault();
+			e.stopPropagation();
+			processBarcode();
+		}
+	});
 })
 
 	document.getElementById('serial_number').focus();
@@ -356,6 +364,7 @@ for(var i=0;i<parsers.length;i++){
 	document.getElementById('serial_number').addEventListener('keydown', function(e) {
 		if (e.keyCode === 13 || e.which === 13) {
 			e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
 			processBarcode();
 		}
 	});
@@ -378,12 +387,21 @@ for(var i=0;i<parsers.length;i++){
 		else if (e) keycode = e.which;
 		if (keycode == 13 )
 		{
-			processBarcode();
+			var target = e.target || e.srcElement;
+			var targetId = (target && target.id) ? target.id : '';
+			if (targetId === 'serial_number' || targetId === 'add_other_shelf') {
+				if (e.preventDefault) e.preventDefault();
+				if (e.stopPropagation) e.stopPropagation();
+				processBarcode();
+			}
 		}
 	}
 	
 	// Mobil uyumlu barcode işleme fonksiyonu
 	function processBarcode() {
+		// Re-entrancy guard to prevent duplicate alerts and double handling
+		if (window._processingBarcode) { return false; }
+		window._processingBarcode = true;
 		console.log('387 - Enter key pressed');
 		$("#loglar").append('<p>Enter key pressed</p>');
 		var barkod=$("#add_other_barcod").val().trim();
@@ -403,12 +421,23 @@ for(var i=0;i<parsers.length;i++){
 		 * 
 		 */
 
-		
+		try {
+        
 		if(serial.length>0){
-			var SerialObject = bm.parseWith(serial, parseInt(document.getElementById('BarcodeParser').value));
-			console.log('Barcode parsed for serial number:', SerialObject);
-			if(SerialObject && SerialObject.serial_no){
-				serial = SerialObject.serial_no;
+			var parserId = parseInt(document.getElementById('BarcodeParser').value, 10);
+			var SerialObject = null;
+			if (!isNaN(parserId) && parserId > 0) {
+				try {
+					SerialObject = bm.parseWith(serial, parserId);
+					console.log('Barcode parsed for serial number:', SerialObject);
+					if(SerialObject && SerialObject.serial_no){
+						serial = SerialObject.serial_no;
+					}
+				} catch (perr) {
+					console.warn('Barcode parsing failed, using raw serial.', perr);
+				}
+			} else {
+				console.log('No barcode parser selected, using raw serial input.');
 			}
 			console.log('Serial number detected: ' + serial);
 			$("#loglar").append('<p>Serial number detected: ' + serial + '</p>');
@@ -431,6 +460,9 @@ for(var i=0;i<parsers.length;i++){
 				document.getElementById('serial_number').focus();
 				return false;
 			}
+		} finally {
+			window._processingBarcode = false;
+		}
 
 			/*if (document.getElementById('add_other_barcod').value.length == '' && document.getElementById('add_other_shelf').value.length >0)
 			{
@@ -665,9 +697,18 @@ WHERE SB.SERIAL_NO = '${serialno}'`;
 	function add_row_with_serial_no(serialc_)
 	{
 		console.log('add_row_with_serial_no called with serial: ' + serialc_);
-		var serialObj=bm.parseWith(serialc_,parseInt(document.getElementById('BarcodeParser').value));
-		if(serialObj && serialObj.serial_no){
-			serialc_=serialObj.serial_no;
+		try {
+			var parserId2 = parseInt(document.getElementById('BarcodeParser').value, 10);
+			if (!isNaN(parserId2) && parserId2 > 0) {
+				var serialObj=bm.parseWith(serialc_, parserId2);
+				if(serialObj && serialObj.serial_no){
+					serialc_=serialObj.serial_no;
+				}
+			} else {
+				console.log('No barcode parser selected for add_row_with_serial_no, using raw serial.');
+			}
+		} catch (e) {
+			console.warn('Parsing failed in add_row_with_serial_no, using raw serial.', e);
 		}
 		{
 			  amount = document.getElementById('add_other_amount').value;
