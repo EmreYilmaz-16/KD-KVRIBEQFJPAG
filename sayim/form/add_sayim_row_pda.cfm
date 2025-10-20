@@ -8,7 +8,7 @@
 </cfquery>
 
 <cfdump var="#getSayim#">
-<cfset isRafliSayim = (getSayim.recordCount gt 0 and getSayim.RAFLI[1] eq 1)>
+<cfset isRafliSayim = (getSayim.recordCount gt 0 and getSayim.RAFLI[1] gt 0)>
 <script>
     var IS_RAFLI_SAYIM = <cfif isRafliSayim>1<cfelse>0</cfif>;
 </script>
