@@ -227,12 +227,23 @@ var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
+    // Handle Enter only on relevant inputs and stop bubbling to avoid duplicate triggers
+    $('#serial_number, #txt_shelf_number').on('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            e.stopPropagation();
+            processSerialNumber();
+        }
+    });
 });
 
 // Klavye Kontrolü
 document.onkeydown = function(e) {
     var keycode = window.event ? window.event.keyCode : e.which;
-    if (keycode == 13) {
+    // Only act on Enter when focused inside specific inputs; otherwise ignore
+    var target = e.target || e.srcElement;
+    var targetId = (target && target.id) ? target.id : '';
+    if ((targetId === 'serial_number' || targetId === 'txt_shelf_number') && keycode == 13) {
         console.log('Enter tuşuna basıldı');
         e.preventDefault();
         processSerialNumber();
@@ -241,31 +252,52 @@ document.onkeydown = function(e) {
 
 // Ana İşlem Fonksiyonu
 function processSerialNumber() {
-    var miktar = document.getElementById('miktar').value;
-    var serial_number = document.getElementById('serial_number').value;
-    	var SerialObject = bm.parseWith(serial_number, parseInt(document.getElementById('BarcodeParser').value));
-			console.log('Barcode parsed for serial number:', SerialObject);
-    if(SerialObject && SerialObject.serial_no){
-				serial_number = SerialObject.serial_no;
-			}
-    if (!serial_number) {
-        alert('Seri numarası giriniz!');
-        return false;
-    }
-    
-    // Seri Numarası Kontrolü
-    var hasStock = checkSerialNumber(serial_number);
-    
-    if (!hasStock) {
-        alert('Seri Numarası Bulunamadı veya Seri Numarası Kullanımda!');
-        return false;
-    }
-    
-    // Raf kontrolü
-    if (is_rafli > 0) {
-        return processRafliDepo(serial_number);
-    } else {
-        return processNormalDepo(serial_number);
+    // Prevent re-entrancy/double alerts if scanner sends multiple Enter keystrokes
+    if (window._processingSerial) { return false; }
+    window._processingSerial = true;
+    try {
+        var miktar = document.getElementById('miktar').value;
+        var serial_number = document.getElementById('serial_number').value;
+
+        // Only attempt parsing when a specific parser is selected (>0); otherwise use raw input
+        var parserVal = document.getElementById('BarcodeParser').value;
+        var parserId = parseInt(parserVal, 10);
+        var SerialObject = null;
+        try {
+            if (!isNaN(parserId) && parserId > 0) {
+                SerialObject = bm.parseWith(serial_number, parserId);
+                console.log('Barcode parsed for serial number:', SerialObject);
+                if (SerialObject && SerialObject.serial_no) {
+                    serial_number = SerialObject.serial_no;
+                }
+            } else {
+                console.log('No barcode parser selected, using raw serial.');
+            }
+        } catch (parseErr) {
+            console.warn('Barcode parsing failed, using raw input.', parseErr);
+        }
+
+        if (!serial_number) {
+            alert('Seri numarası giriniz!');
+            return false;
+        }
+        
+        // Seri Numarası Kontrolü
+        var hasStock = checkSerialNumber(serial_number);
+        
+        if (!hasStock) {
+            alert('Seri Numarası Bulunamadı veya Seri Numarası Kullanımda!');
+            return false;
+        }
+        
+        // Raf kontrolü
+        if (is_rafli > 0) {
+            return processRafliDepo(serial_number);
+        } else {
+            return processNormalDepo(serial_number);
+        }
+    } finally {
+        window._processingSerial = false;
     }
 }
 
