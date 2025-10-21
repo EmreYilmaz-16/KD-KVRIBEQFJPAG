@@ -41,5 +41,35 @@ for(var i=0;i<parsers.length;i++){
         }
         }
     }
+    function wrk_query(str_query, data_source, maxrows) {
+    if (!data_source) data_source = 'dsn';
+    if (!maxrows) maxrows = 0;
+    
+    var new_query = new Object();
+    var req = createXMLHttpRequest();
+    
+    if (req) {
+        req.open("post", '/index.cfm?fuseaction=objects2.emptypopup_get_js_query&isAjax=1&xmlhttp=1', false);
+        req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        req.setRequestHeader('pragma', 'nocache');
+        
+        var queryParam = encodeURI(str_query).indexOf('+') == -1 ? 
+            'str_sql=' + encodeURI(str_query) : 
+            'str_sql=' + encodeURIComponent(str_query);
+            
+        req.send(queryParam + '&data_source=' + data_source + '&maxrows=' + maxrows);
+        
+        if (req.readyState == 4 && req.status == 200) {
+            try {
+                eval(req.responseText.replace(/\u200B/g, ''));
+                new_query = get_js_query;
+            } catch(e) {
+                new_query = false;
+            }
+        }
+    }
+    
+    return new_query;
+}
 </script>
 
