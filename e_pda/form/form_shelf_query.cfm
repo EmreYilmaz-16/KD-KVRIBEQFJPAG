@@ -24,12 +24,14 @@ for(var i=0;i<parsers.length;i++){
             var parserVal = document.getElementById('BarcodeParser').value;
         var parserId = parseInt(parserVal, 10);
         var SerialObject = null;
+        var product_code_2 = '';
         try {
             if (!isNaN(parserId) && parserId > 0) {
                 SerialObject = bm.parseWith(serial_number, parserId);
                 console.log('Barcode parsed for serial number:', SerialObject);
                 if (SerialObject && SerialObject.serial_no) {
-                    serial_number = SerialObject.serial_no;
+                   product_code_2= SerialObject.product_code_2;
+                     console.log('Extracted product_code_2:', product_code_2);
                 }
             } else {
                 console.log('No barcode parser selected, using raw serial.');
