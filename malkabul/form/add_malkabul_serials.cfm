@@ -731,6 +731,13 @@ async function checkSerial(input, event) {
         `;
         
         newRow.appendChild(newCell);
+        var newCell2 = document.createElement("td");
+        newCell2.innerHTML = `
+            <button class="btn btn-sm btn-danger" onclick="deleteUnProcessedSerial('${parseResult.serial_no}','${wrk_row_id}','${product_id}')">
+                <i class="fas fa-trash-alt"></i> Sil
+            </button>
+        `;
+        newRow.appendChild(newCell2);
         serialsTable.appendChild(newRow);
 
         // Sayacı güncelle
@@ -1040,6 +1047,34 @@ function deleteSerial(serial_no,wrk_row_id,product_id) {
     .catch(error => {
         showNotification('Sunucu hatası: ' + error.message, 'error');
     });
+    
+}
+function deleteUnProcessedSerial(serial_no,wrk_row_id,product_id) {
+    if (!confirm('Bu yeni eklenen seri numarasını silmek istediğinize emin misiniz?')) {
+        return;
+    }
+    
+    // Tablodan sil
+    var serialTable = document.getElementById('serials_' + product_id);
+    var rows = serialTable.getElementsByTagName('tr');
+    for (var i = 0; i < rows.length; i++) {
+        var cellContent = rows[i].firstElementChild.innerText || rows[i].firstElementChild.textContent;
+        var existingSerialNo = cellContent
+            .replace(/<[^>]*>/g, '') // HTML etiketlerini kaldır
+            .replace(/\([^)]*\)/g, '') // Parantez içindeki metinleri kaldır
+            .replace(/\s+/g, ' ') // Birden fazla boşluğu tek boşluğa çevir
+            .trim();
+        
+        if (existingSerialNo === serial_no) {
+            serialTable.deleteRow(i);
+            break;
+        }
+    }
+    // Sayaç güncelle
+    var currentCount = serialTable.getElementsByTagName("tr").length;
+    var totalQuantity = parseInt(document.querySelector(`tr[data-product_id="${product_id}"]`).children[1].innerText);
+    updateProductStatus(product_id, currentCount, totalQuantity);
+    
     
 }
 </script>
