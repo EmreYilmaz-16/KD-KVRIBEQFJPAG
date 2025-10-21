@@ -84,5 +84,11 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
-
+<cfquery name="UP2" datasource="#DSN3#">
+    UPDATE PBS_SERIAL_SAYIM SET 
+    PROCESS_ID=#PBS_FIS_ID#,
+    PROCESS_NO='#PBS_FIS_NO#',
+    IS_PROCESSED=1 
+    WHERE SAYIM_ID=#attributes.sayim_id#
+</cfquery>
 
