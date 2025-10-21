@@ -172,7 +172,7 @@
                          	PRODUCT_PLACE_ROWS AS PPR ON PP.PRODUCT_PLACE_ID = PPR.PRODUCT_PLACE_ID LEFT OUTER JOIN
                          	#dsn2_alias#.GET_STOCK_LAST_SHELF AS GS ON PPR.STOCK_ID = GS.STOCK_ID AND PPR.PRODUCT_PLACE_ID = GS.SHELF_NUMBER
 						WHERE 
-                        	GS.REAL_STOCK > 0 AND 
+                        	--GS.REAL_STOCK > 0 AND 
                             PPR.STOCK_ID = TBL1.PAKET_ID AND  
                             PP.PLACE_STATUS = 1 AND     
                         	PP.STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND 
@@ -270,7 +270,7 @@
            	 	<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row"
 				<cfif get_shelf.recordcount and len(SHELF_CODE) neq 0>
 					<cfif listFindNoCase(shelf_code_list,SHELF_CODE) eq 0> style="display:none;"  </cfif>
-					
+
 				</cfif>
 				>
                 	<td>
