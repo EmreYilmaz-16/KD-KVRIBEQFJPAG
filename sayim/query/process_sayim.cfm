@@ -92,3 +92,7 @@ WHERE SAYIM_ID=#attributes.sayim_id#
     WHERE SAYIM_ID=#attributes.sayim_id#
 </cfquery>
 
+<script>
+alert("Sayım işlemi başarıyla tamamlandı.");
+    window.location.href = "/index.cfm?fuseaction=stock.emptypopup_list_sayim_pbs";
+</script>
