@@ -9,7 +9,9 @@
             sl.COMMENT AS DEPO_NAME,
             s.SAYIM_DATE,
             s.RECORD_DATE,
-            s.RECORD_EMP
+            s.RECORD_EMP,
+            s.IS_PROCESSED,
+            s.PROCESS_NO
         FROM PBS_SERIAL_SAYIM s
         LEFT JOIN w3Qa.STOCKS_LOCATION sl ON (
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
@@ -18,7 +20,7 @@
         ORDER BY s.RECORD_DATE DESC, s.SAYIM_ID DESC
     </cfquery>
     <cfcatch>
-        <cfset getSayimList = queryNew("SAYIM_ID,PAPER_NUMBER,DEPARTMENT_ID,LOCATION_ID,DEPO_CODE,DEPO_NAME,SAYIM_DATE,RECORD_DATE,RECORD_EMP", "integer,varchar,integer,integer,varchar,varchar,date,date,integer")>
+        <cfset getSayimList = queryNew("SAYIM_ID,PAPER_NUMBER,DEPARTMENT_ID,LOCATION_ID,DEPO_CODE,DEPO_NAME,SAYIM_DATE,RECORD_DATE,RECORD_EMP,IS_PROCESSED,PROCESS_NO", "integer,varchar,integer,integer,varchar,varchar,date,date,integer,integer,varchar")>
         <cfset errorMessage = "Veritabanı hatası: #cfcatch.message#">
     </cfcatch>
 </cftry>
