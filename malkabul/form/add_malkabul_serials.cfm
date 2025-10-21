@@ -997,6 +997,51 @@ $(document).keydown(function(e) {
         $('#seri_no').focus();
     }
 });
+
+function deleteSerial(serial_no,wrk_row_id,product_id) {
+    if (!confirm('Bu seri numarasını silmek istediğinize emin misiniz?')) {
+        return;
+    }
+    
+    // Silme işlemi için sunucuya istek gönder
+    fetch('/AddOns/Partner/cfc/serialservice.cfc?method=deleteSerial&returnformat=json', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({ serial_no, wrk_row_id })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.SUCCESS) {
+            showNotification('Seri numarası başarıyla silindi.', 'success');
+            // Seri numarasını tablodan kaldır
+            var serialTable = document.getElementById('serials_' + product_id);
+            var rows = serialTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var cellContent = rows[i].firstElementChild.innerText || rows[i].firstElementChild.textContent;
+                var existingSerialNo = cellContent
+                    .replace(/<[^>]*>/g, '') // HTML etiketlerini kaldır
+                    .replace(/\([^)]*\)/g, '') // Parantez içindeki metinleri kaldır
+                    .replace(/\s+/g, ' ') // Birden fazla boşluğu tek boşluğa çevir
+                    .trim();
+                
+                if (existingSerialNo === serial_no) {
+                    serialTable.deleteRow(i);
+                    break;
+                }
+            }
+            // Sayaç güncelle
+            var currentCount = serialTable.getElementsByTagName("tr").length;
+            var totalQuantity = parseInt(document.querySelector(`tr[data-product_id="${product_id}"]`).children[1].innerText);
+            updateProductStatus(product_id, currentCount, totalQuantity);
+        } else {
+            showNotification('Seri numarası silinirken hata oluştu: ' + data.ERROR, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Sunucu hatası: ' + error.message, 'error');
+    });
+    
+}
 </script>
 
 
