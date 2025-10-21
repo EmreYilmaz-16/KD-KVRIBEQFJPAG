@@ -27,7 +27,7 @@ for(var i=0;i<parsers.length;i++){
         var product_code_2 = '';
         try {
             if (!isNaN(parserId) && parserId > 0) {
-                SerialObject = bm.parseWith(serial_number, parserId);
+                SerialObject = bm.parseWith(barcode, parserId);
                 console.log('Barcode parsed for serial number:', SerialObject);
                 if (SerialObject && SerialObject.serial_no) {
                    product_code_2= SerialObject.product_code_2;
