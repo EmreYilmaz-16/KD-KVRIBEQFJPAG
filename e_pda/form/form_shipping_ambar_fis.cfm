@@ -62,8 +62,8 @@
                         	--GS.REAL_STOCK > 0 AND 
                             PPR.STOCK_ID = TBL1.PAKET_ID AND  
                             PP.PLACE_STATUS = 1 AND     
-                        	PP.STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND 
-                            PP.LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#  
+                        	--PP.STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND 
+                            --PP.LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#  
 						ORDER BY 
                         	PP.SHELF_CODE
                     	) AS SHELF_CODE
@@ -175,8 +175,8 @@
                         	--GS.REAL_STOCK > 0 AND 
                             PPR.STOCK_ID = TBL1.PAKET_ID AND  
                             PP.PLACE_STATUS = 1 AND     
-                        	PP.STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND 
-                            PP.LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#  
+                        	--PP.STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND 
+                            --PP.LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#  
 						ORDER BY 
                         	PP.SHELF_CODE
                     	) AS SHELF_CODE
