@@ -49,7 +49,10 @@
 
 
 <cfquery name="getPaperData" datasource="#dsn2#">
-  SELECT ( select SHIP_NUMBER,SHIP_TYPE,DEPARTMENT_IN,LOCATION_IN,COMPANY_ID,PARTNER_ID,SHIP_ID from w3Qa_2025_1.SHIP WHERE SHIP_ID=#attributes.shipId# FOR JSON PATH) AS jsonData
+  SELECT 
+    ( select SHIP_NUMBER,SHIP_TYPE,DEPARTMENT_IN,LOCATION_IN,COMPANY_ID,PARTNER_ID,SHIP_ID 
+        from w3Qa_2025_1.SHIP WHERE SHIP_ID=#attributes.shipId# FOR JSON PATH) 
+        AS jsonData
 </cfquery>
 
 <!-- Font Awesome Icons -->
@@ -404,7 +407,8 @@ body {
 
 <cfquery name="getDespatchRow" datasource="#dsn2#">
    SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,
-(SELECT COUNT(*) FROM w3Qa_1.SERVICE_GUARANTY_NEW AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID) AS OMIK
+(SELECT COUNT(*) FROM w3Qa_1.SERVICE_GUARANTY_NEW AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID) AS OMIK,
+(select COUNT(*) from w3Qa_1.SERVICE_GUARANTY_NEW where SERIAL_NO=SG.SERIAL_NO and PROCESS_CAT<>76) as IS_DELETABLE
 FROM w3Qa_2025_1.SHIP_ROW AS SR
 LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=SR.STOCK_ID
 LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID=SR.WRK_ROW_ID
@@ -478,6 +482,14 @@ WHERE SHIP_ID=#attributes.shipId#
                                                 #EncodeForHTML(SERIAL_NO)#
                                                 <small class="text-muted">(Mevcut)</small>
                                             </td>
+                                            <td>
+                                                <cfif IS_DELETABLE GT 0>    
+                                                    <i class="fas fa-exclamation-triangle text-warning" title="Bu seri numarası başka işlemlerde kullanılmış, silinemez."></i>
+                                                <cfelse>
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteSerial('#SERIAL_NO#','#WRK_ROW_ID#','#PRODUCT_ID#')">
+                                                        <i class="fas fa-trash-alt"></i> Sil
+                                                    </button>
+                                                </cfif>
                                         </tr>
                                     </cfif>
                                     </cfoutput>
