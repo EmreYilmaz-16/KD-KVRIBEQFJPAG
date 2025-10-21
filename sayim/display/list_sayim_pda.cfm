@@ -29,6 +29,8 @@
 <cfset todayCount = 0>
 <cfset depotCount = 0>
 <cfset userCount = 0>
+<cfset processedCount = 0>
+<cfset unprocessedCount = 0>
 <cfset todayString = dateFormat(now(), "yyyy-mm-dd")>
 
 <cfif totalRecords gt 0>
@@ -46,6 +48,14 @@
 
         <cfif len(trim(RECORD_EMP))>
             <cfset uniqueUsers[RECORD_EMP] = true>
+        </cfif>
+        <!--- Count processed / unprocessed for visual stats --->
+        <cfif isDefined('IS_PROCESSED')>
+            <cfif IS_PROCESSED EQ 1>
+                <cfset processedCount = processedCount + 1>
+            <cfelse>
+                <cfset unprocessedCount = unprocessedCount + 1>
+            </cfif>
         </cfif>
     </cfloop>
 
@@ -123,6 +133,37 @@ a:link {
                 font-weight: 600;
                 white-space: nowrap;
                 box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+            }
+
+            /* Status badges */
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 10px;
+                border-radius: 999px;
+                font-weight: 700;
+                font-size: 0.82rem;
+                color: #fff;
+            }
+
+            .status-processed {
+                background: linear-gradient(135deg, #059669, #047857);
+                box-shadow: 0 6px 12px rgba(5,150,105,0.18);
+            }
+
+            .status-unprocessed {
+                background: linear-gradient(135deg, #dc2626, #b91c1c);
+                box-shadow: 0 6px 12px rgba(220,38,38,0.14);
+            }
+
+            /* Visual hint on list item when processed */
+            .record-item.processed {
+                border-left: 6px solid #059669;
+            }
+
+            .record-item.unprocessed {
+                border-left: 6px solid #dc2626;
             }
 
             .stat-list {
@@ -522,6 +563,14 @@ a:link {
                     <span class="stat-value">#todayCount#</span>
                 </li>
                 <li class="stat-card">
+                    <span class="stat-label">İşlenmiş</span>
+                    <span class="stat-value">#processedCount#</span>
+                </li>
+                <li class="stat-card">
+                    <span class="stat-label">İşlenmemiş</span>
+                    <span class="stat-value">#unprocessedCount#</span>
+                </li>
+                <li class="stat-card">
                     <span class="stat-label">Depo</span>
                     <span class="stat-value">#depotCount#</span>
                 </li>
@@ -555,7 +604,17 @@ a:link {
             <ul class="record-list" id="sayimList">
                 <cfloop query="getSayimList">
                     <cfset filterText = lcase(trim(SAYIM_ID & " " & PAPER_NUMBER & " " & DEPO_CODE & " " & DEPO_NAME & " " & dateFormat(SAYIM_DATE, "dd.mm.yyyy") & " " & dateFormat(RECORD_DATE, "dd.mm.yyyy") & " " & RECORD_EMP))>
-                    <li class="record-item" data-filter="#encodeForHtmlAttribute(filterText)#">
+                    <cfif isDefined('IS_PROCESSED') AND IS_PROCESSED EQ 1>
+                        <cfset itemClass = 'record-item processed'>
+                        <cfset statusLabel = 'İşlenmiş'>
+                        <cfset statusClass = 'status-badge status-processed'>
+                    <cfelse>
+                        <cfset itemClass = 'record-item unprocessed'>
+                        <cfset statusLabel = 'Beklemede'>
+                        <cfset statusClass = 'status-badge status-unprocessed'>
+                    </cfif>
+
+                    <li class="#itemClass#" data-filter="#encodeForHtmlAttribute(filterText)#">
                         <div class="checkbox-cell">
                             <div class="custom-checkbox">
                                 <input type="checkbox" class="sayim-checkbox" value="#SAYIM_ID#" id="checkbox_#SAYIM_ID#">
@@ -566,7 +625,9 @@ a:link {
                             <div class="item-top">
                                 <span class="item-id">## #SAYIM_ID#</span>
                                 <span class="item-paper">#PAPER_NUMBER#</span>
-                                
+                                <span style="margin-left:6px;">
+                                    <span class="#statusClass#">#statusLabel#</span>
+                                </span>
                             </div>
                             <div class="item-meta">
                                 <span class="meta-chip"><strong>Depo:</strong> <cfif len(trim(DEPO_NAME))>#DEPO_NAME#<cfelse>Tanımsız</cfif></span>
