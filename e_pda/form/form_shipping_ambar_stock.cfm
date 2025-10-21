@@ -201,10 +201,11 @@ var department_in_id = <cfoutput>#listgetat(attributes.department_in_id,1,"-")#<
 var location_in_id = <cfoutput>#listgetat(attributes.department_in_id,2,"-")#</cfoutput>;
 var department_out_id = <cfoutput>#listgetat(attributes.department_out_id,1,"-")#</cfoutput>;
 var location_out_id = <cfoutput>#listgetat(attributes.department_out_id,2,"-")#</cfoutput>;
-var paketSayisi = <cfoutput>#attributes.paket_sayisi#</cfoutput>;
+var paketSayisi = parseInt("<cfoutput>#attributes.paket_sayisi#</cfoutput>", 10) || 0;
 var row_count = 0;
 var TarihKontrol=false;
 var TarihKontrolLokasyonIds="'2-1','2-2'";
+
 var formArgs = {
     stock_id: stock_id,
     is_rafli: is_rafli,
@@ -256,6 +257,12 @@ function processSerialNumber() {
     if (window._processingSerial) { return false; }
     window._processingSerial = true;
     try {
+        if (paketSayisi > 0 && row_count >= paketSayisi) {
+            alert('Paket sayısına ulaşıldı, yeni satır eklenemez.');
+            clearInputs();
+            return false;
+        }
+
         var miktar = document.getElementById('miktar').value;
         var serial_number = document.getElementById('serial_number').value;
 
@@ -408,6 +415,11 @@ function processNormalDepo(serialNumber) {
 
 // Tabloya Satır Ekleme
 function addRowToTable(serialNo, stockCode, amount, shelfCode,shelf_id) {
+    if (paketSayisi > 0 && row_count >= paketSayisi) {
+        alert('Paket sayısına ulaşıldı, yeni satır eklenemez.');
+        return;
+    }
+
     row_count++;
     document.getElementById('row_count').value = row_count;
     
