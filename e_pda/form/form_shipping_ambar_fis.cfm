@@ -274,11 +274,7 @@
 				</cfif>
 				>
                 	<td>
-						<cfif get_shelf.recordcount and len(SHELF_CODE) neq 0>
-							IF_1
-					<cfif listFindNoCase(shelf_code_list,SHELF_CODE) eq 0> IF_1 A </cfif>
-
-				</cfif>
+				
 						<cfif get_shelf.recordcount>	
                             #SHELF_CODE#	
                         <cfelse>     
