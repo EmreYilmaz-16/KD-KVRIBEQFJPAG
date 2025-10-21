@@ -1,6 +1,9 @@
 ﻿<div  class="form-group">
     <input type="text" placeholder="Barkod" name="barkod" id="barkod" onkeydown="checkbarcode(this,event);" class="form-control" value="">
 </div>
+<div class="form-group" style="margin-top:10px;">
+    <input type="text" name="raf" id="raf" placeholder="Raf Kodu" onkeydown="checkRaf(this,event)">
+</div>
 <div class="form-group">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Tipi</option>
@@ -39,6 +42,7 @@ for(var i=0;i<parsers.length;i++){
                 console.log('Barcode parsed for serial number:', SerialObject);
                 if (SerialObject && SerialObject.serial_no) {
                    product_code_2= SerialObject.product_code_2;
+                   createRows(product_code_2);
                      console.log('Extracted product_code_2:', product_code_2);
                 }
             } else {
@@ -48,6 +52,29 @@ for(var i=0;i<parsers.length;i++){
             console.warn('Barcode parsing failed, using raw input.', parseErr);
         }
         }
+    }
+    function createRows(product_code_2){
+        
+var SerialObject=bm.parseWith("K13.0501_3CET-VSNM-CRM_02.25_02/25_0000000000000_1.0",2)
+product_code_2=SerialObject.product_code_2
+console.log(SerialObject)
+var sql=`SELECT * FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`
+console.log(sql)
+var qResult=wrk_query(sql,"dsn3")
+var stockId=qResult.STOCK_ID[0];
+var productId=qResult.STOCK_ID[0];
+console.table({stockId,productId,product_code_2})
+var recordedShelfsQuery=`SELECT SHELF_CODE,PP.PRODUCT_PLACE_ID FROM w3Qa_1.PRODUCT_PLACE AS PP LEFT JOIN w3Qa_1.PRODUCT_PLACE_ROWS AS PPR ON PPR.PRODUCT_PLACE_ID=PP.PRODUCT_PLACE_ID
+WHERE PPR.STOCK_ID=${stockId}`;
+var recordedShelfsQueryResult=wrk_query(recordedShelfsQuery,"dsn3")
+var tablo=document.getElementById("shelf_results_body")
+for(let i=0;i<recordedShelfsQueryResult.recordcount;i++){
+    var tr=document.createElement("tr");
+    var td=document.createElement("td");
+    td.innerText=recordedShelfsQueryResult.SHELF_CODE[i];
+    tr.appendChild(td)
+    tablo.appendChild(tr);
+}
     }
     function wrk_query(str_query, data_source, maxrows) {
     if (!data_source) data_source = 'dsn';
@@ -101,6 +128,9 @@ function createXMLHttpRequest() {
     }
     
     return req;
+}
+function checkRaf(input,event) {
+    
 }
 </script>
 
