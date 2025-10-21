@@ -564,11 +564,13 @@ a:link {
                             <div class="item-top">
                                 <span class="item-id">## #SAYIM_ID#</span>
                                 <span class="item-paper">#PAPER_NUMBER#</span>
+                                
                             </div>
                             <div class="item-meta">
                                 <span class="meta-chip"><strong>Depo:</strong> <cfif len(trim(DEPO_NAME))>#DEPO_NAME#<cfelse>Tanımsız</cfif></span>
                                 <span class="meta-chip"><strong>Kod:</strong> #DEPO_CODE#</span>
                                 <span class="meta-chip"><strong>Kayıt Eden:</strong> <cfif len(trim(RECORD_EMP))>#RECORD_EMP#<cfelse>Bilinmiyor</cfif></span>
+                                <span class="meta-chip"><strong>Belge No:</strong> <cfif LEN(PROCESS_NO)>#PROCESS_NO#<cfelse>Beklemede</cfif>
                             </div>
                         </div>
                         <div class="item-dates">
@@ -577,7 +579,11 @@ a:link {
                         </div>
                         <div class="item-action">
                             <a href="/index.cfm?fuseaction=stock.emptypopup_add_sayim_row_pbs&sayim_id=#SAYIM_ID#" class="primary-button">Detay</a>
+                           <cfif IS_PROCESSED EQ 0>
                             <a href="/index.cfm?fuseaction=stock.emptypopup_process_sayim&sayim_id=#SAYIM_ID#" class="process-button">Sayımı İşle</a>
+                           <cfelse>
+                            <a href="##" class="process-button" style="background: gray; cursor: not-allowed;">İşlenmiş</a>
+                           </cfif>
                         </div>
                     </li>
                 </cfloop>
