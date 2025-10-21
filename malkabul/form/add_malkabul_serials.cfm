@@ -1011,7 +1011,7 @@ function deleteSerial(serial_no,wrk_row_id,product_id) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.SUCCESS) {
+        if (data.DELETED) {
             showNotification('Seri numarası başarıyla silindi.', 'success');
             // Seri numarasını tablodan kaldır
             var serialTable = document.getElementById('serials_' + product_id);
