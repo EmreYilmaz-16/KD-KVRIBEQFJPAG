@@ -998,7 +998,7 @@ $(document).keydown(function(e) {
     }
 });
 
-function deleteSerial(serial_no,wrk_row_id,product_id) {
+function deleteSerial(SERIALNO ,wrk_row_id,product_id) {
     if (!confirm('Bu seri numarasını silmek istediğinize emin misiniz?')) {
         return;
     }
@@ -1007,7 +1007,7 @@ function deleteSerial(serial_no,wrk_row_id,product_id) {
     fetch('/AddOns/Partner/cfc/serialservice.cfc?method=deleteSerial&returnformat=json', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({ serial_no, wrk_row_id })
+        body: new URLSearchParams({ SERIALNO, wrk_row_id })
     })
     .then(response => response.json())
     .then(data => {
