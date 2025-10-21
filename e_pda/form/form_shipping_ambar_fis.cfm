@@ -7,6 +7,10 @@
 <cfquery name="get_shelf" datasource="#dsn3#">
 	SELECT TOP (10) SHELF_CODE FROM PRODUCT_PLACE WHERE STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#
 </cfquery>
+<cfquery name="get_shelf_all" datasource="#dsn3#">
+	SELECT  SHELF_CODE FROM PRODUCT_PLACE WHERE STORE_ID = #ListGetAt(attributes.department_out_id,1,'-')# AND LOCATION_ID = #ListGetAt(attributes.department_out_id,2,'-')#
+</cfquery>
+<cfset shelf_code_list = ValueList(get_shelf_all.SHELF_CODE)>
 <cfquery name="get_spool" datasource="#dsn3#">
  	SELECT STOCK_ID FROM EZGI_PDA_PRINT_SPOOL WHERE SHIP_ID = #attributes.ship_id# AND IS_TYPE = #attributes.is_type# AND RECORD_EMP = #session.ep.userid#
 </cfquery>
@@ -233,6 +237,7 @@
     </cfquery>
 	
 </cfif> 
+
 <cfset BASLIK="">
 <cfif attributes.is_type eq 1>
 	<cfset BASLIK="Sevk Plan No :">
@@ -263,8 +268,9 @@
 		<tbody>
 			<cfoutput query="GET_SHIP_PACKAGE_LIST">
            	 	<tr height="20" onMouseOver="this.className='color-light';" onMouseOut="this.className='color-row';" class="color-row"
-				<cfif get_shelf.recordcount and len(SHELF_CODE) gt 0>
-					data-shelf="#SHELF_CODE#"
+				<cfif get_shelf.recordcount and len(SHELF_CODE) neq 0>
+					<cfif listFindNoCase(shelf_code_list,SHELF_CODE) eq 0> style="display:none;"  </cfif>
+					
 				</cfif>
 				>
                 	<td>
