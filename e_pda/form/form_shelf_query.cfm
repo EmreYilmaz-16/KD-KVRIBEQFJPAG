@@ -7,6 +7,14 @@
 
 			</select>
 		</div>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered">
+          <tr>
+            <th width="50%" align="center" valign="middle">Raf Kodu</th>
+            <th width="25%" align="center" valign="middle">Kapasite</th>
+            <th width="25%" align="center" valign="middle">Mevcut</th>
+          </tr>
+          <tbody id="shelf_results_body"></tbody>
+          
 
 <script>
 var bm=null;
