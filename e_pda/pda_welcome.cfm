@@ -306,10 +306,10 @@
             </span>
         </a>
 
-        <a class="action-card tableyazi" href="#request.self#?fuseaction=pda.form_add_stock_count_loc">
-            <span class="icon"><img src="../../images/e-pd/say30.png" alt="Depo sayım belgesi"></span>
+        <a class="action-card tableyazi" href="#request.self#?fuseaction=stock.emptypopup_list_sayim_pbs">
+            <span class="icon"><img src="../../images/e-pd/say30.png" alt="Sayım belgesi"></span>
             <span class="details">
-                <span class="title">Depo Sayım Belgesi</span>
+                <span class="title">İlk Sayım Belgesi</span>
             </span>
         </a>
 
