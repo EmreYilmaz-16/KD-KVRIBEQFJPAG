@@ -55,9 +55,9 @@ for(var i=0;i<parsers.length;i++){
     }
     function createRows(product_code_2){
         
-var SerialObject=bm.parseWith(product_code_2,2)
-product_code_2=SerialObject.product_code_2
-console.log(SerialObject)
+
+
+
 var sql=`SELECT * FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`
 console.log(sql)
 var qResult=wrk_query(sql,"dsn3")
