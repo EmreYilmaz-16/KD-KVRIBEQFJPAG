@@ -16,5 +16,24 @@ component output="false" {
         }
         
     }
+    remote struct function deleteSerial(required string serialNo) {
+        var result = {deleted = false};
+        try {
+            var delQ = queryExecute(
+                "DELETE FROM SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER = :serial",
+                {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
+                {datasource = "w3Qa_1"}
+            );
+            var delQ2 = queryExecute(
+                "DELETE FROM SERVICE_GUARANTY_NEW WHERE SERIAL_NO = :serial",
+                {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
+                {datasource = "w3Qa_1"}
+            );
+            result.deleted = true;
+        } catch (any exName) {
+            result.deleted = false;
+        }
+        return result;
+}
 }
 </cfscript>
