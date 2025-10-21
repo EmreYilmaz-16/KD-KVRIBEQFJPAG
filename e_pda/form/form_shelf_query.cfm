@@ -55,7 +55,7 @@ for(var i=0;i<parsers.length;i++){
     }
     function createRows(product_code_2){
         
-var SerialObject=bm.parseWith("K13.0501_3CET-VSNM-CRM_02.25_02/25_0000000000000_1.0",2)
+var SerialObject=bm.parseWith(product_code_2,2)
 product_code_2=SerialObject.product_code_2
 console.log(SerialObject)
 var sql=`SELECT * FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`
