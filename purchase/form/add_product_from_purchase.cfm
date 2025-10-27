@@ -69,6 +69,8 @@
         
         writeDump(var=attributes, format="html", label="attributes", abort=true);
         */
+        writeDump(attributes, "attributes before CreateProduct");
+        abort;
         ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId,0);
         ProductInserResult=deserializeJSON(ProductInserResult);
        
