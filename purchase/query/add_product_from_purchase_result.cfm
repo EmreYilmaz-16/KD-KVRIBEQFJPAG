@@ -39,7 +39,7 @@
         surec_id=29;
         fiyat_yetkisi = 1;
         uretici_urun_kodu="";
-        brand_id="";
+        brand_id="#arguments.brand_id#";
         short_code = '';
         short_code_id = '';
         product_code_2='#arguments.eta_kodu#';
