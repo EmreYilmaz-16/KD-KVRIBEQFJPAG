@@ -2,8 +2,9 @@
     <cfargument name="PRODUCT_NAME">
     <cfargument name="PRODUCT_CATID">
     <cfargument name="BRAND_ID">
-    <cfargument name="SHORT_CODE_ID">
     <cfargument name="SHORT_CODE">
+    <cfargument name="SHORT_CODE_ID">
+    
     <cfargument name="BIRIM">
     <cfargument name="OEM_NO_ARR">
     <cfargument name="ALTERNATIVES">    
@@ -40,8 +41,8 @@
         fiyat_yetkisi = 1;
         uretici_urun_kodu="";
         brand_id="#arguments.brand_id#";
-        short_code = '';
-        short_code_id = '';
+        short_code = '#arguments.SHORT_CODE#';
+        short_code_id = '#arguments.SHORT_CODE_ID#';
         product_code_2='#arguments.eta_kodu#';
         is_limited_stock="";
         min_margin="";
