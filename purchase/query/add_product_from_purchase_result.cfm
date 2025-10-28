@@ -127,6 +127,7 @@
 <cfset ReturnData.ErrorMessage=cfcatch.message>
 <cfset ReturnData.PRODUCT_ID="">
 <cfset ReturnData.STOCK_ID="">
+<cfdump var="#cfcatch#" abort="true">
 <cfreturn replace(serializeJSON(ReturnData),"//","")>
 </cfcatch>
 </cftry>
