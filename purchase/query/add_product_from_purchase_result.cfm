@@ -2,9 +2,9 @@
     <cfargument name="PRODUCT_NAME">
     <cfargument name="PRODUCT_CATID">
     <cfargument name="BRAND_ID">
-    <cfargument name="SHORT_CODE">
-    <cfargument name="SHORT_CODE_ID">
     
+    <cfargument name="SHORT_CODE_ID">
+    <cfargument name="SHORT_CODE">
     <cfargument name="BIRIM">
     <cfargument name="OEM_NO_ARR">
     <cfargument name="ALTERNATIVES">    
