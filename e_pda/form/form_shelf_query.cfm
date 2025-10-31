@@ -66,8 +66,8 @@ var qResult=wrk_query(sql,"dsn3")
 console.log(qResult)
 var stockId=qResult.STOCK_ID[0];
 var productId=qResult.STOCK_ID[0];
-var main_stock_id=stockId;
-var main_product_id=productId;
+ main_stock_id=stockId;
+ main_product_id=productId;
 console.table({stockId,productId,product_code_2})
 var recordedShelfsQuery=`SELECT SHELF_CODE,PP.PRODUCT_PLACE_ID FROM w3Qa_1.PRODUCT_PLACE AS PP LEFT JOIN w3Qa_1.PRODUCT_PLACE_ROWS AS PPR ON PPR.PRODUCT_PLACE_ID=PP.PRODUCT_PLACE_ID
 WHERE PPR.STOCK_ID=${stockId}`;
