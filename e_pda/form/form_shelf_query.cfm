@@ -72,6 +72,12 @@ var recordedShelfsQuery=`SELECT SHELF_CODE,PP.PRODUCT_PLACE_ID FROM w3Qa_1.PRODU
 WHERE PPR.STOCK_ID=${stockId}`;
 var recordedShelfsQueryResult=wrk_query(recordedShelfsQuery,"dsn3")
 var tablo=document.getElementById("shelf_results_body")
+if(recordedShelfsQueryResult.recordcount==0){
+    tablo.innerHTML="<tr><td colspan='3' align='center'>Bu ürüne ait raf bulunamadı.</td></tr>";
+    //return;
+    $("#raf").val("");
+    $("#raf").focus();
+}
 for(let i=0;i<recordedShelfsQueryResult.recordcount;i++){
     var tr=document.createElement("tr");
     var td=document.createElement("td");
@@ -141,6 +147,12 @@ function checkRaf(input,event) {
     var r=wrk_query("SELECT * FROM PRODUCT_PLACE WHERE SHELF_CODE='"+rafCode+"'","dsn3");
     if(r.recordcount>0){
         console.log('Raf Kodu Bulundu:',rafCode);
+        var d={
+            shelf_code:rafCode,
+            product_id:main_product_id,
+            stock_id:main_stock_id
+        };
+        console.log('Gönderilen Veri:',d);
         
    }else{
        console.log('Raf Kodu Bulunamadı:',rafCode);
