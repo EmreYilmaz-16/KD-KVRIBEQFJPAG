@@ -49,7 +49,7 @@
 <cfelse>
     <cfset usableStateClass = "negative">
 </cfif>
-<cfset formul_1=depoBakiye-verilenRezerv> <!---alinan sipariş rezervi---->
+<cfset formul_1=verilenRezerv-ozel_siparis> <!---alinan sipariş rezervi---->
 <cfset formul_2=alinanRezerv-verilenRezerv>
 
 <cfif formul_1 GTE 0>
