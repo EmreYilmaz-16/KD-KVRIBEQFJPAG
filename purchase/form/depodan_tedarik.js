@@ -457,8 +457,8 @@ for (const supplier of data) {
     let lowestNetPrice = Infinity;
     data.forEach(supplier => {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
-        if (product && product.NET_PRICE < lowestNetPrice) {
-            lowestNetPrice = product.NET_PRICE;
+        if (product && product.ONET_PRICE_2 < lowestNetPrice) {
+            lowestNetPrice = product.ONET_PRICE_2;
         }
     });
 
