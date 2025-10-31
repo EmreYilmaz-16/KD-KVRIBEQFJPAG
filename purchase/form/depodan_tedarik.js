@@ -485,6 +485,7 @@ for (const supplier of data) {
                 ? `<div class="tooltip"><span class="price-original">${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
                 : `<div><strong>${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</strong></div>`;
             var netPriceHtml = "";
+            console.log("Lowest Net Price for Product ID", productId, "is", lowestNetPrice);
             if (product.ONET_PRICE_2 > 0) {
                 netPriceHtml = `<div class=\"net-price\">Net: ${product.ONET_PRICE_2.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
                 if (product.ONET_PRICE_2 === lowestNetPrice) {
