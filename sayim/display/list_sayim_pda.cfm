@@ -1,5 +1,5 @@
 ﻿<cfparam name="attributes.isSubmit" default="0">
-<cfparam name="attributes.depo_kodu" default="2-1">
+<cfparam name="attributes.depo_kodu" default="">
 
 <cfquery name="getDepo" datasource="#dsn#">
     SELECT 
@@ -674,6 +674,12 @@ a:link {
             <div class="message">
                 ⚠️ #errorMessage#
             </div>
+        </cfif>
+        <cfif attributes.depo_kodu eq "">
+            <div class="message">
+                ℹ️ Lütfen sayımları listelemek için bir depo seçiniz.
+            </div>
+            <cfabort>
         </cfif>
 
         <cfif totalRecords gt 0>
