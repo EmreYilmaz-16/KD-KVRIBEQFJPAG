@@ -117,7 +117,7 @@ function open_product_popup_special(satir)
 	  }
 
 function ButonYaz(){
-   var els = document.querySelectorAll("#tblBasket > tbody > tr > td:nth-child(6) > div > div");
+   var els = document.querySelectorAll("#tblBasket > tbody > tr > td:nth-child(4) > div > div");
 for (let i = 0; i < els.length; i++) {
   var span = document.createElement("span");
   span.className = "input-group-addon";
