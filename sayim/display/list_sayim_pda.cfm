@@ -1,4 +1,4 @@
-﻿<cfparam name="isSubmit" default="0">
+﻿<cfparam name="attributes.isSubmit" default="0">
 <cf_box title="Sayım Kayıtları">
 
     <cfif attributes.isSubmit eq 1>
