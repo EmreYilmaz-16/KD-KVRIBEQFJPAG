@@ -74,7 +74,7 @@
 <cfset ozel_siparisFormatted = tlformat(ozel_siparis)>
 
 
-<cf_box title="Stok Depo Bilgileri" closable="1" draggable="1">
+<cf_box title="Stok Depo Bilgileri" >
     
         <style>
             .stock-summary-wrap {
