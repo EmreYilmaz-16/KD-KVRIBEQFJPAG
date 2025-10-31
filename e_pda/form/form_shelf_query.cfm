@@ -466,7 +466,7 @@ function checkRaf(input, event) {
                             renderShelfRows(null);
                         }
                     }else{
-                        var message = response && response.message ? response.message : 'Raf eklenirken bir hata oluştu.';
+                        var message = response && response.MESSAGE ? response.MESSAGE : 'Raf eklenirken bir hata oluştu.';
                         showFeedback(message, 'error');
                     }
                 },
