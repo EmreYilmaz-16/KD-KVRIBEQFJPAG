@@ -22,15 +22,15 @@
 </cfquery>
 
 <cfset depoBakiye = Val(getDepoBakiye.BAKIYE)>
-<cfset alinanRezerv = Val(getRezerv.COLUMN1)>
-<cfset verilenRezerv = Val(getRezerv.COLUMN2)>
-<cfset kullanilabilirBakiye = depoBakiye - verilenRezerv + alinanRezerv>
+<cfset verilenRezerv = Val(getRezerv.COLUMN1)>
+<cfset alinanRezerv = Val(getRezerv.COLUMN2)>
+<cfset kullanilabilirBakiye = depoBakiye - alinanRezerv + verilenRezerv>
 <cfif kullanilabilirBakiye GTE 0>
     <cfset usableStateClass = "positive">
 <cfelse>
     <cfset usableStateClass = "negative">
 </cfif>
-<cfset formul_1=depoBakiye-verilenRezerv>
+<cfset formul_1=depoBakiye-verilenRezerv> <!---alinan sipariş rezervi---->
 <cfset formul_2=alinanRezerv-verilenRezerv>
 
 <cfif formul_1 GTE 0>
@@ -170,13 +170,13 @@
                 </div>
 
                 <div class="stock-card reserve-out">
-                    <div class="label">Verilen Sipariş Rezervi</div>
+                    <div class="label">Alınan Sipariş Rezervi</div>
                     <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Çıkış bekleyen siparişler için ayrılan stok.</div>
                 </div>
 
                 <div class="stock-card reserve-in">
-                    <div class="label">Alınan Sipariş Rezervi</div>
+                    <div class="label">Verilen Sipariş Rezervi</div>
                     <div class="value">#alinanRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
                 </div>
