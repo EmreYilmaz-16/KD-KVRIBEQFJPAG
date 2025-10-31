@@ -174,18 +174,18 @@
                     <div class="value">#alinanRezervFormatted#</div>
                     <div class="hint">Çıkış bekleyen siparişler için ayrılan stok.</div>
                 </div>
-
+                <div class="stock-card #usableStateClass#">
+                    <div class="label">Kullanılabilir Bakiye</div>
+                    <div class="value">#kullanilabilirBakiyeFormatted#</div>
+                    <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
+                </div>
                 <div class="stock-card reserve-in">
                     <div class="label">Verilen Sipariş Rezervi</div>
                     <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
                 </div>
 
-                <div class="stock-card #usableStateClass#">
-                    <div class="label">Kullanılabilir Bakiye</div>
-                    <div class="value">#kullanilabilirBakiyeFormatted#</div>
-                    <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
-                </div>
+                
 
                 <div class="stock-card #formul1Class#">
                     <div class="label">Rezerv Sonrası Depo</div>
