@@ -164,7 +164,7 @@ function checkRaf(input,event) {
             dataType:'json',
             success:function(response){
                 console.log('Sunucudan Gelen Yanıt:',response);
-                if(response.success){
+                if(response.SUCCESS){
                     alert('Raf başarıyla eklendi!');
                     // Raf eklendikten sonra gerekli işlemler yapılabilir
                 }else{
