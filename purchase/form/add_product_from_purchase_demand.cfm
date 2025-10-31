@@ -71,6 +71,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                     <li>#hataMesaj#</li>
                 </cfloop>
                 </ul>
+                <button class="btn btn-primary" onclick="history.back();">Geri Dön</button>
             </cfoutput>
         </div>
         <cfabort>
