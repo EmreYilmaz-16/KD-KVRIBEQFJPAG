@@ -50,7 +50,7 @@
 </cfif>
     <cfset attributes.oem_no = []>
     <cfset oem_satir = attributes.oem_satir>
-<cfset oemSatirHataArr=[]
+<cfset oemSatirHataArr=[]>
     <cfloop from="1" to="#oem_satir#" index="i">
         <cfset arrayAppend(attributes.oem_no, attributes["oem_" & i])>
     <cfquery name="ishvoem" datasource="#dsn1#">
