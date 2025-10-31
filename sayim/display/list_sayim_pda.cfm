@@ -1,7 +1,33 @@
 ﻿<cfparam name="attributes.isSubmit" default="0">
-<cf_box title="Sayım Kayıtları">
+<cfset attributes.depo_kodu="2-1">
 
-    <cfif attributes.isSubmit eq 1>
+
+    <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" >
+    <div class="form-control">
+    <cfquery name="getDepo" datasource="#dsn#">
+        SELECT CAST(D.DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar)DEPO_KODU,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO FROM w3Qa.DEPARTMENT AS D INNER JOIN w3Qa.STOCKS_LOCATION AS SL
+ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
+    </cfquery>
+    
+    <select name="depo_kodu" id="depo_kodu" class="input input-bordered w-full max-w-xs">
+        <option value="">Depo Seçiniz</option>
+        <cfloop query="getDepo">
+           <cfoutput> <option <cfif attributes.depo_kodu eq DEPO_KODU> selected="selected" </cfif> value="#DEPO_KODU#">#DEPO#</option></cfoutput>
+           
+        </cfloop>
+
+    </select>
+</div>
+    <div class="form-control mt-4">
+        <button type="submit" class="btn btn-primary">Sayımları Getir</button>
+    </div>
+  
+</cfform>
+
+
+
+
+    
 
     
 <cftry>
@@ -850,26 +876,3 @@ a:link {
     </script>
 
 </cfoutput>
-<button onclick="window.location.href='<cfoutput>#request.self#?fuseaction=#attributes.fuseaction#</cfoutput>'" class="btn btn-secondary">Temizle</button>
-<cfelse>
-    <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" >
-    <div class="form-control">
-    <cfquery name="getDepo" datasource="#dsn#">
-        SELECT CAST(D.DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar)DEPO_KODU,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO FROM w3Qa.DEPARTMENT AS D INNER JOIN w3Qa.STOCKS_LOCATION AS SL
-ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
-    </cfquery>
-    
-    <select name="depo_kodu" id="depo_kodu" class="input input-bordered w-full max-w-xs">
-        <option value="">Depo Seçiniz</option>
-        <cfloop query="getDepo">
-           <cfoutput> <option value="#DEPO_KODU#">#DEPO#</option></cfoutput>
-        </cfloop>
-    </select>
-</div>
-    <div class="form-control mt-4">
-        <button type="submit" class="btn btn-primary">Getir</button>
-    </div>
-<input type="hidden" name="isSubmit" value="1">    
-</cfform>
-</cfif>
-</cf_box>
