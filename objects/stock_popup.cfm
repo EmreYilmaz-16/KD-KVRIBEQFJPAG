@@ -27,10 +27,10 @@
 <cfset kullanilabilirBakiye = depoBakiye - verilenRezerv + alinanRezerv>
 <cfset usableStateClass = IIf(kullanilabilirBakiye GTE 0, "positive", "negative")>
 
-<cfset depoBakiyeFormatted = LSNumberFormat(depoBakiye, "#,##0.##")>
-<cfset verilenRezervFormatted = LSNumberFormat(verilenRezerv, "#,##0.##")>
-<cfset alinanRezervFormatted = LSNumberFormat(alinanRezerv, "#,##0.##")>
-<cfset kullanilabilirBakiyeFormatted = LSNumberFormat(kullanilabilirBakiye, "#,##0.##")>
+<cfset depoBakiyeFormatted = tlformat(depoBakiye)>
+<cfset verilenRezervFormatted = tlformat(verilenRezerv)>
+<cfset alinanRezervFormatted = tlformat(alinanRezerv)>
+<cfset kullanilabilirBakiyeFormatted = tlformat(kullanilabilirBakiye)>
 
 <cf_box title="Stok Depo Bilgileri" closable="1" draggable="1">
     <cfoutput>
