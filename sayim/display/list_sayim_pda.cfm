@@ -850,12 +850,15 @@ a:link {
     </script>
 
 </cfoutput>
+<button onclick="window.location.href='<cfoutput>#request.self#?fuseaction=#attributes.fuseaction#</cfoutput>'" class="btn btn-secondary">Temizle</button>
 <cfelse>
+    <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" >
     <div class="form-control">
     <cfquery name="getDepo" datasource="#dsn#">
         SELECT CAST(D.DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar)DEPO_KODU,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO FROM w3Qa.DEPARTMENT AS D INNER JOIN w3Qa.STOCKS_LOCATION AS SL
 ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
     </cfquery>
+    
     <select name="depo_kodu" id="depo_kodu" class="input input-bordered w-full max-w-xs">
         <option value="">Depo Seçiniz</option>
         <cfloop query="getDepo">
@@ -863,5 +866,10 @@ ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
         </cfloop>
     </select>
 </div>
+    <div class="form-control mt-4">
+        <button type="submit" class="btn btn-primary">Getir</button>
+    </div>
+    
+</cfform>
 </cfif>
 </cf_box>
