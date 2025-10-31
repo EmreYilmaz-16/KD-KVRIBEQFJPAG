@@ -78,14 +78,16 @@ if(recordedShelfsQueryResult.recordcount==0){
     //return;
     $("#raf").val("");
     $("#raf").focus();
-}
+}else{
+    tablo.innerHTML="";
+
 for(let i=0;i<recordedShelfsQueryResult.recordcount;i++){
     var tr=document.createElement("tr");
     var td=document.createElement("td");
     td.innerText=recordedShelfsQueryResult.SHELF_CODE[i];
     tr.appendChild(td)
     tablo.appendChild(tr);
-}
+}}
     }
     function wrk_query(str_query, data_source, maxrows) {
     if (!data_source) data_source = 'dsn';
