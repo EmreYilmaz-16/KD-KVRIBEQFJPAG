@@ -22,8 +22,8 @@
 </cfquery>
 
 <cfset depoBakiye = Val(getDepoBakiye.BAKIYE)>
-<cfset verilenRezerv = Val(getRezerv.COLUMN1)>
-<cfset alinanRezerv = Val(getRezerv.COLUMN2)>
+<cfset alinanRezerv = Val(getRezerv.COLUMN1)>
+<cfset verilenRezerv = Val(getRezerv.COLUMN2)>
 <cfset kullanilabilirBakiye = depoBakiye - verilenRezerv + alinanRezerv>
 <cfif kullanilabilirBakiye GTE 0>
     <cfset usableStateClass = "positive">
