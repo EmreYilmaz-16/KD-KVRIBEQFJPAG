@@ -30,12 +30,28 @@
 <cfelse>
     <cfset usableStateClass = "negative">
 </cfif>
+<cfset formul_1=depoBakiye-verilenRezerv>
+<cfset formul_2=alinanRezerv-verilenRezerv>
 
+<cfif formul_1 GTE 0>
+    <cfset formul1Class = "positive">
+<cfelse>
+    <cfset formul1Class = "negative">
+</cfif>
+
+<cfif formul_2 GTE 0>
+    <cfset formul2Class = "positive">
+<cfelse>
+    <cfset formul2Class = "negative">
+</cfif>
 
 <cfset depoBakiyeFormatted = tlformat(depoBakiye)>
 <cfset verilenRezervFormatted = tlformat(verilenRezerv)>
 <cfset alinanRezervFormatted = tlformat(alinanRezerv)>
 <cfset kullanilabilirBakiyeFormatted = tlformat(kullanilabilirBakiye)>
+<cfset formul1Formatted = tlformat(formul_1)>
+<cfset formul2Formatted = tlformat(formul_2)>
+
 
 <cf_box title="Stok Depo Bilgileri" closable="1" draggable="1">
     
@@ -169,6 +185,18 @@
                     <div class="label">Kullanılabilir Bakiye</div>
                     <div class="value">#kullanilabilirBakiyeFormatted#</div>
                     <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
+                </div>
+
+                <div class="stock-card #formul1Class#">
+                    <div class="label">Rezerv Sonrası Depo</div>
+                    <div class="value">#formul1Formatted#</div>
+                    <div class="hint">Depo bakiyesinden verilen rezerv çıkarıldığında kalan miktar.</div>
+                </div>
+
+                <div class="stock-card #formul2Class#">
+                    <div class="label">Rezerv Net Değişim</div>
+                    <div class="value">#formul2Formatted#</div>
+                    <div class="hint">Alınan ve verilen rezervler arasındaki fark.</div>
                 </div>
             </div>
         </div>
