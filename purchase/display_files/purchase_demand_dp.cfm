@@ -99,5 +99,39 @@ rows.forEach(function (row) {
 })
     }
 })
+function open_product_popup_special(satir)
+	  {
+		  url_str = 'index.cfm?fuseaction=stock.emptypopup_stock_detail_pbs';
+		  var data = window.basket.items[satir];
+		  var stock_id = data.STOCK_ID;
+		  var product_id = data.PRODUCT_ID;
+		  var spect_id = data.SPECT_ID;
+		  var spect_name = data.SPECT_NAME;
+		  if(spect_id != undefined && spect_id != '' && spect_name != '')
+			  url_str = url_str+'&spec_id='+spect_id;
+		  
+		  
+		  if(product_id != "")
+			  openBoxDraggable(url_str + '&pid='+ product_id + '&sid='+stock_id);
+	  }
+
+function ButonYaz(){
+   var els = document.querySelectorAll("#tblBasket > tbody > tr > td:nth-child(6) > div > div");
+for (let i = 0; i < els.length; i++) {
+  var span = document.createElement("span");
+  span.className = "input-group-addon";
+  span.id = `product_popup_${i}`;
+  span.title = "Ürün Detayları İçin Tıklayınız";
+span.style.color="green"
+  span.onclick = function () { open_product_popup_special(i); };
+
+  var icon = document.createElement("i");
+  icon.className = "fa fa-ellipsis-v";
+
+  span.appendChild(icon);
+  els[i].appendChild(span);
+}
+ 
+}
 </script>
 
