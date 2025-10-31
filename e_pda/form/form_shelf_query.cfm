@@ -153,7 +153,8 @@ function checkRaf(input,event) {
         var d={
             shelf_code:rafCode,
             product_id:main_product_id,
-            stock_id:main_stock_id
+            stock_id:main_stock_id,
+            product_place_id:r.PRODUCT_PLACE_ID[0]
         };
         console.log('Gönderilen Veri:',d);
         $.ajax({
