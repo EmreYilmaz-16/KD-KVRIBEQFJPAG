@@ -6,7 +6,7 @@ component output="false" {
         //writeDump(getHTTPRequestData())
         var q=queryExecute(
             "INSERT INTO PRODUCT_PLACE_ROWS (PRODUCT_PLACE_ID, PRODUCT_ID, STOCK_ID) 
-             VALUES (:productPlaceId, :productId, :stockId, :shelfCode)",
+             VALUES (:productPlaceId, :productId, :stockId )",
             {
                 productPlaceId={value=arguments.PRODUCT_PLACE_ID, cfsqltype="cf_sql_integer"},
                 productId={value=arguments.PRODUCT_ID, cfsqltype="cf_sql_integer"},
