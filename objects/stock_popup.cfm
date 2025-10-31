@@ -25,7 +25,12 @@
 <cfset verilenRezerv = Val(getRezerv.COLUMN1)>
 <cfset alinanRezerv = Val(getRezerv.COLUMN2)>
 <cfset kullanilabilirBakiye = depoBakiye - verilenRezerv + alinanRezerv>
-<cfset usableStateClass = IIf(kullanilabilirBakiye GTE 0, "positive", "negative")>
+<cfif kullanilabilirBakiye GTE 0>
+    <cfset usableStateClass = "positive">
+<cfelse>
+    <cfset usableStateClass = "negative">
+</cfif>
+
 
 <cfset depoBakiyeFormatted = tlformat(depoBakiye)>
 <cfset verilenRezervFormatted = tlformat(verilenRezerv)>
