@@ -93,6 +93,7 @@
                 align-items: center;
                 justify-content: space-between;
                 margin-bottom: 18px;
+                gap: 12px;
             }
 
             .stock-summary-header h2 {
@@ -107,6 +108,31 @@
                 text-transform: uppercase;
                 letter-spacing: 0.15em;
                 color: #64748b;
+            }
+
+            .close-summary-button {
+                background: #0f172a;
+                color: #ffffff;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 16px;
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                cursor: pointer;
+                transition: background 0.2s ease, transform 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .close-summary-button:hover {
+                background: #1e293b;
+                transform: translateY(-1px);
+            }
+
+            .close-summary-button:active {
+                transform: translateY(0);
             }
 
             .stock-summary-grid {
@@ -179,8 +205,13 @@
 <cfoutput>
         <div class="stock-summary-wrap">
             <div class="stock-summary-header">
-                <h2>Stok Durum Özeti</h2>
-                <span>#DateTimeFormat(Now(), "dd mmm yyyy HH:nn")#</span>
+                <div>
+                    <h2>Stok Durum Özeti</h2>
+                    <span>#DateTimeFormat(Now(), "dd mmm yyyy HH:nn")#</span>
+                </div>
+                <button type="button" class="close-summary-button" onclick="closeBoxDraggable('#attributes.modal_id#')">
+                    X Kapat
+                </button>
             </div>
 
             <div class="stock-summary-grid">
@@ -225,7 +256,6 @@
                 </div>---->
             </div>
         </div>
-        <button onclick="closeBoxDraggable('#attributes.modal_id#')">Kapat</button>
     </cfoutput>
     
 </cf_box>
