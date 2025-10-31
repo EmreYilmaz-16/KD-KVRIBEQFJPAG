@@ -217,12 +217,12 @@
                     <div class="value">#formul1Formatted#</div>
                     <div class="hint">Depo bakiyesinden verilen rezerv çıkarıldığında kalan miktar.</div>
                 </div>
-
+<!---
                 <div class="stock-card #formul2Class#">
                     <div class="label">Rezerv Net Değişim</div>
                     <div class="value">#formul2Formatted#</div>
                     <div class="hint">Alınan ve verilen rezervler arasındaki fark.</div>
-                </div>
+                </div>---->
             </div>
         </div>
     </cfoutput>
