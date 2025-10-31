@@ -33,7 +33,7 @@
 <cfset kullanilabilirBakiyeFormatted = tlformat(kullanilabilirBakiye)>
 
 <cf_box title="Stok Depo Bilgileri" closable="1" draggable="1">
-    <cfoutput>
+    
         <style>
             .stock-summary-wrap {
                 font-family: "Segoe UI", Tahoma, Arial, sans-serif;
@@ -134,7 +134,7 @@
                 }
             }
         </style>
-
+<cfoutput>
         <div class="stock-summary-wrap">
             <div class="stock-summary-header">
                 <h2>Stok Durum Özeti</h2>
