@@ -157,7 +157,7 @@ function checkRaf(input,event) {
         };
         console.log('Gönderilen Veri:',d);
         $.ajax({
-            url:'/index.cfm?fuseaction=kd.e_pda.form.form_shelf_add_ajax',
+            url:'/AddOns/partner/cfc/depoService.cfc?method=saveProductToShelf',
             type:'POST',
             data:d,
             dataType:'json',
