@@ -196,7 +196,7 @@
                     <div class="hint">Çıkış bekleyen siparişler için ayrılan stok.</div>
                 </div>
                 <div class="stock-card #usableStateClass#">
-                    <div class="label">Kullanılabilir Bakiye</div>
+                    <div class="label">Kalan Stok</div>
                     <div class="value">#kullanilabilirBakiyeFormatted#</div>
                     <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
                 </div>
@@ -213,9 +213,9 @@
                 </div>
 
                 <div class="stock-card #formul1Class#">
-                    <div class="label">Rezerv Sonrası Depo</div>
+                    <div class="label">Beklenen Sipariş</div>
                     <div class="value">#formul1Formatted#</div>
-                    <div class="hint">Depo bakiyesinden verilen rezerv çıkarıldığında kalan miktar.</div>
+                    <div class="hint"></div>
                 </div>
 <!---
                 <div class="stock-card #formul2Class#">
