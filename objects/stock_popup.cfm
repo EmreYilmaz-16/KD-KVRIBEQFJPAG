@@ -225,5 +225,7 @@
                 </div>---->
             </div>
         </div>
+        <button onclick="closeBoxDraggable('#attributes.modal_id#')">Kapat</button>
     </cfoutput>
+    
 </cf_box>
