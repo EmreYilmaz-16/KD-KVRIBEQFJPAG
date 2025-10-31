@@ -1,33 +1,13 @@
 ﻿<cfparam name="attributes.isSubmit" default="0">
-<cfset attributes.depo_kodu="2-1">
+<cfparam name="attributes.depo_kodu" default="2-1">
 
-
-    <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" >
-    <div class="form-control">
-    <cfquery name="getDepo" datasource="#dsn#">
-        SELECT CAST(D.DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar)DEPO_KODU,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO FROM w3Qa.DEPARTMENT AS D INNER JOIN w3Qa.STOCKS_LOCATION AS SL
-ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
-    </cfquery>
-    
-    <select name="depo_kodu" id="depo_kodu" class="input input-bordered w-full max-w-xs">
-        <option value="">Depo Seçiniz</option>
-        <cfloop query="getDepo">
-           <cfoutput> <option <cfif attributes.depo_kodu eq DEPO_KODU> selected="selected" </cfif> value="#DEPO_KODU#">#DEPO#</option></cfoutput>
-           
-        </cfloop>
-
-    </select>
-</div>
-    <div class="form-control mt-4">
-        <button type="submit" class="btn btn-primary">Sayımları Getir</button>
-    </div>
-  
-</cfform>
-
-
-
-
-    
+<cfquery name="getDepo" datasource="#dsn#">
+    SELECT 
+        CAST(D.DEPARTMENT_ID AS varchar) + '-' + CAST(LOCATION_ID AS varchar) AS DEPO_KODU,
+        D.DEPARTMENT_HEAD + '-' + SL.COMMENT AS DEPO
+    FROM w3Qa.DEPARTMENT AS D
+    INNER JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.DEPARTMENT_ID = D.DEPARTMENT_ID
+</cfquery>
 
     
 <cftry>
@@ -280,6 +260,62 @@ a:link {
                 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
             }
 
+            .filter-card {
+                background: var(--surface);
+                border-radius: 14px;
+                padding: 16px;
+                box-shadow: var(--shadow);
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .filter-card label {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: var(--text-muted);
+            }
+
+            .filter-select {
+                width: 100%;
+                padding: 12px 14px;
+                border-radius: 10px;
+                border: 1px solid rgba(148, 163, 184, 0.45);
+                font-size: 0.95rem;
+                background: #f8fafc;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .filter-select:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+            }
+
+            .filter-actions {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .filter-actions .primary-button {
+                margin-bottom: 0;
+            }
+
+            @media (max-width: 540px) {
+                .filter-card {
+                    padding: 14px;
+                }
+
+                .filter-actions {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .filter-actions .primary-button {
+                    width: 100%;
+                }
+            }
+
             .record-list {
                 margin: 0;
                 padding: 0;
@@ -371,6 +407,8 @@ a:link {
                 justify-content: center;
                 gap: 6px;
                 text-decoration: none;
+                border: none;
+                cursor: pointer;
                 background: linear-gradient(135deg, var(--primary), var(--primary-dark));
                 color: white;
                 padding: 10px 14px;
@@ -615,6 +653,22 @@ a:link {
                 </li>
             </ul>
         </header>
+
+        <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+            <div class="filter-card">
+                <label for="depo_kodu">Depo Seçiniz</label>
+                <select name="depo_kodu" id="depo_kodu" class="filter-select">
+                    <option value="">Depo seçiniz</option>
+                    <cfloop query="getDepo">
+                        <option value="#encodeForHtmlAttribute(DEPO_KODU)#" <cfif attributes.depo_kodu eq DEPO_KODU>selected="selected"</cfif>>#encodeForHtml(DEPO)#</option>
+                    </cfloop>
+                </select>
+                <input type="hidden" name="isSubmit" value="1">
+                <div class="filter-actions">
+                    <button type="submit" class="primary-button">Sayımları Getir</button>
+                </div>
+            </div>
+        </cfform>
 
         <cfif isDefined("errorMessage")>
             <div class="message">
