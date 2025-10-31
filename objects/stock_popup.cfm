@@ -171,13 +171,13 @@
 
                 <div class="stock-card reserve-out">
                     <div class="label">Alınan Sipariş Rezervi</div>
-                    <div class="value">#verilenRezervFormatted#</div>
+                    <div class="value">#alinanRezervFormatted#</div>
                     <div class="hint">Çıkış bekleyen siparişler için ayrılan stok.</div>
                 </div>
 
                 <div class="stock-card reserve-in">
                     <div class="label">Verilen Sipariş Rezervi</div>
-                    <div class="value">#alinanRezervFormatted#</div>
+                    <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
                 </div>
 
