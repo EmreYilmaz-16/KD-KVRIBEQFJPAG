@@ -57,7 +57,7 @@
         select P.PRODUCT_CODE_2,P.BRAND_ID from w3Qa_product.STOCKS_BARCODES AS SB
 LEFT JOIN w3Qa_product.STOCKS AS S ON SB.STOCK_ID=S.STOCK_ID
 LEFT JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
-WHERE SB.BARCODE='#evaluate("#attributes.oem_no[i]#")#'
+WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
     </cfquery>
         <cfif ishvoem.recordCount gt 0>
             <cfset arrayAppend(oemSatirHataArr,"#attributes.oem_no[i]# kodlu OEM No zaten sistemde kayıtlıdır. Ürün Kodu: #ishvoem.PRODUCT_CODE_2[1]#")>
