@@ -869,7 +869,7 @@ ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
     <div class="form-control mt-4">
         <button type="submit" class="btn btn-primary">Getir</button>
     </div>
-    
+<input type="hidden" name="isSubmit" value="1">    
 </cfform>
 </cfif>
 </cf_box>
