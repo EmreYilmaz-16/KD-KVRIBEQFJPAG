@@ -63,6 +63,7 @@ for(var i=0;i<parsers.length;i++){
 var sql=`SELECT * FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`
 console.log(sql)
 var qResult=wrk_query(sql,"dsn3")
+console.log(qResult)
 var stockId=qResult.STOCK_ID[0];
 var productId=qResult.STOCK_ID[0];
 var main_stock_id=stockId;
