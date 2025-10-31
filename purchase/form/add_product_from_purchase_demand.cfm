@@ -41,7 +41,7 @@
     SELECT TAX_ID, TAX FROM SETUP_TAX ORDER BY TAX
 </cfquery>
 <cfif isDefined("attributes.is_submit") and attributes.is_submit eq 1>
-    <cfdump var="#attributes#">
+   
     <cfset attributes.product_name = attributes.product_name>
     <cfif isDefined("attributes.alternatif")>
     <cfset attributes.alternatif = attributes.alternatif>
@@ -50,13 +50,33 @@
 </cfif>
     <cfset attributes.oem_no = []>
     <cfset oem_satir = attributes.oem_satir>
-
+<cfset oemSatirHataArr=[]
     <cfloop from="1" to="#oem_satir#" index="i">
         <cfset arrayAppend(attributes.oem_no, attributes["oem_" & i])>
+    <cfquery name="ishvoem" datasource="#dsn1#">
+        select P.PRODUCT_CODE_2,P.BRAND_ID from w3Qa_product.STOCKS_BARCODES AS SB
+LEFT JOIN w3Qa_product.STOCKS AS S ON SB.STOCK_ID=S.STOCK_ID
+LEFT JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
+WHERE SB.BARCODE='#evaluate("#attributes.oem_no[i]#")#'
+    </cfquery>
+        <cfif ishvoem.recordCount gt 0>
+            <cfset arrayAppend(oemSatirHataArr,"#attributes.oem_no[i]# kodlu OEM No zaten sistemde kayıtlıdır. Ürün Kodu: #ishvoem.PRODUCT_CODE_2[1]#")>
+        </cfif>
     </cfloop>
+    <cfif arrayLen(oemSatirHataArr) gt 0>
+        <div class="alert alert-danger" role="alert">
+            <cfoutput>
+                <ul>
+                <cfloop index="hataMesaj" array="#oemSatirHataArr#">
+                    <li>#hataMesaj#</li>
+                </cfloop>
+                </ul>
+            </cfoutput>
+        </div>
+        <cfabort>
+    </cfif>
 
-<cfdump var="#attributes#">
-<cfabort>
+
     <cfinclude template="../query/add_product_from_purchase_result.cfm">
  
     
