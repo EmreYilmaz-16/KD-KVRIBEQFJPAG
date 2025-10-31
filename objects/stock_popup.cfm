@@ -20,10 +20,29 @@
     ) AS T
     WHERE ISNULL(OZEL_DURUM, 0) <> 1
 </cfquery>
+<cfquery name="getRezerv1" datasource="#dsn3#">
+    SELECT SUM(VERILEN_SIPARIS_REZERVI) AS COLUMN1, SUM(ALINAN_SIPARIS_REZERVI) AS COLUMN2
+    FROM (
+        SELECT
+            RESERVE_STOCK_IN - STOCK_IN AS VERILEN_SIPARIS_REZERVI,
+            RESERVE_STOCK_OUT - STOCK_OUT AS ALINAN_SIPARIS_REZERVI,
+            (
+                SELECT SPECIAL_DEFINITION_PBS
+                FROM ORDERS
+                WHERE ORDER_ID = GOR.ORDER_ID
+            ) AS OZEL_DURUM
+        FROM GET_ORDER_ROW_RESERVED_ALL GOR
+        WHERE STOCK_ID = #attributes.sid#
+        AND (RESERVE_STOCK_IN - STOCK_IN) >= 0
+        AND (RESERVE_STOCK_OUT - STOCK_OUT) >= 0
+    ) AS T
+    WHERE ISNULL(OZEL_DURUM, 0) = 1
+</cfquery>
 
 <cfset depoBakiye = Val(getDepoBakiye.BAKIYE)>
 <cfset verilenRezerv = Val(getRezerv.COLUMN1)>
 <cfset alinanRezerv = Val(getRezerv.COLUMN2)>
+<cfset ozel_siparis=Val(getRezerv1.COLUMN2)>
 <cfset kullanilabilirBakiye = depoBakiye - alinanRezerv>
 <cfif kullanilabilirBakiye GTE 0>
     <cfset usableStateClass = "positive">
@@ -45,12 +64,14 @@
     <cfset formul2Class = "negative">
 </cfif>
 
+
 <cfset depoBakiyeFormatted = tlformat(depoBakiye)>
 <cfset verilenRezervFormatted = tlformat(verilenRezerv)>
 <cfset alinanRezervFormatted = tlformat(alinanRezerv)>
 <cfset kullanilabilirBakiyeFormatted = tlformat(kullanilabilirBakiye)>
 <cfset formul1Formatted = tlformat(formul_1)>
 <cfset formul2Formatted = tlformat(formul_2)>
+<cfset ozel_siparisFormatted = tlformat(ozel_siparis)>
 
 
 <cf_box title="Stok Depo Bilgileri" closable="1" draggable="1">
@@ -179,13 +200,17 @@
                     <div class="value">#kullanilabilirBakiyeFormatted#</div>
                     <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
                 </div>
+
                 <div class="stock-card reserve-in">
                     <div class="label">Verilen Sipariş Rezervi</div>
                     <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
                 </div>
-
-                
+                <div class="stock-card ozel-siparis">
+                    <div class="label">Özel Sipariş Rezervi</div>
+                    <div class="value">#ozel_siparisFormatted#</div>
+                    <div class="hint">Özel siparişler için ayrılan stok.</div>
+                </div>
 
                 <div class="stock-card #formul1Class#">
                     <div class="label">Rezerv Sonrası Depo</div>
