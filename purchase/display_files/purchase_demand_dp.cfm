@@ -13,6 +13,7 @@ txt.innerText="Belge Para Biriminde Değişikllik Yaptıktan Sonra Fiyat Karşı
 txt.setAttribute("style","color:red;font-weight:bold;margin-left:10px")
 document.getElementsByClassName("totalBox")[0].appendChild(txt)
 SanallariIsaretle();
+ButonYaz();
 
 // Sepet tablosundaki tüm <tr> satırlarını gez
     $("#tblBasket tbody").children().each(function(index, row) {
