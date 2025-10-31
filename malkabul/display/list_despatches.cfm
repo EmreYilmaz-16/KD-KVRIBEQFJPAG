@@ -65,8 +65,8 @@
         ) AS G
                ON G.SHIP_ID = S.SHIP_ID
         WHERE S.PURCHASE_SALES = 0
-          AND S.DEPARTMENT_IN  = 2
-          AND S.LOCATION_IN    = 1
+          AND S.DEPARTMENT_IN  = 13
+          AND S.LOCATION_IN    = 5
         <cfif Len(searchTerm)>
           AND (
                 S.SHIP_NUMBER LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_varchar">

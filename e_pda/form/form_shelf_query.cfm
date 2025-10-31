@@ -156,6 +156,26 @@ function checkRaf(input,event) {
             stock_id:main_stock_id
         };
         console.log('Gönderilen Veri:',d);
+        $.ajax({
+            url:'/index.cfm?fuseaction=kd.e_pda.form.form_shelf_add_ajax',
+            type:'POST',
+            data:d,
+            dataType:'json',
+            success:function(response){
+                console.log('Sunucudan Gelen Yanıt:',response);
+                if(response.success){
+                    alert('Raf başarıyla eklendi!');
+                    // Raf eklendikten sonra gerekli işlemler yapılabilir
+                }else{
+                    alert('Raf eklenirken bir hata oluştu: '+response.message);
+                }
+            },
+            error:function(xhr,status,error){
+                console.error('AJAX Hatası:',status,error);
+                alert('Raf eklenirken bir AJAX hatası oluştu.');
+            }
+        });
+        
         
    }else{
        console.log('Raf Kodu Bulunamadı:',rafCode);

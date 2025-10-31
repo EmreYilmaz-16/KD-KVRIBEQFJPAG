@@ -51,7 +51,7 @@
 <cfquery name="getPaperData" datasource="#dsn2#">
   SELECT 
     ( select SHIP_NUMBER,SHIP_TYPE,DEPARTMENT_IN,LOCATION_IN,COMPANY_ID,PARTNER_ID,SHIP_ID 
-        from w3Qa_2025_1.SHIP WHERE SHIP_ID=#attributes.shipId# FOR JSON PATH) 
+        from SHIP WHERE SHIP_ID=#attributes.shipId# FOR JSON PATH) 
         AS jsonData
 </cfquery>
 
