@@ -1,4 +1,10 @@
-﻿<cftry>
+﻿<cfparam name="isSubmit" default="0">
+<cf_box title="Sayım Kayıtları">
+
+    <cfif attributes.isSubmit eq 1>
+
+    
+<cftry>
     <cfquery name="getSayimList" datasource="w3Qa_1">
         SELECT 
             s.SAYIM_ID,
@@ -17,6 +23,9 @@
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
             s.LOCATION_ID = sl.LOCATION_ID
         )
+        where 1=1
+        AND s.DEPARTMENT_ID = #listGetAt(attributes.depo_kodu,1,"-")#
+        AND s.LOCATION_ID = #listGetAt(attributes.depo_kodu,2,"-")#
         ORDER BY s.RECORD_DATE DESC, s.SAYIM_ID DESC
     </cfquery>
     <cfcatch>
@@ -841,3 +850,18 @@ a:link {
     </script>
 
 </cfoutput>
+<cfelse>
+    <div class="form-control">
+    <cfquery name="getDepo" datasource="#dsn#">
+        SELECT CAST(D.DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar)DEPO_KODU,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO FROM w3Qa.DEPARTMENT AS D INNER JOIN w3Qa.STOCKS_LOCATION AS SL
+ON SL.DEPARTMENT_ID=D.DEPARTMENT_ID
+    </cfquery>
+    <select name="depo_kodu" id="depo_kodu" class="input input-bordered w-full max-w-xs">
+        <option value="">Depo Seçiniz</option>
+        <cfloop query="getDepo">
+           <cfoutput> <option value="#DEPO_KODU#">#DEPO#</option></cfoutput>
+        </cfloop>
+    </select>
+</div>
+</cfif>
+</cf_box>
