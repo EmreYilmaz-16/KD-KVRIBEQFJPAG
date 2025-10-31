@@ -161,7 +161,7 @@
 <div class="shelf-query-wrapper">
     <div class="shelf-query-card">
         <div class="shelf-query-header">
-            <h2>Raf Sorgulama</h2>
+            <h2>Raf Tanımlama</h2>
             <p>Ürün barkodunu okutarak raf yerleşimini hızlıca görüntüleyin.</p>
         </div>
         <div class="shelf-query-body">
