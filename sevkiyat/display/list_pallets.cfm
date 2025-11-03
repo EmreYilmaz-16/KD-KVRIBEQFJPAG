@@ -340,10 +340,10 @@
 									<td>
 										<div class="company-cell">
 											<span class="company-pill">#companyDisplay#</span>
-											<cfif Val(CONSUMER_ID) GT 0>
+											<cfif isdefined("CONSUMER_ID") AND Val(CONSUMER_ID) GT 0>
 												<div class="company-meta"><strong>Consumer ID:</strong> #HTMLEditFormat(CONSUMER_ID)#</div>
 											</cfif>
-											<cfif Val(COMPANY_ID) GT 0>
+											<cfif isdefined("COMPANY_ID") AND Val(COMPANY_ID) GT 0>
 												<div class="company-meta"><strong>Company ID:</strong> #HTMLEditFormat(COMPANY_ID)#</div>
 											</cfif>
 										</div>
