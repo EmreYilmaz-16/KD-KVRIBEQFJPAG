@@ -39,6 +39,7 @@ function generatePalletCode() {
 <cfif StructKeyExists(form, "submitNewPallet")>
 	<cfset palletCode = Trim(form.pallet_code)>
 	<cfset palletType = Trim(form.pallet_type)>
+	<cfset company_id = form.company_id>
 	<cfset selectedTypeExists = false>
 
 	<cfif NOT Len(palletCode)>
@@ -80,13 +81,14 @@ function generatePalletCode() {
 			<cfelse>
 				<cfquery name="insertNewPallet" datasource="#dsn3#">
 					INSERT INTO w3Qa_1.SHIPPING_PALLETS_PBS
-						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP)
+						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID)
 					VALUES
 						(
 							<cfqueryparam value="#palletCode#" cfsqltype="cf_sql_nvarchar" maxlength="50">,
 							<cfqueryparam value="#Val(palletType)#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#recordDate#" cfsqltype="cf_sql_timestamp">,
-							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">
+							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#company_id#" cfsqltype="cf_sql_integer">
 						)
 				</cfquery>
 
