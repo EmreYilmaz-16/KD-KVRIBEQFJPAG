@@ -17,14 +17,23 @@
 		P.PALLET_TYPE,
 		P.RECORD_DATE,
 		P.RECORD_EMP,
-		T.PALET_TYPE AS PALLET_TYPE_NAME
+		T.PALET_TYPE AS PALLET_TYPE_NAME,
+		P.COMPANY_ID,
+		P.CONSUMER_ID,
+		C.NICKNAME AS COMPANY_NICKNAME,
+		E.EMPLOYEE_NAME,
+		E.EMPLOYEE_SURNAME
 	FROM w3Qa_1.SHIPPING_PALLETS_PBS P
 	LEFT JOIN w3Qa.PALET_TYPES_PBS T ON T.ID = P.PALLET_TYPE
+	LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID = P.COMPANY_ID
+	LEFT JOIN w3Qa.EMPLOYEES AS E ON E.EMPLOYEE_ID = P.RECORD_EMP
 	WHERE 1 = 1
 	<cfif Len(searchTerm)>
 		AND (
 			P.PALLET_CODE LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="50">
 			OR T.PALET_TYPE LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="50">
+			OR C.NICKNAME LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="100">
+			OR (COALESCE(E.EMPLOYEE_NAME, '') + ' ' + COALESCE(E.EMPLOYEE_SURNAME, '')) LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="100">
 		)
 	</cfif>
 	<cfif Len(selectedType) AND IsNumeric(selectedType)>
@@ -131,7 +140,7 @@
 		table.pallets-table {
 			width: 100%;
 			border-collapse: collapse;
-			min-width: 540px;
+			min-width: 680px;
 		}
 
 		table.pallets-table thead {
@@ -187,6 +196,40 @@
 			color: #1f2937;
 		}
 
+		.company-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			background: rgba(14, 116, 144, 0.12);
+			color: #0e7490;
+			border-radius: 999px;
+			padding: 6px 12px;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.company-pill i {
+			font-style: normal;
+			font-weight: 700;
+		}
+
+		.company-cell {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			font-size: 13px;
+			color: #475569;
+		}
+
+		.company-meta {
+			font-size: 12px;
+			color: #64748b;
+		}
+
+		.company-meta strong {
+			color: #1f2937;
+		}
+
 		.pallet-empty {
 			padding: 40px 0;
 			text-align: center;
@@ -228,7 +271,7 @@
 							type="text"
 							name="search"
 							value="#HTMLEditFormat(searchTerm)#"
-							placeholder="Kod veya tip ara"
+							placeholder="Kod, tip veya cari ara"
 						>
 						<select name="type">
 							<option value="">Tum tipler</option>
@@ -260,11 +303,33 @@
 							<tr>
 								<th>Kod</th>
 								<th>Tip</th>
+								<th>Cari Hesap</th>
 								<th>Kayit Bilgileri</th>
 							</tr>
 						</thead>
 						<tbody>
 							<cfloop query="getPallets">
+								<cfset companyNameRaw = Trim(COMPANY_NICKNAME)>
+								<cfif NOT Len(companyNameRaw) AND Val(COMPANY_ID) GT 0>
+									<cfset companyNameRaw = "ID: " & COMPANY_ID>
+								<cfelseif NOT Len(companyNameRaw)>
+									<cfset companyNameRaw = "Atanmamis">
+								</cfif>
+
+								<cfset companyDisplay = HTMLEditFormat(companyNameRaw)>
+
+								<cfset employeeFullName = Trim(EMPLOYEE_NAME & " " & EMPLOYEE_SURNAME)>
+								<cfif Len(employeeFullName)>
+									<cfset employeeDisplay = HTMLEditFormat(employeeFullName)>
+									<cfif Val(RECORD_EMP) GT 0>
+										<cfset employeeDisplay = employeeDisplay & " (" & HTMLEditFormat(RECORD_EMP) & ")">
+									</cfif>
+								<cfelseif Val(RECORD_EMP) GT 0>
+									<cfset employeeDisplay = HTMLEditFormat(RECORD_EMP)>
+								<cfelse>
+									<cfset employeeDisplay = "Atanmamis">
+								</cfif>
+
 								<tr>
 									<td class="pallet-code">#HTMLEditFormat(PALLET_CODE)#</td>
 									<td>
@@ -273,9 +338,26 @@
 										</span>
 									</td>
 									<td>
+										<div class="company-cell">
+											<span class="company-pill">#companyDisplay#</span>
+											<cfif Val(CONSUMER_ID) GT 0>
+												<div class="company-meta"><strong>Consumer ID:</strong> #HTMLEditFormat(CONSUMER_ID)#</div>
+											</cfif>
+											<cfif Val(COMPANY_ID) GT 0>
+												<div class="company-meta"><strong>Company ID:</strong> #HTMLEditFormat(COMPANY_ID)#</div>
+											</cfif>
+										</div>
+									</td>
+									<td>
 										<div class="pallet-meta">
-											<div><strong>Tarih:</strong> #DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:nn")#</div>
-											<div><strong>Kayit Eden:</strong> #RECORD_EMP#</div>
+											<div><strong>Tarih:</strong>
+												<cfif IsDate(RECORD_DATE)>
+													#DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:nn")#
+												<cfelse>
+													Belirtilmedi
+												</cfif>
+											</div>
+											<div><strong>Kayit Eden:</strong> #employeeDisplay#</div>
 										</div>
 									</td>
 								</tr>
