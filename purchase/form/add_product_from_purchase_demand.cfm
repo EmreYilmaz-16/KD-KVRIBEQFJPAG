@@ -3,6 +3,8 @@
 <cfparam name="tax_purchase" default="20">
 <cfparam name="attributes.product_code2" default="">
 <cfparam name="tax_s" default="20">
+<cfparam name="attributes.ignore_oem_duplicate" default="0">
+<cfparam name="attributes.fuseaction" default="">
 <style>
     .list-group {
         padding: 0;
@@ -63,7 +65,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
             <cfset arrayAppend(oemSatirHataArr,"#attributes.oem_no[i]# kodlu OEM No zaten sistemde kayıtlıdır. Ürün Kodu: #ishvoem.PRODUCT_CODE_2[1]#")>
         </cfif>
     </cfloop>
-    <cfif arrayLen(oemSatirHataArr) gt 0>
+    <cfif arrayLen(oemSatirHataArr) gt 0 AND NOT val(attributes.ignore_oem_duplicate)>
         <div class="alert alert-danger" role="alert">
             <cfoutput>
                 <ul>
@@ -71,7 +73,29 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                     <li>#hataMesaj#</li>
                 </cfloop>
                 </ul>
-                <button class="btn btn-primary" onclick="history.back();">Geri Dön</button>
+                <div class="d-flex gap-2 flex-wrap">
+                    <form method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+                        <input type="hidden" name="ignore_oem_duplicate" value="1">
+                        <input type="hidden" name="is_submit" value="1">
+                        <cfset continueFields = "wrkRowId,product_name,eta_kodu,brand_id,brand_name,brand_code,short_code_id,short_code_name,short_code,unit_id,acc_code_cat,tax_purchase,tax,alternatif,OFFER_ID,product_code2">
+                        <cfloop list="#continueFields#" index="continueField">
+                            <cfif structKeyExists(attributes, continueField)>
+                                <input type="hidden" name="#continueField#" value="#xmlFormat(attributes[continueField])#">
+                            </cfif>
+                        </cfloop>
+                        <input type="hidden" name="oem_satir" value="#oem_satir#">
+                        <cfloop from="1" to="#oem_satir#" index="oemIndex">
+                            <cfset oemKey = "oem_" & oemIndex>
+                            <cfif structKeyExists(attributes, oemKey)>
+                                <input type="hidden" name="#oemKey#" value="#xmlFormat(attributes[oemKey])#">
+                            <cfelse>
+                                <input type="hidden" name="#oemKey#" value="">
+                            </cfif>
+                        </cfloop>
+                        <button type="submit" class="btn btn-success">Devam Et</button>
+                    </form>
+                    <button class="btn btn-primary" type="button" onclick="history.back();">Geri Dön</button>
+                </div>
             </cfoutput>
         </div>
         <cfabort>
