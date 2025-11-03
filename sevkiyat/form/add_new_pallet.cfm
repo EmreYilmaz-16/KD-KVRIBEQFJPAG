@@ -164,12 +164,17 @@ function generatePalletCode() {
 		.pallet-form-grid {
 			display: grid;
 			gap: 18px;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 		}
 
 		.pallet-field {
 			display: flex;
 			flex-direction: column;
 			gap: 6px;
+		}
+
+		.pallet-field-full {
+			grid-column: 1 / -1;
 		}
 
 		.pallet-field label {
@@ -204,6 +209,46 @@ function generatePalletCode() {
 		.pallet-hint {
 			font-size: 12px;
 			color: #64748b;
+		}
+
+		.pallet-input-group {
+			display: flex;
+			align-items: stretch;
+			border: 1px solid #cbd5f5;
+			border-radius: 10px;
+			overflow: hidden;
+			background: #ffffff;
+		}
+
+		.pallet-input-group .pallet-input {
+			border: none;
+			border-radius: 0;
+			flex: 1 1 auto;
+			padding: 12px 14px;
+		}
+
+		.pallet-input-group .pallet-input:focus {
+			box-shadow: none;
+		}
+
+		.pallet-input-group button {
+			border: none;
+			background: #1d4ed8;
+			color: #ffffff;
+			padding: 0 16px;
+			font-size: 13px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: background 0.2s ease;
+		}
+
+		.pallet-input-group button:hover {
+			background: #1e40af;
+		}
+
+		.pallet-autocomplete {
+			position: relative;
+			z-index: 10;
 		}
 
 		.pallet-actions {
@@ -285,7 +330,7 @@ function generatePalletCode() {
 				</div>
 			</cfif>
 
-			<form method="post">
+			<form method="post" name="order_form" id="order_form">
 				<div class="pallet-form-grid">
 					<div class="pallet-field">
 						<label for="pallet_code">Pallet Kodu</label>
@@ -316,6 +361,32 @@ function generatePalletCode() {
 							</cfloop>
 						</select>
 						<span class="pallet-hint">Pallet tipi listesi w3Qa.PALET_TYPES_PBS tablosundan yuklenir.</span>
+					</div>
+
+					<div class="pallet-field pallet-field-full">
+						<label for="member_name">Cari Hesap</label>
+						<input type="hidden" name="consumer_id" id="consumer_id" value="">
+						<input type="hidden" name="company_id" id="company_id" value="">
+						<input type="hidden" name="member_type" id="member_type" value="">
+						<div class="pallet-input-group">
+							<input
+								type="text"
+								name="member_name"
+								id="member_name"
+								class="pallet-input"
+								placeholder="Cari hesap ara"
+								autocomplete="off"
+								onfocus="AutoComplete_Create('member_name','MEMBER_NAME,MEMBER_PARTNER_NAME,MEMBER_CODE','MEMBER_NAME,MEMBER_PARTNER_NAME,MEMBER_CODE','get_member_autocomplete','\'1,2\'','CONSUMER_ID,COMPANY_ID,MEMBER_TYPE','consumer_id,company_id,member_type','','3','250');"
+							>
+							<button
+								type="button"
+								onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_all_pars&field_consumer=order_form.consumer_id&field_comp_id=order_form.company_id&field_member_name=order_form.member_name&field_type=order_form.member_type&select_list=7,8&keyword='+encodeURIComponent(document.order_form.member_name.value));"
+							>
+								Sec
+							</button>
+						</div>
+						<div id="member_name_div_2" name="member_name_div_2" class="pallet-autocomplete completeListbox" style="display:none;"></div>
+						<span class="pallet-hint">Cari hesap secmek icin yazmaya baslayin veya Sec butonunu kullanin.</span>
 					</div>
 				</div>
 
