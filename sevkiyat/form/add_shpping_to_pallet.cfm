@@ -27,7 +27,7 @@ function resolveCompanyName(companyId) {
     return Len(Trim(companyName)) ? companyName : "Belirtilmedi";
 }
 </cfscript>
-
+<CFSET successMessage="">
 <cfif attributes.is_submit EQ 1>
     <cfif StructKeyExists(form, "IID") AND Len(form.IID)>
         <cfloop list="#form.IID#" index="sid">
