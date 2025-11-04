@@ -52,7 +52,7 @@ AND COMPANY_ID=#getPaletBilgi.COMPANY_ID#
         <input type="checkbox" name="IID" value="#SHIP_RESULT_ID#" <cfif IN_PALLET GT 0> checked disabled </cfif>>
     </td>
     </tr>
-    
+</cfoutput>
 </table>
 
 <input type="hidden" name="pallet_id" value="#attributes.pallet_id#">
