@@ -56,21 +56,25 @@ for(var i=0;i<parsers.length;i++){
     }
     function addSerial(SerialObject) {
         var tbody = document.getElementById("tablo1");
-        var ix =productArray.findIndex(item => item.productCode === SerialObject.productCode);
-
+        var ix =productArray.findIndex(item => item.product_code_2 === SerialObject.product_code_2);
+ 
         if (ix !== -1) {
-            productArray[ix].quantity += SerialObject.quantity;
-            document.getElementById("quantity_" + SerialObject.productCode).innerText = productArray[ix].quantity;
+            productArray[ix].quantity += 1;
+            document.getElementById("quantity_" + SerialObject.product_code_2).innerText = productArray[ix].quantity;
         } else {
-            productArray.push(SerialObject);
+            productArray.push({
+                product_code_2: SerialObject.product_code_2,
+                serial: SerialObject.serial_no,                
+                quantity: 1
+            });
             var row = document.createElement("tr");
 
             var cellProduct = document.createElement("td");
-            cellProduct.innerText = SerialObject.productName + " (" + SerialObject.productCode + ")";
+            cellProduct.innerText = SerialObject.product_code_2;
             row.appendChild(cellProduct);
 
             var cellQuantity = document.createElement("td");
-            cellQuantity.id = "quantity_" + SerialObject.productCode;
+            cellQuantity.id = "quantity_" + SerialObject.product_code_2;
             cellQuantity.innerText = SerialObject.quantity;
             row.appendChild(cellQuantity);
 
@@ -78,7 +82,7 @@ for(var i=0;i<parsers.length;i++){
             var removeButton = document.createElement("button");
             removeButton.innerText = "Kaldır";
             removeButton.onclick = function() {
-                removeSerial(SerialObject.productCode);
+                removeSerial(SerialObject.product_code_2);
             };
             cellAction.appendChild(removeButton);
             row.appendChild(cellAction);
