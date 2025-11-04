@@ -1,3 +1,4 @@
+<cfparam  name="attributes.is_submit" default="0">
 
 <cfquery name="getPaletBilgi" datasource="#dsn3#">
     SELECT * FROM w3Qa_1.SHIPPING_PALLETS_PBS WHERE ID=#attributes.pallet_id#
