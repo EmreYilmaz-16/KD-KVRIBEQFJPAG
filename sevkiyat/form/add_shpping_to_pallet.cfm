@@ -351,8 +351,8 @@ function resolveCompanyName(companyId) {
                                     <td>#formatTl(HAZ_MIK)#</td>
                                     <td>#formatTl(SVK_MIK)#</td>
                                     <td>
-                                        <span class="badge-status #IIf(isLocked, "locked", "free")#">
-                                            #IIf(isLocked, "Palete Eklenmiş", "Müsait")#
+                                        <span class="badge-status <cfif isLocked>locked <cfelse>free</cfif>">
+                                            <cfif isLocked>"Palete Eklenmiş"<cfelse>"Müsait"</cfif>
                                         </span>
                                     </td>
                                 </tr>
