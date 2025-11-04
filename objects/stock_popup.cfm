@@ -2,6 +2,7 @@
     SELECT SUM(STOCK_IN - STOCK_OUT) AS BAKIYE FROM STOCKS_ROW WHERE STOCK_ID = #attributes.sid#
 </cfquery>
 
+
 <cfquery name="getRezerv" datasource="#dsn3#">
     SELECT SUM(VERILEN_SIPARIS_REZERVI) AS COLUMN1, SUM(ALINAN_SIPARIS_REZERVI) AS COLUMN2
     FROM (
@@ -232,7 +233,7 @@
                     <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
                 </div>
 
-                <div class="stock-card reserve-in">
+                <div class="stock-card reserve-in" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=#attributes.pid#&nosale_order_location=0')">
                     <div class="label">Verilen Sipariş Rezervi</div>
                     <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
@@ -249,6 +250,8 @@
                     <div class="hint"></div>
                 </div>
 <!---
+    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=1&pid=14841'); ALINAN REZERV
+    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=14841&nosale_order_location=0'); VERILEN REZERV
                 <div class="stock-card #formul2Class#">
                     <div class="label">Rezerv Net Değişim</div>
                     <div class="value">#formul2Formatted#</div>
