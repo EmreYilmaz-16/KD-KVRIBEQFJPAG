@@ -360,7 +360,7 @@
 										</div>
 									</td>
 									<td>
-										<a onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs'">Sevkiyat Ekle</a>
+										<a onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat Ekle</a>
 									</td>
 								</tr>
 							</cfloop>
