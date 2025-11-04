@@ -1,5 +1,5 @@
 <cfparam name="attributes.is_submit" default="0">
-
+<CFSET successMessage="">
 <cfscript>
 function formatTl(numericValue) {
     if (IsNumeric(numericValue)) {
@@ -27,7 +27,7 @@ function resolveCompanyName(companyId) {
     return Len(Trim(companyName)) ? companyName : "Belirtilmedi";
 }
 </cfscript>
-<CFSET successMessage="">
+
 <cfif attributes.is_submit EQ 1>
     <cfif StructKeyExists(form, "IID") AND Len(form.IID)>
         <cfloop list="#form.IID#" index="sid">
