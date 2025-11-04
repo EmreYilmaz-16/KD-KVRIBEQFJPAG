@@ -46,7 +46,7 @@ for(var i=0;i<parsers.length;i++){
             console.log(SerialObject);
                 if (SerialObject != null) {
                     var sn=SerialObject.serial_no;
-                    var ix=productArray.findIndex(item => item.serial === sn);
+                    var ix=productArray.findIndex(item => item.serial.includes(sn));
                     if(ix!==-1){
                         alert("Bu seri numarası zaten eklendi.");
                         field.value = "";
@@ -68,10 +68,11 @@ for(var i=0;i<parsers.length;i++){
         if (ix !== -1) {
             productArray[ix].quantity += 1;
             document.getElementById("quantity_" + SerialObject.product_code_2).innerText = productArray[ix].quantity;
+            productArray[ix].serial.push(SerialObject.serial_no);
         } else {
             productArray.push({
                 product_code_2: SerialObject.product_code_2,
-                serial: SerialObject.serial_no,                
+                serial: [SerialObject.serial_no],
                 quantity: 1
             });
             var row = document.createElement("tr");
