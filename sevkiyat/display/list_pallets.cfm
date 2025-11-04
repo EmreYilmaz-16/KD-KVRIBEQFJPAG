@@ -359,6 +359,9 @@
 											<div><strong>Kayit Eden:</strong> #employeeDisplay#</div>
 										</div>
 									</td>
+									<td>
+										<a onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs'">Sevkiyat Ekle</a>
+									</td>
 								</tr>
 							</cfloop>
 						</tbody>
