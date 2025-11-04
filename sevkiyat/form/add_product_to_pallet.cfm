@@ -93,6 +93,13 @@ for(var i=0;i<parsers.length;i++){
                 removeSerial(SerialObject.product_code_2);
             };
             cellAction.appendChild(removeButton);
+            var showSerialsButton = document.createElement("button");
+            showSerialsButton.innerText = "Seri Numaralarını Göster";
+            showSerialsButton.onclick = function() {
+                alert("Seri Numaraları: " + productArray[ix].serial.join(", "));
+            };
+            cellAction.appendChild(showSerialsButton);
+            
             row.appendChild(cellAction);
 
             tbody.appendChild(row);
