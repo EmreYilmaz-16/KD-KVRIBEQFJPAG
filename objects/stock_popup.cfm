@@ -1,4 +1,4 @@
-<cfquery name="getDepoBakiye" datasource="#dsn2#">
+﻿<cfquery name="getDepoBakiye" datasource="#dsn2#">
     SELECT SUM(STOCK_IN - STOCK_OUT) AS BAKIYE FROM STOCKS_ROW WHERE STOCK_ID = #attributes.sid#
 </cfquery>
 
