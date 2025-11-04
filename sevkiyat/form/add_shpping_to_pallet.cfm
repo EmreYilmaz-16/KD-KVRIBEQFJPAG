@@ -56,7 +56,7 @@ AND COMPANY_ID=#getPaletBilgi.COMPANY_ID#
 </cfoutput>
 </table>
 
-<input type="hidden" name="pallet_id" value="#attributes.pallet_id#">
+<input type="hidden" name="pallet_id" value="<cfoutput>#attributes.pallet_id#</cfoutput>">
 <input type="hidden" name="is_submit" value="1">
 <input type="submit" name="submit_add_to_pallet" value="Palete Ekle">
 
