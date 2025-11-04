@@ -104,7 +104,7 @@ function resolveCompanyName(companyId) {
     </cfif>
 </cfloop>
 
-<cfoutput>
+
 <cf_box title="Palete Sevkiyat Ekle">
     <style>
         .pallet-assign-wrap {
@@ -282,7 +282,7 @@ function resolveCompanyName(companyId) {
             }
         }
     </style>
-
+<cfoutput>
     <div class="pallet-assign-wrap">
         <div class="pallet-assign-header">
             <h2>Palet: #HTMLEditFormat(getPaletBilgi.PALLET_CODE)#</h2>
