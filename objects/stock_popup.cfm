@@ -2,7 +2,6 @@
     SELECT SUM(STOCK_IN - STOCK_OUT) AS BAKIYE FROM STOCKS_ROW WHERE STOCK_ID = #attributes.sid#
 </cfquery>
 
-
 <cfquery name="getRezerv" datasource="#dsn3#">
     SELECT SUM(VERILEN_SIPARIS_REZERVI) AS COLUMN1, SUM(ALINAN_SIPARIS_REZERVI) AS COLUMN2
     FROM (
@@ -95,6 +94,7 @@
                 justify-content: space-between;
                 margin-bottom: 18px;
                 gap: 12px;
+                flex-wrap: wrap;
             }
 
             .stock-summary-header h2 {
@@ -134,6 +134,55 @@
 
             .close-summary-button:active {
                 transform: translateY(0);
+            }
+
+            .stock-actions {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .stock-action-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                border-radius: 999px;
+                border: 1px solid rgba(15, 23, 42, 0.12);
+                background: rgba(15, 23, 42, 0.04);
+                padding: 8px 14px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #0f172a;
+                text-decoration: none;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            }
+
+            .stock-action-link:hover {
+                background: #0f172a;
+                color: #ffffff;
+                transform: translateY(-1px);
+                box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+            }
+
+            .stock-action-link .badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: rgba(15, 23, 42, 0.12);
+                color: currentColor;
+                font-size: 12px;
+                font-weight: 700;
+            }
+
+            .action-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
             }
 
             .stock-summary-grid {
@@ -210,9 +259,27 @@
                     <h2>Stok Durum Özeti</h2>
                     <span>#DateTimeFormat(Now(), "dd mmm yyyy HH:nn")#</span>
                 </div>
-                <button type="button" class="close-summary-button" onclick="closeBoxDraggable('#attributes.modal_id#')">
-                    X Kapat
-                </button>
+                <div class="stock-actions">
+                    <a href="javascript:void(0)" class="stock-action-link" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=1&pid=#attributes.pid#')">
+                        <span class="badge">A</span>
+                        Alınan Rezervler
+                    </a>
+                    <a href="javascript:void(0)" class="stock-action-link" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=#attributes.pid#&nosale_order_location=0')">
+                        <span class="badge">V</span>
+                        Verilen Rezervler
+                    </a>
+                    <a href="javascript:void(0)" class="stock-action-link" onclick="openBoxDraggable('index.cfm?fuseaction=stock.detail_stock_popup&pid=#attributes.pid#&stock_id=#attributes.sid#')">
+                        <span class="badge">H</span>
+                        Stok Hareketleri
+                    </a>
+                    <a href="javascript:void(0)" class="stock-action-link" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_product_stocks&pid=#attributes.pid#&sid=#attributes.sid#')">
+                        <span class="badge">D</span>
+                        Depolara Göre Stoklar
+                    </a>
+                    <button type="button" class="close-summary-button" onclick="closeBoxDraggable('#attributes.modal_id#')">
+                        X Kapat
+                    </button>
+                </div>
             </div>
 
             <div class="stock-summary-grid">
@@ -233,7 +300,7 @@
                     <div class="hint">Rezervler dikkate alındığında kalan stok.</div>
                 </div>
 
-                <div class="stock-card reserve-in" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=#attributes.pid#&nosale_order_location=0')">
+                <div class="stock-card reserve-in" >
                     <div class="label">Verilen Sipariş Rezervi</div>
                     <div class="value">#verilenRezervFormatted#</div>
                     <div class="hint">Giriş bekleyen siparişlerden gelecek stok.</div>
@@ -250,8 +317,10 @@
                     <div class="hint"></div>
                 </div>
 <!---
-    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=1&pid=14841'); ALINAN REZERV
-    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=14841&nosale_order_location=0'); VERILEN REZERV
+    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=1&pid=#attributes.pid#'); //ALINAN REZERV
+    openBoxDraggable('index.cfm?fuseaction=objects.popup_reserved_orders&taken=0&pid=#attributes.pid#&nosale_order_location=0'); //VERILEN REZERV
+    openBoxDraggable('index.cfm?fuseaction=stock.detail_stock_popup&pid=#attributes.pid#&stock_id=#attributes.sid#') //STOK HAREKETLERI
+    openBoxDraggable('index.cfm?fuseaction=objects.popup_product_stocks&pid=#attributes.pid#&sid=#attributes.sid#'); DEPOLARA GORE STOKLAR
                 <div class="stock-card #formul2Class#">
                     <div class="label">Rezerv Net Değişim</div>
                     <div class="value">#formul2Formatted#</div>
