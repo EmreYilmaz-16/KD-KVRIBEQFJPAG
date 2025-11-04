@@ -7,8 +7,25 @@
 <div class="form-group">
     <input type="text" name="barcode" id="barcode" onkeydown="checkKey(this,event)">
 </div>
+<cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+    <table>
+        <tr>
+            <th>
+                Ürün
+            </th>
+            <th>
+                Miktar
+            </th>
+            <th></th>
+        </tr>
+    <tbody id="tablo1">
+
+    </tbody>
+    </table>
+</cfform>
 
 <script>
+var productArray = [];
 var bm=null;
 $(document).ready(function() {
     $('#barcode').focus();
@@ -28,7 +45,7 @@ for(var i=0;i<parsers.length;i++){
                 var SerialObject = bm.parseWith(barcodeValue, parseInt(document.getElementById('BarcodeParser').value));
             console.log(SerialObject);
                 if (SerialObject != null) {
-                    window.opener.addShippingToPallet(SerialObject);
+                    addSerial(SerialObject);
                     window.close();
                 } else {
                     alert("Geçersiz barkod. Lütfen tekrar deneyin.");
@@ -36,5 +53,38 @@ for(var i=0;i<parsers.length;i++){
                 }
             }
         }
+    }
+    function addSerial(SerialObject) {
+        var tbody = document.getElementById("tablo1");
+        var ix =productArray.findIndex(item => item.productCode === SerialObject.productCode);
+
+        if (ix !== -1) {
+            productArray[ix].quantity += SerialObject.quantity;
+            document.getElementById("quantity_" + SerialObject.productCode).innerText = productArray[ix].quantity;
+        } else {
+            productArray.push(SerialObject);
+            var row = document.createElement("tr");
+
+            var cellProduct = document.createElement("td");
+            cellProduct.innerText = SerialObject.productName + " (" + SerialObject.productCode + ")";
+            row.appendChild(cellProduct);
+
+            var cellQuantity = document.createElement("td");
+            cellQuantity.id = "quantity_" + SerialObject.productCode;
+            cellQuantity.innerText = SerialObject.quantity;
+            row.appendChild(cellQuantity);
+
+            var cellAction = document.createElement("td");
+            var removeButton = document.createElement("button");
+            removeButton.innerText = "Kaldır";
+            removeButton.onclick = function() {
+                removeSerial(SerialObject.productCode);
+            };
+            cellAction.appendChild(removeButton);
+            row.appendChild(cellAction);
+
+            tbody.appendChild(row);
+        }
+        
     }
 </script>
