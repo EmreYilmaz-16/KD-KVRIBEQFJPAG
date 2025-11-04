@@ -104,16 +104,16 @@ function resolveCompanyName(companyId) {
     </cfif>
 </cfloop>
 
-
+<cfoutput>
 <cf_box title="Palete Sevkiyat Ekle">
     <style>
         .pallet-assign-wrap {
             font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-            color: #1f2933;
-            background: linear-gradient(135deg, #f8fafc, #eef2f7);
+            color: ##1f2933;
+            background: linear-gradient(135deg, ##f8fafc, ##eef2f7);
             border-radius: 16px;
             padding: 28px;
-            border: 1px solid #d8e2ef;
+            border: 1px solid ##d8e2ef;
             box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
         }
 
@@ -135,8 +135,8 @@ function resolveCompanyName(companyId) {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
+            background: ##ffffff;
+            border: 1px solid ##cbd5e1;
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 20px;
@@ -144,7 +144,7 @@ function resolveCompanyName(companyId) {
         }
 
         .pallet-meta strong {
-            color: #0f172a;
+            color: ##0f172a;
             font-weight: 600;
         }
 
@@ -157,15 +157,15 @@ function resolveCompanyName(companyId) {
         }
 
         .pallet-alert.success {
-            background: #dcfce7;
-            border: 1px solid #86efac;
-            color: #166534;
+            background: ##dcfce7;
+            border: 1px solid ##86efac;
+            color: ##166534;
         }
 
         .pallet-alert.error {
-            background: #fee2e2;
-            border: 1px solid #fca5a5;
-            color: #b91c1c;
+            background: ##fee2e2;
+            border: 1px solid ##fca5a5;
+            color: ##b91c1c;
         }
 
         .pallet-actions-bar {
@@ -190,8 +190,8 @@ function resolveCompanyName(companyId) {
         }
 
         .pallet-actions-bar .primary {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: #ffffff;
+            background: linear-gradient(135deg, ##22c55e, ##16a34a);
+            color: ##ffffff;
             box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
         }
 
@@ -201,9 +201,9 @@ function resolveCompanyName(companyId) {
         }
 
         .pallet-actions-bar .secondary {
-            background: #f1f5f9;
-            color: #475569;
-            border: 1px solid #cbd5e1;
+            background: ##f1f5f9;
+            color: ##475569;
+            border: 1px solid ##cbd5e1;
         }
 
         .pallet-actions-bar .secondary:hover {
@@ -212,10 +212,10 @@ function resolveCompanyName(companyId) {
         }
 
         .pallet-table-wrapper {
-            border: 1px solid #cbd5e1;
+            border: 1px solid ##cbd5e1;
             border-radius: 12px;
             overflow: hidden;
-            background: #ffffff;
+            background: ##ffffff;
         }
 
         table.pallet-table {
@@ -224,7 +224,7 @@ function resolveCompanyName(companyId) {
         }
 
         table.pallet-table thead {
-            background: #e2e8f0;
+            background: ##e2e8f0;
         }
 
         table.pallet-table th,
@@ -232,15 +232,15 @@ function resolveCompanyName(companyId) {
             padding: 14px 16px;
             text-align: left;
             font-size: 13px;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid ##e2e8f0;
         }
 
         table.pallet-table tbody tr:nth-child(even) {
-            background: #f8fafc;
+            background: ##f8fafc;
         }
 
         table.pallet-table tbody tr:hover {
-            background: #eef2ff;
+            background: ##eef2ff;
         }
 
         .badge-status {
@@ -255,18 +255,18 @@ function resolveCompanyName(companyId) {
 
         .badge-status.free {
             background: rgba(22, 163, 74, 0.1);
-            color: #15803d;
+            color: ##15803d;
         }
 
         .badge-status.locked {
             background: rgba(220, 38, 38, 0.1);
-            color: #b91c1c;
+            color: ##b91c1c;
         }
 
         .empty-state {
             padding: 36px;
             text-align: center;
-            color: #6b7280;
+            color: ##6b7280;
             font-size: 14px;
         }
 
@@ -282,7 +282,7 @@ function resolveCompanyName(companyId) {
             }
         }
     </style>
-<cfoutput>
+
     <div class="pallet-assign-wrap">
         <div class="pallet-assign-header">
             <h2>Palet: #HTMLEditFormat(getPaletBilgi.PALLET_CODE)#</h2>
