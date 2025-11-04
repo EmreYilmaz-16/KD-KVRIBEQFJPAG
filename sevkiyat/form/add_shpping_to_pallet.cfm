@@ -50,7 +50,7 @@ function resolveCompanyName(companyId) {
 </cfif>
 
 <cfquery name="getPaletBilgi" datasource="#dsn3#">
-    SELECT P.ID, P.PALLET_CODE, P.PALLET_TYPE, P.COMPANY_ID, P.CONSUMER_ID,
+    SELECT P.ID, P.PALLET_CODE, P.PALLET_TYPE, P.COMPANY_ID, 
            PT.PALET_TYPE, P.RECORD_DATE
     FROM w3Qa_1.SHIPPING_PALLETS_PBS P
     LEFT JOIN w3Qa.PALET_TYPES_PBS PT ON PT.ID = P.PALLET_TYPE
