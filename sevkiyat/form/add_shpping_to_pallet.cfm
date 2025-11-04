@@ -1,6 +1,7 @@
 <cfparam name="attributes.is_submit" default="0">
 <CFSET successMessage="">
 <CFSET ERRORMESSAGE ="">
+<CFSET locked  ="">
 <cfscript>
 function formatTl(numericValue) {
     if (IsNumeric(numericValue)) {
