@@ -45,6 +45,13 @@ for(var i=0;i<parsers.length;i++){
                 var SerialObject = bm.parseWith(barcodeValue, parseInt(document.getElementById('BarcodeParser').value));
             console.log(SerialObject);
                 if (SerialObject != null) {
+                    var sn=SerialObject.serial_no;
+                    var ix=productArray.findIndex(item => item.serial === sn);
+                    if(ix!==-1){
+                        alert("Bu seri numarası zaten eklendi.");
+                        field.value = "";
+                        return;
+                    }
                     addSerial(SerialObject);
                     window.close();
                 } else {
