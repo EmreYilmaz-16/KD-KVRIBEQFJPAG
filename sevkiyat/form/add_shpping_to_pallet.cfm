@@ -72,7 +72,7 @@ AND COMPANY_ID=#getPaletBilgi.COMPANY_ID#
             VALUES
             (
                 <cfqueryparam value="#attributes.pallet_id#" cfsqltype="cf_sql_integer">,
-                <cfqueryparam value="#sid#" cfsqltype="cf_sql_integer">,
+                <cfqueryparam value="#sid#" cfsqltype="cf_sql_integer">
             )
         </cfquery>
     </cfloop>
