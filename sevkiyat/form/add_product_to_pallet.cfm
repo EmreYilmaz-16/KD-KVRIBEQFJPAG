@@ -88,12 +88,14 @@ for(var i=0;i<parsers.length;i++){
 
             var cellAction = document.createElement("td");
             var removeButton = document.createElement("button");
+            removeButton.type = "button";
             removeButton.innerText = "Kaldır";
             removeButton.onclick = function() {
                 removeSerial(SerialObject.product_code_2);
             };
             cellAction.appendChild(removeButton);
             var showSerialsButton = document.createElement("button");
+            showSerialsButton.type = "button";
             showSerialsButton.innerText = "Seri Numaralarını Göster";
             showSerialsButton.onclick = function() {
                 alert("Seri Numaraları: " + productArray[ix].serial.join(", "));
