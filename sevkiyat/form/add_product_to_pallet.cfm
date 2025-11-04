@@ -98,6 +98,7 @@ for(var i=0;i<parsers.length;i++){
             showSerialsButton.type = "button";
             showSerialsButton.innerText = "Seri Numaralarını Göster";
             showSerialsButton.onclick = function() {
+                console.log(productArray[ix].serial);
                 alert("Seri Numaraları: " + productArray[ix].serial.join(", "));
             };
             cellAction.appendChild(showSerialsButton);
