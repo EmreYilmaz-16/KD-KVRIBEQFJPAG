@@ -75,7 +75,7 @@ for(var i=0;i<parsers.length;i++){
 
             var cellQuantity = document.createElement("td");
             cellQuantity.id = "quantity_" + SerialObject.product_code_2;
-            cellQuantity.innerText = SerialObject.quantity;
+            cellQuantity.innerText = 1;
             row.appendChild(cellQuantity);
 
             var cellAction = document.createElement("td");
