@@ -2,7 +2,7 @@
     <cfdump var="#attributes#">
     <CFSET FD=deserializeJSON(attributes.selected_products)>
     <cfdump var="#FD#">
-    <cfloop array="#FD#" index="item"></cfloop>
+    <cfloop array="#FD#" index="item">
         <cfset productCode = item.product_code>
         <cfset quantity = item.quantity>
         <cfset serials = item.serial>
@@ -10,6 +10,7 @@
         <cfdump var="#productCode#">
         <cfdump var="#quantity#">
         <cfdump var="#serials#">
+        </cfloop>
 </cfif>
 <cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
