@@ -1,3 +1,6 @@
+<cfif isDefined("attributes.submitAddProducts")>
+    <cfdump var="#attributes#">
+</cfif>
 <cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
         SELECT DISTINCT
@@ -251,6 +254,8 @@
             </div>
 
             <input type="hidden" name="selected_products" id="selectedProducts">
+            <cfoutput><input type="hidden" name="pallet_id" value="#HTMLEditFormat(attributes.pallet_id)#"></cfoutput>
+            <input type="hidden" name="submitAddProducts" value="1">
         </cfform>
     </div>
 </cf_box>
