@@ -1,3 +1,23 @@
+<cfquery name="getPaperSerials" datasource="#dsn3#">
+SELECT (
+SELECT DISTINCT --ESR.DELIVER_PAPER_NO,FIS_ID,PERIODID,
+SG.SERIAL_NO
+--,SG.PROCESS_CAT 
+FROM w3Qa_1.SHIPPING_PALLET_SVK_PBS SP
+LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT AS ESR ON ESR.SHIP_RESULT_ID=SP.ORDER_ID
+LEFT JOIN (
+    SELECT FIS_ID,REF_NO,2 AS PERIODID FROM w3Qa_2025_1.STOCK_FIS        
+    UNION ALL
+    SELECT FIS_ID,REF_NO,1 AS PERIODID FROM w3Qa_2024_1.STOCK_FIS
+) AS SF ON SF.REF_NO=ESR.DELIVER_PAPER_NO
+LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.PROCESS_ID=SF.FIS_ID AND SG.PERIOD_ID=SF.PERIODID
+FOR JSON PATH) T
+
+</cfquery>
+<script>
+var paperSerials = <cfoutput>#getPaperSerials.T#</cfoutput>;
+</script>
+
 <div class="form-group" style="margin-top: 24px; margin-left: 10px;">
 			<select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Tipi</option>
