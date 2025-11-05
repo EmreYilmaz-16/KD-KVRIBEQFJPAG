@@ -1,5 +1,22 @@
+<cfparam name="attributes.pallet_id" default="0">
+
 <cfset successMessage = "">
 <cfset errorMessage = "">
+
+<cfset currentPalletId = Val(attributes.pallet_id)>
+<cfset hasPalletIdColumn = false>
+<cftry>
+    <cfdbinfo type="columns" datasource="#dsn3#" table="w3Qa_1.SHIPPING_PALLET_ROWS_PBS" name="palletRowColumns">
+    <cfloop query="palletRowColumns">
+        <cfif CompareNoCase(palletRowColumns.COLUMN_NAME, "PALLET_ID") EQ 0>
+            <cfset hasPalletIdColumn = true>
+            <cfbreak>
+        </cfif>
+    </cfloop>
+<cfcatch type="any">
+    <cfset hasPalletIdColumn = false>
+</cfcatch>
+</cftry>
 
 <cfif StructKeyExists(attributes, "submitAddProducts") AND attributes.submitAddProducts EQ "1">
     <cfset insertedRowCount = 0>
@@ -40,11 +57,20 @@
                                 <cfcontinue>
                             </cfif>
 
-                            <cfquery name="checkExistingSerial" datasource="#dsn3#">
-                                SELECT COUNT(1) AS CNT
-                                FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
-                                WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
-                            </cfquery>
+                            <cfif hasPalletIdColumn>
+                                <cfquery name="checkExistingSerial" datasource="#dsn3#">
+                                    SELECT COUNT(1) AS CNT
+                                    FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
+                                      AND PALLET_ID = <cfqueryparam value="#currentPalletId#" cfsqltype="cf_sql_integer">
+                                </cfquery>
+                            <cfelse>
+                                <cfquery name="checkExistingSerial" datasource="#dsn3#">
+                                    SELECT COUNT(1) AS CNT
+                                    FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
+                                </cfquery>
+                            </cfif>
 
                             <cfif checkExistingSerial.CNT GT 0>
                                 <cfif NOT ListFindNoCase(duplicateSerialList, trimmedSerial)>
@@ -53,18 +79,34 @@
                                 <cfcontinue>
                             </cfif>
 
-                            <cfquery name="insertSerialRow" datasource="#dsn3#">
-                                INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
-                                    (SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
-                                VALUES
-                                    (
-                                        <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">,
-                                        <cfqueryparam value="#currentProductId#" cfsqltype="cf_sql_integer">,
-                                        <cfqueryparam value="#currentStockId#" cfsqltype="cf_sql_integer">,
-                                        <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
-                                        <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
-                                    )
-                            </cfquery>
+                            <cfif hasPalletIdColumn>
+                                <cfquery name="insertSerialRow" datasource="#dsn3#">
+                                    INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                        (PALLET_ID, SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
+                                    VALUES
+                                        (
+                                            <cfqueryparam value="#currentPalletId#" cfsqltype="cf_sql_integer">,
+                                            <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">,
+                                            <cfqueryparam value="#currentProductId#" cfsqltype="cf_sql_integer">,
+                                            <cfqueryparam value="#currentStockId#" cfsqltype="cf_sql_integer">,
+                                            <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+                                            <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
+                                        )
+                                </cfquery>
+                            <cfelse>
+                                <cfquery name="insertSerialRow" datasource="#dsn3#">
+                                    INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                        (SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
+                                    VALUES
+                                        (
+                                            <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">,
+                                            <cfqueryparam value="#currentProductId#" cfsqltype="cf_sql_integer">,
+                                            <cfqueryparam value="#currentStockId#" cfsqltype="cf_sql_integer">,
+                                            <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+                                            <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
+                                        )
+                                </cfquery>
+                            </cfif>
 
                             <cfset insertedRowCount = insertedRowCount + 1>
                         </cfloop>
@@ -113,6 +155,86 @@
 <cfif NOT Len(paperSerialJson)>
     <cfset paperSerialJson = "[]">
 </cfif>
+
+<cfset paperSerialArray = []>
+<cfset validSerialStruct = StructNew()>
+<cftry>
+    <cfset paperSerialArray = deserializeJSON(paperSerialJson)>
+    <cfif NOT IsArray(paperSerialArray)>
+        <cfset paperSerialArray = []>
+    </cfif>
+<cfcatch type="any">
+    <cfset paperSerialArray = []>
+</cfcatch>
+</cftry>
+
+<cfif ArrayLen(paperSerialArray)>
+    <cfloop array="#paperSerialArray#" index="serialItem">
+        <cfif StructKeyExists(serialItem, "SERIAL_NO")>
+            <cfset validSerialStruct[serialItem.SERIAL_NO] = serialItem>
+        </cfif>
+    </cfloop>
+</cfif>
+
+<cfset getSavedPalletRows = QueryNew("SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,PRODUCT_CODE_2")>
+<cftry>
+    <cfquery name="getSavedPalletRows" datasource="#dsn3#">
+        SELECT SPR.SERIAL_NUMBER,
+               SPR.PRODUCT_ID,
+               SPR.STOCK_ID,
+               P.PRODUCT_CODE_2
+        FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS SPR
+        INNER JOIN w3Qa_product.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
+        WHERE SPR.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+    </cfquery>
+<cfcatch type="any">
+    <cfquery name="getSavedPalletRows" datasource="#dsn3#">
+        SELECT SPR.SERIAL_NUMBER,
+               SPR.PRODUCT_ID,
+               SPR.STOCK_ID,
+               P.PRODUCT_CODE_2
+        FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS SPR
+        INNER JOIN w3Qa_product.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
+    </cfquery>
+</cfcatch>
+</cftry>
+
+<cfset existingProductsMap = StructNew()>
+<cfif getSavedPalletRows.RecordCount GT 0>
+    <cfloop query="getSavedPalletRows">
+        <cfset savedSerial = Trim(getSavedPalletRows.SERIAL_NUMBER & "")>
+        <cfif NOT Len(savedSerial)>
+            <cfcontinue>
+        </cfif>
+        <cfif ArrayLen(paperSerialArray) AND NOT StructKeyExists(validSerialStruct, savedSerial)>
+            <cfcontinue>
+        </cfif>
+
+        <cfset productKey = getSavedPalletRows.PRODUCT_CODE_2 & "|" & getSavedPalletRows.PRODUCT_ID & "|" & getSavedPalletRows.STOCK_ID>
+
+        <cfif NOT StructKeyExists(existingProductsMap, productKey)>
+            <cfset existingProductsMap[productKey] = {
+                product_code = getSavedPalletRows.PRODUCT_CODE_2,
+                serial = [],
+                quantity = 0,
+                productid = Val(getSavedPalletRows.PRODUCT_ID),
+                stockid = Val(getSavedPalletRows.STOCK_ID)
+            }>
+        </cfif>
+
+        <cfset ArrayAppend(existingProductsMap[productKey].serial, savedSerial)>
+        <cfset existingProductsMap[productKey].quantity = existingProductsMap[productKey].quantity + 1>
+    </cfloop>
+</cfif>
+
+<cfset existingProductsArray = []>
+<cfif StructCount(existingProductsMap)>
+    <cfloop collection="#existingProductsMap#" item="productKey">
+        <cfset ArrayAppend(existingProductsArray, existingProductsMap[productKey])>
+    </cfloop>
+</cfif>
+
+<cfset existingProductsJson = SerializeJSON(existingProductsArray)>
 
 <cf_box title="Palete Urun Barkodu Ekle">
     <style>
@@ -390,11 +512,16 @@
         paperSerials = [];
     }
 
+    var preloadedProducts = <cfoutput>#existingProductsJson#</cfoutput>;
+    if (!Array.isArray(preloadedProducts)) {
+        preloadedProducts = [];
+    }
+
     var validSerialSet = new Set(paperSerials.map(function (item) {
         return item.SERIAL_NO;
     }));
 
-    var productArray = [];
+    var productArray = preloadedProducts.slice();
     var barcodeManager = null;
 
     var parserSelect = document.getElementById('BarcodeParser');
@@ -435,6 +562,9 @@
             renderProductRows();
             updateSummary();
         });
+
+        renderProductRows();
+        updateSummary();
     });
 
     function handleBarcodeKeydown(event) {
