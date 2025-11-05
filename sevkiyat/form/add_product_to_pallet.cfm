@@ -13,6 +13,7 @@
             SELECT FIS_ID, REF_NO, 1 AS PERIODID FROM w3Qa_2024_1.STOCK_FIS
         ) SF ON SF.REF_NO = ESR.DELIVER_PAPER_NO
         LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW SG ON SG.PROCESS_ID = SF.FIS_ID AND SG.PERIOD_ID = SF.PERIODID
+        WHERE SP.ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
         FOR JSON PATH
     ) AS T
 </cfquery>
