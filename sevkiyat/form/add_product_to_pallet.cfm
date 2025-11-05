@@ -1,17 +1,96 @@
-<cfif isDefined("attributes.submitAddProducts")>
-    <cfdump var="#attributes#">
-    <CFSET FD=deserializeJSON(attributes.selected_products)>
-    <cfdump var="#FD#">
-    <cfloop array="#FD#" index="item">
-        <cfset productCode = item.product_code>
-        <cfset quantity = item.quantity>
-        <cfset serials = item.serial>
+<cfset successMessage = "">
+<cfset errorMessage = "">
 
-        <cfdump var="#productCode#">
-        <cfdump var="#quantity#">
-        <cfdump var="#serials#">
+<cfif StructKeyExists(attributes, "submitAddProducts") AND attributes.submitAddProducts EQ "1">
+    <cfset insertedRowCount = 0>
+    <cfset duplicateSerialList = "">
 
-        </cfloop>
+    <cfset rawSelectedProducts = "">
+    <cfif StructKeyExists(attributes, "selected_products")>
+        <cfset rawSelectedProducts = Trim(attributes.selected_products)>
+    </cfif>
+
+    <cfif Len(rawSelectedProducts)>
+        <cftry>
+            <cfset selectedProductArray = deserializeJSON(rawSelectedProducts)>
+            <cfif NOT IsArray(selectedProductArray)>
+                <cfset selectedProductArray = []>
+            </cfif>
+
+            <cfif ArrayLen(selectedProductArray)>
+                <cftransaction>
+                    <cfloop array="#selectedProductArray#" index="productItem">
+                        <cfif NOT StructKeyExists(productItem, "serial") OR NOT IsArray(productItem.serial)>
+                            <cfcontinue>
+                        </cfif>
+
+                        <cfset currentProductId = 0>
+                        <cfif StructKeyExists(productItem, "productid")>
+                            <cfset currentProductId = Val(productItem.productid)>
+                        </cfif>
+
+                        <cfset currentStockId = 0>
+                        <cfif StructKeyExists(productItem, "stockid")>
+                            <cfset currentStockId = Val(productItem.stockid)>
+                        </cfif>
+
+                        <cfloop array="#productItem.serial#" index="serialNo">
+                            <cfset trimmedSerial = Trim(serialNo & "")>
+                            <cfif NOT Len(trimmedSerial)>
+                                <cfcontinue>
+                            </cfif>
+
+                            <cfquery name="checkExistingSerial" datasource="#dsn3#">
+                                SELECT COUNT(1) AS CNT
+                                FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
+                            </cfquery>
+
+                            <cfif checkExistingSerial.CNT GT 0>
+                                <cfif NOT ListFindNoCase(duplicateSerialList, trimmedSerial)>
+                                    <cfset duplicateSerialList = ListAppend(duplicateSerialList, trimmedSerial)>
+                                </cfif>
+                                <cfcontinue>
+                            </cfif>
+
+                            <cfquery name="insertSerialRow" datasource="#dsn3#">
+                                INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    (SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
+                                VALUES
+                                    (
+                                        <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">,
+                                        <cfqueryparam value="#currentProductId#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#currentStockId#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+                                        <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
+                                    )
+                            </cfquery>
+
+                            <cfset insertedRowCount = insertedRowCount + 1>
+                        </cfloop>
+                    </cfloop>
+                </cftransaction>
+
+                <cfif insertedRowCount GT 0>
+                    <cfset successMessage = insertedRowCount & " adet seri kaydedildi.">
+                </cfif>
+
+                <cfif Len(duplicateSerialList)>
+                    <cfif Len(errorMessage)>
+                        <cfset errorMessage = errorMessage & " ">
+                    </cfif>
+                    <cfset errorMessage = errorMessage & "Listeye alinmayan seri numaralari: " & duplicateSerialList>
+                </cfif>
+            <cfelse>
+                <cfset errorMessage = "Gonderilen urun listesi bos gorundu.">
+            </cfif>
+        <cfcatch type="any">
+            <cfset errorMessage = "Gonderilen veriler islenirken hata olustu.">
+        </cfcatch>
+        </cftry>
+    <cfelse>
+        <cfset errorMessage = "Kaydedilecek seri verisi bulunamadi.">
+    </cfif>
 </cfif>
 <cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
@@ -66,6 +145,26 @@
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             margin-bottom: 18px;
+        }
+
+        .pallet-alert {
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            border: 1px solid transparent;
+        }
+
+        .pallet-alert-success {
+            background: rgba(34, 197, 94, 0.12);
+            color: #166534;
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .pallet-alert-error {
+            background: rgba(248, 113, 113, 0.15);
+            color: #b91c1c;
+            border-color: rgba(248, 113, 113, 0.45);
         }
 
         .pallet-select,
@@ -224,6 +323,18 @@
             <h2>Paketlenen Urunleri Tara</h2>
             <span class="info-hint">Gecerli barkodlar otomatik olarak palete eklenir.</span>
         </div>
+
+        <cfif Len(successMessage)>
+            <cfoutput>
+                <div class="pallet-alert pallet-alert-success">#HTMLEditFormat(successMessage)#</div>
+            </cfoutput>
+        </cfif>
+
+        <cfif Len(errorMessage)>
+            <cfoutput>
+                <div class="pallet-alert pallet-alert-error">#HTMLEditFormat(errorMessage)#</div>
+            </cfoutput>
+        </cfif>
 
         <div class="pallet-form-controls">
             <div>
