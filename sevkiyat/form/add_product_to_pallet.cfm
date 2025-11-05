@@ -67,8 +67,14 @@ for(var i=0;i<parsers.length;i++){
                 if (SerialObject != null) {
                     var sn=SerialObject.serial_no;
                     var ix=productArray.findIndex(item => item.serial.includes(sn));
+                    var ix2=paperSerials.findIndex(item => item.serial_no === sn);
                     if(ix!==-1){
                         alert("Bu seri numarası zaten eklendi.");
+                        field.value = "";
+                        return;
+                    }
+                    if(ix2===-1){
+                        alert("Bu seri numarası Bu Palete Eklenen Sevkiyatlar İçin geçersiz.");
                         field.value = "";
                         return;
                     }
