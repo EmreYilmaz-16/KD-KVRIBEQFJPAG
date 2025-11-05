@@ -67,7 +67,7 @@ for(var i=0;i<parsers.length;i++){
                 if (SerialObject != null) {
                     var sn=SerialObject.serial_no;
                     var ix=productArray.findIndex(item => item.serial.includes(sn));
-                    var ix2=paperSerials.findIndex(item => item.serial_no === sn);
+                    var ix2=paperSerials.findIndex(item => item.SERIAL_NO === sn);
                     if(ix!==-1){
                         alert("Bu seri numarası zaten eklendi.");
                         field.value = "";
