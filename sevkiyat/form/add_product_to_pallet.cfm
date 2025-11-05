@@ -377,7 +377,10 @@
 LEFT JOIN w3Qa_product.STOCKS ON PRODUCT.PRODUCT_ID=STOCKS.PRODUCT_ID WHERE PRODUCT_CODE_2='${productCode}'`
 var qr=wrk_query(sql,'dsn1');
 console.log(qr);
-
+        if(qr.recordcount==0){
+            alert('Bu urun kodu sistemde bulunamadi.');
+            return;
+        }
         if (existingSerial) {
             alert('Bu seri numarasi zaten listede bulunuyor.');
             return;
@@ -394,7 +397,9 @@ console.log(qr);
             productArray.push({
                 product_code: productCode,
                 serial: [serialNo],
-                quantity: 1
+                quantity: 1,
+                productid: qr.PRODUCT_ID[0],
+                stockid: qr.STOCK_ID[0]
             });
         }
 
