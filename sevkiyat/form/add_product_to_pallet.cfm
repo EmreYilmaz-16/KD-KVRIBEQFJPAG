@@ -1,5 +1,15 @@
 <cfif isDefined("attributes.submitAddProducts")>
     <cfdump var="#attributes#">
+    <CFSET FD=deserializeJSON(attributes.selected_products)>
+    <cfdump var="#FD#">
+    <cfloop array="#FD#" index="item"></cfloop>
+        <cfset productCode = item.product_code>
+        <cfset quantity = item.quantity>
+        <cfset serials = item.serial>
+
+        <cfdump var="#productCode#">
+        <cfdump var="#quantity#">
+        <cfdump var="#serials#">
 </cfif>
 <cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
@@ -13,7 +23,7 @@
             SELECT FIS_ID, REF_NO, 1 AS PERIODID FROM w3Qa_2024_1.STOCK_FIS
         ) SF ON SF.REF_NO = ESR.DELIVER_PAPER_NO
         LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW SG ON SG.PROCESS_ID = SF.FIS_ID AND SG.PERIOD_ID = SF.PERIODID
-        WHERE SP.ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+        WHERE SP.PALLET_ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
         FOR JSON PATH
     ) AS T
 </cfquery>
