@@ -32,6 +32,7 @@
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
+    var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
     var savedPalletRows = [];
     <cfif len(getSavedPalletRows.T) EQ 0>
         savedPalletRows = [];
@@ -151,7 +152,7 @@ function savePaper() {
         return;
     }
 
-    var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
+    
 
     $.ajax({
         url: '/index.cfm?fuseaction=eshipping.save_product_pallet_pbs',
