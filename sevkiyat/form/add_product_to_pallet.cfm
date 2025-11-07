@@ -148,7 +148,7 @@ function addProductToPallet(serial_no,product_code_2){
 
 palletProductsTableProducts.push({
     SERIAL_NO:serial_no,
-    PRODUCT_ID:paperSerials[ix1].STOCK_ID,
+    PRODUCT_ID:paperSerials[ix1].PRODUCT_ID,
     STOCK_ID:paperSerials[ix1].STOCK_ID,
     PRODUCT_CODE_2:product_code_2
 });
