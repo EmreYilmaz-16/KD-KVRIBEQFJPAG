@@ -360,8 +360,8 @@
 										</div>
 									</td>
 									<td>
-										<a onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat Ekle</a>
-										<a onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun Ekle</a>
+										<a class="btn btn-primary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat Ekle</a>
+										<a class="btn btn-secondary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun Ekle</a>
 									</td>
 								</tr>
 							</cfloop>
