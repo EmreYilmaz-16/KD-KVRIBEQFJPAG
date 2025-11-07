@@ -151,7 +151,7 @@ function savePaper() {
         return;
     }
 
-    var palletId = #Val(attributes.pallet_id)#;
+    var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
 
     $.ajax({
         url: '/index.cfm?fuseaction=eshipping.save_product_pallet_pbs',
