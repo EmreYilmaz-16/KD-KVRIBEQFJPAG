@@ -120,6 +120,6 @@ palletProductsTableProducts.push({
 });
 
 }
-function addrow
+
 
 </script>
