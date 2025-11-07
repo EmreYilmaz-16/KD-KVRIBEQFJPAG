@@ -26,8 +26,12 @@
         FOR JSON PATH
         ) AS T
     </cfquery>
+
+<cfdump var="#getSavedPalletRows#">
+
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
+
     var savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
 </script>
 
