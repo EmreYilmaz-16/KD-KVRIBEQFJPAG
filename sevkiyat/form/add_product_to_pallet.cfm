@@ -128,6 +128,11 @@ function addProductToPallet(serial_no,product_code_2){
         return;
     }
 
+    var qr=`SELECT PRODUCT_ID,STOCK_ID,PRODUCT_CODE_2 FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`;
+    console.log(qr);
+    var result=wrk_query(qr,'dsn3',1);
+    console.log(result);
+
 palletProductsTableProducts.push({
     SERIAL_NO:serial_no,
     PRODUCT_ID:paperSerials[ix1].STOCK_ID,
