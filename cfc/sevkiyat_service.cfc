@@ -9,6 +9,13 @@ component output="false" {
         var palletId=formdata.pallet_id;
         var userid=formdata.userid;
         var products=formdata.products;
+        var qdel=queryExecute(
+            "DELETE FROM SHIPPING_PALLET_ROWS_PBS WHERE PALLET_ID = :palletId",
+            {
+                palletId={value=palletId, cfsqltype="cf_sql_integer"}
+            },
+            {datasource="w3Qa_1"}
+        );
         for(var i=1;i LTE arrayLen(products);i=i+1){
             var q=queryExecute(
                 "INSERT INTO SHIPPING_PALLET_ROWS_PBS (PALLET_ID, PRODUCT_ID, STOCK_ID, SERIAL_NUMBER,RECORD_DATE,RECORD_EMP) 
@@ -24,6 +31,7 @@ component output="false" {
                 {datasource="w3Qa_1"}
             );
         }
+        return {success=true, message="Product saved to shelf successfully."};
         abort;
         var qm=queryExecute(
             "SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE_ROWS WHERE PRODUCT_PLACE_ID = :productPlaceId AND STOCK_ID = :stockId",
