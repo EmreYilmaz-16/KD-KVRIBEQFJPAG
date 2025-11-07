@@ -33,7 +33,7 @@
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
     var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
-    var userId=<cfoutput>#session.ep.USER_ID#</cfoutput>;
+    var userId=<cfoutput>#session.ep.USERID#</cfoutput>;
     var savedPalletRows = [];
     <cfif len(getSavedPalletRows.T) EQ 0>
         savedPalletRows = [];
