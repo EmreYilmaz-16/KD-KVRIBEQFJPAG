@@ -132,6 +132,19 @@ function addProductToPallet(serial_no,product_code_2){
     console.log(qr);
     var result=wrk_query(qr,'dsn3',1);
     console.log(result);
+    if(result.recordCount==0){
+        alert("Urun koduna ait stok kaydi bulunamadi.");
+        $("#productBarcodeInput").val("");
+        return;
+    }else{
+        var rpid=result.PRODUCT_ID[0];
+        var rsid=result.STOCK_ID[0];
+        if(rpid!=paperSerials[ix1].PRODUCT_ID || rsid!=paperSerials[ix1].STOCK_ID){
+            alert("Urun kodu ile barkod uyusmuyor.");
+            $("#productBarcodeInput").val("");
+            return;
+        }
+    }
 
 palletProductsTableProducts.push({
     SERIAL_NO:serial_no,
