@@ -28,7 +28,7 @@
         ) AS T
     </cfquery>
 
-
+<cfdump var="#getSavedPalletRows#">
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
