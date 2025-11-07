@@ -162,7 +162,7 @@ function savePaper() {
     
 
     $.ajax({
-        url: '/index.cfm?fuseaction=eshipping.save_product_pallet_pbs',
+        url: '/AddOns/Partner/cfc/sevkiyat_service.cfc?method=saveProductsToPallet',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
