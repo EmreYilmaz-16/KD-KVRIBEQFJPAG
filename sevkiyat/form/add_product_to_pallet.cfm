@@ -77,7 +77,7 @@ for(var i=0;i<parsers.length;i++){
 }
     if(savedPalletRows.length>0){
         for(var j=0;j<savedPalletRows.length;j++){
-            addRow("Kayitli Urun: ",savedPalletRows[j]);
+            //addRow("Kayitli Urun: ",savedPalletRows[j]);
         }
     }
     });
