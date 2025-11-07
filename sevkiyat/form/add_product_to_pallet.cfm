@@ -66,7 +66,7 @@
         <!-- Urun satirlari buraya eklenecek -->
     </tbody>
 </table>
-
+<input type="button" class="btn btn-success" value="Urunleri Palete Kaydet" onclick="savePaper()" style="margin-top: 16px;">
 
 </cf_box>
 
