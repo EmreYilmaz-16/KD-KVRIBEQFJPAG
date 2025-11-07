@@ -10,6 +10,7 @@
             SELECT FIS_ID, REF_NO, 1 AS PERIODID FROM w3Qa_2024_1.STOCK_FIS
         ) SF ON SF.REF_NO = ESR.DELIVER_PAPER_NO
         LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW SG ON SG.PROCESS_ID = SF.FIS_ID AND SG.PERIOD_ID = SF.PERIODID
+        LEFT JOIN w3Qa_1.STOCKS S ON S.STOCK_ID = SG.STOCK_ID
         WHERE SP.PALLET_ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
         FOR JSON PATH
     ) AS T
@@ -36,7 +37,7 @@
         <cfelse>
             var savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
     </cfif>
-    
+    var palletProductsTableProducts=[];
 </script>
 
 <cf_box title="Palete Urun Ekle">
@@ -50,6 +51,21 @@
     <input type="text" id="productBarcodeInput" class="form-control" onkeydown="checkKey(this,event)" placeholder="Urun Barkodu Giriniz" style="width: 300px; display: inline-block; margin-right: 10px;">
 
 </div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Urun Barkodu</th>
+            <th>Urun Kodu</th>
+            <th>Islem</th>
+        </tr>
+    </thead>
+    <tbody id="palletProductsTableBody">
+        <!-- Urun satirlari buraya eklenecek -->
+    </tbody>
+</table>
+
+
 </cf_box>
 
 <script>
@@ -59,6 +75,11 @@ var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
+    if(savedPalletRows.length>0){
+        for(var j=0;j<savedPalletRows.length;j++){
+            addRow("Kayitli Urun: ",savedPalletRows[j]);
+        }
+    }
     });
 
 function checkKey(el,event){
@@ -73,7 +94,32 @@ function checkKey(el,event){
         var bm=new BarcodeManager();
         var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
         console.log(serialObject);
+        if(serialObject.success){
+            addProductToPallet(serialObject.serial_no,serialObject.product_code_2);
+        }else{
+            alert("Barkod okunamadi: "+serialObject.error);
+            $(el).val("");
+        }
     }
     
 }
+
+function addProductToPallet(serial_no,product_code_2){
+    var ix1=paperSerials.findIndex(p=>p.SERIAL_NO==serial_no);
+    if(ix1==-1){
+        alert("Girilen barkoda ait urun bulunamadi.");
+        $("#productBarcodeInput").val("");
+        return;
+    }
+
+palletProductsTableProducts.push({
+    SERIAL_NO:serial_no,
+    PRODUCT_ID:paperSerials[ix1].STOCK_ID,
+    STOCK_ID:paperSerials[ix1].STOCK_ID,
+    PRODUCT_CODE_2:product_code_2
+});
+
+}
+function addrow
+
 </script>
