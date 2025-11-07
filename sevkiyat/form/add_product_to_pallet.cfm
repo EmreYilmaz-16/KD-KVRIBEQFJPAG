@@ -33,6 +33,7 @@
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
     var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
+    var userId=<cfoutput>#session.ep.USER_ID#</cfoutput>;
     var savedPalletRows = [];
     <cfif len(getSavedPalletRows.T) EQ 0>
         savedPalletRows = [];
@@ -167,6 +168,7 @@ function savePaper() {
         contentType: 'application/json',
         data: JSON.stringify({
             pallet_id: palletId,
+            userid: userId,
             products: palletProductsTableProducts
         }),
         success: function (response) {

@@ -6,6 +6,24 @@ component output="false" {
         writeDump(getHTTPRequestData())
         formdata=deserializeJSON(getHTTPRequestData().content);
         writeDump(formdata);
+        var palletId=formdata.palletId;
+        var userid=formdata.userid;
+        var products=formdata.products;
+        for(var i=1;i LTE arrayLen(products);i=i+1){
+            var q=queryExecute(
+                "INSERT INTO SHIPPING_PALLET_ROWS_PBS (PALLET_ID, PRODUCT_ID, STOCK_ID, SERIAL_NUMBER,RECORD_DATE,RECORD_EMP) 
+                 VALUES (:palletId, :productId, :stockId, :serialNo, :recordDate, :recordEmp)",
+                {
+                    palletId={value=palletId, cfsqltype="cf_sql_integer"},
+                    productId={value=products[i].PRODUCT_ID, cfsqltype="cf_sql_integer"},
+                    stockId={value=products[i].STOCK_ID, cfsqltype="cf_sql_integer"},
+                    serialNo={value=products[i].SERIAL_NO, cfsqltype="cf_sql_varchar"},
+                    recordDate={value=currentDateTime(), cfsqltype="cf_sql_timestamp"},
+                    recordEmp={value=userid, cfsqltype="cf_sql_integer"}
+                },
+                {datasource="w3Qa_1"}
+            );
+        }
         abort;
         var qm=queryExecute(
             "SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE_ROWS WHERE PRODUCT_PLACE_ID = :productPlaceId AND STOCK_ID = :stockId",
