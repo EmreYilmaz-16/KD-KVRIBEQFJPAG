@@ -1,7 +1,7 @@
 <cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
         SELECT DISTINCT
-            SG.SERIAL_NO,SG.STOCK_ID
+            SG.SERIAL_NO,SG.STOCK_ID,S.PRODUCT_ID
         FROM w3Qa_1.SHIPPING_PALLET_SVK_PBS SP
         LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT ESR ON ESR.SHIP_RESULT_ID = SP.ORDER_ID
         LEFT JOIN (
