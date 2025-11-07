@@ -80,7 +80,14 @@ for(var i=0;i<parsers.length;i++){
     if(savedPalletRows.length>0){
         for(var j=0;j<savedPalletRows.length;j++){
             //addRow("Kayitli Urun: ",savedPalletRows[j]);
+            palletProductsTableProducts.push({
+                SERIAL_NO:savedPalletRows[j].SERIAL_NUMBER,
+                PRODUCT_ID:savedPalletRows[j].PRODUCT_ID,
+                STOCK_ID:savedPalletRows[j].STOCK_ID,
+                PRODUCT_CODE_2:savedPalletRows[j].PRODUCT_CODE_2
+            });
         }
+        renderPalletProductsTable();
     }
     });
 
