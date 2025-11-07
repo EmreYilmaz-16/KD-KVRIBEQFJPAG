@@ -4,6 +4,8 @@ component output="false" {
     remote struct function saveProductsToPallet() returnformat="json" {
         writeDump(arguments);
         writeDump(getHTTPRequestData())
+        formdata=deserializeJSON(getHTTPRequestData().content);
+        writeDump(formdata);
         abort;
         var qm=queryExecute(
             "SELECT PRODUCT_PLACE_ID FROM PRODUCT_PLACE_ROWS WHERE PRODUCT_PLACE_ID = :productPlaceId AND STOCK_ID = :stockId",
