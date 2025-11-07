@@ -32,10 +32,11 @@
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
+    var savedPalletRows = [];
     <cfif len(getSavedPalletRows.T) EQ 0>
-       var savedPalletRows = [];
+        savedPalletRows = [];
         <cfelse>
-            var savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
+             savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
     </cfif>
     var palletProductsTableProducts=[];
 </script>
@@ -139,6 +140,36 @@ function renderPalletProductsTable(){
             '</tr>';
         tbody.append(row);
     }
+}
+function removePalletProductRow(index){
+    palletProductsTableProducts.splice(index,1);
+    renderPalletProductsTable();
+}
+function savePaper() {
+    if (palletProductsTableProducts.length == 0) {
+        alert("Palete eklenmis urun bulunamadi.");
+        return;
+    }
+
+    var palletId = #Val(attributes.pallet_id)#;
+
+    $.ajax({
+        url: '/index.cfm?fuseaction=eshipping.save_product_pallet_pbs',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            pallet_id: palletId,
+            products: palletProductsTableProducts
+        }),
+        success: function (response) {
+            alert("Urunler palete basariyla eklendi.");
+            // Isterseniz sayfayi yenileyebilir veya baska islemler yapabilirsiniz
+        },
+        error: function (xhr, status, error) {
+            alert("Hata olustu: " + error);
+        }
+    });
+    
 }
 
 
