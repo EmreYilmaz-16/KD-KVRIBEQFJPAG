@@ -27,7 +27,7 @@
         ) AS T
     </cfquery>
 
-<cfdump var="#getSavedPalletRows#">
+
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
@@ -39,3 +39,25 @@
     
 </script>
 
+<cf_box title="Palete Urun Ekle">
+<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Tipi</option>
+
+			</select>
+		</div>
+<div class="form-group">
+    <input type="text" id="productBarcodeInput" class="form-control" onkeydown="checkKey(this,event)" placeholder="Urun Barkodu Giriniz" style="width: 300px; display: inline-block; margin-right: 10px;">
+
+</div>
+</cf_box>
+
+<script>
+    $(document).ready(function(){
+      bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
+    });
+</script>
