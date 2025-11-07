@@ -111,6 +111,12 @@ function addProductToPallet(serial_no,product_code_2){
         $("#productBarcodeInput").val("");
         return;
     }
+    var ix2=palletProductsTableProducts.findIndex(p=>p.SERIAL_NO==serial_no);
+    if(ix2!=-1){
+        alert("Bu urun zaten palete eklenmis.");
+        $("#productBarcodeInput").val("");
+        return;
+    }
 
 palletProductsTableProducts.push({
     SERIAL_NO:serial_no,
