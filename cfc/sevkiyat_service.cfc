@@ -18,7 +18,7 @@ component output="false" {
                     productId={value=products[i].PRODUCT_ID, cfsqltype="cf_sql_integer"},
                     stockId={value=products[i].STOCK_ID, cfsqltype="cf_sql_integer"},
                     serialNo={value=products[i].SERIAL_NO, cfsqltype="cf_sql_varchar"},
-                    recordDate={value=currentDateTime(), cfsqltype="cf_sql_timestamp"},
+                    recordDate={value=now(), cfsqltype="cf_sql_timestamp"},
                     recordEmp={value=userid, cfsqltype="cf_sql_integer"}
                 },
                 {datasource="w3Qa_1"}
