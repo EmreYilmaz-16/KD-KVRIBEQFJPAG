@@ -31,7 +31,11 @@
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
-
-    var savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
+    <cfif len(getSavedPalletRows.T) EQ 0>
+        getSavedPalletRows = "[]";
+        <cfelse>
+            var savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
+    </cfif>
+    
 </script>
 
