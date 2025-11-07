@@ -28,46 +28,191 @@
         ) AS T
     </cfquery>
 
-<cfdump var="#getSavedPalletRows#">
+
+
+<style>
+.pallet-form-container {
+    padding: 24px 28px;
+    background: #f6f9fc;
+    border-radius: 12px;
+    border: 1px solid #e0e6ed;
+    max-width: 720px;
+}
+
+.pallet-form-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2933;
+    margin-bottom: 16px;
+}
+
+.pallet-form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.pallet-form-group {
+    flex: 1;
+    min-width: 220px;
+}
+
+.pallet-form-group label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #52606d;
+    margin-bottom: 6px;
+}
+
+.pallet-form-select,
+.pallet-form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd2d9;
+    font-size: 14px;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
+}
+
+.pallet-form-select:focus,
+.pallet-form-input:focus {
+    outline: none;
+    border: 1px solid #2bb0ed;
+    box-shadow: 0 0 0 3px rgba(43, 176, 237, 0.2);
+}
+
+.pallet-table-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e6ed;
+    overflow: hidden;
+}
+
+.pallet-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pallet-table thead {
+    background: linear-gradient(90deg, #2bb0ed 0%, #0a6cbd 100%);
+    color: #ffffff;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.pallet-table th,
+.pallet-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9edf3;
+    font-size: 14px;
+    color: #1f2933;
+}
+
+.pallet-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.pallet-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.pallet-save-button {
+    min-width: 220px;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.pallet-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #3d4852;
+    background: #e3f8ff;
+    border-radius: 999px;
+    padding: 6px 14px;
+    border: 1px solid #b3ecff;
+    margin-bottom: 18px;
+}
+
+.pallet-counter strong {
+    font-size: 16px;
+    color: #0a6cbd;
+}
+
+.pallet-empty-state {
+    text-align: center;
+    padding: 32px 16px;
+    color: #7b8794;
+    font-size: 14px;
+}
+</style>
 
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
-    var palletId = <cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
+    var palletId=<cfoutput>#Val(attributes.pallet_id)#</cfoutput>;
     var userId=<cfoutput>#session.ep.USERID#</cfoutput>;
-    var savedPalletRows = [];
+    var savedPalletRows=[];
     <cfif len(getSavedPalletRows.T) EQ 0>
-        savedPalletRows = [];
-        <cfelse>
-             savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
+        savedPalletRows=[];
+    <cfelse>
+        savedPalletRows=<cfoutput>#getSavedPalletRows.T#</cfoutput>;
     </cfif>
     var palletProductsTableProducts=[];
 </script>
 
 <cf_box title="Palete Urun Ekle">
-<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
-			<select name="BarcodeParser" id="BarcodeParser">
-				<option value="0">Barkod Tipi</option>
+<div class="pallet-form-container">
+    <div class="pallet-form-title">Palete ürün eklemek için barkod bilgilerini girin.</div>
+    <div class="pallet-form-row">
+        <div class="pallet-form-group">
+            <label for="BarcodeParser">Barkod Tipi</label>
+            <select name="BarcodeParser" id="BarcodeParser" class="pallet-form-select">
+                <option value="0">Barkod tipini seçiniz</option>
+            </select>
+        </div>
+        <div class="pallet-form-group">
+            <label for="productBarcodeInput">Ürün Barkodu</label>
+            <input type="text" id="productBarcodeInput" class="pallet-form-input" onkeydown="checkKey(this,event)" placeholder="Barkodu okutun veya yazın">
+        </div>
+    </div>
 
-			</select>
-		</div>
-<div class="form-group">
-    <input type="text" id="productBarcodeInput" class="form-control" onkeydown="checkKey(this,event)" placeholder="Urun Barkodu Giriniz" style="width: 300px; display: inline-block; margin-right: 10px;">
+    <div class="pallet-counter">
+        <span>Palete eklenen ürün sayısı:</span>
+        <strong id="palletProductCount">0</strong>
+    </div>
 
+    <div class="pallet-table-wrapper">
+        <table class="pallet-table">
+            <thead>
+                <tr>
+                    <th>Ürün Barkodu</th>
+                    <th>Ürün Kodu</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody id="palletProductsTableBody">
+                <tr class="pallet-empty-state">
+                    <td colspan="3">Palete henüz ürün eklenmedi.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pallet-actions">
+        <input type="button" class="btn btn-success pallet-save-button" value="Ürünleri Palete Kaydet" onclick="savePaper()">
+    </div>
 </div>
-
-<table>
-    <thead>
-        <tr>
-            <th>Urun Barkodu</th>
-            <th>Urun Kodu</th>
-            <th>Islem</th>
-        </tr>
-    </thead>
-    <tbody id="palletProductsTableBody">
-        <!-- Urun satirlari buraya eklenecek -->
-    </tbody>
-</table>
-<input type="button" class="btn btn-success" value="Urunleri Palete Kaydet" onclick="savePaper()" style="margin-top: 16px;">
 
 </cf_box>
 
@@ -159,14 +304,19 @@ $("#productBarcodeInput").val("");
 function renderPalletProductsTable(){
     var tbody=$("#palletProductsTableBody");
     tbody.empty();
-    for(var i=0;i<palletProductsTableProducts.length;i++){
-        var row='<tr>'+
-            '<td>'+palletProductsTableProducts[i].SERIAL_NO+'</td>'+
-            '<td>'+palletProductsTableProducts[i].PRODUCT_CODE_2+'</td>'+
-            '<td><button class="btn btn-danger" onclick="removePalletProductRow('+i+')">Kaldir</button></td>'+
-            '</tr>';
-        tbody.append(row);
+    if(palletProductsTableProducts.length===0){
+        tbody.append('<tr class="pallet-empty-state"><td colspan="3">Palete henüz ürün eklenmedi.</td></tr>');
+    }else{
+        for(var i=0;i<palletProductsTableProducts.length;i++){
+            var row='<tr>'+
+                '<td>'+palletProductsTableProducts[i].SERIAL_NO+'</td>'+
+                '<td>'+palletProductsTableProducts[i].PRODUCT_CODE_2+'</td>'+
+                '<td><button class="btn btn-danger btn-sm" onclick="removePalletProductRow('+i+')">Kaldır</button></td>'+
+                '</tr>';
+            tbody.append(row);
+        }
     }
+    $('#palletProductCount').text(palletProductsTableProducts.length);
 }
 function removePalletProductRow(index){
     palletProductsTableProducts.splice(index,1);
