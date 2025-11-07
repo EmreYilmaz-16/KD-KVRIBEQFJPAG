@@ -6,7 +6,7 @@ component output="false" {
         writeDump(getHTTPRequestData())
         formdata=deserializeJSON(getHTTPRequestData().content);
         writeDump(formdata);
-        var palletId=formdata.palletId;
+        var palletId=formdata.pallet_id;
         var userid=formdata.userid;
         var products=formdata.products;
         for(var i=1;i LTE arrayLen(products);i=i+1){
