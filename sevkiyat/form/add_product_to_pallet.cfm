@@ -60,4 +60,20 @@ for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
     });
+
+function checkKey(el,event){
+    if(event.keyCode==13){
+        event.preventDefault();
+        var parserId=$("#BarcodeParser").val();
+        var serial_=el.value;
+        if(parserId==0){
+            alert("Lutfen bir barkod tipi seciniz.");
+            return;
+        }
+        var bm=new BarcodeManager();
+        var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
+        console.log(serialObject);
+    }
+    
+}
 </script>
