@@ -15,6 +15,7 @@
     ) AS T
 </cfquery>
    <cfquery name="getSavedPalletRows" datasource="#dsn3#">
+        SELECT (
         SELECT SPR.SERIAL_NUMBER,
                SPR.PRODUCT_ID,
                SPR.STOCK_ID,
@@ -22,6 +23,8 @@
         FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS SPR
         INNER JOIN w3Qa_product.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
         WHERE SPR.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+        FOR JSON PATH
+        ) AS T
     </cfquery>
 <script>
     var paperSerials=<cfoutput>#getPaperSerials.T#</cfoutput>;
