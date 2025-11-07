@@ -118,7 +118,21 @@ palletProductsTableProducts.push({
     STOCK_ID:paperSerials[ix1].STOCK_ID,
     PRODUCT_CODE_2:product_code_2
 });
+renderPalletProductsTable();
+$("#productBarcodeInput").val("");
 
+}
+function renderPalletProductsTable(){
+    var tbody=$("#palletProductsTableBody");
+    tbody.empty();
+    for(var i=0;i<palletProductsTableProducts.length;i++){
+        var row='<tr>'+
+            '<td>'+palletProductsTableProducts[i].SERIAL_NO+'</td>'+
+            '<td>'+palletProductsTableProducts[i].PRODUCT_CODE_2+'</td>'+
+            '<td><button class="btn btn-danger" onclick="removePalletProductRow('+i+')">Kaldir</button></td>'+
+            '</tr>';
+        tbody.append(row);
+    }
 }
 
 
