@@ -84,7 +84,7 @@ SELECT
   </cfif>
   <CFIF getOfferStage.OFFER_STAGE EQ 256 and getOfferStage.SS EQ 0>
     <cfif qcheck.TUMU_3_MU EQ 0>
-      <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparisTum(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button>
+      <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button>
     </cfif>
     
   </CFIF>
