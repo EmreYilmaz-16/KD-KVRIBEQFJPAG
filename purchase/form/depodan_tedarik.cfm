@@ -164,6 +164,7 @@ FOR JSON PATH
 
 
   </cfquery>
+  
   <span style="display:none">depodan_tedarik.cfm</span>
 <cfif len(getMainPurchaseOffer.QRESULT) EQ 0>
     <div class="alert alert-warning">Bu Talep İçin Depodan Teslim Edilecek Ürün Bulunmamaktadır</div><cfabort>
