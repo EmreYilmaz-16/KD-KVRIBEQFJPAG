@@ -174,15 +174,15 @@ headerRow.innerHTML += `
     Marj (%)<br>
     <input id="global-marj-input" onchange="setMarjAllRows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
   </th>
-  <th>Özel İskonto (%)<br>
+  <th>İskonto 1 (%)<br>
     <input id="global-dsc1-input" onchange="setAllDsc1Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     
     </th>
-  <th>İskonto 1
+  <th>İskonto 2
     (%)<br>
     <input id="global-dsc2-input" onchange="setAllDsc2Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     </th>
-  <th>İskonto 2
+  <th>İskonto 3
     (%)<br>
     <input id="global-dsc3-input" onchange="setAllDsc3Rows(this)"  type="number" class="form-control form-control-sm" style="width:80px; margin-top:4px;" placeholder="Toplu">
     </th>
