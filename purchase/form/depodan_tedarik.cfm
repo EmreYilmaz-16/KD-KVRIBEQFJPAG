@@ -27,7 +27,7 @@ SELECT PRICE_CAT FROM w3Qa.COMPANY_CREDIT WHERE COMPANY_ID=#GETDEMAND_MONEY.FROM
 <cfif getComppanyPriceCat.recordCount>
 <cfset CMPRICE_ID=getComppanyPriceCat.PRICE_CAT>
 </cfif>
-<cfdump var="#CMPRICE_ID#">
+
 
 <cfquery name="getMainPurchaseOffer" datasource="#DSN3#">
 SELECT ( SELECT * FROM (
@@ -164,7 +164,7 @@ FOR JSON PATH
 
 
   </cfquery>
-  <cfdump var="#getMainPurchaseOffer#">
+  
   
   <span style="display:none">depodan_tedarik.cfm</span>
 <cfif len(getMainPurchaseOffer.QRESULT) EQ 0>
