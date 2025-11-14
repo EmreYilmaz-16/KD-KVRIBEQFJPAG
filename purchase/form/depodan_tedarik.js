@@ -360,8 +360,14 @@ for (const supplier of data) {
     const dsc2Cell = document.createElement('td');
     const dsc2Input = document.createElement('input');
     dsc2Input.type = 'number';
-    dsc2Input.value = slpInfo.DSC2 || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
-    dsc2Input.className = 'form-control form-control-sm dsc2-input';
+   // dsc2Input.value = slpInfo.DSC2 || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
+    if (slpInfo.DSC2) {
+        dsc2Input.value = slpInfo.DSC2 || 0; //#TODO: Burası İskonto 2 Kontrol Edecek Tabloya EKlenecek
+    } else {
+        dsc2Input.value = productInfo.DSC_OX2 || 0;
+    } 
+   
+   dsc2Input.className = 'form-control form-control-sm dsc2-input';
     dsc2Input.style.width = '80px';
     dsc2Cell.appendChild(dsc2Input);
 
