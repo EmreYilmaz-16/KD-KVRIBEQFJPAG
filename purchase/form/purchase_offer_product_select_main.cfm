@@ -29,6 +29,9 @@ GROUP BY I_ID;
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
 </cfif>
+<cfquery name="getInternal" datasource="#dsn3#">
+  SELECT INTERNALDEMAND_STAGE FROM w3Qa_1.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.INTERNAL_ID#
+</cfquery>
 <cfquery name="GETORDERS" datasource="#dsn3#">
   
 SELECT DISTINCT ORDER_ID,ORDER_NUMBER FROM (
@@ -63,8 +66,9 @@ SELECT
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,true,#last_offer_id#)">Depodan Teslim</button>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,true,#last_offer_id#)">Depoya Tedarik</button>
 </cfoutput>
-<button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
-
+<cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE)>
+    <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
+</cfif>
   
 <cfoutput query="getSatis">
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
