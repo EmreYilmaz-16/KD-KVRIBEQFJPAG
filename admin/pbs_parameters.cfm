@@ -1,4 +1,5 @@
-﻿<cfset dsn3="w3Qa">
+﻿<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn3="#trim(configContent)#">
 <!DOCTYPE html>
 <html lang="tr">
 <head>
