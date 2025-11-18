@@ -70,7 +70,7 @@ FROM B;
 DECLARE @cols nvarchar(max);
 SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
-FROM (SELECT DISTINCT rn FROM w3qa.##B) d;
+FROM (SELECT DISTINCT rn FROM #dsn#.##B) d;
 
 
 

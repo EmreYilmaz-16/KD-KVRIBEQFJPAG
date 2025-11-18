@@ -918,6 +918,12 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
 
 
         </cfquery>
+        <cfquery name="GETIDEMAND" datasource="#dsn3#">
+                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,DEPARTMENT_IN,LOCATION_IN,
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM w3Qa_1.INTERNALDEMAND
+                WHERE INTERNAL_ID =#offers.offer_id#
+            </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
             SELECT 
                 TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) AS COMPANY_ID,
@@ -1036,9 +1042,9 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cfset attributes.PRICE = BASKET_NET_TOTAL_>
     
             <cfset attributes.ACTIVE_COMPANY = session.ep.company_id>
-            <cfset attributes.DELIVER_DEPT_ID = 2>
-            <cfset attributes.DELIVER_LOC_ID = 1>
-            <cfset attributes.DELIVER_DEPT_NAME = "2">
+            <cfset attributes.DELIVER_DEPT_ID = GETIDEMAND.DEPARTMENT_IN>
+            <cfset attributes.DELIVER_LOC_ID = GETIDEMAND.LOCATION_IN>
+            <cfset attributes.DELIVER_DEPT_NAME = "ASDASD2">
             <cfset attributes.BASKET_MONEY = "TL">
             <cfset attributes.BASKET_RATE1 = 1>
             <cfset attributes.BASKET_RATE2 = 1>
