@@ -5,8 +5,9 @@
      ============================= --->
 
 <!--- DSN ve isteğe bağlı sıralama parametreleri --->
-
-
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfdump var="#configContent#" label="Config Content">
+<cfabort>
 
 
 <cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
