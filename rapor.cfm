@@ -6,11 +6,11 @@
 
 <!--- DSN ve isteğe bağlı sıralama parametreleri --->
 <cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
-<cfdump var="#configContent#" label="Config Content">
-<cfabort>
 
 
-<cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
+
+
+<cfset dsn = "#trim(configContent)#"> <!--- kendi DSN'inizi girin --->
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
 <cfparam name="url.orderBy" default="barcode"> 
 <!--- güvenli whitelist --->
@@ -58,12 +58,12 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
                     SB.BARCODE
                 END
         ) AS rn
-    FROM w3Qa_product.STOCKS_BARCODES SB
-    INNER JOIN w3Qa_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
-    INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
+    FROM #dsn#_product.STOCKS_BARCODES SB
+    INNER JOIN #dsn#_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
+    INNER JOIN #dsn#_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
 )
 SELECT *
-INTO w3qa.##B
+INTO #dsn#.##B
 FROM B;
 
 -- 2) Dinamik kolon listesini oluştur
@@ -87,7 +87,7 @@ N'SELECT
           PRODUCT_NAME,
           ''BARCODE'' + CAST(rn AS nvarchar(10)) AS colname,
           BARCODE
-      FROM w3qa.##B
+      FROM #dsn#.##B
   ) src
   PIVOT (
       MAX(BARCODE) FOR colname IN (' + @cols + N')
@@ -96,7 +96,7 @@ N'SELECT
 
 EXEC sys.sp_executesql @sql;
 
-DROP TABLE w3qa.##B;
+DROP TABLE #dsn#.##B;
 </cfquery>
 
 <!--- HTML tabloyu yaz (Excel açar) --->
