@@ -66,6 +66,12 @@ SELECT
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,true,#last_offer_id#)">Depodan Teslim</button>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,true,#last_offer_id#)">Depoya Tedarik</button>
 </cfoutput>
+<div class="alert alert-danger">
+  <cfoutput>
+    <p>session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST =========   #session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST#</p>
+    <p>getInternal.INTERNALDEMAND_STAGE =========   #getInternal.INTERNALDEMAND_STAGE#</p>
+  </cfoutput>
+</div>
 <cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE)>
     <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
 </cfif>
