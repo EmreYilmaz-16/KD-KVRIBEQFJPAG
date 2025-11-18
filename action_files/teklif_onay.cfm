@@ -1,6 +1,13 @@
-<cfquery name="geto" datasource="#attributes.datasource#">
-   select o.RECORD_EMP,EMPLOYEE_EMAIL,OFFER_HISTORY_ID from w3Qa_1.OFFER_HISTORY AS O 
-   INNER JOIN w3Qa.EMPLOYEES AS E ON E.EMPLOYEE_ID=O.RECORD_EMP 
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
+
+<cfquery name="geto" datasource="#dsn#">
+   select o.RECORD_EMP,EMPLOYEE_EMAIL,OFFER_HISTORY_ID from #dsn3#.OFFER_HISTORY AS O 
+   INNER JOIN #dsn#.EMPLOYEES AS E ON E.EMPLOYEE_ID=O.RECORD_EMP 
    WHERE OFFER_ID=#caller.offer_id# ORDER BY  OFFER_HISTORY_ID DESC 
 </cfquery>
 

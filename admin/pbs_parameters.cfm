@@ -658,7 +658,7 @@
         <cfif form.action eq "insert">
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
-                INSERT INTO w3Qa.PBS_PARAMETERS 
+                INSERT INTO #dsn3#.PBS_PARAMETERS 
                 (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID)
                 VALUES 
                 (
@@ -690,7 +690,7 @@
         <cfelseif form.action eq "update">
             <!--- Kayıt Güncelleme --->
             <cfquery datasource="#dsn3#">
-                UPDATE w3Qa.PBS_PARAMETERS
+                UPDATE #dsn3#.PBS_PARAMETERS
                 SET 
                     OFFER_PRODUCT_ID = <cfif len(trim(form.offer_product_id))>#val(form.offer_product_id)#<cfelse>NULL</cfif>,
                     PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST = <cfif len(trim(form.purchase_demand_accept_process_row_id_list))>'#form.purchase_demand_accept_process_row_id_list#'<cfelse>NULL</cfif>,
@@ -714,7 +714,7 @@
 <cfif len(trim(url.delete_id))>
     <cftry>
         <cfquery datasource="#dsn3#">
-            DELETE FROM w3Qa.PBS_PARAMETERS
+            DELETE FROM #dsn3#.PBS_PARAMETERS
             WHERE OFFER_PRODUCT_ID = #val(url.delete_id)#
         </cfquery>
         <cfset message = "Kayıt başarıyla silindi!">
@@ -730,7 +730,7 @@
 <!--- Düzenleme için kayıt getir --->
 <cfif len(trim(url.edit_id))>
     <cfquery name="getEditData" datasource="#dsn3#">
-        SELECT * FROM w3Qa.PBS_PARAMETERS
+        SELECT * FROM #dsn3#.PBS_PARAMETERS
         WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
     </cfquery>
     <cfif getEditData.recordCount>
@@ -743,7 +743,7 @@
 
 <!--- Tüm kayıtları listele --->
 <cfquery name="getAllData" datasource="#dsn3#">
-    SELECT * FROM w3Qa.PBS_PARAMETERS
+    SELECT * FROM #dsn3#.PBS_PARAMETERS
     ORDER BY OFFER_PRODUCT_ID DESC
 </cfquery>
 
