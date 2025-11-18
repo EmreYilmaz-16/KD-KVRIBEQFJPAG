@@ -1,4 +1,4 @@
-﻿<cfset dsn3="w3Qa_1">
+﻿<cfset dsn3="w3Qa">
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -643,6 +643,8 @@
 <cfparam name="form.action" default="">
 <cfparam name="form.offer_product_id" default="">
 <cfparam name="form.purchase_demand_accept_process_row_id_list" default="">
+<cfparam name="form.pbs_modul_company_id" default="">
+<cfparam name="form.sale_order_accept_process_row_id" default="">
 <cfparam name="url.edit_id" default="">
 <cfparam name="url.delete_id" default="">
 
@@ -655,8 +657,8 @@
         <cfif form.action eq "insert">
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
-                INSERT INTO w3Qa_1.PBS_PARAMETERS 
-                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST)
+                INSERT INTO w3Qa.PBS_PARAMETERS 
+                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID)
                 VALUES 
                 (
                     <cfif len(trim(form.offer_product_id))>
@@ -668,6 +670,16 @@
                         '#form.purchase_demand_accept_process_row_id_list#'
                     <cfelse>
                         NULL
+                    </cfif>,
+                    <cfif len(trim(form.pbs_modul_company_id))>
+                        #val(form.pbs_modul_company_id)#
+                    <cfelse>
+                        NULL
+                    </cfif>,
+                    <cfif len(trim(form.sale_order_accept_process_row_id))>
+                        #val(form.sale_order_accept_process_row_id)#
+                    <cfelse>
+                        NULL
                     </cfif>
                 )
             </cfquery>
@@ -677,10 +689,12 @@
         <cfelseif form.action eq "update">
             <!--- Kayıt Güncelleme --->
             <cfquery datasource="#dsn3#">
-                UPDATE w3Qa_1.PBS_PARAMETERS
+                UPDATE w3Qa.PBS_PARAMETERS
                 SET 
                     OFFER_PRODUCT_ID = <cfif len(trim(form.offer_product_id))>#val(form.offer_product_id)#<cfelse>NULL</cfif>,
-                    PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST = <cfif len(trim(form.purchase_demand_accept_process_row_id_list))>'#form.purchase_demand_accept_process_row_id_list#'<cfelse>NULL</cfif>
+                    PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST = <cfif len(trim(form.purchase_demand_accept_process_row_id_list))>'#form.purchase_demand_accept_process_row_id_list#'<cfelse>NULL</cfif>,
+                    PBS_MODUL_COMPANY_ID = <cfif len(trim(form.pbs_modul_company_id))>#val(form.pbs_modul_company_id)#<cfelse>NULL</cfif>,
+                    SALE_ORDER_ACCEPT_PROCESS_ROW_ID = <cfif len(trim(form.sale_order_accept_process_row_id))>#val(form.sale_order_accept_process_row_id)#<cfelse>NULL</cfif>
                 WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
             </cfquery>
             <cfset message = "Kayıt başarıyla güncellendi!">
@@ -699,7 +713,7 @@
 <cfif len(trim(url.delete_id))>
     <cftry>
         <cfquery datasource="#dsn3#">
-            DELETE FROM w3Qa_1.PBS_PARAMETERS
+            DELETE FROM w3Qa.PBS_PARAMETERS
             WHERE OFFER_PRODUCT_ID = #val(url.delete_id)#
         </cfquery>
         <cfset message = "Kayıt başarıyla silindi!">
@@ -715,18 +729,20 @@
 <!--- Düzenleme için kayıt getir --->
 <cfif len(trim(url.edit_id))>
     <cfquery name="getEditData" datasource="#dsn3#">
-        SELECT * FROM w3Qa_1.PBS_PARAMETERS
+        SELECT * FROM w3Qa.PBS_PARAMETERS
         WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
     </cfquery>
     <cfif getEditData.recordCount>
         <cfset form.offer_product_id = getEditData.OFFER_PRODUCT_ID>
         <cfset form.purchase_demand_accept_process_row_id_list = getEditData.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST>
+        <cfset form.pbs_modul_company_id = getEditData.PBS_MODUL_COMPANY_ID>
+        <cfset form.sale_order_accept_process_row_id = getEditData.SALE_ORDER_ACCEPT_PROCESS_ROW_ID>
     </cfif>
 </cfif>
 
 <!--- Tüm kayıtları listele --->
 <cfquery name="getAllData" datasource="#dsn3#">
-    SELECT * FROM w3Qa_1.PBS_PARAMETERS
+    SELECT * FROM w3Qa.PBS_PARAMETERS
     ORDER BY OFFER_PRODUCT_ID DESC
 </cfquery>
 
@@ -816,6 +832,36 @@
                             </div>
                             <span class="field-hint">Maksimum 50 karakter, değerleri virgülle ayırın.</span>
                         </div>
+
+                        <div class="form-group">
+                            <label for="pbs_modul_company_id">PBS Modul Company ID</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🏢</span>
+                                <input
+                                    type="number"
+                                    id="pbs_modul_company_id"
+                                    name="pbs_modul_company_id"
+                                    value="<cfoutput>#form.pbs_modul_company_id#</cfoutput>"
+                                    placeholder="Örn: 2001"
+                                >
+                            </div>
+                            <span class="field-hint">Şirket tanımı yoksa boş bırakabilirsiniz.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sale_order_accept_process_row_id">Sale Order Accept Process Row ID</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">📦</span>
+                                <input
+                                    type="number"
+                                    id="sale_order_accept_process_row_id"
+                                    name="sale_order_accept_process_row_id"
+                                    value="<cfoutput>#form.sale_order_accept_process_row_id#</cfoutput>"
+                                    placeholder="Örn: 500"
+                                >
+                            </div>
+                            <span class="field-hint">İlgili sipariş süreci yoksa boş bırakın.</span>
+                        </div>
                     </div>
 
                     <div class="action-row">
@@ -843,6 +889,7 @@
                 <h3>Nasıl Kullanılır?</h3>
                 <ul class="helper-list">
                     <li>✅ Offer Product ID benzersiz ve sayısal olmalıdır.</li>
+                    <li>✅ PBS Modul Company ve Sale Order ID alanları isteğe bağlıdır, sayısal değer giriniz.</li>
                     <li>✅ Satır ID listesini virgülle ayırarak girin (örn: 1,2,3).</li>
                     <li>✅ Boş bıraktığınız alanlar veri tabanında NULL olarak kaydedilir.</li>
                     <li>✅ Silme işlemi geri alınamaz, dikkatli olun.</li>
@@ -864,6 +911,8 @@
                         <thead>
                             <tr>
                                 <th>Offer Product ID</th>
+                                <th>PBS Modul Company ID</th>
+                                <th>Sale Order Accept Process Row ID</th>
                                 <th>Purchase Demand Accept Process Row ID List</th>
                                 <th style="text-align: center;">İşlemler</th>
                             </tr>
@@ -872,6 +921,20 @@
                             <cfoutput query="getAllData">
                                 <tr>
                                     <td data-label="Offer Product ID">#OFFER_PRODUCT_ID#</td>
+                                    <td data-label="PBS Modul Company ID">
+                                        <cfif Len(Trim("" & PBS_MODUL_COMPANY_ID))>
+                                            #PBS_MODUL_COMPANY_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Sale Order Accept Process Row ID">
+                                        <cfif Len(Trim("" & SALE_ORDER_ACCEPT_PROCESS_ROW_ID))>
+                                            #SALE_ORDER_ACCEPT_PROCESS_ROW_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
                                     <td data-label="Purchase Demand Accept Process Row ID List">
                                         <cfif len(trim(PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST))>
                                             <div class="badge-group">
