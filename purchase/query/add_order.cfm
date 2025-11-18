@@ -133,7 +133,7 @@
 		VALUES  
 			(
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#wrk_id#">,
-			<cfif isDefined("attributes.order_status")>1<cfelse>0</cfif>,
+			1,
 			#attributes.process_stage#,
 			#attributes.order_date#,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#paper_full#">,
