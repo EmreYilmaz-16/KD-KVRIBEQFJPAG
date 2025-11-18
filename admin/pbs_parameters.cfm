@@ -815,6 +815,7 @@
                                     placeholder="Örn: 12345"
                                 >
                             </div>
+                            <span class="field-hint">Teklif Ürünü İd'si</span>
                         </div>
 
                         <div class="form-group">
@@ -830,7 +831,7 @@
                                     maxlength="50"
                                 >
                             </div>
-                            <span class="field-hint">Maksimum 50 karakter, değerleri virgülle ayırın.</span>
+                            <span class="field-hint">Satış Teklifine Dönüştürebilmek İçin Satınalma Talebi Süreçleri</span>
                         </div>
 
                         <div class="form-group">
@@ -845,7 +846,7 @@
                                     placeholder="Örn: 2001"
                                 >
                             </div>
-                            <span class="field-hint">Şirket tanımı yoksa boş bırakabilirsiniz.</span>
+                            <span class="field-hint">Modülü Kullanacak Şirket Id'si</span>
                         </div>
 
                         <div class="form-group">
@@ -860,7 +861,7 @@
                                     placeholder="Örn: 500"
                                 >
                             </div>
-                            <span class="field-hint">İlgili sipariş süreci yoksa boş bırakın.</span>
+                            <span class="field-hint">Satınalma Siparişine Dönüştürebilmek İçin Satış Teklifi Süreci</span>
                         </div>
                     </div>
 
