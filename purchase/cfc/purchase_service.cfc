@@ -922,7 +922,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,DEPARTMENT_IN,LOCATION_IN,
                 (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
                 FROM w3Qa_1.INTERNALDEMAND
-                WHERE INTERNAL_ID =#offers.offer_id#
+                WHERE INTERNAL_ID =#arguments.internal_id#
             </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
             SELECT 
