@@ -3,6 +3,17 @@
 <cfparam name="url.page" default="1">
 <cfparam name="url.per_page" default="4">
 
+<!--- Resolve datasource configuration dynamically --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset variables.dsn = trim(configContent)>
+<cfquery name="getParams" datasource="#variables.dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset variables.companyId = trim(getParams.PBS_MODUL_COMPANY_ID)>
+<cfset variables.dsnCompany = variables.dsn & '_' & variables.companyId>
+<cfset variables.dsn3 = variables.dsnCompany>
+<cfset variables.dsnShip = variables.dsn & '_#year(now())#_' & variables.companyId>
+
 <!--- Custom tag için gerekli değişkenler --->
 <cfset upload_folder = ExpandPath(".")>
 <cfset dir_seperator = "/">
@@ -11,7 +22,7 @@
 </cfif>
 
 <!--- Import bilgilerini al --->
-<cfquery name="getImportInfo" datasource="w3Qa">
+<cfquery name="getImportInfo" datasource="#variables.dsn#">
     SELECT 
         import_id,
         import_date,
@@ -28,7 +39,7 @@
 </cfif>
 
 <!--- Sayfalama hesaplamaları - gerçek kayıt sayısına göre yap --->
-<cfquery name="getTotalRecordsForPaging" datasource="w3Qa">
+<cfquery name="getTotalRecordsForPaging" datasource="#variables.dsn#">
     SELECT COUNT(*) as total_count
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
@@ -39,7 +50,7 @@
 <cflog file="etiket_import" text="view_labels.cfm: Pagination - total_count=#getTotalRecordsForPaging.total_count#, totalPages=#totalPages#, offset=#offset#">
 
 <!--- Etiket verilerini al --->
-<cfquery name="getLabelData" datasource="w3Qa">
+<cfquery name="getLabelData" datasource="#variables.dsn#">
     SELECT 
         temp_id,
         eta_kodu,
@@ -59,7 +70,7 @@
 <cflog file="etiket_import" text="view_labels.cfm: import_id=#url.import_id#, found #getLabelData.recordCount# records">
 
 <!--- Debug: Total records in temp table for this import --->
-<cfquery name="getTotalRecords" datasource="w3Qa">
+<cfquery name="getTotalRecords" datasource="#variables.dsn#">
     SELECT COUNT(*) as total_count
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
@@ -421,7 +432,7 @@
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
                     
-                    <cfquery name="getStok" datasource="w3Qa">
+                    <cfquery name="getStok" datasource="#variables.dsn#">
                         SELECT TOP 1 PRODUCT_NAME 
                         FROM PBS_GETSTOCK 
                         WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">

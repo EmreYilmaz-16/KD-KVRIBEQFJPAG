@@ -1,3 +1,12 @@
+<!--- Resolve datasource configuration dynamically --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset variables.dsn = trim(configContent)>
+<cfquery name="getParams" datasource="#variables.dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset variables.companyId = trim(getParams.PBS_MODUL_COMPANY_ID)>
+<cfset variables.dsn3 = variables.dsn & '_' & variables.companyId>
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -212,7 +221,7 @@
                         <!-- Geçmiş İmportlar -->
                         <div class="mt-4">
                             <h6>Son İmportlar:</h6>
-                            <cfquery name="getRecentImports" datasource="w3Qa">
+                            <cfquery name="getRecentImports" datasource="#variables.dsn#">
                                 SELECT TOP 5 
                                     import_id,
                                     import_date,

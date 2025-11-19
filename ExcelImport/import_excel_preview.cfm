@@ -3,6 +3,12 @@
     CFML Excel Preview Script
     Bu dosya upload_excel.cfm'den gelen Excel dosyasını önce gösterir, kullanıcı onayından sonra veritabanına aktarır
 --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 
 <cfparam name="form.excelFile" default="">
 <cfparam name="form.confirmImport" default="false">
@@ -12,7 +18,7 @@
 <cfsetting requesttimeout="300" showdebugoutput="false">
 
 <!--- Veritabanı bağlantı ayarları (projenize göre düzenleyin) --->
-<cfset dsn = "W3Qa">
+
 
 <!--- Upload klasörü ayarları --->
 <cfset uploadPath = expandPath("./uploads/")>
@@ -305,7 +311,7 @@
                     
                     <!--- ETA_KODU değerini al --->
                     <cfset etaKoduValue = trim(importData[etaKoduColumn][currentRow])>
-                     <cfquery name="getProduct" datasource="W3Qa_1">
+                     <cfquery name="getProduct" datasource="#dsn3#">
                     SELECT * FROM STOCKS WHERE PRODUCT_CODE_2= <cfqueryparam value="#etaKoduValue#" cfsqltype="cf_sql_nvarchar">
                 </cfquery>
                     <cfif getProduct.recordCount EQ 0>
@@ -320,7 +326,7 @@
                         <cfset oemColumn = "OEM #i#">
                         <cfif listFindNoCase(columnList, oemColumn) AND len(trim(importData[oemColumn][currentRow]))>
                             <cfquery name="getExistingRecord" datasource="#dsn#_product">
-                               SELECT BARCODE,STOCK_ID,UNIT_ID FROM [w3Qa_product].[STOCKS_BARCODES]  WHERE BARCODE=<cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
+                               SELECT BARCODE,STOCK_ID,UNIT_ID FROM [#dsn#_product].[STOCKS_BARCODES]  WHERE BARCODE=<cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
                                AND STOCK_ID=<cfqueryparam value="#getProduct.STOCK_ID#" cfsqltype="cf_sql_integer">
                                
                             </cfquery>
@@ -328,9 +334,9 @@
                             <!--- Marka kontrolü sadece BRAND_ID varsa yapılacak --->
                             <cfif isDefined("getProduct.BRAND_ID") AND len(trim(getProduct.BRAND_ID)) AND isNumeric(getProduct.BRAND_ID)>
                                 <cfquery name="getBrandExRecord" datasource="#dsn#_product">
-                                    SELECT SB.* FROM w3Qa_product.STOCKS_BARCODES AS SB 
-    INNER JOIN w3Qa_product.STOCKS AS S ON S.STOCK_ID=SB.STOCK_ID
-    INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
+                                    SELECT SB.* FROM [#dsn#_product].[STOCKS_BARCODES] AS SB 
+    INNER JOIN [#dsn#_product].[STOCKS] AS S ON S.STOCK_ID=SB.STOCK_ID
+    INNER JOIN [#dsn#_product].[PRODUCT] AS P ON P.PRODUCT_ID=S.PRODUCT_ID
     WHERE P.BRAND_ID = <cfqueryparam value="#getProduct.BRAND_ID#" cfsqltype="cf_sql_integer">
     AND SB.BARCODE = <cfqueryparam value="#trim(importData[oemColumn][currentRow])#" cfsqltype="cf_sql_nvarchar">
                                 </cfquery>

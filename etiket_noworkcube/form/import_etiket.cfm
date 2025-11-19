@@ -1,3 +1,9 @@
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -204,7 +210,7 @@
                         <!-- Geçmiş İmportlar -->
                         <div class="mt-4">
                             <h6>Son İmportlar:</h6>
-                            <cfquery name="getRecentImports" datasource="w3Qa">
+                            <cfquery name="getRecentImports" datasource="#dsn#">
                                 SELECT TOP 5 
                                     import_id,
                                     import_date,

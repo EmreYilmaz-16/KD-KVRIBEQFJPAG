@@ -1,16 +1,25 @@
 <!--- Etiket Şablon Tasarım Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.template_id" default="1">
+
+<!--- Resolve datasource configuration dynamically --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset variables.dsn = trim(configContent)>
+<cfquery name="getParams" datasource="#variables.dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset variables.companyId = trim(getParams.PBS_MODUL_COMPANY_ID)>
+<cfset variables.dsn3 = variables.dsn & '_' & variables.companyId>
     
 <!--- Mevcut şablonları al --->
-<cfquery name="getTemplates" datasource="w3Qa">
+<cfquery name="getTemplates" datasource="#variables.dsn#">
     SELECT * FROM etiket_templates_s 
     ORDER BY template_name
 </cfquery>
 
 <!--- Eğer template yoksa varsayılan şablonları oluştur --->
 <cfif getTemplates.recordCount eq 0>
-    <cfquery datasource="w3Qa">
+    <cfquery datasource="#variables.dsn#">
         INSERT INTO etiket_templates_s (template_name, template_description, label_width, label_height, qr_size, font_size, show_qr, show_barcode, fields_layout)
         VALUES 
         ('Standart Etiket', 'Temel etiket şablonu - QR kod ile', 300, 200, 100, 12, 1, 0, 'standard'),
@@ -23,7 +32,7 @@
 </cfif>
 
 <!--- Seçili şablon bilgilerini al --->
-<cfquery name="getSelectedTemplate" datasource="w3Qa">
+<cfquery name="getSelectedTemplate" datasource="#variables.dsn#">
     SELECT * FROM etiket_templates_s 
     WHERE template_id = <cfqueryparam value="#url.template_id#" cfsqltype="cf_sql_integer">
 </cfquery>

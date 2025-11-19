@@ -1,3 +1,9 @@
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 <!--- Etiket Görüntüleme ve Yazdırma Sayfası --->
 <cfparam name="url.import_id" default="0">
 <cfparam name="url.page" default="1">
@@ -11,7 +17,7 @@
 </cfif>
 
 <!--- Import bilgilerini al --->
-<cfquery name="getImportInfo" datasource="w3Qa">
+<cfquery name="getImportInfo" datasource="#dsn#">
     SELECT 
         import_id,
         import_date,
@@ -28,7 +34,7 @@
 </cfif>
 
 <!--- Sayfalama hesaplamaları - gerçek kayıt sayısına göre yap --->
-<cfquery name="getTotalRecordsForPaging" datasource="w3Qa">
+<cfquery name="getTotalRecordsForPaging" datasource="#dsn#">
     SELECT COUNT(*) as total_count
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
@@ -39,7 +45,7 @@
 <cflog file="etiket_import" text="view_labels.cfm: Pagination - total_count=#getTotalRecordsForPaging.total_count#, totalPages=#totalPages#, offset=#offset#">
 
 <!--- Etiket verilerini al --->
-<cfquery name="getLabelData" datasource="w3Qa">
+<cfquery name="getLabelData" datasource="#dsn#">
     SELECT 
         temp_id,
         eta_kodu,
@@ -61,7 +67,7 @@
 <cflog file="etiket_import" text="view_labels.cfm: import_id=#url.import_id#, found #getLabelData.recordCount# records">
 
 <!--- Debug: Total records in temp table for this import --->
-<cfquery name="getTotalRecords" datasource="w3Qa">
+<cfquery name="getTotalRecords" datasource="#dsn#">
     SELECT COUNT(*) as total_count
     FROM etiket_temp_data 
     WHERE import_id = <cfqueryparam value="#url.import_id#" cfsqltype="cf_sql_integer">
@@ -391,7 +397,7 @@
                 <cfoutput> 
                 <cfloop query="getLabelData">
                     <!--- Ürün bilgisini bir kez al --->
-                    <cfquery name="getStok" datasource="w3Qa">
+                    <cfquery name="getStok" datasource="#dsn#">
                         SELECT TOP 1 PRODUCT_NAME 
                         FROM PBS_GETSTOCK 
                         WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">

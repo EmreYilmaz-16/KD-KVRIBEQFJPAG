@@ -1,3 +1,9 @@
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 <!--- Şablon Kaydetme API --->
 <cfcontent type="application/json">
 
@@ -7,7 +13,7 @@
     <cfset templateData = DeserializeJSON(requestBody)>
     
     <!--- Şablonu güncelle --->
-    <cfquery datasource="w3Qa">
+    <cfquery datasource="#dsn#">
         UPDATE etiket_templates_s 
         SET 
             label_width = <cfqueryparam value="#templateData.label_width#" cfsqltype="cf_sql_integer">,

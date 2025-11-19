@@ -1,13 +1,22 @@
 <!--- Şablon Kaydetme API --->
 <cfcontent type="application/json">
 
+<!--- Resolve datasource configuration dynamically --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset variables.dsn = trim(configContent)>
+<cfquery name="getParams" datasource="#variables.dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset variables.companyId = trim(getParams.PBS_MODUL_COMPANY_ID)>
+<cfset variables.dsn3 = variables.dsn & '_' & variables.companyId>
+
 <cftry>
     <!--- POST verilerini al --->
     <cfset requestBody = GetHttpRequestData().content>
     <cfset templateData = DeserializeJSON(requestBody)>
     
     <!--- Şablonu güncelle --->
-    <cfquery datasource="w3Qa">
+    <cfquery datasource="#variables.dsn#">
         UPDATE etiket_templates_s 
         SET 
             label_width = <cfqueryparam value="#templateData.label_width#" cfsqltype="cf_sql_integer">,

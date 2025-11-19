@@ -1,3 +1,9 @@
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 <!--- JavaScript Tabanlı Excel Import (Apache POI alternatifi) --->
 <cfparam name="form.jsonData" default="">
 
@@ -13,7 +19,7 @@
     <cfset var counter = 1>
     
     <!--- Get last serial number for this eta kodu and date --->
-    <cfquery name="getLastSerial" datasource="w3Qa">
+    <cfquery name="getLastSerial" datasource="#dsn#">
         SELECT TOP 1 seri_no 
         FROM etiket_temp_data 
         WHERE eta_kodu = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
@@ -97,7 +103,7 @@
                                 <cfset excelData = deserializeJSON(form.jsonData)>
                                 
                                 <!--- Import log oluştur --->
-                                <cfquery name="createImportLog" datasource="w3Qa" result="logResult">
+                                <cfquery name="createImportLog" datasource="#dsn#" result="logResult">
                                     INSERT INTO etiket_import_log (
                                         import_date,
                                         file_name,
@@ -129,7 +135,7 @@
                                                     
                                                     <!--- Her seri numarası için ayrı kayıt oluştur --->
                                                     <cfloop array="#generatedSerials#" index="generatedSerial">
-                                                        <cfquery name="insertData" datasource="w3Qa">
+                                                        <cfquery name="insertData" datasource="#dsn#">
                                                             INSERT INTO etiket_temp_data (
                                                                 import_id,
                                                                 eta_kodu,
@@ -170,7 +176,7 @@
                                                 </cfif>
                                             <cfelse>
                                                 <!--- Normal tek kayıt insert --->
-                                                <cfquery name="insertData" datasource="w3Qa">
+                                                <cfquery name="insertData" datasource="#dsn#">
                                                     INSERT INTO etiket_temp_data (
                                                         import_id,
                                                         eta_kodu,
@@ -219,7 +225,7 @@
                                 </cfloop>
                                 
                                 <!--- Import log güncelle --->
-                                <cfquery name="updateImportLog" datasource="w3Qa">
+                                <cfquery name="updateImportLog" datasource="#dsn#">
                                     UPDATE etiket_import_log SET
                                         total_records = <cfqueryparam value="#arrayLen(excelData.data)#" cfsqltype="cf_sql_integer">,
                                         success_records = <cfqueryparam value="#successCount#" cfsqltype="cf_sql_integer">,
@@ -230,7 +236,7 @@
                                 </cfquery>
                                 
                                 <!--- Gerçek etiket sayısını kontrol et --->
-                                <cfquery name="getActualCount" datasource="w3Qa">
+                                <cfquery name="getActualCount" datasource="#dsn#">
                                     SELECT COUNT(*) as actual_count
                                     FROM etiket_temp_data 
                                     WHERE import_id = <cfqueryparam value="#importId#" cfsqltype="cf_sql_integer">

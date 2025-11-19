@@ -28,7 +28,7 @@
                 <cfquery name="getAllStocks" datasource="#dsn2#">
                    SELECT SUM(STOCK_IN-STOCK_OUT) AS BK,STOCK_ID,STORE,STORE_LOCATION ,
 DEPARTMENT_HEAD+'-'+COMMENT AS DEPO
-FROM w3Qa_2025_1.STOCKS_ROW 
+FROM #dsn2#.STOCKS_ROW 
 LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=STORE
 LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=STORE_LOCATION AND SL.DEPARTMENT_ID=D.DEPARTMENT_ID
 WHERE STOCK_ID=#getProduct.STOCK_ID#
@@ -81,6 +81,13 @@ HAVING STORE_LOCATION IS NOT NULL
                     </cf_box>
                 <!-- Serial numbers will be loaded here -->
         </div>
+        <script>
+           <cfoutput> 
+            var dsn3="#dsn3#";
+            var dsn2="#dsn2#";
+            var dsn="#dsn#";
+        </cfoutput>
+        </script>
 <script>
     function getSerials(stockId, departmentId, locationId) {
         var sql_query=`
@@ -90,7 +97,7 @@ SUM(CASE WHEN IN_OUT=1 THEN 1 ELSE -1 END)
 ,STOCK_ID
 ,DEPARTMENT_ID
 ,LOCATION_ID
-FROM w3Qa_1.SERVICE_GUARANTY_NEW
+FROM ${dsn3}.SERVICE_GUARANTY_NEW
 GROUP BY
 SERIAL_NO,
 STOCK_ID
@@ -127,9 +134,9 @@ var result=wrk_query(sql_query,"dsn3")
     }
 
 function getHareket(serial_no) {
-    var sql_query=`select CASE WHEN SGN.IN_OUT=1 THEN '+++' ELSE'---' END AS TR,SGN.DEPARTMENT_ID,SGN.LOCATION_ID,SGN.SERIAL_NO,DEPARTMENT_HEAD+'-'+COMMENT AS DEPO  from w3Qa_1.SERVICE_GUARANTY_NEW  AS SGN
-    LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SGN.DEPARTMENT_ID
-LEFT JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DEPARTMENT_ID=D.DEPARTMENT_ID
+    var sql_query=`select CASE WHEN SGN.IN_OUT=1 THEN '+++' ELSE'---' END AS TR,SGN.DEPARTMENT_ID,SGN.LOCATION_ID,SGN.SERIAL_NO,DEPARTMENT_HEAD+'-'+COMMENT AS DEPO  from ${dsn3}.SERVICE_GUARANTY_NEW  AS SGN
+    LEFT JOIN ${dsn}.DEPARTMENT AS D ON D.DEPARTMENT_ID=SGN.DEPARTMENT_ID
+LEFT JOIN ${dsn}.STOCKS_LOCATION AS SL ON SL.LOCATION_ID=SGN.LOCATION_ID AND SL.DEPARTMENT_ID=D.DEPARTMENT_ID
     where SERIAL_NO='${serial_no}'
     `
     var result=wrk_query(sql_query,"dsn3")

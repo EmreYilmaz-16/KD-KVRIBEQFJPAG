@@ -47,19 +47,19 @@
             S.SHIP_DATE,
             COALESCE(T.TotalAmount, 0)  AS TOTAL_AMOUNT,
             COALESCE(G.GuaranteeCnt, 0) AS GUARANTY_COUNT
-        FROM w3Qa_2025_1.SHIP AS S
-        LEFT JOIN w3Qa.COMPANY AS C
+        FROM #dsn2#.SHIP AS S
+        LEFT JOIN #dsn#.COMPANY AS C
                ON C.COMPANY_ID = S.COMPANY_ID
         LEFT JOIN (
             SELECT SR.SHIP_ID, SUM(SR.AMOUNT) AS TotalAmount
-            FROM w3Qa_2025_1.SHIP_ROW AS SR
+            FROM #dsn2#.SHIP_ROW AS SR
             GROUP BY SR.SHIP_ID
         ) AS T
                ON T.SHIP_ID = S.SHIP_ID
         LEFT JOIN (
             SELECT SR.SHIP_ID, COUNT(*) AS GuaranteeCnt
-            FROM w3Qa_2025_1.SHIP_ROW AS SR
-            INNER JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG
+            FROM #dsn2#.SHIP_ROW AS SR
+            INNER JOIN #dsn3#.SERVICE_GUARANTY_NEW AS SG
                     ON SG.WRK_ROW_ID = SR.WRK_ROW_ID
             GROUP BY SR.SHIP_ID
         ) AS G

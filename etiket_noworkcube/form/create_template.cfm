@@ -2,9 +2,16 @@
 <cfparam name="url.name" default="Yeni Şablon">
 <cfparam name="url.import_id" default="0">
 
+
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#">
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#">
 <cftry>
     <!--- Yeni şablon ekle --->
-    <cfquery datasource="w3Qa">
+    <cfquery datasource="#dsn#">
         INSERT INTO etiket_templates_s (
             template_name, 
             template_description, 
@@ -26,7 +33,7 @@
     </cfquery>
     
     <!--- Yeni oluşturulan şablonun ID'sini al --->
-    <cfquery name="getNewTemplate" datasource="w3Qa">
+    <cfquery name="getNewTemplate" datasource="#dsn#">
         SELECT template_id FROM etiket_templates_s 
         WHERE template_name = <cfqueryparam value="#url.name#" cfsqltype="cf_sql_varchar">
         ORDER BY created_date DESC

@@ -2,6 +2,15 @@
 <cfparam name="form.clearTable" default="false">
 <cfparam name="form.validateData" default="false">
 
+<!--- Resolve datasource configuration dynamically --->
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset variables.dsn = trim(configContent)>
+<cfquery name="getParams" datasource="#variables.dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset variables.companyId = trim(getParams.PBS_MODUL_COMPANY_ID)>
+<cfset variables.dsn3 = variables.dsn & '_' & variables.companyId>
+
 <!--- Upload Path Configuration --->
 <cfset uploadPath = "c:\temp\excel_imports\">
 <cfset maxFileSize = 10 * 1024 * 1024> <!--- 10MB --->
@@ -21,7 +30,7 @@
     <cflog file="etiket_import" text="generateSerialNumbers called: etaKodu=#etaKodu#, miktar=#miktar#, prefix=#prefix#">
     
     <!--- Get last serial number for this eta kodu and date --->
-    <cfquery name="getLastSerial" datasource="w3Qa">
+    <cfquery name="getLastSerial" datasource="#variables.dsn#">
         SELECT TOP 1 seri_no 
         FROM etiket_temp_data 
         WHERE eta_kodu = <cfqueryparam value="#etaKodu#" cfsqltype="cf_sql_varchar">
@@ -158,7 +167,7 @@
                                 </cfif>
 
                                 <!--- Create Import Log Entry --->
-                                <cfquery name="createImportLog" datasource="w3Qa" result="logResult">
+                                <cfquery name="createImportLog" datasource="#variables.dsn#" result="logResult">
                                     INSERT INTO etiket_import_log (
                                         import_date,
                                         file_name,
@@ -176,7 +185,7 @@
 
                                 <!--- Clear existing temp data if requested --->
                                 <cfif form.clearTable eq "true">
-                                    <cfquery name="clearTempTable" datasource="w3Qa">
+                                    <cfquery name="clearTempTable" datasource="#variables.dsn#">
                                         DELETE FROM etiket_temp_data WHERE import_id = <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">
                                     </cfquery>
                                 </cfif>
@@ -570,7 +579,7 @@
                                                     
                                                     <!--- Insert multiple records for generated serials --->
                                                     <cfloop array="#generatedSerials#" index="generatedSerial">
-                                                        <cfquery name="insertTempData" datasource="w3Qa">
+                                                        <cfquery name="insertTempData" datasource="#variables.dsn#">
                                                             INSERT INTO etiket_temp_data (
                                                                 import_id,
                                                                 eta_kodu,
@@ -608,7 +617,7 @@
                                                     </cfloop>
                                                 <cfelse>
                                                     <!--- Normal single record insert --->
-                                                    <cfquery name="insertTempData" datasource="w3Qa">
+                                                    <cfquery name="insertTempData" datasource="#variables.dsn#">
                                                         INSERT INTO etiket_temp_data (
                                                             import_id,
                                                             eta_kodu,
@@ -669,7 +678,7 @@
                                 </cfscript>
 
                                 <!--- Verify actual records in database --->
-                                <cfquery name="verifyRecords" datasource="w3Qa">
+                                <cfquery name="verifyRecords" datasource="#variables.dsn#">
                                     SELECT COUNT(*) as actual_count
                                     FROM etiket_temp_data 
                                     WHERE import_id = <cfqueryparam value="#importResult.importId#" cfsqltype="cf_sql_integer">
@@ -677,7 +686,7 @@
                                 <cflog file="etiket_import" text="Actual records in database for import_id #importResult.importId#: #verifyRecords.actual_count#">
 
                                 <!--- Update Import Log --->
-                                <cfquery name="updateImportLog" datasource="w3Qa">
+                                <cfquery name="updateImportLog" datasource="#variables.dsn#">
                                     UPDATE etiket_import_log SET
                                         total_records = <cfqueryparam value="#importResult.totalRecords#" cfsqltype="cf_sql_integer">,
                                         success_records = <cfqueryparam value="#importResult.successRecords#" cfsqltype="cf_sql_integer">,
@@ -696,7 +705,7 @@
                                     
                                     <!--- Update log with error --->
                                     <cfif importResult.importId gt 0>
-                                        <cfquery name="updateErrorLog" datasource="w3Qa">
+                                        <cfquery name="updateErrorLog" datasource="#variables.dsn#">
                                             UPDATE etiket_import_log SET
                                                 status = 'ERROR',
                                                 error_message = <cfqueryparam value="#cfcatch.message#" cfsqltype="cf_sql_varchar">,
