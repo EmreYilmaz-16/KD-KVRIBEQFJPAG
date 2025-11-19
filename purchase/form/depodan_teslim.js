@@ -87,7 +87,8 @@ function calculateFinalSalePrice(productId) {
         d3,
         rate1,
         rate2,
-        DEMAND_MONEY
+        DEMAND_MONEY,
+        gpaMoney
     });
     // Marj + kur dönüşümü
     const base = net + (net * marj / 100);
