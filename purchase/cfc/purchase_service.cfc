@@ -47,13 +47,30 @@
  */
 ------>
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
-    <cfset dsn3="w3Qa_1">
+    <cfset dsn3="">
     <cfset DSN3_ALIAS =dsn3>
-    <cfset dsn="w3Qa">
+    <cfset dsn="">
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
+
+<cffunction name="setdatasources">
+    burada datasourcelar elle yazılmış halde ama burayı parametrik yaptım aşağıda yazılı datasourceları entegre edebilirmiyiz
+
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#"> <!---w3qa--->
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_1---->
+<cfset dsn2="#dsn#_#year(now())#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_2025_1---->
+</cffunction>
+
+
 <cffunction name="saveSaleOfferFromSelectedRows" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-        <cfset var response = {}>
+    <cfscript>
+        setdatasources();
+    </cfscript>   
+    <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
         <cfif isJSON(arguments.payload)>
