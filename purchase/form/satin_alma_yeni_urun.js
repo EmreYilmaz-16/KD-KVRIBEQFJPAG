@@ -128,6 +128,20 @@ uniqueProducts.forEach(productId => {
     codeCell.textContent = productCode || "N/A"; // Eğer bulunamazsa "N/A" yaz
     codeCell.className = 'product-code';
     row.appendChild(codeCell);
+     var brandcell = document.createElement('td');
+    // Marka
+    let brandName = "";
+    for (const supplier of data) {
+        const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+        if (product && product.BRAND_NAME) {
+            brandName = product.BRAND_NAME;
+            break; // İlk bulduğunda döngüyü kır
+        }
+    }
+    brandcell.textContent = brandName || "-"; // Eğer marka bulunamazsa "-" göster
+    brandcell.className = 'product-brand';
+    brandcell.dataset.productid = productId;
+    row.appendChild(brandcell);
     // OEM No
     const oemCell = document.createElement('td');
 
