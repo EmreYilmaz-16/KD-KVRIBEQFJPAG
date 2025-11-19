@@ -4,6 +4,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     let gpa_money = "";
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+        console.log("Net Fiyat Kontrol Ediliyor:", productId, product);
         if (product && product.NET_PRICE) {
             net = product.NET_PRICE;
             gpa_money = product.GPA_MONEY;
@@ -91,7 +92,7 @@ function calculateFinalSalePrice(productId) {
         gpaMoney,
         gpaPrice,
         gpaPrice1
-        
+
     });
     // Marj + kur dönüşümü
     const base = net + (net * marj / 100);
