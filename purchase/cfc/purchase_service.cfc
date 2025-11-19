@@ -650,7 +650,7 @@ VALUES(
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
-            <cfquery name="DEL" datasource="#dsn3#">
+            <cfquery name="DEL" datasource="w3Qa_1">
                 DELETE FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' AND BASKET_EXTRA_INFO=#offers.BEI#
             </cfquery>
             <!-- Process each offer -->
