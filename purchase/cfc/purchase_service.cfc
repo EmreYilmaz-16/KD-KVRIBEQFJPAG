@@ -664,7 +664,7 @@ VALUES(
                    
 
                     <!-- Insert new rows for the product -->
-                    <cfquery name="INS" datasource="#dsn3#">
+                    <cfquery name="INS" datasource="w3Qa_1">
                         INSERT INTO PBS_SELECTED_ROWS (
                             WRK_ROW_ID,
                             PRICE,
@@ -688,11 +688,11 @@ VALUES(
                             '#product.demandMoney#'
                         )
                     </cfquery>
-                    <cfquery name="getStockInfo" datasource="#dsn3#">
+                    <cfquery name="getStockInfo" datasource="w3Qa_1">
                         SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
                     </cfquery>
-                      <cfquery name="getUnit" datasource="#dsn3#">
-                        select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                      <cfquery name="getUnit" datasource="w3Qa_1">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from w3Qa_1.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
                     </cfquery>
                     <cfscript>
                         ix=ix+1;
