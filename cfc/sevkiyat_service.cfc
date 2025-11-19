@@ -6,6 +6,18 @@ component output="false" {
         writeDump(getHTTPRequestData())
         formdata=deserializeJSON(getHTTPRequestData().content);
         writeDump(formdata);
+        // Resolve company-specific datasource dynamically based on configuration.
+        var configContent = fileRead(expandPath('/pbs_dsn.txt'));
+        var dsn = trim(configContent);
+        var getparams = queryExecute(
+            "SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS",
+            [],
+            {datasource=dsn, maxrows=1}
+        );
+        if (getparams.recordCount eq 0) {
+            throw(type="DatasourceResolution", message="PBS_MODUL_COMPANY_ID could not be determined.");
+        }
+        var dsn3 = dsn & '_' & getparams.PBS_MODUL_COMPANY_ID;
         var palletId=formdata.pallet_id;
         var userid=formdata.userid;
         var products=formdata.products;
@@ -14,7 +26,7 @@ component output="false" {
             {
                 palletId={value=palletId, cfsqltype="cf_sql_integer"}
             },
-            {datasource="w3Qa_1"}
+            {datasource=dsn3}
         );
         for(var i=1;i LTE arrayLen(products);i=i+1){
             var q=queryExecute(
@@ -28,7 +40,7 @@ component output="false" {
                     recordDate={value=now(), cfsqltype="cf_sql_timestamp"},
                     recordEmp={value=userid, cfsqltype="cf_sql_integer"}
                 },
-                {datasource="w3Qa_1"}
+                {datasource=dsn3}
             );
         }
         return {success=true, message="Product saved to shelf successfully."};
@@ -40,7 +52,7 @@ component output="false" {
                 stockId={value=arguments.STOCK_ID, cfsqltype="cf_sql_integer"}
             },
             
-            {datasource="w3Qa_1", maxrows=1}
+            {datasource=dsn3, maxrows=1}
         );
         if(qm.recordcount gt 0){
             return {success=false, message="This product is already assigned to the shelf."};
@@ -53,7 +65,7 @@ component output="false" {
                 productId={value=arguments.PRODUCT_ID, cfsqltype="cf_sql_integer"},
                 stockId={value=arguments.STOCK_ID, cfsqltype="cf_sql_integer"}
             },
-            {datasource="w3Qa_1"}
+            {datasource=dsn3}
         );
         return {success=true, message="Product saved to shelf successfully."};
 

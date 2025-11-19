@@ -208,7 +208,14 @@
         </div>
     </div>
 </div>
-
+<script>
+<cfoutput>
+	var dsn="#dsn#";
+	var dsn3="#dsn3#";
+	var dsn2="#dsn2#";
+	var dsn1="#dsn1#";
+</cfoutput>
+</script>
 <script>
 var bm = null;
 var main_product_id = 0;
@@ -312,7 +319,7 @@ function createRows(product_code_2){
     main_stock_id = stockId;
     main_product_id = productId;
     console.table({stockId: stockId, productId: productId, product_code_2: product_code_2});
-    var recordedShelfsQuery = "SELECT PP.SHELF_CODE, PP.PRODUCT_PLACE_ID FROM w3Qa_1.PRODUCT_PLACE AS PP LEFT JOIN w3Qa_1.PRODUCT_PLACE_ROWS AS PPR ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID=" + stockId;
+    var recordedShelfsQuery = "SELECT PP.SHELF_CODE, PP.PRODUCT_PLACE_ID FROM "+dsn3+".PRODUCT_PLACE AS PP LEFT JOIN "+dsn3+".PRODUCT_PLACE_ROWS AS PPR ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE PPR.STOCK_ID=" + stockId;
     var recordedShelfsQueryResult = wrk_query(recordedShelfsQuery, 'dsn3');
     renderShelfRows(recordedShelfsQueryResult);
     if(recordedShelfsQueryResult && recordedShelfsQueryResult.recordcount > 0){

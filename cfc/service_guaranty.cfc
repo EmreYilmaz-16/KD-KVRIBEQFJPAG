@@ -6,7 +6,19 @@
         <cfargument name="recordEmp" type="string" required="true" />
         <cfargument name="fromApp" type="string" required="false" default="Ambar" /> <!--- Hangi uygulamadan geldiği bilgisi Uygulamalar Sayim / Ambar (opsiyonel) --->
         <cfset var success = false />
-<cfset dsn3="w3Qa_1">
+        <cfset var configContent = "" />
+        <cfset var dsn = "" />
+        <cfset var dsn3 = "" />
+        <cfset var getparams = queryNew("") />
+        <cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+        <cfset dsn = trim(configContent)>
+        <cfquery name="getparams" datasource="#dsn#" maxrows="1">
+            SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+        </cfquery>
+        <cfif getparams.recordCount EQ 0>
+            <cfthrow type="DatasourceResolution" message="PBS_MODUL_COMPANY_ID could not be determined." />
+        </cfif>
+        <cfset dsn3 = "#dsn#_#getparams.PBS_MODUL_COMPANY_ID#" />
         <!--- İş kuralları --->
         <cfset var isPurchase = (arguments.data.IN_OUT EQ 1 ? 1 : 0)>
         <cfset var isSale     = (arguments.data.IN_OUT EQ 0 ? 1 : 0)>
@@ -16,7 +28,7 @@
         <!--- INSERT işlemi --->
         <cftry>
             <cfquery name="q1" datasource="#dsn3#" result="queryResult">
-                INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW
+                INSERT INTO #dsn3#.SERVICE_GUARANTY_NEW
                 (
                     STOCK_ID,
                     SERIAL_NO,
@@ -71,11 +83,11 @@
             </cfquery>
             <cfif arguments.fromApp eq "Sayim">
                 <cfquery name="ishv" datasource="#dsn3#">
-                    select * from w3Qa_1.SERIAL_IN_OUT_PBS where SERIAL_NUMBER='#data.SERIAL_NO#'
+                    select * from #dsn3#.SERIAL_IN_OUT_PBS where SERIAL_NUMBER='#data.SERIAL_NO#'
                 </cfquery>
                 <cfif ishv.recordcount eq 0>
                     <cfquery name="insQ" datasource="#dsn3#">
-                        INSERT INTO w3Qa_1.SERIAL_IN_OUT_PBS
+                        INSERT INTO #dsn3#.SERIAL_IN_OUT_PBS
                         (
                              SERIAL_NUMBER, 
                              IS_ALIVE, 

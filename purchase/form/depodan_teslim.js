@@ -79,6 +79,16 @@ function calculateFinalSalePrice(productId) {
     const d2 = parseFloat(dsc2Input?.value) || 0;
     const d3 = parseFloat(dsc3Input?.value) || 0;
 
+    console.table({
+        net,
+        marj,
+        d1,
+        d2,
+        d3,
+        rate1,
+        rate2,
+        DEMAND_MONEY
+    });
     // Marj + kur dönüşümü
     const base = net + (net * marj / 100);
     const converted = (base * rate1) / rate2;

@@ -71,6 +71,15 @@
 	display: none;
 }
 </style>
+
+<script>
+<cfoutput>
+	var dsn="#dsn#";
+	var dsn3="#dsn3#";
+	var dsn2="#dsn2#";
+	var dsn1="#dsn1#";
+</cfoutput>
+</script>
 <script type="text/javascript">
 // Global Variables
 const FormState = {
@@ -136,9 +145,9 @@ function getStockWithSerialNo(serialNo) {
 	resetFormState();
 	
 	const sql = `SELECT TOP 1 SB.STOCK_ID, SB.SERIAL_NO,'' AS BARCODE, PU.MAIN_UNIT, PU.MULTIPLIER, S.PRODUCT_NAME
-		FROM w3qa_1.SERVICE_GUARANTY_NEW AS SB
-		INNER JOIN w3qa_1.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
-		INNER JOIN w3qa_1.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
+		FROM ${dsn3}.SERVICE_GUARANTY_NEW AS SB
+		INNER JOIN ${dsn3}.STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID
+		INNER JOIN ${dsn3}.PRODUCT_UNIT AS PU ON S.PRODUCT_UNIT_ID = PU.PRODUCT_UNIT_ID
 		WHERE SB.SERIAL_NO = '${serialNo}'`;
 	
 	const result = processProductQuery(sql, 'dsn3', 'Seri Numaralı Ürün Bulunamadı');

@@ -192,6 +192,14 @@
 	</div>
 </div>
 <script>
+<cfoutput>
+	var dsn="#dsn#";
+	var dsn3="#dsn3#";
+	var dsn2="#dsn2#";
+	var dsn1="#dsn1#";
+</cfoutput>
+</script>
+<script>
 // Global Variables
 var stock_id = <cfoutput>#f_stock_id#;</cfoutput>
 var is_rafli = <cfoutput>#get_store_type.raf#</cfoutput>;
@@ -310,16 +318,16 @@ function processSerialNumber() {
 
 // Seri Numarası Kontrol Fonksiyonu
 function checkSerialNumber(serialNumber) {
-    var sql = `SELECT IS_ALIVE, PURCHASE_DATE FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serialNumber}' AND STOCK_ID=${formArgs.stock_id}`;
+    var sql = `SELECT IS_ALIVE, PURCHASE_DATE FROM ${dsn3}.SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER='${serialNumber}' AND STOCK_ID=${formArgs.stock_id}`;
     var result = wrk_query(sql, 'dsn3', 1);
     
     console.log('Serial Check Result:', result);
     
     if (result.recordcount > 0 && result.IS_ALIVE[0] == 1) {
         // Eski tarihli seri kontrolü
-       // var oncekiSql = `SELECT COUNT(*) MK FROM w3Qa_1.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) < CAST('${result.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`;
+       // var oncekiSql = `SELECT COUNT(*) MK FROM ${dsn3}.SERIAL_IN_OUT_PBS WHERE STOCK_ID=${formArgs.stock_id} AND CAST(PURCHASE_DATE AS DATE) < CAST('${result.PURCHASE_DATE}' AS DATE) AND IS_ALIVE=1`;
 //         var oncekiSql=`
-//         SELECT * FROM w3Qa_1.vw_SerialAliveWithDepo
+//         SELECT * FROM ${dsn3}.vw_SerialAliveWithDepo
 //         WHERE 1=1
 //         AND DEPO IN (${TarihKontrolLokasyonIds})
 //         AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE}' AS DATE) 
@@ -329,7 +337,7 @@ function checkSerialNumber(serialNumber) {
 //         var oncekiResult = wrk_query(oncekiSql, "DSN3");
 var SerialNumberList = getUsedSerialNumbers();
 var oncekiSql=`
-        SELECT COUNT(*) as MK FROM w3Qa_1.vw_SerialAliveWithDepo
+        SELECT COUNT(*) as MK FROM ${dsn3}.vw_SerialAliveWithDepo
         WHERE 1=1
         AND DEPO IN (${TarihKontrolLokasyonIds})
         AND PURCHASE_DATE < CAST('${result.PURCHASE_DATE[0]}' AS DATE) 
@@ -392,7 +400,7 @@ function processRafliDepo(serialNumber) {
     var shelf_id = rafResult.PRODUCT_PLACE_ID[0];
     
     // Raf-seri eşleşme kontrolü
-    var rafKontrolSql = `SELECT SHELF_NUMBER, SUM(CASE WHEN IN_OUT = 1 THEN 1 ELSE -1 END) AS V FROM w3Qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serialNumber}' GROUP BY SHELF_NUMBER HAVING SHELF_NUMBER=${rafResult.PRODUCT_PLACE_ID[0]}`;
+    var rafKontrolSql = `SELECT SHELF_NUMBER, SUM(CASE WHEN IN_OUT = 1 THEN 1 ELSE -1 END) AS V FROM ${dsn3}.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='${serialNumber}' GROUP BY SHELF_NUMBER HAVING SHELF_NUMBER=${rafResult.PRODUCT_PLACE_ID[0]}`;
     var rafKontrolSonuc = wrk_query(rafKontrolSql, 'dsn3', 1);
     
     if (rafKontrolSonuc.recordcount == 0 || rafKontrolSonuc.V[0] <= 0) {

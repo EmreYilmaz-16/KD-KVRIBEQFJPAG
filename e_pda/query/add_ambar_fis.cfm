@@ -424,7 +424,7 @@ POZİSYON=SATIRLAR
         <cfdump var="GIRIS_RAF_ID=#GIRIS_RAF_ID# ----- CIKIS_RAF_ID=#CIKIS_RAF_ID#">
         
         <cfquery name="GETSER" datasource="#DSN3#">
-            SELECT * FROM w3qa_1.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
+            SELECT * FROM #dsn3#.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#SERI_NO_SER#'
         </cfquery>
         <cfif isdefined('attributes.change_shelf_fis')>
         
