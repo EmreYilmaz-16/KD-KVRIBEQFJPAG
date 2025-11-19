@@ -183,7 +183,7 @@ data.forEach(supplier => {
 const uniqueProducts = Array.from(productSet);
 
 const headerRow = document.createElement('tr');
-headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
+headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Marka</th><th class="sticky-header bg-success text-white">Oem No</th>`;
 headerRow.innerHTML += `
   <th class="sticky-header bg-info text-white">
     Marj (%)<br>
@@ -276,6 +276,21 @@ uniqueProducts.forEach(productId => {
     codeCell.className = 'product-code';
     codeCell.dataset.productid = productId;
     row.appendChild(codeCell);
+
+    var brandcell = document.createElement('td');
+    // Marka
+    let brandName = "";
+    for (const supplier of data) {
+        const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
+        if (product && product.BRAND_NAME) {
+            brandName = product.BRAND_NAME;
+            break; // İlk bulduğunda döngüyü kır
+        }
+    }
+    brandcell.textContent = brandName || "-"; // Eğer marka bulunamazsa "-" göster
+    brandcell.className = 'product-brand';
+    brandcell.dataset.productid = productId;
+    row.appendChild(brandcell);
 
     // Son fiyat
     let last_price = 0;
