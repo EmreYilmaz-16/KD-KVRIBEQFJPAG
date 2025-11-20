@@ -385,7 +385,11 @@ VALUES(
                             PRODUCT_MARJ,
                             SALE_PRICE,
                             IS_OS,
-                            BASKET_EXTRA_INFO
+                            BASKET_EXTRA_INFO,
+                            DSC1,
+                            DSC2,
+                            DSC3
+
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -394,7 +398,10 @@ VALUES(
                             #product.productMarj#,
                             #product.salePrice#,
                             0,
-                            #product.selectInfoExtra#
+                            #product.selectInfoExtra#,
+                            #product.discount1#,
+                            #product.discount2#,
+                            #product.discount3#
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="#dsn3#">
@@ -674,7 +681,10 @@ VALUES(
                             IS_OS,
                             BASKET_EXTRA_INFO,
                             OEM_NO,
-                            OTHER_MONEY
+                            OTHER_MONEY,
+                            DSC1,
+                            DSC2,
+                            DSC3
                         )
                         VALUES (
                             '#product.wrkRowId#',
@@ -686,6 +696,9 @@ VALUES(
                             #product.selectInfoExtra#,
                             '#product.oemNo#',
                             '#product.demandMoney#'
+                            #product.discount1#,
+                            #product.discount2#,
+                            #product.discount3#
                         )
                     </cfquery>
                     <cfquery name="getStockInfo" datasource="w3Qa_1">
