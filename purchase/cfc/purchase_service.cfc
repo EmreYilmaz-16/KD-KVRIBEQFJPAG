@@ -695,7 +695,7 @@ VALUES(
                             1,
                             #product.selectInfoExtra#,
                             '#product.oemNo#',
-                            '#product.demandMoney#'
+                            '#product.demandMoney#',
                             #product.discount1#,
                             #product.discount2#,
                             #product.discount3#
