@@ -646,7 +646,7 @@ uniqueProducts.forEach(productId => {
 function updateOutput() {
     const grouped = {};
     selectedCells.forEach((key, productId) => {
-        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra, gpaPrice, gpaMoney, dsc1, dsc2, dsc3] = key.split('|');
+        const [companyId, productIdStr, price, wrkRowId, discount1, quantity, netPrice, tax, priceOther, otherMoney, demandMoney, stockId, isSatinalma, yyy, xxx, oemNo, selectInfoExtra, gpaPrice, gpaMoney, dsc11, dsc2, dsc3] = key.split('|');
         if (!grouped[companyId]) {
             grouped[companyId] = {
                 companyId: parseInt(companyId),
