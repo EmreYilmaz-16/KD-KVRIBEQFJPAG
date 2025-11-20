@@ -168,7 +168,7 @@ data.forEach(supplier => {
 const uniqueProducts = Array.from(productSet);
 
 const headerRow = document.createElement('tr');
-headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Oem No</th>`;
+headerRow.innerHTML = `<th class="sticky-header bg-success text-white">&Uuml;r&uuml;n</th><th class="sticky-header bg-success text-white">Urun Kodu</th><th class="sticky-header bg-success text-white">Marka</th><th class="sticky-header bg-success text-white">Oem No</th>`;
 headerRow.innerHTML += `
   <th class="sticky-header bg-info text-white">
     Marj (%)<br>
