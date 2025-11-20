@@ -72,9 +72,9 @@ SELECT
     <p>getInternal.INTERNALDEMAND_STAGE =========   #getInternal.INTERNALDEMAND_STAGE#</p>
   </cfoutput>
 </div>
-<cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE) neq 0>
-    <button class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
-</cfif>
+
+    <button <cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE) neq 0><cfelse>style="display:none;"</cfif> class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
+
   
 <cfoutput query="getSatis">
 <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
