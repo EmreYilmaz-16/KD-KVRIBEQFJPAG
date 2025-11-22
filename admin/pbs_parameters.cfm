@@ -646,6 +646,8 @@
 <cfparam name="form.purchase_demand_accept_process_row_id_list" default="">
 <cfparam name="form.pbs_modul_company_id" default="">
 <cfparam name="form.sale_order_accept_process_row_id" default="">
+<cfparam name="form.depo_teslim_id" default="">
+<cfparam name="form.depo_tedarik_id" default="">
 <cfparam name="url.edit_id" default="">
 <cfparam name="url.delete_id" default="">
 
@@ -659,7 +661,7 @@
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
                 INSERT INTO #dsn3#.PBS_PARAMETERS 
-                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID)
+                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID)
                 VALUES 
                 (
                     <cfif len(trim(form.offer_product_id))>
@@ -681,6 +683,16 @@
                         #val(form.sale_order_accept_process_row_id)#
                     <cfelse>
                         NULL
+                    </cfif>,
+                    <cfif len(trim(form.depo_teslim_id))>
+                        #val(form.depo_teslim_id)#
+                    <cfelse>
+                        NULL
+                    </cfif>,
+                    <cfif len(trim(form.depo_tedarik_id))>
+                        #val(form.depo_tedarik_id)#
+                    <cfelse>
+                        NULL
                     </cfif>
                 )
             </cfquery>
@@ -695,7 +707,9 @@
                     OFFER_PRODUCT_ID = <cfif len(trim(form.offer_product_id))>#val(form.offer_product_id)#<cfelse>NULL</cfif>,
                     PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST = <cfif len(trim(form.purchase_demand_accept_process_row_id_list))>'#form.purchase_demand_accept_process_row_id_list#'<cfelse>NULL</cfif>,
                     PBS_MODUL_COMPANY_ID = <cfif len(trim(form.pbs_modul_company_id))>#val(form.pbs_modul_company_id)#<cfelse>NULL</cfif>,
-                    SALE_ORDER_ACCEPT_PROCESS_ROW_ID = <cfif len(trim(form.sale_order_accept_process_row_id))>#val(form.sale_order_accept_process_row_id)#<cfelse>NULL</cfif>
+                    SALE_ORDER_ACCEPT_PROCESS_ROW_ID = <cfif len(trim(form.sale_order_accept_process_row_id))>#val(form.sale_order_accept_process_row_id)#<cfelse>NULL</cfif>,
+                    DEPO_TESLIM_ID = <cfif len(trim(form.depo_teslim_id))>#val(form.depo_teslim_id)#<cfelse>NULL</cfif>,
+                    DEPO_TEDARIK_ID = <cfif len(trim(form.depo_tedarik_id))>#val(form.depo_tedarik_id)#<cfelse>NULL</cfif>
                 WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
             </cfquery>
             <cfset message = "Kayıt başarıyla güncellendi!">
@@ -738,6 +752,8 @@
         <cfset form.purchase_demand_accept_process_row_id_list = getEditData.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST>
         <cfset form.pbs_modul_company_id = getEditData.PBS_MODUL_COMPANY_ID>
         <cfset form.sale_order_accept_process_row_id = getEditData.SALE_ORDER_ACCEPT_PROCESS_ROW_ID>
+        <cfset form.depo_teslim_id = getEditData.DEPO_TESLIM_ID>
+        <cfset form.depo_tedarik_id = getEditData.DEPO_TEDARIK_ID>
     </cfif>
 </cfif>
 
@@ -864,6 +880,36 @@
                             </div>
                             <span class="field-hint">Satınalma Siparişine Dönüştürebilmek İçin Satış Teklifi Süreci</span>
                         </div>
+
+                        <div class="form-group">
+                            <label for="depo_teslim_id">Depo Teslim ID</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🏬</span>
+                                <input
+                                    type="number"
+                                    id="depo_teslim_id"
+                                    name="depo_teslim_id"
+                                    value="<cfoutput>#form.depo_teslim_id#</cfoutput>"
+                                    placeholder="Örn: 700"
+                                >
+                            </div>
+                            <span class="field-hint">Teslimat depoları için süreç referansı</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="depo_tedarik_id">Depo Tedarik ID</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🏗️</span>
+                                <input
+                                    type="number"
+                                    id="depo_tedarik_id"
+                                    name="depo_tedarik_id"
+                                    value="<cfoutput>#form.depo_tedarik_id#</cfoutput>"
+                                    placeholder="Örn: 800"
+                                >
+                            </div>
+                            <span class="field-hint">Tedarik depoları için süreç referansı</span>
+                        </div>
                     </div>
 
                     <div class="action-row">
@@ -915,6 +961,8 @@
                                 <th>Offer Product ID</th>
                                 <th>PBS Modul Company ID</th>
                                 <th>Sale Order Accept Process Row ID</th>
+                                <th>Depo Teslim ID</th>
+                                <th>Depo Tedarik ID</th>
                                 <th>Purchase Demand Accept Process Row ID List</th>
                                 <th style="text-align: center;">İşlemler</th>
                             </tr>
@@ -933,6 +981,20 @@
                                     <td data-label="Sale Order Accept Process Row ID">
                                         <cfif Len(Trim("" & SALE_ORDER_ACCEPT_PROCESS_ROW_ID))>
                                             #SALE_ORDER_ACCEPT_PROCESS_ROW_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Depo Teslim ID">
+                                        <cfif Len(Trim("" & DEPO_TESLIM_ID))>
+                                            #DEPO_TESLIM_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Depo Tedarik ID">
+                                        <cfif Len(Trim("" & DEPO_TEDARIK_ID))>
+                                            #DEPO_TEDARIK_ID#
                                         <cfelse>
                                             <span class="badge is-empty">Belirtilmemiş</span>
                                         </cfif>

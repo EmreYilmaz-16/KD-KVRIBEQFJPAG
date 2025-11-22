@@ -47,28 +47,64 @@
  */
 ------>
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
-    <cfset dsn3="">
-    <cfset DSN3_ALIAS =dsn3>
-    <cfset dsn="">
+   
+   
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
+      <cfscript>
+        variables.dsn  = "";
+        variables.dsn2 = "";
+        variables.dsn3 = "";
+        variables.OUR_COMPANY_ID = "";
+    </cfscript>
 
-<cffunction name="setdatasources">
-    burada datasourcelar elle yazılmış halde ama burayı parametrik yaptım aşağıda yazılı datasourceları entegre edebilirmiyiz
+      <cffunction name="init" access="public" returntype="any" output="false" hint="Init component and set datasources">
+        <cfscript>
+            setDatasources();
+            return this;
+        </cfscript>
+    </cffunction>
 
-<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
-<cfset dsn="#trim(configContent)#"> <!---w3qa--->
-<cfquery name="getparams" datasource="#dsn#">
-    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
-</cfquery>
-<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_1---->
-<cfset dsn2="#dsn#_#year(now())#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_2025_1---->
-</cffunction>
+    <cffunction name="setDatasources" access="public" returntype="void" output="false"
+                hint="Reads base DSN from file and builds dsn2/dsn3 dynamically">
+
+        <!--- Lokal değişken --->
+        <cfset var configContent = "">
+
+        <!--- DSN temel adını dosyadan al --->
+        <cffile 
+            action="read" 
+            file="#ExpandPath('/pbs_dsn.txt')#" 
+            variable="configContent">
+
+        <!--- Örn: w3qa --->
+        <cfset variables.dsn = trim(configContent)>
+
+        <!--- Şirket id’yi al --->
+        <cfquery name="getParams" datasource="#variables.dsn#">
+            SELECT PBS_MODUL_COMPANY_ID 
+            FROM PBS_PARAMETERS
+        </cfquery>
+
+        <!--- Örn: w3qa_1 --->
+        <cfset variables.dsn3 = "#variables.dsn#_#getParams.PBS_MODUL_COMPANY_ID#">
+
+        <!--- Örn: w3qa_2025_1 --->
+        <cfset variables.dsn2 = "#variables.dsn#_#year(now())#_#getParams.PBS_MODUL_COMPANY_ID#">
+        <cfset variables.OUR_COMPANY_ID = getParams.PBS_MODUL_COMPANY_ID>
+
+    </cffunction>
 
 
 <cffunction name="saveSaleOfferFromSelectedRows" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
     <cfscript>
-        setdatasources();
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny = variables.our_company_id;
     </cfscript>   
     <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
@@ -85,7 +121,7 @@
 
         <cfquery name="getRows" datasource="#dsn3#">
             SELECT * FROM PBS_SELECTED_ROWS 
-            LEFT JOIN w3Qa_1.OFFER_ROW ON PBS_SELECTED_ROWS.WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID
+            LEFT JOIN #dsn3#.OFFER_ROW ON PBS_SELECTED_ROWS.WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID
             WHERE PBS_SELECTED_ROWS.OFFER_ID = '#offers.offer_id#' 
             
         </cfquery>
@@ -126,8 +162,8 @@
         <cfset attributes.rows_=ix>
 <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#offers.offer_id#
             </cfquery>
             <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
@@ -182,10 +218,10 @@
 <cfset attributes.project_id="">
 <cfset attributes.process_stage="20">
 <cfquery name="getcc" datasource="#dsn#">
-    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from #dsn#.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
 </cfquery>
 <cfquery name="GETCOMPANY" datasource="#dsn#">
-  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
 </cfquery>
 <cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
 <cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
@@ -204,18 +240,18 @@
 
 <cfset attributes.commission_rate="">
 <cfquery NAME="getSatis" datasource="#dsn#">
-  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
-INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
+  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from #dsn3#.OFFER_ROW
+INNER JOIN #dsn3#.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
-SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
+SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 ) ORDER BY OFFER_ID ASC
 </cfquery>
 <CFIF getSatis.recordCount>
     <CFSET attributes.rel_offer_id=getSatis.OFFER_ID>
     <CFSET attributes.rel_offer_head="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
 
-<cfquery name="UP" datasource="#DSN#">
-    UPDATE w3Qa_1.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
+<cfquery name="UP" datasource="#dsn3#">
+    UPDATE #dsn3#.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
         #valueList(getSatis.OFFER_ID)#
     )
 </cfquery>
@@ -321,11 +357,11 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
-DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+DELETE FROM #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
 </cfquery>
 
 <cfquery name="INSREL" datasource="#dsn3#">
-INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+INSERT INTO #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
     SALE_OFFER_ID,
    PURCHASE_OFFER_ID
 )
@@ -343,6 +379,15 @@ VALUES(
             <cfreturn response>
 </cffunction>
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+         <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny = variables.our_company_id;
+    </cfscript>  
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
@@ -439,8 +484,8 @@ VALUES(
             <!-- Retrieve related internal demand data -->
             <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#offers.offer_id#
             </cfquery>
             <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
@@ -494,10 +539,10 @@ VALUES(
 <cfset attributes.project_id="">
 <cfset attributes.process_stage="20">
 <cfquery name="getcc" datasource="#dsn#">
-    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from #dsn#.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
 </cfquery>
 <cfquery name="GETCOMPANY" datasource="#dsn#">
-  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
 </cfquery>
 <cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
 <cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
@@ -606,11 +651,11 @@ VALUES(
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
-DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+DELETE FROM #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
 </cfquery>
 
 <cfquery name="INSREL" datasource="#dsn3#">
-INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+INSERT INTO #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
     SALE_OFFER_ID,
    PURCHASE_OFFER_ID
 )
@@ -637,6 +682,15 @@ VALUES(
     </cffunction>
 
     <cffunction name="savePurchaseOfferSelectorOnly" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+         <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny = variables.our_company_id;
+    </cfscript>  
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
@@ -657,7 +711,7 @@ VALUES(
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
-            <cfquery name="DEL" datasource="w3Qa_1">
+            <cfquery name="DEL" datasource="#dsn3#">
                 DELETE FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' AND BASKET_EXTRA_INFO=#offers.BEI#
             </cfquery>
             <!-- Process each offer -->
@@ -671,7 +725,7 @@ VALUES(
                    
 
                     <!-- Insert new rows for the product -->
-                    <cfquery name="INS" datasource="w3Qa_1">
+                    <cfquery name="INS" datasource="#dsn3#">
                         INSERT INTO PBS_SELECTED_ROWS (
                             WRK_ROW_ID,
                             PRICE,
@@ -701,11 +755,11 @@ VALUES(
                             #product.discount3#
                         )
                     </cfquery>
-                    <cfquery name="getStockInfo" datasource="w3Qa_1">
+                    <cfquery name="getStockInfo" datasource="#dsn3#">
                         SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
                     </cfquery>
-                      <cfquery name="getUnit" datasource="w3Qa_1">
-                        select PRODUCT_UNIT_ID,MAIN_UNIT from w3Qa_1.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                      <cfquery name="getUnit" datasource="#dsn3#">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
                     </cfquery>
                     <cfscript>
                         ix=ix+1;
@@ -759,14 +813,24 @@ VALUES(
 
 
     <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST" returnFormat="json">
+        
 
         <cfargument name="product_id" type="string" required="true">
+         <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny = variables.our_company_id;
+    </cfscript>  
 
         <cfset var result = []>
 
         <cfquery name="qAlt" datasource="#dsn3#">
             SELECT ALTERNATIVE_PRODUCT_ID as ALTERNATIF_PRODUCT_ID
-            FROM w3Qa_1.ALTERNATIVE_PRODUCTS
+            FROM #dsn3#.ALTERNATIVE_PRODUCTS
             WHERE PRODUCT_ID = <cfqueryparam value="#arguments.product_id#" cfsqltype="cf_sql_varchar">
         </cfquery>
 
@@ -778,7 +842,15 @@ VALUES(
     </cffunction>
 
     <cffunction name="savePurchaseOffer" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-
+ <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny = variables.our_company_id;
+    </cfscript>  
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
         <cfdump var="#arguments.payload#">
@@ -835,7 +907,7 @@ VALUES(
         </cfloop>
         <cfset attributes.rows_=ix>
         <cfquery name="GETCOMPANY" datasource="#dsn#">
-            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#company_id#
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#company_id#
         </cfquery>
 
 <cfset attributes.offer_date=now()>
@@ -922,9 +994,18 @@ VALUES(
     </cffunction>
     <cffunction name="SAVEORDER_gpt" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfargument name="internal_id" type="numeric" required="true">
+         <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny=variables.our_company_id;
+    </cfscript>  
       <cfset var response = {}>
-        <cfset var dsn = "w3Qa">
-        <cfset var dsn3 = "w3Qa_1">
+        <cfset var dsn = variables.dsn>
+        <cfset var dsn3 = variables.dsn3>
         <cfset var attributes = {}>
     <cftry>
         <!--- Teklif satırlarını çek --->
@@ -937,12 +1018,12 @@ SELECT
     PSR.BASKET_EXTRA_INFO
     --PSR.SOME_COLUMN_1, -- Kullanmak istediğin PBS_SELECTED_ROWS alanlarını buraya ekle
     --PSR.SOME_COLUMN_2
-FROM w3Qa_1. PBS_SELECTED_ROWS AS PSR
-INNER JOIN w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI 
+FROM #dsn3#.PBS_SELECTED_ROWS AS PSR
+INNER JOIN #dsn3#.OFFER_ROW AS ORR_SATIS_TEKLIFI 
     ON PSR.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID AND ORR_SATIS_TEKLIFI.OFFER_ID= #arguments.last_offer_id#
-LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI 
+LEFT JOIN #dsn3#.OFFER_ROW AS ORR_ALIS_TEKLIFI 
     ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI 
+LEFT JOIN #dsn3#.OFFER AS O_ALIS_TEKLIFI 
     ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
 WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>3  ORDER BY COMPANY_ID
 
@@ -950,8 +1031,8 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
         </cfquery>
         <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,DEPARTMENT_IN,LOCATION_IN,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#arguments.internal_id#
             </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
@@ -1049,20 +1130,21 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cfquery name="GETCOMPANY" datasource="#dsn#">
                 SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY
                 FROM COMPANY
+                LEFT JOIN #dsn#.COMPANY_CREDIT AS CC ON CC.COMPANY_ID = COMPANY.COMPANY_ID AND CC.OUR_COMPANY_ID = <cfqueryparam value="#ourcmpny#" cfsqltype="cf_sql_integer">
                 WHERE COMPANY_ID = <cfqueryparam value="#getSelectedRows.COMPANY_ID#" cfsqltype="cf_sql_integer">
             </cfquery>
     
             <cfset attributes.company_id = getSelectedRows.COMPANY_ID>
             <cfset attributes.PARTNER_ID = getSelectedRows.PARTNER_ID>
             <cfset attributes.CONSUMER_ID ="">
-<cfset attributes.CONSUMER_NAME ="">
+            <cfset attributes.CONSUMER_NAME ="">
             <cfset attributes.ORDER_HEAD = "Siparişimiz">
             <cfset attributes.ORDER_DESCRIPTION = "">
             <cfset attributes.ORDER_DETAIL = "">
             <cfset attributes.order_date = nowTS>
             <cfset attributes.deliverdate = nowTS>
             <cfset attributes.PUBLISHDATE = nowTS>
-            <cfset attributes.SHIP_METHOD_ID = 2>
+            <cfset attributes.SHIP_METHOD_ID = 2> <!----Risk ve Çalışma Bilgilerinden Alınacak ---->
             <cfset attributes.SHIP_METHOD = "kargo">
     
             <cfset attributes.BASKET_NET_TOTAL = BASKET_NET_TOTAL_>
