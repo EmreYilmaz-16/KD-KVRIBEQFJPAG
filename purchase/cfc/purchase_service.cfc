@@ -1131,7 +1131,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
     
             <!--- Şirket Bilgilerini Ekle --->
             <cfquery name="GETCOMPANY" datasource="#dsn#">
-                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY
+                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY,CC.SHIP_METHOD_ID
                 FROM COMPANY
                 LEFT JOIN #dsn#.COMPANY_CREDIT AS CC ON CC.COMPANY_ID = COMPANY.COMPANY_ID AND CC.OUR_COMPANY_ID = <cfqueryparam value="#ourcmpny#" cfsqltype="cf_sql_integer">
                 WHERE COMPANY_ID = <cfqueryparam value="#getSelectedRows.COMPANY_ID#" cfsqltype="cf_sql_integer">
@@ -1147,7 +1147,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cfset attributes.order_date = nowTS>
             <cfset attributes.deliverdate = nowTS>
             <cfset attributes.PUBLISHDATE = nowTS>
-            <cfset attributes.SHIP_METHOD_ID = 2> <!----Risk ve Çalışma Bilgilerinden Alınacak ---->
+            <cfset attributes.SHIP_METHOD_ID = #GETCOMPANY.SHIP_METHOD_ID#> <!----Risk ve Çalışma Bilgilerinden Alınacak ---->
             <cfset attributes.SHIP_METHOD = "kargo">
     
             <cfset attributes.BASKET_NET_TOTAL = BASKET_NET_TOTAL_>
@@ -1165,7 +1165,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cfset attributes.BASKET_RATE2 = 1>
             <cfset attributes.kur_say = getMoneyext.recordCount>
             <cfset attributes.internaldemand_id_list = ",#arguments.internal_id#,">
-            <cfset attributes.process_stage = "259">
+            <cfset attributes.process_stage = "#GET#">
     
             <!--- Kur bilgilerini tekrar setle --->
             <cfset i=1>
@@ -1462,6 +1462,16 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 	<cfargument name="process_type" required="true">
 	<cfargument name="basket_money_db" type="string" default="">
 	<cfargument name="transaction_dsn">
+    <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny=variables.our_company_id;
+    </cfscript> 
+
 	<!---
 		by : Arzu BT 20031211
 		notes : Basket_money tablosuna islemlere gore kur bilgilerini kaydeder.
@@ -1543,6 +1553,16 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 	</cfloop>
 </cffunction>
 <cffunction name="add_internaldemand_row_relation" returntype="boolean" output="false">
+        <cfscript>
+         if (!len(variables.dsn)) {
+                setDatasources();
+            }
+              dsn  = variables.dsn;
+                dsn2 = variables.dsn2;
+                dsn3 = variables.dsn3;
+                ourcmpny=variables.our_company_id;
+                dsn3_alias=variables.dsn3;
+    </cfscript> 
 	<cfargument name="internaldemand_id" default=""> <!--- ic talep id si --->
 	<cfargument name="to_related_action_id" required="yes" default=""> <!--- iç talebin ilişkili oldugu işlemin action_id si --->
 	<cfargument name="to_related_action_type" required="yes" default=""><!---iç talep hangi işlemle ilişkilendirilmis  0: satınalma siparişi, 1: depolararası sevk irs. ,2: ambar fişi 3: satinalma teklifi--->
