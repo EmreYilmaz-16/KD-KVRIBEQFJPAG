@@ -1003,6 +1003,9 @@ VALUES(
                 dsn3 = variables.dsn3;
                 ourcmpny=variables.our_company_id;
     </cfscript>  
+    <cfquery name="getParameters" datasource="#dsn#">
+        SELECT  * FROM PBS_PARAMETERS
+    </cfquery>
       <cfset var response = {}>
         <cfset var dsn = variables.dsn>
         <cfset var dsn3 = variables.dsn3>
@@ -1025,7 +1028,7 @@ LEFT JOIN #dsn3#.OFFER_ROW AS ORR_ALIS_TEKLIFI
     ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
 LEFT JOIN #dsn3#.OFFER AS O_ALIS_TEKLIFI 
     ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
-WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>3  ORDER BY COMPANY_ID
+WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>#getParameters.DEPO_TESLIM_ID#  ORDER BY COMPANY_ID
 
 
         </cfquery>

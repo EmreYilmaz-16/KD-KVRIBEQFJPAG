@@ -648,6 +648,8 @@
 <cfparam name="form.sale_order_accept_process_row_id" default="">
 <cfparam name="form.depo_teslim_id" default="">
 <cfparam name="form.depo_tedarik_id" default="">
+<cfparam name="form.default_sevkiyat_depo_id" default="">
+<cfparam name="form.default_satinalma_siparis_sureci" default="">
 <cfparam name="url.edit_id" default="">
 <cfparam name="url.delete_id" default="">
 
@@ -661,7 +663,7 @@
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
                 INSERT INTO #dsn3#.PBS_PARAMETERS 
-                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID)
+                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID, DEFAULT_SEVKIYAT_DEPO_ID, DEFAULT_SATINALMA_SIPARIS_SURECI)
                 VALUES 
                 (
                     <cfif len(trim(form.offer_product_id))>
@@ -693,6 +695,16 @@
                         #val(form.depo_tedarik_id)#
                     <cfelse>
                         NULL
+                    </cfif>,
+                    <cfif len(trim(form.default_sevkiyat_depo_id))>
+                        #val(form.default_sevkiyat_depo_id)#
+                    <cfelse>
+                        NULL
+                    </cfif>,
+                    <cfif len(trim(form.default_satinalma_siparis_sureci))>
+                        #val(form.default_satinalma_siparis_sureci)#
+                    <cfelse>
+                        NULL
                     </cfif>
                 )
             </cfquery>
@@ -709,7 +721,9 @@
                     PBS_MODUL_COMPANY_ID = <cfif len(trim(form.pbs_modul_company_id))>#val(form.pbs_modul_company_id)#<cfelse>NULL</cfif>,
                     SALE_ORDER_ACCEPT_PROCESS_ROW_ID = <cfif len(trim(form.sale_order_accept_process_row_id))>#val(form.sale_order_accept_process_row_id)#<cfelse>NULL</cfif>,
                     DEPO_TESLIM_ID = <cfif len(trim(form.depo_teslim_id))>#val(form.depo_teslim_id)#<cfelse>NULL</cfif>,
-                    DEPO_TEDARIK_ID = <cfif len(trim(form.depo_tedarik_id))>#val(form.depo_tedarik_id)#<cfelse>NULL</cfif>
+                    DEPO_TEDARIK_ID = <cfif len(trim(form.depo_tedarik_id))>#val(form.depo_tedarik_id)#<cfelse>NULL</cfif>,
+                    DEFAULT_SEVKIYAT_DEPO_ID = <cfif len(trim(form.default_sevkiyat_depo_id))>#val(form.default_sevkiyat_depo_id)#<cfelse>NULL</cfif>,
+                    DEFAULT_SATINALMA_SIPARIS_SURECI = <cfif len(trim(form.default_satinalma_siparis_sureci))>#val(form.default_satinalma_siparis_sureci)#<cfelse>NULL</cfif>
                 WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
             </cfquery>
             <cfset message = "Kayıt başarıyla güncellendi!">
@@ -754,6 +768,8 @@
         <cfset form.sale_order_accept_process_row_id = getEditData.SALE_ORDER_ACCEPT_PROCESS_ROW_ID>
         <cfset form.depo_teslim_id = getEditData.DEPO_TESLIM_ID>
         <cfset form.depo_tedarik_id = getEditData.DEPO_TEDARIK_ID>
+        <cfset form.default_sevkiyat_depo_id = getEditData.DEFAULT_SEVKIYAT_DEPO_ID>
+        <cfset form.default_satinalma_siparis_sureci = getEditData.DEFAULT_SATINALMA_SIPARIS_SURECI>
     </cfif>
 </cfif>
 
@@ -910,6 +926,36 @@
                             </div>
                             <span class="field-hint">Tedarik depoları için süreç referansı</span>
                         </div>
+
+                        <div class="form-group">
+                            <label for="default_sevkiyat_depo_id">Default Sevkiyat Depo ID</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🚚</span>
+                                <input
+                                    type="number"
+                                    id="default_sevkiyat_depo_id"
+                                    name="default_sevkiyat_depo_id"
+                                    value="<cfoutput>#form.default_sevkiyat_depo_id#</cfoutput>"
+                                    placeholder="Örn: 900"
+                                >
+                            </div>
+                            <span class="field-hint">Varsayılan sevkiyat deposu kimliği</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="default_satinalma_siparis_sureci">Default Satınalma Sipariş Süreci</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🧾</span>
+                                <input
+                                    type="number"
+                                    id="default_satinalma_siparis_sureci"
+                                    name="default_satinalma_siparis_sureci"
+                                    value="<cfoutput>#form.default_satinalma_siparis_sureci#</cfoutput>"
+                                    placeholder="Örn: 1000"
+                                >
+                            </div>
+                            <span class="field-hint">Satınalma siparişi için varsayılan süreç</span>
+                        </div>
                     </div>
 
                     <div class="action-row">
@@ -963,6 +1009,8 @@
                                 <th>Sale Order Accept Process Row ID</th>
                                 <th>Depo Teslim ID</th>
                                 <th>Depo Tedarik ID</th>
+                                <th>Default Sevkiyat Depo ID</th>
+                                <th>Default Satınalma Sipariş Süreci</th>
                                 <th>Purchase Demand Accept Process Row ID List</th>
                                 <th style="text-align: center;">İşlemler</th>
                             </tr>
@@ -995,6 +1043,20 @@
                                     <td data-label="Depo Tedarik ID">
                                         <cfif Len(Trim("" & DEPO_TEDARIK_ID))>
                                             #DEPO_TEDARIK_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Default Sevkiyat Depo ID">
+                                        <cfif Len(Trim("" & DEFAULT_SEVKIYAT_DEPO_ID))>
+                                            #DEFAULT_SEVKIYAT_DEPO_ID#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Default Satınalma Sipariş Süreci">
+                                        <cfif Len(Trim("" & DEFAULT_SATINALMA_SIPARIS_SURECI))>
+                                            #DEFAULT_SATINALMA_SIPARIS_SURECI#
                                         <cfelse>
                                             <span class="badge is-empty">Belirtilmemiş</span>
                                         </cfif>
