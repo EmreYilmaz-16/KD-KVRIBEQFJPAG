@@ -28,7 +28,7 @@ function generatePalletCode() {
 
 <cfquery name="getPalletTypes" datasource="#dsn3#">
 	SELECT ID, PALET_TYPE
-	FROM w3Qa.PALET_TYPES_PBS
+	FROM #dsn#.PALET_TYPES_PBS
 	ORDER BY PALET_TYPE
 </cfquery>
 
@@ -71,7 +71,7 @@ function generatePalletCode() {
 		<cftry>
 			<cfquery name="checkDuplicate" datasource="#dsn3#">
 				SELECT TOP 1 1
-				FROM w3Qa_1.SHIPPING_PALLETS_PBS
+				FROM #dsn3#.SHIPPING_PALLETS_PBS
 				WHERE UPPER(PALLET_CODE) = <cfqueryparam value="#UCase(palletCode)#" cfsqltype="cf_sql_nvarchar" maxlength="50">
 			</cfquery>
 
@@ -80,7 +80,7 @@ function generatePalletCode() {
 				<cfset ArrayAppend(errorMessages, "Bu pallet kodu zaten kayitli gorunuyor. Sistem yeni bir kod olusturdu, lutfen tekrar deneyin.")>
 			<cfelse>
 				<cfquery name="insertNewPallet" datasource="#dsn3#">
-					INSERT INTO w3Qa_1.SHIPPING_PALLETS_PBS
+					INSERT INTO #dsn3#.SHIPPING_PALLETS_PBS
 						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID)
 					VALUES
 						(
@@ -362,7 +362,7 @@ function generatePalletCode() {
 								<option value="#ID#" <cfif form.pallet_type EQ ToString(ID)>selected</cfif>>#HTMLEditFormat(PALET_TYPE)#</option>
 							</cfloop>
 						</select>
-						<span class="pallet-hint">Pallet tipi listesi w3Qa.PALET_TYPES_PBS tablosundan yuklenir.</span>
+						<span class="pallet-hint">Pallet tipi listesi #dsn#.PALET_TYPES_PBS tablosundan yuklenir.</span>
 					</div>
 
 					<div class="pallet-field pallet-field-full">

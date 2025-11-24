@@ -2,7 +2,7 @@
 
 <!--- Sayım listesi için sorgu --->
 <cftry>
-    <cfquery name="getSayimList" datasource="w3Qa_1">
+    <cfquery name="getSayimList" datasource="#DSN3#">
         SELECT 
             s.SAYIM_ID,
             s.PAPER_NUMBER,
@@ -14,7 +14,7 @@
             s.RECORD_DATE,
             s.RECORD_EMP
         FROM PBS_SERIAL_SAYIM s
-        LEFT JOIN w3Qa.STOCKS_LOCATION sl ON (
+        LEFT JOIN #DSN#.STOCKS_LOCATION sl ON (
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
             s.LOCATION_ID = sl.LOCATION_ID
         )
@@ -29,7 +29,7 @@
 <!--- Silme işlemi --->
 <cfif isDefined("url.action") and url.action eq "delete" and isDefined("url.id")>
     <cftry>
-        <cfquery datasource="w3Qa">
+        <cfquery datasource="#DSN#">
             DELETE FROM PBS_SERIAL_SAYIM 
             WHERE SAYIM_ID = <cfqueryparam value="#url.id#" cfsqltype="cf_sql_integer">
         </cfquery>

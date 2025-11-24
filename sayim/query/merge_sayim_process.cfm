@@ -1,7 +1,7 @@
 <cfdump var="#attributes#">
 
 <cfquery name="depo_kontrol" datasource="#dsn3#">
-    select DISTINCT CAST(DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar) AS DEPO  from  w3Qa_1.PBS_SERIAL_SAYIM WHERE SAYIM_ID IN(#attributes.SAYIM_IDS#)
+    select DISTINCT CAST(DEPARTMENT_ID AS varchar)+'-'+CAST(LOCATION_ID AS varchar) AS DEPO  from  #dsn3#.PBS_SERIAL_SAYIM WHERE SAYIM_ID IN(#attributes.SAYIM_IDS#)
 </cfquery>
 <cfif depo_kontrol.recordcount gt 1>
     <cfset attributes.error="true">
@@ -11,7 +11,7 @@
 </cfif>
 
 <cfquery name="getrows" datasource="#dsn3#">
-select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 from  w3Qa_1.PBS_SERIAL_SAYIM_ROW WHERE SAYIM_ID IN (#attributes.SAYIM_IDS#)
+select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 from  #dsn3#.PBS_SERIAL_SAYIM_ROW WHERE SAYIM_ID IN (#attributes.SAYIM_IDS#)
 </cfquery>
 
 
@@ -45,8 +45,8 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
         <cfset departmentId = depoValues[1]>
         <cfset locationId = depoValues[2]>
         
-        <cfquery name="GETPAPER" datasource="w3Qa_1">
-            select SAYIM_NO,SAYIM_NUMBER from w3Qa_1.PBS_PAPER_NUMBERS
+        <cfquery name="GETPAPER" datasource="#dsn3#">
+            select SAYIM_NO,SAYIM_NUMBER from #dsn3#.PBS_PAPER_NUMBERS
         </cfquery>
         <cfset zero_Count=0>
         <cfif len(GETPAPER.SAYIM_NUMBER) eq 1>
@@ -59,13 +59,13 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
             <cfset paper_number=REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(GETPAPER.SAYIM_NUMBER,'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9','')>
             <cfset paper_number=GETPAPER.SAYIM_NO & REPEATSTRING('0',zero_Count) & (GETPAPER.SAYIM_NUMBER+1)>
             
-            <cfquery name="updatepaper" datasource="w3Qa_1">
+            <cfquery name="updatepaper" datasource="#dsn3#">
                 update PBS_PAPER_NUMBERS set SAYIM_NUMBER=SAYIM_NUMBER+1
             </cfquery>
 
         
         <!--- Veritabanına kayıt ekleme --->
-        <cfquery datasource="w3Qa_1" result="insertResult">
+        <cfquery datasource="#dsn3#" result="insertResult">
             INSERT INTO PBS_SERIAL_SAYIM (
                 PAPER_NUMBER,
                 DEPARTMENT_ID,
@@ -86,7 +86,7 @@ select SAYIM_ID,SERIAL_NUMBER,PRODUCT_ID,STOCK_ID,SHELF_NUMBER,PRODUCT_CODE_2 fr
         <cfset newSayimId = insertResult.generatedKey>
         <cfset rowCount = yeni_tablo.recordCount>
         <cfloop query="yeni_tablo">
-            <cfquery datasource="w3Qa_1">
+            <cfquery datasource="#dsn3#">
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
                             SAYIM_ID,
                             SERIAL_NUMBER,

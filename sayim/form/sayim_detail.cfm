@@ -7,7 +7,7 @@
 
 <!--- Sayım bilgilerini getir --->
 <cftry>
-    <cfquery name="getSayimInfo" datasource="w3Qa_1">
+    <cfquery name="getSayimInfo" datasource="#dsn3#">
         SELECT 
             s.SAYIM_ID,
             s.PAPER_NUMBER,
@@ -19,7 +19,7 @@
             s.RECORD_DATE,
             s.RECORD_EMP
         FROM PBS_SERIAL_SAYIM s
-        LEFT JOIN w3Qa.STOCKS_LOCATION sl ON (
+        LEFT JOIN #DSN#.STOCKS_LOCATION sl ON (
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
             s.LOCATION_ID = sl.LOCATION_ID
         )
@@ -40,7 +40,7 @@
 
 <!--- Mevcut sayım detaylarını getir --->
 <cftry>
-    <cfquery name="getSayimDetails" datasource="w3Qa_1">
+    <cfquery name="getSayimDetails" datasource="#dsn3#">
         SELECT 
             SAYIM_ROW_ID,
             SAYIM_ID,
@@ -62,14 +62,14 @@
     <cfif isDefined("form.serial_number") and len(trim(form.serial_number))>
         <cfset result = barcodeManager.parseBarcode("#form.serial_number#", "firma1")>
         <cfdump var="#result#">
-        <cfquery name="getStok" datasource="w3Qa">
+        <cfquery name="getStok" datasource="#DSN#">
             SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#result.urunKodu#'
         </cfquery>
         
         <cfif getStok.recordCount gt 0>
             <cftry>
                 <!--- Aynı seri numarasının daha önce eklenip eklenmediğini kontrol et --->
-                <cfquery name="checkSerial" datasource="w3Qa_1">
+                <cfquery name="checkSerial" datasource="#dsn3#">
                     SELECT COUNT(*) as SERIAL_COUNT
                     FROM PBS_SERIAL_SAYIM_ROW
                     WHERE SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
@@ -78,7 +78,7 @@
                 
                 <cfif checkSerial.SERIAL_COUNT eq 0>
                     <!--- Yeni seri numarası ekle --->
-                    <cfquery datasource="w3Qa_1">
+                    <cfquery datasource="#dsn3#">
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
                             SAYIM_ID,
                             SERIAL_NUMBER,
@@ -99,7 +99,7 @@
                 </cfif>
                 
                 <!--- Sayım detaylarını yeniden getir --->
-                <cfquery name="getSayimDetails" datasource="w3Qa_1">
+                <cfquery name="getSayimDetails" datasource="#dsn3#">
                     SELECT 
                         SAYIM_ROW_ID,
                         SAYIM_ID,
@@ -127,7 +127,7 @@
 <!--- Seri numarası silme işlemi --->
 <cfif isDefined("url.action") and url.action eq "delete_serial" and isDefined("url.row_id")>
     <cftry>
-        <cfquery datasource="w3Qa_1">
+        <cfquery datasource="#dsn3#">
             DELETE FROM PBS_SERIAL_SAYIM_ROW
             WHERE SAYIM_ROW_ID = <cfqueryparam value="#url.row_id#" cfsqltype="cf_sql_integer">
             AND SAYIM_ID = <cfqueryparam value="#sayimId#" cfsqltype="cf_sql_integer">
@@ -143,15 +143,15 @@
 <!--- Sayımı tamamlama işlemi --->
 <cfif isDefined("form.action") and form.action eq "complete_sayim">
     <cfif getSayimDetails.recordCount gt 0>
-        <cfquery name="GETS" datasource="w3Qa_1">
+        <cfquery name="GETS" datasource="#dsn3#">
 SELECT *,CASE WHEN DD=1 THEN 'BİŞEY YAPMA' ELSE CASE WHEN DD=0 OR DD=-1 THEN 'SAYIM FİŞİ EKLE' ELSE '' END END AS ISLEM FROM (
 SELECT PSSR.*,ISNULL((
 SELECT BKY FROM (
-SELECT SERIAL_NO,DEPARTMENT_ID,LOCATION_ID,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS BKY FROM w3Qa_1.SERVICE_GUARANTY_NEW
+SELECT SERIAL_NO,DEPARTMENT_ID,LOCATION_ID,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS BKY FROM #dsn3#.SERVICE_GUARANTY_NEW
 GROUP BY SERIAL_NO,DEPARTMENT_ID,LOCATION_ID
   ) AS T WHERE DEPARTMENT_ID=PSS.DEPARTMENT_ID AND LOCATION_ID=PSS.LOCATION_ID AND SERIAL_NO=PSSR.SERIAL_NUMBER
-),-1) AS DD FROM w3Qa_1.PBS_SERIAL_SAYIM PSS
-INNER JOIN w3Qa_1.PBS_SERIAL_SAYIM_ROW PSSR ON PSS.SAYIM_ID=PSSR.SAYIM_ID
+),-1) AS DD FROM #dsn3#.PBS_SERIAL_SAYIM PSS
+INNER JOIN #dsn3#.PBS_SERIAL_SAYIM_ROW PSSR ON PSS.SAYIM_ID=PSSR.SAYIM_ID
 
 WHERE PSS.SAYIM_ID =#sayimId#) AS TTT WHERE 1=1 AND DD<>1
 

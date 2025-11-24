@@ -14,7 +14,7 @@
             <cfdump var="#isreaded#">
             <cfif isreaded eq "0">
                 <cfquery name="insSerial" datasource="#dsn3#" result="insResult">
-                    INSERT INTO w3Qa_1.SERVICE_GUARANTY_NEW (
+                    INSERT INTO #dsn3#.SERVICE_GUARANTY_NEW (
     STOCK_ID,
     SERIAL_NO,
     IN_OUT,
@@ -77,7 +77,7 @@ VALUES (
                 </cfquery>
                 <cfquery name="ins2" datasource="#dsn3#">
 
-INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] (
+INSERT INTO [#dsn3#].[SERIAL_IN_OUT_PBS] (
     [SERIAL_NUMBER],
     [IS_ALIVE],
     [IN_GUARANTY_ID],

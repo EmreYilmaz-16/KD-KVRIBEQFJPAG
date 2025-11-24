@@ -10,8 +10,8 @@
 <form method="POST" action="/AddOns/Partner/reports/query/oem_raporu_excell.cfm" name="search_product" id="search_product">
     <input type="hidden" name="is_submit" value="1">
     
-    <cfquery name="getBrands" datasource="w3qa">
-        SELECT BRAND_NAME,BRAND_ID FROM w3Qa_product.PRODUCT_BRANDS
+    <cfquery name="getBrands" datasource="#dsn#">
+        SELECT BRAND_NAME,BRAND_ID FROM #dsn1#.PRODUCT_BRANDS
     </cfquery>
     <table>
         <tr>
@@ -49,7 +49,7 @@
 <cfabort>
 
 
-<cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
+
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
 <cfparam name="url.orderBy" default="barcode"> 
 <!--- güvenli whitelist --->
@@ -97,19 +97,19 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
                     SB.BARCODE
                 END
         ) AS rn
-    FROM w3Qa_product.STOCKS_BARCODES SB
-    INNER JOIN w3Qa_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
-    INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
+    FROM #dsn1#.STOCKS_BARCODES SB
+    INNER JOIN #dsn1#.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
+    INNER JOIN #dsn1#.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
 )
 SELECT *
-INTO w3qa.##B
+INTO #dsn#.##B
 FROM B;
 
 -- 2) Dinamik kolon listesini oluştur
 DECLARE @cols nvarchar(max);
 SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
-FROM (SELECT DISTINCT rn FROM w3qa.##B) d;
+FROM (SELECT DISTINCT rn FROM #dsn#.##B) d;
 
 
 
@@ -126,7 +126,7 @@ N'SELECT
           PRODUCT_NAME,
           ''BARCODE'' + CAST(rn AS nvarchar(10)) AS colname,
           BARCODE
-      FROM w3qa.##B
+      FROM #dsn#.##B
   ) src
   PIVOT (
       MAX(BARCODE) FOR colname IN (' + @cols + N')
@@ -135,7 +135,7 @@ N'SELECT
 
 EXEC sys.sp_executesql @sql;
 
-DROP TABLE w3qa.##B;
+DROP TABLE #dsn#.##B;
 </cfquery>
 
 <!--- HTML tabloyu yaz (Excel açar) --->

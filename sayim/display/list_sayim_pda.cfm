@@ -5,13 +5,13 @@
     SELECT 
         CAST(D.DEPARTMENT_ID AS varchar) + '-' + CAST(LOCATION_ID AS varchar) AS DEPO_KODU,
         D.DEPARTMENT_HEAD + '-' + SL.COMMENT AS DEPO
-    FROM w3Qa.DEPARTMENT AS D
-    INNER JOIN w3Qa.STOCKS_LOCATION AS SL ON SL.DEPARTMENT_ID = D.DEPARTMENT_ID
+    FROM #DSN#.DEPARTMENT AS D
+    INNER JOIN #DSN#.STOCKS_LOCATION AS SL ON SL.DEPARTMENT_ID = D.DEPARTMENT_ID
 </cfquery>
 
     
 <cftry>
-    <cfquery name="getSayimList" datasource="w3Qa_1">
+    <cfquery name="getSayimList" datasource="#DSN3#">
         SELECT 
             s.SAYIM_ID,
             s.PAPER_NUMBER,
@@ -25,7 +25,7 @@
             s.IS_PROCESSED,
             s.PROCESS_NO
         FROM PBS_SERIAL_SAYIM s
-        LEFT JOIN w3Qa.STOCKS_LOCATION sl ON (
+        LEFT JOIN #DSN#.STOCKS_LOCATION sl ON (
             s.DEPARTMENT_ID = sl.DEPARTMENT_ID AND 
             s.LOCATION_ID = sl.LOCATION_ID
         )

@@ -97,7 +97,7 @@
  <cfquery name="INSERT_ALTERNATIVES" datasource="#DSN3#">
     <cfloop list="#arguments.ALTERNATIVES#" item="it">
         
-        INSERT INTO w3Qa_1.ALTERNATIVE_PRODUCTS(PRODUCT_ID,STOCK_ID,ALTERNATIVE_PRODUCT_ID) VALUES (#RECORDED_PRODUCT_ID#,#RECORDED_STOCK_ID#,#listGetAt(it,2,"-")#);
+        INSERT INTO #dsn3#.ALTERNATIVE_PRODUCTS(PRODUCT_ID,STOCK_ID,ALTERNATIVE_PRODUCT_ID) VALUES (#RECORDED_PRODUCT_ID#,#RECORDED_STOCK_ID#,#listGetAt(it,2,"-")#);
     </cfloop>
  </cfquery>
 </cfif> 
@@ -105,7 +105,7 @@
 <cfquery name="INSER_OEM_NO" datasource="#DSN3#">
     <cfloop array="#arguments.OEM_NO_ARR#" item="it">
         
-        INSERT INTO w3Qa_product.STOCKS_BARCODES(STOCK_ID,BARCODE,UNIT_ID) VALUES (#RECORDED_STOCK_ID#,'#it#',#RECORDED_UNIT_ID#);
+        INSERT INTO #dsn1#.STOCKS_BARCODES(STOCK_ID,BARCODE,UNIT_ID) VALUES (#RECORDED_STOCK_ID#,'#it#',#RECORDED_UNIT_ID#);
         
     </cfloop>
 </cfquery>

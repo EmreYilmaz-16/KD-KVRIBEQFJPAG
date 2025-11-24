@@ -15,7 +15,7 @@ function resolveCompanyName(companyId) {
     if (Val(companyId) GT 0) {
         try {
             var companyQuery = QueryExecute(
-                "SELECT TOP 1 NICKNAME FROM w3Qa.COMPANY WHERE COMPANY_ID = ?",
+                "SELECT TOP 1 NICKNAME FROM #DSN#.COMPANY WHERE COMPANY_ID = ?",
                 [companyId],
                 {datasource = dsn3}
             );
@@ -34,7 +34,7 @@ function resolveCompanyName(companyId) {
     <cfif StructKeyExists(form, "IID") AND Len(form.IID)>
         <cfloop list="#form.IID#" index="sid">
             <cfquery name="insert_to_pallet" datasource="#dsn3#">
-                INSERT INTO w3Qa_1.SHIPPING_PALLET_SVK_PBS
+                INSERT INTO #DSN3#.SHIPPING_PALLET_SVK_PBS
                     (PALLET_ID, ORDER_ID, RECORD_DATE, RECORD_EMP)
                 VALUES
                     (
@@ -54,8 +54,8 @@ function resolveCompanyName(companyId) {
 <cfquery name="getPaletBilgi" datasource="#dsn3#">
     SELECT P.ID, P.PALLET_CODE, P.PALLET_TYPE, P.COMPANY_ID, 
            PT.PALET_TYPE, P.RECORD_DATE
-    FROM w3Qa_1.SHIPPING_PALLETS_PBS P
-    LEFT JOIN w3Qa.PALET_TYPES_PBS PT ON PT.ID = P.PALLET_TYPE
+    FROM #DSN3#.SHIPPING_PALLETS_PBS P
+    LEFT JOIN #DSN#.PALET_TYPES_PBS PT ON PT.ID = P.PALLET_TYPE
     WHERE P.ID = <cfqueryparam value="#attributes.pallet_id#" cfsqltype="cf_sql_integer">
 </cfquery>
 
@@ -88,7 +88,7 @@ function resolveCompanyName(companyId) {
             ), 0) AS SVK_MIK,
             (
                 SELECT COUNT(*)
-                FROM w3Qa_1.SHIPPING_PALLET_SVK_PBS
+                FROM #DSN3#.SHIPPING_PALLET_SVK_PBS
                 WHERE ORDER_ID = ESR.SHIP_RESULT_ID
                 AND PALLET_ID = <cfqueryparam value="#attributes.pallet_id#" cfsqltype="cf_sql_integer">
             ) AS IN_PALLET

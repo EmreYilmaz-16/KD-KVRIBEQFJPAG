@@ -1,3 +1,5 @@
+
+
 <cf_box title="GTIP Kodu Import Sistemi">
 
     <meta charset="utf-8">
@@ -98,7 +100,7 @@
                                         <cfif len(currentResult.urunIsmiIngilizce) gt 0>
                                             <cftry>
                                                 <cfquery name="getPns" datasource="#dsn#">
-                                                    SELECT * FROM w3Qa.SETUP_LANGUAGE_INFO 
+                                                    SELECT * FROM #dsn#.SETUP_LANGUAGE_INFO 
                                                     WHERE TABLE_NAME='PRODUCT' 
                                                     AND COLUMN_NAME='PRODUCT_NAME' 
                                                     AND UNIQUE_COLUMN_ID=#checkProduct.PRODUCT_ID# 
@@ -107,17 +109,17 @@
                                                 
                                                 <cfif getPns.recordCount>
                                                     <cfquery name="upd" datasource="#dsn#">
-                                                        UPDATE w3Qa.SETUP_LANGUAGE_INFO 
+                                                        UPDATE #dsn#.SETUP_LANGUAGE_INFO 
                                                         SET ITEM = <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">
                                                         WHERE TABLE_NAME='PRODUCT' AND COLUMN_NAME='PRODUCT_NAME' AND UNIQUE_COLUMN_ID=#checkProduct.PRODUCT_ID# AND LANGUAGE='eng'
                                                     </cfquery>
                                                 <cfelse>
                                                     <cfquery name="ins" datasource="#dsn#">
-                                                        INSERT INTO w3Qa.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
+                                                        INSERT INTO #dsn#.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
                                                         VALUES ('PRODUCT', 'PRODUCT_NAME', #checkProduct.PRODUCT_ID#, 'eng', <cfqueryparam value="#currentResult.urunIsmiIngilizce#" cfsqltype="cf_sql_varchar">)
                                                     </cfquery>
                                                     <cfquery name="insTr" datasource="#dsn#">
-                                                        INSERT INTO w3Qa.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
+                                                        INSERT INTO #dsn#.SETUP_LANGUAGE_INFO (TABLE_NAME, COLUMN_NAME, UNIQUE_COLUMN_ID, LANGUAGE, ITEM)
                                                         VALUES ('PRODUCT', 'PRODUCT_NAME', #checkProduct.PRODUCT_ID#, 'tr', <cfqueryparam value="#checkProduct.PRODUCT_NAME#" cfsqltype="cf_sql_varchar">)
                                                     </cfquery>
                                                 </cfif>
@@ -132,13 +134,13 @@
                                             <cftry>
                                                 <!--- Ürün birim tablosunda ağırlık kontrolü --->
                                                 <cfquery name="checkWeight" datasource="#dsn1#">
-                                                    SELECT WEIGHT FROM w3Qa_product.PRODUCT_UNIT WHERE PRODUCT_ID=#checkProduct.PRODUCT_ID#
+                                                    SELECT WEIGHT FROM #dsn1#.PRODUCT_UNIT WHERE PRODUCT_ID=#checkProduct.PRODUCT_ID#
                                                 </cfquery>
                                                 
                                                 <cfif checkWeight.recordCount gt 0>
                                                     <!--- Mevcut kayıt varsa güncelle --->
                                                     <cfquery name="updateWeight" datasource="#dsn1#">
-                                                        UPDATE w3Qa_product.PRODUCT_UNIT 
+                                                        UPDATE #dsn1#_product.PRODUCT_UNIT 
                                                         SET WEIGHT = #currentResult.urunAgirlik#
                                                         WHERE PRODUCT_ID = #checkProduct.PRODUCT_ID#
                                                     </cfquery>

@@ -1,7 +1,7 @@
 
 
 
-<cfset dsn = "w3qa"> <!--- kendi DSN'inizi girin --->
+<!--- kendi DSN'inizi girin --->
 <!--- rn sıralaması için: created_at / barcode_id / barcode --->
 <cfparam name="url.orderBy" default="barcode"> 
 <cfparam name="url.is_submit" default="0">
@@ -53,11 +53,11 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
                     SB.BARCODE
                 END
         ) AS rn
-    FROM w3Qa_product.STOCKS_BARCODES SB
-    INNER JOIN w3Qa_product.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
-    INNER JOIN w3Qa_product.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
+    FROM #dsn1#.STOCKS_BARCODES SB
+    INNER JOIN #dsn1#.STOCKS  AS S ON S.STOCK_ID   = SB.STOCK_ID
+    INNER JOIN #dsn1#.PRODUCT AS P ON P.PRODUCT_ID = S.PRODUCT_ID
     <cfif len(attributes.cat_id)>
-        INNER JOIN w3Qa_product.PRODUCT_CAT PC ON PC.PRODUCT_CATID = P.PRODUCT_CATID
+        INNER JOIN #dsn1#.PRODUCT_CAT PC ON PC.PRODUCT_CATID = P.PRODUCT_CATID
         WHERE PC.PRODUCT_CATID = <cfqueryparam value="#attributes.cat_id#" cfsqltype="cf_sql_integer">
     </cfif>
     <cfif len(attributes.brand)>
@@ -65,14 +65,14 @@ SET @orderByCol = CASE LOWER(<cfqueryparam value="#url.orderBy#" cfsqltype="cf_s
     </cfif>
 )
 SELECT *
-INTO w3qa.##B
+INTO #dsn#.##B
 FROM B;
 
 -- 2) Dinamik kolon listesini oluştur
 DECLARE @cols nvarchar(max);
 SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
-FROM (SELECT DISTINCT rn FROM w3qa.##B) d;
+FROM (SELECT DISTINCT rn FROM #dsn#.##B) d;
 
 
 
@@ -89,7 +89,7 @@ N'SELECT
           PRODUCT_NAME,
           ''BARCODE'' + CAST(rn AS nvarchar(10)) AS colname,
           BARCODE
-      FROM w3qa.##B
+      FROM #dsn#.##B
   ) src
   PIVOT (
       MAX(BARCODE) FOR colname IN (' + @cols + N')
@@ -98,7 +98,7 @@ N'SELECT
 
 EXEC sys.sp_executesql @sql;
 
-DROP TABLE w3qa.##B;
+DROP TABLE #dsn#.##B;
 </cfquery>
 
 <!--- HTML tabloyu yaz (Excel açar) --->

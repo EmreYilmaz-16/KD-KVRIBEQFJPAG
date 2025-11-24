@@ -1,6 +1,6 @@
 
 <cfquery name="qPurchaseOffer" datasource="#dsn3#" result="result">
-    SELECT INTERNALDEMAND_ID FROM w3Qa_1.OFFER WHERE OFFER_ID=#attributes.offer_id#
+    SELECT INTERNALDEMAND_ID FROM #dsn3#.OFFER WHERE OFFER_ID=#attributes.offer_id#
 </cfquery>
 <script>
 var OFFER_PRODUCT=<cfoutput>#session.kd.OFFER_PRODUCT_ID#</cfoutput>;

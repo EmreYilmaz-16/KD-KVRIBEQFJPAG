@@ -5,7 +5,7 @@
 <cfdump var="#Data#">
 <cfset ErrorArray= arrayNew(1)>
 <cfloop array="#Data#" index="item">
-    <cfquery name="getStok" datasource="w3Qa">
+    <cfquery name="getStok" datasource="#DSN#">
             SELECT TOP 10 * FROM PBS_GETSTOCK WHERE PRODUCT_CODE_2='#item.Stok#'
     </cfquery>
     <cfif getStok.recordCount>
@@ -22,7 +22,7 @@
                 </cfif>
                
                     <!--- Yeni seri numarası ekle --->
-                    <cfquery datasource="w3Qa_1">
+                    <cfquery datasource="#dsn3#">
                         INSERT INTO PBS_SERIAL_SAYIM_ROW (
                             SAYIM_ID,
                             SERIAL_NUMBER,

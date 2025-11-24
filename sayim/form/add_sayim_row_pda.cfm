@@ -1,10 +1,10 @@
 ﻿<cfquery name="getSayim" datasource="#dsn3#">
     select *,
     (
-        select count(*) from w3Qa_1.PRODUCT_PLACE 
+        select count(*) from #dsn3#.PRODUCT_PLACE 
         where STORE_ID=PSS.DEPARTMENT_ID AND LOCATION_ID=PSS.LOCATION_ID
     ) AS RAFLI 
-        from w3Qa_1.PBS_SERIAL_SAYIM PSS WHERE SAYIM_ID=<cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
+        from #dsn3#.PBS_SERIAL_SAYIM PSS WHERE SAYIM_ID=<cfqueryparam value="#attributes.sayim_id#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 

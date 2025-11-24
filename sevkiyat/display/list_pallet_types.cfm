@@ -4,7 +4,7 @@
 
 <cfquery name="getPalletTypes" datasource="#dsn3#">
 	SELECT ID, PALET_TYPE, MAXIMUM_WEIGHT
-	FROM w3Qa.PALET_TYPES_PBS
+	FROM #DSN#.PALET_TYPES_PBS
 	<cfif Len(searchTerm)>
 		WHERE PALET_TYPE LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="50">
 	</cfif>

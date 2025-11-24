@@ -30,7 +30,7 @@
 		<cftry>
 			<cfquery name="checkDuplicate" datasource="#dsn3#">
 				SELECT TOP 1 1
-				FROM w3Qa.PALET_TYPES_PBS
+				FROM #dsn#.PALET_TYPES_PBS
 				WHERE UPPER(PALET_TYPE) = <cfqueryparam value="#UCase(paletType)#" cfsqltype="cf_sql_varchar" maxlength="50">
 			</cfquery>
 
@@ -38,7 +38,7 @@
 				<cfset ArrayAppend(errorMessages, "Bu palet tipi zaten kayitli gorunuyor.")>
 			<cfelse>
 				<cfquery name="insertPalletType" datasource="#dsn3#">
-					INSERT INTO w3Qa.PALET_TYPES_PBS (PALET_TYPE, MAXIMUM_WEIGHT)
+					INSERT INTO #dsn#.PALET_TYPES_PBS (PALET_TYPE, MAXIMUM_WEIGHT)
 					VALUES (
 						<cfqueryparam value="#paletType#" cfsqltype="cf_sql_nvarchar" maxlength="50">,
 						<cfqueryparam value="#maximumWeightValue#" cfsqltype="cf_sql_float">

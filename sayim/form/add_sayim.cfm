@@ -10,8 +10,8 @@
     --------------->
 
 <!--- Form işlemi kontrol --->
-<cfquery name="GETPAPER" datasource="w3Qa_1">
-            select SAYIM_NO,SAYIM_NUMBER from w3Qa_1.PBS_PAPER_NUMBERS
+<cfquery name="GETPAPER" datasource="#dsn3#">
+            select SAYIM_NO,SAYIM_NUMBER from #dsn3#.PBS_PAPER_NUMBERS
         </cfquery>
         <cfset zero_Count=0>
         <cfif len(GETPAPER.SAYIM_NUMBER) eq 1>
@@ -34,7 +34,7 @@
         <cfset locationId = depoValues[2]>
         
         <!--- Veritabanına kayıt ekleme --->
-        <cfquery datasource="w3Qa_1" result="insertResult">
+        <cfquery datasource="#dsn3#" result="insertResult">
             INSERT INTO PBS_SERIAL_SAYIM (
                 PAPER_NUMBER,
                 DEPARTMENT_ID,
@@ -51,7 +51,7 @@
                 <cfqueryparam value="#session.ep.userid#" cfsqltype="cf_sql_integer">
             )
         </cfquery>
-        <cfquery name="updatepaper" datasource="w3Qa_1">
+        <cfquery name="updatepaper" datasource="#dsn3#">
                 update PBS_PAPER_NUMBERS set SAYIM_NUMBER=SAYIM_NUMBER+1
             </cfquery>
         <cfset successMessage = "Sayım kaydı başarıyla eklendi. Kayıt ID: #insertResult.generatedkey#">
@@ -64,7 +64,7 @@
 
 <!--- Depo/Lokasyon listesi için sorgu --->
 <cftry>
-    <cfquery name="getLocations" datasource="w3Qa">
+    <cfquery name="getLocations" datasource="#DSN#">
         SELECT CAST(DEPARTMENT_ID AS VARCHAR)+'-'+CAST(LOCATION_ID AS VARCHAR) AS DEPO, COMMENT 
         FROM STOCKS_LOCATION AS SL 
         ORDER BY COMMENT

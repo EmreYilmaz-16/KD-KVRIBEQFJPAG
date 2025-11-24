@@ -1,5 +1,8 @@
-﻿<cfquery name="gets" datasource="#dsn#">
-    select * from w3Qa.PROCESS_TYPE_ROWS_CAUID where PROCESS_ROW_ID=253
+﻿<cfquery name=getparams datasource="#dsn#">
+    SELECT * FROM PBS_PARAMETERS
+</cfquery>
+<cfquery name="gets" datasource="#dsn#">
+    select * from #dsn#.PROCESS_TYPE_ROWS_CAUID where PROCESS_ROW_ID=#getparams.TEKLIF_ISKONTO_ONAY_TALEP_SUREC_ID#
 </cfquery>
 
 <script>

@@ -1,3 +1,6 @@
+<cfquery name="GETPERIODS" datasource="#DSN#">
+    SELECT TOP 2 PERIOD_ID,OUR_COMPANY_ID FROM SETUP_PERIOD ORDER BY PERIOD_ID DESC
+</cfquery>
 <cfparam name="attributes.pallet_id" default="0">
 
 <cfset successMessage = "">
@@ -6,7 +9,7 @@
 <cfset currentPalletId = Val(attributes.pallet_id)>
 <cfset hasPalletIdColumn = false>
 <cftry>
-    <cfdbinfo type="columns" datasource="#dsn3#" table="w3Qa_1.SHIPPING_PALLET_ROWS_PBS" name="palletRowColumns">
+    <cfdbinfo type="columns" datasource="#dsn3#" table="#dsn3#.SHIPPING_PALLET_ROWS_PBS" name="palletRowColumns">
     <cfloop query="palletRowColumns">
         <cfif CompareNoCase(palletRowColumns.COLUMN_NAME, "PALLET_ID") EQ 0>
             <cfset hasPalletIdColumn = true>
@@ -60,14 +63,14 @@
                             <cfif hasPalletIdColumn>
                                 <cfquery name="checkExistingSerial" datasource="#dsn3#">
                                     SELECT COUNT(1) AS CNT
-                                    FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    FROM #dsn3#.SHIPPING_PALLET_ROWS_PBS
                                     WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
                                       AND PALLET_ID = <cfqueryparam value="#currentPalletId#" cfsqltype="cf_sql_integer">
                                 </cfquery>
                             <cfelse>
                                 <cfquery name="checkExistingSerial" datasource="#dsn3#">
                                     SELECT COUNT(1) AS CNT
-                                    FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    FROM #dsn3#.SHIPPING_PALLET_ROWS_PBS
                                     WHERE SERIAL_NUMBER = <cfqueryparam value="#trimmedSerial#" cfsqltype="cf_sql_varchar">
                                 </cfquery>
                             </cfif>
@@ -81,7 +84,7 @@
 
                             <cfif hasPalletIdColumn>
                                 <cfquery name="insertSerialRow" datasource="#dsn3#">
-                                    INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    INSERT INTO #dsn3#.SHIPPING_PALLET_ROWS_PBS
                                         (PALLET_ID, SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
                                     VALUES
                                         (
@@ -95,7 +98,7 @@
                                 </cfquery>
                             <cfelse>
                                 <cfquery name="insertSerialRow" datasource="#dsn3#">
-                                    INSERT INTO w3Qa_1.SHIPPING_PALLET_ROWS_PBS
+                                    INSERT INTO #dsn3#.SHIPPING_PALLET_ROWS_PBS
                                         (SERIAL_NUMBER, PRODUCT_ID, STOCK_ID, RECORD_DATE, RECORD_EMP)
                                     VALUES
                                         (
@@ -138,14 +141,21 @@
     SELECT (
         SELECT DISTINCT
             SG.SERIAL_NO,SG.STOCK_ID
-        FROM w3Qa_1.SHIPPING_PALLET_SVK_PBS SP
-        LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT ESR ON ESR.SHIP_RESULT_ID = SP.ORDER_ID
+        FROM #dsn3#.SHIPPING_PALLET_SVK_PBS SP
+        LEFT JOIN #dsn3#.EZGI_SHIP_RESULT ESR ON ESR.SHIP_RESULT_ID = SP.ORDER_ID
         LEFT JOIN (
-            SELECT FIS_ID, REF_NO, 2 AS PERIODID FROM w3Qa_2025_1.STOCK_FIS
+            <cfloop query="GETPERIODS">
+                <cfif GETPERIODS.currentRow GT 1>
+                    UNION ALL
+                </cfif>
+                SELECT FIS_ID, REF_NO, #GETPERIODS.PERIOD_ID# AS PERIODID FROM #dsn#_#GETPERIODS.PERIOD_ID#_#GETPERIODS.OUR_COMPANY_ID#.STOCK_FIS
+                
+            </cfloop>
+         <!----   SELECT FIS_ID, REF_NO, 2 AS PERIODID FROM #dsn2#.STOCK_FIS
             UNION ALL
-            SELECT FIS_ID, REF_NO, 1 AS PERIODID FROM w3Qa_2024_1.STOCK_FIS
+            SELECT FIS_ID, REF_NO, 1 AS PERIODID FROM #dsn#_#year(now())-1#_#session.ep.company_id#.STOCK_FIS---->
         ) SF ON SF.REF_NO = ESR.DELIVER_PAPER_NO
-        LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW SG ON SG.PROCESS_ID = SF.FIS_ID AND SG.PERIOD_ID = SF.PERIODID
+        LEFT JOIN #dsn3#.SERVICE_GUARANTY_NEW SG ON SG.PROCESS_ID = SF.FIS_ID AND SG.PERIOD_ID = SF.PERIODID
         WHERE SP.PALLET_ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
         FOR JSON PATH
     ) AS T
@@ -183,8 +193,8 @@
                SPR.PRODUCT_ID,
                SPR.STOCK_ID,
                P.PRODUCT_CODE_2
-        FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS SPR
-        INNER JOIN w3Qa_product.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
+        FROM #dsn3#.SHIPPING_PALLET_ROWS_PBS SPR
+        INNER JOIN #dsn1#.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
         WHERE SPR.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
     </cfquery>
 <cfcatch type="any">
@@ -193,8 +203,8 @@
                SPR.PRODUCT_ID,
                SPR.STOCK_ID,
                P.PRODUCT_CODE_2
-        FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS SPR
-        INNER JOIN w3Qa_product.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
+        FROM #dsn3#.SHIPPING_PALLET_ROWS_PBS SPR
+        INNER JOIN #dsn1#.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
     </cfquery>
 </cfcatch>
 </cftry>
@@ -614,8 +624,8 @@
             return item.serial.indexOf(serialNo) !== -1;
         });
         var sql=`
-        SELECT PRODUCT.PRODUCT_ID,STOCKS.STOCK_ID,PRODUCT_CODE_2,PRODUCT_NAME FROM w3Qa_product.PRODUCT 
-LEFT JOIN w3Qa_product.STOCKS ON PRODUCT.PRODUCT_ID=STOCKS.PRODUCT_ID WHERE PRODUCT_CODE_2='${productCode}'`
+        SELECT PRODUCT.PRODUCT_ID,STOCKS.STOCK_ID,PRODUCT_CODE_2,PRODUCT_NAME FROM #dsn1#.PRODUCT 
+LEFT JOIN #dsn1#.STOCKS ON PRODUCT.PRODUCT_ID=STOCKS.PRODUCT_ID WHERE PRODUCT_CODE_2='${productCode}'`
 var qr=wrk_query(sql,'dsn1');
 console.log(qr);
         if(qr.recordcount==0){
