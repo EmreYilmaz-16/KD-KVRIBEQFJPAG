@@ -54,14 +54,14 @@
     <cfset workcube_mode=0>
 
 <cffunction name="setdatasources">
-    burada datasourcelar elle yazılmış halde ama burayı parametrik yaptım aşağıda yazılı datasourceları entegre edebilirmiyiz
+    
 
 <cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
 <cfset dsn="#trim(configContent)#"> <!---w3qa--->
 <cfquery name="getparams" datasource="#dsn#">
     SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
 </cfquery>
-<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_1---->
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---#dsn3#---->
 <cfset dsn2="#dsn#_#year(now())#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_2025_1---->
 </cffunction>
 
@@ -85,7 +85,7 @@
 
         <cfquery name="getRows" datasource="#dsn3#">
             SELECT * FROM PBS_SELECTED_ROWS 
-            LEFT JOIN w3Qa_1.OFFER_ROW ON PBS_SELECTED_ROWS.WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID
+            LEFT JOIN #dsn3#.OFFER_ROW ON PBS_SELECTED_ROWS.WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID
             WHERE PBS_SELECTED_ROWS.OFFER_ID = '#offers.offer_id#' 
             
         </cfquery>
@@ -126,8 +126,8 @@
         <cfset attributes.rows_=ix>
 <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#offers.offer_id#
             </cfquery>
             <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
@@ -204,10 +204,10 @@
 
 <cfset attributes.commission_rate="">
 <cfquery NAME="getSatis" datasource="#dsn#">
-  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
-INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
+  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from #dsn3#.OFFER_ROW
+INNER JOIN #dsn3#.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
 where WRK_ROW_RELATION_ID IN (
-SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
+SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 ) ORDER BY OFFER_ID ASC
 </cfquery>
 <CFIF getSatis.recordCount>
@@ -215,7 +215,7 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
     <CFSET attributes.rel_offer_head="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
 
 <cfquery name="UP" datasource="#DSN#">
-    UPDATE w3Qa_1.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
+    UPDATE #dsn3#.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
         #valueList(getSatis.OFFER_ID)#
     )
 </cfquery>
@@ -321,11 +321,11 @@ SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
-DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+DELETE FROM #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
 </cfquery>
 
 <cfquery name="INSREL" datasource="#dsn3#">
-INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+INSERT INTO #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
     SALE_OFFER_ID,
    PURCHASE_OFFER_ID
 )
@@ -439,8 +439,8 @@ VALUES(
             <!-- Retrieve related internal demand data -->
             <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#offers.offer_id#
             </cfquery>
             <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
@@ -606,11 +606,11 @@ VALUES(
 <cfinclude template="../query/add_offer.cfm">
 
 <cfquery name="DELREL" datasource="#dsn3#">
-DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+DELETE FROM #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
 </cfquery>
 
 <cfquery name="INSREL" datasource="#dsn3#">
-INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+INSERT INTO #dsn3#.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
     SALE_OFFER_ID,
    PURCHASE_OFFER_ID
 )
@@ -657,7 +657,7 @@ VALUES(
             <!-- Log the payload for debugging -->
             <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
 
-            <cfquery name="DEL" datasource="w3Qa_1">
+            <cfquery name="DEL" datasource="#dsn3#">
                 DELETE FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' AND BASKET_EXTRA_INFO=#offers.BEI#
             </cfquery>
             <!-- Process each offer -->
@@ -671,7 +671,7 @@ VALUES(
                    
 
                     <!-- Insert new rows for the product -->
-                    <cfquery name="INS" datasource="w3Qa_1">
+                    <cfquery name="INS" datasource="#dsn3#">
                         INSERT INTO PBS_SELECTED_ROWS (
                             WRK_ROW_ID,
                             PRICE,
@@ -701,11 +701,11 @@ VALUES(
                             #product.discount3#
                         )
                     </cfquery>
-                    <cfquery name="getStockInfo" datasource="w3Qa_1">
+                    <cfquery name="getStockInfo" datasource="#dsn3#">
                         SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
                     </cfquery>
-                      <cfquery name="getUnit" datasource="w3Qa_1">
-                        select PRODUCT_UNIT_ID,MAIN_UNIT from w3Qa_1.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                      <cfquery name="getUnit" datasource="#dsn3#">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
                     </cfquery>
                     <cfscript>
                         ix=ix+1;
@@ -766,7 +766,7 @@ VALUES(
 
         <cfquery name="qAlt" datasource="#dsn3#">
             SELECT ALTERNATIVE_PRODUCT_ID as ALTERNATIF_PRODUCT_ID
-            FROM w3Qa_1.ALTERNATIVE_PRODUCTS
+            FROM #dsn3#.ALTERNATIVE_PRODUCTS
             WHERE PRODUCT_ID = <cfqueryparam value="#arguments.product_id#" cfsqltype="cf_sql_varchar">
         </cfquery>
 
@@ -924,7 +924,7 @@ VALUES(
         <cfargument name="internal_id" type="numeric" required="true">
       <cfset var response = {}>
         <cfset var dsn = "w3Qa">
-        <cfset var dsn3 = "w3Qa_1">
+        <cfset var dsn3 = "#dsn3#">
         <cfset var attributes = {}>
     <cftry>
         <!--- Teklif satırlarını çek --->
@@ -937,12 +937,12 @@ SELECT
     PSR.BASKET_EXTRA_INFO
     --PSR.SOME_COLUMN_1, -- Kullanmak istediğin PBS_SELECTED_ROWS alanlarını buraya ekle
     --PSR.SOME_COLUMN_2
-FROM w3Qa_1. PBS_SELECTED_ROWS AS PSR
-INNER JOIN w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI 
+FROM #dsn3#. PBS_SELECTED_ROWS AS PSR
+INNER JOIN #dsn3#.OFFER_ROW AS ORR_SATIS_TEKLIFI 
     ON PSR.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID AND ORR_SATIS_TEKLIFI.OFFER_ID= #arguments.last_offer_id#
-LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI 
+LEFT JOIN #dsn3#.OFFER_ROW AS ORR_ALIS_TEKLIFI 
     ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI 
+LEFT JOIN #dsn3#.OFFER AS O_ALIS_TEKLIFI 
     ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
 WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>3  ORDER BY COMPANY_ID
 
@@ -950,8 +950,8 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
         </cfquery>
         <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,DEPARTMENT_IN,LOCATION_IN,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM w3Qa_1.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM #dsn3#.INTERNALDEMAND
                 WHERE INTERNAL_ID =#arguments.internal_id#
             </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
@@ -1148,11 +1148,11 @@ SELECT
     ,ORR_SATIS_TEKLIFI.TAX
     ,ORR_SATIS_TEKLIFI.OTHER_MONEY_VALUE
 
-FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
-LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
+FROM #dsn3#.OFFER_ROW AS ORR_SATIS_TEKLIFI
+LEFT JOIN #dsn3#.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+LEFT JOIN #dsn3#.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
 WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
-SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.internal_id#)
+SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.internal_id#)
 	
         ORDER BY COMPANY_ID
 </cfquery>
