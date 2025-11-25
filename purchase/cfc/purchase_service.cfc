@@ -1,4 +1,4 @@
-﻿<!-----
+﻿<!---
 /**
  * PurchaseService Component
  * Handles purchase-related operations.
@@ -45,7 +45,7 @@
  * - Error handling is implemented using <cftry> and <cfcatch>.
  * - Logs are written to the "purchaseService" log file for debugging and error tracking.
  */
------->
+--->
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
    
    
