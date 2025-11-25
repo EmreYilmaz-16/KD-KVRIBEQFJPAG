@@ -1,4 +1,4 @@
-﻿<!---
+﻿<!-----
 /**
  * PurchaseService Component
  * Handles purchase-related operations.
@@ -45,83 +45,580 @@
  * - Error handling is implemented using <cftry> and <cfcatch>.
  * - Logs are written to the "purchaseService" log file for debugging and error tracking.
  */
---->
+------>
 <cfcomponent displayname="PurchaseService" output="false" hint="Handles purchase-related operations">
-   
-   
+    <cfset dsn3="">
+    <cfset DSN3_ALIAS =dsn3>
+    <cfset dsn="">
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
-      <cfscript>
-        variables.dsn  = "";
-        variables.dsn2 = "";
-        variables.dsn3 = "";
-        variables.OUR_COMPANY_ID = "";
-    </cfscript>
 
-      <cffunction name="init" access="public" returntype="any" output="false" hint="Init component and set datasources">
-        <cfscript>
-            setDatasources();
-            return this;
-        </cfscript>
-    </cffunction>
+<cffunction name="setdatasources">
+    burada datasourcelar elle yazılmış halde ama burayı parametrik yaptım aşağıda yazılı datasourceları entegre edebilirmiyiz
 
-    <cffunction name="setDatasources" access="public" returntype="void" output="false"
-                hint="Reads base DSN from file and builds dsn2/dsn3 dynamically">
-
-        <!--- Lokal değişken --->
-        <cfset var configContent = "">
-
-        <!--- DSN temel adını dosyadan al --->
-        <cffile 
-            action="read" 
-            file="#ExpandPath('/pbs_dsn.txt')#" 
-            variable="configContent">
-
-        <!--- Örn: w3qa --->
-        <cfset variables.dsn = trim(configContent)>
-
-        <!--- Şirket id’yi al --->
-        <cfquery name="getParams" datasource="#variables.dsn#">
-            SELECT PBS_MODUL_COMPANY_ID 
-            FROM PBS_PARAMETERS
-        </cfquery>
-
-        <!--- Örn: w3qa_1 --->
-        <cfset variables.dsn3 = "#variables.dsn#_#getParams.PBS_MODUL_COMPANY_ID#">
-
-        <!--- Örn: w3qa_2025_1 --->
-        <cfset variables.dsn2 = "#variables.dsn#_#year(now())#_#getParams.PBS_MODUL_COMPANY_ID#">
-        <cfset variables.OUR_COMPANY_ID = getParams.PBS_MODUL_COMPANY_ID>
-
-    </cffunction>
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+<cfset dsn="#trim(configContent)#"> <!---w3qa--->
+<cfquery name="getparams" datasource="#dsn#">
+    SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+</cfquery>
+<cfset dsn3="#dsn#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_1---->
+<cfset dsn2="#dsn#_#year(now())#_#getparams.PBS_MODUL_COMPANY_ID#"> <!---w3qa_2025_1---->
+</cffunction>
 
 
 <cffunction name="saveSaleOfferFromSelectedRows" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-   
+    <cfscript>
+        setdatasources();
+    </cfscript>   
+    <cfset var response = {}>
+        <cfset arguments.payload = getHTTPRequestData().content>
 
-            <cfinclude template="saveSaleOfferFromSelectedRows.cfm">
+        <cfif isJSON(arguments.payload)>
+            <cfset arguments.payload = deserializeJSON(arguments.payload)>            
+        </cfif>
+        <cfif NOT isStruct(arguments.payload)>
+            <cfthrow message="Payload is invalid or missing." type="ValidationError">
+        </cfif>
+        <cfset var offers = arguments.payload>
+        <cfset var session = offers.session_variables>
+        <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
+
+        <cfquery name="getRows" datasource="#dsn3#">
+            SELECT * FROM PBS_SELECTED_ROWS 
+            LEFT JOIN w3Qa_1.OFFER_ROW ON PBS_SELECTED_ROWS.WRK_ROW_ID=OFFER_ROW.WRK_ROW_ID
+            WHERE PBS_SELECTED_ROWS.OFFER_ID = '#offers.offer_id#' 
+            
+        </cfquery>
+        <cfif getRows.recordcount EQ 0>
+            <cfthrow message="No selected rows found for the given offer." type="DataNotFound">
+        </cfif>
+        <cfset var attributes = structNew()>
+        <cfset var ix = 0>
+        <cfloop query="getRows">
+            <cfset ix = ix + 1>
+            <cfquery name="getStockInfo" datasource="#dsn3#">
+                        SELECT * FROM STOCKS WHERE STOCK_ID=#getRows.STOCK_ID#
+            </cfquery>
+            <cfset attributes["price#ix#"] = getRows.PRICE>
+            <cfset attributes["price_other#ix#"] = getRows.SALE_PRICE>
+            <cfset attributes["tax#ix#"] = getRows.TAX>
+            <cfset attributes["amount#ix#"] = getRows.QUANTITY>
+            <cfset attributes["indirim1#ix#"] = getRows.DSC1>
+            <cfset attributes["indirim2#ix#"] = getRows.DSC2>
+            <cfset attributes["indirim3#ix#"] = getRows.DSC3>
+            <cfset attributes["other_money_#ix#"] = getRows.OTHER_MONEY>
+            <cfset attributes["product_id#ix#"] = getRows.PRODUCT_ID>
+            <cfset attributes["stock_id#ix#"] = getRows.STOCK_ID>
+            <cfset attributes["unit#ix#"] = getRows.UNIT>
+            <cfset attributes["unit_id#ix#"] = getRows.UNIT_ID>
+            <cfset attributes["product_name#ix#"] = getRows.PRODUCT_NAME>
+            <cfset attributes["other_money_value_#ix#"] = (getRows.SALE_PRICE * getRows.QUANTITY) - ((getRows.SALE_PRICE * getRows.QUANTITY) * getRows.DSC1) / 100>
+            
+            <cfset attributes["description#ix#"] = "">
+            <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#">
+            <cfset attributes["wrk_row_relation_id#ix#"] = getRows.WRK_ROW_ID>
+            <cfset attributes["is_virtual#ix#"] = 0>
+            <cfset attributes["SHELF_CODE#ix#"] = "">
+            <cfset attributes["OFFER_ROW_CURRENCY#ix#"] = "">
+            <cfset attributes["detail_info_extra#ix#"] = getRows.OEM_NO>
+            <cfset attributes["SELECT_INFO_EXTRA#ix#"] = getRows.BASKET_EXTRA_INFO>
+        </cfloop>
+        <cfset attributes.rows_=ix>
+<cfquery name="GETIDEMAND" datasource="#dsn3#">
+                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM w3Qa_1.INTERNALDEMAND
+                WHERE INTERNAL_ID =#offers.offer_id#
+            </cfquery>
+            <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
+
+
+            <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset MONEYARRRR=arrayNew(1)>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+             <cfset ibnm=1>
+    <cfloop query="getMoneyext">
+        <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+        <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+        <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+        <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+          
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
+        <cfset ibnm=ibnm+1>
+    </cfloop>
+    <cfset kur_sayisi=ibnm-1>
+    <cfset attributes.KUR_SAY=kur_sayisi>
+
+<cfset attributes.offer_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.ship_date=now()>
+<cfset attributes.finishdate=now()>
+<cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.OFFER_DESCRIPTION="">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset FactPBS="purchase.purchase_offer_selector">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset attributes.price_catid="">
+<cfset attributes.sales_emp_id=session.ep.userid>
+<cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
+<cfset attributes.project_head="">
+<cfset attributes.project_id="">
+<cfset attributes.process_stage="20">
+<cfquery name="getcc" datasource="#dsn#">
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+</cfquery>
+<cfquery name="GETCOMPANY" datasource="#dsn#">
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+</cfquery>
+<cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
+<cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
+<cfset attributes.ship_method_id=getcc.SHIP_METHOD_ID>
+<cfset attributes.ship_method=getcc.SHIP_METHOD_ID>
+<cfset attributes.pay_method=getcc.REVMETHOD_ID>
+<cfset attributes.card_paymethod_id="">
+
+<cfset attributes.ship_address=GETCOMPANY.COMPANY_ADDRESS>
+<cfset attributes.ship_address_id=-1>
+<cfset attributes.city_id=GETCOMPANY.CITY>
+<cfset attributes.county_id=GETCOMPANY.COUNTY>
+
+<CFSET attributes.ship_address_city_id=GETCOMPANY.CITY>
+<CFSET attributes.ship_address_county_id=GETCOMPANY.COUNTY>
+
+<cfset attributes.commission_rate="">
+<cfquery NAME="getSatis" datasource="#dsn#">
+  select DISTINCT OFFER.OFFER_ID,OFFER.OFFER_NUMBER from w3Qa_1.OFFER_ROW
+INNER JOIN w3Qa_1.OFFER ON OFFER.OFFER_ID=OFFER_ROW.OFFER_ID
+where WRK_ROW_RELATION_ID IN (
+SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#offers.offer_id#
+) ORDER BY OFFER_ID ASC
+</cfquery>
+<CFIF getSatis.recordCount>
+    <CFSET attributes.rel_offer_id=getSatis.OFFER_ID>
+    <CFSET attributes.rel_offer_head="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
+
+<cfquery name="UP" datasource="#DSN#">
+    UPDATE w3Qa_1.OFFER SET OFFER_STAGE=267 WHERE OFFER_ID IN(
+        #valueList(getSatis.OFFER_ID)#
+    )
+</cfquery>
+</CFIF>
+
+<cfset attributes.sales_add_option="">
+<cfset attributes.offer_head="Teklifimiz">
+<cfset attributes.offer_detail="">
+<cfset attributes.offer_detail="">
+<cfset attributes.basket_money=getcc.MONEY>
+<cfset attributes.basket_rate1=IDEMAND.PARA[1].RATE1>
+<cfset attributes.basket_rate2=IDEMAND.PARA[1].RATE2>
+<cfset attributes.ref_member_type ="">
+<cfset attributes.consumer_id="">
+<cfset attributes.reserved=1>
+<cfset attributes.offer_status=1>
+
+
+<cfscript>
+    DISCOUNT_TOTAL=0;
+    GROSS_TOTAL=0;
+    SUBNETTOTAL=0;
+    SUBTAXTOTAL=0;
+    SUBTOTAL=0;
+    TAX_TOTAL=0;
+    TOTAL_WITHOUT_KDV=0;
+    TOTAL_WITH_KDV=0;
+    BASKET_NET_TOTAL=0;
+    BASKET_NET_TOTAL_=0;
+    BASKET_TAX_TOTAL=0;
+    BASKET_TAX_TOTAL_=0;
+</cfscript>
+<CFLOOP from="1" to="#attributes.rows_#" index="ix">
+    <cfset PRICE=evaluate("attributes.price#ix#")>
+    <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+    <cfset TAX=evaluate("attributes.tax#ix#")>
+    <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+    <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+    <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+    <cfscript>
+     SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+            return item.MONEY == OTHER_MONEY;
+        })[1];
+    OLD_SATIR_KUR= SATIR_KUR;
+    </cfscript>
+
+    <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+    <cfset ox=structNew()>
+    <cfset ox.PRICE=PRICE>
+    <cfset ox.PRICE_=PR_HESAP>
+    <cfscript>
+        dp=PRICE-(PRICE*DISCOUNT)/100;  
+        dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+
+        TUTAR=dp*AMOUNT;
+        TUTAR_=dp_*AMOUNT;
+
+        TX=(TUTAR*TAX)/100
+        TX_=(TUTAR_*TAX)/100
+        ox.DP=dp;
+        ox.DP_=dp_;
+        ox.TUTAR=TUTAR;
+        ox.TUTAR_=TUTAR_;
+        OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+        OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+        ox.TX=TX;
+        ox.TX_=TX_;
+        BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+        BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+        BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+        BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+
+        "attributes.other_money_value_#ix#"=ox.OTM_V_;
+        "attributes.price#ix#"=ox.PRICE_;
+    </cfscript>
+    
+
+
+    
+
+
+
+</CFLOOP>
+
+<CFIF getSatis.recordCount>
+    <cfset attributes.rel_offer_id=getSatis.OFFER_ID>
+    <cfset paper_fulbs="#getSatis.OFFER_NUMBER#-#getSatis.recordCount#">
+<cfelse>
+<cfquery name="get_offer_number" datasource="#dsn3#">
+    EXEC GET_PAPER_NUMBER 1
+</cfquery>
+
+
+<cfset paper_fulbs=get_offer_number.PAPER_NO>
+</cfif>
+
+<cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
+<cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
+<cfset attributes.PRICE=BASKET_NET_TOTAL_>
+ <cfset attributes.KUR_SAY=kur_sayisi>
+<cfset attributes.kur_say=kur_sayisi>
+
+<cfinclude template="../query/add_offer.cfm">
+
+<cfquery name="DELREL" datasource="#dsn3#">
+DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+</cfquery>
+
+<cfquery name="INSREL" datasource="#dsn3#">
+INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+    SALE_OFFER_ID,
+   PURCHASE_OFFER_ID
+)
+VALUES(    
+    #get_max_offer.max_id#,
+    #offers.offer_id#
+)
+</cfquery>
+
+
         
-            <cfset response.res = "success">
+        <cfset response.res = "success">
             <cfset response.message = "Purchase offers saved successfully.">
             <cfset response.data = attributes>
             <cfreturn response>
 </cffunction>
     <cffunction name="savePurchaseOfferSelector" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-         <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny = variables.our_company_id;
-    </cfscript>  
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
         <cftry>
             <!-- Deserialize JSON payload if it's a string -->
-        <cfinclude template="savePurchaseOfferSelector.cfm">            
+            <cfif isJSON(arguments.payload)>
+                <cfset arguments.payload = deserializeJSON(arguments.payload)>
+            </cfif>
+
+            <!-- Validate payload -->
+            <cfif NOT isStruct(arguments.payload)>
+                <cfthrow message="Payload is invalid or missing." type="ValidationError">
+            </cfif>
+
+            <!-- Extract offers from payload -->
+            <cfset var offers = arguments.payload>
+            <cfset session=offers.session_variables>
+            <!-- Log the payload for debugging -->
+            <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
+
+            
+            <!-- Process each offer -->
+            <cfset ix=0>
+            <cfloop array="#offers.payload#" item="offer">
+                <cfset var products = offer.products>
+
+                <!-- Process each product -->
+                <cfloop array="#products#" item="product">
+                    <!-- Delete existing rows for the product -->
+                    <cfquery name="DEL" datasource="#dsn3#">
+                        DELETE FROM PBS_SELECTED_ROWS WHERE WRK_ROW_ID = '#product.wrkRowId#'
+                    </cfquery>
+
+                    <!-- Insert new rows for the product -->
+                    <cfquery name="INS" datasource="#dsn3#">
+                        INSERT INTO PBS_SELECTED_ROWS (
+                            WRK_ROW_ID,
+                            PRICE,
+                            OFFER_ID,
+                            PRODUCT_MARJ,
+                            SALE_PRICE,
+                            IS_OS,
+                            BASKET_EXTRA_INFO,
+                            DSC1,
+                            DSC2,
+                            DSC3
+
+                        )
+                        VALUES (
+                            '#product.wrkRowId#',
+                            #product.netPrice#,
+                            #offers.offer_id#,
+                            #product.productMarj#,
+                            #product.salePrice#,
+                            0,
+                            #product.selectInfoExtra#,
+                            #product.discount1#,
+                            #product.discount2#,
+                            #product.discount3#
+                        )
+                    </cfquery>
+                    <cfquery name="getStockInfo" datasource="#dsn3#">
+                        SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
+                    </cfquery>
+                      <cfquery name="getUnit" datasource="#dsn3#">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from #dsn3#.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                    </cfquery>
+                    <cfscript>
+                        ix=ix+1;
+                        attributes["price#ix#"] = product.convertedsalePriceOther;
+                        attributes["price_other#ix#"] = product.salePrice;
+                        attributes["tax#ix#"] = product.tax;
+                        attributes["amount#ix#"] = product.quantity;
+                        attributes["indirim1#ix#"] = product.discount1;
+                        attributes["other_money_#ix#"] = product.demandMoney;
+                        attributes["product_id#ix#"] = product.productId;
+                        attributes["stock_id#ix#"] = product.stockId;
+                        attributes["unit#ix#"] = getUnit.MAIN_UNIT;
+                        attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
+                        attributes["product_name#ix#"] = product.productName;
+                        attributes["other_money_value_#ix#"] = (product.salePrice * product.quantity) - ((product.salePrice * product.quantity) * product.discount1) / 100;
+                        attributes["description#ix#"] = "";
+                        attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+                        attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
+                        attributes["is_virtual#ix#"] = 0;
+                        attributes["SHELF_CODE#ix#"] = "";
+                        attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+                        attributes["detail_info_extra#ix#"] = product.oemNo;
+                        
+                    </cfscript>
+                </cfloop>
+            </cfloop>
+            <cfset attributes.rows_=ix>
+            <!-- Retrieve related internal demand data -->
+            <cfquery name="GETIDEMAND" datasource="#dsn3#">
+                SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM w3Qa_1.INTERNALDEMAND
+                WHERE INTERNAL_ID =#offers.offer_id#
+            </cfquery>
+            <cfset IDEMAND.PARA=deserializeJSON(GETIDEMAND.PARA)>
+
+
+            <cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+            <cfset MONEYARRRR=arrayNew(1)>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+             <cfset ibnm=1>
+    <cfloop query="getMoneyext">
+        <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+        <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+        <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+        <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+          
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
+        <cfset ibnm=ibnm+1>
+    </cfloop>
+    <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
+
+<cfset attributes.offer_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.ship_date=now()>
+<cfset attributes.finishdate=now()>
+<cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.OFFER_DESCRIPTION="">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.partner_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset FactPBS="purchase.purchase_offer_selector">
+<cfset attributes.company_id=GETIDEMAND.FROM_COMPANY_ID>
+<cfset attributes.member_id=GETIDEMAND.FROM_PARTNER_ID>
+<cfset attributes.price_catid="">
+<cfset attributes.sales_emp_id=session.ep.userid>
+<cfset attributes.sales_emp="#session.ep.NAME# #session.ep.SURNAME#">
+<cfset attributes.project_head="">
+<cfset attributes.project_id="">
+<cfset attributes.process_stage="20">
+<cfquery name="getcc" datasource="#dsn#">
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+</cfquery>
+<cfquery name="GETCOMPANY" datasource="#dsn#">
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+</cfquery>
+<cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
+<cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
+<cfset attributes.ship_method_id=getcc.SHIP_METHOD_ID>
+<cfset attributes.ship_method=getcc.SHIP_METHOD_ID>
+<cfset attributes.pay_method=getcc.REVMETHOD_ID>
+<cfset attributes.card_paymethod_id="">
+
+<cfset attributes.ship_address=GETCOMPANY.COMPANY_ADDRESS>
+<cfset attributes.ship_address_id=-1>
+<cfset attributes.city_id=GETCOMPANY.CITY>
+<cfset attributes.county_id=GETCOMPANY.COUNTY>
+
+<CFSET attributes.ship_address_city_id=GETCOMPANY.CITY>
+<CFSET attributes.ship_address_county_id=GETCOMPANY.COUNTY>
+
+<cfset attributes.commission_rate="">
+
+<cfset attributes.sales_add_option="">
+<cfset attributes.offer_head="Teklifimiz">
+<cfset attributes.offer_detail="">
+<cfset attributes.offer_detail="">
+<cfset attributes.basket_money=getcc.MONEY>
+<cfset attributes.basket_rate1=IDEMAND.PARA[1].RATE1>
+<cfset attributes.basket_rate2=IDEMAND.PARA[1].RATE2>
+<cfset attributes.ref_member_type ="">
+<cfset attributes.consumer_id="">
+<cfset attributes.reserved=1>
+
+
+<cfscript>
+    DISCOUNT_TOTAL=0;
+    GROSS_TOTAL=0;
+    SUBNETTOTAL=0;
+    SUBTAXTOTAL=0;
+    SUBTOTAL=0;
+    TAX_TOTAL=0;
+    TOTAL_WITHOUT_KDV=0;
+    TOTAL_WITH_KDV=0;
+    BASKET_NET_TOTAL=0;
+    BASKET_NET_TOTAL_=0;
+    BASKET_TAX_TOTAL=0;
+    BASKET_TAX_TOTAL_=0;
+</cfscript>
+<CFLOOP from="1" to="#attributes.rows_#" index="ix">
+    <cfset PRICE=evaluate("attributes.price#ix#")>
+    <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+    <cfset TAX=evaluate("attributes.tax#ix#")>
+    <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+    <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+    <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+    <cfscript>
+     SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+            return item.MONEY == OTHER_MONEY;
+        })[1];
+    OLD_SATIR_KUR= SATIR_KUR;
+    </cfscript>
+
+    <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+    <cfset ox=structNew()>
+    <cfset ox.PRICE=PRICE>
+    <cfset ox.PRICE_=PR_HESAP>
+    <cfscript>
+        dp=PRICE-(PRICE*DISCOUNT)/100;  
+        dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+
+        TUTAR=dp*AMOUNT;
+        TUTAR_=dp_*AMOUNT;
+
+        TX=(TUTAR*TAX)/100
+        TX_=(TUTAR_*TAX)/100
+        ox.DP=dp;
+        ox.DP_=dp_;
+        ox.TUTAR=TUTAR;
+        ox.TUTAR_=TUTAR_;
+        OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+        OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+        ox.TX=TX;
+        ox.TX_=TX_;
+        BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+        BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+        BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+        BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+
+        "attributes.other_money_value_#ix#"=ox.OTM_V_;
+        "attributes.price#ix#"=ox.PRICE_;
+    </cfscript>
+    
+
+
+    
+
+
+
+</CFLOOP>
+
+
+<cfquery name="get_offer_number" datasource="#dsn3#">
+    EXEC GET_PAPER_NUMBER 1
+</cfquery>
+<cfset paper_fulbs=get_offer_number.PAPER_NO>
+<cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
+<cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
+<cfset attributes.PRICE=BASKET_NET_TOTAL_>
+
+<cfinclude template="../query/add_offer.cfm">
+
+<cfquery name="DELREL" datasource="#dsn3#">
+DELETE FROM w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS WHERE  PURCHASE_OFFER_ID=#offers.offer_id#
+</cfquery>
+
+<cfquery name="INSREL" datasource="#dsn3#">
+INSERT INTO w3Qa_1.PURCHAE_OFFER_SALE_OFFER_RELATION_PBS(
+    SALE_OFFER_ID,
+   PURCHASE_OFFER_ID
+)
+VALUES(    
+    #get_max_offer.max_id#,
+    #offers.offer_id#
+)
+</cfquery>
 
             <!-- Set success response -->
             <cfset response.res = "success">
@@ -140,20 +637,108 @@
     </cffunction>
 
     <cffunction name="savePurchaseOfferSelectorOnly" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
-         <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny = variables.our_company_id;
-    </cfscript>  
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
         <cftry>
-         <cfinclude template="savePurchaseOfferSelectorOnly.cfm">            
+            <!-- Deserialize JSON payload if it's a string -->
+            <cfif isJSON(arguments.payload)>
+                <cfset arguments.payload = deserializeJSON(arguments.payload)>
+            </cfif>
+
+            <!-- Validate payload -->
+            <cfif NOT isStruct(arguments.payload)>
+                <cfthrow message="Payload is invalid or missing." type="ValidationError">
+            </cfif>
+
+            <!-- Extract offers from payload -->
+            <cfset var offers = arguments.payload>
+            <cfset session=offers.session_variables>
+            <!-- Log the payload for debugging -->
+            <cflog file="purchaseService" text="Received payload: #serializeJSON(offers)#" type="information">
+
+            <cfquery name="DEL" datasource="w3Qa_1">
+                DELETE FROM PBS_SELECTED_ROWS WHERE OFFER_ID = '#offers.offer_id#' AND BASKET_EXTRA_INFO=#offers.BEI#
+            </cfquery>
+            <!-- Process each offer -->
+            <cfset ix=0>
+            <cfloop array="#offers.payload#" item="offer">
+                <cfset var products = offer.products>
+
+                <!-- Process each product -->
+                <cfloop array="#products#" item="product">
+                    <!-- Delete existing rows for the product -->
+                   
+
+                    <!-- Insert new rows for the product -->
+                    <cfquery name="INS" datasource="w3Qa_1">
+                        INSERT INTO PBS_SELECTED_ROWS (
+                            WRK_ROW_ID,
+                            PRICE,
+                            OFFER_ID,
+                            PRODUCT_MARJ,
+                            SALE_PRICE,
+                            IS_OS,
+                            BASKET_EXTRA_INFO,
+                            OEM_NO,
+                            OTHER_MONEY,
+                            DSC1,
+                            DSC2,
+                            DSC3
+                        )
+                        VALUES (
+                            '#product.wrkRowId#',
+                            #product.netPrice#,
+                            #offers.offer_id#,
+                            #product.productMarj#,
+                            #product.salePrice#,
+                            1,
+                            #product.selectInfoExtra#,
+                            '#product.oemNo#',
+                            '#product.demandMoney#',
+                            #product.discount1#,
+                            #product.discount2#,
+                            #product.discount3#
+                        )
+                    </cfquery>
+                    <cfquery name="getStockInfo" datasource="w3Qa_1">
+                        SELECT * FROM STOCKS WHERE STOCK_ID=#product.stockId#
+                    </cfquery>
+                      <cfquery name="getUnit" datasource="w3Qa_1">
+                        select PRODUCT_UNIT_ID,MAIN_UNIT from w3Qa_1.PRODUCT_UNIT where PRODUCT_ID=#product.productId#
+                    </cfquery>
+                    <cfscript>
+                        ix=ix+1;
+                        attributes["price#ix#"] = product.salePrice;
+                        attributes["price_other#ix#"] = product.convertedsalePriceOther;
+                        attributes["tax#ix#"] = product.tax;
+                        attributes["amount#ix#"] = product.quantity;
+                        attributes["indirim1#ix#"] = product.discount1;
+                        attributes["other_money_#ix#"] = product.otherMoney;
+                        attributes["product_id#ix#"] = product.productId;
+                        attributes["stock_id#ix#"] = product.stockId;
+                        attributes["unit#ix#"] = getUnit.MAIN_UNIT;
+                        attributes["unit_id#ix#"] = getUnit.PRODUCT_UNIT_ID;
+                        attributes["product_name#ix#"] = product.productName;
+                        attributes["other_money_value_#ix#"] = (product.convertedsalePriceOther * product.quantity) - ((product.convertedsalePriceOther * product.quantity) * product.discount1) / 100;
+                        attributes["description#ix#"] = "";
+                        attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+                        attributes["wrk_row_relation_id#ix#"] = product.wrkRowId;
+                        attributes["is_virtual#ix#"] = 0;
+                        attributes["SHELF_CODE#ix#"] = "";
+                        attributes["OFFER_ROW_CURRENCY#ix#"] = "";
+                        
+                    </cfscript>
+                </cfloop>
+            </cfloop>
+        
+
+
+    
+
+
+
+
 
 
             <!-- Set success response -->
@@ -174,24 +759,14 @@
 
 
     <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST" returnFormat="json">
-        
 
         <cfargument name="product_id" type="string" required="true">
-         <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny = variables.our_company_id;
-    </cfscript>  
 
         <cfset var result = []>
 
         <cfquery name="qAlt" datasource="#dsn3#">
             SELECT ALTERNATIVE_PRODUCT_ID as ALTERNATIF_PRODUCT_ID
-            FROM #dsn3#.ALTERNATIVE_PRODUCTS
+            FROM w3Qa_1.ALTERNATIVE_PRODUCTS
             WHERE PRODUCT_ID = <cfqueryparam value="#arguments.product_id#" cfsqltype="cf_sql_varchar">
         </cfquery>
 
@@ -203,15 +778,7 @@
     </cffunction>
 
     <cffunction name="savePurchaseOffer" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
- <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny = variables.our_company_id;
-    </cfscript>  
+
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
         <cfdump var="#arguments.payload#">
@@ -268,7 +835,7 @@
         </cfloop>
         <cfset attributes.rows_=ix>
         <cfquery name="GETCOMPANY" datasource="#dsn#">
-            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#company_id#
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#company_id#
         </cfquery>
 
 <cfset attributes.offer_date=now()>
@@ -355,21 +922,9 @@
     </cffunction>
     <cffunction name="SAVEORDER_gpt" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfargument name="internal_id" type="numeric" required="true">
-         <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny=variables.our_company_id;
-    </cfscript>  
-    <cfquery name="getParameters" datasource="#dsn#">
-        SELECT  * FROM PBS_PARAMETERS
-    </cfquery>
       <cfset var response = {}>
-        <cfset var dsn = variables.dsn>
-        <cfset var dsn3 = variables.dsn3>
+        <cfset var dsn = "w3Qa">
+        <cfset var dsn3 = "w3Qa_1">
         <cfset var attributes = {}>
     <cftry>
         <!--- Teklif satırlarını çek --->
@@ -382,21 +937,21 @@ SELECT
     PSR.BASKET_EXTRA_INFO
     --PSR.SOME_COLUMN_1, -- Kullanmak istediğin PBS_SELECTED_ROWS alanlarını buraya ekle
     --PSR.SOME_COLUMN_2
-FROM #dsn3#.PBS_SELECTED_ROWS AS PSR
-INNER JOIN #dsn3#.OFFER_ROW AS ORR_SATIS_TEKLIFI 
+FROM w3Qa_1. PBS_SELECTED_ROWS AS PSR
+INNER JOIN w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI 
     ON PSR.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID AND ORR_SATIS_TEKLIFI.OFFER_ID= #arguments.last_offer_id#
-LEFT JOIN #dsn3#.OFFER_ROW AS ORR_ALIS_TEKLIFI 
+LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI 
     ON ORR_ALIS_TEKLIFI.WRK_ROW_ID = ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
-LEFT JOIN #dsn3#.OFFER AS O_ALIS_TEKLIFI 
+LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI 
     ON O_ALIS_TEKLIFI.OFFER_ID = ORR_ALIS_TEKLIFI.OFFER_ID
-WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>#getParameters.DEPO_TESLIM_ID#  ORDER BY COMPANY_ID
+WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_sql_integer"> AND PSR.BASKET_EXTRA_INFO <>3  ORDER BY COMPANY_ID
 
 
         </cfquery>
         <cfquery name="GETIDEMAND" datasource="#dsn3#">
                 SELECT FROM_COMPANY_ID,FROM_PARTNER_ID,DEPARTMENT_IN,LOCATION_IN,
-                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM #dsn3#.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
-                FROM #dsn3#.INTERNALDEMAND
+                (select MONEY_TYPE, CAST(RATE2 AS DECIMAL(18,2)) AS RATE2,CAST(RATE1 AS DECIMAL(18,2)) AS RATE1 FROM w3Qa_1.INTERNALDEMAND_MONEY  WHERE ACTION_ID=INTERNAL_ID AND IS_SELECTED=1 FOR JSON PATH) AS PARA
+                FROM w3Qa_1.INTERNALDEMAND
                 WHERE INTERNAL_ID =#arguments.internal_id#
             </cfquery>
         <!---<cfquery name="getSelectedRows" datasource="#dsn3#">
@@ -492,23 +1047,22 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
     
             <!--- Şirket Bilgilerini Ekle --->
             <cfquery name="GETCOMPANY" datasource="#dsn#">
-                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY,CC.SHIP_METHOD_ID
+                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY
                 FROM COMPANY
-                LEFT JOIN #dsn#.COMPANY_CREDIT AS CC ON CC.COMPANY_ID = COMPANY.COMPANY_ID AND CC.OUR_COMPANY_ID = <cfqueryparam value="#ourcmpny#" cfsqltype="cf_sql_integer">
                 WHERE COMPANY_ID = <cfqueryparam value="#getSelectedRows.COMPANY_ID#" cfsqltype="cf_sql_integer">
             </cfquery>
     
             <cfset attributes.company_id = getSelectedRows.COMPANY_ID>
             <cfset attributes.PARTNER_ID = getSelectedRows.PARTNER_ID>
             <cfset attributes.CONSUMER_ID ="">
-            <cfset attributes.CONSUMER_NAME ="">
+<cfset attributes.CONSUMER_NAME ="">
             <cfset attributes.ORDER_HEAD = "Siparişimiz">
             <cfset attributes.ORDER_DESCRIPTION = "">
             <cfset attributes.ORDER_DETAIL = "">
             <cfset attributes.order_date = nowTS>
             <cfset attributes.deliverdate = nowTS>
             <cfset attributes.PUBLISHDATE = nowTS>
-            <cfset attributes.SHIP_METHOD_ID = #GETCOMPANY.SHIP_METHOD_ID#> <!----Risk ve Çalışma Bilgilerinden Alınacak ---->
+            <cfset attributes.SHIP_METHOD_ID = 2>
             <cfset attributes.SHIP_METHOD = "kargo">
     
             <cfset attributes.BASKET_NET_TOTAL = BASKET_NET_TOTAL_>
@@ -526,7 +1080,7 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
             <cfset attributes.BASKET_RATE2 = 1>
             <cfset attributes.kur_say = getMoneyext.recordCount>
             <cfset attributes.internaldemand_id_list = ",#arguments.internal_id#,">
-            <cfset attributes.process_stage = "#GET#">
+            <cfset attributes.process_stage = "259">
     
             <!--- Kur bilgilerini tekrar setle --->
             <cfset i=1>
@@ -566,22 +1120,285 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
         <cfreturn response>
     </cffunction>
 
+<!--------------
+
+<cffunction name="SAVEORDER" access="remote">
+    <cfargument name="internal_id" type="numeric" required="true">
+<cfquery name="getSelectedRows" datasource="#dsn3#">
+
+SELECT 
+	
+	TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO, ',', '') AS INT) COMPANY_ID
+    ,TRY_CAST(REPLACE(O_ALIS_TEKLIFI.OFFER_TO_PARTNER, ',', '') AS INT) PARTNER_ID
+	,ORR_SATIS_TEKLIFI.PRODUCT_ID
+	,ORR_SATIS_TEKLIFI.STOCK_ID
+	,ORR_SATIS_TEKLIFI.PRODUCT_NAME
+	,ORR_SATIS_TEKLIFI.PRODUCT_NAME2
+	,ORR_SATIS_TEKLIFI.PRICE
+	,ORR_SATIS_TEKLIFI.QUANTITY
+	,ORR_SATIS_TEKLIFI.WRK_ROW_ID
+	,ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+	,ORR_SATIS_TEKLIFI.OTHER_MONEY
+	,ORR_SATIS_TEKLIFI.PRICE_OTHER
+	,ORR_SATIS_TEKLIFI.MARJ_ORAN_PBS
+	,ORR_SATIS_TEKLIFI.PRICE_PBS
+	,ORR_SATIS_TEKLIFI.OLD_PRICE
+    ,ORR_SATIS_TEKLIFI.UNIT
+    ,ORR_SATIS_TEKLIFI.UNIT_ID
+    ,ORR_SATIS_TEKLIFI.TAX
+    ,ORR_SATIS_TEKLIFI.OTHER_MONEY_VALUE
+
+FROM w3Qa_1.OFFER_ROW AS ORR_SATIS_TEKLIFI
+LEFT JOIN w3Qa_1.OFFER_ROW AS ORR_ALIS_TEKLIFI ON ORR_ALIS_TEKLIFI.WRK_ROW_ID=ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID
+LEFT JOIN w3Qa_1.OFFER AS O_ALIS_TEKLIFI ON O_ALIS_TEKLIFI.OFFER_ID=ORR_ALIS_TEKLIFI.OFFER_ID
+WHERE ORR_SATIS_TEKLIFI.WRK_ROW_RELATION_ID IN (
+SELECT WRK_ROW_ID FROM w3Qa_1.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.internal_id#)
+	
+        ORDER BY COMPANY_ID
+</cfquery>
+<cfset MONEYARRRR=arrayNew(1)>
+            <cfquery name="getMoneyext" datasource="#dsn3#">
+                SELECT 
+             (SELECT RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE1,
+             (SELECT EFFECTIVE_SALE RATE2 FROM #dsn#.MONEY_HISTORY WHERE MONEY_HISTORY_ID=(
+             SELECT MAX(MONEY_HISTORY_ID) FROM #dsn#.MONEY_HISTORY WHERE MONEY=SM.MONEY) )AS RATE2,
+             SM.MONEY
+             FROM #dsn#.SETUP_MONEY AS SM WHERE SM.PERIOD_ID=#session.ep.period_id#
+             </cfquery>
+             <cfset ibnm=1>
+    <cfloop query="getMoneyext">
+       
+        <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+        <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+        <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+        <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+        <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+          
+        <cfscript>
+            arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+        </cfscript>
+        <cfset ibnm=ibnm+1>
+    </cfloop>
+    <cfset attributes.KUR_SAY=arrayLen(MONEYARRRR)>
+<cfloop query="getSelectedRows" group="COMPANY_ID">
+    <cfset MONEYARRRR=arrayNew(1)>
+<cfdump var="#getSelectedRows.COMPANY_ID#">
+<cfset ix=0>
+<cfloop>
+    <cfscript>
+        ix=ix+1;
+        attributes["product_id#ix#"] = PRODUCT_ID;
+        attributes["stock_id#ix#"] = STOCK_ID;
+        attributes["product_name#ix#"] = PRODUCT_NAME;
+        attributes["unit#ix#"] = UNIT;
+        attributes["unit_id#ix#"] = UNIT_ID;
+        attributes["price#ix#"] = PRICE;
+        attributes["price_other#ix#"] = PRICE_OTHER;
+        attributes["tax#ix#"] = TAX;
+        attributes["amount#ix#"] = QUANTITY;
+        attributes["indirim1#ix#"] = 0;
+        attributes["other_money_#ix#"] = OTHER_MONEY;
+        attributes["other_money_value_#ix#"] = OTHER_MONEY_VALUE;
+        attributes["description#ix#"] = "";
+        attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(now(), 'yyyymmdd')##timeFormat(now(), 'hhmmnnl')#";
+        attributes["wrk_row_relation_id#ix#"] = WRK_ROW_ID;
+        attributes["is_virtual#ix#"] = 0;
+        attributes["SHELF_CODE#ix#"] = "";
+        attributes["ORDER_ROW_CURRENCY#ix#"] = "-1";
+
+
+    </cfscript>
+    
+</cfloop>
+<cfset attributes.rows_=ix>
+        <cfquery name="GETCOMPANY" datasource="#dsn#">
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
+        </cfquery>
+<cfset attributes.company_id=getSelectedRows.COMPANY_ID>
+<cfset attributes.PARTNER_ID =getSelectedRows.PARTNER_ID >
+<cfset attributes.CONSUMER_ID ="">
+<cfset attributes.CONSUMER_NAME ="">
+<cfset attributes.ORDER_HEAD  ="Siparişimiz">
+<cfset attributes.ORDER_DETAIL ="">
+<cfset attributes.ORDER_DESCRIPTION ="">
+<cfset attributes.ORDER_HEAD  ="Siparişimiz">
+<cfset attributes.ORDER_DETAIL ="">
+<cfset attributes.order_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfscript>
+    DISCOUNT_TOTAL=0;
+    GROSS_TOTAL=0;
+    SUBNETTOTAL=0;
+    SUBTAXTOTAL=0;
+    SUBTOTAL=0;
+    TAX_TOTAL=0;
+    TOTAL_WITHOUT_KDV=0;
+    TOTAL_WITH_KDV=0;
+    BASKET_NET_TOTAL=0;
+    BASKET_NET_TOTAL_=0;
+    BASKET_TAX_TOTAL=0;
+    BASKET_TAX_TOTAL_=0;
+</cfscript>
+
+<CFLOOP from="1" to="#attributes.rows_#" index="ix">
+    <cfset PRICE=evaluate("attributes.price#ix#")>
+    <cfset PRICE_OTHER=evaluate("attributes.price_other#ix#")>
+    <cfset TAX=evaluate("attributes.tax#ix#")>
+    <CFSET AMOUNT=evaluate("attributes.amount#ix#")>
+    <CFSET DISCOUNT=evaluate("attributes.indirim1#ix#")>
+    <CFSET OTHER_MONEY=evaluate("attributes.other_money_#ix#")>
+    <cfscript>
+     SATIR_KUR= arrayFilter(MONEYARRRR, function(item) {
+            return item.MONEY == OTHER_MONEY;
+        })[1];
+    OLD_SATIR_KUR= SATIR_KUR;
+    </cfscript>
+
+    <CFSET PR_HESAP=PRICE_OTHER*SATIR_KUR.RATE2>
+    <cfset ox=structNew()>
+    <cfset ox.PRICE=PRICE>
+    <cfset ox.PRICE_=PR_HESAP>
+    <cfscript>
+        dp=PRICE-(PRICE*DISCOUNT)/100;  
+        dp_=PR_HESAP-(PR_HESAP*DISCOUNT)/100;                    
+
+        TUTAR=dp*AMOUNT;
+        TUTAR_=dp_*AMOUNT;
+
+        TX=(TUTAR*TAX)/100
+        TX_=(TUTAR_*TAX)/100
+        ox.DP=dp;
+        ox.DP_=dp_;
+        ox.TUTAR=TUTAR;
+        ox.TUTAR_=TUTAR_;
+        OX.OTM_V=TUTAR/OLD_SATIR_KUR.RATE2;
+        OX.OTM_V_=TUTAR_/SATIR_KUR.RATE2;
+        ox.TX=TX;
+        ox.TX_=TX_;
+        BASKET_TAX_TOTAL=BASKET_TAX_TOTAL+TX;
+        BASKET_TAX_TOTAL_=BASKET_TAX_TOTAL_+TX_;
+        BASKET_NET_TOTAL=BASKET_NET_TOTAL+(TUTAR+TX);
+        BASKET_NET_TOTAL_=BASKET_NET_TOTAL_+(TUTAR_+TX_);
+
+        "attributes.other_money_value_#ix#"=ox.OTM_V_;
+        "attributes.price#ix#"=ox.PRICE_;
+    </cfscript>
+</cfloop>
+<cfset FORM.ACTIVE_COMPANY=session.ep.company_id>
+<cfset ATTRIBUTES.ACTIVE_COMPANY=session.ep.company_id>
+<cfset attributes.process_stage="67">
+<cfset attributes.order_date=now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.PUBLISHDATE =now()>
+<cfset attributes.deliverdate=now()>
+<cfset attributes.SHIP_METHOD_ID=2>
+<cfset attributes.SHIP_METHOD="kargo">
+<cfquery name="get_offer_number" datasource="#dsn3#">
+    EXEC GET_PAPER_NUMBER 1
+</cfquery>
+<cfset paper_fulbs=get_offer_number.PAPER_NO>
+<cfset attributes.BASKET_TAX_TOTAL=BASKET_TAX_TOTAL_>
+<cfset attributes.BASKET_NET_TOTAL=BASKET_NET_TOTAL_>
+<cfset attributes.PRICE=BASKET_NET_TOTAL_>
+<cfset attributes.BASKET_DISCOUNT_TOTAL=0>
+<cfset attributes.BASKET_GROSS_TOTAL=BASKET_NET_TOTAL_-BASKET_TAX_TOTAL_>
+<CFSET attributes.DELIVER_DEPT_ID=2>
+<CFSET attributes.DELIVER_DEPT_NAME ="2">
+<CFSET attributes.DELIVER_LOC_ID =1>
+<CFSET attributes.DELIVER_DEPT_NAME ="2">
+<CFSET attributes.BASKET_MONEY  ="TL">
+<CFSET attributes.BASKET_RATE1   =1>
+<CFSET attributes.BASKET_RATE2   =1>
+<cfset attributes.kur_say=arrayLen(MONEYARRRR)>
+<CFSET attributes.internaldemand_id_list=",#arguments.internal_id#,">
+<cfset ibnm=1>
+<cfdump var="#attributes.kur_say#">
+<cfdump var="#getMoneyext#">
+<cfset MONEYARRRR=arrayNew(1)>
+<cfloop query="getMoneyext">
+    <cfset "attributes._hidden_rd_money_#ibnm#"=MONEY>
+
+
+    <cfset "attributes.hidden_rd_money_#ibnm#"=MONEY>
+    <cfset "attributes._txt_rate1_#ibnm#"=RATE1>
+    <cfset "attributes._txt_rate2_#ibnm#"=RATE2>
+    <cfset "attributes.txt_rate1_#ibnm#"=RATE1>
+    <cfset "attributes.txt_rate2_#ibnm#"=RATE2>
+      
+    <cfscript>
+        arrayAppend(MONEYARRRR,{MONEY=MONEY,RATE1=RATE1,RATE2=RATE2})
+    </cfscript>
+    <cfset ibnm=ibnm+1>
+</cfloop>
+<cfinclude template="../query/add_order.cfm">
+
+<cfscript>
+    structClear(attributes);
+</cfscript>
+
+</cfloop>
+
+
+<!--------------------
+<cfloop query="getSelectedRows" group="COMPANY_ID">
+
+    <cfset ix=0>
+    <cfloop >
+        <cfset wrkRowId=product>
+        
+        <cfset attributes.rows_=ix>
+        <cfquery name="GETCOMPANY" datasource="#dsn#">
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#COMPANY_ID#
+        </cfquery>
+    
+    <cfset attributes.order_date=now()>
+    <cfset attributes.deliverdate=now()>
+    
+    
+
+<cfdump var="#attributes#">
+
+</cfloop>
+
+
+------------------>
+
+
+</cffunction>
+
+------------>
 <cffunction name="basket_kur_ekle">
 	<cfargument name="action_id" required="true">
 	<cfargument name="table_type_id" required="true">
 	<cfargument name="process_type" required="true">
 	<cfargument name="basket_money_db" type="string" default="">
 	<cfargument name="transaction_dsn">
-    <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny=variables.our_company_id;
-    </cfscript> 
-
+	<!---
+		by : Arzu BT 20031211
+		notes : Basket_money tablosuna islemlere gore kur bilgilerini kaydeder.
+		process_type:1 upd 0 add
+		transaction_dsn : kullanılan sayfa içinde table dan farklı dsn tanımı olduğu durumlarda kullanılan dsn gönderilir.
+		usage :
+			invoice:1
+			ship:2
+			order:3
+			offer:4
+			servis:5
+			stock_fis:6
+			internmal_demand:7
+			prroduct_catalog 8
+			sale_quote:9
+			subscription:13
+		revisions : javascript version ergün koçak 20040209
+		kullanim:
+		<cfscript>
+			basket_kur_ekle(action_id:MY_ID,table_type_id:1,process_type:0);
+		</cfscript>		
+	--->
 	<cfscript>
 		switch (arguments.table_type_id){
 			case 1: fnc_table_name="INVOICE_MONEY"; fnc_dsn_name="#dsn2#";break;
@@ -641,16 +1458,6 @@ WHERE PSR.OFFER_ID =<cfqueryparam value="#arguments.internal_id#" cfsqltype="cf_
 	</cfloop>
 </cffunction>
 <cffunction name="add_internaldemand_row_relation" returntype="boolean" output="false">
-        <cfscript>
-         if (!len(variables.dsn)) {
-                setDatasources();
-            }
-              dsn  = variables.dsn;
-                dsn2 = variables.dsn2;
-                dsn3 = variables.dsn3;
-                ourcmpny=variables.our_company_id;
-                dsn3_alias=variables.dsn3;
-    </cfscript> 
 	<cfargument name="internaldemand_id" default=""> <!--- ic talep id si --->
 	<cfargument name="to_related_action_id" required="yes" default=""> <!--- iç talebin ilişkili oldugu işlemin action_id si --->
 	<cfargument name="to_related_action_type" required="yes" default=""><!---iç talep hangi işlemle ilişkilendirilmis  0: satınalma siparişi, 1: depolararası sevk irs. ,2: ambar fişi 3: satinalma teklifi--->
