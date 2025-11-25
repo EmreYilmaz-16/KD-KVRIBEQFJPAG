@@ -183,10 +183,10 @@
 <cfset attributes.project_id="">
 <cfset attributes.process_stage="20">
 <cfquery name="getcc" datasource="#dsn#">
-    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from #dsn#.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
 </cfquery>
 <cfquery name="GETCOMPANY" datasource="#dsn#">
-  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
 </cfquery>
 <cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
 <cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
@@ -495,10 +495,10 @@ VALUES(
 <cfset attributes.project_id="">
 <cfset attributes.process_stage="20">
 <cfquery name="getcc" datasource="#dsn#">
-    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from w3Qa.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
+    select SHIP_METHOD_ID,REVMETHOD_ID,MONEY from #dsn#.COMPANY_CREDIT where COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID# and OUR_COMPANY_ID=#session.ep.company_id#    
 </cfquery>
 <cfquery name="GETCOMPANY" datasource="#dsn#">
-  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
+  select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#GETIDEMAND.FROM_COMPANY_ID#
 </cfquery>
 <cfset attributes.paymethod_id=getcc.REVMETHOD_ID>
 <cfset attributes.PAYMETHOD=getcc.REVMETHOD_ID>
@@ -839,7 +839,7 @@ VALUES(
         </cfloop>
         <cfset attributes.rows_=ix>
         <cfquery name="GETCOMPANY" datasource="#dsn#">
-            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from w3Qa.COMPANY WHERE COMPANY_ID=#company_id#
+            select CASE WHEN LEN(COMPANY_ADDRESS)=0 THEN '-'ELSE ISNULL(COMPANY_ADDRESS,'-') END AS COMPANY_ADDRESS,CITY,COUNTY from #dsn#.COMPANY WHERE COMPANY_ID=#company_id#
         </cfquery>
 
 <cfset attributes.offer_date=now()>
@@ -926,8 +926,12 @@ VALUES(
     </cffunction>
     <cffunction name="SAVEORDER_gpt" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
         <cfargument name="internal_id" type="numeric" required="true">
-      <cfset var response = {}>
-        <cfset var dsn = "w3Qa">
+      <cfscript>
+        setdatasources();
+      </cfscript>
+      
+        <cfset var response = {}>
+        
         <cfset var dsn3 = "#dsn3#">
         <cfset var attributes = {}>
     <cftry>
