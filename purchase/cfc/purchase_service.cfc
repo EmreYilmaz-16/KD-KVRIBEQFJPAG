@@ -637,6 +637,9 @@ VALUES(
     </cffunction>
 
     <cffunction name="savePurchaseOfferSelectorOnly" access="remote" returntype="struct" output="false" hint="Saves selected purchase offers" returnFormat="json" httpMethod="POST">
+      <cfscript>
+        setdatasources();
+      </cfscript>
         <cfset var response = {}>
         <cfset arguments.payload = getHTTPRequestData().content>
 
