@@ -52,6 +52,7 @@
     <cfset dsn="">
     <cfset wrk_eval = application.functions.wrk_eval>
     <cfset workcube_mode=0>
+    <cfset dsn=application.systemparam.dsn>
 
 <cffunction name="setdatasources">
     
