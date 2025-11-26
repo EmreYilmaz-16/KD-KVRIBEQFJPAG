@@ -336,7 +336,7 @@ uniqueProducts.forEach(productId => {
         if (product && product.GPA_PRICE) {
             listPrice = product.GPA_PRICE;
             const currency = MONEYARRRR.find(c => c.MONEY === product.GPA_MONEY);
-            let rate1 = 1;
+           /* let rate1 = 1;
             let rate2 = 1;
             if (product.GPA_MONEY != DEMAND_MONEY) {
                 rate1 = parseFloat(currency?.RATE1 || 1);
@@ -344,10 +344,13 @@ uniqueProducts.forEach(productId => {
             } else {
                 rate1 = 1;
                 rate2 = 1;
-            }
-
-
-            convertedListPrice = product.GPA_PRICE * rate2 // rate2;
+            }*/
+            const rate2 = parseFloat(currency?.RATE2 || 1);
+            const currency2 = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+            const rate22 = parseFloat(currency2?.RATE2 || 1);
+            // Kur dönüşümü için çapraz kur
+            var crossrate = rate2 / rate22;
+            convertedListPrice = product.GPA_PRICE * crossrate;
             listMoney = product.GPA_MONEY;
             //listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
             listPriceCell.innerHTML = `<div><span class="list-price-value">${listPrice.toFixed(2)}</span> <span class="list-price-money">${listMoney}</span></div>
