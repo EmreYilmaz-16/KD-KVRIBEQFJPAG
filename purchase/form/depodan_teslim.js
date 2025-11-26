@@ -15,15 +15,21 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     const netWithMarj = net + (net * marj / 100);
 
     const currency = MONEYARRRR.find(c => c.MONEY === gpa_money);
+    var currency2= MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    var rrate2=parseFloat(currency2?.RATE2 || 1);
+    
     console.log(currency);
     let rate1 = 1;
     let rate2 = 1;
+
     if (DEMAND_MONEY != gpa_money) {
 
         rate1 = parseFloat(currency?.RATE1 || 1);
         rate2 = parseFloat(currency?.RATE2 || 1);
     }
-    const converted = (netWithMarj * rate2) / rate1;
+    var crossrate=rate2/rrate2;
+    //const converted = (netWithMarj * rate2) / rate1;
+const converted = (netWithMarj * crossrate)
 
     return converted.toFixed(2);
 }
