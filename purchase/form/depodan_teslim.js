@@ -315,7 +315,7 @@ uniqueProducts.forEach(productId => {
         console.log("Liste Fiyatı Kontrol Ediliyor:", productId, product);
         if (product && product.GPA_PRICE) {
             listPrice = product.GPA_PRICE;
-            const currency = MONEYARRRR.find(c => c.MONEY === GPA_MONEY);
+            const currency = MONEYARRRR.find(c => c.MONEY === product.GPA_MONEY);
             let rate1 = 1;
             let rate2 = 1;
             if (product.GPA_MONEY != DEMAND_MONEY) {
