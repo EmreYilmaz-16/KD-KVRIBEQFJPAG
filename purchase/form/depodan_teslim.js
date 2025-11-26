@@ -57,7 +57,7 @@ function calculateFinalSalePrice(productId) {
     if (isNaN(gpaPrice1) || gpaPrice1 === 0) return;
 
 
-    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    const currency = MONEYARRRR.find(c => c.MONEY === gpaMoney);
     let rate1 = 1;
     let rate2 = 1;
 
