@@ -95,9 +95,12 @@ function calculateFinalSalePrice(productId) {
 
     });
     // Marj + kur dönüşümü
+    /*
     const base = gpaPrice1 + (gpaPrice1 * marj / 100);
     const converted = (base * rate1) / rate2;
-
+*/
+  const base = net + (net * marj / 100);
+    const converted = (base * rate1) / rate2;
     // İskontolar
     const final = applyDiscounts(converted, d1, d2, d3);
 
