@@ -19,6 +19,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     var rrate2=parseFloat(currency2?.RATE2 || 1);
     
     console.log(currency);
+
     let rate1 = 1;
     let rate2 = 1;
 
@@ -28,6 +29,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
         rate2 = parseFloat(currency?.RATE2 || 1);
     }
     var crossrate=rate2/rrate2;
+    console.log("Cross Rate:",crossrate);
     //const converted = (netWithMarj * rate2) / rate1;
 const converted = (netWithMarj * crossrate)
 
