@@ -327,7 +327,7 @@ uniqueProducts.forEach(productId => {
             }
 
 
-            convertedListPrice = product.NET_PRICE/ rate2;
+            convertedListPrice = product.GPA_PRICE // rate2;
             listMoney = product.GPA_MONEY;
             //listPriceCell.textContent = convertedListPrice.toFixed(2) + " " + listMoney;
             listPriceCell.innerHTML = `<div><span class="list-price-value">${listPrice.toFixed(2)}</span> <span class="list-price-money">${listMoney}</span></div>
