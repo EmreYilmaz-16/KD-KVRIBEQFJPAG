@@ -748,7 +748,7 @@ VALUES(
             <!-- Set success response -->
             <cfset response.res = "success">
             <cfset response.message = "Purchase offers saved successfully.">
-            <cfset response.data = attributes>
+            <cfset response.data = "">
         <cfcatch>
             <!-- Handle errors -->
             <cfset response.res = "error">
