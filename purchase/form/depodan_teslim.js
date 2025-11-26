@@ -78,13 +78,13 @@ function calculateFinalSalePrice(productId) {
 
 
     const currency = MONEYARRRR.find(c => c.MONEY === gpaMoney);
-    let rate1 = 1;
-    let rate2 = 1;
-
-    if (DEMAND_MONEY != gpaMoney) {
-         rate1 = parseFloat(currency?.RATE1 || 1);
-         rate2 = parseFloat(currency?.RATE2 || 1);
-    }
+    const currency2 = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    var rate1 = parseFloat(currency?.RATE1 || 1);
+    var rate2 = parseFloat(currency?.RATE2 || 1);
+    var rate22 = parseFloat(currency2?.RATE2 || 1);
+    // Kur dönüşümü için çapraz kur
+    var crossrate = rate2 / rate22;
+  
     // İlgili inputları bul
     const row = [...document.querySelectorAll('td.product-name')].find(td => td.dataset.productid == productId)?.parentElement;
     if (!row) return;
@@ -116,7 +116,7 @@ function calculateFinalSalePrice(productId) {
     });
     // Marj + kur dönüşümü
     const base = gpaPrice1 + (gpaPrice1 * marj / 100);
-    const converted = (base * rate2) / rate1;
+    const converted = (base * crossrate);
 
     // İskontolar
     const final = applyDiscounts(converted, d1, d2, d3);
