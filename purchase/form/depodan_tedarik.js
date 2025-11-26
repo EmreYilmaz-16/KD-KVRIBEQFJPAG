@@ -13,7 +13,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
 
     const netWithMarj = net + (net * marj / 100);
 
-    const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    const currency = MONEYARRRR.find(c => c.MONEY === gpa_money);
     let rate1 = 1;
     let rate2 = 1;
     if (DEMAND_MONEY != gpa_money) {
