@@ -764,6 +764,9 @@ VALUES(
 
     <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST" returnFormat="json">
 
+        <cfscript>
+        setdatasources();
+        </cfscript>
         <cfargument name="product_id" type="string" required="true">
 
         <cfset var result = []>
