@@ -764,11 +764,11 @@ VALUES(
 
     <cffunction name="getByProductId" access="remote" returntype="array" output="false" httpMethod="POST" returnFormat="json">
 
+        <cfargument name="product_id" type="string" required="true">
+
         <cfscript>
         setdatasources();
         </cfscript>
-        <cfargument name="product_id" type="string" required="true">
-
         <cfset var result = []>
 
         <cfquery name="qAlt" datasource="#dsn3#">
