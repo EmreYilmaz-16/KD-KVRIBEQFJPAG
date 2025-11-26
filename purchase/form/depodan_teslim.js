@@ -22,7 +22,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
         rate1 = parseFloat(currency?.RATE1 || 1);
         rate2 = parseFloat(currency?.RATE2 || 1);
     }
-    const converted = (netWithMarj * rate1) / rate2;
+    const converted = (netWithMarj * rate2) / rate1;
 
     return converted.toFixed(2);
 }
