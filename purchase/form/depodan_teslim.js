@@ -20,14 +20,14 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     
     console.log(currency);
 
-    let rate1 = 1;
-    let rate2 = 1;
+    var rate1 = parseFloat(currency?.RATE1 || 1);
+    var rate2 = parseFloat(currency?.RATE2 || 1);
 
-    if (DEMAND_MONEY != gpa_money) {
+    /*if (DEMAND_MONEY != gpa_money) {
 
         rate1 = parseFloat(currency?.RATE1 || 1);
         rate2 = parseFloat(currency?.RATE2 || 1);
-    }
+    }*/
     var crossrate=rate2/rrate2;
     //console.log("Cross Rate:",crossrate);
     console.table({
