@@ -4,7 +4,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     let gpa_money = "";
     for (const supplier of data) {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
-        console.log("Net Fiyat Kontrol Ediliyor:", productId, product);
+        //console.log("Net Fiyat Kontrol Ediliyor:", productId, product);
         if (product && product.GPA_PRICE) {
             net = product.GPA_PRICE;
             gpa_money = product.GPA_MONEY;
@@ -15,6 +15,7 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
     const netWithMarj = net + (net * marj / 100);
 
     const currency = MONEYARRRR.find(c => c.MONEY === gpa_money);
+    console.log(currency);
     let rate1 = 1;
     let rate2 = 1;
     if (DEMAND_MONEY != gpa_money) {
