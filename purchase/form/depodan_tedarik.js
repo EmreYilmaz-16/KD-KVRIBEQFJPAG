@@ -15,8 +15,11 @@ function getConvertedNetPriceWithMarj(productId, marj = 0) {
 console.log("Net with Marj:", netWithMarj);
     const currency = MONEYARRRR.find(c => c.MONEY === gpa_money);
     const currency2 = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
+    const rate1 = parseFloat(currency?.RATE1 || 1);
+    const rate2 = parseFloat(currency?.RATE2 || 1);
     const rate22 = parseFloat(currency2?.RATE2 || 1);
-    const crossrate = parseFloat(currency?.RATE2 || 1) / rate22;
+    // Kur dönüşümü için çapraz kur
+    const crossrate = rate2 / rate22;
     // let rate1 = 1;
     // let rate2 = 1;
     // if (DEMAND_MONEY != gpa_money) {
@@ -60,13 +63,20 @@ function calculateFinalSalePrice(productId) {
 
 
     const currency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
-    let rate1 = 1;
-    let rate2 = 1;
+    const currency2 = MONEYARRRR.find(c => c.MONEY === gpaMoney);
+    const rate1 = parseFloat(currency?.RATE1 || 1);
+    const rate2 = parseFloat(currency?.RATE2 || 1);
+    const rate22 = parseFloat(currency2?.RATE2 || 1);
+    // Kur dönüşümü için çapraz kur
+    const crossrate = rate2 / rate22;
+    
+    // let rate1 = 1;
+    // let rate2 = 1;
 
-    if (DEMAND_MONEY != gpaMoney) {
-        rate1 = parseFloat(currency?.RATE1 || 1);
-        rate2 = parseFloat(currency?.RATE2 || 1);
-    }
+    // if (DEMAND_MONEY != gpaMoney) {
+    //     rate1 = parseFloat(currency?.RATE1 || 1);
+    //     rate2 = parseFloat(currency?.RATE2 || 1);
+    // }
     // İlgili inputları bul
     const row = [...document.querySelectorAll('td.product-name')].find(td => td.dataset.productid == productId)?.parentElement;
     if (!row) return;
@@ -83,8 +93,8 @@ function calculateFinalSalePrice(productId) {
     const d3 = parseFloat(dsc3Input?.value) || 0;
 
     // Marj + kur dönüşümü
-    const base = net + (net * marj / 100);
-    const converted = (base * rate1) / rate2;
+    const base = gpaPrice1 + (gpaPrice1 * marj / 100);
+    const converted = (base * crossrate);
 
     // İskontolar
     const final = applyDiscounts(converted, d1, d2, d3);
