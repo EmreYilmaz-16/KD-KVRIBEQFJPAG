@@ -69,6 +69,12 @@ function calculateFinalSalePrice(productId) {
     const rate22 = parseFloat(currency2?.RATE2 || 1);
     // Kur dönüşümü için çapraz kur
     const crossrate = rate2 / rate22;
+    console.log("Currency Rates:", {
+        rate1,
+        rate2,
+        rate22,
+        crossrate
+    });
     
     // let rate1 = 1;
     // let rate2 = 1;
