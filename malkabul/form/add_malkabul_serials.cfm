@@ -410,7 +410,7 @@ body {
 
 <cfquery name="getDespatchRow" datasource="#dsn2#">
  SELECT * FROM (
-   SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,
+   SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,0 AS FB,
 (
     SELECT SUM (T) FROM (
     SELECT COUNT(*) T FROM #dsn3#.SERVICE_GUARANTY_NEW AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID
@@ -424,7 +424,7 @@ LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID=SR.STOCK_ID
 LEFT JOIN #dsn3#.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID=SR.WRK_ROW_ID
 WHERE SHIP_ID=#attributes.shipId#
 UNION ALL
-SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,PMB.BARCODE AS SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2, 
+SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,PMB.BARCODE AS SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2, 1 AS FB,
 (SELECT COUNT(*) FROM w3Qa_1.PBS_MAL_KABUL_BARCODES AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID) AS OMIK,
 0 as IS_DELETABLE
 
@@ -496,7 +496,7 @@ WHERE SR.SHIP_ID=#attributes.shipId#
                                 <table class="serial-table" id="serials_#PRODUCT_ID#">              
                                     <cfoutput> 
                                         <cfif len(trim(SERIAL_NO)) NEQ 0>
-                                        <tr data-readed="1" title="Önceden kaydedilmiş">
+                                        <tr data-readed="1" data-from-barcode="#FB#" title="Önceden kaydedilmiş">
                                             <td>
                                                 <i class="fas fa-history"></i>
                                                 #EncodeForHTML(SERIAL_NO)#
