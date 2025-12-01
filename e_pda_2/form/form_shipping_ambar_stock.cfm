@@ -182,18 +182,6 @@ input{
 	  font-size:13px !important;
 }
 </style>
-<script language="javascript" type="text/javascript">
-  var row_count = <cfoutput>#get_ambar_fis.recordcount#</cfoutput>;
-  var barcod = '';
-  var stockid = '';
-  var spectmainid = '';
-  var stockcode = '';
-  var amount = '';
-  var ekle = 0;
-  var cikar = 0;
-  var islemtipi = 0;//0-ekle 1-çıkar
-  var buton = 0;// <1-buton pasif, >0-buton aktif
-</script>
 <!-----
 <cfform name="form_basket">
   <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
@@ -321,7 +309,9 @@ input{
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
 			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
 			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
-			<input type="hidden" name="row_count" id="row_count" value="0">
+			<input type="hidden" name="row_count" id="row_count" value="#get_ambar_fis.recordcount#">
+			<input type="hidden" name="all_amount" id="all_amount" value="#all_amount#">
+			<input type="hidden" name="paket_sayisi" id="paket_sayisi" value="#attributes.paket_sayisi#">
 			
 			<div style="display:flex">
 				<div class="form-group">
@@ -374,341 +364,414 @@ input{
         
 	</div>
 </div>
-<script language="javascript" type="text/javascript">
-	document.getElementById('add_other_amount').focus();
-	setTimeout("document.getElementById('add_other_amount').select();",1000);	
-	function actionidolustur()
-	{
-	  var j = 0;
-	  for(i=1;i<=row_count;i++)
-	  {
-		  if(document.getElementById('amount'+i).value > 0)
-		  {
-			if (j > 0)
-			document.getElementById('action_id').value = document.getElementById('action_id').value + ',';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + i + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('stockid'+i).value + '-';
-			document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('amount'+i).value + '-';
-			<cfif get_store_type.raf gt 0>
-				document.getElementById('action_id').value = document.getElementById('action_id').value + document.getElementById('shelf_code'+i).value 
-			</cfif>
-			j++;
-		  }
-		  document.getElementById('row_count').value = j;
-	  }
+<script type="text/javascript">
+(function () {
+	'use strict';
+
+	const state = {
+		rowCount: <cfoutput>#get_ambar_fis.recordcount#</cfoutput>,
+		stockId: '',
+		barcode: '',
+		stockCode: '',
+		spectMainId: '',
+		amount: 0,
+		shelfCode: '',
+		ekle: 0
+	};
+
+	const config = {
+		hasShelf: <cfoutput>#iif(get_store_type.raf gt 0,1,0)#</cfoutput> === 1,
+		saveBase: '<cfoutput>#request.self#?fuseaction=epda.emptypopup_add_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>',
+		deleteUrl: '<cfoutput>#request.self#?fuseaction=epda.emptypopup_del_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1</cfoutput>'
+	};
+
+	const initialData = {
+		allAmount: Number(<cfoutput>#all_amount#</cfoutput>) || 0
+	};
+
+	const dom = {
+		form: null,
+		inputs: {},
+		hidden: {},
+		tableBody: null
+	};
+
+	function init() {
+		cacheDom();
+		if (!dom.form) {
+			return;
+		}
+		bindEvents();
+		focusAmount();
+		setTimeout(selectAmount, 1000);
 	}
 
-	function buton_kontrol()
-	{
-		if (islemtipi == 0)
-			buton++;
-		else if (buton>0)
-			buton--;
-		if (buton < 1)
-			document.getElementById('onay').disabled = true;
-		else
-			document.getElementById('onay').disabled = false;
-	}
-	
-	function get_stock(barcode)
-    {
-	 	barcod = ''; stockid = ''; stockcode = ''; spectmainid = ''; //ilk önce sıfırlıyoruz
-	 	k_= 0;
-	 	if (k_ == 0)
-     	{
-		 	var new_sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN              PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE= '"+barcode+"'";
-		 	var get_product = wrk_query(new_sql,'dsn3');
-		 	if (get_product.STOCK_ID == undefined)
-		 	{
-				ekle = 1;
-				cikar = 1;
-				k_=1;
-				alert('Ürün Bulunamadı');
-		 	}
-		 	else
-		 	{	
-				document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*-1);
-				if (document.getElementById('all_amount').value*1 <= document.getElementById('paket_sayisi').value*1)
-				{
-					stockid = get_product.STOCK_ID;
-					stockcode = get_product.PRODUCT_NAME;
-					barcode = get_product.BARCODE;
-					buton_kontrol();
-				}
-				else
-				{
-					alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
-					document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
-					document.getElementById('add_other_amount').focus();
-					ekle=1;
-				}
-    		}
+	function cacheDom() {
+		dom.form = document.forms.form_basket || document.getElementById('form_basket');
+		if (!dom.form) {
+			return;
 		}
-		else
-		{
-			barcod = ''; stockid = ''; stockcode = ''; spectmainid = '';
+		dom.inputs.amount = document.getElementById('add_other_amount');
+		dom.inputs.barcode = document.getElementById('add_other_barcod');
+		dom.inputs.shelf = document.getElementById('add_other_shelf');
+		dom.hidden.actionId = document.getElementById('action_id');
+		dom.hidden.rowCount = document.getElementById('row_count');
+		dom.hidden.fisTipi = document.getElementById('fis_tipi');
+		dom.hidden.processCat = document.getElementById('process_cat_id');
+		dom.hidden.deptOut = document.getElementById('txt_department_out');
+		dom.hidden.allAmount = document.getElementById('all_amount');
+		dom.hidden.paketSayisi = document.getElementById('paket_sayisi');
+		const table = document.getElementById('table1');
+		dom.tableBody = table && table.tBodies && table.tBodies.length ? table.tBodies[0] : table;
+	}
+
+	function bindEvents() {
+		dom.form.addEventListener('keydown', handleKeyDown);
+		dom.form.addEventListener('submit', handleSubmit);
+	}
+
+	function focusAmount() {
+		if (dom.inputs.amount) {
+			dom.inputs.amount.focus();
+		}
+	}
+
+	function selectAmount() {
+		if (dom.inputs.amount) {
+			dom.inputs.amount.select();
+		}
+	}
+
+	function handleKeyDown(event) {
+		if (event.key !== 'Enter' || !event.target.matches('input[type="text"]')) {
+			return;
+		}
+		event.preventDefault();
+		if (config.hasShelf) {
+			handleShelfFlow();
+		} else {
+			handleBarcodeFlow();
+		}
+	}
+
+	function handleBarcodeFlow() {
+		if (dom.inputs.barcode && dom.inputs.barcode.value.length > 0) {
+			addRow(dom.inputs.barcode.value);
+			if (dom.inputs.amount) {
+				dom.inputs.amount.value = '';
+			}
+			focusAmount();
+		} else {
+			alert('Barcod Hatalı');
+			if (dom.inputs.barcode) {
+				dom.inputs.barcode.value = '';
+				dom.inputs.barcode.focus();
+			}
+		}
+	}
+
+	function handleShelfFlow() {
+		if (dom.inputs.shelf && dom.inputs.shelf.value.length > 0) {
+			searchShelf(dom.inputs.shelf.value);
+		} else {
+			alert('Raf Borkodu Hatalı');
+			if (dom.inputs.shelf) {
+				dom.inputs.shelf.value = '';
+				dom.inputs.shelf.focus();
+			}
+		}
+	}
+
+	function buildActionId() {
+		if (!dom.hidden.actionId) {
+			return;
+		}
+		const payload = [];
+		for (let i = 1; i <= state.rowCount; i++) {
+			const amountField = document.getElementById('amount' + i);
+			const stockField = document.getElementById('stockid' + i);
+			if (!amountField || !stockField) {
+				continue;
+			}
+			if (Number(amountField.value) > 0) {
+				const rowParts = [i, stockField.value, amountField.value];
+				if (config.hasShelf) {
+					const shelfField = document.getElementById('shelf_code' + i);
+					rowParts.push(shelfField ? shelfField.value : '');
+				}
+				payload.push(rowParts.join('-'));
+			}
+		}
+		dom.hidden.actionId.value = payload.join(',');
+		if (dom.hidden.rowCount) {
+			dom.hidden.rowCount.value = payload.length;
+		}
+	}
+
+	function adjustAllAmount(delta) {
+		if (!dom.hidden.allAmount) {
+			return;
+		}
+		const current = Number(dom.hidden.allAmount.value) || 0;
+		dom.hidden.allAmount.value = current + delta;
+	}
+
+	function getStock(barcode) {
+		state.barcode = '';
+		state.stockId = '';
+		state.stockCode = '';
+		state.spectMainId = '';
+		state.shelfCode = '';
+		const sql = "SELECT SB.STOCK_ID,SB.BARCODE,PU.MAIN_UNIT,PU.MULTIPLIER,S.PRODUCT_NAME FROM STOCKS_BARCODES AS SB INNER JOIN PRODUCT_UNIT AS PU ON SB.UNIT_ID = PU.PRODUCT_UNIT_ID INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID WHERE SB.BARCODE='" + barcode + "'";
+		const product = wrk_query(sql, 'dsn3');
+		if (product.STOCK_ID === undefined) {
+			state.ekle = 1;
+			alert('Ürün Bulunamadı');
+			return;
+		}
+		const amountField = dom.inputs.amount;
+		if (dom.hidden.allAmount && amountField) {
+			adjustAllAmount(Number(amountField.value) || 0);
+			const paketLimit = Number(dom.hidden.paketSayisi ? dom.hidden.paketSayisi.value : 0) || 0;
+			if ((Number(dom.hidden.allAmount.value) || 0) <= paketLimit) {
+				state.stockId = product.STOCK_ID;
+				state.stockCode = product.PRODUCT_NAME;
+				state.barcode = product.BARCODE;
+				return;
+			}
+			alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
+			adjustAllAmount(-(Number(amountField.value) || 0));
+			focusAmount();
+			state.ekle = 1;
+		}
+	}
+
+	function addAmount() {
+		const currentAmount = Number(state.amount) || 0;
+		if (state.rowCount > 0) {
+			for (let i = 1; i <= state.rowCount; i++) {
+				const stockField = document.getElementById('stockid' + i);
+				if (!stockField || stockField.value !== String(state.stockId)) {
+					continue;
+				}
+				if (config.hasShelf) {
+					const shelfField = document.getElementById('shelf_code' + i);
+					if (!shelfField || shelfField.value !== state.shelfCode) {
+						continue;
+					}
+					const stockSql = "SELECT ISNULL(S.REAL_STOCK, 0) AS REAL_STOCK FROM GET_STOCK_LAST_SHELF AS S INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID WHERE P.SHELF_CODE='" + state.shelfCode + "' AND S.STOCK_ID=" + state.stockId;
+					const shelfStock = wrk_query(stockSql, 'dsn2');
+					const available = shelfStock.REAL_STOCK === undefined ? 0 : shelfStock.REAL_STOCK;
+					const amountField = document.getElementById('amount' + i);
+					if (!amountField) {
+						continue;
+					}
+					if ((available * 1) < (Number(amountField.value) - (-1 * currentAmount))) {
+						state.ekle = 1;
+						alert('Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : ' + available);
+						amountField.value = Number(amountField.value) - (1 * currentAmount);
+						focusAmount();
+					} else {
+						amountField.value = Number(amountField.value) - (-1 * currentAmount);
+						state.ekle = 1;
+					}
+				} else {
+					const stockSql = "SELECT PRODUCT_STOCK FROM PRTOTM_GET_STOCK_LOCATION_TOTAL WHERE DEPO='" + (dom.hidden.deptOut ? dom.hidden.deptOut.value : '') + "' AND STOCK_ID=" + state.stockId;
+					const depotStock = wrk_query(stockSql, 'dsn2');
+					const available = depotStock.PRODUCT_STOCK === undefined ? 0 : depotStock.PRODUCT_STOCK;
+					if ((available * 1) < (-1 * currentAmount)) {
+						state.ekle = 1;
+						alert('Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : ' + available);
+						adjustAllAmount(-(Number(dom.inputs.amount ? dom.inputs.amount.value : 0)));
+						focusAmount();
+					} else {
+						const amountField = document.getElementById('amount' + i);
+						if (amountField) {
+							amountField.value = Number(amountField.value) - (-1 * currentAmount);
+						}
+						state.ekle = 1;
+					}
+				}
+			}
+		} else {
+			const qry = config.hasShelf
+				? "SELECT ISNULL(S.REAL_STOCK, 0) AS REAL_STOCK FROM GET_STOCK_LAST_SHELF AS S INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID WHERE P.SHELF_CODE='" + state.shelfCode + "' AND S.STOCK_ID=" + state.stockId
+				: "SELECT PRODUCT_STOCK FROM PRTOTM_GET_STOCK_LOCATION_TOTAL WHERE DEPO='" + (dom.hidden.deptOut ? dom.hidden.deptOut.value : '') + "' AND STOCK_ID=" + state.stockId;
+			const stockInfo = wrk_query(qry, config.hasShelf ? 'dsn2' : 'dsn2');
+			const available = config.hasShelf ? (stockInfo.REAL_STOCK === undefined ? 0 : stockInfo.REAL_STOCK) : (stockInfo.PRODUCT_STOCK === undefined ? 0 : stockInfo.PRODUCT_STOCK);
+			if ((available * 1) < (1 * currentAmount)) {
+				state.ekle = 1;
+				alert('Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : ' + available);
+				focusAmount();
+			}
+		}
+	}
+
+	function createRow(barcode) {
+		const table = dom.tableBody;
+		if (!table) {
+			return;
+		}
+		state.rowCount += 1;
+		if (dom.hidden.rowCount) {
+			dom.hidden.rowCount.value = state.rowCount;
+		}
+		const row = table.insertRow(table.rows.length);
+		row.id = 'frm_row' + state.rowCount;
+		const barcodeCell = row.insertCell();
+		barcodeCell.innerHTML = '<input type="hidden" value="' + state.stockId + '" name="stockid' + state.rowCount + '" id="stockid' + state.rowCount + '" /><input type="hidden" value="' + state.spectMainId + '" name="spectmainid' + state.rowCount + '" id="spectmainid' + state.rowCount + '" /><input type="text" value="' + barcode + '" name="barcod' + state.rowCount + '" id="barcod' + state.rowCount + '" size="13" class="boxtext" readonly="yes" />';
+		const codeCell = row.insertCell();
+		codeCell.innerHTML = '<input type="text" value="' + state.stockCode + '" name="stockcode' + state.rowCount + '" id="stockcode' + state.rowCount + '" size="13" class="boxtext" readonly="yes" />';
+		const amountCell = row.insertCell();
+		amountCell.innerHTML = '<input type="text" style="text-align:center" value="' + state.amount + '" name="amount' + state.rowCount + '" id="amount' + state.rowCount + '" size="5" class="boxtext" readonly="yes" />';
+		const shelfCell = row.insertCell();
+		shelfCell.innerHTML = '<input type="text" value="' + state.shelfCode + '" name="shelf_code' + state.rowCount + '" id="shelf_code' + state.rowCount + '" size="8" class="boxtext" readonly="yes" style="text-align:right" />';
+	}
+
+	function addRow(barcode) {
+		if (!config.hasShelf) {
+			getStock(barcode);
+		}
+		state.amount = dom.inputs.amount ? dom.inputs.amount.value : 0;
+		addAmount();
+		if (state.ekle === 0) {
+			createRow(barcode);
+		} else {
+			state.ekle = 0;
+		}
+	}
+
+	function searchShelf(shelfCode) {
+		const outDept = dom.hidden.deptOut ? dom.hidden.deptOut.value : '';
+		const shelfSql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE='" + shelfCode + "'";
+		const shelf = wrk_query(shelfSql, 'dsn3');
+		if (!shelf.recordcount) {
+			alert('Seçtiğiniz Raf Bulunamadı!');
+			if (dom.inputs.shelf) {
+				dom.inputs.shelf.value = '';
+				dom.inputs.shelf.focus();
+			}
+			return;
+		}
+		const shelfDept = shelf.STORE_ID.toString() + '-' + shelf.LOCATION_ID.toString();
+		if (outDept !== shelfDept) {
+			alert('Seçtiğiniz Raf Giriş Lokasyonunda Değildir.!');
+			if (dom.inputs.shelf) {
+				dom.inputs.shelf.value = '';
+				dom.inputs.shelf.focus();
+			}
+			return;
+		}
+		if (!dom.inputs.barcode || dom.inputs.barcode.value.length === 0) {
+			if (dom.inputs.barcode) {
+				dom.inputs.barcode.focus();
+			}
+			return;
+		}
+		const sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE='" + dom.inputs.barcode.value + "' AND PP.SHELF_CODE='" + dom.inputs.shelf.value + "'";
+		const product = wrk_query(sql, 'dsn3');
+		if (product.STOCK_ID === undefined) {
+			alert('Ürün Bulunamadı');
+			if (dom.inputs.shelf) {
+				dom.inputs.shelf.value = '';
+				dom.inputs.shelf.focus();
+			}
+			return;
+		}
+		if (dom.hidden.allAmount && dom.inputs.amount) {
+			adjustAllAmount(Number(dom.inputs.amount.value) || 0);
+			const paketLimit = Number(dom.hidden.paketSayisi ? dom.hidden.paketSayisi.value : 0) || 0;
+			if ((Number(dom.hidden.allAmount.value) || 0) <= paketLimit) {
+				state.stockId = product.STOCK_ID;
+				state.stockCode = product.PRODUCT_NAME;
+				state.barcode = product.BARCODE;
+				state.shelfCode = product.SHELF_CODE;
+				addRow(product.BARCODE);
+				if (dom.inputs.shelf) {
+					dom.inputs.shelf.value = '';
+				}
+				if (dom.inputs.amount) {
+					dom.inputs.amount.value = '';
+				}
+				focusAmount();
+			} else {
+				alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
+				adjustAllAmount(-(Number(dom.inputs.amount.value) || 0));
+				if (dom.inputs.shelf) {
+					dom.inputs.shelf.value = '';
+				}
+				focusAmount();
+			}
+		}
+	}
+
+	function handleSubmit(event) {
+		if (event) {
+			event.preventDefault();
+		}
+		if (!dom.hidden.deptOut || dom.hidden.deptOut.value === '') {
+			alert('Depo Seçmelisiniz.');
 			return false;
 		}
-	}
-	function add_amount()
-	{
-		if(row_count >0) /*ilk Satırdan sonrası*/
-	  	{
-		  for(i=1;i<=row_count;i++)
-		  {
-			  <cfif get_store_type.raf gt 0>
-				  if(document.getElementById('stockid'+i).value == stockid && document.getElementById('shelf_code'+i).value == shelf_code)
-				  {
-					  var stock_sql = "SELECT ISNULL(S.REAL_STOCK, 0) AS REAL_STOCK FROM GET_STOCK_LAST_SHELF AS S INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID WHERE P.SHELF_CODE = '"+shelf_code+"' AND S.STOCK_ID ="+stockid;
-					  var get_real_stock = wrk_query(stock_sql,'dsn2');
-					  if(get_real_stock.REAL_STOCK==undefined)
-					  get_real_stock.REAL_STOCK = 0;
-					  if((get_real_stock.REAL_STOCK*1) < document.getElementById('amount'+i).value - (-1 * amount))
-					  {
-						ekle=1;
-						alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock.REAL_STOCK);
-						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (1 * amount);
-						document.getElementById('add_other_amount').focus();
-					  }
-					  else
-					  {
-						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
-						ekle=1;
-					  }
-				  }
-			  <cfelse>
-				  if(document.getElementById('stockid'+i).value == stockid)
-				  {
-					  var stock_sql = "SELECT PRODUCT_STOCK FROM PRTOTM_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+stockid;
-					  var get_real_stock = wrk_query(stock_sql,'dsn2');
-					  if(get_real_stock.PRODUCT_STOCK==undefined)
-					  get_real_stock.PRODUCT_STOCK = 0;
-					  if((get_real_stock.PRODUCT_STOCK*1) < (-1 * amount))
-					  {
-						ekle=1;
-						alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock.PRODUCT_STOCK);
-						document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
-						document.getElementById('add_other_amount').focus();
-					  }
-					  else
-					  {
-						document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
-						ekle=1;
-					  }
-				  }
-			  </cfif>
-		  }
+		if (dom.hidden.deptOut.value.indexOf('-') === -1) {
+			alert('Lütfen giriş için doğru depo seçiniz.');
+			return false;
 		}
-		else
-		{
-			<cfif get_store_type.raf gt 0>
-				var stock_sql_1 = "SELECT ISNULL(S.REAL_STOCK, 0) AS REAL_STOCK FROM GET_STOCK_LAST_SHELF AS S INNER JOIN <cfoutput>#dsn3_alias#</cfoutput>.PRODUCT_PLACE AS P ON S.SHELF_NUMBER = P.PRODUCT_PLACE_ID WHERE P.SHELF_CODE = '"+shelf_code+"' AND S.STOCK_ID ="+stockid;
-				
-				var get_real_stock_1 = wrk_query(stock_sql_1,'dsn2');
-				if(get_real_stock_1.REAL_STOCK==undefined)
-				get_real_stock_1.REAL_STOCK = 0;
-				if((get_real_stock_1.REAL_STOCK*1) < (1*amount))
-				{
-					ekle=1;
-					alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock_1.REAL_STOCK);
-					document.getElementById('add_other_amount').focus();
-				}
-				/*else
-				{
-					document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
-					ekle=1;
-				}*/
-			<cfelse>
-			
-				var stock_sql_1 = "SELECT PRODUCT_STOCK FROM PRTOTM_GET_STOCK_LOCATION_TOTAL WHERE  DEPO = '"+form_basket.txt_department_out.value+"' AND STOCK_ID ="+stockid;
-				var get_real_stock_1 = wrk_query(stock_sql_1,'dsn2');
-				if(get_real_stock_1.PRODUCT_STOCK==undefined)
-				get_real_stock_1.PRODUCT_STOCK = 0;
-				if((get_real_stock_1.PRODUCT_STOCK*1) < (1*amount))
-				{
-					ekle=1;
-					alert("Yetersiz Stok. Çıkış Lokasyonundaki Stok Miktarı : "+get_real_stock_1.PRODUCT_STOCK);
-					document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
-					document.getElementById('add_other_amount').focus();
-				}
-				/*else
-				{
-					document.getElementById('amount'+i).value = document.getElementById('amount'+i).value - (-1 * amount);
-					ekle=1;
-				}*/
-			</cfif>
-		}
+		buildActionId();
+		const actionId = dom.hidden.actionId ? dom.hidden.actionId.value : '';
+		const fis = dom.hidden.fisTipi ? dom.hidden.fisTipi.value : '';
+		const processCat = dom.hidden.processCat ? dom.hidden.processCat.value : '';
+		const target = config.saveBase + 'action_id=' + encodeURIComponent(actionId) + '&fis_tipi=' + encodeURIComponent(fis) + '&process_cat=' + encodeURIComponent(processCat);
+		window.location.href = target;
+		return false;
 	}
-	
-	function add_row(barcode)
-	{
-		<cfif get_store_type.raf eq 0>
-			get_stock(barcode);
-		</cfif>
-		{
-			  amount = document.getElementById('add_other_amount').value;
-			  add_amount();
-			  if (ekle == 0)
-			  {
-				row_count++;
-				document.getElementById('row_count').value = row_count;
-				var newRow;
-				var newCell;	
-				newRow = document.getElementById("table1").insertRow(document.getElementById("table1").rows.length);
-				newRow.setAttribute("name","frm_row" + row_count);
-				newRow.setAttribute("id","frm_row" + row_count);		
-				newRow.setAttribute("NAME","frm_row" + row_count);
-				newRow.setAttribute("ID","frm_row" + row_count);		
-				
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="hidden" value="'+stockid+'" name="stockid'+row_count+'" id="stockid'+row_count+'" /><input type="hidden" value="'+spectmainid+'" name="spectmainid'+row_count+'" id="spectmainid'+row_count+'" /><input type="text" value="'+barcode+'" name="barcod'+row_count+'" id="barcod'+row_count+'" size="13" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" value="'+stockcode+'" name="stockcode'+row_count+'" id="stockcode'+row_count+'" size="13" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" style="text-align:center" value="'+amount+'" name="amount'+row_count+'" id="amount'+row_count+'" size="5" class="boxtext" readonly="yes" />';
-				newCell = newRow.insertCell();
-				newCell.innerHTML = '<input type="text" value="'+shelf_code+'" name="shelf_code'+row_count+'" id="shelf_code'+row_count+'" size="8" class="boxtext" readonly="yes" style="text-align:right" />';
-			  }
-			  else
-			  {
-				 ekle = 0;
-			  }
-		}
-	}
-</script>
 
-<script language="JavaScript">
-	document.onkeydown = checkKeycode
-	function checkKeycode(e) 
-	{
-		var keycode;
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		if (keycode == 13)
-		{
-			<cfif get_store_type.raf gt 0>
-				if (document.getElementById('add_other_shelf').value.length >0)
-				{
-					search_shelf(document.getElementById('add_other_shelf').value);
-				}
-				else
-				{
-					alert('Raf Borkodu Hatalı');
-					document.getElementById('add_other_shelf').value = '';
+	function clearAllInputs(event) {
+		if (event) {
+			event.preventDefault();
+		}
+		if (dom.inputs.barcode) {
+			dom.inputs.barcode.value = '';
+		}
+		if (dom.inputs.shelf) {
+			dom.inputs.shelf.value = '';
+		}
+		if (dom.inputs.amount) {
+			dom.inputs.amount.value = '1';
+		}
+		if (dom.tableBody) {
+			dom.tableBody.innerHTML = '';
+		}
+		if (dom.hidden.rowCount) {
+			dom.hidden.rowCount.value = 0;
+		}
+		if (dom.hidden.actionId) {
+			dom.hidden.actionId.value = '';
+		}
+		if (dom.hidden.allAmount) {
+			dom.hidden.allAmount.value = initialData.allAmount;
+		}
+		state.rowCount = 0;
+		state.barcode = '';
+		state.spectMainId = '';
+		state.stockId = '';
+		state.stockCode = '';
+		state.shelfCode = '';
+		state.amount = 0;
+		state.ekle = 0;
+	}
 
-
-					document.getElementById('add_other_shelf').focus();	
-				}
-			<cfelse>
-				if (document.getElementById('add_other_barcod').value.length >0) 
-				{
-					add_row(document.getElementById('add_other_barcod').value);
-					/*document.getElementById('add_other_barcod').value = '';*/
-					document.getElementById('add_other_amount').value = '';
-					document.getElementById('add_other_amount').focus();
-				}
-				else
-				{
-					alert('Barcod Hatalı');
-					document.getElementById('add_other_barcod').value = '';
-					document.getElementById('add_other_barcode').focus();
-				}
-			</cfif>
+	function handleDelete() {
+		const wantsDelete = confirm('Ambar Fişini Silmek İster misiniz ?');
+		if (wantsDelete) {
+			window.location.href = config.deleteUrl;
 		}
 	}
-	function search_shelf(shelf_8)
-	{
-		var giris_depo = document.all.txt_department_out.value;
-		var shelf_sql = "SELECT PRODUCT_PLACE_ID, STORE_ID, LOCATION_ID FROM PRODUCT_PLACE WHERE PLACE_STATUS = 1 AND SHELF_CODE = '"+shelf_8+"'";
-		var get_shelf = wrk_query(shelf_sql,'dsn3');
-		if(get_shelf.recordcount)
-		{
-			var giris_depo_s = get_shelf.STORE_ID.toString()+'-'+get_shelf.LOCATION_ID.toString();
-			if(giris_depo != giris_depo_s)
-			{
-					alert('Seçtiğiniz Raf Giriş Lokasyonunda Değildir.!');	
-					document.getElementById('add_other_shelf').value = '';
-					document.getElementById('add_other_shelf').focus();	
-			}
-			else
-			{
-				if (document.getElementById('add_other_barcod').value.length >0)
-				{
-					var new_sql = "SELECT SB.STOCK_ID, SB.BARCODE, S.PRODUCT_NAME, PP.SHELF_CODE FROM STOCKS_BARCODES AS SB INNER JOIN STOCKS AS S ON SB.STOCK_ID = S.STOCK_ID INNER JOIN PRODUCT_PLACE_ROWS AS PPR ON S.PRODUCT_ID = PPR.PRODUCT_ID INNER JOIN PRODUCT_PLACE AS PP ON PPR.PRODUCT_PLACE_ID = PP.PRODUCT_PLACE_ID WHERE SB.BARCODE = '"+document.getElementById('add_other_barcod').value+"' AND PP.SHELF_CODE ='"+document.getElementById('add_other_shelf').value+"'";
-		 			var get_product = wrk_query(new_sql,'dsn3');
-					if (get_product.STOCK_ID == undefined)
-					{
-						alert('Ürün Bulunamadı');
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_shelf').focus();
-					}
-					else
-					{	
-						document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*-1);
-						if (document.getElementById('all_amount').value*1 <= document.getElementById('paket_sayisi').value*1)
-						{
-						stockid = get_product.STOCK_ID;
-						stockcode = get_product.PRODUCT_NAME;
-						barcode = get_product.BARCODE;
-						shelf_code = get_product.SHELF_CODE; 
-						buton_kontrol();
-						add_row(barcode);
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_amount').value = '';
-						document.getElementById('add_other_amount').focus();
-						}
-						else
-						{
-							alert('Sevk Emrinden Fazla Çıkış Yaptınız !');
-							document.getElementById('all_amount').value = document.getElementById('all_amount').value - (document.getElementById('add_other_amount').value*1);
-							document.getElementById('add_other_shelf').value = '';
-							document.getElementById('add_other_amount').focus();
-						}
-					}
-				}
-				else if (document.getElementById('add_other_barcod').value.length == 0)
-				{
-						document.getElementById('add_other_barcod').focus();	
-				}
-				/*else
-				{
-						alert('Ürün Barkodu Hatalı');
-						document.getElementById('add_other_shelf').value = '';
-						document.getElementById('add_other_shelf').focus();
-				}*/
-			}
-		}
-		else
-		{
-			alert('Seçtiğiniz Raf Bulunamadı!');
-			document.getElementById('add_other_shelf').value = '';
-			document.getElementById('add_other_shelf').focus();
-		}
-	}
-</script>
-<script language="javascript" type="text/javascript">
-		function kontrol_kayit()
-		{
-			if(form_basket.txt_department_out.value == "")
-			{
-				alert('Depo Seçmelisiniz.');
-				return false;
-			}
-			else if(form_basket.txt_department_out.value.indexOf('-') == -1)
-			{
-				alert('Lütfen giriş için doğru depo seçiniz.');
-				return false;
-			}
-			else
-			{
-			actionidolustur();
-			window.location.href='<cfoutput>#request.self#?fuseaction=epda.emptypopup_add_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>&action_id='+document.getElementById('action_id').value+'&fis_tipi='+document.form_basket.fis_tipi.value+'&process_cat='+document.form_basket.process_cat_id.value;
-			}
-		}
-		function kontrol_sil()
-		{
-			var sil_kontrol = confirm('Ambar Fişini Silmek İster misiniz ?');
-			if(sil_kontrol== true)
-			window.location.href='<cfoutput>#request.self#?fuseaction=epda.emptypopup_del_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1'</cfoutput>;
-		}
+
+	window.addEventListener('DOMContentLoaded', init);
+	window.kontrol_kayit = handleSubmit;
+	window.submitForm = handleSubmit;
+	window.clearAllInputs = clearAllInputs;
+	window.kontrol_sil = handleDelete;
+})();
 </script>
