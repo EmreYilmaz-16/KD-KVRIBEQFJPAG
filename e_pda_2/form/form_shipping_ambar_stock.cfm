@@ -201,7 +201,7 @@ input{
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
   <div style="width:100%">
-  	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
+  	<table cellpadding="2" cellspacing="1" align="left" width="99%">
 	  	    <tr>
   
   </tr>
