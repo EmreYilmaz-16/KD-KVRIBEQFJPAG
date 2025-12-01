@@ -201,7 +201,16 @@ input{
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
   <div style="width:100%">
-  	<table cellpadding="2" cellspacing="1" align="left" width="99%">
+  	<div>
+		<strong><cfoutput>#get_stock_info.product_name#</cfoutput></strong><
+	</div>
+<div style="display:flex">
+	<div class="form-group">
+		<label>Miktar</label>
+<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
+	</div>
+</div>
+	<table cellpadding="2" cellspacing="1" align="left" width="99%">
 	  	    <tr>
   
   </tr>
@@ -220,7 +229,7 @@ input{
           			<tr >
             			<td>
 							<div class="form-group">
-                        	<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
+                        	
 							</div>
                       	</td>
             			<cfif get_store_type.raf gt 0>
