@@ -1,7 +1,8 @@
+
 <cfparam name="attributes.search" default="">
 <cfparam name="url.search" default="">
 <cfset searchTerm = Trim(attributes.search)>
-
+<cf_xml_page_edit fuseact="purchase._emptypopup_list_purchase_despatches_pbs">
 <div class="page-wrapper">
     <div class="page-header">
         <div>
