@@ -288,7 +288,7 @@ input{
 			</cfoutput>
 		</cf_grid_list>
 		
-		<cfform name="form_basket" action="#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock">
+		<cfform name="form_basket" action="#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock_wb">
 			<!--- Form URL Parametreleri --->
 			<cfinput id="shelf_type" name="shelf_type" type="hidden" value="#get_store_type.raf#">
 			<cfinput id="date1" name="date1" type="hidden" value="#attributes.date1#">
@@ -303,7 +303,9 @@ input{
 			<input type="hidden" name="action_id" id="action_id" value="">
 			<input type="hidden" name="fis_tipi" id="fis_tipi" value="">
 			<cfinput id="PROCESS_CAT " name="PROCESS_CAT" type="hidden" value="#get_process_cat.process_cat_id#">
-            
+              <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
+  <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
+  <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
 			
 			<!--- Orijinal Form Hidden Alanları --->
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
@@ -381,8 +383,8 @@ input{
 
 	const config = {
 		hasShelf: <cfoutput>#iif(get_store_type.raf gt 0,1,0)#</cfoutput> === 1,
-		saveBase: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>',
-		deleteUrl: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1</cfoutput>'
+		saveBase: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock_wb&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>',
+		deleteUrl: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock_wb&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1</cfoutput>'
 	};
 
 	const initialData = {
