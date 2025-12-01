@@ -194,67 +194,50 @@ input{
   var islemtipi = 0;//0-ekle 1-çıkar
   var buton = 0;// <1-buton pasif, >0-buton aktif
 </script>
-
+<!-----
 <cfform name="form_basket">
   <cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
   <cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
   <div style="width:100%">
-  	<div>
-		<strong><cfoutput>#get_stock_info.product_name#</cfoutput></strong><
-	</div>
-<div style="display:flex">
-	<div class="form-group">
-		<label>Miktar</label>
-<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
-	</div>
-</div>
-	<table cellpadding="2" cellspacing="1" align="left" width="99%">
+  	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
 	  	    <tr>
   
   </tr>
-    	<tr  height="20px">
+    	<tr class="color-list" height="20px">
     		<td colspan="4"><strong><cfoutput>#get_stock_info.product_name#</cfoutput></strong></td>
     	</tr>
-    	<tr >
+    	<tr class="color-list">
       		<td colspan="4">
-            	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-          			<tr >
+            	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
+          			<tr class="color-list">
             			<td width="45px">Miktar</td>
             			<cfif get_store_type.raf gt 0><td width="75px">Raf</td></cfif>
             			<td width="95px">Barcode</td>
             			<td>Kontrol</td>
        	  			</tr>
-          			<tr >
+          			<tr class="color-list">
             			<td>
-							<div class="form-group">
-                        	
-							</div>
+                        	<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
                       	</td>
             			<cfif get_store_type.raf gt 0>
             				<td>
-								<div class="form-group">
                             	<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:75px;" value="" />
-								</div>
                           	</td>
            				</cfif>
             			<td>
-							<div class="form-group">
                         	<cfinput id="add_other_barcod" name="add_other_barcod" readonly="yes" type="text" value="#get_stock_info.BARCODE#" style="width:110px;" >
-							</div>
                        	</td>
             			<td nowrap="nowrap">
-							<div class="form-group">
             				<cfinput type="text" value="#all_amount#" name="all_amount" id="all_amount" class="boxtext" style="text-align:right; font-weight:bold; width:30px">/
         					<cfinput type="text" value="#attributes.paket_sayisi#" name="paket_sayisi" id="paket_sayisi" class="boxtext" style="text-align:right;font-weight:bold;width:30px">
-							</div>
             			</td>
           			</tr>
         		</table>
          	</td>
     	</tr>
-    	<tr >
+    	<tr class="color-list">
       		<td width="90" align="center">Barkod</td>
       		<td width="90" align="left">Ürün Adı</td>
       		<td width="40" align="right">Mikt.</td>
@@ -262,7 +245,7 @@ input{
       			<td align="left">Raf</td>
       		</cfif>
     	</tr>
-    	<tr >
+    	<tr class="color-list">
       		<td align="left" colspan="4">
         		<form name="product_row" id="product_row" method="post">
           			<table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
@@ -283,7 +266,7 @@ input{
         		</form>
           	</td>
     	</tr>
-    	<tr >
+    	<tr class="color-list">
       		<td colspan="4" valign="middle" align="center">
 				<cfif get_store_type.raf gt 0>
                     <select name="shelf_select" style="width:100px; text-align:center">
@@ -303,7 +286,94 @@ input{
     	</tr>
   	</table>
   </div>
-</cfform>
+</cfform>----->
+<div class="row">
+	<div class="col col-md-2 col-sm-12 col-xs-12">
+		<cf_grid_list>
+			<cfoutput>
+				<tr>
+					<td style="font-size:12pt">#attributes.product_name#</td>
+					<td style="font-size:12pt;text-align:center">
+						<span style="font-size:12pt">#attributes.paket_sayisi#</span>/<span style="font-size:12pt">#all_amount#</span>
+					</td>
+				</tr>
+			</cfoutput>
+		</cf_grid_list>
+		
+		<cfform name="form_basket" action="#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock">
+			<!--- Form URL Parametreleri --->
+			<cfinput id="shelf_type" name="shelf_type" type="hidden" value="#get_store_type.raf#">
+			<cfinput id="date1" name="date1" type="hidden" value="#attributes.date1#">
+			<cfinput id="date2" name="date2" type="hidden" value="#attributes.date2#">
+			<cfinput id="is_type" name="is_type" type="hidden" value="#attributes.is_type#">
+			<cfinput id="keyword" name="keyword" type="hidden" value="#attributes.keyword#">
+			<cfinput id="dep_in" name="dep_in" type="hidden" value="#attributes.department_in_id#">
+			<cfinput id="dep_out" name="dep_out" type="hidden" value="#attributes.department_out_id#">
+			<cfinput id="ref_no" name="ref_no" type="hidden" value="#attributes.deliver_paper_no#">
+			<cfinput id="ship_id" name="ship_id" type="hidden" value="#attributes.ship_id#">
+			<cfinput id="f_stock_id" name="f_stock_id" type="hidden" value="#f_stock_id#">
+			<input type="hidden" name="action_id" id="action_id" value="">
+			<input type="hidden" name="fis_tipi" id="fis_tipi" value="">
+			<cfinput id="PROCESS_CAT " name="PROCESS_CAT" type="hidden" value="#get_process_cat.process_cat_id#">
+            
+			
+			<!--- Orijinal Form Hidden Alanları --->
+			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
+			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
+			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+			<input type="hidden" name="row_count" id="row_count" value="0">
+			
+			<div style="display:flex">
+				<div class="form-group">
+					<label for="add_other_amount">Miktar</label>
+					<input type="text" class="moneybox" name="add_other_amount" id="add_other_amount" value="1" readonly>
+				</div>
+				<div class="form-group">
+					<label for="add_other_barcod">Seri Numarası</label>
+					<input type="text" name="add_other_barcod" id="add_other_barcod" class="moneybox" value="<cfoutput>#get_stock_info.BARCODE#</cfoutput>" placeholder="Seri Numarası">
+				</div>
+				<cfif get_store_type.raf gt 0>
+					<div class="form-group">
+						<label for="add_other_shelf">Raf Numarası</label>
+						<input type="text" class="moneybox" name="add_other_shelf" id="add_other_shelf" value="" placeholder="Raf Numarası">
+					</div>
+				</cfif>
+			</div>
+            
+			
+			<div class="form-group">
+				<cfif get_store_type.raf gt 0>
+					<select name="shelf_select" style="width:100px; text-align:center">
+						<cfoutput query="get_shelf_stock">
+							<option value="">#SHELF_CODE# - #REAL_STOCK#</option>
+						</cfoutput>
+					</select>
+				<cfelse>
+					Depo Miktarı : <cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput>
+				</cfif>
+			</div>
+            <div class="form-group">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Tipi</option>
+
+			</select>
+		</div>
+			
+			<cf_grid_list id="table1" name="table1">
+				<thead><tr><th>Seri No</th><th>Barkod</th><th>Miktar</th><th>Raf</th></tr></thead>
+				<tbody id="table1" name="table1"></tbody>
+			</cf_grid_list>
+			
+			<!--- Form Submit Butonları --->
+			<div class="form-group" style="margin-top: 10px;">
+				<button type="submit" class="btn btn-primary" onclick="submitForm()">Kaydet</button>
+				<button type="button" class="btn btn-secondary" onclick="clearAllInputs()">Temizle</button>
+			</div>
+            
+		</cfform>
+        
+	</div>
+</div>
 <script language="javascript" type="text/javascript">
 	document.getElementById('add_other_amount').focus();
 	setTimeout("document.getElementById('add_other_amount').select();",1000);	
