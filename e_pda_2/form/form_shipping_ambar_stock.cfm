@@ -381,8 +381,8 @@ input{
 
 	const config = {
 		hasShelf: <cfoutput>#iif(get_store_type.raf gt 0,1,0)#</cfoutput> === 1,
-		saveBase: '<cfoutput>#request.self#?fuseaction=epda.emptypopup_add_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>',
-		deleteUrl: '<cfoutput>#request.self#?fuseaction=epda.emptypopup_del_prtotm_shipping_ambar_stock_q&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1</cfoutput>'
+		saveBase: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>',
+		deleteUrl: '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&type=1</cfoutput>'
 	};
 
 	const initialData = {
