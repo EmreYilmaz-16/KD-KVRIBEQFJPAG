@@ -742,6 +742,11 @@ async function checkSerial(input, event) {
             </button>
         `;
         newRow.appendChild(newCell2);
+        if(parser==4){
+            newRow.dataset.fromBarcode="1";
+        }else{
+            newRow.dataset.fromBarcode="0";
+        }
         serialsTable.appendChild(newRow);
 
         // Sayacı güncelle
