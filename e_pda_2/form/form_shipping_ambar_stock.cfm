@@ -205,19 +205,19 @@ input{
 	  	    <tr>
   
   </tr>
-    	<tr class="color-list" height="20px">
+    	<tr  height="20px">
     		<td colspan="4"><strong><cfoutput>#get_stock_info.product_name#</cfoutput></strong></td>
     	</tr>
-    	<tr class="color-list">
+    	<tr >
       		<td colspan="4">
-            	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="color-border">
-          			<tr class="color-list">
+            	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+          			<tr >
             			<td width="45px">Miktar</td>
             			<cfif get_store_type.raf gt 0><td width="75px">Raf</td></cfif>
             			<td width="95px">Barcode</td>
             			<td>Kontrol</td>
        	  			</tr>
-          			<tr class="color-list">
+          			<tr >
             			<td>
 							<div class="form-group">
                         	<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
@@ -245,7 +245,7 @@ input{
         		</table>
          	</td>
     	</tr>
-    	<tr class="color-list">
+    	<tr >
       		<td width="90" align="center">Barkod</td>
       		<td width="90" align="left">Ürün Adı</td>
       		<td width="40" align="right">Mikt.</td>
@@ -253,7 +253,7 @@ input{
       			<td align="left">Raf</td>
       		</cfif>
     	</tr>
-    	<tr class="color-list">
+    	<tr >
       		<td align="left" colspan="4">
         		<form name="product_row" id="product_row" method="post">
           			<table name="table1" id="table1" border="0" cellpadding="0" cellspacing="0" width="100%" class="tablo">
@@ -274,7 +274,7 @@ input{
         		</form>
           	</td>
     	</tr>
-    	<tr class="color-list">
+    	<tr >
       		<td colspan="4" valign="middle" align="center">
 				<cfif get_store_type.raf gt 0>
                     <select name="shelf_select" style="width:100px; text-align:center">
