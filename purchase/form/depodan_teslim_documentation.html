@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Depodan Teslim Ekranı Teknik Dökümantasyonu</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #222; margin: 2rem auto; max-width: 1080px; }
+    h1, h2, h3 { color: #0f5132; }
+    code { background: #f8f9fa; padding: 0.1rem 0.25rem; border-radius: 3px; }
+    pre { background: #212529; color: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    .file-ref { font-weight: bold; color: #0d6efd; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid #dee2e6; padding: 0.5rem; vertical-align: top; }
+    th { background: #e9ecef; }
+    ul { margin-top: 0; }
+    .tag { display: inline-block; background: #e7f5ff; color: #0c5460; padding: 0 0.5rem; border-radius: 999px; margin-right: 0.25rem; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Depodan Teslim Ekranı</h1>
+    <p>Bu dökümantasyon, <span class="file-ref">depodan_teslim.cfm</span> ve <span class="file-ref">depodan_teslim.js</span> dosyalarının birlikte oluşturduğu satın alma seçim ekranının tam teknik akışını açıklar.</p>
+    <p class="tag">CFML</p><p class="tag">JavaScript</p><p class="tag">Fetch API</p><p class="tag">Dinamik Tablo</p>
+  </header>
+
+  <section id="overview">
+    <h2>1. Genel Bakış</h2>
+    <p>Ekran, satın alma iç taleplerinden depodan teslim edilecek ürünleri listeler, tedarikçi tekliflerini karşılaştırır ve seçilen satırları JSON formatında kaydeder. Sunucu tarafı ColdFusion ile veri setini hazırlarken, istemci tarafı JavaScript ile dinamik tabloyu render eder, fiyat dönüşümlerini hesaplar ve seçimleri API'lere gönderir.</p>
+  </section>
+
+  <section id="server-flow">
+    <h2>2. Sunucu Tarafı (CFML) Akışı</h2>
+    <h3>2.1 Geçici Fiyat Tablosu</h3>
+    <ul>
+      <li><code>HAZIRLIK1</code> sorgusu mevcutsa <code>CMP_PRICE_ALL</code> tablosunu düşürür ve iki farklı veritabanındaki (<code>#dsn2#</code> ve önceki yılın şirket veritabanı) <code>INVOICE_ROW</code> kayıtlarını birleştirerek yeniden oluşturur.</li>
+      <li>Tablo, stok ve firma kırılımında son satın alma fiyatlarını saklar ve daha sonra teklif satırlarına <q>LAST_PRICE</q> olarak yansır.</li>
+    </ul>
+    <h3>2.2 Talep Para Birimi ve Fiyat Kategorisi</h3>
+    <ul>
+      <li><code>GETDEMAND_MONEY</code> iç talebin çalıştığı para birimini (<code>OTHER_MONEY</code>) ve talebi oluşturan şirketi çeker.</li>
+      <li><code>getComppanyPriceCat</code> isteğiyle şirketin özel fiyat kategori bilgisi okunur; yoksa varsayılan kategori <code>CMPRICE_ID = 1</code> olarak kalır.</li>
+    </ul>
+    <h3>2.3 Ana Teklif Verisi</h3>
+    <p><code>getMainPurchaseOffer</code> sorgusu, ilgili iç talebe bağlı tüm <code>OFFER</code> kayıtlarını tarar ve her tedarikçinin ürün bazlı verilerini JSON döner.</p>
+    <ul>
+      <li>Teklif satırlarında ürün adı, stok id, fiyatlar, iskonto, vergi, OEM no, marka, satın alma/satış bayrakları, sepet bilgi tipi, alternatif ürün listesi ve fiyat listesi (<code>GPA</code>) detayları bulunur.</li>
+      <li><code>GPA</code> alt sorgusu, seçilen fiyat kategorisi için güncel liste fiyatını ve döviz kurunu çekerek <code>NET_PRICE</code> alanını doldurur.</li>
+      <li><code>SLP</code> alanı, <code>PBS_SELECTED_ROWS</code> tablosundan ürün marjı ve iskonto geçmişini JSON olarak taşır.</li>
+    </ul>
+    <h3>2.4 Sayfa Çıktısı</h3>
+    <ul>
+      <li>Tablo için CSS stilleri tanımlanır; <code>&lt;cf_grid_list&gt;</code> yer tutucu olarak bırakılır ve JS tarafında DOM manipülasyonu ile doldurulur.</li>
+      <li><code>DEMAND_MONEY</code>, <code>session_variables</code>, <code>data</code> ve <code>MONEYARRRR</code> değişkenleri JS tarafına gömülür.</li>
+      <li><code>MONEYARRRR</code> dizisi dönem bazlı <code>RATE1/RATE2</code> kur bilgilerini içerir ve para dönüşümlerinde kullanılır.</li>
+    </ul>
+  </section>
+
+  <section id="client-flow">
+    <h2>3. İstemci Tarafı (JavaScript) Akışı</h2>
+    <h3>3.1 Global Değişkenler</h3>
+    <table>
+      <thead>
+        <tr><th>Değişken</th><th>Açıklama</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>data</code></td><td>Sunucudan gelen tedarikçi + ürün dizisi. İlk adımda <code>mergeCompanies()</code> ile gruplanır.</td></tr>
+        <tr><td><code>ww_data</code></td><td>Birleşmiş veri setinin kopyası; <code>updateBestSupplier</code> fonksiyonu tarafından kullanılır.</td></tr>
+        <tr><td><code>MONEYARRRR</code></td><td>Her para birimi için <code>RATE1</code>/<code>RATE2</code> değerlerini tutar.</td></tr>
+        <tr><td><code>selectedCells</code></td><td>Ürün bazında seçilen tedarikçi teklifini <code>Map</code> yapısında saklar.</td></tr>
+        <tr><td><code>productInfoMap</code></td><td>Her ürün id için isim ve stok id bilgisini hızlı erişim için tutar.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 Yardımcı Fonksiyonlar</h3>
+    <ul>
+      <li><code>getConvertedNetPriceWithMarj(productId, marj)</code>: GPA liste fiyatını bulur, marj uygular, talep para birimine çapraz kurla çevirir.</li>
+      <li><code>applyDiscounts(basePrice, d1, d2, d3)</code>: Üç kademeli iskonto zinciri uygular.</li>
+      <li><code>calculateFinalSalePrice(productId)</code>: Seçili tekliften gelen net fiyat ve GPA bilgilerini kullanarak marj + iskonto sonrası satış fiyatını hesaplar ve satırdaki inputa yazar.</li>
+      <li><code>calculateMarjFromSalePrice(productId)</code>: Manuel girilen satış fiyatını orijinal net fiyata geri çevirir ve marj yüzdesini yeniden hesaplar.</li>
+      <li><code>getRandomColor()</code>: Alternatif ürün gruplarını renklendirmek için basit HEX üretir.</li>
+    </ul>
+
+    <h3>3.3 Dinamik Tablo Oluşturma</h3>
+    <ol>
+      <li>Başlık satırı ürün bilgisi, global marj/iskonto inputları ve her tedarikçi için birer kolon olacak şekilde oluşturulur.</li>
+      <li><code>uniqueProducts</code> listesine göre her satır üretilir; ürün adı hücresinde fiyat geçmişi popup'ına açılan bağlantı bulunur.</li>
+      <li>Marka, OEM, ürün kodu, son satış fiyatı, satış fiyatı inputu ve liste fiyatı (hem orijinal hem talep para birimi) sütunları sıralanır.</li>
+      <li>Her tedarikçi için hücre; fiyat, iskonto, adet, seçilmişlik durumu, satın alma bayrağı ve ek açıklamaları gösterecek şekilde doldurulur.</li>
+      <li>Satırda açık sipariş ya da satış teklifine aktarılmış kayıt varsa ilgili hücreler devre dışı bırakılır.</li>
+      <li>Tek tedarikçi bulunan ürünler otomatik seçilir.</li>
+    </ol>
+
+    <h3>3.4 Seçim ve JSON Üretimi</h3>
+    <ul>
+      <li>Bir hücreye tıklandığında aynı ürünün diğer hücrelerinden onay ikonları kaldırılır, yeni seçim <code>selectedCells</code> içine kaydedilir.</li>
+      <li><code>updateOutput()</code> fonksiyonu seçimleri şirket bazında gruplayarak <code>output</code> <code>&lt;pre&gt;</code> bloğuna JSON olarak yazar ve geriye döner.</li>
+      <li>JSON içeriği; ürün id, stok id, orijinal ve dönüştürülmüş fiyatlar, iskonto ve marj değerleri, seçili para birimleri ile <code>selectInfoExtra</code> gibi ek alanları içerir.</li>
+    </ul>
+
+    <h3>3.5 Toplu Güncelleme Araçları</h3>
+    <ul>
+      <li>Başlıktaki <code>setMarjAllRows</code>, <code>setAllDsc1Rows</code>, <code>setAllDsc2Rows</code>, <code>setAllDsc3Rows</code> fonksiyonları tüm satır inputlarını senkron şekilde günceller ve yeniden fiyat hesaplatır.</li>
+      <li>Satır içindeki satış fiyatı inputu değiştirildiğinde marj otomatik olarak güncellenir; böylece manuel girişler dengelenir.</li>
+    </ul>
+
+    <h3>3.6 En İyi Tedarikçi Hesabı</h3>
+    <p><code>updateBestSupplier()</code>, tüm ürünleri sağlayabilen tedarikçilerin net fiyat toplamlarını karşılaştırır ve kart bileşeninde en düşük toplamı duyurur.</p>
+
+    <h3>3.7 API Entegrasyonları</h3>
+    <table>
+      <thead>
+        <tr><th>Endpoint</th><th>Metot</th><th>Açıklama</th><th>Gönderilen Veri</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=savePurchaseOfferSelectorOnly</code></td>
+          <td>POST (JSON)</td>
+          <td><q>Kaydet</q> butonuna basıldığında seçili satırları sunucuya gönderir.</td>
+          <td><code>{ payload, offer_id, session_variables, BEI }</code>; <code>payload</code> <code>updateOutput()</code> sonucudur.</td>
+        </tr>
+        <tr>
+          <td><code>/AddOns/Partner/purchase/cfc/purchase_service.cfc?method=SAVEORDER_gpt&amp;internal_id=...</code></td>
+          <td>POST (JSON)</td>
+          <td><code>SatinalmaSiparis</code> fonksiyonu ile eldeki seçimlerden satın alma siparişi oluşturur.</td>
+          <td>Parametre olarak yalnızca <code>internal_id</code> kullanır.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3.8 Ek Etkileşimler</h3>
+    <ul>
+      <li>jQuery event'i ile tablo içindeki <code>&lt;span&gt;</code> fiyat alanları inline editöre dönüşür; blur veya Enter ile yeni değer kaydedilir.</li>
+      <li><code>updateBestSupplier()</code> ilk yüklemede çağrılır; seçimler değiştikçe tekrar tetiklenir.</li>
+    </ul>
+  </section>
+
+  <section id="workflow">
+    <h2>4. Kullanım Senaryosu</h2>
+    <ol>
+      <li>Sayfa açıldığında CFML sorguları çalışır, JSON veri seti ve kur bilgileri istemciye gömülür.</li>
+      <li>JavaScript tedarikçi bazlı tabloyu oluşturur ve varsa önceki seçimleri işaretler.</li>
+      <li>Kullanıcı her ürün için uygun tedarikçiyi seçer; marj ve iskonto alanlarını günceller.</li>
+      <li>Seçimler sunucuya kaydedilmek istendiğinde <q>Kaydet</q> butonu basılır, API yanıtına göre kullanıcı bilgilendirilir.</li>
+      <li>Gerekirse <code>SatinalmaSiparis</code> fonksiyonu ile doğrudan satın alma siparişi tetiklenir.</li>
+    </ol>
+  </section>
+
+  <section id="key-structures">
+    <h2>5. Örnek JSON Yapısı</h2>
+    <pre>{
+  "companyId": 123,
+  "products": [
+    {
+      "productId": 456,
+      "stockId": 789,
+      "price": 120.00,
+      "netPrice": 95.50,
+      "quantity": 10,
+      "discount1": 5,
+      "discount2": 0,
+      "discount3": 0,
+      "productMarj": 12,
+      "salePrice": 110.32,
+      "convertedsalePriceOther": 105.11,
+      "demandMoney": "EUR",
+      "gpaPrice": 80.00,
+      "gpaMoney": "USD",
+      "oemNo": "OEM-123",
+      "selectInfoExtra": 3
+    }
+  ]
+}</pre>
+    <p>Bu yapı sunucu tarafında <code>savePurchaseOfferSelectorOnly</code> metoduna doğrudan aktarılır.</p>
+  </section>
+
+  <section id="considerations">
+    <h2>6. Kritik Notlar</h2>
+    <ul>
+      <li><strong>Geçici tablo hakları:</strong> <code>CMP_PRICE_ALL</code> oluşturma yetkisi ve concurrent drop/create işlemleri göz önünde bulundurulmalıdır.</li>
+      <li><strong>Döviz kurunun doğruluğu:</strong> Çapraz kur hesaplarında <code>RATE2</code> değerleri kullanıldığı için <code>MONEY_HISTORY</code> güncel tutulmalıdır.</li>
+      <li><strong>mergeCompanies bağımlılığı:</strong> JS dosyası <code>mergeCompanies()</code> fonksiyonunun globalde tanımlı olduğunu varsayar; yoksa tablo üretimi hataya düşer.</li>
+      <li><strong>Seçim kısıtları:</strong> <code>IS_OS = false</code> ya da <code>IS_SATINALMA = 1</code> satırlar seçim dışıdır; kullanıcıya tooltip ile bilgi verilir.</li>
+      <li><strong>Güvenlik:</strong> API çağrıları JSON gönderdiği için CSRF token kontrolü sunucu tarafında yapılmalıdır. Session verisi tamamıyla istemciye serileştirildiğinden hassas bilgilerin maskelenmesi önerilir.</li>
+    </ul>
+  </section>
+
+  <section id="extension-ideas">
+    <h2>7. Geliştirme Önerileri</h2>
+    <ul>
+      <li>Marj ve iskonto alanları için validasyon (ör. negatif değer engeli) eklendiğinde hesaplama tutarlılığı artar.</li>
+      <li>Tablo hücrelerinde kullanılan <code>console.log</code> çağrıları üretimde kapatılmalıdır.</li>
+      <li>Alternatif ürün renkleri şu an uygulanmıyor; <code>cell.style.backgroundColor</code> satırı aktive edilirse görsel ayrım güçlenir.</li>
+      <li><code>updateOutput()</code> içinde <code>dsc1</code>/<code>discount2</code> tanımları <code>let</code> olarak değiştirilip fonksiyon başlangıcında sıfırlanmalıdır.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><strong>Hazırlayan:</strong> Yazılım Ekibi – Depodan Teslim Modülü</p>
+    <p>Bu dökümantasyon güncel kod tabanını (Kasım 2025) baz alır; değişikliklerden sonra güncellenmelidir.</p>
+  </footer>
+</body>
+</html>
