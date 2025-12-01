@@ -650,6 +650,7 @@
 <cfparam name="form.depo_tedarik_id" default="">
 <cfparam name="form.default_sevkiyat_depo_id" default="">
 <cfparam name="form.default_satinalma_siparis_sureci" default="">
+<cfparam name="form.default_malkabul_depo" default="">
 <cfparam name="url.edit_id" default="">
 <cfparam name="url.delete_id" default="">
 
@@ -658,12 +659,17 @@
 
 <!--- İşlemler --->
 <cfif len(trim(form.action))>
-    <cftry>
+    <cfset defaultMalkabulPattern = "^\d{5}-\d{3}$">
+    <cfif len(trim(form.default_malkabul_depo)) AND NOT reFind(defaultMalkabulPattern, trim(form.default_malkabul_depo))>
+        <cfset message = "Default Malkabul Depo formatı 5-3 olmalıdır (örn: 12345-123).">
+        <cfset messageType = "error">
+    <cfelse>
+        <cftry>
         <cfif form.action eq "insert">
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
                 INSERT INTO #dsn3#.PBS_PARAMETERS 
-                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID, DEFAULT_SEVKIYAT_DEPO_ID, DEFAULT_SATINALMA_SIPARIS_SURECI)
+                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID, DEFAULT_SEVKIYAT_DEPO_ID, DEFAULT_SATINALMA_SIPARIS_SURECI, DEFAULT_MALKABUL_DEPO)
                 VALUES 
                 (
                     <cfif len(trim(form.offer_product_id))>
@@ -705,6 +711,11 @@
                         #val(form.default_satinalma_siparis_sureci)#
                     <cfelse>
                         NULL
+                    </cfif>,
+                    <cfif len(trim(form.default_malkabul_depo))>
+                        '#form.default_malkabul_depo#'
+                    <cfelse>
+                        NULL
                     </cfif>
                 )
             </cfquery>
@@ -723,7 +734,8 @@
                     DEPO_TESLIM_ID = <cfif len(trim(form.depo_teslim_id))>#val(form.depo_teslim_id)#<cfelse>NULL</cfif>,
                     DEPO_TEDARIK_ID = <cfif len(trim(form.depo_tedarik_id))>#val(form.depo_tedarik_id)#<cfelse>NULL</cfif>,
                     DEFAULT_SEVKIYAT_DEPO_ID = <cfif len(trim(form.default_sevkiyat_depo_id))>#val(form.default_sevkiyat_depo_id)#<cfelse>NULL</cfif>,
-                    DEFAULT_SATINALMA_SIPARIS_SURECI = <cfif len(trim(form.default_satinalma_siparis_sureci))>#val(form.default_satinalma_siparis_sureci)#<cfelse>NULL</cfif>
+                    DEFAULT_SATINALMA_SIPARIS_SURECI = <cfif len(trim(form.default_satinalma_siparis_sureci))>#val(form.default_satinalma_siparis_sureci)#<cfelse>NULL</cfif>,
+                    DEFAULT_MALKABUL_DEPO = <cfif len(trim(form.default_malkabul_depo))>'#form.default_malkabul_depo#'<cfelse>NULL</cfif>
                 WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
             </cfquery>
             <cfset message = "Kayıt başarıyla güncellendi!">
@@ -735,7 +747,8 @@
             <cfset message = "Hata: " & cfcatch.message>
             <cfset messageType = "error">
         </cfcatch>
-    </cftry>
+        </cftry>
+    </cfif>
 </cfif>
 
 <!--- Silme İşlemi --->
@@ -770,6 +783,7 @@
         <cfset form.depo_tedarik_id = getEditData.DEPO_TEDARIK_ID>
         <cfset form.default_sevkiyat_depo_id = getEditData.DEFAULT_SEVKIYAT_DEPO_ID>
         <cfset form.default_satinalma_siparis_sureci = getEditData.DEFAULT_SATINALMA_SIPARIS_SURECI>
+        <cfset form.default_malkabul_depo = getEditData.DEFAULT_MALKABUL_DEPO>
     </cfif>
 </cfif>
 
@@ -943,6 +957,23 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="default_malkabul_depo">Default Malkabul Depo</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🏭</span>
+                                <input
+                                    type="text"
+                                    id="default_malkabul_depo"
+                                    name="default_malkabul_depo"
+                                    value="<cfoutput>#form.default_malkabul_depo#</cfoutput>"
+                                    placeholder="Örn: 12345-123"                                    
+                                    maxlength="9"
+                                    
+                                >
+                            </div>
+                            <span class="field-hint">Format 5-3 (örn: 12345-123) olmalıdır.</span>
+                        </div>
+
+                        <div class="form-group">
                             <label for="default_satinalma_siparis_sureci">Default Satınalma Sipariş Süreci</label>
                             <div class="input-with-icon">
                                 <span class="input-icon">🧾</span>
@@ -985,6 +1016,7 @@
                     <li>✅ Offer Product ID benzersiz ve sayısal olmalıdır.</li>
                     <li>✅ PBS Modul Company ve Sale Order ID alanları isteğe bağlıdır, sayısal değer giriniz.</li>
                     <li>✅ Satır ID listesini virgülle ayırarak girin (örn: 1,2,3).</li>
+                    <li>✅ Default Malkabul Depo alanı 5-3 formatında (örn: 12345-123) girilmelidir.</li>
                     <li>✅ Boş bıraktığınız alanlar veri tabanında NULL olarak kaydedilir.</li>
                     <li>✅ Silme işlemi geri alınamaz, dikkatli olun.</li>
                 </ul>
@@ -1011,6 +1043,7 @@
                                 <th>Depo Tedarik ID</th>
                                 <th>Default Sevkiyat Depo ID</th>
                                 <th>Default Satınalma Sipariş Süreci</th>
+                                <th>Default Malkabul Depo</th>
                                 <th>Purchase Demand Accept Process Row ID List</th>
                                 <th style="text-align: center;">İşlemler</th>
                             </tr>
@@ -1057,6 +1090,13 @@
                                     <td data-label="Default Satınalma Sipariş Süreci">
                                         <cfif Len(Trim("" & DEFAULT_SATINALMA_SIPARIS_SURECI))>
                                             #DEFAULT_SATINALMA_SIPARIS_SURECI#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Default Malkabul Depo">
+                                        <cfif Len(Trim("" & DEFAULT_MALKABUL_DEPO))>
+                                            #DEFAULT_MALKABUL_DEPO#
                                         <cfelse>
                                             <span class="badge is-empty">Belirtilmemiş</span>
                                         </cfif>
