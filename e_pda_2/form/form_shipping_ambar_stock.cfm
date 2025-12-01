@@ -152,15 +152,16 @@
 .ui-table-list>tbody>tr>td,
 .ui-table-list>thead>tr>td {
 	border: 1px solid #bbb;
-	font-size: 12px;
-	padding: 4px 6px;
-	color: #555;
-	min-width: 30px;
+	font-size: 11px;
+	padding: 2px 4px;
+	color: #444;
+	min-width: 28px;
+	line-height: 1.2;
 }
 .shipping-wrapper {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 16px;
+	gap: 8px;
 }
 .summary-panel {
 	flex: 1 1 100%;
@@ -168,50 +169,53 @@
 .form-panel {
 	flex: 1 1 100%;
 	background: #fff;
-	border: 1px solid #d4d4d4;
-	border-radius: 6px;
-	padding: 16px;
+	border: 1px solid #c5c5c5;
+	border-radius: 4px;
+	padding: 10px 12px;
 }
 .form-row {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 12px;
+	gap: 8px;
 }
 .form-group {
-	flex: 1 1 160px;
+	flex: 1 1 140px;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 6px;
 }
 .form-group label {
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: 600;
-	margin-bottom: 4px;
-	color: #444;
+	margin-bottom: 2px;
+	color: #333;
 }
 .form-group input,
 .form-group select {
-	border: 1px solid #bbb;
-	border-radius: 4px;
-	padding: 6px 8px;
-	font-size: 12px;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	padding: 4px 6px;
+	font-size: 11px;
+	line-height: 1.2;
 }
 .stats-display {
 	display: inline-flex;
-	gap: 6px;
+	gap: 4px;
 	align-items: center;
 	font-weight: 600;
 }
 .button-row {
 	display: flex;
-	gap: 10px;
+	gap: 8px;
 	justify-content: flex-end;
-	margin-top: 16px;
+	margin-top: 10px;
 }
 .btn {
 	border: none;
-	border-radius: 6px;
-	padding: 8px 18px;
+	border-radius: 4px;
+	padding: 6px 12px;
 	font-weight: 600;
+	font-size: 12px;
 	cursor: pointer;
 }
 .btn-primary {
@@ -220,7 +224,7 @@
 }
 .btn-secondary {
 	background: #f1f1f1;
-	color: #444;
+	color: #333;
 }
 .btn-danger {
 	background: #d9534f;
