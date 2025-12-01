@@ -7,13 +7,16 @@
             </div>
             <div class="button-group">
                 <button class="btn btn-success btn-lg parser-btn" onclick="setparser(1,'<cfoutput>#attributes.modal_id#</cfoutput>')">
-                    <i class="fas fa-barcode"></i> Dönmez Barkod
+                    <i class="fas fa-barcode"></i> Dönmez Seri No
                 </button>
                 <button class="btn btn-success btn-lg parser-btn" onclick="setparser(3,'<cfoutput>#attributes.modal_id#</cfoutput>')">
-                    <i class="fas fa-barcode"></i> Dönmez Yeni Barkod
+                    <i class="fas fa-barcode"></i> Dönmez Yeni Seri No
                 </button>
                 <button class="btn btn-primary btn-lg parser-btn" onclick="setparser(2,'<cfoutput>#attributes.modal_id#</cfoutput>')">
-                    <i class="fas fa-qrcode"></i> Diğer Barkodlar
+                    <i class="fas fa-qrcode"></i> Diğer Seri No
+                </button>
+                   <button class="btn btn-primary btn-lg parser-btn" onclick="setparser(4,'<cfoutput>#attributes.modal_id#</cfoutput>')">
+                    <i class="fas fa-qrcode"></i> Barkod
                 </button>
             </div>
         </div>
@@ -657,6 +660,7 @@ async function checkSerial(input, event) {
         // Barkodu parse et
         console.log('Barkod parse ediliyor:', serialNo, 'Parser tipi:', parser);
         var parseResult = parseBarcode(serialNo, parser);
+        console.log('Parse fonksiyonundan dönen:', parseResult);
         console.log('Parse sonucu:', parseResult);
         
         if (!parseResult.success) {
@@ -961,6 +965,17 @@ function parseOtherBarcode(barcode) {
         };
     }
 }
+function getPdataWithBarkode(barcode){
+    var brkq=wrk_query(`SELECT PRODUCT_CODE_2,IS_SERIAL_NO FROM w3qa_1.STOCKS  WHERE PRODUCT_BARCOD='${barcode}'`)
+    if(brkq.recordcount>0){
+        return {
+            success: true,
+            product_code_2: brkq.product_code_2,
+            serial_no: barcode,
+            parser_type: 4
+        };
+
+}
 
 /**
  * Parser tipine göre barkodu parse eder
@@ -976,7 +991,19 @@ function parseBarcode(barcode, parserType) {
         return bm.parseWith(barcode,2);
     }else if (parserType == 3) {
         return bm.parseWith(barcode,3);
-    } 
+    }
+    else if (parserType == 4) {
+        var x=getPdataWithBarkode(barcode);
+        if(x.success){
+            return x;
+        }else{
+            return {    
+                success: false,
+                error: 'Barkod sistemde bulunamadı!'
+            };
+        }
+       // return bm.parseWith(barcode,4);
+    }  
     else {
         return {
             success: false,
