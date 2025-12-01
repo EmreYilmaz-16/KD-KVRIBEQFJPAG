@@ -8,8 +8,9 @@
         <cfloop from="1" to="#arrayLen(row.serials)#" index="j">
             <cfset serial=row.serials[j]>
             <cfset isreaded=listLast(serial,"|")>
-            <cfset serial=listFirst(serial,"|")>
             <cfset fromBarcode=listGetAt(serial,2,"|")>
+            <cfset serial=listFirst(serial,"|")>
+            
             
             <cfdump var="#serial#">
             <cfdump var="#isreaded#">
