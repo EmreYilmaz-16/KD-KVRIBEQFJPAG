@@ -4,7 +4,7 @@
     	DEFAULT_MK_TO_RF_DEP, 
         DEFAULT_MK_TO_RF_LOC
 	FROM            
-    	PRTOTM_PDA_DEPARTMENT_DEFAULTS
+    	EZGI_PDA_DEPARTMENT_DEFAULTS
 	WHERE        
     	EPLOYEE_ID = #session.ep.userid#
 </cfquery>
