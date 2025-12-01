@@ -9,10 +9,24 @@
             <cfset serial=row.serials[j]>
             <cfset isreaded=listLast(serial,"|")>
             <cfset serial=listFirst(serial,"|")>
+            <cfset fromBarcode=listGetAt(serial,2,"|")>
             
             <cfdump var="#serial#">
             <cfdump var="#isreaded#">
-            <cfif isreaded eq "0">
+            <cfif isreaded eq "0" >
+                <cfif fromBarcode eq "1" >
+                    <cfquery datasource="#dsn3#">
+                        INSERT INTO [PBS_MAL_KABUL_BARCODES] 
+([BARCODE],
+ [STOCK_ID],
+ [WRK_ROW_ID]) 
+VALUES 
+('#serial#',
+ #row.stock_id#,
+ '#row.wrk_row_id#')
+                    </cfquery>
+                <cfelse>
+
                 <cfquery name="insSerial" datasource="#dsn3#" result="insResult">
                     INSERT INTO #dsn3#.SERVICE_GUARANTY_NEW (
     STOCK_ID,
@@ -97,6 +111,7 @@ VALUES (
 );
                 </cfquery>
             </cfif>
+        </cfif>
         </cfloop>
 </cfloop>
 <script>
