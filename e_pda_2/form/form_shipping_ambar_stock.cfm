@@ -148,326 +148,191 @@
 	<cfset all_amount = 0>
 </cfif>
 <style type="text/css">
-:root {
-	--color-surface: #ffffff;
-	--color-border: #dbe0ea;
-	--color-accent: #0f62fe;
-	--color-accent-muted: #e6efff;
-	--color-text-dark: #1a1c20;
-	--color-text-muted: #6b6f76;
-	--shadow-soft: 0 6px 24px rgba(15, 32, 68, 0.08);
-}
-.boxtext {
-	background-color: transparent;
-	border: none;
-	font-size: 13px;
-	font-weight: 600;
-}
-table,td,th,div {
-	font-size: 13px;
-	font-weight: 600;
-	color: var(--color-text-dark);
-}
-input, select {
-	font-size: 13px !important;
-}
-.form-shell {
-	max-width: 900px;
-	margin: 0 auto;
-	padding: 8px;
-}
-.card {
-	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 12px;
-	padding: 16px 18px;
-	box-shadow: var(--shadow-soft);
-	margin-bottom: 14px;
-}
-.card__header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 12px;
-	margin-bottom: 12px;
-}
-.card__title {
-	font-size: 15px;
-	font-weight: 700;
-	margin: 0;
-}
-.badge {
-	background: var(--color-accent-muted);
-	color: var(--color-accent);
-	border-radius: 999px;
-	padding: 4px 10px;
+.ui-table-list>tfoot>tr>td,
+.ui-table-list>tbody>tr>td,
+.ui-table-list>thead>tr>td {
+	border: 1px solid #bbb;
 	font-size: 12px;
-	font-weight: 600;
+	padding: 4px 6px;
+	color: #555;
+	min-width: 30px;
 }
-.quick-nav {
+.shipping-wrapper {
 	display: flex;
-	gap: 12px;
 	flex-wrap: wrap;
-	margin-bottom: 16px;
+	gap: 16px;
 }
-.quick-nav__link {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	padding: 6px 10px;
-	border-radius: 10px;
-	border: 1px solid var(--color-border);
-	background: var(--color-surface);
-	transition: border-color 0.2s ease, transform 0.2s ease;
+.summary-panel {
+	flex: 1 1 100%;
 }
-.quick-nav__link:hover {
-	border-color: var(--color-accent);
-	transform: translateY(-1px);
+.form-panel {
+	flex: 1 1 100%;
+	background: #fff;
+	border: 1px solid #d4d4d4;
+	border-radius: 6px;
+	padding: 16px;
 }
-.quick-nav__icon {
-	width: 30px;
-	height: 30px;
-}
-.form-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+.form-row {
+	display: flex;
+	flex-wrap: wrap;
 	gap: 12px;
 }
-.field {
+.form-group {
+	flex: 1 1 160px;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
 }
-.field__label {
-	color: var(--color-text-muted);
+.form-group label {
+	font-size: 12px;
 	font-weight: 600;
+	margin-bottom: 4px;
+	color: #444;
 }
-.field__input {
-	border: 1px solid var(--color-border);
-	border-radius: 8px;
+.form-group input,
+.form-group select {
+	border: 1px solid #bbb;
+	border-radius: 4px;
 	padding: 6px 8px;
+	font-size: 12px;
+}
+.stats-display {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
 	font-weight: 600;
 }
-.field__input:focus {
-	outline: 2px solid var(--color-accent);
-	border-color: transparent;
-}
-.stats-pill {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	border-radius: 999px;
-	padding: 6px 12px;
-	background: var(--color-accent-muted);
-	color: var(--color-accent);
-	font-weight: 700;
-}
-.stats-pill__input {
-	background: transparent;
-	border: none;
-	width: 36px;
-	text-align: right;
-	color: var(--color-accent);
-	font-weight: 700;
-}
-.table-wrapper {
-	overflow-x: auto;
-}
-.data-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-.data-table th,
-.data-table td {
-	padding: 8px 10px;
-	border-bottom: 1px solid var(--color-border);
-	text-align: left;
-}
-.data-table th {
-	text-transform: uppercase;
-	font-size: 11px;
-	letter-spacing: 0.5px;
-	color: var(--color-text-muted);
-}
-.btn-bar {
+.button-row {
 	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
 	gap: 10px;
+	justify-content: flex-end;
+	margin-top: 16px;
 }
 .btn {
 	border: none;
-	border-radius: 10px;
+	border-radius: 6px;
 	padding: 8px 18px;
-	font-weight: 700;
+	font-weight: 600;
 	cursor: pointer;
-	transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.btn:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
 }
 .btn-primary {
-	background: var(--color-accent);
-	color: #ffffff;
+	background: #0078d4;
+	color: #fff;
 }
 .btn-secondary {
-	background: #edf1f7;
-	color: var(--color-text-dark);
+	background: #f1f1f1;
+	color: #444;
 }
 .btn-danger {
-	background: #f56565;
-	color: #ffffff;
+	background: #d9534f;
+	color: #fff;
 }
-.alert-text {
-	color: var(--color-text-muted);
-	font-size: 12px;
-}
-.table-legend {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 12px;
+.btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 </style>
-<cfform name="form_basket">
-	<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
-	<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
-	<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
-	<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
-	<div class="form-shell">
-		<div class="quick-nav">
+<cf_box title="Sevkiyat Hazırlama">
+<div class="shipping-wrapper">
+	<div class="summary-panel">
+		<cf_grid_list>
 			<cfoutput>
-				<a class="quick-nav__link" href="#request.self#?fuseaction=epda_prtotm_welcome" title="Ana Sayfa">
-					<img src="../../images/e-pd/Home.png" alt="Ana Sayfa" class="quick-nav__icon">
-					<span>Ana Sayfa</span>
-				</a>
-				<a class="quick-nav__link" href="#request.self#?fuseaction=epda.prtotm_ambar_sevk" title="Ambardan Malkabule">
-					<img src="../../images/e-pd/up30.png" alt="Ambardan Malkabule" class="quick-nav__icon">
-					<span>Ambardan Malkabule</span>
-				</a>
-				<a class="quick-nav__link" href="#request.self#?fuseaction=epda.prtotm_mal_ambar" title="Mal Kabulden Ambara">
-					<img src="../../images/e-pd/down30.png" alt="Mal Kabulden Ambara" class="quick-nav__icon">
-					<span>Mal Kabul</span>
-				</a>
-				<a class="quick-nav__link" href="#request.self#?fuseaction=epda.prtotm_svk_kontrol" title="Sevkiyat Kontrol">
-					<img src="../../images/e-pd/tickmav30.png" alt="Sevkiyat Kontrol" class="quick-nav__icon">
-					<span>Sevkiyat Kontrol</span>
-				</a>
+				<tr>
+					<td style="font-size:12pt">#get_stock_info.PRODUCT_NAME#</td>
+					<td style="font-size:12pt;text-align:center">
+						<span style="font-weight:600">#attributes.paket_sayisi#</span> /
+						<span style="font-weight:600">#all_amount#</span>
+					</td>
+				</tr>
 			</cfoutput>
-		</div>
-		<section class="card">
-			<div class="card__header">
-				<h2 class="card__title">Ürün Bilgisi</h2>
-				<cfoutput><span class="badge">#get_stock_info.STOCK_CODE#</span></cfoutput>
-			</div>
-			<div class="form-grid">
-				<div class="field">
-					<span class="field__label">Ürün</span>
-					<cfoutput><span>#get_stock_info.PRODUCT_NAME#</span></cfoutput>
+		</cf_grid_list>
+	</div>
+	<div class="form-panel">
+		<cfform name="form_basket">
+			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
+			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
+			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+			<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+			<input type="hidden" id="department_in" name="department_in" value="">
+			<input type="hidden" id="action_id" name="action_id" value="">
+			<div class="form-row">
+				<div class="form-group">
+					<label for="add_other_amount">Miktar</label>
+					<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" value="" autocomplete="off" />
 				</div>
-				<div class="field">
-					<span class="field__label">Barkod</span>
-					<cfoutput><span>#get_stock_info.BARCODE#</span></cfoutput>
-				</div>
-				<div class="field">
-					<span class="field__label">Stok Kodu 2</span>
-					<cfoutput><span>#get_stock_info.STOCK_CODE_2#</span></cfoutput>
-				</div>
-			</div>
-		</section>
-		<section class="card">
-			<div class="card__header">
-				<h3 class="card__title">Ürün Çıkışı</h3>
-				<span class="stats-pill">
-					<span>Toplam</span>
-					<cfinput type="text" value="#all_amount#" name="all_amount" id="all_amount" class="boxtext stats-pill__input" readonly="yes">
-					<span>/</span>
-					<cfinput type="text" value="#attributes.paket_sayisi#" name="paket_sayisi" id="paket_sayisi" class="boxtext stats-pill__input" readonly="yes">
-				</span>
-			</div>
-			<div class="form-grid">
-				<label class="field">
-					<span class="field__label">Miktar</span>
-					<input id="add_other_amount" name="add_other_amount" type="text" class="field__input" value="" autocomplete="off" />
-				</label>
 				<cfif get_store_type.raf gt 0>
-					<label class="field">
-						<span class="field__label">Raf</span>
-						<input id="add_other_shelf" name="add_other_shelf" type="text" class="field__input" value="" autocomplete="off" />
-					</label>
+					<div class="form-group">
+						<label for="add_other_shelf">Raf</label>
+						<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" value="" autocomplete="off" />
+					</div>
 				</cfif>
-				<label class="field">
-					<span class="field__label">Barkod</span>
-					<cfinput id="add_other_barcod" name="add_other_barcod" readonly="yes" type="text" value="#get_stock_info.BARCODE#" class="field__input" >
-				</label>
+				<div class="form-group">
+					<label for="add_other_barcod">Barkod</label>
+					<cfinput id="add_other_barcod" name="add_other_barcod" readonly="yes" type="text" value="#get_stock_info.BARCODE#" class="moneybox">
+				</div>
+				<div class="form-group">
+					<label>Toplam</label>
+					<div class="stats-display">
+						<cfinput type="text" value="#all_amount#" name="all_amount" id="all_amount" class="boxtext" style="text-align:right;width:40px" readonly="yes">
+						<span>/</span>
+						<cfinput type="text" value="#attributes.paket_sayisi#" name="paket_sayisi" id="paket_sayisi" class="boxtext" style="text-align:right;width:40px" readonly="yes">
+					</div>
+				</div>
 			</div>
-			<p class="alert-text">Enter tuşu ile hızlıca satır ekleyebilirsiniz. Raflı sistemlerde raf kodunu okutmayı unutmayın.</p>
-		</section>
-		<section class="card">
-			<div class="card__header">
-				<h3 class="card__title">İşlem Satırları</h3>
-				<span class="alert-text">Yeni satırlar listenin en altına eklenir.</span>
-			</div>
-			<div class="table-wrapper">
-				<table name="table1" id="table1" class="data-table">
-					<thead>
-						<tr>
-							<th>Barkod</th>
-							<th>Ürün Adı</th>
-							<th>Miktar</th>
-							<cfif get_store_type.raf gt 0>
-								<th>Raf</th>
-							</cfif>
-						</tr>
-					</thead>
-					<tbody>
-						<cfoutput query="get_ambar_fis">
-							<cfinput type="hidden" value="#stock_id#" name="stockid#currentrow#" id="stockid#currentrow#" />
-							<cfinput type="hidden" value="" name="spectmainid#currentrow#" id="spectmainid#currentrow#" />
-							<tr id="row#currentrow#" class="color-row">
-								<td><cfinput type="text" value="#barcod#" name="barcod#currentrow#" id="barcod#currentrow#" class="boxtext" readonly="yes" /></td>
-								<td><cfinput type="text" value="#PRODUCT_NAME#" name="stockcode#currentrow#" id="stockcode#currentrow#" class="boxtext" readonly="yes" /></td>
-								<td><cfinput type="text" value="#amount#" name="amount#currentrow#" id="amount#currentrow#" class="boxtext" readonly="yes" style="text-align:right" /></td>
-								<cfif get_store_type.raf gt 0>
-									<td><cfinput type="text" value="#shelf_code#" name="shelf_code#currentrow#" id="shelf_code#currentrow#" class="boxtext" readonly="yes" style="text-align:right" /></td>
-								</cfif>
-							</tr>
-						</cfoutput>
-					</tbody>
-				</table>
-				<cfinput type="hidden" id="row_count" name="row_count" value="#get_ambar_fis.recordcount#" />
-			</div>
-		</section>
-		<section class="card">
-			<div class="table-legend">
-				<div>
+			<div class="form-row">
+				<div class="form-group" style="flex:1 1 200px;">
+					<label>Stok Bilgisi</label>
 					<cfif get_store_type.raf gt 0>
-						<label class="field">
-							<span class="field__label">Raf Stoğu</span>
-							<select name="shelf_select" class="field__input" style="text-align:center">
-								<cfoutput query="get_shelf_stock">
-									<option value="">#SHELF_CODE# - #REAL_STOCK#</option>
-								</cfoutput>
-							</select>
-						</label>
+						<select name="shelf_select" style="width:100%">
+							<cfoutput query="get_shelf_stock">
+								<option value="">#SHELF_CODE# - #REAL_STOCK#</option>
+							</cfoutput>
+						</select>
 					<cfelse>
-						<span class="field__label">Depo Miktarı</span>
 						<strong><cfoutput>#AmountFormat(get_depo_stok.product_stock)#</cfoutput></strong>
 					</cfif>
 				</div>
-				<div class="btn-bar">
-					<input type="hidden" id="department_in" name="department_in" value="" />
-					<input type="hidden" id="action_id" name="action_id" value="" />
-					<input id="geri" name="geri" value="Vazgeç" type="button" class="btn btn-secondary" onClick="history.go(-1);" />
-					<input id="sil" name="sil" value="Sil" type="button" class="btn btn-danger" onClick="ShippingStockForm.handleDelete();" />
-					<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" class="btn btn-primary" disabled="disabled" onClick="ShippingStockForm.handleSubmit();" />
-				</div>
 			</div>
-		</section>
+			<div class="form-group" style="margin-top:12px;">
+				<label>İşlem Satırları</label>
+				<div class="table-wrapper">
+					<table name="table1" id="table1" class="ui-table-list">
+						<thead>
+							<tr>
+								<th>Barkod</th>
+								<th>Ürün Adı</th>
+								<th>Miktar</th>
+								<cfif get_store_type.raf gt 0>
+									<th>Raf</th>
+								</cfif>
+							</tr>
+						</thead>
+						<tbody>
+							<cfoutput query="get_ambar_fis">
+								<cfinput type="hidden" value="#stock_id#" name="stockid#currentrow#" id="stockid#currentrow#" />
+								<cfinput type="hidden" value="" name="spectmainid#currentrow#" id="spectmainid#currentrow#" />
+								<tr id="row#currentrow#">
+									<td><cfinput type="text" value="#barcod#" name="barcod#currentrow#" id="barcod#currentrow#" class="boxtext" readonly="yes" /></td>
+									<td><cfinput type="text" value="#PRODUCT_NAME#" name="stockcode#currentrow#" id="stockcode#currentrow#" class="boxtext" readonly="yes" /></td>
+									<td><cfinput type="text" value="#amount#" name="amount#currentrow#" id="amount#currentrow#" class="boxtext" readonly="yes" style="text-align:right" /></td>
+									<cfif get_store_type.raf gt 0>
+										<td><cfinput type="text" value="#shelf_code#" name="shelf_code#currentrow#" id="shelf_code#currentrow#" class="boxtext" readonly="yes" style="text-align:right" /></td>
+									</cfif>
+								</tr>
+							</cfoutput>
+						</tbody>
+					</table>
+				</div>
+				<cfinput type="hidden" id="row_count" name="row_count" value="#get_ambar_fis.recordcount#" />
+			</div>
+			<div class="button-row">
+				<input id="geri" name="geri" value="Vazgeç" type="button" class="btn btn-secondary" onClick="history.go(-1);" />
+				<input id="sil" name="sil" value="Sil" type="button" class="btn btn-danger" onClick="ShippingStockForm.handleDelete();" />
+				<input id="onay" name="Onay" value="Kaydet" type="button" class="btn btn-primary" disabled="disabled" onClick="ShippingStockForm.handleSubmit();" />
+			</div>
+		</cfform>
 	</div>
-</cfform>
+</div>
+</cf_box>
 <script type="text/javascript">
 const ShippingStockForm = (() => {
 	let rowCount = 0;
