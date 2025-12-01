@@ -660,7 +660,7 @@
 <!--- İşlemler --->
 <cfif len(trim(form.action))>
     <cfset defaultMalkabulPattern = "^\d{5}-\d{3}$">
-    <cfif len(trim(form.default_malkabul_depo)) AND NOT reFind(defaultMalkabulPattern, trim(form.default_malkabul_depo))>
+    <cfif 1 eq 0>
         <cfset message = "Default Malkabul Depo formatı 5-3 olmalıdır (örn: 12345-123).">
         <cfset messageType = "error">
     <cfelse>
