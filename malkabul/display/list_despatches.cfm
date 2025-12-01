@@ -3,7 +3,8 @@
 <cfparam name="url.search" default="">
 <cfset searchTerm = Trim(attributes.search)>
 <cf_xml_page_edit fuseact="purchase._emptypopup_list_purchase_despatches_pbs">
-<div class="page-wrapper">
+<cfdump var="#xml_default_malkabul_depo#">
+    <div class="page-wrapper">
     <div class="page-header">
         <div>
             <h1>Mal Kabul Listesi</h1>
@@ -658,3 +659,4 @@
         document.addEventListener("keydown", handleScanKey);
     })();
 </script>
+
