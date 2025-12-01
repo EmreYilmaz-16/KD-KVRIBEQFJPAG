@@ -814,7 +814,7 @@ const ShippingStockForm = (() => {
 		buildActionMap();
 		const fisValue = dom.form && dom.form.fis_tipi ? dom.form.fis_tipi.value : '';
 		const processCatValue = dom.form && dom.form.process_cat_id ? dom.form.process_cat_id.value : '';
-		const targetUrl = '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>'
+		const targetUrl = '<cfoutput>#request.self#?fuseaction=pda.emptypopup_add_shipping_ambar_stock_wb&shelf_type=#get_store_type.raf#&date1=#attributes.date1#&date2=#attributes.date2#&is_type=#attributes.is_type#&keyword=#attributes.keyword#&dep_in=#attributes.department_in_id#&dep_out=#attributes.department_out_id#&ref_no=#attributes.deliver_paper_no#&ship_id=#attributes.ship_id#&f_stock_id=#f_stock_id#&</cfoutput>'
 			+ 'action_id=' + encodeURIComponent(dom.actionInput ? dom.actionInput.value : '')
 			+ '&fis_tipi=' + encodeURIComponent(fisValue)
 			+ '&process_cat=' + encodeURIComponent(processCatValue);
