@@ -203,13 +203,7 @@ input{
   <div style="width:100%">
   	<table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
 	  	    <tr>
-  <td colspan="4">
-  <a href="<cfoutput>#request.self#?fuseaction=epda_prtotm_welcome</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/Home.png"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_ambar_sevk</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/up30.png" title="Ambardan Malkabule"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_mal_ambar</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/down30.png" title="MalKabulden Ambara"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_svk_kontrol</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/tickmav30.png" title="Sevkiyat Kontrol"></a>&nbsp;&nbsp;
   
-  </td>
   </tr>
     	<tr class="color-list" height="20px">
     		<td colspan="4"><strong><cfoutput>#get_stock_info.product_name#</cfoutput></strong></td>
@@ -225,19 +219,27 @@ input{
        	  			</tr>
           			<tr class="color-list">
             			<td>
+							<div class="form-group">
                         	<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:40px; text-align:right" value="" />
+							</div>
                       	</td>
             			<cfif get_store_type.raf gt 0>
             				<td>
+								<div class="form-group">
                             	<input id="add_other_shelf" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="width:75px;" value="" />
+								</div>
                           	</td>
            				</cfif>
             			<td>
+							<div class="form-group">
                         	<cfinput id="add_other_barcod" name="add_other_barcod" readonly="yes" type="text" value="#get_stock_info.BARCODE#" style="width:110px;" >
+							</div>
                        	</td>
             			<td nowrap="nowrap">
+							<div class="form-group">
             				<cfinput type="text" value="#all_amount#" name="all_amount" id="all_amount" class="boxtext" style="text-align:right; font-weight:bold; width:30px">/
         					<cfinput type="text" value="#attributes.paket_sayisi#" name="paket_sayisi" id="paket_sayisi" class="boxtext" style="text-align:right;font-weight:bold;width:30px">
+							</div>
             			</td>
           			</tr>
         		</table>
