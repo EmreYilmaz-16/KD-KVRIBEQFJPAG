@@ -65,8 +65,8 @@
         ) AS G
                ON G.SHIP_ID = S.SHIP_ID
         WHERE S.PURCHASE_SALES = 0
-          AND S.DEPARTMENT_IN  = 13
-          AND S.LOCATION_IN    = 5
+          AND S.DEPARTMENT_IN  = #listGetAt(session.kd.DEFAULT_MALKABUL_DEPO,1,"-")#
+          AND S.LOCATION_IN    = #listGetAt(session.kd.DEFAULT_MALKABUL_DEPO,2,"-")#
         <cfif Len(searchTerm)>
           AND (
                 S.SHIP_NUMBER LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_varchar">
