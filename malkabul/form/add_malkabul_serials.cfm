@@ -714,7 +714,7 @@ async function checkSerial(input, event) {
             console.log("Temizlenmiş seri no:", existingSerialNo);
             console.log("Karşılaştırılıyor:", existingSerialNo, "==", parseResult.serial_no);
             
-            if (existingSerialNo === parseResult.serial_no) {
+            if ((existingSerialNo === parseResult.serial_no) && parser !==4 ) {
                 console.log("Seri numarası zaten mevcut:", existingSerialNo);
                 showNotification('Bu seri numarası daha önce girilmiş!', 'error');
                 input.value = '';
