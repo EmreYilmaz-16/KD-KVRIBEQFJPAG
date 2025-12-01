@@ -309,9 +309,9 @@ input{
 			<cfinput id="txt_department_out" name="txt_department_out" type="hidden" value="#attributes.department_out_id#">
 			<cfinput id="txt_department_in" name="txt_department_in" type="hidden" value="#attributes.department_in_id#">
 			<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
-			<input type="hidden" name="row_count" id="row_count" value="#get_ambar_fis.recordcount#">
-			<input type="hidden" name="all_amount" id="all_amount" value="#all_amount#">
-			<input type="hidden" name="paket_sayisi" id="paket_sayisi" value="#attributes.paket_sayisi#">
+			<cfinput type="hidden" name="row_count" id="row_count" value="#get_ambar_fis.recordcount#">
+			<cfinput type="hidden" name="all_amount" id="all_amount" value="#all_amount#">
+			<cfinput type="hidden" name="paket_sayisi" id="paket_sayisi" value="#attributes.paket_sayisi#">
 			
 			<div style="display:flex">
 				<div class="form-group">
