@@ -970,7 +970,7 @@ function getPdataWithBarkode(barcode){
     if(brkq.recordcount>0){
         return {
             success: true,
-            product_code_2: brkq.product_code_2,
+            product_code_2: brkq.PRODUCT_CODE_2[0],
             serial_no: barcode,
             parser_type: 4
         };
