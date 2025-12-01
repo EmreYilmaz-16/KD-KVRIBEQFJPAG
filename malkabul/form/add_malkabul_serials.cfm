@@ -815,6 +815,7 @@ function GetRows() {
                 var stock_id = rw.getAttribute("data-stock_id");
                 var product_code_2 = rw.getAttribute("data-product_code_2");
                 
+                
                 var serials = [];
                 var serialTable = document.getElementById('serials_' + product_id);
                 
@@ -832,8 +833,9 @@ function GetRows() {
                                 .trim();
                             
                             var isreaded = rows[j].getAttribute("data-readed") || "1";
+                            var fromBarcode = rows[j].getAttribute("data-from-barcode") || "1";
                             if (serialNo) {
-                                serials.push(serialNo + "|" + isreaded);
+                                serials.push(serialNo + "|" + fromBarcode + "|" + isreaded);
                             }
                         }
                     }
