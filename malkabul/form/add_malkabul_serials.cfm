@@ -976,6 +976,7 @@ function getPdataWithBarkode(barcode){
         };
 
 }
+}
 
 /**
  * Parser tipine göre barkodu parse eder
