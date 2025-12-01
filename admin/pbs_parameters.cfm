@@ -970,7 +970,7 @@
                                     
                                 >
                             </div>
-                            <span class="field-hint">Format  (4-1) olmalıdır.</span>
+                            <span class="field-hint">Format  (4-1) olmalıdır.(Depo - Lokasyon)</span>
                         </div>
 
                         <div class="form-group">
