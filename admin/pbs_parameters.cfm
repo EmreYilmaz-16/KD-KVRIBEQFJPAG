@@ -970,7 +970,7 @@
                                     
                                 >
                             </div>
-                            <span class="field-hint">Format 5-3 (örn: 12345-123) olmalıdır.</span>
+                            <span class="field-hint">Format  (4-1) olmalıdır.</span>
                         </div>
 
                         <div class="form-group">
