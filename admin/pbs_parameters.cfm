@@ -815,7 +815,7 @@
         <cfif len(trim(message))>
             <div class="message-stack">
                 <div class="alert alert-#messageType#">
-                    #message#
+                    <cfoutput>#message#</cfoutput>
                 </div>
             </div>
         </cfif>
