@@ -672,7 +672,13 @@ VALUES(
                 <!-- Process each product -->
                 <cfloop array="#products#" item="product">
                     <!-- Delete existing rows for the product -->
-                   
+                   <cfif isDefined("product.discount2") EQ false>
+                      <cfset product.discount2=0>
+                     </cfif>
+                    <cfif isDefined("product.discount3") EQ false>
+                      <cfset product.discount3=0>
+                        </cfif>
+
 
                     <!-- Insert new rows for the product -->
                     <cfquery name="INS" datasource="#dsn3#">
