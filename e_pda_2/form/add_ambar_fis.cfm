@@ -98,6 +98,7 @@ table, td, th, div {
   var islemtipi = 0;//0-ekle 1-çıkar
   var buton = 0;// <1-buton pasif, >0-buton aktif
 </script>
+<!-----
 <cfform name="form_basket">
   <cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
   <cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
@@ -106,12 +107,7 @@ table, td, th, div {
   <div style="width:100%">
   <table cellpadding="2" cellspacing="1" align="left" class="color-border" width="99%">
     <tr>
-  <td colspan="3">
-  <a href="<cfoutput>#request.self#?fuseaction=epda_prtotm_welcome</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/Home.png"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_ambar_sevk</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/up30.png"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_mal_ambar</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/down30.png"></a>&nbsp;&nbsp;
-  <a href="<cfoutput>#request.self#?fuseaction=epda.prtotm_svk_kontrol</cfoutput>"><img style="width:30px;height:30px" src="../../images/e-pd/tickmav30.png"></a>&nbsp;&nbsp;
-  </td>
+
   </tr>
     <tr class="color-list">
       <td colspan="4">
@@ -207,6 +203,118 @@ table, td, th, div {
   </table>
   </div>
 </cfform>
+----->
+<cf_box title="Mal Kabulden Ambara">
+	<cfform name="form_basket">
+		<cfinput id="process_cat_id" type="hidden" name="process_cat_id" value="#get_process_cat.process_cat_id#">
+  		<cfinput id="fis_tipi" type="hidden" name="fis_tipi" value="#default_process_type#">
+  		<input type="hidden" name="kuponlist" value="" />
+  		<input type="hidden" name="active_period" value="#session.ep.period_id#" />		
+		<div style="display:flex">
+			<div class="form-group">
+				<label for="add_other_amount">Miktar</label>
+				<input id="add_other_amount" name="add_other_amount" type="text" class="moneybox" onfocus="islemtipi=0;" style="text-align:right" value="1" />
+			</div>
+			<div  class="form-group">
+				<label for="add_other_barcod">Barkod</label>
+				<input id="add_other_barcod" name="add_other_barcod" type="text" value="" 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done"
+					   style="" >
+			</div>	
+			<div style="display:none" class="form-group">
+				<label for="serial_number">Seri No</label>
+				<input type="text" name="serial_number" id="serial_number"
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done">
+			</div>
+		</div>
+		<div style="display:flex">
+			<div class="form-group">
+				<label for="add_other_shelf">Raf Okutunuz</label>
+				<input id="add_other_shelf"    autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false"
+					   inputmode="text"
+					   enterkeyhint="done" name="add_other_shelf" type="text" class="moneybox" onfocus="islemtipi=0;" style="" value="" />
+			</div>
+			<div id="shelf_select_td" style="display:none"  class="form-group">
+				<label for="shelf_select_td">Raflar</label>				
+				<select name="shelf_select" id="shelf_select" style="text-align:center">
+					<option value="">Ürün Rafları</option>
+				</select>
+			</div>
+		</div>
+		<div style="display:flex">
+			<div class="form-group">
+				<label for="txt_department_out">Çıkış Depo</label>
+				<select name="txt_department_out"  onchange="document.getElementById('department_out').value = this.value">
+                <cfoutput query="get_all_location" group="department_id">
+                  <option disabled="disabled" value="#department_id#"<cfif attributes.department_out_id eq department_id>selected</cfif>>#department_head#</option>
+                  <cfoutput>
+                    <option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_out_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+                    <cfif not status>
+                      -
+                      <cf_get_lang_main no='82.Pasif'>
+                    </cfif>
+                    </option>
+                  </cfoutput> </cfoutput>
+              </select>
+			</div>
+			<div class="form-group">
+				<label for="txt_department_in">Giriş Depo</label>
+				<select name="txt_department_in"  onchange="document.getElementById('department_in').value = this.value">
+				<cfoutput query="get_all_location" group="department_id">
+				  <option disabled="disabled"  value="#department_id#"<cfif attributes.department_in_id eq department_id>selected</cfif>>#department_head#</option>
+				  <cfoutput>
+					<option <cfif not status>style="color:FF0000"</cfif> value="#department_id#-#location_id#" <cfif attributes.department_in_id eq '#department_id#-#location_id#'>selected</cfif>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#comment#
+					<cfif not status>
+					  -
+					  <cf_get_lang_main no='82.Pasif'>
+					</cfif>
+					</option>
+				  </cfoutput> </cfoutput>
+			  </select>
+		</div>
+		<div class="form-group" style="margin-top: 24px; margin-left: 10px;">
+			<select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Tipi</option>
+
+			</select>
+		</div>
+    <input id="del_other_amount" name="del_other_amount" type="hidden"  onfocus="islemtipi=1;" value="1" />
+          <input id="del_other_barcod" name="del_other_barcod" type="hidden" value="" >
+	</div>
+	
+		<cf_ajax_list>
+			<thead>
+				<tr class="color-list" height="20px">
+					<th>Barkod No</th>				
+					<th >Ürün</th>
+					<th >Miktar</th>
+					<th >Raf</th>
+					
+				</tr>
+				</thead>
+				<tbody id="table1"></tbody>
+					
+		</cf_ajax_list>
+	
+	<input type="hidden" id="department_in" name="department_in" value="" />
+      	<input type="hidden" id="row_count" name="row_count" value="0" />
+        <input type="hidden" id="action_id" name="action_id" value="" />
+		<input id="onay" name="Onay" value="<cf_get_lang_main no="49.Kaydet">" type="button" disabled="disabled" onClick="kontrol_kayit();" />
+	</cfform>
+</cf_box>
 <script language="javascript" type="text/javascript">
 	document.getElementById('add_other_barcod').focus();
 	setTimeout("document.getElementById('add_other_barcod').select();",1000);
