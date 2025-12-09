@@ -244,8 +244,19 @@ class BarcodeManager {
       const y = Number(t.slice(4, 8));
       return BarcodeManager._toIso(y, mo, d);
     }
+    // "12018" gibi tanımsız 5 haneli değerler için bugünün tarihi
+    if (/^\d{5}$/.test(t)) {
+      return BarcodeManager._todayIso();
+    }
 
     return null; // tanınamadı
+  }
+  static _todayIso() {
+    const now = new Date();
+    const y = now.getUTCFullYear();
+    const m = String(now.getUTCMonth() + 1).padStart(2, '0');
+    const d = String(now.getUTCDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
   static _expandTwoDigitYear(y) {
@@ -301,7 +312,7 @@ class BarcodeManager {
       }
     };
   }
-    static defaultYeniDonmezParser() {
+  static defaultYeniDonmezParser() {
     return {
       id: 3,
       name: 'Dönmez Yeni',
@@ -321,7 +332,7 @@ class BarcodeManager {
         }
         const result = {
           success: true,
-          product_code_2: (barcodeArr[0]+" "+barcodeArr[1]),
+          product_code_2: (barcodeArr[0] + " " + barcodeArr[1]),
           serial_no: barcodeArr[5] || '',
           uretim_tarihi: barcodeArr[4] || '',
           paketleme_tarihi: barcodeArr[4] || '',
