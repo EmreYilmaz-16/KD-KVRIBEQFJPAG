@@ -171,7 +171,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
             <cfquery name="getOfferRows" datasource="#dsn3#">
                 SELECT * FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#' and PRODUCT_ID<>#session.kd.OFFER_PRODUCT_ID#
             </cfquery>
-            <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+            <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" onsubmit="return confirmProductSubmit()">
                 <input type="hidden" name="wrkRowId" value="<CFOUTPUT>#attributes.wrkRowId#</CFOUTPUT>">
                 <input type="hidden" name="is_submit" value="1">
                 <div class="row">
@@ -315,6 +315,18 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
         <cfoutput>OemSatirEkle("#attributes.oem_no#");</cfoutput>
         </cfif>
     });
+
+    function confirmProductSubmit() {
+       var bnm=document.getElementById("brand_name").value;
+       var bnm_id=document.getElementById("brand_id").value;
+         if(bnm=="" && bnm_id==""){
+            alert("Lütfen Marka Seçiniz");
+            return false;
+         }
+       
+        return true;
+    }
+
     function OemSatirEkle(oem_numarasi="") {
         const oemCounter = document.getElementsByName("oem_satir")[0];
         let ix = parseInt(oemCounter.value) + 1;
