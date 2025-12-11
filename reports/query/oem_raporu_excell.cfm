@@ -72,6 +72,7 @@ FROM B;
 DECLARE @cols nvarchar(max);
 SELECT @cols =
     STRING_AGG(QUOTENAME(N'BARCODE' + CAST(rn AS nvarchar(10))), N',')
+    WITHIN GROUP (ORDER BY rn)
 FROM (SELECT DISTINCT rn FROM #dsn#.##B) d;
 
 
