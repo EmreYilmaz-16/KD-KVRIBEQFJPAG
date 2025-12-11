@@ -109,10 +109,33 @@ DROP TABLE #dsn#.##B;
     th { background: #eee; }
 </style>
 
+<!--- Kolonları doğru sırala: PRODUCT_CODE_2, PRODUCT_CODE, PRODUCT_NAME, BARCODE1, BARCODE2, ... --->
+<cfset colList = qPivot.columnList>
+<cfset fixedCols = "PRODUCT_CODE_2,PRODUCT_CODE,PRODUCT_NAME">
+<cfset barcodeCols = []>
+
+<cfloop list="#colList#" index="col">
+    <cfif left(col, 7) EQ "BARCODE">
+        <cfset barcodeNum = val(replace(col, "BARCODE", ""))>
+        <cfset arrayAppend(barcodeCols, {name: col, num: barcodeNum})>
+    </cfif>
+</cfloop>
+
+<!--- Barkod kolonlarını sayısal sıraya göre sırala --->
+<cfset arraySort(barcodeCols, function(a, b) {
+    return a.num - b.num;
+})>
+
+<!--- Sıralı kolon listesi oluştur --->
+<cfset sortedCols = fixedCols>
+<cfloop array="#barcodeCols#" index="bc">
+    <cfset sortedCols = listAppend(sortedCols, bc.name)>
+</cfloop>
+
 <table>
     <thead>
         <tr>
-            <cfloop list="#qPivot.columnList#" index="col">
+            <cfloop list="#sortedCols#" index="col">
                 <th><cfoutput>#encodeForHtml(col)#</cfoutput></th>
             </cfloop>
         </tr>
@@ -120,7 +143,7 @@ DROP TABLE #dsn#.##B;
     <tbody>
         <cfoutput query="qPivot">
             <tr>
-                <cfloop list="#qPivot.columnList#" index="col">
+                <cfloop list="#sortedCols#" index="col">
                     <td>#encodeForHtml(qPivot[col][currentRow])#</td>
                 </cfloop>
             </tr>
