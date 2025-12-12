@@ -273,6 +273,7 @@ function add_product_to_barkod(barcode,amount,type)
 	var ship_id = #attributes.ship_id#;
 	var is_type = #attributes.is_type#;
 	</cfoutput>
+	<CFSET colorrow="##ffff003b">
 	var uzunluk = barcode.length;
 	var amount = amount
 	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>',barcode,','))
