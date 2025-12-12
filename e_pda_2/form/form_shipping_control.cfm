@@ -31,7 +31,7 @@
             SELECT     
             	SUM(CONTROL_AMOUNT) AS CONTROL_AMOUNT
          	FROM          
-            	PRTOTM_SHIPPING_PACKAGE_LIST
+            	EZGI_SHIPPING_PACKAGE_LIST
          	WHERE      
             	TYPE = 1 AND 
                 STOCK_ID = TBL.PAKET_ID AND 
@@ -67,10 +67,10 @@
                     ESR.SHIP_RESULT_ID,
                     ESRR.ORDER_ROW_ID
                 FROM          
-                    PRTOTM_SHIP_RESULT AS ESR INNER JOIN
-                    PRTOTM_SHIP_RESULT_ROW AS ESRR ON ESR.SHIP_RESULT_ID = ESRR.SHIP_RESULT_ID INNER JOIN
+                    EZGI_SHIP_RESULT AS ESR INNER JOIN
+                    EZGI_SHIP_RESULT_ROW AS ESRR ON ESR.SHIP_RESULT_ID = ESRR.SHIP_RESULT_ID INNER JOIN
                     ORDER_ROW AS ORR ON ESRR.ORDER_ROW_ID = ORR.ORDER_ROW_ID INNER JOIN
-                    PRTOTM_PAKET_SAYISI AS EPS ON ORR.STOCK_ID = EPS.MODUL_ID INNER JOIN
+                    EZGI_PAKET_SAYISI AS EPS ON ORR.STOCK_ID = EPS.MODUL_ID INNER JOIN
                     STOCKS AS S ON EPS.PAKET_ID = S.STOCK_ID
                 WHERE      
                     ESR.SHIP_RESULT_ID = #attributes.ship_id#
@@ -104,7 +104,7 @@
             SELECT     
             	SUM(CONTROL_AMOUNT) AS CONTROL_AMOUNT
            	FROM          
-            	PRTOTM_SHIPPING_PACKAGE_LIST
+            	EZGI_SHIPPING_PACKAGE_LIST
         	WHERE      
             	TYPE = 2 AND 
                 STOCK_ID = TBL.PAKET_ID AND 
@@ -141,7 +141,7 @@
                     SI.DISPATCH_SHIP_ID AS SHIP_RESULT_ID
          		FROM          
                 	STOCKS AS S INNER JOIN
-                    PRTOTM_PAKET_SAYISI AS EPS ON S.STOCK_ID = EPS.PAKET_ID INNER JOIN
+                    EZGI_PAKET_SAYISI AS EPS ON S.STOCK_ID = EPS.PAKET_ID INNER JOIN
                     #dsn2_alias#.SHIP_INTERNAL_ROW AS SIR INNER JOIN
                     #dsn2_alias#.SHIP_INTERNAL AS SI ON SIR.DISPATCH_SHIP_ID = SI.DISPATCH_SHIP_ID ON EPS.MODUL_ID = SIR.STOCK_ID
            		WHERE      
