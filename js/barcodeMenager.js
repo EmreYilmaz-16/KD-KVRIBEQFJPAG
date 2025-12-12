@@ -343,16 +343,27 @@ class BarcodeManager {
       }
     };
   }
-  static withoutSerialParser(){
-    var brkq=wrk_query(`SELECT PRODUCT_CODE_2,IS_SERIAL_NO FROM w3qa_1.STOCKS  WHERE PRODUCT_BARCOD='${barcode}'`)
+  static withoutSerialParser() {
     return {
-      success: true,
-      product_code_2: brkq.PRODUCT_CODE_2[0],
-      serial_no: barcode,
-      uretim_tarihi:"",
-      paketleme_tarihi:"",
-      parser_type: 4
-  };
+      id: 4,
+      name: 'Seri Numarasız',
+      priority: 50,
+      canParse: (barcode) => {
+        // Bu parser en düşük önceliğe sahip, diğerleri eşleşmezse çalışır
+        return true;
+      },
+      parse: (barcode) => {
+        var brkq = wrk_query(`SELECT PRODUCT_CODE_2,IS_SERIAL_NO FROM w3qa_1.STOCKS WHERE PRODUCT_BARCOD='${barcode}'`);
+        return {
+          success: true,
+          product_code_2: brkq.PRODUCT_CODE_2[0],
+          serial_no: barcode,
+          uretim_tarihi: "",
+          paketleme_tarihi: "",
+          parser_type: 4
+        };
+      }
+    };
   }
 
   /**
