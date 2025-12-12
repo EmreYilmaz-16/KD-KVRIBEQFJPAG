@@ -34,6 +34,7 @@ class BarcodeManager {
     this.registerParser(BarcodeManager.defaultDonmezParser());
     this.registerParser(BarcodeManager.defaultOtherParser());
     this.registerParser(BarcodeManager.defaultYeniDonmezParser());
+    this.registerParser(BarcodeManager.withoutSerialParser());
   }
 
   /**
@@ -341,6 +342,17 @@ class BarcodeManager {
         return result;
       }
     };
+  }
+  static withoutSerialParser(){
+    var brkq=wrk_query(`SELECT PRODUCT_CODE_2,IS_SERIAL_NO FROM w3qa_1.STOCKS  WHERE PRODUCT_BARCOD='${barcode}'`)
+    return {
+      success: true,
+      product_code_2: brkq.PRODUCT_CODE_2[0],
+      serial_no: barcode,
+      uretim_tarihi:"",
+      paketleme_tarihi:"",
+      parser_type: 4
+  };
   }
 
   /**
