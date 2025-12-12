@@ -465,7 +465,7 @@ function add_product_to_barkod(barcode, amount, type) {
 	var is_type = #attributes.is_type#;
 	</cfoutput>
 	if(document.getElementById('BarcodeParser').value==4){
-		add_product_to_barkod_lmn(barcode, amount, type);
+		add_product_to_barkod_lm(barcode, amount, type);
 		return false;
 	}
 
@@ -676,7 +676,7 @@ function add_product_to_barkod_lm(barcode,amount,type)
     
     return new_query;
 }
-// XMLHttpRequest oluşturma fonksiyonu
+//2110000013349 XMLHttpRequest oluşturma fonksiyonu
 function createXMLHttpRequest() {
     var req = false;
     
