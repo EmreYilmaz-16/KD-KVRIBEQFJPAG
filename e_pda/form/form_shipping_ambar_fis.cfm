@@ -472,7 +472,7 @@ $(document).ready(function(){
                             #BARCOD#
                         </cfif>
                     </td>
-                    <td >
+                    <td >dasdas
                         <cfif (get_shelf.recordcount and len(SHELF_CODE)) or (not get_shelf.recordcount and len(BARCOD))>
                           <cfquery name="getstokinfo" datasource="#dsn3#">
 							SELECT IS_SERIAL_NO FROM STOCKS WHERE STOCK_ID = #stock_id#
