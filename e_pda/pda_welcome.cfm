@@ -250,6 +250,17 @@
                 </span>
             </span>
         </a>
+            <a class="action-card tableyazi" href="#request.self#?fuseaction=pda.form_add_ambar_fis_wb">
+            <span class="icon"><img src="../../images/e-pd/down30.png" alt="Mal kabulden ambara (Seri Numarasız)"></span>
+            <span class="details">
+                <span class="title">Mal Kabulden Ambara</span>
+                <span class="badge-row">
+                    <span class="status-badge status-success">Yapıldı!</span>
+                    <span class="status-badge status-alert">Barkod Parçalama Yapıldı!</span>
+                    <span class="status-badge status-warning">Barkod Alanı Kaldırıldı !</span>
+                </span>
+            </span>
+        </a>
 
         <a class="action-card tableyazi" href="#request.self#?fuseaction=pda.form_add_ambar_fis_2">
             <span class="icon"><img src="../../images/e-pd/exit30.png" alt="Ambardan mal kabule"></span>
