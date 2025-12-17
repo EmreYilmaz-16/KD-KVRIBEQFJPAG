@@ -474,9 +474,19 @@ $(document).ready(function(){
                     </td>
                     <td >
                         <cfif (get_shelf.recordcount and len(SHELF_CODE)) or (not get_shelf.recordcount and len(BARCOD))>
-                            <a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
+                          <cfquery name="getstokinfo" datasource="#dsn3#">
+							SELECT * FROM STOCKS WHERE STOCK_ID = #stock_id#
+						  </cfquery>
+						  <cfif getstokinfo.IS_SERIAL_NOD eq 1>
+						  	<a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
                                 #PRODUCT_NAME#
                             </a>
+						  <cfelse>
+							<a href="#request.self#?fuseaction=pda.form_shipping_ambar_stock_wb&ship_id=#attributes.ship_id#&f_stock_id=#stock_id#&department_in_id=#attributes.department_in_id#&department_out_id=#attributes.department_out_id#&date1=#attributes.date1#&date2=#attributes.date2#&product_name=#PRODUCT_NAME#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.DELIVER_PAPER_NO#&keyword=#attributes.keyword#&paket_sayisi=#PAKETSAYISI#" class="tableyazi">
+                                #PRODUCT_NAME#
+                            </a>
+						  </cfif>
+							
                     	<cfelse>
                     		#PRODUCT_NAME#
                     	</cfif>
