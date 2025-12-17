@@ -605,8 +605,7 @@ function add_product_to_barkod_lm(barcode, amount, type)
 		return false;
 	}
 	
-	if(list_find('<cfoutput>#product_barcode_list#</cfoutput>', barcode, ','))
-	{
+	
 		var new_sql = "SELECT TOP 1 STOCK_ID FROM STOCKS_BARCODES WHERE BARCODE = '" + barcode + "'";
 		var get_product = wrk_query(new_sql, 'dsn1');
 		
@@ -690,14 +689,9 @@ function add_product_to_barkod_lm(barcode, amount, type)
 		// Değişen stock id'yi kaydet ve satırı vurgula
 		if(changedStockIdEl) changedStockIdEl.value = stockId;
 		if(rowEl) rowEl.style.background = '#FFCCCC';
-	}
-	else {
-		alert('Kayıtlı Barkod Yok!');
-		document.getElementById('add_other_barcod').value = '';
-		document.getElementById('add_other_barcod').focus();
-	}
 	
-	return false;
+	
+	return true;
 }
 
 
