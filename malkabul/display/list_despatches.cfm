@@ -49,6 +49,9 @@
             S.SHIP_DATE,
             COALESCE(T.TotalAmount, 0)  AS TOTAL_AMOUNT,
             COALESCE(G.GuaranteeCnt, 0) AS GUARANTY_COUNT
+            ,(select COUNT(*) from w3qa_1.PBS_MAL_KABUL_BARCODES AS PMB
+INNER JOIN w3qa_2025_1.SHIP_ROW AS SR ON SR.WRK_ROW_ID=PMB.WRK_ROW_ID
+WHERE SR.SHIP_ID=S.SHIP_ID) AS SCANNED_COUNT
         FROM #dsn2#.SHIP AS S
         LEFT JOIN #dsn#.COMPANY AS C
                ON C.COMPANY_ID = S.COMPANY_ID
