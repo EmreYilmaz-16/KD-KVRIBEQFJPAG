@@ -96,7 +96,9 @@ function generatePalletCode() {
 				<cfset form.pallet_code = generatePalletCode()>
 				<cfset form.pallet_type = "">
 			</cfif>
-
+<script>
+	window.location.href="/index.cfm?fuseaction=eshipping.emptypopup_list_shipping_pallets_pbs"
+</script>
 			<cfcatch type="any">
 				<cfset ArrayAppend(errorMessages, "Kayit sirasinda bir hata olustu: " & cfcatch.message)>
 			</cfcatch>

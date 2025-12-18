@@ -366,10 +366,10 @@
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
-
+<cflocation url="#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&" addtoken="No">
 
 <!--------------------
-
+pda.form_shipping_ambar_fis&department_in_id=13-4&department_out_id=13-2&keyword=&date1=15/12/2025&date2=18/12/2025&DELIVER_PAPER_NO=SEV-111&is_type=1&ship_id=99
 // <cf_get_lang_set module_name="stock"> sayfanin en altinda kapanisi var 
 // <cfinclude template="../../../../v16/stock/query/check_our_period.cfm"> 
 // <cfinclude template="../../../../v16/stock/query/get_process_cat.cfm">

@@ -46,9 +46,13 @@ function resolveCompanyName(companyId) {
             </cfquery>
         </cfloop>
         <cfset successMessage = "Seçilen sevk kayıtları palete eklendi.">
+        <script>
+	window.location.href="/index.cfm?fuseaction=eshipping.emptypopup_list_shipping_pallets_pbs"
+</script>
     <cfelse>
         <cfset errorMessage = "Herhangi bir sevk kaydı seçilmedi.">
     </cfif>
+    
 </cfif>
 
 <cfquery name="getPaletBilgi" datasource="#dsn3#">
