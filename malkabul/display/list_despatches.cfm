@@ -80,7 +80,7 @@ WHERE SR.SHIP_ID=S.SHIP_ID),0) AS SCANNED_COUNT
           )
         </cfif>
         ) AS Despatches
-        ORDER BY S.SHIP_DATE DESC
+        ORDER BY SHIP_DATE DESC
     </cfquery>
 
     <style>
