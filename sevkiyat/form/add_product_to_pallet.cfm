@@ -251,6 +251,11 @@ function checkKey(el,event){
     if(event.keyCode==13){
         event.preventDefault();
         var parserId=$("#BarcodeParser").val();
+        if(parserId==4){
+            console.log("Standart Barkod Secildi");
+            var serial_=el.value;
+            return false;
+        }
         var serial_=el.value;
         if(parserId==0){
             alert("Lutfen bir barkod tipi seciniz.");
