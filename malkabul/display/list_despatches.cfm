@@ -42,13 +42,14 @@
 
 
     <cfquery name="getDespatches" datasource="#dsn2#">
+     SELECT *,GUARANTY_COUNT_+SCANNED_COUNT=GUARANTY_COUNT FROM (
         SELECT
             S.SHIP_ID,
             S.SHIP_NUMBER,
             C.NICKNAME,
             S.SHIP_DATE,
             COALESCE(T.TotalAmount, 0)  AS TOTAL_AMOUNT,
-            COALESCE(G.GuaranteeCnt, 0) AS GUARANTY_COUNT
+            COALESCE(G.GuaranteeCnt, 0) AS GUARANTY_COUNT_
             ,(select COUNT(*) from w3qa_1.PBS_MAL_KABUL_BARCODES AS PMB
 INNER JOIN w3qa_2025_1.SHIP_ROW AS SR ON SR.WRK_ROW_ID=PMB.WRK_ROW_ID
 WHERE SR.SHIP_ID=S.SHIP_ID) AS SCANNED_COUNT
@@ -78,6 +79,7 @@ WHERE SR.SHIP_ID=S.SHIP_ID) AS SCANNED_COUNT
              OR C.NICKNAME    LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_varchar">
           )
         </cfif>
+        ) AS Despatches
         ORDER BY S.SHIP_DATE DESC
     </cfquery>
 
