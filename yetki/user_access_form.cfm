@@ -918,10 +918,17 @@ function hepsini_sil(option)
         
         // Erişime firma ekle
         async function addCompanyToAccess() {
-            const companyId = document.getElementById('new_company_id').value;
+            const companyIdElement = document.getElementById('new_company_id');
+            const companyNameElement = document.getElementById('new_company_name');
+            
+            console.log('Company ID Element:', companyIdElement);
+            console.log('Company ID Value:', companyIdElement ? companyIdElement.value : 'element yok');
+            console.log('Company Name Value:', companyNameElement ? companyNameElement.value : 'element yok');
+            
+            const companyId = companyIdElement ? companyIdElement.value.trim() : '';
             
             if (!companyId) {
-                showAlert('Lütfen bir firma seçin', false);
+                showAlert('Lütfen bir firma seçin. (ID: ' + companyId + ', Name: ' + (companyNameElement ? companyNameElement.value : '') + ')', false);
                 return;
             }
             
