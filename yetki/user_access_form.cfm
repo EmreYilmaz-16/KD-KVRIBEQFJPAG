@@ -194,31 +194,22 @@
                                 <option value="admin">Yönetici (Admin)</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Markalar:</label>
-                            <div class="checkbox-group" id="brandCheckboxes">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="brandIds" value="1" id="brand1">
-                                    <label for="brand1">Marka 1</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="brandIds" value="2" id="brand2">
-                                    <label for="brand2">Marka 2</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="brandIds" value="3" id="brand3">
-                                    <label for="brand3">Marka 3</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="brandIds" value="4" id="brand4">
-                                    <label for="brand4">Marka 4</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="brandIds" value="5" id="brand5">
-                                    <label for="brand5">Marka 5</label>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="form-group" id="item-brand_name">
+                                    <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
+                                    <div class=""> 
+                                        <cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
+                                        <cf_wrkProductBrand
+                                        returnInputValue="brand_id,brand_name,brand_code"
+                                        returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
+                                        width="120"
+                                        compenent_name="getProductBrand"               
+                                        boxwidth="300"
+                                        boxheight="150"
+                                        is_internet="1"
+                                        brand_code="1"
+                                        brand_ID="#brand_id#">
+                                    </div>
+                                </div>	
                         <div class="form-group">
                             <label>Şirketler:</label>
                             <div class="checkbox-group" id="companyCheckboxes">
