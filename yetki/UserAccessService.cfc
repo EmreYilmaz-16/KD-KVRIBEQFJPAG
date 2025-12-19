@@ -240,7 +240,7 @@
         <cfquery name="qSelect" datasource="#variables.dsn#">
             SELECT uac.ACCESS_ID, uac.COMPANY_ID, p.NICKNAME as COMPANY_NAME
             FROM USER_ACCESS_COMPANIES_PBS uac
-            LEFT JOIN COMPANY p ON uac.COMPANY_ID = p.PAR_ID
+            LEFT JOIN COMPANY p ON uac.COMPANY_ID = p.COMPANY_ID
             WHERE uac.ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
