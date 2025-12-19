@@ -412,9 +412,6 @@ function hepsini_sil(option)
                             <option value="">Seçiniz...</option>
                             <option value="purchase">Satın Alma (Purchase)</option>
                             <option value="sales">Satış (Sales)</option>
-                            <option value="inventory">Envanter (Inventory)</option>
-                            <option value="reporting">Raporlama (Reporting)</option>
-                            <option value="admin">Yönetici (Admin)</option>
                         </select>
                     </div>
                     <button class="btn btn-primary" onclick="updateUserAccess()">Güncelle</button>
@@ -441,10 +438,10 @@ function hepsini_sil(option)
                     <thead>
                         <tr>
                             <th>Access ID</th>
-                            <th>User ID</th>
+                            <th>Kullanıcı</th>
                             <th>Erişim Tipi</th>
                             <th>Markalar</th>
-                            <th>Şirketler</th>
+                            <th>Firmalar</th>
                             <th>İşlemler</th>
                         </tr>
                     </thead>
@@ -500,20 +497,43 @@ function hepsini_sil(option)
             }
         }
         
-        // Checkbox değerlerini al
-        function getCheckedValues(name) {
-            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-            return Array.from(checkboxes).map(cb => cb.value).join(',');
+        // Seçili marka değerlerini al (multiple select için)
+        function getSelectedMarks() {
+            const select = document.getElementById('marks');
+            const selectedOptions = Array.from(select.selectedOptions);
+            return selectedOptions.map(option => option.value).join(',');
+        }
+        
+        // Seçili şirket ID'lerini al (dinamik tablodan)
+        function getSelectedCompanyIds() {
+            const companyInputs = document.querySelectorAll('input[name="to_comp_ids"]');
+            const companyIds = [];
+            companyInputs.forEach(input => {
+                if (input.value && input.value.trim() !== '') {
+                    companyIds.push(input.value);
+                }
+            });
+            return companyIds.join(',');
         }
         
         // Yeni erişim oluştur
         document.getElementById('createAccessForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const userId = document.getElementById('userId').value;
+            const userId = document.getElementById('sales_emp_id').value;
             const accessType = document.getElementById('accessType').value;
-            const brandIds = getCheckedValues('brandIds');
-            const companyIds = getCheckedValues('companyIds');
+            const brandIds = getSelectedMarks();
+            const companyIds = getSelectedCompanyIds();
+            
+            if (!userId || userId == '0') {
+                showAlert('Lütfen bir kullanıcı seçin', false);
+                return;
+            }
+            
+            if (!accessType) {
+                showAlert('Lütfen erişim tipi seçin', false);
+                return;
+            }
             
             const result = await apiCall('createUserAccess', {
                 userId: userId,
@@ -614,8 +634,8 @@ function hepsini_sil(option)
             tbody.innerHTML = data.map(item => `
                 <tr>
                     <td>${item.ACCESS_ID}</td>
-                    <td>${item.USER_ID}</td>
-                    <td>${item.ACCESS_TYPE}</td>
+                    <td>${item.USER_NAME || 'ID: ' + item.USER_ID}</td>
+                    <td>${getAccessTypeLabel(item.ACCESS_TYPE)}</td>
                     <td><button class="btn btn-primary" onclick="loadBrands(${item.ACCESS_ID})">Göster</button></td>
                     <td><button class="btn btn-primary" onclick="loadCompanies(${item.ACCESS_ID})">Göster</button></td>
                     <td>
@@ -624,6 +644,15 @@ function hepsini_sil(option)
                     </td>
                 </tr>
             `).join('');
+        }
+        
+        // Erişim tipi etiketini getir
+        function getAccessTypeLabel(type) {
+            const labels = {
+                'purchase': 'Satın Alma',
+                'sales': 'Satış'
+            };
+            return labels[type] || type;
         }
         
         // Düzenleme formunu doldur
@@ -647,16 +676,26 @@ function hepsini_sil(option)
             }
         }
         
-        // Markaları yükle
+        // Markaları yükle ve göster
         async function loadBrands(accessId) {
             const result = await apiCall('getBrandsByAccessId', { accessId: accessId });
-            showResult({ accessId: accessId, brands: result.data });
+            if (result.success && result.data && result.data.length > 0) {
+                const brandNames = result.data.map(b => b.BRAND_NAME || 'ID: ' + b.BRAND_ID).join(', ');
+                showResult({ accessId: accessId, markalar: brandNames, detay: result.data });
+            } else {
+                showResult({ accessId: accessId, markalar: 'Marka bulunamadı' });
+            }
         }
         
-        // Şirketleri yükle
+        // Şirketleri yükle ve göster
         async function loadCompanies(accessId) {
             const result = await apiCall('getCompaniesByAccessId', { accessId: accessId });
-            showResult({ accessId: accessId, companies: result.data });
+            if (result.success && result.data && result.data.length > 0) {
+                const companyNames = result.data.map(c => c.COMPANY_NAME || 'ID: ' + c.COMPANY_ID).join(', ');
+                showResult({ accessId: accessId, firmalar: companyNames, detay: result.data });
+            } else {
+                showResult({ accessId: accessId, firmalar: 'Firma bulunamadı' });
+            }
         }
         
         // Sayfa yüklendiğinde tüm erişimleri getir

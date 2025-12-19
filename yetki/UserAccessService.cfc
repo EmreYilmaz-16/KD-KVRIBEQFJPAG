@@ -1,5 +1,7 @@
 <cfcomponent displayname="UserAccessService" hint="User Access CRUD Operations">
 
+    <cfset variables.dsn = "dsn1">
+
     <!--- ==================== USER_ACCESS_PBS CRUD ==================== --->
     
     <!--- CREATE: Yeni kullanıcı erişimi ekle --->
@@ -9,7 +11,7 @@
         
         <cfset var result = 0>
         
-        <cfquery name="qInsert" datasource="#application.dsn#" result="insertResult">
+        <cfquery name="qInsert" datasource="#variables.dsn#" result="insertResult">
             INSERT INTO USER_ACCESS_PBS (USER_ID, ACCESS_TYPE)
             VALUES (
                 <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">,
@@ -26,10 +28,12 @@
     <cffunction name="getAllUserAccess" access="public" returntype="query" output="false">
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#application.dsn#">
-            SELECT ACCESS_ID, USER_ID, ACCESS_TYPE
-            FROM USER_ACCESS_PBS
-            ORDER BY ACCESS_ID
+        <cfquery name="qSelect" datasource="#variables.dsn#">
+            SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE,
+                   m.MEMBER_NAME as USER_NAME
+            FROM USER_ACCESS_PBS ua
+            LEFT JOIN MEMBERS m ON ua.USER_ID = m.EMPLOYEE_ID
+            ORDER BY ua.ACCESS_ID
         </cfquery>
         
         <cfreturn qSelect>
@@ -41,10 +45,12 @@
         
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#application.dsn#">
-            SELECT ACCESS_ID, USER_ID, ACCESS_TYPE
-            FROM USER_ACCESS_PBS
-            WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
+        <cfquery name="qSelect" datasource="#variables.dsn#">
+            SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE,
+                   m.MEMBER_NAME as USER_NAME
+            FROM USER_ACCESS_PBS ua
+            LEFT JOIN MEMBERS m ON ua.USER_ID = m.EMPLOYEE_ID
+            WHERE ua.ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
         <cfreturn qSelect>
@@ -56,10 +62,12 @@
         
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#application.dsn#">
-            SELECT ACCESS_ID, USER_ID, ACCESS_TYPE
-            FROM USER_ACCESS_PBS
-            WHERE USER_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">
+        <cfquery name="qSelect" datasource="#variables.dsn#">
+            SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE,
+                   m.MEMBER_NAME as USER_NAME
+            FROM USER_ACCESS_PBS ua
+            LEFT JOIN MEMBERS m ON ua.USER_ID = m.EMPLOYEE_ID
+            WHERE ua.USER_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
         <cfreturn qSelect>
@@ -71,7 +79,7 @@
         <cfargument name="userId" type="numeric" required="true">
         <cfargument name="accessType" type="string" required="true">
         
-        <cfquery name="qUpdate" datasource="#application.dsn#">
+        <cfquery name="qUpdate" datasource="#variables.dsn#">
             UPDATE USER_ACCESS_PBS
             SET USER_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">,
                 ACCESS_TYPE = <cfqueryparam value="#arguments.accessType#" cfsqltype="cf_sql_varchar" maxlength="30">
@@ -86,18 +94,18 @@
         <cfargument name="accessId" type="numeric" required="true">
         
         <!--- Önce ilişkili kayıtları sil --->
-        <cfquery name="qDeleteBrands" datasource="#application.dsn#">
+        <cfquery name="qDeleteBrands" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_BRANDS_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
-        <cfquery name="qDeleteCompanies" datasource="#application.dsn#">
+        <cfquery name="qDeleteCompanies" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_COMPANIES_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
         <!--- Ana kaydı sil --->
-        <cfquery name="qDelete" datasource="#application.dsn#">
+        <cfquery name="qDelete" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
@@ -112,7 +120,7 @@
         <cfargument name="accessId" type="numeric" required="true">
         <cfargument name="brandId" type="numeric" required="true">
         
-        <cfquery name="qInsert" datasource="#application.dsn#">
+        <cfquery name="qInsert" datasource="#variables.dsn#">
             INSERT INTO USER_ACCESS_BRANDS_PBS (ACCESS_ID, BRAND_ID)
             VALUES (
                 <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">,
@@ -131,7 +139,7 @@
         <cfset var brandIdList = listToArray(arguments.brandIds)>
         
         <cfloop array="#brandIdList#" index="brandId">
-            <cfquery name="qInsert" datasource="#application.dsn#">
+            <cfquery name="qInsert" datasource="#variables.dsn#">
                 INSERT INTO USER_ACCESS_BRANDS_PBS (ACCESS_ID, BRAND_ID)
                 VALUES (
                     <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">,
@@ -149,10 +157,11 @@
         
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#application.dsn#">
-            SELECT ACCESS_ID, BRAND_ID
-            FROM USER_ACCESS_BRANDS_PBS
-            WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
+        <cfquery name="qSelect" datasource="#variables.dsn#">
+            SELECT uab.ACCESS_ID, uab.BRAND_ID, pb.BRAND_NAME
+            FROM USER_ACCESS_BRANDS_PBS uab
+            LEFT JOIN PRODUCT_BRANDS pb ON uab.BRAND_ID = pb.BRAND_ID
+            WHERE uab.ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
         <cfreturn qSelect>
@@ -163,7 +172,7 @@
         <cfargument name="accessId" type="numeric" required="true">
         <cfargument name="brandId" type="numeric" required="true">
         
-        <cfquery name="qDelete" datasource="#application.dsn#">
+        <cfquery name="qDelete" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_BRANDS_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
               AND BRAND_ID = <cfqueryparam value="#arguments.brandId#" cfsqltype="cf_sql_integer">
@@ -176,7 +185,7 @@
     <cffunction name="removeAllBrandsFromAccess" access="public" returntype="boolean" output="false">
         <cfargument name="accessId" type="numeric" required="true">
         
-        <cfquery name="qDelete" datasource="#application.dsn#">
+        <cfquery name="qDelete" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_BRANDS_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
@@ -191,7 +200,7 @@
         <cfargument name="accessId" type="numeric" required="true">
         <cfargument name="companyId" type="numeric" required="true">
         
-        <cfquery name="qInsert" datasource="#application.dsn#">
+        <cfquery name="qInsert" datasource="#variables.dsn#">
             INSERT INTO USER_ACCESS_COMPANIES_PBS (ACCESS_ID, COMPANY_ID)
             VALUES (
                 <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">,
@@ -210,7 +219,7 @@
         <cfset var companyIdList = listToArray(arguments.companyIds)>
         
         <cfloop array="#companyIdList#" index="companyId">
-            <cfquery name="qInsert" datasource="#application.dsn#">
+            <cfquery name="qInsert" datasource="#variables.dsn#">
                 INSERT INTO USER_ACCESS_COMPANIES_PBS (ACCESS_ID, COMPANY_ID)
                 VALUES (
                     <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">,
@@ -228,10 +237,11 @@
         
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#application.dsn#">
-            SELECT ACCESS_ID, COMPANY_ID
-            FROM USER_ACCESS_COMPANIES_PBS
-            WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
+        <cfquery name="qSelect" datasource="#variables.dsn#">
+            SELECT uac.ACCESS_ID, uac.COMPANY_ID, p.PAR_NAME as COMPANY_NAME
+            FROM USER_ACCESS_COMPANIES_PBS uac
+            LEFT JOIN PARTNERS p ON uac.COMPANY_ID = p.PAR_ID
+            WHERE uac.ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
         <cfreturn qSelect>
@@ -242,7 +252,7 @@
         <cfargument name="accessId" type="numeric" required="true">
         <cfargument name="companyId" type="numeric" required="true">
         
-        <cfquery name="qDelete" datasource="#application.dsn#">
+        <cfquery name="qDelete" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_COMPANIES_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
               AND COMPANY_ID = <cfqueryparam value="#arguments.companyId#" cfsqltype="cf_sql_integer">
@@ -255,7 +265,7 @@
     <cffunction name="removeAllCompaniesFromAccess" access="public" returntype="boolean" output="false">
         <cfargument name="accessId" type="numeric" required="true">
         
-        <cfquery name="qDelete" datasource="#application.dsn#">
+        <cfquery name="qDelete" datasource="#variables.dsn#">
             DELETE FROM USER_ACCESS_COMPANIES_PBS
             WHERE ACCESS_ID = <cfqueryparam value="#arguments.accessId#" cfsqltype="cf_sql_integer">
         </cfquery>
@@ -274,9 +284,11 @@
         <cfset var accessList = arrayNew(1)>
         
         <!--- Kullanıcının erişimlerini getir --->
-        <cfquery name="qAccess" datasource="#application.dsn#">
-            SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE
+        <cfquery name="qAccess" datasource="#variables.dsn#">
+            SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE,
+                   m.MEMBER_NAME as USER_NAME
             FROM USER_ACCESS_PBS ua
+            LEFT JOIN MEMBERS m ON ua.USER_ID = m.EMPLOYEE_ID
             WHERE ua.USER_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
