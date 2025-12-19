@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    
     <title>Kullanıcı Erişim Yönetimi</title>
     <style>
         * {
@@ -160,8 +156,7 @@
             display: none;
         }
     </style>
-</head>
-<body>
+
     <div class="container">
         <h1>🔐 Kullanıcı Erişim Yönetimi</h1>
         
@@ -188,10 +183,7 @@
                             <select id="accessType" name="accessType" required>
                                 <option value="">Seçiniz...</option>
                                 <option value="purchase">Satın Alma (Purchase)</option>
-                                <option value="sales">Satış (Sales)</option>
-                                <option value="inventory">Envanter (Inventory)</option>
-                                <option value="reporting">Raporlama (Reporting)</option>
-                                <option value="admin">Yönetici (Admin)</option>
+                                <option value="sales">Satış (Sales)</option>                          
                             </select>
                         </div>
                         <div class="form-group" id="item-brand_name">
@@ -515,5 +507,4 @@
         // Sayfa yüklendiğinde tüm erişimleri getir
         // document.addEventListener('DOMContentLoaded', getAllUserAccess);
     </script>
-</body>
-</html>
+
