@@ -27,513 +27,163 @@
 
 <title>Kullanıcı Erişim Yönetimi</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
-
-        :root {
-            --primary: #0ea5e9;
-            --primary-strong: #0284c7;
-            --accent: #f59e0b;
-            --accent-strong: #d97706;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #0ea5e9;
-            --surface: #f7f8fb;
-            --card: #ffffff;
-            --ink: #0f172a;
-            --muted: #64748b;
-            --muted-strong: #475569;
-            --border: #e2e8f0;
-            --border-strong: #cbd5e1;
-            --shadow-soft: 0 10px 40px rgba(15, 23, 42, 0.12);
-            --shadow-hard: 0 20px 60px rgba(15, 23, 42, 0.16);
-            --radius-sm: 10px;
-            --radius: 14px;
-            --radius-lg: 18px;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
-            font-family: 'Space Grotesk', 'Manrope', 'Segoe UI', system-ui;
-            background: radial-gradient(1200px at 15% 20%, rgba(14, 165, 233, 0.18), transparent),
-                        radial-gradient(900px at 85% 10%, rgba(245, 158, 11, 0.18), transparent),
-                        #eef2f7;
-            color: var(--ink);
-            min-height: 100vh;
-            padding: 32px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
         }
-
         .container {
-            max-width: 1320px;
+            max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
         }
-
-        /* Header */
-        .page-header {
-            position: relative;
-            overflow: hidden;
-            text-align: left;
-            padding: 32px;
-            background: linear-gradient(135deg, #ffffffcc, #f8fafc);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
         }
-
-        .page-header::before,
-        .page-header::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(500px at 15% 10%, rgba(14, 165, 233, 0.12), transparent),
-                        radial-gradient(600px at 85% 0%, rgba(245, 158, 11, 0.12), transparent);
-            z-index: 0;
-        }
-
-        .page-header > * { position: relative; z-index: 1; }
-
-        .page-header h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(120deg, var(--primary-strong), var(--accent-strong));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: var(--muted);
-            font-size: 1.05rem;
-            max-width: 720px;
-            line-height: 1.6;
-        }
-
-        /* Cards */
         .card {
-            position: relative;
-            background: var(--card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-soft);
-            padding: 22px;
-            border: 1px solid var(--border);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
         }
-
-        .card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.06), rgba(245, 158, 11, 0.06));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: var(--radius);
-            pointer-events: none;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hard);
-            border-color: var(--border-strong);
-        }
-
-        .card:hover::after { opacity: 1; }
-
         .card h2 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--ink);
-            margin-bottom: 18px;
+            color: #2196F3;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2196F3;
             padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.01em;
         }
-
-        .card h2 .icon { font-size: 1.4rem; }
-
-        /* Form Groups */
-        .form-group { margin-bottom: 16px; }
-
+        .form-group {
+            margin-bottom: 15px;
+        }
         .form-group label {
             display: block;
-            margin-bottom: 6px;
-            color: var(--muted-strong);
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: -0.01em;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            background: #fff;
-            color: var(--ink);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary);
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2196F3;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
         }
-
-        .form-group input::placeholder { color: var(--muted); }
-
-        .form-group input[readonly] {
-            background: #f1f5f9;
-            cursor: not-allowed;
-        }
-
-        /* Input Groups */
-        .input-group { display: flex; align-items: stretch; }
-
-        .input-group input { border-radius: var(--radius-sm) 0 0 var(--radius-sm); flex: 1; }
-
-        .input-group .input-group-text {
-            padding: 12px 14px;
-            background: linear-gradient(120deg, var(--primary), var(--primary-strong));
-            color: white;
-            border: 1px solid var(--primary-strong);
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, filter 0.2s ease;
-        }
-
-        .input-group .input-group-text:hover { transform: translateY(-1px); filter: brightness(1.05); }
-
-        /* Buttons */
         .btn {
-            padding: 11px 20px;
+            padding: 10px 20px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 14px;
             margin-right: 10px;
             margin-bottom: 10px;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            letter-spacing: -0.01em;
-            box-shadow: var(--shadow-soft);
         }
-
         .btn-primary {
-            background: linear-gradient(120deg, var(--primary), var(--primary-strong));
-            color: #fff;
+            background-color: #2196F3;
+            color: white;
         }
-
         .btn-success {
-            background: linear-gradient(120deg, var(--success), #0f9d58);
-            color: #fff;
+            background-color: #4CAF50;
+            color: white;
         }
-
         .btn-danger {
-            background: linear-gradient(120deg, var(--danger), #dc2626);
-            color: #fff;
+            background-color: #f44336;
+            color: white;
         }
-
         .btn-warning {
-            background: linear-gradient(120deg, var(--accent), var(--accent-strong));
-            color: #fff;
+            background-color: #ff9800;
+            color: white;
         }
-
-        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hard); }
-        .btn:active { transform: translateY(0); }
-
-        .btn-sm { padding: 8px 14px; font-size: 0.85rem; margin-right: 6px; }
-        .btn-icon { padding: 8px 10px; font-size: 0.9rem; }
-
-        /* Multi Select */
-        select[multiple] {
-            min-height: 150px;
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
+        .btn:hover {
+            opacity: 0.9;
         }
-
-        select[multiple] option { padding: 8px 10px; border-radius: 6px; }
-
-        select[multiple] option:checked {
-            background: linear-gradient(120deg, rgba(14, 165, 233, 0.15), rgba(245, 158, 11, 0.15));
-            color: var(--ink);
-            font-weight: 700;
-        }
-
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            background: #fff;
-        }
-
-        table { width: 100%; border-collapse: collapse; }
-
-        table th {
-            background: linear-gradient(120deg, var(--primary), var(--accent));
-            color: #fff;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.78rem;
-            letter-spacing: 0.04em;
-            padding: 14px 16px;
-            text-align: left;
-        }
-
-        table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            color: var(--muted-strong);
-            font-size: 0.95rem;
-        }
-
-        table tbody tr { transition: background 0.2s ease; }
-        table tbody tr:hover { background: #f8fafc; }
-        table tbody tr:last-child td { border-bottom: none; }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-        }
-
-        .badge-primary { background: rgba(14, 165, 233, 0.12); color: var(--primary-strong); }
-        .badge-success { background: rgba(16, 185, 129, 0.14); color: #0f9d58; }
-        .badge-warning { background: rgba(245, 158, 11, 0.14); color: var(--accent-strong); }
-        .badge-danger { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
-        .badge-info { background: rgba(14, 165, 233, 0.1); color: var(--primary-strong); }
-
-        /* Tags */
-        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 12px;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            font-size: 0.85rem;
-            color: var(--muted-strong);
-            transition: all 0.2s ease;
-        }
-
-        .tag:hover { background: #e2f3fb; border-color: rgba(14, 165, 233, 0.3); }
-
-        .tag .tag-remove { cursor: pointer; color: var(--danger); font-weight: 700; transition: transform 0.2s ease; }
-        .tag .tag-remove:hover { transform: scale(1.1); }
-
-        .tag-brand { background: rgba(14, 165, 233, 0.12); color: var(--primary-strong); }
-        .tag-company { background: rgba(16, 185, 129, 0.14); color: #0f9d58; }
-
-        /* Alerts */
-        .alert {
-            padding: 14px 16px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 18px;
-            font-weight: 600;
+        .checkbox-group {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            background: #fff;
-            animation: slideDown 0.3s ease;
         }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .alert-success { border-color: rgba(16, 185, 129, 0.4); background: linear-gradient(120deg, rgba(16, 185, 129, 0.12), rgba(14, 165, 233, 0.08)); color: #0f9d58; }
-        .alert-error { border-color: rgba(239, 68, 68, 0.4); background: linear-gradient(120deg, rgba(239, 68, 68, 0.12), rgba(245, 158, 11, 0.08)); color: #dc2626; }
-
-        /* Result Box */
-        .result-box {
-            background: #f8fafc;
-            border: 1px dashed var(--border-strong);
-            border-radius: var(--radius-sm);
-            padding: 20px;
-            margin-top: 10px;
-            max-height: 420px;
-            overflow-y: auto;
-        }
-
-        .result-box pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'IBM Plex Mono', 'Consolas', monospace;
-            font-size: 0.86rem;
-            color: var(--muted-strong);
-        }
-
-        .result-box:empty::after,
-        .result-box .empty-state {
-            content: 'Henüz sonuç yok';
-            color: var(--muted);
-            text-align: center;
-            display: block;
-            padding: 36px;
-            font-style: italic;
-        }
-
-        /* Grid Layout */
-        .row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-            gap: 22px;
-        }
-
-        .col-6 { min-width: 0; }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 6px; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
-        /* Hidden */
-        .hidden { display: none !important; }
-
-        /* Action Buttons in Table */
-        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
-
-        /* Responsive */
-        @media (max-width: 860px) {
-            body { padding: 18px; }
-            .page-header h1 { font-size: 2rem; }
-            .row { grid-template-columns: 1fr; }
-            .btn { width: 100%; justify-content: center; }
-        }
-
-        /* Stats Cards */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 18px;
-            margin-bottom: 16px;
-        }
-
-        .stat-card {
-            background: #fff;
-            border-radius: var(--radius);
-            padding: 18px;
-            text-align: center;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border);
-        }
-
-        .stat-card .stat-icon { font-size: 2.2rem; margin-bottom: 8px; }
-        .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--ink); }
-        .stat-card .stat-label { color: var(--muted); font-size: 0.9rem; }
-
-        /* Company Search */
-        .search-input { position: relative; }
-        .search-input input { padding-left: 40px; }
-        .search-input::before {
-            content: '🔍';
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1rem;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #e2e8f0;
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Popup Card Animation */
-        .card[id$="Card"] { animation: fadeInUp 0.3s ease; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Checkbox Items */
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
-
         .checkbox-item {
             display: flex;
             align-items: center;
-            background: #f8fafc;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-            cursor: pointer;
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
         }
-
-        .checkbox-item:hover { border-color: var(--primary-strong); background: rgba(14, 165, 233, 0.08); }
-        .checkbox-item input { width: auto; margin-right: 8px; accent-color: var(--primary); }
-
-        /* UI Scroll */
-        .ui-scroll {
+        .checkbox-item input {
+            width: auto;
+            margin-right: 8px;
+        }
+        .result-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
             max-height: 300px;
             overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: #fff;
         }
-
-        .ui-scroll table { margin: 0; }
-
-        /* Add Button Row */
-        .add-btn-row {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--border);
+        .result-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #2196F3;
+            color: white;
+        }
+        table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .col-6 {
+            flex: 1;
+            min-width: 300px;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 
     <div class="container">
-        <div class="page-header">
-            <h1>🔐 Kullanıcı Erişim Yönetimi</h1>
-            <p>Kullanıcı yetkilendirme ve erişim kontrol sistemi</p>
-        </div>
+        <h1>🔐 Kullanıcı Erişim Yönetimi</h1>
         
         <div id="alertBox" class="alert hidden"></div>
         
@@ -544,29 +194,33 @@
                     <h2>➕ Yeni Erişim Oluştur</h2>
                     <form id="createAccessForm" name="createAccessForm">
                       <div class="form-group" id="item-sales_emp">
-						<label>👤 Kullanıcı Seç</label>
-						<div class="input-group">
-							<input type="hidden" name="sales_emp_id" id="sales_emp_id" value="">
-							<input name="sales_emp" type="text" id="sales_emp" placeholder="Kullanıcı ara..." onfocus="AutoComplete_Create('sales_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','sales_emp_id','','3','120');" value="" autocomplete="off">
-							<span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=createAccessForm.sales_emp_id&field_name=createAccessForm.sales_emp&select_list=1');">🔍</span>
+						<label class="col col-12">Satış Yapan </label>
+						<div class="col col-12">
+							<div class="input-group">
+								<input type="hidden" name="sales_emp_id" id="sales_emp_id" value="35">
+								<input name="sales_emp" type="text" id="sales_emp" onfocus="AutoComplete_Create('sales_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','sales_emp_id','','3','120');" value="Emre Yılmaz" autocomplete="off" style=""><div id="sales_emp_div_2" name="sales_emp_div_2" class="completeListbox" autocomplete="on" style="width: 401px; max-height: 150px; overflow: auto; position: absolute; left: 441.364px; top: 211.364px; z-index: 159; display: none;"></div>
+								<span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=createAccessForm.sales_emp_id&field_name=createAccessForm.sales_emp&select_list=1');"></span>
+							</div>
 						</div>
 					</div>
                         <div class="form-group">
-                            <label for="accessType">📝 Erişim Tipi</label>
+                            <label for="accessType">Erişim Tipi:</label>
                             <select id="accessType" name="accessType" required>
                                 <option value="">Seçiniz...</option>
-                                <option value="purchase">🛒 Satın Alma (Purchase)</option>
-                                <option value="sales">💰 Satış (Sales)</option>                          
+                                <option value="purchase">Satın Alma (Purchase)</option>
+                                <option value="sales">Satış (Sales)</option>                          
                             </select>
                         </div>
                        <div class="form-group">
-                            <label>🏷️ Markalar <small style="color: var(--gray-400);">(Ctrl+Click ile çoklu seçim)</small></label>
-                            <select name="marks" id="marks" multiple="multiple" style="width:100%; min-height:140px;">
-                                <cfoutput query="get_mark_names">
-                                    <option value="#BRAND_ID#"<cfif listfind(attributes.marks,BRAND_ID)>selected</cfif>>#BRAND_NAME#</option>
-                                </cfoutput>
-                            </select>
-                        </div>
+                                        <label class="col col-12 col-xs-12"><cf_get_lang dictionary_id='58847.Marka'></label>
+                                        <div class="col col-12">
+                                            <select name="marks" id="marks" multiple="multiple" style="width:170px;height:106px">
+                                                <cfoutput query="get_mark_names">
+                                                    <option value="#BRAND_ID#"<cfif listfind(attributes.marks,BRAND_ID)>selected</cfif>>#BRAND_NAME#</option>
+                                                </cfoutput>
+                                            </select>
+                                        </div>	
+                                    </div>
                        <div class="form-group" id="item-OFFER_ID">
                     <label style="display:none;">Teklif İstenenler </label>
                         
@@ -746,66 +400,49 @@ function hepsini_sil(option)
                 <div class="card">
                     <h2>🔍 Erişim Sorgula</h2>
                     <div class="form-group">
-                        <label for="searchUserId">🔢 Kullanıcı ID</label>
-                        <input type="number" id="searchUserId" placeholder="Kullanıcı ID girin...">
+                        <label for="searchUserId">Kullanıcı ID:</label>
+                        <input type="number" id="searchUserId">
                     </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="getUserAccessDetails()">
-                            <span>👤</span> Kullanıcı Erişimlerini Getir
-                        </button>
-                        <button class="btn btn-warning" onclick="getAllUserAccess()">
-                            <span>📊</span> Tüm Erişimleri Getir
-                        </button>
-                    </div>
+                    <button class="btn btn-primary" onclick="getUserAccessDetails()">Kullanıcı Erişimlerini Getir</button>
+                    <button class="btn btn-warning" onclick="getAllUserAccess()">Tüm Erişimleri Getir</button>
                 </div>
                 
                 <!--- Erişim Güncelle/Sil --->
                 <div class="card">
                     <h2>✏️ Erişim Güncelle/Sil</h2>
                     <div class="form-group">
-                        <label for="updateAccessId">🔑 Erişim ID</label>
-                        <input type="number" id="updateAccessId" readonly placeholder="Listeden bir kayıt seçin...">
+                        <label for="updateAccessId">Erişim ID:</label>
+                        <input type="number" id="updateAccessId" readonly style="background-color: #eee;">
                     </div>
                     <div class="form-group">
-                        <label>👤 Kullanıcı</label>
+                        <label>Kullanıcı:</label>
                         <div class="input-group">
                             <input type="hidden" name="update_emp_id" id="update_emp_id" value="">
-                            <input name="update_emp" type="text" id="update_emp" placeholder="Kullanıcı seç..." onfocus="AutoComplete_Create('update_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','update_emp_id','','3','120');" value="" autocomplete="off">
-                            <span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=update_emp_id&field_name=update_emp&select_list=1');">🔍</span>
+                            <input name="update_emp" type="text" id="update_emp" onfocus="AutoComplete_Create('update_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','update_emp_id','','3','120');" value="" autocomplete="off">
+                            <span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=update_emp_id&field_name=update_emp&select_list=1');"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="updateAccessType">📝 Yeni Erişim Tipi</label>
+                        <label for="updateAccessType">Yeni Erişim Tipi:</label>
                         <select id="updateAccessType">
                             <option value="">Seçiniz...</option>
-                            <option value="purchase">🛒 Satın Alma (Purchase)</option>
-                            <option value="sales">💰 Satış (Sales)</option>
+                            <option value="purchase">Satın Alma (Purchase)</option>
+                            <option value="sales">Satış (Sales)</option>
                         </select>
                     </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="updateUserAccess()">
-                            <span>✅</span> Güncelle
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteUserAccess()">
-                            <span>🗑️</span> Sil
-                        </button>
-                        <button class="btn btn-warning" onclick="clearUpdateForm()">
-                            <span>🔄</span> Temizle
-                        </button>
-                    </div>
+                    <button class="btn btn-primary" onclick="updateUserAccess()">Güncelle</button>
+                    <button class="btn btn-danger" onclick="deleteUserAccess()">Sil</button>
+                    <button class="btn btn-warning" onclick="clearUpdateForm()">Temizle</button>
                 </div>
             </div>
         </div>
         
         <!--- Sonuçlar --->
         <div class="card">
-            <h2>📋 Detay Sonuçları</h2>
+            <h2>📋 Sonuçlar</h2>
             <div class="result-box">
                 <div id="resultContainer">
-                    <div class="empty-state" style="text-align: center; padding: 40px; color: var(--gray-400);">
-                        <div style="font-size: 3rem; margin-bottom: 10px;">📝</div>
-                        <p>Henüz sonuç yok. Bir kayıt seçin veya sorgulama yapın.</p>
-                    </div>
+                    <p style="color: #999; text-align: center;">Henüz sonuç yok</p>
                 </div>
             </div>
         </div>
@@ -814,49 +451,38 @@ function hepsini_sil(option)
         <div class="row">
             <div class="col-6">
                 <div class="card" id="addBrandCard" style="display:none;">
-                    <h2>🏷️ Marka Ekle <span class="badge badge-primary">Erişim #<span id="brandAccessId"></span></span></h2>
+                    <h2>➕ Marka Ekle (Erişim #<span id="brandAccessId"></span>)</h2>
                     <div class="form-group">
-                        <label>Eklenecek Marka</label>
-                        <select id="newBrandSelect">
+                        <label>Eklenecek Marka:</label>
+                        <select id="newBrandSelect" style="width:100%; padding:10px;">
                             <option value="">Seçiniz...</option>
                             <cfoutput query="get_mark_names">
                                 <option value="#BRAND_ID#">#BRAND_NAME#</option>
                             </cfoutput>
                         </select>
                     </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-success" onclick="addBrandToAccess()">
-                            <span>✅</span> Marka Ekle
-                        </button>
-                        <button class="btn btn-warning" onclick="hideAddBrandForm()">
-                            <span>❌</span> İptal
-                        </button>
-                    </div>
+                    <button class="btn btn-success" onclick="addBrandToAccess()">Marka Ekle</button>
+                    <button class="btn btn-warning" onclick="hideAddBrandForm()">İptal</button>
                 </div>
             </div>
             <div class="col-6">
                 <div class="card" id="addCompanyCard" style="display:none;">
-                    <h2>🏢 Firma Ekle <span class="badge badge-success">Erişim #<span id="companyAccessId"></span></span></h2>
+                    <h2>➕ Firma Ekle (Erişim #<span id="companyAccessId"></span>)</h2>
                     <div class="form-group">
-                        <label>🔍 Firma Ara</label>
-                        <input type="text" id="companySearchInput" placeholder="Firma adı yazın..." onkeyup="filterCompanies()">
+                        <label>Firma Ara:</label>
+                        <input type="text" id="companySearchInput" placeholder="Firma adı yazın..." 
+                               onkeyup="filterCompanies()" style="width:100%; padding:10px; margin-bottom:10px;">
                     </div>
                     <div class="form-group">
-                        <label>Eklenecek Firma <span id="companyCount" class="badge badge-info"></span></label>
-                        <select id="newCompanySelect" size="8" style="width:100%;">
+                        <label>Eklenecek Firma: <span id="companyCount" style="color:#666; font-size:12px;"></span></label>
+                        <select id="newCompanySelect" style="width:100%; padding:10px;" size="8">
                             <cfoutput query="get_companies">
                                 <option value="#PAR_ID#">#PAR_NAME#</option>
                             </cfoutput>
                         </select>
                     </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-success" onclick="addCompanyToAccess()">
-                            <span>✅</span> Firma Ekle
-                        </button>
-                        <button class="btn btn-warning" onclick="hideAddCompanyForm()">
-                            <span>❌</span> İptal
-                        </button>
-                    </div>
+                    <button class="btn btn-success" onclick="addCompanyToAccess()">Firma Ekle</button>
+                    <button class="btn btn-warning" onclick="hideAddCompanyForm()">İptal</button>
                 </div>
             </div>
         </div>
@@ -864,24 +490,21 @@ function hepsini_sil(option)
         <!--- Erişim Listesi --->
         <div class="card">
             <h2>📊 Erişim Listesi</h2>
-            <div class="table-container" id="accessListContainer">
+            <div id="accessListContainer">
                 <table id="accessTable">
                     <thead>
                         <tr>
-                            <th style="width: 80px;">🔑 ID</th>
-                            <th>👤 Kullanıcı</th>
-                            <th style="width: 150px;">📝 Erişim Tipi</th>
-                            <th>🏷️ Markalar</th>
-                            <th>🏢 Firmalar</th>
-                            <th style="width: 200px;">⚙️ İşlemler</th>
+                            <th>Access ID</th>
+                            <th>Kullanıcı</th>
+                            <th>Erişim Tipi</th>
+                            <th>Markalar</th>
+                            <th>Firmalar</th>
+                            <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody id="accessTableBody">
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 40px;">
-                                <div style="font-size: 3rem; margin-bottom: 10px;">📋</div>
-                                <p style="color: var(--gray-400);">Veri yüklemek için "Tüm Erişimleri Getir" butonuna tıklayın</p>
-                            </td>
+                            <td colspan="6" style="text-align: center; color: #999;">Veri yüklemek için "Tüm Erişimleri Getir" butonuna tıklayın</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1102,47 +725,20 @@ function hepsini_sil(option)
             const tbody = document.getElementById('accessTableBody');
             
             if (!data || data.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px;">
-                            <div style="font-size: 3rem; margin-bottom: 10px;">🔍</div>
-                            <p style="color: var(--gray-400);">Kayıt bulunamadı</p>
-                        </td>
-                    </tr>`;
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">Kayıt bulunamadı</td></tr>';
                 return;
             }
             
             tbody.innerHTML = data.map(item => `
                 <tr>
-                    <td><span class="badge badge-primary">#${item.ACCESS_ID}</span></td>
+                    <td>${item.ACCESS_ID}</td>
+                    <td>${item.USER_NAME || 'ID: ' + item.USER_ID}</td>
+                    <td>${getAccessTypeLabel(item.ACCESS_TYPE)}</td>
+                    <td><button class="btn btn-primary" onclick="loadBrands(${item.ACCESS_ID})">Göster</button></td>
+                    <td><button class="btn btn-primary" onclick="loadCompanies(${item.ACCESS_ID})">Göster</button></td>
                     <td>
-                        <div style="font-weight: 600;">${item.USER_NAME || 'Bilinmiyor'}</div>
-                        <small style="color: var(--gray-400);">ID: ${item.USER_ID}</small>
-                    </td>
-                    <td>
-                        <span class="badge ${item.ACCESS_TYPE === 'purchase' ? 'badge-warning' : 'badge-success'}">
-                            ${item.ACCESS_TYPE === 'purchase' ? '🛒' : '💰'} ${getAccessTypeLabel(item.ACCESS_TYPE)}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="loadBrands(${item.ACCESS_ID})">
-                            🏷️ Göster
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="loadCompanies(${item.ACCESS_ID})">
-                            🏢 Göster
-                        </button>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-warning btn-icon" onclick="editAccess(${item.ACCESS_ID}, ${item.USER_ID}, '${item.ACCESS_TYPE}', '${(item.USER_NAME || '').replace(/'/g, "\\'")}')">
-                                ✏️
-                            </button>
-                            <button class="btn btn-danger btn-icon" onclick="quickDelete(${item.ACCESS_ID})">
-                                🗑️
-                            </button>
-                        </div>
+                        <button class="btn btn-warning" onclick="editAccess(${item.ACCESS_ID}, ${item.USER_ID}, '${item.ACCESS_TYPE}', '${(item.USER_NAME || '').replace(/'/g, "\\'")}')">Düzenle</button>
+                        <button class="btn btn-danger" onclick="quickDelete(${item.ACCESS_ID})">Sil</button>
                     </td>
                 </tr>
             `).join('');
@@ -1190,36 +786,23 @@ function hepsini_sil(option)
             currentAccessId = accessId;
             const result = await apiCall('getBrandsByAccessId', { accessId: accessId });
             
-            let html = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h4 style="margin: 0; color: var(--gray-800);">
-                        🏷️ Erişim <span class="badge badge-primary">#${accessId}</span> - Markalar
-                    </h4>
-                    <button class="btn btn-success btn-sm" onclick="showAddBrandForm(${accessId})">
-                        ➕ Yeni Marka Ekle
-                    </button>
-                </div>
-            `;
+            let html = '<h4>Erişim #' + accessId + ' - Markalar <button class="btn btn-success" style="padding:5px 15px; font-size:12px; margin-left:10px;" onclick="showAddBrandForm(' + accessId + ')">+ Yeni Marka Ekle</button></h4>';
             
             if (result.success && result.data && result.data.length > 0) {
-                html += '<div class="tag-list" style="margin-bottom: 20px;">';
+                html += '<table style="width:100%; margin-top:10px;">';
+                html += '<tr><th>Marka ID</th><th>Marka Adı</th><th>İşlem</th></tr>';
+                
                 result.data.forEach(brand => {
-                    html += `
-                        <div class="tag tag-brand">
-                            <span>🏷️ ${brand.BRAND_NAME || 'ID: ' + brand.BRAND_ID}</span>
-                            <span class="tag-remove" onclick="removeBrand(${accessId}, ${brand.BRAND_ID})" title="Sil">✕</span>
-                        </div>
-                    `;
+                    html += '<tr>';
+                    html += '<td>' + brand.BRAND_ID + '</td>';
+                    html += '<td>' + (brand.BRAND_NAME || '-') + '</td>';
+                    html += '<td><button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="removeBrand(' + accessId + ', ' + brand.BRAND_ID + ')">Sil</button></td>';
+                    html += '</tr>';
                 });
-                html += '</div>';
-                html += `<p style="color: var(--gray-400); font-size: 0.85rem;">Toplam ${result.data.length} marka</p>`;
+                
+                html += '</table>';
             } else {
-                html += `
-                    <div style="text-align: center; padding: 30px; color: var(--gray-400);">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">🏷️</div>
-                        <p>Henüz marka eklenmemiş</p>
-                    </div>
-                `;
+                html += '<p style="color:#999; margin-top:10px;">Henüz marka eklenmemiş</p>';
             }
             
             document.getElementById('resultContainer').innerHTML = html;
@@ -1230,36 +813,23 @@ function hepsini_sil(option)
             currentAccessId = accessId;
             const result = await apiCall('getCompaniesByAccessId', { accessId: accessId });
             
-            let html = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h4 style="margin: 0; color: var(--gray-800);">
-                        🏢 Erişim <span class="badge badge-success">#${accessId}</span> - Firmalar
-                    </h4>
-                    <button class="btn btn-success btn-sm" onclick="showAddCompanyForm(${accessId})">
-                        ➕ Yeni Firma Ekle
-                    </button>
-                </div>
-            `;
+            let html = '<h4>Erişim #' + accessId + ' - Firmalar <button class="btn btn-success" style="padding:5px 15px; font-size:12px; margin-left:10px;" onclick="showAddCompanyForm(' + accessId + ')">+ Yeni Firma Ekle</button></h4>';
             
             if (result.success && result.data && result.data.length > 0) {
-                html += '<div class="tag-list" style="margin-bottom: 20px;">';
+                html += '<table style="width:100%; margin-top:10px;">';
+                html += '<tr><th>Firma ID</th><th>Firma Adı</th><th>İşlem</th></tr>';
+                
                 result.data.forEach(company => {
-                    html += `
-                        <div class="tag tag-company">
-                            <span>🏢 ${company.COMPANY_NAME || 'ID: ' + company.COMPANY_ID}</span>
-                            <span class="tag-remove" onclick="removeCompany(${accessId}, ${company.COMPANY_ID})" title="Sil">✕</span>
-                        </div>
-                    `;
+                    html += '<tr>';
+                    html += '<td>' + company.COMPANY_ID + '</td>';
+                    html += '<td>' + (company.COMPANY_NAME || '-') + '</td>';
+                    html += '<td><button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="removeCompany(' + accessId + ', ' + company.COMPANY_ID + ')">Sil</button></td>';
+                    html += '</tr>';
                 });
-                html += '</div>';
-                html += `<p style="color: var(--gray-400); font-size: 0.85rem;">Toplam ${result.data.length} firma</p>`;
+                
+                html += '</table>';
             } else {
-                html += `
-                    <div style="text-align: center; padding: 30px; color: var(--gray-400);">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">🏢</div>
-                        <p>Henüz firma eklenmemiş</p>
-                    </div>
-                `;
+                html += '<p style="color:#999; margin-top:10px;">Henüz firma eklenmemiş</p>';
             }
             
             document.getElementById('resultContainer').innerHTML = html;
