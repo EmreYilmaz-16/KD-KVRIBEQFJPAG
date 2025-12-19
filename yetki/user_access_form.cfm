@@ -1,6 +1,19 @@
 <cfparam name="brand_code" default="">    
 <cfparam name="brand_id" default="">    
-    <title>Kullanıcı Erişim Yönetimi</title>
+<cfquery name="get_mark_names" datasource="#dsn1#"><!--- Markalar --->
+	SELECT
+		PB.BRAND_ID,
+        PB.BRAND_NAME
+	FROM
+		PRODUCT_BRANDS PB
+		,PRODUCT_BRANDS_OUR_COMPANY PBO
+	WHERE
+		PB.BRAND_ID = PBO.BRAND_ID
+		AND PBO.OUR_COMPANY_ID =  #session.ep.company_id# 
+	ORDER BY BRAND_NAME
+</cfquery>
+
+<title>Kullanıcı Erişim Yönetimi</title>
     <style>
         * {
             box-sizing: border-box;
@@ -186,22 +199,16 @@
                                 <option value="sales">Satış (Sales)</option>                          
                             </select>
                         </div>
-                        <div class="form-group" id="item-brand_name">
-                                    <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
-                                    <div class=""> 
-                                        <input type="hidden" name="brand_code" id="brand_code" value="<cfoutput>#brand_code#</cfoutput>">
-                                        <cf_wrkProductBrand
-                                        returnInputValue="brand_id,brand_name,brand_code"
-                                        returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
-                                        width="120"
-                                        compenent_name="getProductBrand"               
-                                        boxwidth="300"
-                                        boxheight="150"
-                                        is_internet="1"
-                                        brand_code="1"
-                                        brand_ID="#brand_id#">
+                       <div class="form-group">
+                                        <label class="col col-12 col-xs-12"><cf_get_lang dictionary_id='58847.Marka'></label>
+                                        <div class="col col-12">
+                                            <select name="marks" id="marks" multiple="multiple" style="width:170px;height:106px">
+                                                <cfoutput query="get_mark_names">
+                                                    <option value="#BRAND_ID#"<cfif listfind(attributes.marks,BRAND_ID)>selected</cfif>>#BRAND_NAME#</option>
+                                                </cfoutput>
+                                            </select>
+                                        </div>	
                                     </div>
-                                </div>	
                        <div class="form-group" id="item-OFFER_ID">
                     <label style="display:none;">Teklif İstenenler </label>
                         
