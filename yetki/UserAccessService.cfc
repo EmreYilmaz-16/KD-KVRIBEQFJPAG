@@ -157,7 +157,7 @@
         
         <cfset var qSelect = "">
         
-        <cfquery name="qSelect" datasource="#variables.dsn#">
+        <cfquery name="qSelect" datasource="#variables.dsn#_product">
             SELECT uab.ACCESS_ID, uab.BRAND_ID, pb.BRAND_NAME
             FROM USER_ACCESS_BRANDS_PBS uab
             LEFT JOIN PRODUCT_BRANDS pb ON uab.BRAND_ID = pb.BRAND_ID
