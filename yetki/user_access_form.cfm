@@ -1,5 +1,5 @@
 <cfparam name="brand_code" default="">    
-<cfparam name="brand_id" default="">    
+<cfparam name="attributes.marks" default="">    
 <cfquery name="get_mark_names" datasource="#dsn1#"><!--- Markalar --->
 	SELECT
 		PB.BRAND_ID,
