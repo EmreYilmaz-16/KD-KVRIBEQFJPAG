@@ -92,14 +92,18 @@
             <cfparam name="form.accessId" default="0">
             <cfparam name="form.userId" default="0">
             <cfparam name="form.accessType" default="">
+            <cfparam name="form.brandIds" default="">
+            <cfparam name="form.companyIds" default="">
             
             <cfif val(form.accessId) eq 0 OR val(form.userId) eq 0 OR len(trim(form.accessType)) eq 0>
                 <cfset response.message = "accessId, userId ve accessType zorunludur">
             <cfelse>
-                <cfset userAccessService.updateUserAccess(
+                <cfset userAccessService.updateFullUserAccess(
                     accessId = val(form.accessId),
                     userId = val(form.userId),
-                    accessType = form.accessType
+                    accessType = form.accessType,
+                    brandIds = form.brandIds,
+                    companyIds = form.companyIds
                 )>
                 <cfset response.success = true>
                 <cfset response.message = "Erişim başarıyla güncellendi">

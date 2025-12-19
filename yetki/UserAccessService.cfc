@@ -339,5 +339,33 @@
         
         <cfreturn accessId>
     </cffunction>
+    
+    <!--- Tam erişim kaydı güncelle (markalar ve şirketlerle birlikte) --->
+    <cffunction name="updateFullUserAccess" access="public" returntype="boolean" output="false">
+        <cfargument name="accessId" type="numeric" required="true">
+        <cfargument name="userId" type="numeric" required="true">
+        <cfargument name="accessType" type="string" required="true">
+        <cfargument name="brandIds" type="string" required="false" default="">
+        <cfargument name="companyIds" type="string" required="false" default="">
+        
+        <cftransaction>
+            <!--- Ana erişim kaydını güncelle --->
+            <cfset updateUserAccess(arguments.accessId, arguments.userId, arguments.accessType)>
+            
+            <!--- Mevcut markaları sil ve yenilerini ekle --->
+            <cfset removeAllBrandsFromAccess(arguments.accessId)>
+            <cfif len(trim(arguments.brandIds))>
+                <cfset addBrandsToAccess(arguments.accessId, arguments.brandIds)>
+            </cfif>
+            
+            <!--- Mevcut şirketleri sil ve yenilerini ekle --->
+            <cfset removeAllCompaniesFromAccess(arguments.accessId)>
+            <cfif len(trim(arguments.companyIds))>
+                <cfset addCompaniesToAccess(arguments.accessId, arguments.companyIds)>
+            </cfif>
+        </cftransaction>
+        
+        <cfreturn true>
+    </cffunction>
 
 </cfcomponent>

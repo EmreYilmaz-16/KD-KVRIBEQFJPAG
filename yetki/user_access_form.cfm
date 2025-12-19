@@ -400,11 +400,15 @@ function hepsini_sil(option)
                     <h2>✏️ Erişim Güncelle/Sil</h2>
                     <div class="form-group">
                         <label for="updateAccessId">Erişim ID:</label>
-                        <input type="number" id="updateAccessId">
+                        <input type="number" id="updateAccessId" readonly style="background-color: #eee;">
                     </div>
                     <div class="form-group">
-                        <label for="updateUserId">Yeni Kullanıcı ID:</label>
-                        <input type="number" id="updateUserId">
+                        <label>Kullanıcı:</label>
+                        <div class="input-group">
+                            <input type="hidden" name="update_emp_id" id="update_emp_id" value="">
+                            <input name="update_emp" type="text" id="update_emp" onfocus="AutoComplete_Create('update_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','update_emp_id','','3','120');" value="" autocomplete="off">
+                            <span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=update_emp_id&field_name=update_emp&select_list=1');"></span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="updateAccessType">Yeni Erişim Tipi:</label>
@@ -416,6 +420,7 @@ function hepsini_sil(option)
                     </div>
                     <button class="btn btn-primary" onclick="updateUserAccess()">Güncelle</button>
                     <button class="btn btn-danger" onclick="deleteUserAccess()">Sil</button>
+                    <button class="btn btn-warning" onclick="clearUpdateForm()">Temizle</button>
                 </div>
             </div>
         </div>
@@ -504,11 +509,11 @@ function hepsini_sil(option)
             return selectedOptions.map(option => option.value).join(',');
         }
         
-        // Seçili şirket ID'lerini al (dinamik tablodan)
+        // Seçili şirket ID'lerini al (dinamik tablodan - PAR_ID kullanılıyor)
         function getSelectedCompanyIds() {
-            const companyInputs = document.querySelectorAll('input[name="to_comp_ids"]');
+            const parInputs = document.querySelectorAll('input[name="to_par_ids"]');
             const companyIds = [];
-            companyInputs.forEach(input => {
+            parInputs.forEach(input => {
                 if (input.value && input.value.trim() !== '') {
                     companyIds.push(input.value);
                 }
@@ -578,11 +583,21 @@ function hepsini_sil(option)
         // Erişimi güncelle
         async function updateUserAccess() {
             const accessId = document.getElementById('updateAccessId').value;
-            const userId = document.getElementById('updateUserId').value;
+            const userId = document.getElementById('update_emp_id').value;
             const accessType = document.getElementById('updateAccessType').value;
             
-            if (!accessId || !userId || !accessType) {
-                showAlert('Lütfen tüm alanları doldurun', false);
+            if (!accessId) {
+                showAlert('Lütfen listeden bir erişim seçin', false);
+                return;
+            }
+            
+            if (!userId || userId == '0' || userId == '') {
+                showAlert('Lütfen bir kullanıcı seçin', false);
+                return;
+            }
+            
+            if (!accessType) {
+                showAlert('Lütfen erişim tipi seçin', false);
                 return;
             }
             
@@ -596,8 +611,17 @@ function hepsini_sil(option)
             showResult(result);
             
             if (result.success) {
+                clearUpdateForm();
                 getAllUserAccess();
             }
+        }
+        
+        // Güncelleme formunu temizle
+        function clearUpdateForm() {
+            document.getElementById('updateAccessId').value = '';
+            document.getElementById('update_emp_id').value = '';
+            document.getElementById('update_emp').value = '';
+            document.getElementById('updateAccessType').value = '';
         }
         
         // Erişimi sil
@@ -639,7 +663,7 @@ function hepsini_sil(option)
                     <td><button class="btn btn-primary" onclick="loadBrands(${item.ACCESS_ID})">Göster</button></td>
                     <td><button class="btn btn-primary" onclick="loadCompanies(${item.ACCESS_ID})">Göster</button></td>
                     <td>
-                        <button class="btn btn-warning" onclick="editAccess(${item.ACCESS_ID}, ${item.USER_ID}, '${item.ACCESS_TYPE}')">Düzenle</button>
+                        <button class="btn btn-warning" onclick="editAccess(${item.ACCESS_ID}, ${item.USER_ID}, '${item.ACCESS_TYPE}', '${(item.USER_NAME || '').replace(/'/g, "\\'")}')">Düzenle</button>
                         <button class="btn btn-danger" onclick="quickDelete(${item.ACCESS_ID})">Sil</button>
                     </td>
                 </tr>
@@ -656,10 +680,14 @@ function hepsini_sil(option)
         }
         
         // Düzenleme formunu doldur
-        function editAccess(accessId, userId, accessType) {
+        function editAccess(accessId, userId, accessType, userName) {
             document.getElementById('updateAccessId').value = accessId;
-            document.getElementById('updateUserId').value = userId;
+            document.getElementById('update_emp_id').value = userId;
+            document.getElementById('update_emp').value = userName || '';
             document.getElementById('updateAccessType').value = accessType;
+            
+            // Forma scroll yap
+            document.getElementById('updateAccessId').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
         // Hızlı silme
@@ -699,6 +727,8 @@ function hepsini_sil(option)
         }
         
         // Sayfa yüklendiğinde tüm erişimleri getir
-        // document.addEventListener('DOMContentLoaded', getAllUserAccess);
+        document.addEventListener('DOMContentLoaded', function() {
+            getAllUserAccess();
+        });
     </script>
 
