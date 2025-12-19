@@ -202,27 +202,175 @@
                                         brand_ID="#brand_id#">
                                     </div>
                                 </div>	
-                        <div class="form-group">
-                            <label>Şirketler:</label>
-                            <div class="checkbox-group" id="companyCheckboxes">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="companyIds" value="1" id="company1">
-                                    <label for="company1">Şirket 1</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="companyIds" value="2" id="company2">
-                                    <label for="company2">Şirket 2</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="companyIds" value="3" id="company3">
-                                    <label for="company3">Şirket 3</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" name="companyIds" value="4" id="company4">
-                                    <label for="company4">Şirket 4</label>
-                                </div>
-                            </div>
-                        </div>
+                       <div class="form-group" id="item-OFFER_ID">
+                    <label style="display:none;">Teklif İstenenler </label>
+                        
+<input type="hidden" name="rows" id="rows" value="0">
+
+
+        <div class="ui-scroll">
+        	<table id="ajax_list_7522694" class="ajax_list ui-form tablesorter tablesorter-default tablesorter920aa3e92968f" sort="true" role="grid">
+    
+	<thead>
+		
+			<tr role="row" class="tablesorter-headerRow">
+				<th width="20" data-column="0" class="tablesorter-header tablesorter-headerUnSorted" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="ajax_list_7522694" unselectable="on" aria-sort="none" aria-label=": No sort applied, activate to apply an ascending sort" style="user-select: none;"><div class="tablesorter-header-inner">
+					<a href="javascript://" onclick="try{opener_control();}catch(e){};openBoxDraggable('index.cfm?fuseaction=objects.popup_list_pars_multiuser&amp;field_emp_id=to_emp_ids&amp;field_pos_id=to_pos_ids&amp;field_pos_code=to_pos_codes&amp;field_par_id=to_par_ids&amp;field_company_id=to_comp_ids&amp;field_cons_id=to_cons_ids&amp;to_title=1&amp;select_list=7,8&amp;row_count=form_baskettbl_to_names_row_count&amp;table_name=form_baskettbl_to_names&amp;table_row_name=form_basketworkcube_to_row&amp;field_grp_id=form_basketto_grp_ids&amp;field_wgrp_id=form_basketto_wgrp_ids&amp;function_row_name=form_basketworkcube_to_delRow&amp;comp_id_list='+document.getElementById('comp_id_list').value);"><i class="fa fa-plus" title="Ekle " alt="Ekle "></i></a>
+				</div></th>
+				<th data-column="1" class="tablesorter-header tablesorter-headerUnSorted" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="ajax_list_7522694" unselectable="on" aria-sort="none" aria-label="Teklif İstenenler: No sort applied, activate to apply an ascending sort" style="user-select: none;"><div class="tablesorter-header-inner">Teklif İstenenler </div></th>
+				<th data-column="2" class="tablesorter-header tablesorter-headerUnSorted" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="ajax_list_7522694" unselectable="on" aria-sort="none" aria-label=": No sort applied, activate to apply an ascending sort" style="user-select: none;"><div class="tablesorter-header-inner"></div></th>
+				<th data-column="3" class="tablesorter-header tablesorter-headerUnSorted" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="ajax_list_7522694" unselectable="on" aria-sort="none" aria-label=": No sort applied, activate to apply an ascending sort" style="user-select: none;"><div class="tablesorter-header-inner"></div></th>
+				<th data-column="4" class="tablesorter-header tablesorter-headerUnSorted" tabindex="0" scope="col" role="columnheader" aria-disabled="false" aria-controls="ajax_list_7522694" unselectable="on" aria-sort="none" aria-label=": No sort applied, activate to apply an ascending sort" style="user-select: none;"><div class="tablesorter-header-inner"></div></th>
+				<input type="hidden" name="comp_id_list" id="comp_id_list" value="">
+				<input type="hidden" name="form_baskettbl_to_names_row_count" id="form_baskettbl_to_names_row_count" value="0">
+			</tr>
+		
+	</thead>
+		
+						
+				<tbody id="form_baskettbl_to_names" width="100%" aria-live="polite" aria-relevant="all"></tbody>	
+			 
+        	</table>
+        </div>
+        
+        <script>
+            jQuery.moveColumn = function (table, from, to) {
+                var rows = jQuery('tr', table);
+                var cols;
+                rows.each(function() {
+                cols = jQuery(this).children('th, td');
+                cols.eq(from).detach().insertBefore(cols.eq(to));
+                });
+            }
+		
+            if($('.controllerEvents').length){
+                if($('.controllerEvents').attr("id") == "list"){
+                    var th = $('table#ajax_list_7522694:not([is_child]) > thead tr th');
+                        th.each(function(){
+                            if($(this).attr("id") == undefined)
+                            {
+                                $(this).attr("id","th_"+$(this).index());
+                            };
+                    });
+                }
+            }
+
+            	
+        </script>
+        
+<script type="text/javascript">
+	
+		cus_tag_max_row_to=0;
+		function form_basketworkcube_to_delRow(yer,int_row)
+		{ 
+			var ver = navigator.appVersion;
+			
+				flag_custag=document.all.to_par_ids.length;
+			
+			if(flag_custag > 0)
+			{
+				if (ver.indexOf("MSIE") != -1)
+				{
+					try{document.all.to_pos_ids[yer-1].value = '';}catch(e){}
+					try{document.all.to_pos_codes[yer-1].value = '';}catch(e){}
+					try{document.all.to_emp_ids[yer-1].value = '';}catch(e){}
+					try{document.all.to_comp_ids[yer-1].value = '';}catch(e){}
+					try{document.all.to_par_ids[yer-1].value = '';}catch(e){}
+					try{document.all.to_cons_ids[yer-1].value = '';}catch(e){}
+					try{document.all.form_basketto_wgrp_ids[yer-1].value = '';}catch(e){}
+				}
+				else
+				{
+					for(var i=0;i<document.all.to_emp_ids.lenght;i++)
+					{
+						if(document.all.to_emp_ids[i].value==int_row)
+						{
+							try{document.all.to_pos_ids[i].value = '';}catch(e){}
+							try{document.all.to_pos_codes[i].value = '';}catch(e){}
+							try{document.all.to_emp_ids[i].value = '';}catch(e){}
+							try{document.all.to_comp_ids[i].value = '';}catch(e){}
+							try{document.all.to_par_ids[i].value = '';}catch(e){}
+							try{document.all.to_cons_ids[i].value = '';}catch(e){}
+							try{document.all.form_basketto_wgrp_ids[i].value = '';}catch(e){}
+							break;
+						}	
+					}
+					try
+					{
+						for(var i=0;i<document.all.to_comp_ids.length;i++)
+						{
+							if(document.all.to_comp_ids[i].value==int_row)
+							{
+								try{document.all.to_comp_ids[i].value = '';}catch(e){}
+								try{document.all.to_par_ids[i].value = '';}catch(e){}
+								break;
+							}
+						}
+					}catch(e){}
+				}
+			}
+			else
+			{
+				try{document.all.to_pos_ids.value = '';}catch(e){}
+				try{document.all.to_pos_codes.value = '';}catch(e){}
+				try{document.all.to_emp_ids.value = '';}catch(e){}
+				try{document.all.to_comp_ids.value = '';}catch(e){}
+				try{document.all.to_par_ids.value = '';}catch(e){}
+				try{document.all.to_cons_ids.value = '';}catch(e){}
+				try{document.all.form_basketto_wgrp_ids.value = '';}catch(e){}
+			}
+			var my_element = document.getElementById('form_basketworkcube_to_row' + yer);
+			my_element.parentNode.removeChild(my_element);
+			document.getElementById('form_baskettbl_to_names_row_count').value = yer - 1;
+		}
+
+	
+function control_related_offer(a,b)//cariden daha once teklif istenip istenmedigini kontrol eder
+{
+	
+		if(a >= 1)
+		{
+			alert("Cariden Daha Önce Teklif İstenmiştir!");
+			return false;
+		}
+		else
+		{
+			
+		}
+	
+}
+function hepsini_sil(option)
+{
+	if(option == 1)
+	{
+		for(i=1;i<=document.getElementById('form_baskettbl_to_names_row_count').value;i++)
+		{
+				var my_element = document.getElementById('form_basketworkcube_to_row' + i);
+				my_element.parentNode.removeChild(my_element);
+		}
+		document.getElementById('hepsini_sil_id').style.display='none';
+	}
+	else if(option == 2)
+	{
+		for(i=0;i<=document.getElementById('tbl_cc_names_row_count').value;i++)
+		{
+				var my_element = document.getElementById('form_basketworkcube_cc_row' + i);
+				my_element.parentNode.removeChild(my_element);
+		}
+		document.getElementById('hepsini_sil_id2').style.display='none';
+	}
+	else
+	{
+		for(i=0;i<=document.getElementById('tbl_cc2_names_row_count').value;i++)
+		{
+				var my_element = document.getElementById('form_basketworkcube_cc2_row' + i);
+				my_element.parentNode.removeChild(my_element);
+		}
+		document.getElementById('hepsini_sil_id3').style.display='none';
+	}
+}
+</script> 
+                </div>
                         <button type="submit" class="btn btn-success">Erişim Oluştur</button>
                     </form>
                 </div>
