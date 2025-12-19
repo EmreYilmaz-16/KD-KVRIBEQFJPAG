@@ -178,7 +178,7 @@
 							<div class="input-group">
 								<input type="hidden" name="sales_emp_id" id="sales_emp_id" value="35">
 								<input name="sales_emp" type="text" id="sales_emp" onfocus="AutoComplete_Create('sales_emp','MEMBER_NAME','MEMBER_NAME','get_member_autocomplete','3','EMPLOYEE_ID','sales_emp_id','','3','120');" value="Emre Yılmaz" autocomplete="off" style=""><div id="sales_emp_div_2" name="sales_emp_div_2" class="completeListbox" autocomplete="on" style="width: 401px; max-height: 150px; overflow: auto; position: absolute; left: 441.364px; top: 211.364px; z-index: 159; display: none;"></div>
-								<span class="input-group-addon btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=list_offer.sales_emp_id&field_name=list_offer.sales_emp&select_list=1');"></span>
+								<span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_positions&field_emp_id=list_offer.sales_emp_id&field_name=list_offer.sales_emp&select_list=1');"></span>
 							</div>
 						</div>
 					</div>
