@@ -1,0 +1,30 @@
+{
+    "userid": "12345",
+    "accsess_rights": [
+        {
+            "type": "purchase",
+            "allowed_brands": [
+                "brandA",
+                "brandB",
+                "brandC"
+            ],
+            "allowed_companies": [
+                "tax_number_1",
+                "tax_number_2"
+            ]
+        },
+        {
+            "type": "sales",
+            "allowed_brands": [
+                "brandA",
+                "brandB",
+                "brandC"
+            ],
+            "allowed_companies": [
+                "tax_number_1",
+                "tax_number_2"
+            ]
+        }
+    ]
+}
+
