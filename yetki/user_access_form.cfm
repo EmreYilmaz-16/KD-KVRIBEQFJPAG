@@ -13,7 +13,7 @@
 	ORDER BY BRAND_NAME
 </cfquery>
 
-<cfquery name="get_companies" datasource="#dsn1#"><!--- Firmalar --->
+<cfquery name="get_companies" datasource="#dsn#"><!--- Firmalar --->
 	SELECT
 		COMPANY_ID PAR_ID,
 		NICKNAME PAR_NAME
