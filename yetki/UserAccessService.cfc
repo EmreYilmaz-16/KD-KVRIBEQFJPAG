@@ -1,6 +1,6 @@
 <cfcomponent displayname="UserAccessService" hint="User Access CRUD Operations">
 
-    <cfset variables.dsn = "dsn1">
+    <cfset variables.dsn = "w3qa">
 
     <!--- ==================== USER_ACCESS_PBS CRUD ==================== --->
     
