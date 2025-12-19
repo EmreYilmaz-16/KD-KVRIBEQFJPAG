@@ -1,4 +1,5 @@
 <cfparam name="brand_code" default="">    
+<cfparam name="brand_id" default="">    
     <title>Kullanıcı Erişim Yönetimi</title>
     <style>
         * {
