@@ -483,6 +483,7 @@ function hepsini_sil(option)
         
         // API çağrısı yap
         async function apiCall(action, data = {}) {
+            console.log('API Call:', action, data);
             const formData = new FormData();
             formData.append('action', action);
             
@@ -495,9 +496,19 @@ function hepsini_sil(option)
                     method: 'POST',
                     body: formData
                 });
-                const result = await response.json();
-                return result;
+                console.log('Response status:', response.status);
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                try {
+                    const result = JSON.parse(text);
+                    return result;
+                } catch (parseError) {
+                    console.error('JSON Parse Error:', parseError);
+                    return { success: false, message: 'JSON parse hatası: ' + text.substring(0, 200) };
+                }
             } catch (error) {
+                console.error('Fetch Error:', error);
                 return { success: false, message: 'Bağlantı hatası: ' + error.message };
             }
         }
@@ -558,11 +569,17 @@ function hepsini_sil(option)
         
         // Tüm erişimleri getir
         async function getAllUserAccess() {
+            console.log('getAllUserAccess çağrıldı');
+            showResult({ message: 'Yükleniyor...' });
+            
             const result = await apiCall('getAllUserAccess');
+            console.log('getAllUserAccess sonuç:', result);
             showResult(result);
             
             if (result.success && result.data) {
                 renderAccessTable(result.data);
+            } else {
+                showAlert(result.message || 'Veri alınamadı', false);
             }
         }
         
