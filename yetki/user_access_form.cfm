@@ -726,25 +726,94 @@ function hepsini_sil(option)
             }
         }
         
-        // Markaları yükle ve göster
+        // Aktif erişim ID'sini sakla (marka/firma silme işlemleri için)
+        let currentAccessId = null;
+        
+        // Markaları yükle ve göster (silme butonlarıyla)
         async function loadBrands(accessId) {
+            currentAccessId = accessId;
             const result = await apiCall('getBrandsByAccessId', { accessId: accessId });
+            
             if (result.success && result.data && result.data.length > 0) {
-                const brandNames = result.data.map(b => b.BRAND_NAME || 'ID: ' + b.BRAND_ID).join(', ');
-                showResult({ accessId: accessId, markalar: brandNames, detay: result.data });
+                let html = '<h4>Erişim #' + accessId + ' - Markalar</h4>';
+                html += '<table style="width:100%; margin-top:10px;">';
+                html += '<tr><th>Marka ID</th><th>Marka Adı</th><th>İşlem</th></tr>';
+                
+                result.data.forEach(brand => {
+                    html += '<tr>';
+                    html += '<td>' + brand.BRAND_ID + '</td>';
+                    html += '<td>' + (brand.BRAND_NAME || '-') + '</td>';
+                    html += '<td><button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="removeBrand(' + accessId + ', ' + brand.BRAND_ID + ')">Sil</button></td>';
+                    html += '</tr>';
+                });
+                
+                html += '</table>';
+                document.getElementById('resultContainer').innerHTML = html;
             } else {
                 showResult({ accessId: accessId, markalar: 'Marka bulunamadı' });
             }
         }
         
-        // Şirketleri yükle ve göster
+        // Şirketleri yükle ve göster (silme butonlarıyla)
         async function loadCompanies(accessId) {
+            currentAccessId = accessId;
             const result = await apiCall('getCompaniesByAccessId', { accessId: accessId });
+            
             if (result.success && result.data && result.data.length > 0) {
-                const companyNames = result.data.map(c => c.COMPANY_NAME || 'ID: ' + c.COMPANY_ID).join(', ');
-                showResult({ accessId: accessId, firmalar: companyNames, detay: result.data });
+                let html = '<h4>Erişim #' + accessId + ' - Firmalar</h4>';
+                html += '<table style="width:100%; margin-top:10px;">';
+                html += '<tr><th>Firma ID</th><th>Firma Adı</th><th>İşlem</th></tr>';
+                
+                result.data.forEach(company => {
+                    html += '<tr>';
+                    html += '<td>' + company.COMPANY_ID + '</td>';
+                    html += '<td>' + (company.COMPANY_NAME || '-') + '</td>';
+                    html += '<td><button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="removeCompany(' + accessId + ', ' + company.COMPANY_ID + ')">Sil</button></td>';
+                    html += '</tr>';
+                });
+                
+                html += '</table>';
+                document.getElementById('resultContainer').innerHTML = html;
             } else {
                 showResult({ accessId: accessId, firmalar: 'Firma bulunamadı' });
+            }
+        }
+        
+        // Marka sil
+        async function removeBrand(accessId, brandId) {
+            if (!confirm('Bu markayı erişimden kaldırmak istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            const result = await apiCall('removeBrandFromAccess', { 
+                accessId: accessId, 
+                brandId: brandId 
+            });
+            
+            showAlert(result.message, result.success);
+            
+            if (result.success) {
+                // Marka listesini yenile
+                loadBrands(accessId);
+            }
+        }
+        
+        // Firma sil
+        async function removeCompany(accessId, companyId) {
+            if (!confirm('Bu firmayı erişimden kaldırmak istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            const result = await apiCall('removeCompanyFromAccess', { 
+                accessId: accessId, 
+                companyId: companyId 
+            });
+            
+            showAlert(result.message, result.success);
+            
+            if (result.success) {
+                // Firma listesini yenile
+                loadCompanies(accessId);
             }
         }
         
