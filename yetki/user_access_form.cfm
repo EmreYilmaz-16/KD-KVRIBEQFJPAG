@@ -13,6 +13,18 @@
 	ORDER BY BRAND_NAME
 </cfquery>
 
+<cfquery name="get_companies" datasource="#dsn1#"><!--- Firmalar --->
+	SELECT
+		COMPANY_ID PAR_ID,
+		NICKNAME PAR_NAME
+	FROM
+		COMPANY
+	WHERE
+		
+		
+	ORDER BY NICKNAME
+</cfquery>
+
 <title>Kullanıcı Erişim Yönetimi</title>
     <style>
         * {
@@ -457,12 +469,13 @@ function hepsini_sil(option)
                 <div class="card" id="addCompanyCard" style="display:none;">
                     <h2>➕ Firma Ekle (Erişim #<span id="companyAccessId"></span>)</h2>
                     <div class="form-group">
-                        <label>Firma Seç:</label>
-                        <div class="input-group">
-                            <input type="hidden" id="new_company_id" value="">
-                            <input type="text" id="new_company_name" placeholder="Firma ara..." onfocus="AutoComplete_Create('new_company_name','PAR_NAME','PAR_NAME','get_par_autocomplete','3','PAR_ID','new_company_id','','3','120');" autocomplete="off">
-                            <span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_pars&field_par_id=new_company_id&field_name=new_company_name&select_list=7,8');"></span>
-                        </div>
+                        <label>Eklenecek Firma:</label>
+                        <select id="newCompanySelect" style="width:100%; padding:10px;">
+                            <option value="">Seçiniz...</option>
+                            <cfoutput query="get_companies">
+                                <option value="#PAR_ID#">#PAR_NAME#</option>
+                            </cfoutput>
+                        </select>
                     </div>
                     <button class="btn btn-success" onclick="addCompanyToAccess()">Firma Ekle</button>
                     <button class="btn btn-warning" onclick="hideAddCompanyForm()">İptal</button>
@@ -905,8 +918,7 @@ function hepsini_sil(option)
         function showAddCompanyForm(accessId) {
             currentAccessId = accessId;
             document.getElementById('companyAccessId').textContent = accessId;
-            document.getElementById('new_company_id').value = '';
-            document.getElementById('new_company_name').value = '';
+            document.getElementById('newCompanySelect').value = '';
             document.getElementById('addCompanyCard').style.display = 'block';
             document.getElementById('addCompanyCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -918,17 +930,10 @@ function hepsini_sil(option)
         
         // Erişime firma ekle
         async function addCompanyToAccess() {
-            const companyIdElement = document.getElementById('new_company_id');
-            const companyNameElement = document.getElementById('new_company_name');
-            
-            console.log('Company ID Element:', companyIdElement);
-            console.log('Company ID Value:', companyIdElement ? companyIdElement.value : 'element yok');
-            console.log('Company Name Value:', companyNameElement ? companyNameElement.value : 'element yok');
-            
-            const companyId = companyIdElement ? companyIdElement.value.trim() : '';
+            const companyId = document.getElementById('newCompanySelect').value;
             
             if (!companyId) {
-                showAlert('Lütfen bir firma seçin. (ID: ' + companyId + ', Name: ' + (companyNameElement ? companyNameElement.value : '') + ')', false);
+                showAlert('Lütfen bir firma seçin', false);
                 return;
             }
             
