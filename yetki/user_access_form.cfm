@@ -456,7 +456,7 @@ function hepsini_sil(option)
     </div>
 
     <script>
-        const API_URL = 'user_access_api.cfm';
+        const API_URL = '/addOns/Partner/yetki/user_access_api.cfm';
         
         // Alert göster
         function showAlert(message, isSuccess) {
