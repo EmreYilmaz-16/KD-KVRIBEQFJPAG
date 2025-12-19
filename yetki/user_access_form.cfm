@@ -469,9 +469,13 @@ function hepsini_sil(option)
                 <div class="card" id="addCompanyCard" style="display:none;">
                     <h2>➕ Firma Ekle (Erişim #<span id="companyAccessId"></span>)</h2>
                     <div class="form-group">
-                        <label>Eklenecek Firma:</label>
-                        <select id="newCompanySelect" style="width:100%; padding:10px;">
-                            <option value="">Seçiniz...</option>
+                        <label>Firma Ara:</label>
+                        <input type="text" id="companySearchInput" placeholder="Firma adı yazın..." 
+                               onkeyup="filterCompanies()" style="width:100%; padding:10px; margin-bottom:10px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Eklenecek Firma: <span id="companyCount" style="color:#666; font-size:12px;"></span></label>
+                        <select id="newCompanySelect" style="width:100%; padding:10px;" size="8">
                             <cfoutput query="get_companies">
                                 <option value="#PAR_ID#">#PAR_NAME#</option>
                             </cfoutput>
@@ -914,11 +918,63 @@ function hepsini_sil(option)
         
         // ==================== FİRMA EKLEME ====================
         
+        // Firma listesi için orijinal options'ları sakla
+        let allCompanyOptions = [];
+        
+        // Sayfa yüklendiğinde firma options'larını sakla
+        function initCompanyOptions() {
+            const select = document.getElementById('newCompanySelect');
+            if (select) {
+                allCompanyOptions = Array.from(select.options).map(opt => ({
+                    value: opt.value,
+                    text: opt.text
+                }));
+                updateCompanyCount();
+            }
+        }
+        
+        // Firma sayısını güncelle
+        function updateCompanyCount() {
+            const select = document.getElementById('newCompanySelect');
+            const countSpan = document.getElementById('companyCount');
+            if (select && countSpan) {
+                const visibleCount = select.options.length;
+                countSpan.textContent = `(${visibleCount} firma)`;
+            }
+        }
+        
+        // Firma arama/filtreleme
+        function filterCompanies() {
+            const searchInput = document.getElementById('companySearchInput');
+            const select = document.getElementById('newCompanySelect');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // Select'i temizle
+            select.innerHTML = '';
+            
+            // Filtrelenmiş options'ları ekle
+            allCompanyOptions.forEach(opt => {
+                if (opt.text.toLowerCase().includes(searchTerm)) {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.text = opt.text;
+                    select.add(option);
+                }
+            });
+            
+            updateCompanyCount();
+        }
+        
         // Firma ekleme formunu göster
         function showAddCompanyForm(accessId) {
             currentAccessId = accessId;
             document.getElementById('companyAccessId').textContent = accessId;
+            document.getElementById('companySearchInput').value = '';
             document.getElementById('newCompanySelect').value = '';
+            
+            // Options'ları sıfırla
+            filterCompanies();
+            
             document.getElementById('addCompanyCard').style.display = 'block';
             document.getElementById('addCompanyCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -955,8 +1011,9 @@ function hepsini_sil(option)
             }
         }
         
-        // Sayfa yüklendiğinde tüm erişimleri getir
+        // Sayfa yüklendiğinde tüm erişimleri getir ve firma listesini hazırla
         document.addEventListener('DOMContentLoaded', function() {
+            initCompanyOptions();
             getAllUserAccess();
         });
     </script>
