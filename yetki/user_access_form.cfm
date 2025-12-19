@@ -188,7 +188,7 @@
                         <div class="form-group" id="item-brand_name">
                                     <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
                                     <div class=""> 
-                                        <cfinput type="hidden" name="brand_code" id="brand_code" value="#brand_code#">
+                                        <input type="hidden" name="brand_code" id="brand_code" value="<cfoutput>#brand_code#</cfoutput>">
                                         <cf_wrkProductBrand
                                         returnInputValue="brand_id,brand_name,brand_code"
                                         returnQueryValue="BRAND_ID,BRAND_NAME,BRAND_CODE"
