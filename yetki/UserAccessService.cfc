@@ -286,9 +286,9 @@
         <!--- Kullanıcının erişimlerini getir --->
         <cfquery name="qAccess" datasource="#variables.dsn#">
             SELECT ua.ACCESS_ID, ua.USER_ID, ua.ACCESS_TYPE,
-                   m.MEMBER_NAME as USER_NAME
+                   m.EMPLOYEE_NAME+' '+m.EMPLOYEE_SURNAME as USER_NAME
             FROM USER_ACCESS_PBS ua
-            LEFT JOIN MEMBERS m ON ua.USER_ID = m.EMPLOYEE_ID
+            LEFT JOIN EMPLOYEES m ON ua.USER_ID = m.EMPLOYEE_ID
             WHERE ua.USER_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="cf_sql_integer">
         </cfquery>
         
