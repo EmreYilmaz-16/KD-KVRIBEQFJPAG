@@ -502,7 +502,12 @@ function hepsini_sil(option)
                 
                 try {
                     const result = JSON.parse(text);
-                    return result;
+                    // ColdFusion büyük harfli key döndürüyor, küçük harfe çeviriyoruz
+                    return {
+                        success: result.SUCCESS,
+                        message: result.MESSAGE,
+                        data: result.DATA
+                    };
                 } catch (parseError) {
                     console.error('JSON Parse Error:', parseError);
                     return { success: false, message: 'JSON parse hatası: ' + text.substring(0, 200) };
