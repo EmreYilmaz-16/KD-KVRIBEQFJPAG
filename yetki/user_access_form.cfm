@@ -435,6 +435,41 @@ function hepsini_sil(option)
             </div>
         </div>
         
+        <!--- Marka/Firma Ekleme Bölümü --->
+        <div class="row">
+            <div class="col-6">
+                <div class="card" id="addBrandCard" style="display:none;">
+                    <h2>➕ Marka Ekle (Erişim #<span id="brandAccessId"></span>)</h2>
+                    <div class="form-group">
+                        <label>Eklenecek Marka:</label>
+                        <select id="newBrandSelect" style="width:100%; padding:10px;">
+                            <option value="">Seçiniz...</option>
+                            <cfoutput query="get_mark_names">
+                                <option value="#BRAND_ID#">#BRAND_NAME#</option>
+                            </cfoutput>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" onclick="addBrandToAccess()">Marka Ekle</button>
+                    <button class="btn btn-warning" onclick="hideAddBrandForm()">İptal</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card" id="addCompanyCard" style="display:none;">
+                    <h2>➕ Firma Ekle (Erişim #<span id="companyAccessId"></span>)</h2>
+                    <div class="form-group">
+                        <label>Firma Seç:</label>
+                        <div class="input-group">
+                            <input type="hidden" id="new_company_id" value="">
+                            <input type="text" id="new_company_name" placeholder="Firma ara..." onfocus="AutoComplete_Create('new_company_name','PAR_NAME','PAR_NAME','get_par_autocomplete','3','PAR_ID','new_company_id','','3','120');" autocomplete="off">
+                            <span class="input-group-text btnPointer icon-ellipsis" onclick="openBoxDraggable('index.cfm?fuseaction=objects.popup_list_pars&field_par_id=new_company_id&field_name=new_company_name&select_list=7,8');"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="addCompanyToAccess()">Firma Ekle</button>
+                    <button class="btn btn-warning" onclick="hideAddCompanyForm()">İptal</button>
+                </div>
+            </div>
+        </div>
+        
         <!--- Erişim Listesi --->
         <div class="card">
             <h2>📊 Erişim Listesi</h2>
@@ -734,8 +769,9 @@ function hepsini_sil(option)
             currentAccessId = accessId;
             const result = await apiCall('getBrandsByAccessId', { accessId: accessId });
             
+            let html = '<h4>Erişim #' + accessId + ' - Markalar <button class="btn btn-success" style="padding:5px 15px; font-size:12px; margin-left:10px;" onclick="showAddBrandForm(' + accessId + ')">+ Yeni Marka Ekle</button></h4>';
+            
             if (result.success && result.data && result.data.length > 0) {
-                let html = '<h4>Erişim #' + accessId + ' - Markalar</h4>';
                 html += '<table style="width:100%; margin-top:10px;">';
                 html += '<tr><th>Marka ID</th><th>Marka Adı</th><th>İşlem</th></tr>';
                 
@@ -748,10 +784,11 @@ function hepsini_sil(option)
                 });
                 
                 html += '</table>';
-                document.getElementById('resultContainer').innerHTML = html;
             } else {
-                showResult({ accessId: accessId, markalar: 'Marka bulunamadı' });
+                html += '<p style="color:#999; margin-top:10px;">Henüz marka eklenmemiş</p>';
             }
+            
+            document.getElementById('resultContainer').innerHTML = html;
         }
         
         // Şirketleri yükle ve göster (silme butonlarıyla)
@@ -759,8 +796,9 @@ function hepsini_sil(option)
             currentAccessId = accessId;
             const result = await apiCall('getCompaniesByAccessId', { accessId: accessId });
             
+            let html = '<h4>Erişim #' + accessId + ' - Firmalar <button class="btn btn-success" style="padding:5px 15px; font-size:12px; margin-left:10px;" onclick="showAddCompanyForm(' + accessId + ')">+ Yeni Firma Ekle</button></h4>';
+            
             if (result.success && result.data && result.data.length > 0) {
-                let html = '<h4>Erişim #' + accessId + ' - Firmalar</h4>';
                 html += '<table style="width:100%; margin-top:10px;">';
                 html += '<tr><th>Firma ID</th><th>Firma Adı</th><th>İşlem</th></tr>';
                 
@@ -773,10 +811,11 @@ function hepsini_sil(option)
                 });
                 
                 html += '</table>';
-                document.getElementById('resultContainer').innerHTML = html;
             } else {
-                showResult({ accessId: accessId, firmalar: 'Firma bulunamadı' });
+                html += '<p style="color:#999; margin-top:10px;">Henüz firma eklenmemiş</p>';
             }
+            
+            document.getElementById('resultContainer').innerHTML = html;
         }
         
         // Marka sil
@@ -814,6 +853,93 @@ function hepsini_sil(option)
             if (result.success) {
                 // Firma listesini yenile
                 loadCompanies(accessId);
+            }
+        }
+        
+        // ==================== MARKA EKLEME ====================
+        
+        // Marka ekleme formunu göster
+        function showAddBrandForm(accessId) {
+            currentAccessId = accessId;
+            document.getElementById('brandAccessId').textContent = accessId;
+            document.getElementById('newBrandSelect').value = '';
+            document.getElementById('addBrandCard').style.display = 'block';
+            document.getElementById('addBrandCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Marka ekleme formunu gizle
+        function hideAddBrandForm() {
+            document.getElementById('addBrandCard').style.display = 'none';
+        }
+        
+        // Erişime marka ekle
+        async function addBrandToAccess() {
+            const brandId = document.getElementById('newBrandSelect').value;
+            
+            if (!brandId) {
+                showAlert('Lütfen bir marka seçin', false);
+                return;
+            }
+            
+            if (!currentAccessId) {
+                showAlert('Erişim ID bulunamadı', false);
+                return;
+            }
+            
+            const result = await apiCall('addBrandToAccess', {
+                accessId: currentAccessId,
+                brandId: brandId
+            });
+            
+            showAlert(result.message, result.success);
+            
+            if (result.success) {
+                hideAddBrandForm();
+                loadBrands(currentAccessId);
+            }
+        }
+        
+        // ==================== FİRMA EKLEME ====================
+        
+        // Firma ekleme formunu göster
+        function showAddCompanyForm(accessId) {
+            currentAccessId = accessId;
+            document.getElementById('companyAccessId').textContent = accessId;
+            document.getElementById('new_company_id').value = '';
+            document.getElementById('new_company_name').value = '';
+            document.getElementById('addCompanyCard').style.display = 'block';
+            document.getElementById('addCompanyCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Firma ekleme formunu gizle
+        function hideAddCompanyForm() {
+            document.getElementById('addCompanyCard').style.display = 'none';
+        }
+        
+        // Erişime firma ekle
+        async function addCompanyToAccess() {
+            const companyId = document.getElementById('new_company_id').value;
+            
+            if (!companyId) {
+                showAlert('Lütfen bir firma seçin', false);
+                return;
+            }
+            
+            if (!currentAccessId) {
+                showAlert('Erişim ID bulunamadı', false);
+                return;
+            }
+            
+            const result = await apiCall('addCompanyToAccess', {
+                accessId: currentAccessId,
+                companyId: companyId
+            });
+            
+            showAlert(result.message, result.success);
+            
+            if (result.success) {
+                hideAddCompanyForm();
+                loadCompanies(currentAccessId);
             }
         }
         
