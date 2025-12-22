@@ -228,6 +228,18 @@
                 
             </span>
         </a>
+        <a class="action-card tableyazi" href="#request.self#?fuseaction=eshipping.emptypopup_list_shipping_pallets_pbs">
+            <span class="icon"><img src="../../images/e-pd/up30.png" alt="Ambardan sevkiyata"></span>
+            <span class="details">
+                <span class="title">Sevkiyat Paletleri</span>
+                <span class="badge-row">
+                    <span class="status-badge status-success"></span>
+                    <span class="status-badge status-alert"></span>
+                    <span class="status-badge status-warning"></span>
+                </span>
+                
+            </span>
+        </a>
 
         <a class="action-card tableyazi" href="#request.self#?fuseaction=purchase._emptypopup_list_purchase_despatches_pbs">
             <span class="icon"><img src="../../images/e-pd/malkabul.png" alt="Mal kabul"></span>
