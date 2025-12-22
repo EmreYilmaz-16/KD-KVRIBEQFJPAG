@@ -261,6 +261,12 @@ function checkKey(el,event){
             var serial_=el.value;
             var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
             console.log(serialObject);
+            if(serialObject.success){
+            addProductToPallet(serialObject.serial_no,serialObject.product_code_2);
+        }else{
+            alert("Barkod okunamadi: "+serialObject.error);
+            $(el).val("");
+        }
             return false;
         }
         var serial_=el.value;
