@@ -38,6 +38,14 @@
     .align-items-center {
         align-items: center !important;
     }
+
+    #acc_code_cat_results {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: none;
+    }
 </style>
 <cfquery name="GET_KDV" datasource="#DSN2#">
     SELECT TAX_ID, TAX FROM SETUP_TAX ORDER BY TAX
@@ -238,11 +246,12 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                     <label ><cf_get_lang dictionary_id='37257.Muh Kod Grubu'></label>
                                     <input type="text" class="form-control mb-2" id="acc_code_cat_search" placeholder="Ara" oninput="filterAccCodeCat()">
                                     <select name="acc_code_cat" id="acc_code_cat">
-									<option value=""><cf_get_lang dictionary_id='57734.Seçiniz'></option>
-									<cfoutput query="get_code_cat">
-										<option value="#pro_code_catid#" <cfif isdefined("product_period_cat_id") and product_period_cat_id eq pro_code_catid>selected</cfif>>#pro_code_cat_name#</option>
-									</cfoutput>
-								</select>
+								<option value=""><cf_get_lang dictionary_id='57734.Seçiniz'></option>
+								<cfoutput query="get_code_cat">
+									<option value="#pro_code_catid#" <cfif isdefined("product_period_cat_id") and product_period_cat_id eq pro_code_catid>selected</cfif>>#pro_code_cat_name#</option>
+								</cfoutput>
+							</select>
+                                    <div id="acc_code_cat_results" class="list-group mt-1"></div>
                                 </div>
                                 <div class="form-group" id="item-tax_purchase">
                                     <label class="col col-4 col-md-4 col-sm-4 col-xs-12"><cf_get_lang dictionary_id='37631.Alis KDV'>*</label>
@@ -378,15 +387,36 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
     function filterAccCodeCat() {
         const search = document.getElementById("acc_code_cat_search").value.toLowerCase();
         const select = document.getElementById("acc_code_cat");
+        const results = document.getElementById("acc_code_cat_results");
+        results.innerHTML = "";
+        let matchCount = 0;
+
         Array.from(select.options).forEach((opt, idx) => {
             // Always keep the placeholder visible
             if (idx === 0) {
                 opt.hidden = false;
                 return;
             }
+
             const text = opt.text.toLowerCase();
-            opt.hidden = search && !text.includes(search);
+            const isMatch = !search || text.includes(search);
+            opt.hidden = search && !isMatch;
+
+            if (isMatch && search) {
+                matchCount++;
+                const item = document.createElement("a");
+                item.className = "list-group-item list-group-item-action";
+                item.href = "javascript:void(0);";
+                item.textContent = opt.text;
+                item.onclick = () => {
+                    select.value = opt.value;
+                    results.style.display = "none";
+                };
+                results.appendChild(item);
+            }
         });
+
+        results.style.display = matchCount ? "block" : "none";
     }
 
     function reassignRows() {
