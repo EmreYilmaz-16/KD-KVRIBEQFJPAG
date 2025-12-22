@@ -252,11 +252,15 @@ for(var i=0;i<parsers.length;i++){
 
 function checkKey(el,event){
     if(event.keyCode==13){
+         var bm=new BarcodeManager();
         event.preventDefault();
         var parserId=$("#BarcodeParser").val();
         if(parserId==4){
             console.log("Standart Barkod Secildi");
+
             var serial_=el.value;
+            var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
+            console.log(serialObject);
             return false;
         }
         var serial_=el.value;
