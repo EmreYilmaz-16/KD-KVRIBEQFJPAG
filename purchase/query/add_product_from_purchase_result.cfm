@@ -68,13 +68,17 @@
     <cfset RECORDED_PRODUCT_ID=GET_PID.PRODUCT_ID>
     <cfset RECORDED_STOCK_ID=get_max_stck.max_stck>
     <cfset RECORDED_UNIT_ID=GET_MAX_UNIT.MAX_UNIT>
+    
     <CFIF arguments.IS_FROM_DEMAND EQ 1>
         <cfquery name="GETPRODUCT_NAME" datasource="#DSN3#">
             SELECT * FROM INTERNALDEMAND_ROW WHERE WRK_ROW_ID='#arguments.OFFER_WRK_ROW_ID#'
         </cfquery>
     <cfquery name="UP" datasource="#DSN3#">
         UPDATE INTERNALDEMAND_ROW SET PRODUCT_ID=#RECORDED_PRODUCT_ID#,STOCK_ID=#RECORDED_STOCK_ID#,PRODUCT_NAME='#arguments.PRODUCT_NAME#',PRODUCT_NAME2='#GETPRODUCT_NAME.PRODUCT_NAME#',DETAIL_INFO_EXTRA=
-        <cfif arrayLen(arguments.OEM_NO_ARR)>'#arguments.OEM_NO_ARR[1]#'<cfelse>NULL</cfif> WHERE WRK_ROW_ID='#arguments.OFFER_WRK_ROW_ID#'
+        <cfif arrayLen(arguments.OEM_NO_ARR)>'#arguments.OEM_NO_ARR[1]#'<cfelse>NULL</cfif>
+        ,UNIT_ID=#RECORDED_UNIT_ID#
+        
+         WHERE WRK_ROW_ID='#arguments.OFFER_WRK_ROW_ID#'
     </cfquery>
     
     <cfelse>
