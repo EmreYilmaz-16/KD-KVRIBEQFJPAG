@@ -110,6 +110,35 @@
     </cfloop>
 </cfquery>
 </cfif>
+<cfquery name="inprclist" datasource="#DSN3#">
+    INSERT INTO [#DSN3#].[PRICE] 
+([PRICE_CATID],
+ [PRODUCT_ID],
+ [STOCK_ID],
+ [STARTDATE],
+ [PRICE_KDV],
+ [IS_KDV],
+ [UNIT],
+ [MONEY],
+ [PRICE_DISCOUNT],
+ [RECORD_DATE],
+ [RECORD_EMP],
+ [RECORD_IP]
+ ) 
+VALUES 
+(1,
+ #RECORDED_PRODUCT_ID#,
+ #RECORDED_STOCK_ID#,
+ GETDATE(),
+ 0,
+ 1,
+ #RECORDED_UNIT_ID#,
+ 'TL',
+ 0,
+ GETDATE(),
+ #session.ep.userId#,
+ '')
+</cfquery>
 
     <cfset ReturnData.STATUS=1>
     <cfset ReturnData.MESSAGE="Ürün Oluşturuldu">
