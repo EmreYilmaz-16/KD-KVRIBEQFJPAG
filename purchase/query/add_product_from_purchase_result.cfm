@@ -123,7 +123,8 @@
  [PRICE_DISCOUNT],
  [RECORD_DATE],
  [RECORD_EMP],
- [RECORD_IP]
+ [RECORD_IP],
+ PRICE
  ) 
 VALUES 
 (1,
@@ -137,7 +138,7 @@ VALUES
  0,
  GETDATE(),
  #session.ep.userId#,
- '')
+ '',0)
 </cfquery>
 
     <cfset ReturnData.STATUS=1>
