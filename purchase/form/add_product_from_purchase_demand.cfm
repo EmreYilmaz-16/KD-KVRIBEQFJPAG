@@ -234,7 +234,9 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                     </div>
                                 </div>
                                 <div class="form-group">
+
                                     <label ><cf_get_lang dictionary_id='37257.Muh Kod Grubu'></label>
+                                    <input type="text" class="form-control mb-2" id="acc_code_cat_search" placeholder="Ara" oninput="filterAccCodeCat()">
                                     <select name="acc_code_cat" id="acc_code_cat">
 									<option value=""><cf_get_lang dictionary_id='57734.Seçiniz'></option>
 									<cfoutput query="get_code_cat">
@@ -371,6 +373,20 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
         tr.parentNode.removeChild(tr);
 
         reassignRows();
+    }
+
+    function filterAccCodeCat() {
+        const search = document.getElementById("acc_code_cat_search").value.toLowerCase();
+        const select = document.getElementById("acc_code_cat");
+        Array.from(select.options).forEach((opt, idx) => {
+            // Always keep the placeholder visible
+            if (idx === 0) {
+                opt.hidden = false;
+                return;
+            }
+            const text = opt.text.toLowerCase();
+            opt.hidden = search && !text.includes(search);
+        });
     }
 
     function reassignRows() {
