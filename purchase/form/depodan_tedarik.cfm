@@ -166,7 +166,7 @@ FOR JSON PATH
 
 
   </cfquery>
-  <cfdump var="#getMainPurchaseOffer#">
+  
   
   <span style="display:none">depodan_tedarik.cfm</span>
 <cfif len(getMainPurchaseOffer.QRESULT) EQ 0>
