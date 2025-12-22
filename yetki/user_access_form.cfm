@@ -27,175 +27,85 @@
 
 <title>Kullanıcı Erişim Yönetimi</title>
     <style>
-        :root {
-            --bg: #0f172a;
-            --panel: rgba(17, 24, 39, 0.75);
-            --card: rgba(255, 255, 255, 0.05);
-            --stroke: rgba(255, 255, 255, 0.1);
-            --primary: #7c3aed;
-            --primary-strong: #8b5cf6;
-            --accent: #0ea5e9;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --text: #e5e7eb;
-            --muted: #9ca3af;
-            --shadow: 0 10px 50px rgba(0, 0, 0, 0.25);
-            --radius: 14px;
-        }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.2), transparent 30%),
-                        radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.25), transparent 25%),
-                        radial-gradient(circle at 50% 80%, rgba(34, 197, 94, 0.15), transparent 30%),
-                        var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 32px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
-        .page-hero {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(14, 165, 233, 0.25));
-            border: 1px solid var(--stroke);
-            border-radius: 18px;
-            padding: 24px;
+        h1 {
+            color: #333;
             margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
-        }
-        .page-hero h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        .page-hero .lead {
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        .eyebrow {
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 11px;
-            color: var(--accent);
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .chip {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text);
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            border: 1px solid var(--stroke);
+            text-align: center;
         }
         .card {
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--stroke);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 20px;
             margin-bottom: 20px;
         }
         .card h2 {
-            color: #f8fafc;
-            margin-bottom: 12px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .card h2:after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+            color: #2196F3;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
         }
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 6px;
-            color: var(--muted);
-            font-weight: 600;
-            font-size: 13px;
-            letter-spacing: 0.01em;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
         }
-        .form-group input,
-        .form-group select {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 11px 12px;
-            border: 1px solid var(--stroke);
-            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text);
-            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
         }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: var(--accent);
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2196F3;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
-            background: rgba(255, 255, 255, 0.07);
         }
         .btn {
-            padding: 10px 16px;
-            border: 1px solid transparent;
-            border-radius: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.05);
-            box-shadow: var(--shadow);
+            margin-right: 10px;
+            margin-bottom: 10px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.08);
+            background-color: #2196F3;
+            color: white;
         }
         .btn-success {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.08);
+            background-color: #4CAF50;
+            color: white;
         }
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #f97316);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.08);
+            background-color: #f44336;
+            color: white;
         }
         .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #f97316);
-            color: #0f172a;
-            border-color: rgba(255, 255, 255, 0.08);
+            background-color: #ff9800;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
         }
         .checkbox-group {
             display: flex;
@@ -205,135 +115,75 @@
         .checkbox-item {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.04);
+            background: #f5f5f5;
             padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--stroke);
+            border-radius: 4px;
         }
         .checkbox-item input {
             width: auto;
             margin-right: 8px;
         }
         .result-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--stroke);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-top: 12px;
-            max-height: 320px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
             overflow-y: auto;
         }
         .result-box pre {
             white-space: pre-wrap;
             word-wrap: break-word;
-            color: var(--muted);
-            font-size: 13px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            overflow: hidden;
+            margin-top: 15px;
         }
-        table th,
-        table td {
-            padding: 12px 10px;
+        table th, table td {
+            padding: 10px;
             text-align: left;
-            border-bottom: 1px solid var(--stroke);
-            color: var(--text);
+            border-bottom: 1px solid #ddd;
         }
         table th {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(14, 165, 233, 0.35));
-            color: #f8fafc;
-            font-size: 13px;
-            letter-spacing: 0.01em;
+            background-color: #2196F3;
+            color: white;
         }
         table tr:hover {
-            background-color: rgba(255, 255, 255, 0.04);
+            background-color: #f5f5f5;
         }
         .alert {
-            padding: 14px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            border: 1px solid var(--stroke);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
         }
         .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            color: #bbf7d0;
-            border-color: rgba(34, 197, 94, 0.4);
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
         .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #fecdd3;
-            border-color: rgba(239, 68, 68, 0.4);
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
         .row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 18px;
-            align-items: start;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         .col-6 {
-            width: 100%;
+            flex: 1;
+            min-width: 300px;
         }
         .hidden {
             display: none;
         }
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: center;
-            gap: 8px;
-        }
-        .input-group-text {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--stroke);
-            border-radius: 10px;
-            padding: 10px 12px;
-            color: var(--text);
-            cursor: pointer;
-        }
-        .result-heading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            font-size: 13px;
-            margin-bottom: 6px;
-        }
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #e2e8f0;
-            margin-bottom: 10px;
-            letter-spacing: 0.01em;
-        }
     </style>
 
     <div class="container">
-        <div class="page-hero">
-            <div>
-                <p class="eyebrow">Erişim Kontrolü</p>
-                <h1>🔐 Kullanıcı Erişim Yönetimi</h1>
-                <p class="lead">Kullanıcı, marka ve firma yetkilerini tek ekrandan, akıcı bir arayüzle yönetin.</p>
-                <div class="hero-tags">
-                    <span class="chip">API tabanlı</span>
-                    <span class="chip">Gerçek zamanlı</span>
-                    <span class="chip">Marka &amp; Firma eşleştirme</span>
-                </div>
-            </div>
-            <div class="card" style="margin:0;">
-                <div class="section-title">Hızlı İpuçları</div>
-                <div class="result-heading">• Yeni erişim oluşturduktan sonra liste otomatik güncellenir.</div>
-                <div class="result-heading">• Marka ve firma ekleme alanları, satırdaki Göster butonuyla açılır.</div>
-                <div class="result-heading">• JSON çıktıları altta Sonuçlar bölümünde görünür.</div>
-            </div>
-        </div>
+        <h1>🔐 Kullanıcı Erişim Yönetimi</h1>
         
         <div id="alertBox" class="alert hidden"></div>
         
