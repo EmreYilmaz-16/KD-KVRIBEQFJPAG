@@ -124,7 +124,7 @@
 		1,			
 		<cfif len(surec_id)>#surec_id#<cfelse>1</cfif>,
 		<cfif birim is "KG">1<cfelse>0</cfif>,
-		0,
+		1,
 		<cfif len(is_zero_stock)>#is_zero_stock#<cfelse>0</cfif>,
 		<cfif isDefined("is_karma") and len(is_karma)>#is_karma#<cfelse>0</cfif>,
 		#NOW()#,
