@@ -532,7 +532,10 @@ uniqueProducts.forEach(productId => {
             if (product.NET_PRICE > 0) {
                 netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
                 if (product.NET_PRICE === lowestNetPrice) {
-                    netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                    if(product.IS_ALLOWED==0){
+                    netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;}else{
+                        netPriceHtml = `<div class=\"net-price\">********</div>`;
+                    }
                     cell.title = 'En iyi teklif' + product.WRK_ROW_ID;
                 }
             } else {
