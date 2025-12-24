@@ -195,6 +195,17 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                     <label for="product_name">KD Kodu</label>
                                     <input type="text" class="form-control" id="eta_kodu" name="eta_kodu" value="<cfoutput>#attributes.product_code2#</cfoutput>">
                                 </div>
+                                <div class="form-group" id="item-barcod">
+										<label class="col col-4 col-md-4 col-sm-4 col-xs-12">Barkod </label>
+										<div class="col col-8 col-md-8 col-sm-8 col-xs-12">
+											<div class="input-group">
+												<input type="hidden" name="old_barcod" id="old_barcod" value="">
+												<input name="barcod" id="barcod" type="text" onkeyup="barcod_control();"> 
+													<span class="input-group-addon btnPointer" onclick="javascript:if (confirm('Yeni Otomatik Barkod Oluşturulacak! Emin misiniz? ')) document.form_upd_product.barcod.value='2110000013943'; else return;" title="Otomatik Barkod  !"><i class="fa fa-plus"></i></span>
+												
+											</div>
+										</div>
+									</div>
                                 <div class="form-group" id="item-brand_name">
                                     <label class=""><cf_get_lang dictionary_id='58847.Marka'></label>
                                     <div class=""> 
