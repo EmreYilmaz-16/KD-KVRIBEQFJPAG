@@ -655,7 +655,7 @@ const satislarUnique = Array.from(uniqueMap.values());
       satislarUnique.forEach(sat => {
         block.innerHTML += `
           <li>
-            ${sat.satisTeklifNo ? `📄 <strong>${sat.satisTeklifNo}</strong>` : ""}
+            ${sat.satisTeklifNo ? `<a href='/index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=${sat.satisTeklifId}'>📄 <strong>${sat.satisTeklifNo}</strong></a>` : ""}
             ${sat.satisTeklifTarihi ? `<span class="tarih">📅 ${sat.satisTeklifTarihi.slice(0, 10)}</span>` : ""}
             ${sat.satisSiparisNo ? `📦 <strong>${sat.satisSiparisNo}</strong>` : ""}
             ${sat.satisSiparisTarihi ? `<span class="tarih">📅 ${sat.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
