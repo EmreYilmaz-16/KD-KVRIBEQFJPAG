@@ -659,9 +659,9 @@ const satislarUnique = Array.from(uniqueMap.values());
             ${sat.satisTeklifTarihi ? `<span class="tarih">📅 ${sat.satisTeklifTarihi.slice(0, 10)}</span>` : ""}
             ${sat.satisSiparisNo ? `📦 <strong>${sat.satisSiparisNo}</strong>` : ""}
             ${sat.satisSiparisTarihi ? `<span class="tarih">📅 ${sat.satisSiparisTarihi.slice(0, 10)}</span>` : ""}
-            ${sat.satisFaturaNo ? `<span class="tarih">🧾 ${sat.satisFaturaNo}</span>` : ""}
+            ${sat.satisFaturaNo ? `<a href='/index.cfm?fuseaction=invoice.form_add_bill&event=upd&iid=${sat.satisFaturaId}'><span class="tarih">🧾 ${sat.satisFaturaNo}</span></a>` : ""}
             ${sat.satisFaturaTarihi ? `<span class="tarih">📅 ${sat.satisFaturaTarihi.slice(0, 10)}</span>` : ""}
-            ${sat.satisIrsaliyeNo ? `<span class="tarih">📦 ${sat.satisIrsaliyeNo}</span>` : ""}
+            ${sat.satisIrsaliyeNo ? `<a href='/index.cfm?fuseaction=stock.form_add_sale&event=upd&ship_id=${sat.satisIrsaliyeId}'><span class="tarih">📦 ${sat.satisIrsaliyeNo}</span></a>` : ""}
 
           </li>
         `;
