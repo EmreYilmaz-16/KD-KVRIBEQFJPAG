@@ -549,6 +549,8 @@ data.forEach(item => {
       satisFaturaNo: item.SATIS_FATURA_NO,
       satisFaturaTarihi: item.SATIS_FATURA_TARIHI,
       satisFaturaPeriod: item.SATIS_FATURA_PERIOD,
+      satisFaturaId: item.SATIS_FATURA_ID,
+      
       alisFaturaNo: item.ALIS_FATURA_NO,
       alisFaturaTarihi: item.ALIS_FATURA_TARIHI,
       alisFaturaPeriod: item.ALIS_FATURA_PERIOD,
@@ -557,7 +559,8 @@ data.forEach(item => {
       alisIrsaliyePeriod: item.ALIS_IRSALIYE_PERIOD,
       satisIrsaliyeNo: item.SATIS_IRSALIYE_NO,
       satisIrsaliyeTarihi: item.SATIS_IRSALIYE_TARIHI,
-      satisIrsaliyePeriod: item.SATIS_IRSALIYE_PERIOD
+      satisIrsaliyePeriod: item.SATIS_IRSALIYE_PERIOD,
+      
 
 
 
