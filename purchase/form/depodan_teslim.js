@@ -531,8 +531,8 @@ uniqueProducts.forEach(productId => {
                 : `<div><strong>${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</strong></div>`;
             }else{
                  priceDisplay = product.DISCOUNT_1 > 0
-                ? `<div class="tooltip"><span class="price-original">****span><span class="tooltiptext">İskonto: ****</span></div>`
-                : `<div><strong>****</strong></div>`;
+                ? `<div class="tooltip"><span class="price-original">********span><span class="tooltiptext">İskonto: ********</span></div>`
+                : `<div><strong>********</strong></div>`;
             }
 
 
