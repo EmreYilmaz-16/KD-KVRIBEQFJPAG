@@ -179,7 +179,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
             <cfquery name="getOfferRows" datasource="#dsn3#">
                 SELECT * FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.OFFER_ID# AND WRK_ROW_ID<>'#attributes.wrkRowId#' and PRODUCT_ID<>#session.kd.OFFER_PRODUCT_ID#
             </cfquery>
-            <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" onsubmit="return confirmProductSubmit()">
+            <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" name="form_add_product" onsubmit="return confirmProductSubmit()">
                 <input type="hidden" name="wrkRowId" value="<CFOUTPUT>#attributes.wrkRowId#</CFOUTPUT>">
                 <input type="hidden" name="is_submit" value="1">
                 <div class="row">
