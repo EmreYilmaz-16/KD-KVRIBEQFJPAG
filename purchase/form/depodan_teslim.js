@@ -524,13 +524,24 @@ uniqueProducts.forEach(productId => {
             const cmqconvertedPrice = (parseFloat(product.NET_PRICE) / cmqrate2) * cmqrate1;
             // const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${productName}`;
             const cellKey = `${supplier.COMPANY_ID}|${product.PRODUCT_ID}|${product.PRICE}|${product.WRK_ROW_ID}|${product.DISCOUNT_1}|${product.QUANTITY}|${product.NET_PRICE}|${product.TAX}|${product.PRICE_OTHER}|${product.OTHER_MONEY}|${DEMAND_MONEY}|${product.STOCK_ID}|${product.PRODUCT_ID}|${product.IS_SELECTED || 0}|${product.IS_SATINALMA || 0}|${product.OEM_NO || ""}|${product.SELECT_INFO_EXTRA || 0}|${product.GPA_PRICE || 0}|${product.GPA_MONEY || ""}|${slpInfo.DSC1 || 0}|${slpInfo.DSC2 || 0}|${slpInfo.DSC3 || 0}`;
-
+            if(product.IS_ALLOWED==0){
             const priceDisplay = product.DISCOUNT_1 > 0
                 ? `<div class="tooltip"><span class="price-original">${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</span><span class="tooltiptext">İskonto: ${product.DISCOUNT_1}%</span></div>`
                 : `<div><strong>${product.PRICE_OTHER.toFixed(2)} ${product.OTHER_MONEY}</strong></div>`;
+            }else{
+                const priceDisplay = product.DISCOUNT_1 > 0
+                ? `<div class="tooltip"><span class="price-original">****span><span class="tooltiptext">İskonto: ****</span></div>`
+                : `<div><strong>****</strong></div>`;
+            }
+
+
             var netPriceHtml = "";
             if (product.NET_PRICE > 0) {
-                netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                if(product.IS_ALLOWED==0){
+                    netPriceHtml = `<div class=\"net-price\">Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;
+                }else{
+                    netPriceHtml = `<div class=\"net-price\">********</div>`;
+                }
                 if (product.NET_PRICE === lowestNetPrice) {
                     if(product.IS_ALLOWED==0){
                     netPriceHtml = `<div class=\"net-price\">⭐ Net: ${product.NET_PRICE.toFixed(2)} TL <div><strong>${cmqconvertedPrice.toFixed(2)} ${DEMAND_MONEY}</strong></div></div>`;}else{
