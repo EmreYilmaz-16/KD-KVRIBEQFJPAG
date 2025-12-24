@@ -515,7 +515,7 @@ uniqueProducts.forEach(productId => {
     data.forEach(supplier => {
         const product = supplier.URUNLER.find(p => p.PRODUCT_ID === productId);
         const cell = document.createElement('td');
-
+        console.log("Tedarikçi:", supplier.FULLNAME, "İçin Ürün Kontrol Ediliyor:", productId, product);
         if (product) {
             console.log("Ürün Bulundu:", product, "Tedarikçi:", supplier.FULLNAME);
             const cmqurrency = MONEYARRRR.find(c => c.MONEY === DEMAND_MONEY);
