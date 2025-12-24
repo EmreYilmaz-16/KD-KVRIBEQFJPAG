@@ -192,7 +192,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                     <input type="text" class="form-control" id="product_name" name="product_name" value="<cfoutput>#attributes.productName#</cfoutput>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Eta Kodu</label>
+                                    <label for="product_name">KD Kodu</label>
                                     <input type="text" class="form-control" id="eta_kodu" name="eta_kodu" value="<cfoutput>#attributes.product_code2#</cfoutput>">
                                 </div>
                                 <div class="form-group" id="item-brand_name">
