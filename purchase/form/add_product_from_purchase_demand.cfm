@@ -197,7 +197,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                 </div>
                                 <div class="form-group" id="item-barcod">
 								<label><cf_get_lang dictionary_id='57633.Barkod'> <cfif get_our_company_info.is_barcod_required eq 1> *</cfif></label>
-								<div class="col col-8 col-md-8 col-sm-8 col-xs-12"> 
+								
                                     <cfparam name="barcod" default="">
 									<div class="input-group">
 										<cfinput type="text" name="barcod" id="barcod" value="#barcod#" onKeyUp="barcod_control()">
@@ -206,7 +206,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
 										<cfelse>
 										<span class="input-group-addon btnPointer" onclick="javascript:document.form_add_product.barcod.value='<cfoutput>#get_barcode_no(1)#</cfoutput>'" title="<cf_get_lang dictionary_id='37940.Otomatik barkod'> !"><i class="fa fa-plus"></i></span>
 										</cfif>
-									</div>
+									
 								</div>
 							</div>	
                                 <div class="form-group" id="item-brand_name">
