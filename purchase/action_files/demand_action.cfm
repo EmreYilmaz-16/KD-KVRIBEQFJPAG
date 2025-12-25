@@ -1,3 +1,6 @@
+<script>
+    console.log("GetPage function is being defined.");
+</script>
 <cfdump var="#attributes#">
 <cfabort>
 <cfquery name="up" datasource="#caller.dsn#">
