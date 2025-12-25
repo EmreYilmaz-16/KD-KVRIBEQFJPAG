@@ -99,7 +99,7 @@ SELECT
     qcheck.TUMU_3_MU = #qcheck.TUMU_3_MU# <br>
     SS = #getOfferStage.SS# <br>
   </cfoutput>
-  <CFIF getOfferStage.OFFER_STAGE EQ session.kd.SALE_ORDER_ACCEPT_PROCESS_ROW_ID and getOfferStage.SS EQ 0>
+  <CFIF getOfferStage.OFFER_STAGE EQ session.kd.SALE_ORDER_ACCEPT_PROCESS_ROW_ID ><!------and getOfferStage.SS EQ 0------>
     <cfif qcheck.TUMU_3_MU EQ 0>
       <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button> <!----Satınalma Sİparişi--->
     </cfif>
