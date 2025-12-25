@@ -13,6 +13,7 @@ SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 )
 ORDER BY OFFER_ID DESC
 </cfquery>
+<cfdump var="#getSatis#">
 <cfquery name="qcheck" datasource="#dsn3#">
   SELECT 
     I_ID,
