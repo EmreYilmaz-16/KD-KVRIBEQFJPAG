@@ -1,4 +1,5 @@
 <script>
+alert("Debug: Starting to define GetPage function.");
     console.log("GetPage function is being defined.");
 </script>
 <cfdump var="#attributes#">
