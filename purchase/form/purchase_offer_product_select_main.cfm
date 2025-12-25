@@ -60,7 +60,7 @@ SELECT
 	) TT WHERE INTERNAL_ID=#attributes.INTERNAL_ID# AND ORDER_ID IS NOT NULL
 
 </cfquery>
-<cfdump var="#GETORDERS#" >
+
 <cf_box title="Teklif Oluşturma">
   <cfoutput>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,true,#last_offer_id#)">Yeni Ürün</button>
