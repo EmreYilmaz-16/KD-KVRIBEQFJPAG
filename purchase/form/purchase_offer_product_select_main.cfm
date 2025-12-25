@@ -37,8 +37,7 @@ GROUP BY I_ID;
 <cfquery name="GETICLof" datasource="#DSN3#">
   SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.INTERNAL_ID# and ISNULL(SELECT_INFO_EXTRA,0)<>6
 </cfquery>
-<cfdump var="#getrclof#">
-<cfdump var="#GETICLof#">
+
 <cfif GETICLof.SAYI GT getrclof.SAYI>
   <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında Yeni Eklenmiş Ürünler Var Lütfen Konttrol Ediniz">
 </cfif>
