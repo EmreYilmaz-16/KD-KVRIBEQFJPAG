@@ -28,7 +28,7 @@ WHERE I_ID = #attributes.INTERNAL_ID# AND SELECT_INFO_EXTRA<> 6
 GROUP BY I_ID;
 </cfquery>
 <cfset last_offer_id = "">
-<cfset son_teklif_satir_sayisi = 0>
+<cfset h_mesaj="">
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
   <cfquery name="getrclof" datasource="#dsn3#">
@@ -39,7 +39,10 @@ GROUP BY I_ID;
 </cfquery>
 <cfdump var="#getrclof#">
 <cfdump var="#GETICLof#">
-
+<cfif getrclof.SAYI neq GETICLof.SAYI>
+  <cfset last_offer_id="">
+  <cfset h_mesaj="İptal Edilmiş Ürünler Var Lütfen Konttrol Edip Revize Satış Tekliifi Oluşturunuz.">
+</cfif>
 
 
 </cfif>
@@ -78,6 +81,11 @@ SELECT
 
 <cf_box title="Teklif Oluşturma">
   <cfoutput>
+    <cfif len(h_mesaj)>
+      <div class="alert alert-danger">
+        #h_mesaj#
+      </div>
+    </cfif>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,true,#last_offer_id#)">Yeni Ürün</button>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="2" onclick="GetPage(2,true,#last_offer_id#)">Depodan Teslim</button>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="3" onclick="GetPage(3,true,#last_offer_id#)">Depoya Tedarik</button>
