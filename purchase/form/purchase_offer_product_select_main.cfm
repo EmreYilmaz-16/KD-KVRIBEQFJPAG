@@ -22,7 +22,7 @@ ORDER BY OFFER_ID DESC
         ELSE 0  -- farklı değer varsa
     END AS TUMU_3_MU
 FROM #dsn3#.INTERNALDEMAND_ROW
-WHERE I_ID = #attributes.INTERNAL_ID#
+WHERE I_ID = #attributes.INTERNAL_ID# AND SELECT_INFO_EXTRA<> -6 
 GROUP BY I_ID;
 </cfquery>
 <cfset last_offer_id = "">
