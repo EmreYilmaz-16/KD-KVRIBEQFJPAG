@@ -41,7 +41,7 @@ GROUP BY I_ID;
 <cfdump var="#GETICLof#">
 <cfif getrclof.SAYI neq GETICLof.SAYI>
   <cfset last_offer_id="">
-  <cfset h_mesaj="İptal Edilmiş Ürünler Var Lütfen Konttrol Edip Revize Satış Tekliifi Oluşturunuz.">
+  <cfset h_mesaj="İptal Edilmiş / Yeni Eklenmiş Ürünler Var Lütfen Konttrol Ediniz">
 </cfif>
 
 
