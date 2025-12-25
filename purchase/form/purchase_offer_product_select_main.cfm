@@ -35,7 +35,7 @@ GROUP BY I_ID;
   SELECT COUNT(*) AS SAYI FROM OFFER_ROW WHERE OFFER_ID=#last_offer_id#
 </cfquery>
 <cfquery name="GETICLof" datasource="#DSN3#">
-  SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#last_offer_id# 
+  SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.INTERNAL_ID# 
 </cfquery>
 <cfdump var="#getrclof#">
 <cfdump var="#GETICLof#">
