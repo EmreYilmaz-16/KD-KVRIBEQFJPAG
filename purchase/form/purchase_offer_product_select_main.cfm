@@ -60,6 +60,7 @@ SELECT
 	) TT WHERE INTERNAL_ID=#attributes.INTERNAL_ID# AND ORDER_ID IS NOT NULL
 
 </cfquery>
+<cfdump var="#GETORDERS#" >
 <cf_box title="Teklif Oluşturma">
   <cfoutput>
 <button class="ui-wrk-btn ui-wrk-btn-extra" data-pageid="1" onclick="GetPage(1,true,#last_offer_id#)">Yeni Ürün</button>
@@ -77,12 +78,12 @@ SELECT
 
   
 <cfoutput query="getSatis">
-<button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">
-  Teklife Git #OFFER_NUMBER#</button>
-  </cfoutput>
+  <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">Teklife Git #OFFER_NUMBER#</button> <!----Satış Teklifi--->
+</cfoutput>
+
 <cfif GETORDERS.recordCount> 
   <cfoutput query="GETORDERS">
-  <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button>
+    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button> <!----Satınalma Sİparişi--->
   </cfoutput>
 <cfelse>
   <cfinclude template="includes/get_offer_stage_query.cfm">
@@ -94,7 +95,7 @@ SELECT
   </cfif>
   <CFIF getOfferStage.OFFER_STAGE EQ session.kd.SALE_ORDER_ACCEPT_PROCESS_ROW_ID and getOfferStage.SS EQ 0>
     <cfif qcheck.TUMU_3_MU EQ 0>
-      <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button>
+      <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="SatinalmaSiparis(<CFOUTPUT>#attributes.internal_id#,#last_offer_id#</CFOUTPUT>)" id="send-btn2">Tüm Satınalma Siparişlerini Oluştur</button> <!----Satınalma Sİparişi--->
     </cfif>
     
   </CFIF>
