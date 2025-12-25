@@ -13,6 +13,7 @@ SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#attributes.INTER
 )
 ORDER BY OFFER_ID DESC
 </cfquery>
+
 <cfdump var="#getSatis#">
 <cfquery name="qcheck" datasource="#dsn3#">
   SELECT 
@@ -27,9 +28,22 @@ WHERE I_ID = #attributes.INTERNAL_ID# AND SELECT_INFO_EXTRA<> 6
 GROUP BY I_ID;
 </cfquery>
 <cfset last_offer_id = "">
+<cfset son_teklif_satir_sayisi = 0>
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
+  <cfquery name="getrclof" datasource="#dsn3#">
+  SELECT COUNT(*) AS SAYI FROM OFFER_ROW WHERE OFFER_ID=#last_offer_id#
+</cfquery>
+<cfquery name="GETICLof" datasource="#DSN3#">
+  SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#last_offer_id# 
+</cfquery>
+<cfdump var="#getrclof#">
+<cfdump var="#GETICLof#">
+
+
+
 </cfif>
+
 <cfquery name="getInternal" datasource="#dsn3#">
   SELECT INTERNALDEMAND_STAGE FROM #dsn3#.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.INTERNAL_ID#
 </cfquery>
