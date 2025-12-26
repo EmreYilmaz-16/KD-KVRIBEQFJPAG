@@ -34,21 +34,20 @@ GROUP BY I_ID;
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
   <cfquery name="getrclof" datasource="#dsn3#">
-  SELECT COUNT(*) AS SAYI FROM OFFER_ROW WHERE OFFER_ID=#last_offer_id#
-</cfquery>
-<cfquery name="GETICLof" datasource="#DSN3#">
-  SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.INTERNAL_ID# and ISNULL(SELECT_INFO_EXTRA,0)<>6
-</cfquery>
-
-<cfif GETICLof.SAYI GT getrclof.SAYI>
-  <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında Yeni Eklenmiş Ürünler Var Lütfen Konttrol Ediniz">
-</cfif>
-<cfif GETICLof.SAYI LT getrclof.SAYI>
-  <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında İptal Edilmiş Ürünler Var Lütfen Konttrol Ediniz">
-</cfif>
-<cfquery name="cheqorder" datasource="#dsn3#">
-  SELECT * from   FROM [w3Qa_1].[ORDERS] WHERE OFFER_ID=#last_offer_id#
-</cfquery>
+    SELECT COUNT(*) AS SAYI FROM OFFER_ROW WHERE OFFER_ID=#last_offer_id#
+  </cfquery>
+  <cfquery name="GETICLof" datasource="#DSN3#">
+    SELECT COUNT(*) AS SAYI FROM INTERNALDEMAND_ROW WHERE I_ID=#attributes.INTERNAL_ID# and ISNULL(SELECT_INFO_EXTRA,0)<>6
+  </cfquery>
+  <cfif GETICLof.SAYI GT getrclof.SAYI>
+    <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında Yeni Eklenmiş Ürünler Var Lütfen Konttrol Ediniz">
+  </cfif>
+  <cfif GETICLof.SAYI LT getrclof.SAYI>
+    <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında İptal Edilmiş Ürünler Var Lütfen Konttrol Ediniz">
+  </cfif>
+  <cfquery name="cheqorder" datasource="#dsn3#">
+    SELECT *   FROM [w3Qa_1].[ORDERS] WHERE OFFER_ID=#last_offer_id#
+  </cfquery>
 
 <cfif cheqorder.recordCount GT 0>
   <cfset satis_teklif_buton_goster=0>
@@ -60,6 +59,8 @@ GROUP BY I_ID;
 <cfquery name="getInternal" datasource="#dsn3#">
   SELECT INTERNALDEMAND_STAGE FROM #dsn3#.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.INTERNAL_ID#
 </cfquery>
+
+
 <cfquery name="GETORDERS" datasource="#dsn3#">
   
 SELECT DISTINCT ORDER_ID,ORDER_NUMBER FROM (
