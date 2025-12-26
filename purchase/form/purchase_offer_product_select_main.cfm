@@ -122,10 +122,11 @@ SELECT
 <cfoutput query="getSatis">
   <button class="ui-wrk-btn ui-wrk-btn-success" onclick="window.location.href='index.cfm?fuseaction=sales.list_offer&event=upd&offer_id=#OFFER_ID#'">Teklife Git #OFFER_NUMBER#</button> <!----Satış Teklifi--->
 </cfoutput>
-
+<cfloop array="#order_id_arr#" index="ord">
+  <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=sales.list_order&event=upd&order_id=#ord.ORDER_ID#'" id="send-btn2aa">Siparişe Git - #ord.ORDER_NUMBER#</button> <!----Satınalma Sİparişi--->
 <cfif GETORDERS.recordCount> 
   <cfoutput query="GETORDERS">
-    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="send-btn2aaa">Siparişe Git - #ORDER_NUMBER#</button> <!----Satınalma Sİparişi--->
+    <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="">Siparişe Git - #ORDER_NUMBER#</button> <!----satış Sİparişi--->
   </cfoutput>
 <cfelse>
   <cfinclude template="includes/get_offer_stage_query.cfm">
