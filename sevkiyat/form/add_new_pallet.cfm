@@ -27,7 +27,7 @@ function generatePalletCode() {
 <cfset recordDate = Now()>
 
 <cfquery name="getPalletTypes" datasource="#dsn3#">
-	SELECT ID, PALET_TYPE
+	SELECT ID, PALET_TYPE,IS_WEIGHT_STANDART 
 	FROM #dsn#.PALET_TYPES_PBS
 	ORDER BY PALET_TYPE
 </cfquery>
