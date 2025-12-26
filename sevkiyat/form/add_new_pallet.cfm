@@ -365,7 +365,7 @@ function generatePalletCode() {
 								<option data-IS_WEIGHT_STANDART="#IS_WEIGHT_STANDART#" value="#ID#" <cfif form.pallet_type EQ ToString(ID)>selected</cfif>>#HTMLEditFormat(PALET_TYPE)#</option>
 							</cfloop>
 						</select>
-						<input type="text" name="max_weight" id="max_weight" placeholder="Max Weight" >
+						<input class="pallet-input" type="text" name="max_weight" id="max_weight" placeholder="Max Weight" >
 					</div>
 						<span class="pallet-hint">Pallet tipi listesi #dsn#.PALET_TYPES_PBS tablosundan yuklenir.</span>
 					</div>
