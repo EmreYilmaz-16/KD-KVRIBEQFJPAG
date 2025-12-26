@@ -29,6 +29,8 @@ GROUP BY I_ID;
 </cfquery>
 <cfset last_offer_id = "">
 <cfset h_mesaj="">
+<cfset satis_teklif_buton_goster=1>
+<cfset order_id_arr=arrayNew(1)>
 <cfif getSatis.recordCount>
   <cfset last_offer_id = getSatis.OFFER_ID>
   <cfquery name="getrclof" datasource="#dsn3#">
@@ -44,12 +46,17 @@ GROUP BY I_ID;
 <cfif GETICLof.SAYI LT getrclof.SAYI>
   <cfset h_mesaj="Son Satış Teklifi İle Karşılaştırıldığında İptal Edilmiş Ürünler Var Lütfen Konttrol Ediniz">
 </cfif>
+<cfquery name="cheqorder" datasource="#dsn3#">
+  SELECT * from   FROM [w3Qa_1].[ORDERS] WHERE OFFER_ID=#last_offer_id#
+</cfquery>
 
-
-
-
+<cfif cheqorder.recordCount GT 0>
+  <cfset satis_teklif_buton_goster=0>
 </cfif>
-
+<cfloop query="cheqorder">
+  <cfset arrayAppend(order_id_arr,{ORDER_ID=cheqorder.ORDER_ID,ORDER_NUMBER=cheqorder.ORDER_NUMBER})>
+</cfloop>
+</cfif>
 <cfquery name="getInternal" datasource="#dsn3#">
   SELECT INTERNALDEMAND_STAGE FROM #dsn3#.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.INTERNAL_ID#
 </cfquery>
@@ -99,8 +106,16 @@ SELECT
     <p>getInternal.INTERNALDEMAND_STAGE =========   #getInternal.INTERNALDEMAND_STAGE#</p>
   </cfoutput>
 </div>
+  <cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE) neq 0>     
+    <cfif satis_teklif_buton_goster EQ 1>
+      <button  class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
+    </cfif>
+  <cfelse>   
+  </cfif>
 
-    <button <cfif listFindNoCase(session.kd.PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST,getInternal.INTERNALDEMAND_STAGE) neq 0><cfelse>style="display:none;"</cfif> class=" ui-wrk-btn ui-wrk-btn-success" id="send-btn">Satış Teklifine Dönüştür</button>
+
+
+    
 
   
 <cfoutput query="getSatis">
