@@ -408,3 +408,13 @@ function generatePalletCode() {
 		</div>
 	</cfoutput>
 </cf_box>
+<script>
+	const select = document.getElementById('pallet_type');
+
+select.addEventListener('change', function () {
+    const selectedOption = this.options[this.selectedIndex];
+    const isWeightStandart = selectedOption.dataset.is_weight_standart;
+
+    console.log(isWeightStandart); // "1" veya "0"
+});
+</script>
