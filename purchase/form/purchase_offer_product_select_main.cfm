@@ -124,6 +124,7 @@ SELECT
 </cfoutput>
 <cfloop array="#order_id_arr#" index="ord">
   <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=sales.list_order&event=upd&order_id=#ord.ORDER_ID#'" id="send-btn2aa">Siparişe Git - #ord.ORDER_NUMBER#</button> <!----Satınalma Sİparişi--->
+</cfloop>
 <cfif GETORDERS.recordCount> 
   <cfoutput query="GETORDERS">
     <button class="ui-wrk-btn ui-wrk-btn-warning" onclick="window.location.href='index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#ORDER_ID#'" id="">Siparişe Git - #ORDER_NUMBER#</button> <!----satış Sİparişi--->
