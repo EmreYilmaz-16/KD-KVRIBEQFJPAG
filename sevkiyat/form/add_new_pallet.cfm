@@ -40,6 +40,7 @@ function generatePalletCode() {
 	<cfset palletCode = Trim(form.pallet_code)>
 	<cfset palletType = Trim(form.pallet_type)>
 	<cfset company_id = form.company_id>
+	<cfset palletWeight = form.max_weight>
 	<cfset selectedTypeExists = false>
 
 	<cfif NOT Len(palletCode)>
@@ -81,14 +82,15 @@ function generatePalletCode() {
 			<cfelse>
 				<cfquery name="insertNewPallet" datasource="#dsn3#">
 					INSERT INTO #dsn3#.SHIPPING_PALLETS_PBS
-						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID)
+						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID,PALLET_WEIGHT)
 					VALUES
 						(
 							<cfqueryparam value="#palletCode#" cfsqltype="cf_sql_nvarchar" maxlength="50">,
 							<cfqueryparam value="#Val(palletType)#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#recordDate#" cfsqltype="cf_sql_timestamp">,
 							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">,
-							<cfqueryparam value="#company_id#" cfsqltype="cf_sql_integer">
+							<cfqueryparam value="#company_id#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#Val(palletWeight)#" cfsqltype="cf_sql_decimal">
 						)
 				</cfquery>
 
