@@ -56,10 +56,10 @@ GROUP BY I_ID;
   <cfset arrayAppend(order_id_arr,{ORDER_ID=cheqorder.ORDER_ID,ORDER_NUMBER=cheqorder.ORDER_NUMBER})>
 </cfloop>
 </cfif>
+<cfdump var="#order_id_arr#" label="order_id_arr">
 <cfquery name="getInternal" datasource="#dsn3#">
   SELECT INTERNALDEMAND_STAGE FROM #dsn3#.INTERNALDEMAND WHERE INTERNAL_ID=#attributes.INTERNAL_ID#
 </cfquery>
-
 
 <cfquery name="GETORDERS" datasource="#dsn3#">
   
