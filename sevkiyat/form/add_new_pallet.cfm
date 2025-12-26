@@ -353,6 +353,7 @@ function generatePalletCode() {
 
 					<div class="pallet-field">
 						<label for="pallet_type">Pallet Tipi</label>
+						<div class="pallet-input-group">
 						<select
 							id="pallet_type"
 							name="pallet_type"
@@ -365,6 +366,7 @@ function generatePalletCode() {
 							</cfloop>
 						</select>
 						<input type="text" name="max_weight" id="max_weight" placeholder="Max Weight" >
+					</div>
 						<span class="pallet-hint">Pallet tipi listesi #dsn#.PALET_TYPES_PBS tablosundan yuklenir.</span>
 					</div>
 
