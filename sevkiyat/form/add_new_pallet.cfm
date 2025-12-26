@@ -361,7 +361,7 @@ function generatePalletCode() {
 						>
 							<option value="">Pallet tipi seciniz</option>
 							<cfloop query="getPalletTypes">
-								<option value="#ID#" <cfif form.pallet_type EQ ToString(ID)>selected</cfif>>#HTMLEditFormat(PALET_TYPE)#</option>
+								<option data-IS_WEIGHT_STANDART="#IS_WEIGHT_STANDART#" value="#ID#" <cfif form.pallet_type EQ ToString(ID)>selected</cfif>>#HTMLEditFormat(PALET_TYPE)#</option>
 							</cfloop>
 						</select>
 						<span class="pallet-hint">Pallet tipi listesi #dsn#.PALET_TYPES_PBS tablosundan yuklenir.</span>
