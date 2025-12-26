@@ -364,6 +364,7 @@ function generatePalletCode() {
 								<option data-IS_WEIGHT_STANDART="#IS_WEIGHT_STANDART#" value="#ID#" <cfif form.pallet_type EQ ToString(ID)>selected</cfif>>#HTMLEditFormat(PALET_TYPE)#</option>
 							</cfloop>
 						</select>
+						<input type="text" name="max_weight" id="max_weight" placeholder="Max Weight" >
 						<span class="pallet-hint">Pallet tipi listesi #dsn#.PALET_TYPES_PBS tablosundan yuklenir.</span>
 					</div>
 
@@ -414,7 +415,11 @@ function generatePalletCode() {
 select.addEventListener('change', function () {
     const selectedOption = this.options[this.selectedIndex];
     const isWeightStandart = selectedOption.dataset.is_weight_standart;
-
+if(isWeightStandart=="1"){
+	document.getElementById("max_weight").setAttribute("readonly", "true");
+}else{
+	document.getElementById("max_weight").removeAttribute("readonly");
+}
     console.log(isWeightStandart); // "1" veya "0"
 });
 </script>
