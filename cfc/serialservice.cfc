@@ -39,7 +39,7 @@ component output="false" {
         var result = {deleted = false};
         var datasourceName = resolveDatasource();
         var iid=arguments.IIID;
-        
+        result.iiid=iid;
         try {
         if(iid neq 0){
             var delQ = queryExecute(
