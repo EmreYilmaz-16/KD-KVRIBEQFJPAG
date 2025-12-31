@@ -38,7 +38,7 @@ component output="false" {
     remote struct function deleteSerial(required string serialNo) {
         var result = {deleted = false};
         var datasourceName = resolveDatasource();
-        writeDump(arguments, label="deleteSerial args");
+        writeDump(arguments);
         try {
             var delQ = queryExecute(
                 "DELETE FROM SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER = :serial",
