@@ -38,8 +38,10 @@ component output="false" {
     remote struct function deleteSerial(required string serialNo) {
         var result = {deleted = false};
         var datasourceName = resolveDatasource();
-        writeDump(arguments);
+        var iid=arguments.IIID;
+        
         try {
+        if(iid neq 0){
             var delQ = queryExecute(
                 "DELETE FROM SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER = :serial",
                 {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
@@ -50,6 +52,16 @@ component output="false" {
                 {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
                 {datasource = datasourceName}
             );
+        } else {
+            var delQ = queryExecute(
+                "DELETE FROM PBS_MAL_KABUL_BARCODES WHERE PMB_ID = :iid",
+                {
+                    iid = {value = iid, cfsqltype = "cf_sql_varchar"}
+                    
+                },
+                {datasource = datasourceName}
+            );
+        }
             result.deleted = true;
         } catch (any exName) {
             result.deleted = false;
