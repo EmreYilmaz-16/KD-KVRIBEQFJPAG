@@ -409,7 +409,7 @@ body {
 
 
 <cfquery name="getDespatchRow" datasource="#dsn2#">
- SELECT * FROM (
+<!------ SELECT * FROM (
    SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,SG.SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2,0 AS FB,
 (
     SELECT SUM (T) FROM (
@@ -418,8 +418,7 @@ body {
     SELECT COUNT(*) T FROM w3Qa_1.PBS_MAL_KABUL_BARCODES AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID
     ) AS TKS
 ) AS OMIK,
-(select COUNT(*) from #dsn3#.SERVICE_GUARANTY_NEW where SERIAL_NO=SG.SERIAL_NO and PROCESS_CAT<>76) as IS_DELETABLE,
-1 AS AMOUNT
+(select COUNT(*) from #dsn3#.SERVICE_GUARANTY_NEW where SERIAL_NO=SG.SERIAL_NO and PROCESS_CAT<>76) as IS_DELETABLE
 FROM #dsn2#.SHIP_ROW AS SR
 LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID=SR.STOCK_ID
 LEFT JOIN #dsn3#.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID=SR.WRK_ROW_ID
@@ -427,14 +426,74 @@ WHERE SHIP_ID=#attributes.shipId#
 UNION ALL
 SELECT S.STOCK_ID,S.PRODUCT_ID,S.PRODUCT_NAME,SR.AMOUNT,PMB.BARCODE AS SERIAL_NO,SR.WRK_ROW_ID,PRODUCT_CODE_2, 1 AS FB,
 (SELECT COUNT(*) FROM w3Qa_1.PBS_MAL_KABUL_BARCODES AS SGA WHERE SGA.WRK_ROW_ID=SR.WRK_ROW_ID) AS OMIK,
-0 as IS_DELETABLE,SGA.AMOUNT
+0 as IS_DELETABLE
 
 FROM #dsn2#.SHIP_ROW AS SR 
 LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID=SR.STOCK_ID
 LEFT JOIN #dsn3#.PBS_MAL_KABUL_BARCODES AS PMB ON PMB.WRK_ROW_ID=SR.WRK_ROW_ID
 WHERE SR.SHIP_ID=#attributes.shipId#
  ) AS TFR
- ORDER BY PRODUCT_ID
+ ORDER BY PRODUCT_ID ------>
+
+ SELECT *
+FROM (
+	SELECT S.STOCK_ID
+		,S.PRODUCT_ID
+		,S.PRODUCT_NAME
+		,SR.AMOUNT
+		,SG.SERIAL_NO
+		,SR.WRK_ROW_ID
+		,PRODUCT_CODE_2
+		,0 AS FB
+		,(
+			SELECT SUM(T)
+			FROM (
+				SELECT COUNT(*) T
+				FROM #dsn3#.SERVICE_GUARANTY_NEW AS SGA
+				WHERE SGA.WRK_ROW_ID = SR.WRK_ROW_ID
+				
+				UNION ALL
+				
+				SELECT COUNT(*) T
+				FROM w3Qa_1.PBS_MAL_KABUL_BARCODES AS SGA
+				WHERE SGA.WRK_ROW_ID = SR.WRK_ROW_ID
+				) AS TKS
+			) AS OMIK
+		,(
+			SELECT COUNT(*)
+			FROM #dsn3#.SERVICE_GUARANTY_NEW
+			WHERE SERIAL_NO = SG.SERIAL_NO
+				AND PROCESS_CAT <> 76
+			) AS IS_DELETABLE
+        ,1 AS R_AMOUNT
+	FROM #dsn2#.SHIP_ROW AS SR
+	LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID = SR.STOCK_ID
+	LEFT JOIN #dsn3#.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID = SR.WRK_ROW_ID
+	WHERE SHIP_ID = #attributes.shipId#
+	
+	UNION ALL
+	
+	SELECT S.STOCK_ID
+		,S.PRODUCT_ID
+		,S.PRODUCT_NAME
+		,SR.AMOUNT
+		,PMB.BARCODE AS SERIAL_NO
+		,SR.WRK_ROW_ID
+		,PRODUCT_CODE_2
+		,1 AS FB
+		,(
+			SELECT COUNT(*)
+			FROM w3Qa_1.PBS_MAL_KABUL_BARCODES AS SGA
+			WHERE SGA.WRK_ROW_ID = SR.WRK_ROW_ID
+			) AS OMIK
+		,0 AS IS_DELETABLE
+        ,PMB.AMOUNT AS R_AMOUNT
+	FROM #dsn2#.SHIP_ROW AS SR
+	LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID = SR.STOCK_ID
+	LEFT JOIN #dsn3#.PBS_MAL_KABUL_BARCODES AS PMB ON PMB.WRK_ROW_ID = SR.WRK_ROW_ID
+	WHERE SR.SHIP_ID = #attributes.shipId#
+	) AS TFR
+ORDER BY PRODUCT_ID
 </cfquery>
 <div class="main-container">
     <div class="guide-button-wrapper">
@@ -497,7 +556,7 @@ WHERE SR.SHIP_ID=#attributes.shipId#
                                 <table class="serial-table" id="serials_#PRODUCT_ID#">              
                                     <cfoutput> 
                                         <cfif len(trim(SERIAL_NO)) NEQ 0>
-                                        <tr data-readed="1" data-from-barcode="#FB#" data-amount="#AMOUNT#" title="Önceden kaydedilmiş">
+                                        <tr data-readed="1" data-from-barcode="#FB#" data-amount="#R_AMOUNT#" title="Önceden kaydedilmiş">
                                             <td>
                                                 <i class="fas fa-history"></i>
                                                 #EncodeForHTML(SERIAL_NO)#
