@@ -529,8 +529,8 @@
 										>
 											+
 										</button>
-										<a class="btn btn-primary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat Ekle</a>
-										<a class="btn btn-secondary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun Ekle</a>
+										<button class="pallet-action-btn" title="Sevkiyat Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'" style="font-size: 18px;">🚚</button>
+										<button class="pallet-action-btn" title="Urun Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'" style="font-size: 18px;">📦</button>
 									</td>
 								</tr>
 								
@@ -580,8 +580,8 @@
 															</div>
 														</div>
 														<div>
-															<a class="btn btn-primary btn-sm" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat</a>
-															<a class="btn btn-secondary btn-sm" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun</a>
+															<button class="pallet-action-btn" title="Sevkiyat Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'" style="font-size: 18px;">🚚</button>
+															<button class="pallet-action-btn" title="Urun Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'" style="font-size: 18px;">📦</button>
 														</div>
 													</div>
 												</cfloop>
