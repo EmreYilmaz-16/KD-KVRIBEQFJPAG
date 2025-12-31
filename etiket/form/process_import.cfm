@@ -697,7 +697,7 @@
                                 </cfquery>
 
                                 <!--- Clean up uploaded file --->
-                                <cffile action="delete" file="#excelFilePath#">
+                               <!---- <cffile action="delete" file="#excelFilePath#">------>
 
                                 <cfcatch type="any">
                                     <cfset importResult.success = false>
