@@ -560,16 +560,18 @@ ORDER BY PRODUCT_ID
                                             <td>
                                                 <i class="fas fa-history"></i>
                                                 #EncodeForHTML(SERIAL_NO)#
-                                                <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
+                                                
                                                 <small class="text-muted">(Mevcut)</small>
                                             </td>
                                             <td>
                                                 <cfif IS_DELETABLE GT 0>    
                                                     <i class="fas fa-exclamation-triangle text-warning" title="Bu seri numarası başka işlemlerde kullanılmış, silinemez."></i>
+                                                    <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
                                                 <cfelse>
                                                     <button class="btn btn-sm btn-danger" onclick="deleteSerial('#SERIAL_NO#','#WRK_ROW_ID#','#PRODUCT_ID#')">
                                                         <i class="fas fa-trash-alt"></i> Sil
                                                     </button>
+                                                    <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
                                                 </cfif>
                                         </tr>
                                     </cfif>
@@ -814,7 +816,7 @@ async function checkSerial(input, event) {
         newCell.innerHTML = `
             <i class="fas fa-plus-circle text-success"></i>
             ${parseResult.serial_no}
-             <span class="badge badge-info ml-2">x${xxx}</span>
+             
             <small class="text-success">(Yeni eklendi)</small>
         `;
         
@@ -824,6 +826,7 @@ async function checkSerial(input, event) {
             <button class="btn btn-sm btn-danger" onclick="deleteUnProcessedSerial('${parseResult.serial_no}','${wrk_row_id}','${product_id}')">
                 <i class="fas fa-trash-alt"></i> Sil
             </button>
+            <span class="badge badge-info ml-2">x${xxx}</span>
         `;
         newRow.appendChild(newCell2);
         if(parser==4){
