@@ -899,8 +899,9 @@ function GetRows() {
                             
                             var isreaded = rows[j].getAttribute("data-readed") || "1";
                             var fromBarcode = rows[j].getAttribute("data-from-barcode") || "1";
+                            var amount = rows[j].getAttribute("data-amount") || "1";
                             if (serialNo) {
-                                serials.push(serialNo + "|" + fromBarcode + "|" + isreaded);
+                                serials.push(serialNo + "|" + fromBarcode + "|" + isreaded + "|" + amount);
                             }
                         }
                     }
