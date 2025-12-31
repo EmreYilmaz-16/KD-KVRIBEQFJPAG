@@ -526,8 +526,9 @@
 											title="Yavru palet olustur"
 											onclick="createChildPallet(#ID#, '#encodeForJavaScript(PALLET_CODE)#')"
 											id="addChildBtn_#ID#"
+											style="font-size: 18px;"
 										>
-											+
+											➕
 										</button>
 										<button class="pallet-action-btn" title="Sevkiyat Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'" style="font-size: 18px;">🚚</button>
 										<button class="pallet-action-btn" title="Urun Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'" style="font-size: 18px;">📦</button>
