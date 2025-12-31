@@ -750,6 +750,10 @@ async function checkSerial(input, event) {
             input.value = '';
             return;
         }
+        var xxx=1;
+        if(parser==4){
+             xxx=prompt("Miktar Giriniz")
+        }
 
         // Ürün satırını bul
         console.log("Ürün Satırı Aranıyor:", parseResult.product_code_2);
@@ -802,6 +806,7 @@ async function checkSerial(input, event) {
         // Yeni seri numarası satırı oluştur
         var newRow = document.createElement("tr");
         newRow.setAttribute("data-readed", "0");
+        newRow.setAttribute("data-amount", xxx);    
         newRow.className = "fade-in";
         
         var newCell = document.createElement("td");
