@@ -476,7 +476,7 @@ function createChildPallet(parentPalletId, parentPalletCode) {
 	}
 
 	// Ajax isteği gönder
-	fetch('/index.cfm?fuseaction=eshipping.emptypopup_create_child_pallet_pbs&parent_pallet_id=' + parentPalletId)
+	fetch('/index.cfm?fuseaction=eshipping.emptypopup_create_child_pallet_pbs&parent_pallet_id=' + parentPalletId+"&ajax=1&ajax_box_page=1&isAjax=1")
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
