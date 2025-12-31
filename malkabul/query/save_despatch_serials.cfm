@@ -9,8 +9,9 @@
             <cfset serial=row.serials[j]>
             <cfset isreaded=listGetAt(serial,3,"|")>
             <cfset fromBarcode=listGetAt(serial,2,"|")>
-            <cfset serial=listFirst(serial,"|")>
             <cfset amount=listGetAt(serial,4,"|")>
+            <cfset serial=listFirst(serial,"|")>
+            
             
             
             <cfdump var="#serial#">
