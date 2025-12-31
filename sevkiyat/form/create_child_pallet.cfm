@@ -1,3 +1,4 @@
+<cfsetting enablecfoutputonly="true" showdebugoutput="false">
 <cfparam name="url.parent_pallet_id" default="">
 
 <cfscript>
@@ -105,5 +106,4 @@ function generatePalletCode() {
 	</cftry>
 </cfif>
 
-<cfcontent type="application/json" reset="true">
-<cfoutput>#SerializeJSON(response)#</cfoutput>
+<cfcontent type="application/json" reset="true"><cfoutput>#SerializeJSON(response)#</cfoutput><cfabort>
