@@ -560,6 +560,7 @@ ORDER BY PRODUCT_ID
                                             <td>
                                                 <i class="fas fa-history"></i>
                                                 #EncodeForHTML(SERIAL_NO)#
+                                                <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
                                                 <small class="text-muted">(Mevcut)</small>
                                             </td>
                                             <td>
@@ -813,7 +814,7 @@ async function checkSerial(input, event) {
         newCell.innerHTML = `
             <i class="fas fa-plus-circle text-success"></i>
             ${parseResult.serial_no}
-             <span class="badge badge-info ml-2">x${amount}</span>
+             <span class="badge badge-info ml-2">x${xxx}</span>
             <small class="text-success">(Yeni eklendi)</small>
         `;
         
