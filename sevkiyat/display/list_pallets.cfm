@@ -29,6 +29,7 @@
 	LEFT JOIN #DSN#.COMPANY AS C ON C.COMPANY_ID = P.COMPANY_ID
 	LEFT JOIN #DSN#.EMPLOYEES AS E ON E.EMPLOYEE_ID = P.RECORD_EMP
 	WHERE 1 = 1
+	AND P.MAIN_PALET_ID IS NULL
 	<cfif Len(searchTerm)>
 		AND (
 			P.PALLET_CODE LIKE <cfqueryparam value="%#searchTerm#%" cfsqltype="cf_sql_nvarchar" maxlength="50">
@@ -296,6 +297,87 @@
 			pointer-events: none;
 		}
 
+		.accordion-toggle-btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			border-radius: 6px;
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			color: #475569;
+			font-size: 14px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-right: 8px;
+			vertical-align: middle;
+		}
+
+		.accordion-toggle-btn:hover {
+			background: #f1f5f9;
+			border-color: #94a3b8;
+		}
+
+		.accordion-toggle-btn.expanded {
+			background: #e0e7ff;
+			border-color: #818cf8;
+			color: #4f46e5;
+		}
+
+		.child-pallets-row {
+			display: none;
+		}
+
+		.child-pallets-row.show {
+			display: table-row;
+		}
+
+		.child-pallets-container {
+			padding: 16px 20px;
+			background: linear-gradient(135deg, #fef3c7, #fde68a);
+			border-left: 4px solid #f59e0b;
+			border-radius: 8px;
+		}
+
+		.child-pallet-item {
+			background: #ffffff;
+			border-radius: 8px;
+			padding: 12px 16px;
+			margin-bottom: 10px;
+			border: 1px solid #fbbf24;
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr auto;
+			gap: 12px;
+			align-items: center;
+		}
+
+		.child-pallet-item:last-child {
+			margin-bottom: 0;
+		}
+
+		.child-pallet-label {
+			font-size: 12px;
+			color: #92400e;
+			font-weight: 600;
+			margin-bottom: 4px;
+		}
+
+		.child-pallet-value {
+			font-size: 13px;
+			color: #1f2937;
+		}
+
+		.child-pallet-header {
+			font-size: 14px;
+			font-weight: 600;
+			color: #92400e;
+			margin-bottom: 12px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
 		.pallet-empty {
 			padding: 40px 0;
 			text-align: center;
@@ -399,6 +481,9 @@
 
 								<tr>
 									<td class="pallet-code">
+										<cfif Val(CHILD_COUNT) GT 0>
+											<span class="accordion-toggle-btn" onclick="toggleChildPallets(#ID#)" id="toggleBtn_#ID#">▶</span>
+										</cfif>
 										#HTMLEditFormat(PALLET_CODE)#
 										<cfif Val(MAIN_PALET_ID) GT 0>
 											<span class="child-pallet-indicator" title="Bu bir yavru palettir">🔗 Yavru</span>
@@ -448,6 +533,62 @@
 										<a class="btn btn-secondary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun Ekle</a>
 									</td>
 								</tr>
+								
+								<!--- Yavru Paletler Accordion --->
+								<cfif Val(CHILD_COUNT) GT 0>
+									<tr class="child-pallets-row" id="childRow_#ID#">
+										<td colspan="5">
+											<div class="child-pallets-container">
+												<div class="child-pallet-header">
+													🔗 Yavru Paletler (#CHILD_COUNT# adet)
+												</div>
+												
+												<cfquery name="getChildPallets" datasource="#dsn3#">
+													SELECT
+														P.ID,
+														P.PALLET_CODE,
+														P.RECORD_DATE,
+														T.PALET_TYPE AS PALLET_TYPE_NAME,
+														E.EMPLOYEE_NAME,
+														E.EMPLOYEE_SURNAME
+													FROM #dsn3#.SHIPPING_PALLETS_PBS P
+													LEFT JOIN #DSN#.PALET_TYPES_PBS T ON T.ID = P.PALLET_TYPE
+													LEFT JOIN #DSN#.EMPLOYEES AS E ON E.EMPLOYEE_ID = P.RECORD_EMP
+													WHERE P.MAIN_PALET_ID = <cfqueryparam value="#ID#" cfsqltype="cf_sql_integer">
+													ORDER BY P.RECORD_DATE DESC
+												</cfquery>
+												
+												<cfloop query="getChildPallets">
+													<cfset childEmployeeFullName = Trim(EMPLOYEE_NAME & " " & EMPLOYEE_SURNAME)>
+													<div class="child-pallet-item">
+														<div>
+															<div class="child-pallet-label">Palet Kodu</div>
+															<div class="child-pallet-value">#HTMLEditFormat(PALLET_CODE)#</div>
+														</div>
+														<div>
+															<div class="child-pallet-label">Tip</div>
+															<div class="child-pallet-value">#HTMLEditFormat(PALLET_TYPE_NAME)#</div>
+														</div>
+														<div>
+															<div class="child-pallet-label">Kayıt Tarihi</div>
+															<div class="child-pallet-value">
+																<cfif IsDate(RECORD_DATE)>
+																	#DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:nn")#
+																<cfelse>
+																	-
+																</cfif>
+															</div>
+														</div>
+														<div>
+															<a class="btn btn-primary btn-sm" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat</a>
+															<a class="btn btn-secondary btn-sm" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun</a>
+														</div>
+													</div>
+												</cfloop>
+											</div>
+										</td>
+									</tr>
+								</cfif>
 							</cfloop>
 						</tbody>
 					</table>
@@ -458,6 +599,23 @@
 </cf_box>
 
 <script>
+function toggleChildPallets(parentId) {
+	const childRow = document.getElementById('childRow_' + parentId);
+	const toggleBtn = document.getElementById('toggleBtn_' + parentId);
+	
+	if (childRow && toggleBtn) {
+		if (childRow.classList.contains('show')) {
+			childRow.classList.remove('show');
+			toggleBtn.classList.remove('expanded');
+			toggleBtn.innerHTML = '▶';
+		} else {
+			childRow.classList.add('show');
+			toggleBtn.classList.add('expanded');
+			toggleBtn.innerHTML = '▼';
+		}
+	}
+}
+
 function createChildPallet(parentPalletId, parentPalletCode) {
 	// Butonu devre dışı bırak
 	const btn = document.getElementById('addChildBtn_' + parentPalletId);
@@ -479,8 +637,8 @@ function createChildPallet(parentPalletId, parentPalletCode) {
 	fetch('/index.cfm?fuseaction=eshipping.emptypopup_create_child_pallet_pbs&parent_pallet_id=' + parentPalletId+"&ajax=1&ajax_box_page=1&isAjax=1")
 		.then(response => response.json())
 		.then(data => {
-			if (data.success) {
-				alert('Başarılı!\n\nYavru Palet Kodu: ' + data.data.childPalletCode + '\nAna Palet: ' + data.data.parentPalletCode);
+			if (data.SUCCESS) {
+				alert('Başarılı!\n\nYavru Palet Kodu: ' + data.data.CHILDPALLETCODE + '\nAna Palet: ' + data.data.PARENTPALLETCODE);
 				// Sayfayı yenile
 				window.location.reload();
 			} else {
