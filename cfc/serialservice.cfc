@@ -52,6 +52,7 @@ component output="false" {
                 {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
                 {datasource = datasourceName}
             );
+            result.mmmm = "Seri Silme Gerçekleşti";
         } else {
             var delQ = queryExecute(
                 "DELETE FROM PBS_MAL_KABUL_BARCODES WHERE PMB_ID = :iid",
@@ -61,6 +62,7 @@ component output="false" {
                 },
                 {datasource = datasourceName}
             );
+            result.mmmm = "Barkod Silme Gerçekleşti";
         }
             result.deleted = true;
         } catch (any exName) {
