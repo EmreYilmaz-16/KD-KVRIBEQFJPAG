@@ -10,6 +10,7 @@
             <cfset isreaded=listLast(serial,"|")>
             <cfset fromBarcode=listGetAt(serial,2,"|")>
             <cfset serial=listFirst(serial,"|")>
+            <cfset amount=listGetAt(serial,4,"|")>
             
             
             <cfdump var="#serial#">
@@ -20,11 +21,13 @@
                         INSERT INTO [PBS_MAL_KABUL_BARCODES] 
 ([BARCODE],
  [STOCK_ID],
- [WRK_ROW_ID]) 
+ [WRK_ROW_ID],
+ [AMOUNT]) 
 VALUES 
 ('#serial#',
  #row.stock_id#,
- '#row.wrk_row_id#')
+ '#row.wrk_row_id#',
+ #amount#)
                     </cfquery>
                 <cfelse>
 
