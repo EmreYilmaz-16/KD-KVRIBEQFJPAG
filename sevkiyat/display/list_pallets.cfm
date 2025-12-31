@@ -439,7 +439,7 @@
 										<button 
 											class="pallet-action-btn add-child" 
 											title="Yavru palet olustur"
-											onclick="createChildPallet(#ID#, '#JavaScriptStringFormat(PALLET_CODE)#')"
+											onclick="createChildPallet(#ID#, '#encodeForJavaScript(PALLET_CODE)#')"
 											id="addChildBtn_#ID#"
 										>
 											+
