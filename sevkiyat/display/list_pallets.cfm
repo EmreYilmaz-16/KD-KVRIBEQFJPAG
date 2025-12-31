@@ -346,8 +346,8 @@
 			padding: 12px 16px;
 			margin-bottom: 10px;
 			border: 1px solid #fbbf24;
-			display: grid;
-			grid-template-columns: 1fr 1fr 1fr auto;
+			display: flex;
+			grid-template-columns: 0fr 0.1fr 0.1fr 0.1fr auto;
 			gap: 12px;
 			align-items: center;
 		}
