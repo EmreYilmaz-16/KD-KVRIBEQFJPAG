@@ -17,11 +17,13 @@
 		P.PALLET_TYPE,
 		P.RECORD_DATE,
 		P.RECORD_EMP,
+		P.MAIN_PALET_ID,
 		T.PALET_TYPE AS PALLET_TYPE_NAME,
 		P.COMPANY_ID,		
 		C.NICKNAME AS COMPANY_NICKNAME,
 		E.EMPLOYEE_NAME,
-		E.EMPLOYEE_SURNAME
+		E.EMPLOYEE_SURNAME,
+		(SELECT COUNT(*) FROM #dsn3#.SHIPPING_PALLETS_PBS WHERE MAIN_PALET_ID = P.ID) AS CHILD_COUNT
 	FROM #dsn3#.SHIPPING_PALLETS_PBS P
 	LEFT JOIN #DSN#.PALET_TYPES_PBS T ON T.ID = P.PALLET_TYPE
 	LEFT JOIN #DSN#.COMPANY AS C ON C.COMPANY_ID = P.COMPANY_ID
@@ -229,6 +231,71 @@
 			color: #1f2937;
 		}
 
+		.child-pallet-indicator {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			background: rgba(251, 146, 60, 0.15);
+			color: #ea580c;
+			border-radius: 6px;
+			padding: 3px 8px;
+			font-size: 11px;
+			font-weight: 600;
+			margin-left: 8px;
+		}
+
+		.child-count-badge {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(34, 197, 94, 0.15);
+			color: #16a34a;
+			border-radius: 999px;
+			width: 18px;
+			height: 18px;
+			font-size: 11px;
+			font-weight: 700;
+			margin-left: 6px;
+		}
+
+		.pallet-action-btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+			border-radius: 8px;
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			color: #475569;
+			font-size: 16px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-right: 6px;
+		}
+
+		.pallet-action-btn:hover {
+			background: #f1f5f9;
+			border-color: #94a3b8;
+			transform: translateY(-1px);
+		}
+
+		.pallet-action-btn.add-child {
+			color: #16a34a;
+			border-color: #86efac;
+		}
+
+		.pallet-action-btn.add-child:hover {
+			background: #dcfce7;
+			border-color: #22c55e;
+		}
+
+		.pallet-action-btn.disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+			pointer-events: none;
+		}
+
 		.pallet-empty {
 			padding: 40px 0;
 			text-align: center;
@@ -304,6 +371,7 @@
 								<th>Tip</th>
 								<th>Cari Hesap</th>
 								<th>Kayit Bilgileri</th>
+								<th>Islemler</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -330,7 +398,15 @@
 								</cfif>
 
 								<tr>
-									<td class="pallet-code">#HTMLEditFormat(PALLET_CODE)#</td>
+									<td class="pallet-code">
+										#HTMLEditFormat(PALLET_CODE)#
+										<cfif Val(MAIN_PALET_ID) GT 0>
+											<span class="child-pallet-indicator" title="Bu bir yavru palettir">🔗 Yavru</span>
+										</cfif>
+										<cfif Val(CHILD_COUNT) GT 0>
+											<span class="child-count-badge" title="#CHILD_COUNT# yavru palet">#CHILD_COUNT#</span>
+										</cfif>
+									</td>
 									<td>
 										<span class="pallet-type-badge">
 											#HTMLEditFormat(PALLET_TYPE_NAME)#
@@ -360,6 +436,14 @@
 										</div>
 									</td>
 									<td>
+										<button 
+											class="pallet-action-btn add-child" 
+											title="Yavru palet olustur"
+											onclick="createChildPallet(#ID#, '#JavaScriptStringFormat(PALLET_CODE)#')"
+											id="addChildBtn_#ID#"
+										>
+											+
+										</button>
 										<a class="btn btn-primary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'">Sevkiyat Ekle</a>
 										<a class="btn btn-secondary" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'">Urun Ekle</a>
 									</td>
@@ -372,3 +456,47 @@
 		</div>
 	</cfoutput>
 </cf_box>
+
+<script>
+function createChildPallet(parentPalletId, parentPalletCode) {
+	// Butonu devre dışı bırak
+	const btn = document.getElementById('addChildBtn_' + parentPalletId);
+	if (btn) {
+		btn.classList.add('disabled');
+		btn.innerHTML = '⏳';
+	}
+
+	// Onay al
+	if (!confirm('Ana Palet: ' + parentPalletCode + '\n\nBu paletin yavru paletini oluşturmak istediğinize emin misiniz?')) {
+		if (btn) {
+			btn.classList.remove('disabled');
+			btn.innerHTML = '+';
+		}
+		return;
+	}
+
+	// Ajax isteği gönder
+	fetch('/index.cfm?fuseaction=eshipping.emptypopup_create_child_pallet_pbs&parent_pallet_id=' + parentPalletId)
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				alert('Başarılı!\n\nYavru Palet Kodu: ' + data.data.childPalletCode + '\nAna Palet: ' + data.data.parentPalletCode);
+				// Sayfayı yenile
+				window.location.reload();
+			} else {
+				alert('Hata!\n\n' + data.message);
+				if (btn) {
+					btn.classList.remove('disabled');
+					btn.innerHTML = '+';
+				}
+			}
+		})
+		.catch(error => {
+			alert('İstek sırasında hata oluştu!\n\n' + error.message);
+			if (btn) {
+				btn.classList.remove('disabled');
+				btn.innerHTML = '+';
+			}
+		});
+}
+</script>
