@@ -805,11 +805,17 @@ async function checkSerial(input, event) {
             console.log("Temizlenmiş seri no:", existingSerialNo);
             console.log("Karşılaştırılıyor:", existingSerialNo, "==", parseResult.serial_no);
             
-            if ((existingSerialNo === parseResult.serial_no) && parser !==4 ) {
-                console.log("Seri numarası zaten mevcut:", existingSerialNo);
-                showNotification('Bu seri numarası daha önce girilmiş!', 'error');
-                input.value = '';
-                return;
+            if (existingSerialNo === parseResult.serial_no) {
+                if (parser != 4) {
+                    // Parser 1,2,3 için aynı seri numarasına izin verme
+                    console.log("Seri numarası zaten mevcut:", existingSerialNo);
+                    showNotification('Bu seri numarası daha önce girilmiş!', 'error');
+                    input.value = '';
+                    return;
+                } else {
+                    // Parser 4 için aynı barkod eklenebilir (miktar artırılabilir)
+                    console.log("Parser 4 - Aynı barkod farklı miktarla eklenebilir");
+                }
             }
         }
 
@@ -843,8 +849,13 @@ async function checkSerial(input, event) {
         }
         serialsTable.appendChild(newRow);
 
-        // Sayacı güncelle
-        var currentCount = serialsTable.getElementsByTagName("tr").length;
+        // Sayacı güncelle - Parser 4 için miktar toplamını hesapla
+        var currentCount = 0;
+        var allRows = serialsTable.getElementsByTagName("tr");
+        for (let k = 0; k < allRows.length; k++) {
+            var rowAmount = parseInt(allRows[k].getAttribute("data-amount")) || 1;
+            currentCount += rowAmount;
+        }
         updateProductStatus(product_id, currentCount, totalQuantity);
 
         // Seri listesini görünür yap
@@ -1076,8 +1087,12 @@ function getPdataWithBarkode(barcode){
             serial_no: barcode,
             parser_type: 4
         };
-
-}
+    } else {
+        return {
+            success: false,
+            error: 'Barkod sistemde bulunamadı!'
+        };
+    }
 }
 
 /**
@@ -1166,8 +1181,13 @@ function deleteSerial(serial_no,wrk_row_id,product_id, iiid) {
                     break;
                 }
             }
-            // Sayaç güncelle
-            var currentCount = serialTable.getElementsByTagName("tr").length;
+            // Sayaç güncelle - Miktar toplamını hesapla
+            var currentCount = 0;
+            var allRows = serialTable.getElementsByTagName("tr");
+            for (let k = 0; k < allRows.length; k++) {
+                var rowAmount = parseInt(allRows[k].getAttribute("data-amount")) || 1;
+                currentCount += rowAmount;
+            }
             var totalQuantity = parseInt(document.querySelector(`tr[data-product_id="${product_id}"]`).children[1].innerText);
             updateProductStatus(product_id, currentCount, totalQuantity);
         } else {
@@ -1200,8 +1220,13 @@ function deleteUnProcessedSerial(serial_no,wrk_row_id,product_id) {
             break;
         }
     }
-    // Sayaç güncelle
-    var currentCount = serialTable.getElementsByTagName("tr").length;
+    // Sayaç güncelle - Miktar toplamını hesapla
+    var currentCount = 0;
+    var allRows = serialTable.getElementsByTagName("tr");
+    for (let k = 0; k < allRows.length; k++) {
+        var rowAmount = parseInt(allRows[k].getAttribute("data-amount")) || 1;
+        currentCount += rowAmount;
+    }
     var totalQuantity = parseInt(document.querySelector(`tr[data-product_id="${product_id}"]`).children[1].innerText);
     updateProductStatus(product_id, currentCount, totalQuantity);
     
