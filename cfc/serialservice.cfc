@@ -57,7 +57,7 @@ component output="false" {
             var delQ = queryExecute(
                 "DELETE FROM PBS_MAL_KABUL_BARCODES WHERE PMB_ID = :iid",
                 {
-                    iid = {value = iid, cfsqltype = "cf_sql_varchar"}
+                    iid = {value = iid, cfsqltype = "cf_sql_integer"}
                     
                 },
                 {datasource = datasourceName}
