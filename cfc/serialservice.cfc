@@ -38,7 +38,7 @@ component output="false" {
     remote struct function deleteSerial(required string serialNo) {
         var result = {deleted = false};
         var datasourceName = resolveDatasource();
-        var iid=arguments.IIID;
+        var iid=arguments.IIID+0;
         result.iiid=iid;
         try {
         if(iid neq 0){
