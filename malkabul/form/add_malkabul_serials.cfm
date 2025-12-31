@@ -466,6 +466,7 @@ FROM (
 				AND PROCESS_CAT <> 76
 			) AS IS_DELETABLE
         ,1 AS R_AMOUNT
+        ,0 AS IIID
 	FROM #dsn2#.SHIP_ROW AS SR
 	LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID = SR.STOCK_ID
 	LEFT JOIN #dsn3#.SERVICE_GUARANTY_NEW AS SG ON SG.WRK_ROW_ID = SR.WRK_ROW_ID
@@ -488,6 +489,7 @@ FROM (
 			) AS OMIK
 		,0 AS IS_DELETABLE
         ,PMB.AMOUNT AS R_AMOUNT
+        ,PMB.PMB_ID IIID
 	FROM #dsn2#.SHIP_ROW AS SR
 	LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID = SR.STOCK_ID
 	LEFT JOIN #dsn3#.PBS_MAL_KABUL_BARCODES AS PMB ON PMB.WRK_ROW_ID = SR.WRK_ROW_ID
@@ -556,7 +558,7 @@ ORDER BY PRODUCT_ID
                                 <table class="serial-table" id="serials_#PRODUCT_ID#">              
                                     <cfoutput> 
                                         <cfif len(trim(SERIAL_NO)) NEQ 0>
-                                        <tr data-readed="1" data-from-barcode="#FB#" data-amount="#R_AMOUNT#" title="Önceden kaydedilmiş">
+                                        <tr data-readed="1" data-from-barcode="#FB#" data-amount="#R_AMOUNT#" data-IIID="#IIID#" title="Önceden kaydedilmiş">
                                             <td>
                                                 <i class="fas fa-history"></i>
                                                 #EncodeForHTML(SERIAL_NO)#
@@ -568,7 +570,7 @@ ORDER BY PRODUCT_ID
                                                     <i class="fas fa-exclamation-triangle text-warning" title="Bu seri numarası başka işlemlerde kullanılmış, silinemez."></i>
                                                     <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
                                                 <cfelse>
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteSerial('#SERIAL_NO#','#WRK_ROW_ID#','#PRODUCT_ID#')">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteSerial('#SERIAL_NO#','#WRK_ROW_ID#','#PRODUCT_ID#','#IIID#')">
                                                         <i class="fas fa-trash-alt"></i> Sil
                                                     </button>
                                                     <span class="badge badge-info ml-2">x#EncodeForHTML(R_AMOUNT)#</span>
@@ -756,6 +758,11 @@ async function checkSerial(input, event) {
         var xxx=1;
         if(parser==4){
              xxx=prompt("Miktar Giriniz")
+                if(isNaN(xxx) || xxx<=0){
+                    showNotification('Geçersiz miktar girdiniz!', 'error');
+                    input.value = '';
+                    return;
+                }
         }
 
         // Ürün satırını bul
@@ -1128,7 +1135,7 @@ $(document).keydown(function(e) {
     }
 });
 
-function deleteSerial(serial_no,wrk_row_id,product_id) {
+function deleteSerial(serial_no,wrk_row_id,product_id, iiid) {
     if (!confirm('Bu seri numarasını silmek istediğinize emin misiniz?')) {
         return;
     }
@@ -1137,7 +1144,7 @@ function deleteSerial(serial_no,wrk_row_id,product_id) {
     fetch('/AddOns/Partner/cfc/serialservice.cfc?method=deleteSerial&returnformat=json', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({ SERIALNO:serial_no, wrk_row_id:wrk_row_id })
+        body: new URLSearchParams({ SERIALNO:serial_no, wrk_row_id:wrk_row_id, IIID: iiid })
     })
     .then(response => response.json())
     .then(data => {
