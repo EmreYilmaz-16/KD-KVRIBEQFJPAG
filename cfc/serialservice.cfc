@@ -41,7 +41,7 @@ component output="false" {
         var iid=arguments.IIID+0;
         result.iiid=iid;
         try {
-        if(iid neq 0){
+        if(iid eq 0){
             var delQ = queryExecute(
                 "DELETE FROM SERIAL_IN_OUT_PBS WHERE SERIAL_NUMBER = :serial",
                 {serial = {value = arguments.serialNo, cfsqltype = "cf_sql_varchar"}},
