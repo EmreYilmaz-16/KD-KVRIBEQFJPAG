@@ -1,4 +1,4 @@
-<cfparam name="url.search" default="">
+﻿<cfparam name="url.search" default="">
 <cfparam name="url.type" default="">
 
 <cfset searchTerm = Trim(url.search)>
