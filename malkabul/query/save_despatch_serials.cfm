@@ -7,7 +7,7 @@
     <cfdump var="#row#">
         <cfloop from="1" to="#arrayLen(row.serials)#" index="j">
             <cfset serial=row.serials[j]>
-            <cfset isreaded=listLast(serial,"|")>
+            <cfset isreaded=listGetAt(serial,3,"|")>
             <cfset fromBarcode=listGetAt(serial,2,"|")>
             <cfset serial=listFirst(serial,"|")>
             <cfset amount=listGetAt(serial,4,"|")>
