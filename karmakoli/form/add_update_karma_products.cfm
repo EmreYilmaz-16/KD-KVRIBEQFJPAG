@@ -17,10 +17,7 @@
         SELECT PRODUCT_ID,QUANTITY,MAIN_PRODUCT_ID,GETDATE(),RECORD_EMPLOYEE_ID,RECORD_DATE FROM KARMA_PRODUCTS_PBS
         WHERE MAIN_PRODUCT_ID=<cfqueryparam value="#form.MAIN_PRODUCT_ID#" cfsqltype="cf_sql_integer">
     </cfquery>
-    <cfquery name="delete_existing" datasource="#dsn1#">
-        DELETE FROM KARMA_PRODUCTS_PBS
-        WHERE MAIN_PRODUCT_ID=<cfqueryparam value="#form.MAIN_PRODUCT_ID#" cfsqltype="cf_sql_integer">
-    </cfquery>
+
    <cfquery name="insertKarmaProduct" datasource="#dsn1#">
         INSERT INTO KARMA_PRODUCTS_PBS (PRODUCT_ID,QUANTITY,MAIN_PRODUCT_ID,RECORD_DATE,RECORD_EMPLOYEE_ID)
         VALUES (
