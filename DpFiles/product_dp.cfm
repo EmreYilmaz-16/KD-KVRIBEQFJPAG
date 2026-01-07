@@ -96,7 +96,7 @@
                 return;
             }
 
-            const isPackage = productInfo.IS_PACKAGE_PRODUCT[0] === 1;
+            const isPackage = productInfo.IS_PACKAGE_PRODUCT[0] === '1';
             container.innerHTML += createPackageProductHTML(isPackage);
             
         } catch (error) {
