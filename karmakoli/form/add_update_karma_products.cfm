@@ -5,7 +5,7 @@
     <script>
         alert('⚠️ Uyarı: Seçilen ürün bir paket ürün değildir. Lütfen önce ürünün "Paket Ürün" olarak işaretlendiğinden emin olun.');
         this.close();
-        <cfabort>
+        
     </script>
 </cfif>
 
