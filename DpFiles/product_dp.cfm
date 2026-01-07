@@ -28,8 +28,8 @@
 
     function paketlemeButonu(){
         var html=`<div style="display: flex;">
-            <div style="width: 33%;">&nbsp;</div>
-            <div style="width: 33%;">
+            <div style="width: 34%;">&nbsp;</div>
+            <div style="width: 52%;">
                 <div class="form-group">
                     <label>Paketleme Miktarı</label>
                     <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;">
@@ -38,7 +38,9 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 33%;">1</div>
+            <div style="width: 13%;">
+                <a class="ui-btn ui-btn-gray" type="button" style="height: auto;">Paket İçeriği</a>
+                </div>
                 </div>`
               var ii= document.getElementById("item-product_code_2").parentElement
                 ii.innerHTML+=html
