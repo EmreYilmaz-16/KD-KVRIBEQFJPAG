@@ -1,3 +1,6 @@
+<cfquery name="getProductInfo" datasource="#dsn1#">
+    SELECT IS_PACKAGE_PRODUCT FROM PRODUCT WHERE PRODUCT_ID=<cfqueryparam value="#url.pid#" cfsqltype="cf_sql_integer">
+</cfquery>
 <script>
     
 $(document).on('ready',function(){
@@ -26,7 +29,7 @@ function addR(){
     var iiiii=document.getElementById("is_gift_card").parentElement.parentElement.parentElement
 var html=`<div class="form-group" id="item-pbs_karma">
 										<label class="col col-4 col-md-4 col-sm-4 col-xs-12">Paket Ürünü </label>
-										<div class="col col-8 col-md-8 col-sm-8 col-xs-12"><input type="checkbox" name="is_package_product" id="is_package_product" value="1">Evet/Hayır </div>
+										<div class="col col-8 col-md-8 col-sm-8 col-xs-12"><input type="checkbox"<cfif getProductInfo.IS_PACKAGE_PRODUCT EQ 1> checked</cfif> name="is_package_product" id="is_package_product" value="1">Evet/Hayır </div>
 									</div>`
 iiiii.innerHTML+=html
 }
