@@ -1,6 +1,7 @@
 <cfquery name="getProductInfo" datasource="#dsn1#">
     SELECT IS_PACKAGE_PRODUCT FROM PRODUCT WHERE PRODUCT_ID=<cfqueryparam value="#url.pid#" cfsqltype="cf_sql_integer">
 </cfquery>
+<cfdump var="#getProductInfo#">
 <script>
     
 $(document).on('ready',function(){
