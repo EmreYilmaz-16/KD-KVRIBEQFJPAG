@@ -71,6 +71,7 @@
         try {
             const query = `SELECT IS_PACKAGE_PRODUCT FROM PRODUCT WHERE PRODUCT_ID=${productId}`;
             const productInfo = wrk_query(query, "DSN1", 1);
+            console.log('Product Info:', productInfo);
             
             if (!productInfo || !productInfo.IS_PACKAGE_PRODUCT) {
                 console.warn('Product info not available');
