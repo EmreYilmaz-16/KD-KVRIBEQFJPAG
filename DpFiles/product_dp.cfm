@@ -27,7 +27,7 @@
     }
 
     function paketlemeButonu(){
-        var html=`<div style="display: flex;">
+        var html=`<div style="display: flex;align-items: center;"">
             <div style="width: 34%;">&nbsp;</div>
             <div style="width: 52%;">
                 <div class="form-group">
