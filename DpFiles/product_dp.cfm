@@ -27,6 +27,7 @@
     }
 
     function paketlemeButonu(){
+        const productId = getParameterByName('pid');
         var html=`<div style="display: flex;align-items: center;"">
             <div style="width: 34%;">&nbsp;</div>
             <div style="width: 52%;">
@@ -39,7 +40,7 @@
                 </div>
             </div>
             <div style="width: 13%;">
-                <a class="ui-btn ui-btn-gray" type="button" style="height: auto;">Paket İçeriği</a>
+                <a onclick="pencereac(1,${productId})" class="ui-btn ui-btn-gray" type="button" style="height: auto;">Paket İçeriği</a>
                 </div>
                 </div>`
               var ii= document.getElementById("item-product_code_2").parentElement
