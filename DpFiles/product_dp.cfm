@@ -94,7 +94,7 @@
                 console.warn('Product info not available');
                 return;
             }
-            paketlemeButonu();
+           // paketlemeButonu();
             const giftCardElement = document.getElementById(CONFIG.selectors.isGiftCard);
             
             if (!giftCardElement) {
