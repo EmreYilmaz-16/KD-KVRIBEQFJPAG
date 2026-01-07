@@ -1,3 +1,14 @@
+<cfquery name="getProductInfo" datasource="#dsn1#">
+    SELECT PRODUCT_NAME,ISNULL(IS_PACKAGE_PRODUCT,0) IS_PACKAGE_PRODUCT FROM PRODUCT WHERE PRODUCT_ID=<cfqueryparam value="#attributes.PID#" cfsqltype="cf_sql_integer">
+</cfquery>
+<cfif getProductInfo.IS_PACKAGE_PRODUCT EQ 0>
+    <script>
+        alert('⚠️ Uyarı: Seçilen ürün bir paket ürün değildir. Lütfen önce ürünün "Paket Ürün" olarak işaretlendiğinden emin olun.');
+        this.close();
+        <cfabort>
+    </script>
+</cfif>
+
 <cfparam name="attributes.is_submit" default="">
 <cfparam name="attributes.PID" default="">
 <cfparam name="attributes.is_delete" default="">
@@ -29,9 +40,7 @@
         )
     </cfquery>
 </cfif>
-<cfquery name="getProductInfo" datasource="#dsn1#">
-    SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_ID=<cfqueryparam value="#attributes.PID#" cfsqltype="cf_sql_integer">
-</cfquery>
+
 
 <cfquery name="getKarmaProducts" datasource="#dsn1#">
     SELECT KP.PRODUCT_ID,KP.QUANTITY,KP.MAIN_PRODUCT_ID,P.PRODUCT_NAME FROM KARMA_PRODUCTS_PBS AS KP
