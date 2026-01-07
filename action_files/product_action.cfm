@@ -6,4 +6,3 @@
     </cfquery>
 </cfif>
 
-<cfabort>
