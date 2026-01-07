@@ -40,7 +40,8 @@
             </div>
             <div style="width: 33%;">1</div>
                 </div>`
-                document.getElementById("item-product_code_2").parentElement.innerHtml+=html;
+              var ii= document.getElementById("item-product_code_2").parentElement
+                ii.innerHTML+=html
     }
 
     function createPackageProductHTML(isChecked) {
@@ -94,7 +95,7 @@
                 console.warn('Product info not available');
                 return;
             }
-           // paketlemeButonu();
+            paketlemeButonu();
             const giftCardElement = document.getElementById(CONFIG.selectors.isGiftCard);
             
             if (!giftCardElement) {
