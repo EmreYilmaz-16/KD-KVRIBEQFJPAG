@@ -121,8 +121,7 @@
 </script>
 
 <script>
-    function wrk_query(str_query, data_source, maxrows)
-{
+
     function wrk_query(str_query, data_source, maxrows) {
         /* 
         By Workcube
