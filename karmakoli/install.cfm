@@ -23,3 +23,16 @@
     )
 </cfquery>
 
+<cfquery name="addColumn" datasource="#dsn#_product">
+    IF NOT EXISTS (
+    SELECT 1 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'PRODUCT' 
+      AND COLUMN_NAME = 'IS_PACKAGE_PRODUCT'
+)
+BEGIN
+    ALTER TABLE PRODUCT 
+    ADD IS_PACKAGE_PRODUCT BIT NOT NULL DEFAULT(0);
+END
+
+</cfquery>
