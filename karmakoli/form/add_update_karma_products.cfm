@@ -202,6 +202,7 @@
                 </div>
             </div>
             <cfinput type="hidden" name="MAIN_PRODUCT_ID" value="#attributes.PID#">
+             <cfinput type="hidden" name="PID" value="#attributes.PID#">
             <cfinput type="hidden" name="is_submit" value="Y">
             <button type="submit" class="btn-add">✨ Ürün Ekle</button>
         </cfform>
