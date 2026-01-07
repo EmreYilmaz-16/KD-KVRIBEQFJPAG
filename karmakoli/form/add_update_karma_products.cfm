@@ -174,7 +174,7 @@
 
 <div class="karma-card">
     <div class="karma-card-title">
-        🎯 Karma Ürün: #getProductInfo.PRODUCT_NAME#
+        <cfoutput>🎯 Karma Ürün: #getProductInfo.PRODUCT_NAME#</cfoutput>
     </div>
     <div class="form-card">
         <cfform method="post" action="#request.self#?fuseaction=#attributes.fuseaction#" name="list_offer">
