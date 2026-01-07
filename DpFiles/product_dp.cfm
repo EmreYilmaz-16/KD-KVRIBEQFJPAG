@@ -26,6 +26,22 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
+    function paketlemeButonu(){
+        var html=`<div style="display: flex;">
+            <div style="width: 33%;">&nbsp;</div>
+            <div style="width: 33%;">
+                <div class="form-group">
+                    <label>Paketleme Miktarı</label>
+                    <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;">
+                    <div>
+                        <a class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 33%;">1</div>
+                </div>`
+    }
+
     function createPackageProductHTML(isChecked) {
         const checkedAttr = isChecked ? ' checked' : '';
         return `
@@ -77,7 +93,7 @@
                 console.warn('Product info not available');
                 return;
             }
-
+            paketlemeButonu();
             const giftCardElement = document.getElementById(CONFIG.selectors.isGiftCard);
             
             if (!giftCardElement) {
