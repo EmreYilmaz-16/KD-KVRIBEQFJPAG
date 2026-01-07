@@ -40,6 +40,7 @@
             </div>
             <div style="width: 33%;">1</div>
                 </div>`
+                document.getElementById("item-product_code_2").parentElement.innerHtml+=html;
     }
 
     function createPackageProductHTML(isChecked) {
