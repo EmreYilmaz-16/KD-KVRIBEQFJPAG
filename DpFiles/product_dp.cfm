@@ -30,7 +30,7 @@
         const productId = getParameterByName('pid');
         var html=`<div style="display: flex;align-items: center;"">
             <div style="width: 34%;">&nbsp;</div>
-            <div style="width: 52%;">
+            <div style="width: 40%;">
                 <div class="form-group">
                     <label>Paketleme Miktarı</label>
                     <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;">
@@ -39,8 +39,9 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 13%;">
+            <div style="width: 25%;display: flex;flex-direction: column;">
                 <a onclick="pencereac(1,${productId})" class="ui-btn ui-btn-gray" type="button" style="height: auto;">Paket İçeriği</a>
+                <a onclick="pencereac(2,${productId})" class="ui-btn ui-btn-green" type="button" style="height: auto;margin-top: 2px;">Verilmiş Emirler</a>
                 </div>
                 </div>`
               var ii= document.getElementById("item-product_code_2").parentElement
