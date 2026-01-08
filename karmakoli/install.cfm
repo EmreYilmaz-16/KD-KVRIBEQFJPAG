@@ -1,4 +1,12 @@
-
+<cffile action="read" file="#ExpandPath('/pbs_dsn.txt')#" variable="configContent">
+        <cfset dsn = trim(configContent)>
+        <cfquery name="getparams" datasource="#dsn#" maxrows="1">
+            SELECT PBS_MODUL_COMPANY_ID FROM PBS_PARAMETERS
+        </cfquery>
+        <cfif getparams.recordCount EQ 0>
+            <cfthrow type="DatasourceResolution" message="PBS_MODUL_COMPANY_ID could not be determined." />
+        </cfif>
+        <cfset dsn3 = "#dsn#_#getparams.PBS_MODUL_COMPANY_ID#" />
 
 
 <cfquery name="createTable" datasource="#dsn#_product">
