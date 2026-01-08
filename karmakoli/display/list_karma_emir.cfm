@@ -118,7 +118,7 @@
             <tr>
                 <td>
                     <cfif not isDefined("attributes.ajax")>
-                        <a href="javascript:openBoxDraggable('index.cfm?fuseaction=product.emptypopup_detail_karma_emir&EMIR_ID=#KARMA_EMIR_ID#','Paketleme Emri Detayı - #EMIR_NO#',600,400);">
+                        <a href="javascript:windowopen('index.cfm?fuseaction=product.emptypopup_detail_karma_emir&EMIR_ID=#KARMA_EMIR_ID#','Paketleme Emri Detayı - #EMIR_NO#',600,400);">
                             #EMIR_NO#
                         </a>
                     <cfelse>
