@@ -96,7 +96,7 @@
         border-radius: 4px;
         padding: 20px;
         display: flex;
-        flex-direction: column;
+        
         gap: 12px;
     }
     
@@ -171,7 +171,7 @@
         color: #6c757d;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        margin-bottom: -5px;
+        margin-bottom: 10px;
     }
 </style>
 
