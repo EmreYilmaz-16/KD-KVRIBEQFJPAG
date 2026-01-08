@@ -203,7 +203,7 @@
                            readonly 
                            value="#getEmirDetail.AMOUNT#" 
                            class="quantity-input" 
-                           style="color: #667eea;">
+                           style="color: ##667eea;">
                 </div>
                 <div style="width: 100%;">
                     <div class="quantity-label">Üretilen Miktar</div>
@@ -213,7 +213,7 @@
                            readonly 
                            value="0" 
                            class="quantity-input" 
-                           style="color: #e74c3c;">
+                           style="color: ##e74c3c;">
                 </div>
                 </cfoutput>
                 <button type="button" 
