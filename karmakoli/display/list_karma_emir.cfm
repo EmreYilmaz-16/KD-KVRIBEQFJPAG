@@ -5,7 +5,8 @@
         WHERE KARMA_EMIR.PRODUCT_ID = <cfqueryparam value="#URL.product_id#" cfsqltype="cf_sql_integer">    
     </CFIF>
 </cfquery>
-<cf_box title="Paketleme Emirleri -#iIf(isDefined("URL.product_id") AND len(trim(URL.product_id)) GT 0, list_karma_emir.PRODUCT_NAME, "Tümü")#" scroll="1" collapsable="1" resize="1" popup_box="1">
+<cfset boxTitle = "Paketleme Emirleri - " & (isDefined("URL.product_id") AND len(trim(URL.product_id)) GT 0 ? list_karma_emir.PRODUCT_NAME : "Tümü")>
+<cf_box title="#boxTitle#" scroll="1" collapsable="1" resize="1" popup_box="1">
 
 <!----
       KARMA_EMIR_ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
