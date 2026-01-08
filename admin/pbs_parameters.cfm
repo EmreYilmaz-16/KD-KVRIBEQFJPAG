@@ -651,6 +651,7 @@
 <cfparam name="form.default_sevkiyat_depo_id" default="">
 <cfparam name="form.default_satinalma_siparis_sureci" default="">
 <cfparam name="form.default_malkabul_depo" default="">
+<cfparam name="form.packaging_store_list" default="">
 <cfparam name="url.edit_id" default="">
 <cfparam name="url.delete_id" default="">
 
@@ -669,7 +670,7 @@
             <!--- Yeni Kayıt Ekleme --->
             <cfquery datasource="#dsn3#">
                 INSERT INTO #dsn3#.PBS_PARAMETERS 
-                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID, DEFAULT_SEVKIYAT_DEPO_ID, DEFAULT_SATINALMA_SIPARIS_SURECI, DEFAULT_MALKABUL_DEPO)
+                (OFFER_PRODUCT_ID, PURCHASE_DEMAND_ACCEPT_PROCESS_ROW_ID_LIST, PBS_MODUL_COMPANY_ID, SALE_ORDER_ACCEPT_PROCESS_ROW_ID, DEPO_TESLIM_ID, DEPO_TEDARIK_ID, DEFAULT_SEVKIYAT_DEPO_ID, DEFAULT_SATINALMA_SIPARIS_SURECI, DEFAULT_MALKABUL_DEPO, PACKAGING_STORE_LIST)
                 VALUES 
                 (
                     <cfif len(trim(form.offer_product_id))>
@@ -716,6 +717,11 @@
                         '#form.default_malkabul_depo#'
                     <cfelse>
                         NULL
+                    </cfif>,
+                    <cfif len(trim(form.packaging_store_list))>
+                        '#form.packaging_store_list#'
+                    <cfelse>
+                        NULL
                     </cfif>
                 )
             </cfquery>
@@ -735,7 +741,8 @@
                     DEPO_TEDARIK_ID = <cfif len(trim(form.depo_tedarik_id))>#val(form.depo_tedarik_id)#<cfelse>NULL</cfif>,
                     DEFAULT_SEVKIYAT_DEPO_ID = <cfif len(trim(form.default_sevkiyat_depo_id))>#val(form.default_sevkiyat_depo_id)#<cfelse>NULL</cfif>,
                     DEFAULT_SATINALMA_SIPARIS_SURECI = <cfif len(trim(form.default_satinalma_siparis_sureci))>#val(form.default_satinalma_siparis_sureci)#<cfelse>NULL</cfif>,
-                    DEFAULT_MALKABUL_DEPO = <cfif len(trim(form.default_malkabul_depo))>'#form.default_malkabul_depo#'<cfelse>NULL</cfif>
+                    DEFAULT_MALKABUL_DEPO = <cfif len(trim(form.default_malkabul_depo))>'#form.default_malkabul_depo#'<cfelse>NULL</cfif>,
+                    PACKAGING_STORE_LIST = <cfif len(trim(form.packaging_store_list))>'#form.packaging_store_list#'<cfelse>NULL</cfif>
                 WHERE OFFER_PRODUCT_ID = #val(url.edit_id)#
             </cfquery>
             <cfset message = "Kayıt başarıyla güncellendi!">
@@ -987,6 +994,22 @@
                             </div>
                             <span class="field-hint">Satınalma siparişi için varsayılan süreç</span>
                         </div>
+
+                        <div class="form-group">
+                            <label for="packaging_store_list">Packaging Store List</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">📦</span>
+                                <input
+                                    type="text"
+                                    id="packaging_store_list"
+                                    name="packaging_store_list"
+                                    value="<cfoutput>#form.packaging_store_list#</cfoutput>"
+                                    placeholder="Örn: 1,2,3,4"
+                                    maxlength="50"
+                                >
+                            </div>
+                            <span class="field-hint">Paketleme depo listesi</span>
+                        </div>
                     </div>
 
                     <div class="action-row">
@@ -1044,6 +1067,7 @@
                                 <th>Default Sevkiyat Depo ID</th>
                                 <th>Default Satınalma Sipariş Süreci</th>
                                 <th>Default Malkabul Depo</th>
+                                <th>Packaging Store List</th>
                                 <th>Purchase Demand Accept Process Row ID List</th>
                                 <th style="text-align: center;">İşlemler</th>
                             </tr>
@@ -1097,6 +1121,17 @@
                                     <td data-label="Default Malkabul Depo">
                                         <cfif Len(Trim("" & DEFAULT_MALKABUL_DEPO))>
                                             #DEFAULT_MALKABUL_DEPO#
+                                        <cfelse>
+                                            <span class="badge is-empty">Belirtilmemiş</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="Packaging Store List">
+                                        <cfif len(trim(PACKAGING_STORE_LIST))>
+                                            <div class="badge-group">
+                                                <cfloop list="#PACKAGING_STORE_LIST#" index="storeId">
+                                                    <span class="badge">#trim(storeId)#</span>
+                                                </cfloop>
+                                            </div>
                                         <cfelse>
                                             <span class="badge is-empty">Belirtilmemiş</span>
                                         </cfif>
