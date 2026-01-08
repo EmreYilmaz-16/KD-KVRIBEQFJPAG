@@ -32,6 +32,7 @@
 <div class="row mb-3">
     <div class="col-12">
         <form method="get" action="#cgi.script_name#" class="form-inline">
+               <cfoutput>   
             <cfif isDefined("attributes.fuseaction")>
                 <input type="hidden" name="fuseaction" value="#attributes.fuseaction#">
             </cfif>
@@ -78,9 +79,10 @@
             
             <div class="form-group mr-2 mb-2">
                 <button type="submit" class="btn btn-primary">Filtrele</button>
-                <a href="#cgi.script_name#?<cfif isDefined('attributes.fuseaction')>fuseaction=#attributes.fuseaction#</cfif>" class="btn btn-secondary ml-2">Temizle</a>
+          <a href="#cgi.script_name#?<cfif isDefined('attributes.fuseaction')>fuseaction=#attributes.fuseaction#</cfif>" class="btn btn-secondary ml-2">Temizle</a>
             </div>
         </form>
+        </cfoutput>
     </div>
 </div>
 
