@@ -14,42 +14,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
 
 :root {
-    --karma-bg: #0f172a;
-    --karma-card: #111e36;
-    --karma-card-alt: #162447;
-    --karma-border: rgba(255,255,255,0.08);
-    --karma-accent: #ffb347;
-    --karma-accent-strong: #ff9e00;
-    --karma-green: #65f7c0;
+    --karma-bg: #f6f7fb;
+    --karma-card: #ffffff;
+    --karma-card-alt: #fdfdfd;
+    --karma-border: #e2e5ee;
+    --karma-accent: #3d5afe;
+    --karma-accent-strong: #1a237e;
+    --karma-green: #27ae60;
 }
 
 .karma-wrapper {
     font-family: 'Space Grotesk', 'Trebuchet MS', sans-serif;
-    background: radial-gradient(circle at 15% 10%, rgba(255, 179, 71, 0.18), transparent 55%),
-                radial-gradient(circle at 85% 0%, rgba(101, 247, 192, 0.18), transparent 50%),
-                linear-gradient(135deg, #0b1220, #1a1f33);
-    border-radius: 28px;
-    padding: 32px;
-    color: #f4f6fb;
-    box-shadow: 0 25px 60px rgba(10, 15, 30, 0.55);
-    position: relative;
-    overflow: hidden;
+    background: var(--karma-bg);
+    border-radius: 20px;
+    padding: 28px;
+    color: #1f2533;
+    border: 1px solid #e2e5ee;
     margin-top: 10px;
-}
-
-.karma-wrapper > * {
-    position: relative;
-    z-index: 2;
-}
-
-.karma-wrapper::after {
-    content: "";
-    position: absolute;
-    inset: 12px;
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,0.05);
-    pointer-events: none;
-    z-index: 1;
 }
 
 .karma-summary {
@@ -99,12 +80,11 @@
 
 .karma-table-card,
 .karma-action-card {
-    border-radius: 20px;
-    padding: 26px;
+    border-radius: 16px;
+    padding: 24px;
     border: 1px solid var(--karma-border);
-    background: rgba(9, 12, 23, 0.5);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 20px 45px rgba(4, 6, 12, 0.5);
+    background: var(--karma-card);
+    box-shadow: 0 18px 30px rgba(20, 30, 70, 0.08);
 }
 
 .karma-table-card__header {
@@ -117,16 +97,17 @@
     text-transform: uppercase;
     letter-spacing: 0.3em;
     font-size: 11px;
-    color: rgba(255,255,255,0.5);
+    color: #8a93a6;
     margin-bottom: 6px;
 }
 
 .karma-chip {
-    background: rgba(255,255,255,0.08);
+    background: #eef0f7;
     border-radius: 999px;
     padding: 6px 16px;
     font-size: 13px;
     letter-spacing: 0.08em;
+    color: #52617f;
 }
 
 .table-scroll {
@@ -146,14 +127,14 @@
     font-weight: 500;
     font-size: 12px;
     letter-spacing: 0.18em;
-    color: rgba(255,255,255,0.6);
+    color: #8a93a6;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid #eff1f6;
 }
 
 .karma-table td {
     padding: 18px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid #f3f4f8;
     vertical-align: middle;
     font-size: 15px;
 }
@@ -165,12 +146,13 @@
 .product-name {
     font-weight: 600;
     font-size: 16px;
+    color: #1b2130;
 }
 
 .karma-row-id {
     font-size: 13px;
     font-weight: 600;
-    color: rgba(255,255,255,0.6);
+    color: #98a1b3;
 }
 
 .karma-serial-chip {
@@ -179,13 +161,14 @@
     padding: 4px 10px;
     font-size: 12px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.08);
+    background: #eef3ff;
     letter-spacing: 0.08em;
+    color: #3d5afe;
 }
 
 .karma-qty-badge {
     font-weight: 600;
-    color: var(--karma-accent);
+    color: var(--karma-accent-strong);
 }
 
 .karma-link {
@@ -196,7 +179,7 @@
 }
 
 .karma-link:hover {
-    color: #ffe29a;
+    color: #0011ff;
 }
 
 .karma-action-card {
@@ -216,55 +199,53 @@
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 0.25em;
-    color: rgba(255,255,255,0.6);
+    color: #9198ab;
 }
 
 .karma-qty-input {
     width: 100%;
-    border: none;
-    background: rgba(7,11,20,0.7);
+    border: 1px solid #dee3ef;
+    background: #f8f9fd;
     color: var(--karma-accent-strong);
     font-size: 32px;
     font-weight: 600;
     text-align: center;
     padding: 14px 16px;
     border-radius: 14px;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
 }
 
 .karma-qty-input--muted {
-    color: rgba(255,255,255,0.85);
+    color: #5b6378;
 }
 
 .karma-qty-input.is-ready {
     color: var(--karma-green);
-    box-shadow: inset 0 0 0 1px var(--karma-green);
+    border-color: rgba(39, 174, 96, 0.6);
+    background: #f4fff7;
 }
 
 .karma-action-card__btn {
     width: 100%;
     border: none;
-    border-radius: 16px;
-    padding: 16px 0;
+    border-radius: 14px;
+    padding: 14px 0;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    background: linear-gradient(120deg, #ffbb55, #ff9d3f);
-    color: #1c120b;
+    background: var(--karma-accent);
+    color: #fff;
     cursor: pointer;
-    box-shadow: 0 25px 35px rgba(255,153,0,0.35);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.2s ease;
 }
 
 .karma-action-card__btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 30px 35px rgba(255,153,0,0.45);
+    background: #304ffe;
 }
 
 .karma-hint {
     font-size: 13px;
     line-height: 1.6;
-    color: rgba(255,255,255,0.75);
+    color: #6b7286;
 }
 
 .fade-in {
