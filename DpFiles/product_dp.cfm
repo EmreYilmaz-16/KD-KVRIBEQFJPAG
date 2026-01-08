@@ -31,9 +31,8 @@
         var html=`<div style="display: flex;align-items: center;"">
             <div style="width: 34%;">&nbsp;</div>
             <div style="width: 40%;">
-                <div class="form-group">
-                    <label>Paketleme Miktarı</label>
-                    <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;">
+                <div class="form-group">                    
+                    <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;" placeholder="Paketleme Miktarı" />
                     <div>
                         <a class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
                     </div>
