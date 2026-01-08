@@ -23,7 +23,7 @@
                 <tr>
                     <td>#currentRow#</td>
                     <td>#PRODUCT_NAME#</td>
-                    <td>#QUANTITY#X#getEmirDetail.QUANTITY#</td>
+                    <td>#QUANTITY#X#getEmirDetail.AMOUNT#</td>
                     <td><a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#)" title="Seç">Seç </a></td>
                 </tr>
             </cfloop>
@@ -33,7 +33,7 @@
     <div class="col col-2">
 <cfoutput>    
     <div style="dişplay:flex;flex-direction:column;align-items:center;">
-     <input type="text" name="KARMA_QUANTITY" id="KARMA_QUANTITY" readonly value="#getEmirDetail.QUANTITY#" style="font-size:25pt;color:black">
+     <input type="text" name="KARMA_QUANTITY" id="KARMA_QUANTITY" readonly value="#getEmirDetail.AMOUNT#" style="font-size:25pt;color:black">
      <input type="text" name="KARMA_QUANTITY1" id="KARMA_QUANTITY1" readonly value="0" style="font-size:25pt;color:red">
     </div>
     </cfoutput>   
@@ -42,7 +42,7 @@
 
 <script>
     var SelecttedArr = [];
-    var karmaEmirQuantity = <cfoutput>#getEmirDetail.QUANTITY#</cfoutput>;
+    var karmaEmirQuantity = <cfoutput>#getEmirDetail.AMOUNT#</cfoutput>;
     var requiredProducts = [
         <cfoutput query="getKarmaProducts">
             {PRODUCT_ID: #PRODUCT_ID#, QUANTITY: #QUANTITY#, REQUIRED_TOTAL: #QUANTITY# * karmaEmirQuantity}
