@@ -33,7 +33,7 @@
 
     function paketlemeButonu(){
         const productId = getParameterByName('pid');
-        var html=`<div style="display: flex;align-items: center;"">
+        var html=`<div style="display: flex;align-items: flex-start;"">
             <div style="width: 34%;">&nbsp;</div>
             <div style="width: 40%;">
                 <div class="form-group">                    
