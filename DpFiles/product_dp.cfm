@@ -39,7 +39,7 @@
                 <div class="form-group">                    
                     <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;" placeholder="Paketleme Miktarı" />
                     <div>
-                        <a class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
+                        <a onclick="addEmir(${productId})" id="paketleme_emri_ver" class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
                     </div>
                 </div>
             </div>
@@ -85,6 +85,50 @@
         
         $(detailButtons[0].children).append(buttonHTML);
     }
+function addEmir(pid) {
+	// Butonu devre dışı bırak
+	const btn = document.getElementById('paketleme_emri_ver');
+	if (btn) {
+		btn.classList.add('disabled');
+		btn.innerHTML = '⏳';
+	}
+//karma_emir_amount
+	const amountInput = document.getElementById('karma_emir_amount');
+	const amount = amountInput ? amountInput.value : null;
+    if (!amount || isNaN(amount) || amount <= 0) {
+        alert('Lütfen geçerli bir paketleme miktarı giriniz.');
+        if (btn) {
+            btn.classList.remove('disabled');
+            btn.innerHTML = 'Paketleme Emri Ver';
+        }
+        return;
+    }
+
+
+	// Ajax isteği gönder
+	fetch('/index.cfm?fuseaction=product.emptypopup_add_paket_emir&PRODUCT_ID=' + pid + "&AMOUNT=" + amount + "&ajax=1&ajax_box_page=1&isAjax=1")
+		.then(response => response.json())
+		.then(data => {
+			if (data.SUCCESS) {
+				alert('Paketleme emri başarıyla oluşturuldu. Emir No: ' + data.EMIR_NO);
+				// Sayfayı yenile
+				window.location.reload();
+			} else {
+				alert('Hata!\n\n' + data.message);
+				if (btn) {
+					btn.classList.remove('disabled');
+					btn.innerHTML = 'Paketleme Emri Ver';
+				}
+			}
+		})
+		.catch(error => {
+			alert('İstek sırasında hata oluştu!\n\n' + error.message);
+			if (btn) {
+				btn.classList.remove('disabled');
+				btn.innerHTML = 'Paketleme Emri Ver';
+			}
+		});
+}
 
     function addPackageProductToggle() {
         const productId = getParameterByName('pid');
