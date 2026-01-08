@@ -205,6 +205,21 @@
                 </tbody>
             </table>
         </div>
+        <cfquery name="getParams" datasource="#dsn#">
+            SELECT PACKAGING_STORE_LIST FROM PBS_PARAMETERS
+        </cfquery>
+        <cfquery name="getStores" datasource="#dsn#">
+            SELECT * FROM (
+SELECT CAST(D.DEPARTMENT_ID AS VARCHAR) +'-'+CAST(SL.LOCATION_ID AS VARCHAR) DEPO,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO_ADI  FROM w3Qa.STOCKS_LOCATION AS SL 
+LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID 
+  ) AS TTT WHERE DEPO IN (
+    <cfloop list="#getParams.PACKAGING_STORE_LIST#" index="storeId">
+        <cfif currentRow GT 1>,</cfif>'#storeId#'
+    </cfloop>
+    
+  )
+        </cfquery>
+        
         
         <div class="karma-sidebar">
             <cfoutput>
