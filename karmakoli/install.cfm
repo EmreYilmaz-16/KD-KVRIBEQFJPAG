@@ -57,3 +57,18 @@ END
         EMIR_NO VARCHAR(50) NOT NULL
     )
 </cfquery>
+
+
+<cfquery name="addParams" datasource="#dsn#">
+        IF NOT EXISTS (
+    SELECT 1 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'PBS_PARAMETERS' 
+      AND COLUMN_NAME = 'PACKAGING_STORE_LIST'
+)
+BEGIN
+    ALTER TABLE PBS_PARAMETERS 
+    ADD PACKAGING_STORE_LIST NVARCHAR(MAX); 
+END
+
+</cfquery>
