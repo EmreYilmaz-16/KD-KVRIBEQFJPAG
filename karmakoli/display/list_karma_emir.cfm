@@ -1,3 +1,4 @@
+<cf_box title="Paketleme Emirleri" scroll="1" collapsable="1" resize="1" popup_box="1">
 <cfquery name="list_karma_emir" datasource="#dsn3#">
     SELECT * FROM KARMA_EMIR
 </cfquery>
@@ -43,3 +44,5 @@
         </cfoutput>
     </tbody>
 </table>
+
+</cf_box>
