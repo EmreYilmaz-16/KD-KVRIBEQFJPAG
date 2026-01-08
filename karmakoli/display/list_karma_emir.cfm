@@ -116,7 +116,15 @@
     <tbody>
         <cfoutput query="list_karma_emir">
             <tr>
-                <td>#EMIR_NO#</td>
+                <td>
+                    <cfif not isDefined("attributes.ajax")>
+                        <a href="javascript:openBoxDraggable('index.cfm?fuseaction=product.emptypopup_detail_karma_emir&EMIR_ID=#KARMA_EMIR_ID#','Paketleme Emri Detayı - #EMIR_NO#',600,400);">
+                            #EMIR_NO#
+                        </a>
+                    <cfelse>
+                        #EMIR_NO#
+                    </cfif>
+                </td>
                 <td>#PRODUCT_NAME#</td>
                 <td>#NumberFormat(AMOUNT, "9,999")#</td>
                 <td>#DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:mm")#</td>
