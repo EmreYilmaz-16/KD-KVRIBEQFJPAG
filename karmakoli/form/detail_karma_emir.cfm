@@ -1,6 +1,6 @@
 <cfquery name="getEmirDetail" datasource="#dsn3#">
     SELECT KARMA_EMIR.*,STOCKS.PRODUCT_NAME FROM KARMA_EMIR 
-    LEFT JOIN STOCKS ON KARMA_EMIR_PBS.PRODUCT_ID = STOCKS.PRODUCT_ID
+    LEFT JOIN STOCKS ON KARMA_EMIR.PRODUCT_ID = STOCKS.PRODUCT_ID
     WHERE EMIR_ID = <cfqueryparam value="#URL.EMIR_ID#" cfsqltype="cf_sql_integer">
 </cfquery>
 
