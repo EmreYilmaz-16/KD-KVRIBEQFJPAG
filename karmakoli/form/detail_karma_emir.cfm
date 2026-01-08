@@ -11,226 +11,349 @@
 </cfquery>
 
 <style>
-    .karma-emir-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        margin: 20px 0;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+    --karma-bg: #0f172a;
+    --karma-card: #111e36;
+    --karma-card-alt: #162447;
+    --karma-border: rgba(255,255,255,0.08);
+    --karma-accent: #ffb347;
+    --karma-accent-strong: #ff9e00;
+    --karma-green: #65f7c0;
+}
+
+.karma-wrapper {
+    font-family: 'Space Grotesk', 'Trebuchet MS', sans-serif;
+    background: radial-gradient(circle at 15% 10%, rgba(255, 179, 71, 0.18), transparent 55%),
+                radial-gradient(circle at 85% 0%, rgba(101, 247, 192, 0.18), transparent 50%),
+                linear-gradient(135deg, #0b1220, #1a1f33);
+    border-radius: 28px;
+    padding: 32px;
+    color: #f4f6fb;
+    box-shadow: 0 25px 60px rgba(10, 15, 30, 0.55);
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.karma-wrapper > * {
+    position: relative;
+    z-index: 2;
+}
+
+.karma-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.05);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.karma-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-title {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+}
+
+.summary-product {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.summary-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+}
+
+.summary-meta strong {
+    color: #ffffff;
+}
+
+.karma-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr);
+    gap: 26px;
+    align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+    .karma-grid {
+        grid-template-columns: 1fr;
     }
-    
-    .karma-table-wrapper {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.karma-table-card,
+.karma-action-card {
+    border-radius: 20px;
+    padding: 26px;
+    border: 1px solid var(--karma-border);
+    background: rgba(9, 12, 23, 0.5);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 45px rgba(4, 6, 12, 0.5);
+}
+
+.karma-table-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+}
+
+.karma-chip {
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+}
+
+.table-scroll {
+    max-height: 460px;
+    overflow: auto;
+    margin-top: 24px;
+    padding-right: 6px;
+}
+
+.karma-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.karma-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.6);
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.karma-table td {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.karma-table tr:last-child td {
+    border-bottom: none;
+}
+
+.product-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.karma-row-id {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+}
+
+.karma-serial-chip {
+    display: inline-flex;
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    letter-spacing: 0.08em;
+}
+
+.karma-qty-badge {
+    font-weight: 600;
+    color: var(--karma-accent);
+}
+
+.karma-link {
+    color: var(--karma-accent);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.karma-link:hover {
+    color: #ffe29a;
+}
+
+.karma-action-card {
+    background: var(--karma-card-alt);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.karma-qty-display {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.karma-qty-label {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.6);
+}
+
+.karma-qty-input {
+    width: 100%;
+    border: none;
+    background: rgba(7,11,20,0.7);
+    color: var(--karma-accent-strong);
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+.karma-qty-input--muted {
+    color: rgba(255,255,255,0.85);
+}
+
+.karma-qty-input.is-ready {
+    color: var(--karma-green);
+    box-shadow: inset 0 0 0 1px var(--karma-green);
+}
+
+.karma-action-card__btn {
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    padding: 16px 0;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: linear-gradient(120deg, #ffbb55, #ff9d3f);
+    color: #1c120b;
+    cursor: pointer;
+    box-shadow: 0 25px 35px rgba(255,153,0,0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.karma-action-card__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 30px 35px rgba(255,153,0,0.45);
+}
+
+.karma-hint {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+}
+
+.fade-in {
+    animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
-    
-    .karma-products-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        overflow: hidden;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    
-    .karma-products-table thead {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-    
-    .karma-products-table th {
-        padding: 15px;
-        text-align: left;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 12px;
-        letter-spacing: 1px;
-    }
-    
-    .karma-products-table th:first-child {
-        border-top-left-radius: 8px;
-    }
-    
-    .karma-products-table th:last-child {
-        border-top-right-radius: 8px;
-    }
-    
-    .karma-products-table tbody tr {
-        transition: all 0.3s ease;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .karma-products-table tbody tr:hover {
-        background: linear-gradient(to right, #f8f9ff, #fef6ff);
-        transform: scale(1.01);
-        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.1);
-    }
-    
-    .karma-products-table td {
-        padding: 15px;
-        color: #333;
-    }
-    
-    .karma-products-table tbody tr:last-child {
-        border-bottom: none;
-    }
-    
-    .select-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 25px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: inline-block;
-        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-    }
-    
-    .select-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
-        color: white;
-        text-decoration: none;
-    }
-    
-    .quantity-panel {
-        background: white;
-        border-radius: 15px;
-        padding: 30px 20px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-    
-    .quantity-input {
-        width: 100%;
-        padding: 15px;
-        font-size: 28pt;
-        font-weight: bold;
-        text-align: center;
-        border: 3px solid #e0e0e0;
-        border-radius: 10px;
-        background: #f8f9fa;
-        transition: all 0.3s ease;
-    }
-    
-    .quantity-input:focus {
-        outline: none;
-        border-color: #667eea;
-        background: white;
-    }
-    
-    .quantity-label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #666;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: -10px;
-    }
-    
-    .produce-btn {
-        width: 100%;
-        padding: 15px 20px;
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(17, 153, 142, 0.3);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .produce-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5);
-    }
-    
-    .produce-btn:active {
-        transform: translateY(-1px);
-    }
+}
 </style>
 
-<div class="karma-emir-container">
-    <div class="row">
-        <div class="col col-10">
-            <div class="karma-table-wrapper">
-                <table class="karma-products-table">
+<div class="karma-wrapper fade-in">
+    <cfoutput>
+    <section class="karma-summary">
+        <span class="summary-title">Karma Emir Detayı</span>
+        <div class="summary-product">#getEmirDetail.PRODUCT_NAME#</div>
+        <div class="summary-meta">
+            <span>Emir No <strong>#getEmirDetail.KARMA_EMIR_ID#</strong></span>
+            <span>Planlanan <strong>#NumberFormat(getEmirDetail.AMOUNT,"9999")#</strong> koli</span>
+        </div>
+    </section>
+    </cfoutput>
+    <div class="karma-grid">
+        <section class="karma-table-card">
+            <div class="karma-table-card__header">
+                <div>
+                    <p class="eyebrow">Ürün Listesi</p>
+                    <h3>Karma İçerik</h3>
+                </div>
+                <span class="karma-chip"><cfoutput>#getKarmaProducts.recordCount# Parça</cfoutput></span>
+            </div>
+            <div class="table-scroll">
+                <table class="karma-table">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Ürün Adı</th>
-                            <th>Miktar</th>
-                            <th>İşlem</th>
+                            <th>Ürün</th>
+                            <th>Set</th>
+                            <th>Toplam</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <cfoutput>
-                        <cfloop query="getKarmaProducts">
-                            <tr>
-                                <td><strong>##currentRow##</strong></td>
-                                <td>#PRODUCT_NAME#</td>
-                                <td><strong>#QUANTITY# x #getEmirDetail.AMOUNT#</strong></td>
-                                <td>
-                                    <a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#)" 
-                                       class="select-btn" 
-                                       title="Ürün Seç">
-                                        <i class="fa fa-check"></i> Seç
-                                    </a>
-                                </td>
-                            </tr>
-                        </cfloop>
+                        <cfoutput query="getKarmaProducts">
+                        <tr>
+                            <td><span class="karma-row-id">#currentRow#</span></td>
+                            <td>
+                                <div class="product-name">#PRODUCT_NAME#</div>
+                                <cfif IS_SERIAL_NO EQ 1>
+                                    <span class="karma-serial-chip">Seri Takibi</span>
+                                </cfif>
+                            </td>
+                            <td><span class="karma-qty-badge">#QUANTITY# / koli</span></td>
+                            <td><strong>#QUANTITY#X#getEmirDetail.AMOUNT#</strong></td>
+                            <td><a class="karma-link" href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#)" title="Seç">Seç</a></td>
+                        </tr>
                         </cfoutput>
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="col col-2">
-            <div class="quantity-panel">
-                <cfoutput>
-                <div style="width: 100%;">
-                    <div class="quantity-label">Hedef Miktar</div>
-                    <input type="text" 
-                           name="KARMA_QUANTITY" 
-                           id="KARMA_QUANTITY" 
-                           readonly 
-                           value="#getEmirDetail.AMOUNT#" 
-                           class="quantity-input" 
-                           style="color: ##667eea;">
-                </div>
-                <div style="width: 100%;">
-                    <div class="quantity-label">Üretilen Miktar</div>
-                    <input type="text" 
-                           name="KARMA_QUANTITY1" 
-                           id="KARMA_QUANTITY1" 
-                           readonly 
-                           value="0" 
-                           class="quantity-input" 
-                           style="color: ##e74c3c;">
-                </div>
-                </cfoutput>
-                <button type="button" 
-                        id="UretBtn" 
-                        onclick="Uret()" 
-                        class="produce-btn">
-                    <i class="fa fa-cogs"></i> Ürünleri Ekle
-                </button>
+        </section>
+        <aside class="karma-action-card">
+            <cfoutput>
+            <div class="karma-qty-display">
+                <span class="karma-qty-label">Planlanan Adet</span>
+                <input type="text" class="karma-qty-input" name="KARMA_QUANTITY" id="KARMA_QUANTITY" readonly value="#getEmirDetail.AMOUNT#">
             </div>
-        </div>
+            <div class="karma-qty-display">
+                <span class="karma-qty-label">Hazır Adet</span>
+                <input type="text" class="karma-qty-input karma-qty-input--muted" name="KARMA_QUANTITY1" id="KARMA_QUANTITY1" readonly value="0">
+            </div>
+            </cfoutput>
+            <button type="button" id="UretBtn" class="karma-action-card__btn" onclick="Uret()" style="display:none;">Seçilen Ürünleri Ekle</button>
+            <p class="karma-hint">Seçilen parçalar gereksinimleri karşıladığında hazır adet yeşile döner ve üretim butonu aktifleşir.</p>
+        </aside>
     </div>
 </div>
 
 <script>
-    var SelecttedArr = [];
-    var karmaEmirQuantity = <cfoutput>#getEmirDetail.AMOUNT#</cfoutput>;
-    var requiredProducts = [
+    const SelecttedArr = [];
+    const karmaEmirQuantity = <cfoutput>#getEmirDetail.AMOUNT#</cfoutput>;
+    const requiredProducts = [
         <cfoutput query="getKarmaProducts">
             {PRODUCT_ID: #PRODUCT_ID#, QUANTITY: #QUANTITY#, REQUIRED_TOTAL: #QUANTITY# * karmaEmirQuantity}
             <cfif currentRow LT getKarmaProducts.recordCount>,</cfif>
@@ -247,52 +370,45 @@
     }
     
     function checkKarmaRequirements(){
-        var completedKarmaCount = karmaEmirQuantity;
-        var allRequirementsMet = true;
+        let completedKarmaCount = karmaEmirQuantity;
+        let allRequirementsMet = true;
         
-        // Her ürün için toplam seçilen miktarı hesapla
-        for(var i = 0; i < requiredProducts.length; i++){
-            var productId = requiredProducts[i].PRODUCT_ID;
-            var requiredTotal = requiredProducts[i].REQUIRED_TOTAL;
-            var quantityPerKarma = requiredProducts[i].QUANTITY;
+        for(let i = 0; i < requiredProducts.length; i++){
+            const productId = requiredProducts[i].PRODUCT_ID;
+            const requiredTotal = requiredProducts[i].REQUIRED_TOTAL;
+            const quantityPerKarma = requiredProducts[i].QUANTITY;
             
-            // Bu ürün için seçilen toplam miktar
-            var selectedTotal = 0;
-            for(var j = 0; j < SelecttedArr.length; j++){
+            let selectedTotal = 0;
+            for(let j = 0; j < SelecttedArr.length; j++){
                 if(SelecttedArr[j].PRODUCT_ID == productId){
                     selectedTotal += SelecttedArr[j].QUANTITY;
                 }
             }
             
-            // Bu üründen kaç karma koli yapılabilir
-            var possibleKarmaFromThisProduct = Math.floor(selectedTotal / quantityPerKarma);
+            const possibleKarmaFromThisProduct = Math.floor(selectedTotal / quantityPerKarma);
             
-            // En az olanı bul
             if(possibleKarmaFromThisProduct < completedKarmaCount){
                 completedKarmaCount = possibleKarmaFromThisProduct;
             }
             
-            // Gerekli miktar karşılanmadıysa
             if(selectedTotal != requiredTotal  ){
                 allRequirementsMet = false;
             }
         }
         
-        var karmaQuantity1 = document.getElementById('KARMA_QUANTITY1');
-        var uretBtn = document.getElementById('UretBtn');
+        const karmaQuantity1 = document.getElementById('KARMA_QUANTITY1');
+        const uretBtn = document.getElementById('UretBtn');
         
         if(allRequirementsMet && completedKarmaCount > 0){
             karmaQuantity1.value = completedKarmaCount;
-            karmaQuantity1.style.color = '#27ae60';
-            karmaQuantity1.style.borderColor = '#27ae60';
-            karmaQuantity1.style.background = '#e8f8f5';
+            karmaQuantity1.classList.add('is-ready');
             uretBtn.style.display = 'block';
         } else {
             karmaQuantity1.value = 0;
-            karmaQuantity1.style.color = '#e74c3c';
-            karmaQuantity1.style.borderColor = '#e0e0e0';
-            karmaQuantity1.style.background = '#f8f9fa';
+            karmaQuantity1.classList.remove('is-ready');
             uretBtn.style.display = 'none';
         }
     }
+
+    checkKarmaRequirements();
 </script>
