@@ -28,7 +28,7 @@
 
 <cfset boxTitle = "Paketleme Emirleri - " & (isDefined("URL.product_id") AND len(trim(URL.product_id)) GT 0 ? list_karma_emir.PRODUCT_NAME : "Tümü")>
 <cf_box title="#boxTitle#" scroll="1" collapsable="1" resize="1" popup_box="1">
-
+<cfdump var="#attributes#">
 <div class="row mb-3">
     <div class="col-12">
         <cfoutput>
