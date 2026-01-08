@@ -221,7 +221,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
   )
         </cfquery>
-        <cfdump var="#getStores#" label="Stores">
+        
         
         
         <div class="karma-sidebar">
