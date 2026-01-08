@@ -13,7 +13,7 @@
         },
         urls: {
             karmaProducts: 'index.cfm?fuseaction=product.emptypopup_karma_products_pbs&action=KARMA_EMIR&pid=',
-            listEmir:'product.emptypopup_list_paket_emir&product_id='
+            listEmir:'index.cfm?fuseaction=product.emptypopup_list_paket_emir&product_id='
         },
         styles: {
             trackButtonColor: '#e303fc'
