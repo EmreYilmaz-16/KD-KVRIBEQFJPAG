@@ -216,9 +216,10 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     <cfloop list="#getParams.PACKAGING_STORE_LIST#" index="storeId">
         <cfif currentRow GT 1>,</cfif>'#storeId#'
     </cfloop>
-    
+
   )
         </cfquery>
+        <cfdump var="#getStores#" label="Stores">
         
         
         <div class="karma-sidebar">
