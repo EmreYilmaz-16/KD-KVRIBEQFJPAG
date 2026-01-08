@@ -213,8 +213,10 @@
 SELECT CAST(D.DEPARTMENT_ID AS VARCHAR) +'-'+CAST(SL.LOCATION_ID AS VARCHAR) DEPO,D.DEPARTMENT_HEAD+'-'+SL.COMMENT AS DEPO_ADI  FROM w3Qa.STOCKS_LOCATION AS SL 
 LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID 
   ) AS TTT WHERE DEPO IN (
+    <cfset currentRow=1>
     <cfloop list="#getParams.PACKAGING_STORE_LIST#" index="storeId">
         <cfif currentRow GT 1>,</cfif>'#storeId#'
+        <cfset currentRow=currentRow+1>
     </cfloop>
 
   )
