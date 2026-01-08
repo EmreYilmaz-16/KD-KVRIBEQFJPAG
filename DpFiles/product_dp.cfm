@@ -179,7 +179,7 @@ function addEmir(pid) {
         if (tip === 1) {
             windowopen(CONFIG.urls.karmaProducts + idd, 'wide');
         }else if (tip === 2) {
-            windowopen(CONFIG.urls.listEmir + idd, 'wide');
+            openBoxDraggable(CONFIG.urls.listEmir + idd, 'wide');
         }
 
     }
