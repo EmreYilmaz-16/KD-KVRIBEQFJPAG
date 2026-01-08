@@ -31,8 +31,9 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <form method="get" action="#cgi.script_name#" class="form-inline">
-               <cfoutput>   
+        <cfoutput>
+        <form method="get" action="#request.self#?fuseaction=#attributes.fuseaction#" class="form-inline">
+            
             <cfif isDefined("attributes.fuseaction")>
                 <input type="hidden" name="fuseaction" value="#attributes.fuseaction#">
             </cfif>
@@ -47,11 +48,11 @@
                 <label for="product_id" class="mr-2">Ürün:</label>
                 <select name="product_id" id="product_id" class="form-control">
                     <option value="">Tümü</option>
-                    <cfoutput query="get_products">
+                    <cfloop query="get_products">
                         <option value="#PRODUCT_ID#" <cfif isDefined("URL.product_id") AND URL.product_id EQ PRODUCT_ID>selected</cfif>>
                             #PRODUCT_NAME#
                         </option>
-                    </cfoutput>
+                    </cfloop>
                 </select>
             </div>
             
