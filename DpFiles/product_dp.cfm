@@ -109,8 +109,8 @@ function addEmir(pid) {
 	fetch('/index.cfm?fuseaction=product.emptypopup_add_paket_emir&PRODUCT_ID=' + pid + "&AMOUNT=" + amount + "&ajax=1&ajax_box_page=1&isAjax=1")
 		.then(response => response.json())
 		.then(data => {
-			if (data.SUCCESS) {
-				alert('Paketleme emri başarıyla oluşturuldu. Emir No: ' + data.EMIR_NO);
+			if (data.success) {
+				alert('Paketleme emri başarıyla oluşturuldu. Emir No: ' + data.emirNo);
 				// Sayfayı yenile
 				window.location.reload();
 			} else {

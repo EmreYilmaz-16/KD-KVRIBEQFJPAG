@@ -1,4 +1,4 @@
-<cfsetting enablecfoutputonly="true" showdebugoutput="false">
+﻿<cfsetting enablecfoutputonly="true" showdebugoutput="false">
 <cftry>
     <cfquery name="getNextId" datasource="#dsn3#">
         SELECT ISNULL(MAX(KARMA_EMIR_ID), 0) + 1 AS NEXT_ID
