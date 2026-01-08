@@ -1,4 +1,9 @@
 
+<style>
+    #karma_emir_amount::placeholder {
+        font-size: 20pt !important;
+    }
+</style>
 <script>
     // Sabitler
     const CONFIG = {
