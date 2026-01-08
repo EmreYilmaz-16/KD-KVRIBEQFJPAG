@@ -28,7 +28,7 @@
 
 <cfset boxTitle = "Paketleme Emirleri - " & (isDefined("URL.product_id") AND len(trim(URL.product_id)) GT 0 ? list_karma_emir.PRODUCT_NAME : "Tümü")>
 <cf_box title="#boxTitle#" scroll="1" collapsable="1" resize="1" popup_box="1">
-<cfdump var="#attributes#">
+<cfif not isDefined("attributes.ajax")>
 <div class="row mb-3">
     <div class="col-12">
         <cfoutput>
@@ -87,12 +87,13 @@
     </div>
 </div>
 
+
 <div class="row mb-2">
     <div class="col-12">
         <strong>Toplam Emir: <cfoutput>#list_karma_emir.recordCount#</cfoutput></strong>
     </div>
 </div>
-
+</cfif>
 <!----
       KARMA_EMIR_ID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
         PRODUCT_ID INT NOT NULL,
@@ -101,7 +102,7 @@
         RECORD_EMP INT NOT NULL,
         CURRENT_STATUS INT NOT NULL,
         EMIR_NO VARCHAR(50) NOT NULL---->
-<table class="table table-bordered table-striped">
+<cf_grid_list class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Emir No</th>
@@ -134,6 +135,6 @@
             </tr>
         </cfoutput>
     </tbody>
-</table>
+</cf_grid_list>
 
 </cf_box>
