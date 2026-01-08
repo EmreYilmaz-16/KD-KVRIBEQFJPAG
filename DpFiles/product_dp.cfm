@@ -12,7 +12,8 @@
             isGiftCard: 'is_gift_card'
         },
         urls: {
-            karmaProducts: 'index.cfm?fuseaction=product.emptypopup_karma_products_pbs&action=KARMA_EMIR&pid='
+            karmaProducts: 'index.cfm?fuseaction=product.emptypopup_karma_products_pbs&action=KARMA_EMIR&pid=',
+            listEmir:'product.emptypopup_list_paket_emir&product_id='
         },
         styles: {
             trackButtonColor: '#e303fc'
@@ -177,7 +178,10 @@ function addEmir(pid) {
     function pencereac(tip, idd) {
         if (tip === 1) {
             windowopen(CONFIG.urls.karmaProducts + idd, 'wide');
+        }else if (tip === 2) {
+            openBoxDraggable(CONFIG.urls.listEmir + idd, 'wide');
         }
+
     }
 
     // Sayfa yüklendiğinde çalıştır
