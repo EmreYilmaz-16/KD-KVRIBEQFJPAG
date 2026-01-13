@@ -315,7 +315,8 @@ function addProductToPallet(serial_no,product_code_2,parserId){
         renderPalletProductsTable();
         $("#productBarcodeInput").val("");
         return;
-    }   
+    }  
+} 
 
 
     var qr=`SELECT PRODUCT_ID,STOCK_ID,PRODUCT_CODE_2 FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`;
