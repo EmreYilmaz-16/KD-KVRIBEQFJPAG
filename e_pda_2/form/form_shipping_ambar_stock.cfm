@@ -321,7 +321,7 @@ input{
 					<label for="add_other_amount">Miktar</label>
 					<input type="text" class="moneybox" name="add_other_amount" id="add_other_amount" value="1" >
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="display:none">
 					<label for="add_other_barcod">Ürün Barkodu</label>
 					<input type="text" name="add_other_barcod" id="add_other_barcod" class="moneybox" value="<cfoutput>#get_stock_info.BARCODE#</cfoutput>" placeholder="Ürün Barkodu">
 				</div>
