@@ -319,7 +319,7 @@ input{
 			<div style="display:flex">
 				<div class="form-group">
 					<label for="add_other_amount">Miktar</label>
-					<input type="text" class="moneybox" name="add_other_amount" id="add_other_amount" value="1" readonly>
+					<input type="text" class="moneybox" name="add_other_amount" id="add_other_amount" value="1" >
 				</div>
 				<div class="form-group">
 					<label for="add_other_barcod">Ürün Barkodu</label>
