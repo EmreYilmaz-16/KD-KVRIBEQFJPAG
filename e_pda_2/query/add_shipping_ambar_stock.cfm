@@ -379,10 +379,10 @@
 		cost_action(action_type:3,action_id:GET_ID.MAX_ID,query_type:1);
 	</cfscript>
 	<script type="text/javascript">
-		window.location.href="<cfoutput>#request.self#?fuseaction=epda.upd_prtotm_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&</cfoutput>";
+		window.location.href="<cfoutput>#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&</cfoutput>";
 	</script>
 <cfelse>
-	<cflocation url="#request.self#?fuseaction=epda.upd_prtotm_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&" addtoken="No">
+	<cflocation url="#request.self#?fuseaction=pda.form_shipping_ambar_fis&date1=#attributes.date1#&date2=#attributes.date2#&department_in_id=#attributes.dep_in#&department_out_id=#attributes.dep_out#&date1=#attributes.date1#&date2=#attributes.date2#&keyword=#attributes.keyword#&is_type=#attributes.is_type#&deliver_paper_no=#attributes.ref_no#&ship_id=#attributes.ship_id#&" addtoken="No">
 </cfif>
 </cfif>
 <cf_get_lang_set module_name="#lcase(listgetat(attributes.fuseaction,1,'.'))#"> <!---sayfanin en ustunde acilisi var --->

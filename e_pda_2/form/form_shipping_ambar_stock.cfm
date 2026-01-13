@@ -1,4 +1,5 @@
-﻿<cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
+﻿<title>Ambardan - Sevkiyata </title>
+<cfset default_process_type = 113> <!---Dikkat Firmaya Göre Değişebilir--->
 <cfparam name="attributes.department_in_id" default="">
 <cfparam name="attributes.department_out_id" default="">
 <cfquery name="get_process_cat" datasource="#DSN3#">
@@ -321,8 +322,8 @@ input{
 					<input type="text" class="moneybox" name="add_other_amount" id="add_other_amount" value="1" readonly>
 				</div>
 				<div class="form-group">
-					<label for="add_other_barcod">Seri Numarası</label>
-					<input type="text" name="add_other_barcod" id="add_other_barcod" class="moneybox" value="<cfoutput>#get_stock_info.BARCODE#</cfoutput>" placeholder="Seri Numarası">
+					<label for="add_other_barcod">Ürün Barkodu</label>
+					<input type="text" name="add_other_barcod" id="add_other_barcod" class="moneybox" value="<cfoutput>#get_stock_info.BARCODE#</cfoutput>" placeholder="Ürün Barkodu">
 				</div>
 				<cfif get_store_type.raf gt 0>
 					<div class="form-group">
