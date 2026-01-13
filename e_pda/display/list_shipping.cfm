@@ -104,7 +104,7 @@
   			</tr>
   			<tr height="20px">
     			<td colspan="3">
-        			<input type="radio" name="kontrol_status" value="1" <cfif attributes.kontrol_status eq 1>checked</cfif>>Satır Bazında
+        			<input style="display:none" type="radio" name="kontrol_status" value="1" <cfif attributes.kontrol_status eq 1>checked</cfif>>Satır Bazında
             		<input type="radio" name="kontrol_status" value="2" <cfif attributes.kontrol_status eq 2>checked</cfif>>Belge Bazında
             		&nbsp;
               	</td>
