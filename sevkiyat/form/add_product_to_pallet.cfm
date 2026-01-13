@@ -311,6 +311,11 @@ function addProductToPallet(serial_no,product_code_2,parserId){
     }
 }else{
     if(ix2!=-1){
+        if(palletProductsTableProducts[ix2].AMOUNT>=paperSerials[ix1].AMOUNT){
+            alert("Bu urunun palete eklenebilecek maksimum miktarina ulasildi.");
+            $("#productBarcodeInput").val("");
+            return;
+        }
         palletProductsTableProducts[ix2].AMOUNT+=1;
         renderPalletProductsTable();
         $("#productBarcodeInput").val("");
