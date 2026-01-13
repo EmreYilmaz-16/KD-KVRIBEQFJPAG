@@ -270,7 +270,7 @@ function checkKey(el,event){
             var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
             console.log(serialObject);
             if(serialObject.success){
-            addProductToPallet(serialObject.serial_no,serialObject.product_code_2);
+            addProductToPallet(serialObject.serial_no,serialObject.product_code_2,parserId);
         }else{
             alert("Barkod okunamadi: "+serialObject.error);
             $(el).val("");
@@ -286,7 +286,7 @@ function checkKey(el,event){
         var serialObject=bm.parseWith(serial_, parseInt(document.getElementById('BarcodeParser').value));
         console.log(serialObject);
         if(serialObject.success){
-            addProductToPallet(serialObject.serial_no,serialObject.product_code_2);
+            addProductToPallet(serialObject.serial_no,serialObject.product_code_2,parserId);
         }else{
             alert("Barkod okunamadi: "+serialObject.error);
             $(el).val("");
@@ -295,7 +295,7 @@ function checkKey(el,event){
     
 }
 
-function addProductToPallet(serial_no,product_code_2){
+function addProductToPallet(serial_no,product_code_2,parserId){
     var ix1=paperSerials.findIndex(p=>p.SERIAL_NO==serial_no);
     if(ix1==-1){
         alert("Girilen barkoda ait urun bulunamadi.");
@@ -303,12 +303,20 @@ function addProductToPallet(serial_no,product_code_2){
         return;
     }
     var ix2=palletProductsTableProducts.findIndex(p=>p.SERIAL_NO==serial_no);
-    
+    if(parserId!=4){
     if(ix2!=-1){
         alert("Bu urun zaten palete eklenmis.");
         $("#productBarcodeInput").val("");
         return;
     }
+}else{
+    if(ix2!=-1){
+        palletProductsTableProducts[ix2].AMOUNT+=1;
+        renderPalletProductsTable();
+        $("#productBarcodeInput").val("");
+        return;
+    }   
+
 
     var qr=`SELECT PRODUCT_ID,STOCK_ID,PRODUCT_CODE_2 FROM STOCKS WHERE PRODUCT_CODE_2='${product_code_2}'`;
     console.log(qr);
@@ -349,6 +357,7 @@ function renderPalletProductsTable(){
             var row='<tr>'+
                 '<td>'+palletProductsTableProducts[i].SERIAL_NO+'</td>'+
                 '<td>'+palletProductsTableProducts[i].PRODUCT_CODE_2+'</td>'+
+                '<td>'+palletProductsTableProducts[i].AMOUNT+'</td>'+
                 '<td><button class="btn btn-danger btn-sm" onclick="removePalletProductRow('+i+')">Kaldır</button></td>'+
                 '</tr>';
             tbody.append(row);
