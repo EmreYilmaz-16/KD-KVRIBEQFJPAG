@@ -1,4 +1,4 @@
-﻿
+﻿<title>PDA Portal</title>
 <style>
     :root {
         --pda-bg: linear-gradient(160deg, #e6eef8 0%, #f3f6fc 100%);
