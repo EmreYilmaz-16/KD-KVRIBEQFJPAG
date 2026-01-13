@@ -3,7 +3,7 @@
 component output="false" {
     remote struct function saveProductsToPallet() returnformat="json" {
         writeDump(arguments);
-        abort;
+        
         writeDump(getHTTPRequestData())
         formdata=deserializeJSON(getHTTPRequestData().content);
         writeDump(formdata);
@@ -31,15 +31,16 @@ component output="false" {
         );
         for(var i=1;i LTE arrayLen(products);i=i+1){
             var q=queryExecute(
-                "INSERT INTO SHIPPING_PALLET_ROWS_PBS (PALLET_ID, PRODUCT_ID, STOCK_ID, SERIAL_NUMBER,RECORD_DATE,RECORD_EMP) 
-                 VALUES (:palletId, :productId, :stockId, :serialNo, :recordDate, :recordEmp)",
+                "INSERT INTO SHIPPING_PALLET_ROWS_PBS (PALLET_ID, PRODUCT_ID, STOCK_ID, SERIAL_NUMBER,RECORD_DATE,RECORD_EMP,AMOUNT) 
+                 VALUES (:palletId, :productId, :stockId, :serialNo, :recordDate, :recordEmp, :amount)",
                 {
                     palletId={value=palletId, cfsqltype="cf_sql_integer"},
                     productId={value=products[i].PRODUCT_ID, cfsqltype="cf_sql_integer"},
                     stockId={value=products[i].STOCK_ID, cfsqltype="cf_sql_integer"},
                     serialNo={value=products[i].SERIAL_NO, cfsqltype="cf_sql_varchar"},
                     recordDate={value=now(), cfsqltype="cf_sql_timestamp"},
-                    recordEmp={value=userid, cfsqltype="cf_sql_integer"}
+                    recordEmp={value=userid, cfsqltype="cf_sql_integer"},
+                    amount={value=products[i].AMOUNT, cfsqltype="cf_sql_integer"}
                 },
                 {datasource=dsn3}
             );
