@@ -557,7 +557,7 @@
 													LEFT JOIN #DSN#.PALET_TYPES_PBS T ON T.ID = P.PALLET_TYPE
 													LEFT JOIN #DSN#.EMPLOYEES AS E ON E.EMPLOYEE_ID = P.RECORD_EMP
 													WHERE P.MAIN_PALET_ID = <cfqueryparam value="#ID#" cfsqltype="cf_sql_integer">
-													ORDER BY P.RECORD_DATE DESC
+													ORDER BY P.PALLET_NUMBER ASC
 												</cfquery>
 												
 												<cfloop query="getChildPallets">
