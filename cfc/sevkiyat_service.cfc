@@ -2,7 +2,8 @@
 <cfscript>    
 component output="false" {
     remote struct function saveProductsToPallet() returnformat="json" {
-        writeDump(arguments, label="Arguments in saveProductsToPallet", abort=true);
+        writeDump(arguments);
+        abort;
         writeDump(getHTTPRequestData())
         formdata=deserializeJSON(getHTTPRequestData().content);
         writeDump(formdata);
