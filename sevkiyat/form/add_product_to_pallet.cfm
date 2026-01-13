@@ -38,7 +38,8 @@
         SELECT SPR.SERIAL_NUMBER,
                SPR.PRODUCT_ID,
                SPR.STOCK_ID,
-               P.PRODUCT_CODE_2
+               P.PRODUCT_CODE_2,
+               SPR.AMOUNT  
         FROM #dsn3#.SHIPPING_PALLET_ROWS_PBS SPR
         INNER JOIN #DSN1#.PRODUCT P ON P.PRODUCT_ID = SPR.PRODUCT_ID
         WHERE SPR.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
@@ -216,12 +217,13 @@
                 <tr>
                     <th>Ürün Barkodu</th>
                     <th>Ürün Kodu</th>
+                    <th>Miktar</th>
                     <th>İşlem</th>
                 </tr>
             </thead>
             <tbody id="palletProductsTableBody">
                 <tr class="pallet-empty-state">
-                    <td colspan="3">Palete henüz ürün eklenmedi.</td>
+                    <td colspan="4">Palete henüz ürün eklenmedi.</td>
                 </tr>
             </tbody>
         </table>
@@ -248,7 +250,8 @@ for(var i=0;i<parsers.length;i++){
                 SERIAL_NO:savedPalletRows[j].SERIAL_NUMBER,
                 PRODUCT_ID:savedPalletRows[j].PRODUCT_ID,
                 STOCK_ID:savedPalletRows[j].STOCK_ID,
-                PRODUCT_CODE_2:savedPalletRows[j].PRODUCT_CODE_2
+                PRODUCT_CODE_2:savedPalletRows[j].PRODUCT_CODE_2,
+                AMOUNT:savedPalletRows[j].AMOUNT
             });
         }
         renderPalletProductsTable();
@@ -300,6 +303,7 @@ function addProductToPallet(serial_no,product_code_2){
         return;
     }
     var ix2=palletProductsTableProducts.findIndex(p=>p.SERIAL_NO==serial_no);
+    
     if(ix2!=-1){
         alert("Bu urun zaten palete eklenmis.");
         $("#productBarcodeInput").val("");
@@ -328,7 +332,8 @@ palletProductsTableProducts.push({
     SERIAL_NO:serial_no,
     PRODUCT_ID:paperSerials[ix1].PRODUCT_ID,
     STOCK_ID:paperSerials[ix1].STOCK_ID,
-    PRODUCT_CODE_2:product_code_2
+    PRODUCT_CODE_2:product_code_2,
+    AMOUNT:1
 });
 renderPalletProductsTable();
 $("#productBarcodeInput").val("");
