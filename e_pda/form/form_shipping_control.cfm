@@ -227,6 +227,7 @@
 						<input class="ui-wrk-btn ui-wrk-btn-extra" type="button" value="<cfif not get_detail_package_list.recordcount>Kaydet<cfelse>Güncelle</cfif>" onClick="if(confirm('Kaydetmek İstediğinizden Eminmisiniz?')) kontrol(); else return false;">
 					</div>
 					
+			<div class="alert alert-danger">Barkodları Okuttuktan Sonra Kaydet Demeyi Unutmayınız!</div>
 				<!----<div style="display:flex">
 					<span style="font-weight:bold; color:##0000FF;">Ok:</span>
 				
@@ -385,7 +386,7 @@ INNER JOIN (
   WHERE SGN.PROCESS_CAT=113 AND IN_OUT=1
 FOR JSON AUTO),'[]')  AS SERI_NUMARALI
 </cfquery>
-<cfdump var="#getSerialNumbers#">
+
 
 <script>
 	var serialNumbers = <cfoutput>#getSerialNumbers.SERI_NUMARALI#</cfoutput>;
