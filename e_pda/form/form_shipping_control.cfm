@@ -354,16 +354,34 @@
 	</form>
 </table>
 </div>----------->
+<cfquery name="getPeriods" datasource="#dsn#">
+	SELECT PERIOD_ID,OUR_COMPANY_ID,PERIOD_YEAR FROM SETUP_PERIOD
+</cfquery>
+
+<!-----
 <cfquery name="getSerialNumbers" datasource="#dsn3#">
 SELECT ISNULL( (
   SELECT SERIAL_NO,STOCK_ID,(SELECT COUNT(*) FROM #dsn3#.PBS_SHIPPING_PACKAGE_LIST_SERIALS where SERIAL_NUMBER=SGN.SERIAL_NO) as IS_READ FROM #dsn3#.SERVICE_GUARANTY_NEW SGN
   
   WHERE PROCESS_ID IN (
-SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1
+
+	SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1
 FOR JSON AUTO),'[]')  AS SERI_NUMARALI
 
 <!----SELECT  (SELECT SERIAL_NO,STOCK_ID,0 as IS_READ FROM #dsn3#.SERVICE_GUARANTY_NEW WHERE PROCESS_ID IN (
 SELECT FIS_ID FROM #dsn2#.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#')  AND PROCESS_CAT=113 AND IN_OUT=1 FOR JSON AUTO)  AS SERI_NUMARALI----->
+</cfquery>----->
+<cfquery name="" datasource="#DSN3#">
+	SELECT TOP  50 * FROM w3Qa_1.SERVICE_GUARANTY_NEW AS SG
+INNER JOIN (
+	<cfloop query="getPeriods">
+		SELECT FIS_ID,#getPeriods.PERIOD_ID# AS PERIOD_ID FROM w3Qa_#getPeriods.PERIOD_YEAR#_1.STOCK_FIS WHERE REF_NO='#attributes.DELIVER_PAPER_NO#'
+		<cfif getPeriods.currentrow LT getPeriods.recordcount>
+			UNION ALL
+		</cfif>
+	</cfloop>  	
+  ) AS SF ON SG.PROCESS_ID=SF.FIS_ID AND SG.PERIOD_ID=SF.PERIOD_ID
+  WHERE SG.PROCESS_CAT=113 AND IN_OUT=1
 </cfquery>
 <cfdump var="#getSerialNumbers#">
 
