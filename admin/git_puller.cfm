@@ -5,7 +5,7 @@ errorvariable="local.err">
 </cfexecute>
 
 
-
+<title>Git Puller</title>
 <cf_box title="Gİt">
 <cfoutput>
     
