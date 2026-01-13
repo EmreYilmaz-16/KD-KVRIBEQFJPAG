@@ -82,7 +82,7 @@ function generatePalletCode() {
 			<cfelse>
 				<cfquery name="insertNewPallet" datasource="#dsn3#">
 					INSERT INTO #dsn3#.SHIPPING_PALLETS_PBS
-						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID,PALLET_WEIGHT)
+						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP,COMPANY_ID,PALLET_WEIGHT,PALLET_NUMBER)
 					VALUES
 						(
 							<cfqueryparam value="#palletCode#" cfsqltype="cf_sql_nvarchar" maxlength="50">,
@@ -91,6 +91,7 @@ function generatePalletCode() {
 							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#company_id#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#Val(palletWeight)#" cfsqltype="cf_sql_decimal">
+							<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 						)
 				</cfquery>
 

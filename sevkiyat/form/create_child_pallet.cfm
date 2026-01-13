@@ -61,6 +61,7 @@ function generatePalletCode() {
 					FROM #dsn3#.SHIPPING_PALLETS_PBS
 					WHERE UPPER(PALLET_CODE) = <cfqueryparam value="#UCase(childPalletCode)#" cfsqltype="cf_sql_nvarchar" maxlength="50">
 				</cfquery>
+				
 
 				<cfif checkCode.RecordCount EQ 0>
 					<cfset codeExists = false>
@@ -69,14 +70,19 @@ function generatePalletCode() {
 					<cfset attemptCount = attemptCount + 1>
 				</cfif>
 			</cfloop>
+			
 
 			<cfif codeExists>
 				<cfset response.message = "Benzersiz palet kodu olusturulamadi. Lutfen tekrar deneyin.">
 			<cfelse>
+				<cfquery name="GETCHILDCOUNT" datasource="#dsn3#">
+					SELECT COUNT(*)+2 AS NEXT_CHILD  FROM #dsn3#.SHIPPING_PALLETS_PBS WHERE MAIN_PALET_ID = <cfqueryparam value="#parentPalletId#" cfsqltype="cf_sql_integer">
+				</cfquery>
+				<CF
 				<!--- Yavru paleti kaydet --->
 				<cfquery name="insertChildPallet" datasource="#dsn3#">
 					INSERT INTO #dsn3#.SHIPPING_PALLETS_PBS
-						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP, COMPANY_ID, PALLET_WEIGHT, MAIN_PALET_ID)
+						(PALLET_CODE, PALLET_TYPE, RECORD_DATE, RECORD_EMP, COMPANY_ID, PALLET_WEIGHT, MAIN_PALET_ID,PALLET_NUMBER)
 					VALUES
 						(
 							<cfqueryparam value="#childPalletCode#" cfsqltype="cf_sql_nvarchar" maxlength="50">,
@@ -85,7 +91,8 @@ function generatePalletCode() {
 							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#Val(getParentPallet.COMPANY_ID)#" cfsqltype="cf_sql_integer" null="#Val(getParentPallet.COMPANY_ID) EQ 0#">,
 							<cfqueryparam value="#Val(getParentPallet.PALLET_WEIGHT)#" cfsqltype="cf_sql_decimal" null="#Val(getParentPallet.PALLET_WEIGHT) EQ 0#">,
-							<cfqueryparam value="#parentPalletId#" cfsqltype="cf_sql_integer">
+							<cfqueryparam value="#parentPalletId#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#Val(GETCHILDCOUNT.NEXT_CHILD)#" cfsqltype="cf_sql_integer">
 						);
 					SELECT SCOPE_IDENTITY() AS NEW_ID
 				</cfquery>
