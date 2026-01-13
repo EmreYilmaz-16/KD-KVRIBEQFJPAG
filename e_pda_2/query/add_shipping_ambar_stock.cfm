@@ -12,7 +12,7 @@
 
 <cftransaction>
 
-	<cfinclude template="del_shipping_ambar_stock.cfm">
+	
     
 	<cfset form.process_cat = attributes.process_cat>
     
