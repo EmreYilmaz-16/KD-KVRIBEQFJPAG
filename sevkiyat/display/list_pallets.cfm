@@ -551,7 +551,8 @@
 														P.RECORD_DATE,
 														T.PALET_TYPE AS PALLET_TYPE_NAME,
 														E.EMPLOYEE_NAME,
-														E.EMPLOYEE_SURNAME
+														E.EMPLOYEE_SURNAME,
+														P.PALLET_NUMBER AS KAP_NO
 													FROM #dsn3#.SHIPPING_PALLETS_PBS P
 													LEFT JOIN #DSN#.PALET_TYPES_PBS T ON T.ID = P.PALLET_TYPE
 													LEFT JOIN #DSN#.EMPLOYEES AS E ON E.EMPLOYEE_ID = P.RECORD_EMP
@@ -562,6 +563,10 @@
 												<cfloop query="getChildPallets">
 													<cfset childEmployeeFullName = Trim(EMPLOYEE_NAME & " " & EMPLOYEE_SURNAME)>
 													<div class="child-pallet-item">
+														<div>
+															<div class="child-pallet-label">Kap No</div>
+															<div class="child-pallet-value">#HTMLEditFormat(KAP_NO)#</div>
+														</div>
 														<div>
 															<div class="child-pallet-label">Palet Kodu</div>
 															<div class="child-pallet-value">#HTMLEditFormat(PALLET_CODE)#</div>
