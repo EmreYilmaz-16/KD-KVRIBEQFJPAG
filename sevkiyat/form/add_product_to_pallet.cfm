@@ -27,6 +27,7 @@
         FOR JSON PATH
     ) AS T
 </cfquery>
+<cfdump var="#getPaperSerials#">
 
    <cfquery name="getSavedPalletRows" datasource="#dsn3#">
         SELECT (
