@@ -2,11 +2,9 @@
 <cfscript>    
 component output="false" {
     remote struct function saveProductsToPallet() returnformat="json" {
-        writeDump(arguments);
-        
-        writeDump(getHTTPRequestData())
+   
         formdata=deserializeJSON(getHTTPRequestData().content);
-        writeDump(formdata);
+   
         // Resolve company-specific datasource dynamically based on configuration.
         var configContent = fileRead(expandPath('/pbs_dsn.txt'));
         var dsn = trim(configContent);
