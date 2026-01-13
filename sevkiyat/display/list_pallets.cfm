@@ -639,7 +639,7 @@ function createChildPallet(parentPalletId, parentPalletCode) {
 		.then(response => response.json())
 		.then(data => {
 			if (data.SUCCESS) {
-				alert('Başarılı!\n\nYavru Palet Kodu: ' + data.data.CHILDPALLETCODE + '\nAna Palet: ' + data.data.PARENTPALLETCODE);
+				alert('Başarılı!\n\nYavru Palet Kodu: ' + data.DATA.CHILDPALLETCODE + '\nAna Palet: ' + data.DATA.PARENTPALLETCODE);
 				// Sayfayı yenile
 				window.location.reload();
 			} else {
