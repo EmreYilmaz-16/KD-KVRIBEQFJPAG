@@ -78,7 +78,7 @@ function generatePalletCode() {
 				<cfquery name="GETCHILDCOUNT" datasource="#dsn3#">
 					SELECT COUNT(*)+2 AS NEXT_CHILD  FROM #dsn3#.SHIPPING_PALLETS_PBS WHERE MAIN_PALET_ID = <cfqueryparam value="#parentPalletId#" cfsqltype="cf_sql_integer">
 				</cfquery>
-				<CF
+				
 				<!--- Yavru paleti kaydet --->
 				<cfquery name="insertChildPallet" datasource="#dsn3#">
 					INSERT INTO #dsn3#.SHIPPING_PALLETS_PBS
