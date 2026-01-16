@@ -1,6 +1,26 @@
 <cfquery name="GETPERIODS" datasource="#DSN#">
     SELECT TOP 2 PERIOD_ID,OUR_COMPANY_ID,PERIOD_YEAR FROM SETUP_PERIOD ORDER BY PERIOD_ID DESC
 </cfquery>
+<cfquery name="getPalletInfo" datasource="#dsn3#">
+    SELECT PALLET_CODE,PALLET_TYPE,MAIN_PALET_ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
+    WHERE PALLET_ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+</cfquery>
+<cfset palletIdList="">
+<cfif len(getPalletInfo.MAIN_PALET_ID) GT 0>
+    <cfquery name="getOtherSubPallets" datasource="#dsn3#">
+        SELECT ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
+        WHERE MAIN_PALET_ID=<cfqueryparam value="#Val(getPalletInfo.MAIN_PALET_ID)#" cfsqltype="cf_sql_integer">
+    </cfquery>
+    <cfloop query="getOtherSubPallets">
+        <cfif len(palletIdList) EQ 0>
+            <cfset palletIdList="#ID#">
+        <cfelse>
+            <cfset palletIdList="#palletIdList#,#ID#">
+        </cfif>
+    </cfloop>
+</cfif>
+<cfdump var="#palletIdList#">
+
 <!-----<cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
         SELECT DISTINCT
