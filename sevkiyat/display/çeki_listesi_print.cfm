@@ -227,7 +227,7 @@ ORDER BY PALLET_NUMBER
 <cfset palletCode = getPalletInfo.PALLET_CODE>
 <cfset palletType = getPalletInfo.PALLET_TYPE>
 
-<cfoutput>
+
 <div class="container">
     <button class="print-button no-print" onclick="window.print();">🖨️ Yazdır</button>
     
@@ -279,7 +279,7 @@ ORDER BY PALLET_NUMBER
         <p>Bu belge otomatik olarak oluşturulmuştur.</p>
     </div>
 </div>
-</cfoutput>
+
 
 </body>
 </html     <th>Ürün Adı</th>
