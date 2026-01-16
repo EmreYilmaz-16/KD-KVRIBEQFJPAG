@@ -1,3 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Çeki Listesi</title>
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { margin: 0; padding: 15px; }
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .info-item {
+            display: flex;
+            padding: 8px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            min-width: 150px;
+        }
+        
+        .info-value {
+            color: #000;
+        }
+        
+        .packing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .packing-table thead {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .packing-table th {
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #34495e;
+        }
+        
+        .packing-table td {
+            padding: 10px 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .packing-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .packing-table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .pallet-cell {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+        
+        .total-cell {
+            background-color: #e8f5e9;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        
+        .product-code {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+        }
+        
+        .print-button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .print-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .summary-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-left: 5px solid #2196f3;
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+        
+        .summary-item {
+            display: inline-block;
+            margin-right: 30px;
+            font-size: 16px;
+        }
+        
+        .summary-label {
+            font-weight: bold;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
 <cfset dsn3="w3Qa_1">
 <cfset dsn="w3Qa">
 <cfquery name="getPalletInfo" datasource="#dsn3#">
@@ -43,8 +206,6 @@ ORDER BY PALLET_NUMBER
         </cfquery>
 
 </cfif>
-<cfdump var="#getSubPalletRows#" label="getSubPalletRows">
-
 
 <cfset totalWeight = 0>
 <cfset palletCount = 0>
@@ -66,27 +227,62 @@ ORDER BY PALLET_NUMBER
 <cfset palletCode = getPalletInfo.PALLET_CODE>
 <cfset palletType = getPalletInfo.PALLET_TYPE>
 
-    <div>
-        <strong>Paket Kodu:</strong> #palletCode#<br>
-        <strong>Paket Tipi:</strong> #palletType#<br>
-        <strong>Toplam Ağırlık:</strong> #totalWeightFormatted# kg<br>
-        <strong>Paket Sayısı:</strong> #palletCountFormatted#<br>
-        <strong>Tarih ve Saat:</strong> #currentDateTime#
-    </div>
-    <cfset rowCounts = StructNew()>
-    <cfloop query="getSubPalletRows">
-        <cfif NOT StructKeyExists(rowCounts, PALLET_ID)>
-            <cfset rowCounts[PALLET_ID] = 0>
-        </cfif>
-        <cfset rowCounts[PALLET_ID] = rowCounts[PALLET_ID] + 1>
-    </cfloop>
+<cfoutput>
+<div class="container">
+    <button class="print-button no-print" onclick="window.print();">🖨️ Yazdır</button>
     
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Palet No</th>
-                <th>Stok Kodu</th>
-                <th>Ürün Adı</th>
+    <div class="header">
+        <h1>📦 ÇEKİ LİSTESİ</h1>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-item">
+            <span class="info-label">Paket Kodu:</span>
+            <span class="info-value">#palletCode#</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Paket Tipi:</span>
+            <span class="info-value">#palletType#</span>
+        </div>
+        <div class="info-item">
+            <span c width="10%">Palet No</th>
+                <th width="15%">Stok Kodu</th>
+                <th width="35%">Ürün Adı</th>
+                <th width="12%">Miktar</th>
+                <th width="13%">Birim Ağırlık (kg)</th>
+                <th width="15%">Toplam Ağırlık (kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <cfoutput query="getSubPalletRows" group="PALLET_ID">
+                <cfset firstRow = true>
+                <cfoutput>
+                    <tr>
+                        <cfif firstRow>
+                            <td rowspan="#rowCounts[PALLET_ID]#" class="pallet-cell">#PALLET_NUMBER#</td>
+                        </cfif>
+                        <td class="product-code">#PRODUCT_CODE_2#</td>
+                        <td style="text-align: left; padding-left: 15px;">#PRODUCT_NAME#</td>
+                        <td>#NumberFormat(MIKTAR, "9,999,999.99")#</td>
+                        <td>#NumberFormat(WEIGHT, "9,999,999.99")#</td>
+                        <cfif firstRow>
+                            <td rowspan="#rowCounts[PALLET_ID]#" class="total-cell">#NumberFormat(palletTws[PALLET_ID], "9,999,999.99")#</td>
+                            <cfset firstRow = false>
+                        </cfif>
+                    </tr>
+                </cfoutput>
+            </cfoutput>
+        </tbody>
+    </table>
+    
+    <div class="footer">
+        <p>Bu belge otomatik olarak oluşturulmuştur.</p>
+    </div>
+</div>
+</cfoutput>
+
+</body>
+</html     <th>Ürün Adı</th>
                 <th>Miktar</th>
                 <th>Birim Ağırlık (kg)</th>
                 <th>Toplam Ağırlık (kg)</th>
