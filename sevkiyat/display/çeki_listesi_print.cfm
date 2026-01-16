@@ -43,6 +43,7 @@ ORDER BY PALLET_NUMBER
         </cfquery>
 
 </cfif>
+<cfdump var="#getSubPalletRows#" label="getSubPalletRows">
 
 
 <cfset totalWeight = 0>
