@@ -444,7 +444,7 @@ ORDER BY PALLET_NUMBER
             </div>
             <div class="summary-item">
                 <div class="summary-label">Paket Sayısı</div>
-                <div class="summary-value">#/#</div>
+                <div class="summary-value">#palletCountFormatted#</div>
             </div>
             <div class="summary-item">
                 <div class="summary-label">Tarih & Saat</div>
