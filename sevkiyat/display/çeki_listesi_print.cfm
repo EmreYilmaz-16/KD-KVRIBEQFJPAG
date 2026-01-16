@@ -346,7 +346,7 @@ ORDER BY PALLET_NUMBER
 <cfset palletTws = StructNew()>
 <cfloop query="getSubPalletRows">
     <cfset totalWeight = totalWeight + TW>
-    <cfset palletCount = palletCount + 1>
+    <cfset palletCount = PALLET_NUMBER>
     <cfif StructKeyExists(palletTws, getSubPalletRows.PALLET_ID)>
         <cfset palletTws[getSubPalletRows.PALLET_ID] = palletTws[getSubPalletRows.PALLET_ID] + TW>
     <cfelse>
