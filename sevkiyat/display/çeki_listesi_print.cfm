@@ -424,7 +424,7 @@ ORDER BY PALLET_NUMBER
         </div>
         <div class="date-box">
             <div class="customer-title">TARİH</div>
-            <div class="date-value">#currentDateTime#</div>
+            <div class="date-value"><cfoutput>#currentDateTime#</cfoutput></div>
         </div>
     </div>
     <cfoutput>
@@ -448,7 +448,7 @@ ORDER BY PALLET_NUMBER
             </div>
             <div class="summary-item">
                 <div class="summary-label">Tarih & Saat</div>
-                <div class="summary-value">#currentDateTime#</div>
+                <div class="summary-value"><cfoutput>#currentDateTime#</cfoutput></div>
             </div>
         </div>
     </div>
@@ -495,7 +495,7 @@ ORDER BY PALLET_NUMBER
     </table>
     
     <div class="footer">
-        <p>Sistem tarafından otomatik oluşturulmuştur - #currentDateTime#</p>
+        <p>Sistem tarafından otomatik oluşturulmuştur - <cfoutput>#currentDateTime#</cfoutput></p>
     </div>
 </div>
 
