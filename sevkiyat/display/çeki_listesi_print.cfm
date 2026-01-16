@@ -2,278 +2,139 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Çeki Listesi</title>
     <style>
         @media print {
             .no-print { display: none; }
-            body { margin: 0; padding: 15px; }
-            .container { box-shadow: none; }
-            .print-button { display: none; }
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            body { margin: 0; padding: 10mm; }
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #fff;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
-            background-color: #ffffff;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            border-radius: 12px;
         }
         
         .header {
             text-align: center;
-            border-bottom: 4px solid #667eea;
-            padding-bottom: 25px;
-            margin-bottom: 35px;
-            position: relative;
-        }
-        
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .header h1 {
-            margin: 0 0 10px 0;
-            font-size: 36px;
-            color: #2c3e50;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .header .subtitle {
-            color: #7f8c8d;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
-        
-        .info-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .info-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-        }
-        
-        .info-label {
-            font-weight: 600;
-            color: #667eea;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-        
-        .info-value {
-            color: #2c3e50;
-            font-size: 18px;
-            font-weight: 700;
+            margin: 0;
+            font-size: 24px;
+            color: #333;
         }
         
         .summary-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-            color: white;
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
         }
         
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
         }
         
         .summary-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px;
         }
         
         .summary-label {
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            opacity: 0.9;
+            font-weight: bold;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 3px;
         }
         
         .summary-value {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
         }
         
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 25px;
-            font-size: 14px;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
         }
         
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #333;
             color: white;
         }
         
         th {
-            padding: 16px 12px;
+            padding: 10px 8px;
             text-align: center;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-            border: none;
-        }
-        
-        th:first-child {
-            border-top-left-radius: 10px;
-        }
-        
-        th:last-child {
-            border-top-right-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #333;
         }
         
         td {
-            padding: 14px 12px;
-            border-bottom: 1px solid #ecf0f1;
-            border-right: 1px solid #ecf0f1;
+            padding: 8px;
+            border: 1px solid #ddd;
             text-align: center;
-        }
-        
-        td:last-child {
-            border-right: none;
-        }
-        
-        tbody tr {
-            background-color: #ffffff;
-            transition: all 0.3s ease;
         }
         
         tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        tbody tr:hover {
-            background-color: #e8eaf6;
-            transform: scale(1.01);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+            background-color: #f9f9f9;
         }
         
         .pallet-cell {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 700;
-            font-size: 18px;
+            background-color: #ddd;
+            font-weight: bold;
+            font-size: 14px;
             vertical-align: middle;
-            border-right: 2px solid #764ba2 !important;
         }
         
         .total-cell {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            font-weight: 700;
+            background-color: #e8f5e9;
+            font-weight: bold;
             vertical-align: middle;
-            font-size: 16px;
         }
         
         .product-code {
-            font-weight: 600;
-            color: #667eea;
-            font-family: 'Courier New', monospace;
+            font-weight: bold;
         }
         
         .footer {
-            margin-top: 50px;
-            padding-top: 25px;
-            border-top: 3px solid #ecf0f1;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
             text-align: center;
-            color: #95a5a6;
-            font-size: 13px;
+            color: #666;
+            font-size: 11px;
         }
         
         .print-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #333;
             color: white;
-            padding: 15px 40px;
+            padding: 10px 25px;
             border: none;
-            border-radius: 50px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
         
         .print-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-        }
-        
-        .print-button:active {
-            transform: translateY(0);
+            background-color: #555;
         }
         
         .button-container {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -346,36 +207,33 @@ ORDER BY PALLET_NUMBER
 
 <div class="container">
     <div class="button-container no-print">
-        <button class="print-button" onclick="window.print()">
-            🖨️ Yazdır
-        </button>
+        <button class="print-button" onclick="window.print()">Yazdır</button>
     </div>
     
     <div class="header">
         <h1>ÇEKİ LİSTESİ</h1>
-        <div class="subtitle">Paket Detay Raporu</div>
     </div>
     
     <div class="summary-box">
         <div class="summary-grid">
             <div class="summary-item">
-                <div class="summary-label">📦 Paket Kodu</div>
+                <div class="summary-label">Paket Kodu</div>
                 <div class="summary-value">#palletCode#</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">📋 Paket Tipi</div>
+                <div class="summary-label">Paket Tipi</div>
                 <div class="summary-value">#palletType#</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">⚖️ Toplam Ağırlık</div>
+                <div class="summary-label">Toplam Ağırlık</div>
                 <div class="summary-value">#totalWeightFormatted# kg</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">📊 Paket Sayısı</div>
+                <div class="summary-label">Paket Sayısı</div>
                 <div class="summary-value">#palletCountFormatted#</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">🕒 Tarih & Saat</div>
+                <div class="summary-label">Tarih & Saat</div>
                 <div class="summary-value">#currentDateTime#</div>
             </div>
         </div>
@@ -391,12 +249,12 @@ ORDER BY PALLET_NUMBER
     <table>
         <thead>
             <tr>
-                <th>🎯 Palet No</th>
-                <th>🏷️ Stok Kodu</th>
-                <th>📦 Ürün Adı</th>
-                <th>📊 Miktar</th>
-                <th>⚖️ Birim Ağırlık (kg)</th>
-                <th>💪 Toplam Ağırlık (kg)</th>
+                <th>Palet No</th>
+                <th>Stok Kodu</th>
+                <th>Ürün Adı</th>
+                <th>Miktar</th>
+                <th>Birim Ağırlık (kg)</th>
+                <th>Toplam Ağırlık (kg)</th>
             </tr>
         </thead>
         <tbody>
@@ -408,8 +266,8 @@ ORDER BY PALLET_NUMBER
                             <td class="pallet-cell" rowspan="#rowCounts[PALLET_ID]#">#PALLET_NUMBER#</td>
                         </cfif>
                         <td class="product-code">#PRODUCT_CODE_2#</td>
-                        <td style="text-align: left; padding-left: 15px;">#PRODUCT_NAME#</td>
-                        <td style="font-weight: 600;">#NumberFormat(MIKTAR, "9,999,999.99")#</td>
+                        <td style="text-align: left;">#PRODUCT_NAME#</td>
+                        <td>#NumberFormat(MIKTAR, "9,999,999.99")#</td>
                         <td>#NumberFormat(WEIGHT, "9,999,999.99")#</td>
                         <cfif firstRow>
                             <td class="total-cell" rowspan="#rowCounts[PALLET_ID]#">#NumberFormat(palletTws[PALLET_ID], "9,999,999.99")#</td>
@@ -422,8 +280,7 @@ ORDER BY PALLET_NUMBER
     </table>
     
     <div class="footer">
-        <p>Bu belge sistem tarafından otomatik olarak oluşturulmuştur.</p>
-        <p>&copy; #Year(Now())# - Tüm Hakları Saklıdır</p>
+        <p>Sistem tarafından otomatik oluşturulmuştur - #currentDateTime#</p>
     </div>
 </div>
 
