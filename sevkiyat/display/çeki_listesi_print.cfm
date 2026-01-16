@@ -1,3 +1,5 @@
+<cfset dsn3="w3Qa_1">
+<cfset dsn="w3Qa">
 <cfquery name="getPalletInfo" datasource="#dsn3#">
     SELECT PALLET_CODE,PALLET_TYPE,MAIN_PALET_ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
     WHERE ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
