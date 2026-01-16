@@ -5,7 +5,7 @@
     WHERE ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
 </cfquery>
 
-<cfif len(getPalletInfo.MAIN_PALET_ID)>
+<cfif len(getPalletInfo.MAIN_PALET_ID) eq 0>
     <cfquery name="getSubPalletRows" datasource="#dsn3#">
     SELECT 
 S.STOCK_ID,
