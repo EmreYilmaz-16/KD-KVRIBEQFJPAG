@@ -282,31 +282,4 @@ ORDER BY PALLET_NUMBER
 
 
 </body>
-</html     <th>Ürün Adı</th>
-                <th>Miktar</th>
-                <th>Birim Ağırlık (kg)</th>
-                <th>Toplam Ağırlık (kg)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <cfoutput query="getSubPalletRows" group="PALLET_ID">
-                <cfset firstRow = true>
-                <cfoutput>
-                    <tr>
-                        <cfif firstRow>
-                            <td rowspan="#rowCounts[PALLET_ID]#">#PALLET_NUMBER#</td>
-                        </cfif>
-                        <td>#PRODUCT_CODE_2#</td>
-                        <td>#PRODUCT_NAME#</td>
-                        <td>#NumberFormat(MIKTAR, "9,999,999.99")#</td>
-                        <td>#NumberFormat(WEIGHT, "9,999,999.99")#</td>
-                        <cfif firstRow>
-                            <td rowspan="#rowCounts[PALLET_ID]#">#NumberFormat(palletTws[PALLET_ID], "9,999,999.99")#</td>
-                            <cfset firstRow = false>
-                        </cfif>
-                    </tr>
-                </cfoutput>
-            </cfoutput>
-        </tbody>
-    </table>
-
+</html>
