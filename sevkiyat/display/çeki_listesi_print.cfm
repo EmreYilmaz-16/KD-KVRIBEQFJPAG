@@ -1,4 +1,9 @@
 ﻿<cftry>
+        <cfif isDefined("attributes.action_id")>
+            <cfset attributes.pallet_id = Val(attributes.action_id)>
+        <cfelse>
+            
+        </cfif>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
