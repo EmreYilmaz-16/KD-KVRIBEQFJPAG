@@ -64,7 +64,7 @@ ORDER BY PALLET_NUMBER
 <cfset currentDateTime = DateFormat(Now(), "dd.mm.yyyy") & " " & TimeFormat(Now(), "HH:mm:ss")>
 <cfset palletCode = getPalletInfo.PALLET_CODE>
 <cfset palletType = getPalletInfo.PALLET_TYPE>
-<cf_box title="Paket Detaylari - #palletCode#">
+
     <div>
         <strong>Paket Kodu:</strong> #palletCode#<br>
         <strong>Paket Tipi:</strong> #palletType#<br>
@@ -112,4 +112,4 @@ ORDER BY PALLET_NUMBER
             </cfoutput>
         </tbody>
     </table>
-</cf_box>
+
