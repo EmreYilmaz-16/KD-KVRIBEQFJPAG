@@ -136,14 +136,156 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border: 2px solid #333;
+        }
+        
+        .logo-area {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .logo-box {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+        
+        .logo-text {
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c5282;
+        }
+        
+        .company-name {
+            font-size: 14px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .title-box {
+            background-color: #2c5282;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+        
+        .customer-info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+        .customer-box {
+            flex: 1;
+            border: 2px solid #333;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .customer-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        
+        .customer-details {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .date-box {
+            border: 2px solid #333;
+            padding: 15px;
+            background-color: #f9f9f9;
+            min-width: 200px;
+        }
+        
+        .date-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .date-value {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 <cfset dsn3="w3Qa_1">
 <cfset dsn="w3Qa">
 <cfquery name="getPalletInfo" datasource="#dsn3#">
-    SELECT PALLET_CODE,PALLET_TYPE,MAIN_PALET_ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
-    WHERE ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+    SELECT DISTINCT 
+        SP.PALLET_CODE,
+        SP.PALLET_TYPE,
+        SP.MAIN_PALET_ID,
+        SP.ORDER_ID,
+        O.COMPANY_ID,
+        O.SHIP_ADDRESS_ID,
+        C.NICKNAME,
+        C.COMPANY_ADDRESS,
+        C.FIRMA_ULKE_ADI,
+        C.FIRMA_IL_ADI,
+        C.FIRMA_ILCE_ADI,
+        SUBE_BILGI.COMPBRANCH__NAME,
+        SUBE_BILGI.COMPBRANCH_ADDRESS,
+        SUBE_BILGI.SUBE_ULKE_ADI,
+        SUBE_BILGI.SUBE_IL_ADI,
+        SUBE_BILGI.SUBE_ILCE_ADI
+    FROM [w3Qa_1].[SHIPPING_PALLET_SVK_PBS] SP
+    LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT AS ESR ON ESR.SHIP_RESULT_ID=SP.ORDER_ID
+    LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT_ROW AS ESRR ON ESRR.SHIP_RESULT_ID=SP.ORDER_ID
+    LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ESRR.ORDER_ID
+    LEFT JOIN (
+        SELECT 
+            COMPANY_ID,
+            COMPANY_ADDRESS,
+            NICKNAME,
+            SCO.COUNTRY_NAME AS FIRMA_ULKE_ADI,
+            SC.CITY_NAME AS FIRMA_IL_ADI,
+            SCN.COUNTY_NAME AS FIRMA_ILCE_ADI
+        FROM w3Qa.COMPANY CB 
+        LEFT JOIN w3Qa.SETUP_COUNTRY AS SCO ON SCO.COUNTRY_ID=CB.COUNTRY 
+        LEFT JOIN w3Qa.SETUP_CITY AS SC ON SC.CITY_ID=CB.CITY
+        LEFT JOIN w3Qa.SETUP_COUNTY AS SCN ON SCN.COUNTY_ID=CB.COUNTY
+    ) AS C ON C.COMPANY_ID=O.COMPANY_ID
+    LEFT JOIN (
+        SELECT 
+            COMPBRANCH_ID,
+            COMPBRANCH_ADDRESS,
+            COMPBRANCH__NAME,
+            SCO.COUNTRY_NAME AS SUBE_ULKE_ADI,
+            SC.CITY_NAME AS SUBE_IL_ADI,
+            SCN.COUNTY_NAME AS SUBE_ILCE_ADI
+        FROM w3Qa.COMPANY_BRANCH CB 
+        LEFT JOIN w3Qa.SETUP_COUNTRY AS SCO ON SCO.COUNTRY_ID=CB.COUNTRY_ID 
+        LEFT JOIN w3Qa.SETUP_CITY AS SC ON SC.CITY_ID=CB.CITY_ID 
+        LEFT JOIN w3Qa.SETUP_COUNTY AS SCN ON SCN.COUNTY_ID=CB.COUNTY_ID
+    ) AS SUBE_BILGI ON SUBE_BILGI.COMPBRANCH_ID=O.SHIP_ADDRESS_ID
+    WHERE SP.PALLET_ID IN (
+        SELECT ID FROM w3Qa_1.SHIPPING_PALLETS_PBS 
+        WHERE ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer"> 
+        OR MAIN_PALET_ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+    )
 </cfquery>
 
 <cfif len(getPalletInfo.MAIN_PALET_ID) eq 0>
@@ -210,10 +352,71 @@ ORDER BY PALLET_NUMBER
         <button class="print-button" onclick="window.print()">Yazdır</button>
     </div>
     
-    <div class="header">
-        <h1>ÇEKİ LİSTESİ</h1>
+    <div class="top-section">
+        <div class="logo-area">
+            <div class="logo-box">
+                <div class="logo-text">KD TEKNİK</div>
+                <div class="company-name">Otomotiv San. ve Tic. Ltd. Şti.</div>
+            </div>
+            <div class="logo-box">
+                <div class="logo-text">KAÇMAZLAR</div>
+                <div class="company-name">GEAR INDUSTRY</div>
+            </div>
+            <div class="logo-box">
+                <div class="logo-text">RELIABLE</div>
+                <div class="company-name">TECH PARTS</div>
+            </div>
+        </div>
+        <div class="title-box">
+            ÇEKİ LİSTESİ
+        </div>
     </div>
     
+    <div class="customer-info-section">
+        <div class="customer-box">
+            <div class="customer-title">MÜŞTERİ</div>
+            <div class="customer-details">
+                <cfoutput>
+                    <cfif len(trim(getPalletInfo.SHIP_ADDRESS_ID)) and len(trim(getPalletInfo.COMPBRANCH__NAME))>
+                        <!--- Şube bilgileri varsa şubeyi göster --->
+                        <strong>#getPalletInfo.COMPBRANCH__NAME#</strong><br>
+                        <cfif len(trim(getPalletInfo.COMPBRANCH_ADDRESS))>
+                            #getPalletInfo.COMPBRANCH_ADDRESS#<br>
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.SUBE_ILCE_ADI))>
+                            #getPalletInfo.SUBE_ILCE_ADI# - 
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.SUBE_IL_ADI))>
+                            #getPalletInfo.SUBE_IL_ADI#
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.SUBE_ULKE_ADI))>
+                            <br>#getPalletInfo.SUBE_ULKE_ADI#
+                        </cfif>
+                    <cfelse>
+                        <!--- Şube yoksa firma bilgilerini göster --->
+                        <strong>#getPalletInfo.NICKNAME#</strong><br>
+                        <cfif len(trim(getPalletInfo.COMPANY_ADDRESS))>
+                            #getPalletInfo.COMPANY_ADDRESS#<br>
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.FIRMA_ILCE_ADI))>
+                            #getPalletInfo.FIRMA_ILCE_ADI# - 
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.FIRMA_IL_ADI))>
+                            #getPalletInfo.FIRMA_IL_ADI#
+                        </cfif>
+                        <cfif len(trim(getPalletInfo.FIRMA_ULKE_ADI))>
+                            <br>#getPalletInfo.FIRMA_ULKE_ADI#
+                        </cfif>
+                    </cfif>
+                </cfoutput>
+            </div>
+        </div>
+        <div class="date-box">
+            <div class="customer-title">TARİH</div>
+            <div class="date-value">#currentDateTime#</div>
+        </div>
+    </div>
+    <cfoutput>
     <div class="summary-box">
         <div class="summary-grid">
             <div class="summary-item">
@@ -238,6 +441,7 @@ ORDER BY PALLET_NUMBER
             </div>
         </div>
     </div>
+    </cfoutput>
     <cfset rowCounts = StructNew()>
     <cfloop query="getSubPalletRows">
         <cfif NOT StructKeyExists(rowCounts, PALLET_ID)>
