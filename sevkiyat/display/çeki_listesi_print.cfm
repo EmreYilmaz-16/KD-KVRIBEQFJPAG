@@ -158,6 +158,15 @@
             padding: 10px;
             background: white;
             border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-box img {
+            max-height: 60px;
+            max-width: 150px;
+            object-fit: contain;
         }
         
         .logo-text {
@@ -356,16 +365,13 @@ ORDER BY PALLET_NUMBER
     <div class="top-section">
         <div class="logo-area">
             <div class="logo-box">
-                <div class="logo-text">KD TEKNİK</div>
-                <div class="company-name">Otomotiv San. ve Tic. Ltd. Şti.</div>
+                <img src="https://www.kdteknik.com.tr/upload/site/kdteknik-logo1.png" alt="KD TEKNİK">
             </div>
             <div class="logo-box">
-                <div class="logo-text">KAÇMAZLAR</div>
-                <div class="company-name">GEAR INDUSTRY</div>
+                <img src="https://www.kacmazlar.com/Storage/Hotload/Upload/General/kacmazlar-logo.png" alt="KAÇMAZLAR">
             </div>
             <div class="logo-box">
-                <div class="logo-text">RELIABLE</div>
-                <div class="company-name">TECH PARTS</div>
+                <img src="https://www.kdteknik.com.tr/upload/site/kdteknik-logo1.png" alt="RELIABLE">
             </div>
         </div>
         <div class="title-box">
