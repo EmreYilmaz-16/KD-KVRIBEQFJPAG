@@ -7,9 +7,11 @@
 </cfquery>
 <cfset palletIdList="">
 <cfif len(getPalletInfo.MAIN_PALET_ID) GT 0>
-    <cfquery name="getOtherSubPallets" datasource="#dsn3#">
+<cfset palletIdList="#palletIdList#,#getPalletInfo.MAIN_PALET_ID#">
+<cfquery name="getOtherSubPallets" datasource="#dsn3#">
         SELECT ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
         WHERE MAIN_PALET_ID=<cfqueryparam value="#Val(getPalletInfo.MAIN_PALET_ID)#" cfsqltype="cf_sql_integer">
+        AND ID <> <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfloop query="getOtherSubPallets">
         <cfif len(palletIdList) EQ 0>
@@ -19,6 +21,8 @@
         </cfif>
     </cfloop>
 </cfif>
+<cfset palletIdList="#palletIdList#,#attributes.pallet_id#">
+
 <cfdump var="#palletIdList#">
 
 <!-----<cfquery name="getPaperSerials" datasource="#dsn3#">
