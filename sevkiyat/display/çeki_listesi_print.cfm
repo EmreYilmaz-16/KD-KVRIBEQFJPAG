@@ -365,13 +365,13 @@ ORDER BY PALLET_NUMBER
     <div class="top-section">
         <div class="logo-area">
             <div class="logo-box">
-                <img src="https://www.kdteknik.com.tr/upload/site/kdteknik-logo1.png" alt="KD TEKNİK">
+                <img src="https://www.kacmazlar.com/Storage/Hotload/Upload/DirectUpload/kdtekniklogo.png" alt="KD TEKNİK">
             </div>
             <div class="logo-box">
                 <img src="https://www.kacmazlar.com/Storage/Hotload/Upload/General/kacmazlar-logo.png" alt="KAÇMAZLAR">
             </div>
             <div class="logo-box">
-                <img src="https://www.kdteknik.com.tr/upload/site/kdteknik-logo1.png" alt="RELIABLE">
+                <img src="https://www.kdteknik.com.tr/upload/bayiler/reliable-logo.png" alt="RELIABLE">
             </div>
         </div>
         <div class="title-box">
