@@ -5,7 +5,7 @@
     SELECT PALLET_CODE,PALLET_TYPE,MAIN_PALET_ID FROM #dsn3#.SHIPPING_PALLETS_PBS 
     WHERE ID=<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfset palletIdList="">
+<cfset palletIdList="0">
 <cfif len(getPalletInfo.MAIN_PALET_ID) GT 0>
 <cfset palletIdList="#palletIdList#,#getPalletInfo.MAIN_PALET_ID#">
 <cfquery name="getOtherSubPallets" datasource="#dsn3#">
@@ -102,7 +102,9 @@ SELECT DISTINCT ISNULL(SG.SERIAL_NO, S.BARCOD) AS SERIAL_NO
 		LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.PROCESS_ID = SF.FIS_ID
 			AND SG.PERIOD_ID = SF.PERIODID
 		LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID = SF.STOCK_ID
-		WHERE SP.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+		WHERE SP.PALLET_ID IN(
+            #palletIdList#
+        )
 		GROUP BY SG.SERIAL_NO
 			,S.BARCOD
 			,SG.STOCK_ID
