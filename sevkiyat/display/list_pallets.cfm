@@ -532,6 +532,7 @@
 										</button>
 										<button class="pallet-action-btn" title="Sevkiyat Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'" style="font-size: 18px;">🚚</button>
 										<button class="pallet-action-btn" title="Urun Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'" style="font-size: 18px;">📦</button>
+										<button class="pallet-action-btn" title="Yazdir" onclick="window.open('index.cfm?fuseaction=objects.popup_print_files&action=sales.list_order&action_id=#HTMLEditFormat(ID)#&print_type=1000', '_blank', 'width=800,height=600')" style="font-size: 18px;">🖨️</button>
 									</td>
 								</tr>
 								
@@ -588,7 +589,7 @@
 														<div>
 															<button class="pallet-action-btn" title="Sevkiyat Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_svk_to_pallet_pbs&PALLET_ID=#HTMLEditFormat(ID)#'" style="font-size: 18px;">🚚</button>
 															<button class="pallet-action-btn" title="Urun Ekle" onclick="window.location.href='/index.cfm?fuseaction=eshipping.emptypopup_add_product_pallet_pbs&pallet_id=#HTMLEditFormat(ID)#'" style="font-size: 18px;">📦</button>
-														</div>
+															<button class="pallet-action-btn" title="Yazdir" onclick="window.open('/index.cfm?fuseaction=objects.popup_print_files&action=sales.list_order&action_id=#HTMLEditFormat(ID)#&print_type=1000', '_blank', 'width=800,height=600')" style="font-size: 18px;">🖨️</button>														</div>
 													</div>
 												</cfloop>
 											</div>
