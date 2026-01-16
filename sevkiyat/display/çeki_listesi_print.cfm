@@ -386,7 +386,7 @@ ORDER BY PALLET_NUMBER
                 <cfoutput>
                     <cfif len(trim(getPalletInfo.SHIP_ADDRESS_ID)) and len(trim(getPalletInfo.COMPBRANCH__NAME))>
                         <!--- Şube bilgileri varsa şubeyi göster --->
-                        <strong>#getPalletInfo.COMPBRANCH__NAME#</strong><br>
+                        <strong>#getPalletInfo.NICKNAME# #getPalletInfo.COMPBRANCH__NAME#</strong><br>
                         <cfif len(trim(getPalletInfo.COMPBRANCH_ADDRESS))>
                             #getPalletInfo.COMPBRANCH_ADDRESS#<br>
                         </cfif>
