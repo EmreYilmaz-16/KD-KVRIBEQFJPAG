@@ -1,4 +1,4 @@
-﻿
+﻿<cftry>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -501,3 +501,7 @@ ORDER BY PALLET_NUMBER
 
 </body>
 </html>
+<cfcatch>
+    <cfdump var="#cfcatch#">
+</cfcatch>
+</cftry>
