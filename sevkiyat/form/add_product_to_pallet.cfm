@@ -1,7 +1,7 @@
 <cfquery name="GETPERIODS" datasource="#DSN#">
     SELECT TOP 2 PERIOD_ID,OUR_COMPANY_ID,PERIOD_YEAR FROM SETUP_PERIOD ORDER BY PERIOD_ID DESC
 </cfquery>
-<cfquery name="getPaperSerials" datasource="#dsn3#">
+<!-----<cfquery name="getPaperSerials" datasource="#dsn3#">
     SELECT (
         SELECT DISTINCT
             ISNULL(SG.SERIAL_NO,S.BARCOD) SERIAL_NO,ISNULL(SG.STOCK_ID,S.STOCK_ID) STOCK_ID,S.PRODUCT_ID,
@@ -28,6 +28,65 @@
         GROUP BY 
 		SG.SERIAL_NO,S.BARCOD,SG.STOCK_ID,S.STOCK_ID,S.PRODUCT_ID
 	
+        FOR JSON PATH
+    ) AS T
+</cfquery>----->
+
+<cfquery name="getPaperSerials" datasource="#dsn3#">
+     SELECT (
+SELECT * FROM (
+SELECT DISTINCT ISNULL(SG.SERIAL_NO, S.BARCOD) AS SERIAL_NO
+			,ISNULL(SG.STOCK_ID, S.STOCK_ID) AS STOCK_ID
+			,S.PRODUCT_ID
+			,CASE 
+				WHEN ISNULL(SG.SERIAL_NO, '') = ''
+					THEN SUM(AMOUNT)
+				ELSE 1
+				END AS AMOUNT
+			,CASE 
+				WHEN ISNULL(SG.SERIAL_NO, '') = ''
+					THEN 0
+				ELSE 1
+				END AS IS_SERIAL
+			,ISNULL((
+				SELECT SUM(SPR.AMOUNT)
+				FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS AS SPR
+				WHERE SPR.PALLET_ID =<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+					AND (
+						(
+							ISNULL(SG.SERIAL_NO, '') = ''
+							AND SPR.STOCK_ID = S.STOCK_ID
+							)
+						OR (
+							ISNULL(SG.SERIAL_NO, '') <> ''
+							AND SPR.SERIAL_NUMBER = ISNULL(SG.SERIAL_NO, S.BARCOD)
+							)
+						)
+				),0) AS TOTAL_AMOUNT
+		FROM w3Qa_1.SHIPPING_PALLET_SVK_PBS AS SP
+		LEFT JOIN w3Qa_1.EZGI_SHIP_RESULT AS ESR ON ESR.SHIP_RESULT_ID = SP.ORDER_ID
+		LEFT JOIN (
+			<cfloop query="GETPERIODS">
+                <cfif GETPERIODS.currentRow GT 1>
+                    UNION ALL
+                </cfif>
+                SELECT SF#PERIOD_YEAR#.FIS_ID, REF_NO, #GETPERIODS.PERIOD_ID# AS PERIODID,STOCK_ID,AMOUNT FROM #dsn#_#GETPERIODS.PERIOD_YEAR#_#GETPERIODS.OUR_COMPANY_ID#.STOCK_FIS AS SF#PERIOD_YEAR#
+                LEFT JOIN #dsn#_#GETPERIODS.PERIOD_YEAR#_#GETPERIODS.OUR_COMPANY_ID#.STOCK_FIS_ROW AS SFR#PERIOD_YEAR# ON SFR#PERIOD_YEAR#.FIS_ID=SF#PERIOD_YEAR#.FIS_ID
+                
+            </cfloop>
+			) AS SF ON SF.REF_NO = ESR.DELIVER_PAPER_NO
+		LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.PROCESS_ID = SF.FIS_ID
+			AND SG.PERIOD_ID = SF.PERIODID
+		LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID = SF.STOCK_ID
+		WHERE SP.PALLET_ID = <cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+		GROUP BY SG.SERIAL_NO
+			,S.BARCOD
+			,SG.STOCK_ID
+			,S.STOCK_ID
+			,S.PRODUCT_ID
+) AS TT
+
+WHERE (AMOUNT-TOTAL_AMOUNT)>0
         FOR JSON PATH
     ) AS T
 </cfquery>
