@@ -88,7 +88,9 @@ SELECT DISTINCT ISNULL(SG.SERIAL_NO, S.BARCOD) AS SERIAL_NO
 			,ISNULL((
 				SELECT SUM(SPR.AMOUNT)
 				FROM w3Qa_1.SHIPPING_PALLET_ROWS_PBS AS SPR
-				WHERE SPR.PALLET_ID =<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
+				WHERE SPR.PALLET_ID IN (
+                    #palletIdList#
+                )
 					AND (
 						(
 							ISNULL(SG.SERIAL_NO, '') = ''
@@ -115,9 +117,7 @@ SELECT DISTINCT ISNULL(SG.SERIAL_NO, S.BARCOD) AS SERIAL_NO
 		LEFT JOIN w3Qa_1.SERVICE_GUARANTY_NEW AS SG ON SG.PROCESS_ID = SF.FIS_ID
 			AND SG.PERIOD_ID = SF.PERIODID
 		LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID = SF.STOCK_ID
-		WHERE SP.PALLET_ID IN(
-            #palletIdList#
-        )
+		WHERE SP.PALLET_ID =<cfqueryparam value="#Val(attributes.pallet_id)#" cfsqltype="cf_sql_integer">
 		GROUP BY SG.SERIAL_NO
 			,S.BARCOD
 			,SG.STOCK_ID
