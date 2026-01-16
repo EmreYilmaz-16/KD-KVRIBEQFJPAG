@@ -6,18 +6,20 @@
     <style>
         @media print {
             .no-print { display: none; }
-            body { margin: 0; padding: 10mm; }
+            body { margin: 0; padding: 5mm; }
         }
         
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #fff;
         }
         
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
+            padding: 10px;
         }
         
         .header {
