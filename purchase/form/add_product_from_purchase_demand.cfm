@@ -85,7 +85,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                     <form method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
                         <input type="hidden" name="ignore_oem_duplicate" value="1">
                         <input type="hidden" name="is_submit" value="1">
-                        <cfset continueFields = "wrkRowId,product_name,eta_kodu,brand_id,brand_name,brand_code,short_code_id,short_code_name,short_code,unit_id,acc_code_cat,tax_purchase,tax,alternatif,OFFER_ID,product_code2">
+                        <cfset continueFields = "wrkRowId,product_name,eta_kodu,brand_id,brand_name,brand_code,short_code_id,short_code_name,short_code,unit_id,acc_code_cat,tax_purchase,tax,alternatif,OFFER_ID,product_code2,pweight">
                         <cfloop list="#continueFields#" index="continueField">
                             <cfif structKeyExists(attributes, continueField)>
                                 <input type="hidden" name="#continueField#" value="#xmlFormat(attributes[continueField])#">
