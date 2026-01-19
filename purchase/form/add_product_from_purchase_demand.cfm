@@ -256,6 +256,10 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label>Ağırlık</label>
+                                    <input type="number" class="form-control" id="pweight" name="pweight" value="">
+                                </div>
+                                <div class="form-group">
 
                                     <label ><cf_get_lang dictionary_id='37257.Muh Kod Grubu'></label>
                                     <input type="text" class="form-control mb-2" id="acc_code_cat_search" placeholder="Ara" oninput="filterAccCodeCat()">

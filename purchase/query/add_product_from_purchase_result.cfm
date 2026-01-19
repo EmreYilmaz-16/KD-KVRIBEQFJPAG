@@ -14,6 +14,7 @@
     <cfargument name="IS_FROM_DEMAND" default="0">
     <cfargument name="eta_kodu" default="">
     <cfargument name="acc_code_cat" default="">
+    <cfargument name="pweight" default="">
 <cftry>
     <cfquery name="GETPCAT" datasource="#DSN#_product">
         SELECT * FROM PRODUCT_CAT WHERE PRODUCT_CATID=#arguments.PRODUCT_CATID#
@@ -36,7 +37,7 @@
         birim = "#BIRIM#";
         dimention = "";
         volume = "";
-        weight = "";
+        weight = "#arguments.pweight#";
         surec_id=29;
         fiyat_yetkisi = 1;
         uretici_urun_kodu="";
