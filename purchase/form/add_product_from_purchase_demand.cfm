@@ -126,7 +126,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
       // writeDump(var=attributes, format="html", label="attributes", abort=true);
         
        try {
-         ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId,1,attributes.eta_kodu,attributes.acc_code_cat);
+         ProductInserResult=CreateProduct(attributes.product_name,279, attributes.brand_id, attributes.short_code_id,"#attributes.short_code_name#", attributes.unit_id, attributes.oem_no, attributes.alternatif,attributes.tax_purchase,attributes.tax,attributes.wrkRowId,1,attributes.eta_kodu,attributes.acc_code_cat,attributes.pweight);
        } catch (any exName) {
         writeDump(var=exName, format="html", label="Error", abort=true);
        }
@@ -257,7 +257,7 @@ WHERE SB.BARCODE='#evaluate("attributes.oem_#i#")#'
                                 </div>
                                 <div class="form-group">
                                     <label>Ağırlık</label>
-                                    <input type="number" class="form-control" id="pweight" name="pweight" value="">
+                                    <input type="number" class="form-control" id="pweight" name="pweight" value="" step="0.01" min="0">
                                 </div>
                                 <div class="form-group">
 
