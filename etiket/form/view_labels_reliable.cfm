@@ -499,7 +499,7 @@ CT~~CD,~CC^~CT~
                     </cfsavecontent>
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
-                <div style="display:block;width:20px;height:20px">#currentRow#</div>
+                <div style="display:block;width:20px;height:20px">#currentRow# ---- <cfdump var="#BARKOD#"></div>
                 </cfloop> <!--- Ana veri döngüsü sonu --->
                 
                 </cfoutput>
