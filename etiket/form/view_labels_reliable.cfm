@@ -444,21 +444,20 @@
                     
                     <!--- HTML Etiket --->
                     <div class="mini-label">
-                        <div class="top-code">#eta_kodu#</div>
-                        <div class="left-meta ediv">#TARIH#</div>
+                        
                         <div class="qr-wrap">
                             <cfset qr_data = BARKOD>
                             <cfset qr_id = "qr_#temp_id#_#getTickCount()#">
                             <div class="qr-crop">
                                 <cftry>
-                                    #currentRow# - #BARKOD#
+                                    
                                     <cfcatch>
                                         <!--- Hata durumunda basit QR placeholder --->
                                     </cfcatch>
                                 </cftry>
                             </div>
                         </div>
-                        <div class="right-meta">#seri_no#</div>
+                        <div class="right-meta"></div>
                     </div>
                     
                     <!--- Her etiket sonrası sayfa kırma --->
