@@ -499,7 +499,49 @@ CT~~CD,~CC^~CT~
                     </cfsavecontent>
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
-                <div style="display:block;width:20px;height:20px">#currentRow# ---- <cfdump var="#BARKOD#"></div>
+                <div style="display:block;width:20px;height:20px">
+                    <table>
+                        <tr>
+                            <td>
+                                Sıra No: #currentRow# / #getLabelData.recordCount#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Ürün Kodu
+                            </td>
+                            <td>
+                                : #URUNKODU#
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                Seri No
+                            </td>
+                            <td>
+                                : #SERINO#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Tarih
+                            </td>
+                            <td>
+                                : #TARIH#
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td>
+                                Barkod
+                            </td>
+                            <td>
+                                : #BARKOD#
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
                 </cfloop> <!--- Ana veri döngüsü sonu --->
                 
                 </cfoutput>
