@@ -499,7 +499,7 @@ CT~~CD,~CC^~CT~
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
                 <div >
-                    <table>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom:20px;">
                         <tr>
                             <td>
                                 Sıra No: #currentRow# / #getLabelData.recordCount#
