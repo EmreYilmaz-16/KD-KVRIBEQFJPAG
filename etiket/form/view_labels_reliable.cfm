@@ -465,6 +465,7 @@
                     
                     <!--- Her etiket için tek ZPL kodu --->
                     <cfsavecontent variable="zd">
+                        <!----
 CT~~CD,~CC^~CT~
 ^XA
 ~TA000
@@ -494,7 +495,37 @@ CT~~CD,~CC^~CT~
 ^FT47,258^A0B,29,28^FH\^CI28^FD#TARIH#^FS^CI27
 ^FT0,52^A0N,27,30^FB320,1,7,C^FH\^CI28^FD#SERINO#^FS^CI27
 ^PQ1,0,1,Y
+^XZ----->
+^XA
+^MCY^PMN
+^PW730
+~JSN^MMT
+^JZY
+^LH0,0^LRN
 ^XZ
+^XA
+^FT310,75
+^CI0
+^A0N,23,16^FDP629.006^FS
+^FT182,131
+^A0N,23,16^FDPREMIUM DRUM BRAKE PAD (MANY MERCEDES)^FS
+^FT319,154
+^A0N,23,16^FDXXXXX^FS
+^FO538,158
+^BQN,2,4^FDLA,SK-R629.006.0081_SN_6290001_TRH_07/25_XXXXX^FS
+^FT251,211
+^A0N,23,16^FDP629.006^FS
+^FT206,355
+^A0N,23,16^FD0081^FS
+^FT332,355
+^A0N,23,16^FD1 ST/PC^FS
+^FT467,355
+^A0N,23,16^FD07/25^FS
+^FT603,355
+^A0N,23,16^FD3,830^FS
+^PQ1,0,1,Y
+^XZ
+
                     </cfsavecontent>
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
@@ -545,6 +576,7 @@ CT~~CD,~CC^~CT~
                 
                 </cfoutput>
             </div>
+            <cfdump var="#ZPL_DATA_FULL#" label="ZPL DATA FULL">
             
             <cfif getLabelData.recordCount eq 0>
                 <div class="alert alert-warning text-center">
