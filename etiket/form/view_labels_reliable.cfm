@@ -508,7 +508,7 @@ CT~~CD,~CC^~CT~
 ^CI0
 ^A0N,23,16^FDP629.006^FS
 ^FT182,131
-^A0N,23,16^FDPREMIUM DRUM BRAKE PAD (MANY MERCEDES)^FS
+^A0N,23,16^FD#getStok.PRODUCT_NAME#^FS
 ^FT319,154
 ^A0N,23,16^FDXXXXX^FS
 ^FO538,158
@@ -576,7 +576,7 @@ CT~~CD,~CC^~CT~
                 
                 </cfoutput>
             </div>
-            <cfdump var="#ZPL_DATA_FULL#" label="ZPL DATA FULL">
+            
             
             <cfif getLabelData.recordCount eq 0>
                 <div class="alert alert-warning text-center">
