@@ -90,7 +90,7 @@ function generatePalletCode() {
 							<cfqueryparam value="#recordDate#" cfsqltype="cf_sql_timestamp">,
 							<cfqueryparam value="#recordEmp#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#company_id#" cfsqltype="cf_sql_integer">,
-							<cfqueryparam value="#Val(palletWeight)#" cfsqltype="cf_sql_decimal">
+							<cfqueryparam value="#Val(palletWeight)#" cfsqltype="cf_sql_decimal">,
 							<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 						)
 				</cfquery>
