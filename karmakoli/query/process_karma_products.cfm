@@ -39,6 +39,7 @@ writeDump(result);
     <cfset "attributes.AMOUNT#i#"=result[i].QUANTITY>
     <cfset "attributes.SHELF_CODE_IN#i#"="">
     <cfset "attributes.SHELF_CODE_OUT#i#"="">
+    <cfset "attributes.serino#i#"=result[i].SERIAL_NO>
 </cfloop>
 <cfset attributes.dep_out =attributes.PACKAGING_STORE>
 <cfset attributes.dep_in =attributes.PACKAGING_STORE>
