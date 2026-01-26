@@ -549,6 +549,14 @@ CT~~CD,~CC^~CT~
                         </tr>
                         <tr>
                             <td>
+                                eta_kodu
+                            </td>
+                            <td>
+                                : #eta_kodu#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 Ürün Kodu
                             </td>
                             <td>
