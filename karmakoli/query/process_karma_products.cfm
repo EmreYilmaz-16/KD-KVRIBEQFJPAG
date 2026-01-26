@@ -41,6 +41,7 @@ writeDump(result);
     <cfset "attributes.SHELF_CODE_OUT#i#"="">
 </cfloop>
 
+<cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis.cfm">
 
 
 1 Sarf Fişi Yap
