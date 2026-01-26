@@ -365,6 +365,7 @@ POZİSYON=SATIRLAR
         <cfset 'attributes.ROW_UNIQUE_RELATION_ID#k#' = ''>  
         <cfset 'attributes.ROW_WIDTH#k#' = ''>
         <cfset 'attributes.ROW_DEPTH#k#' = ''>
+    </cfloop>
         <!-----<cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
         	<cfset 'attributes.SHELF_NUMBER#k#' = Evaluate('SHELF_ID_#k#')>  
           	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')> 
@@ -458,6 +459,6 @@ POZİSYON=SATIRLAR
 <cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
 ---->
     <cfoutput>Kayıt başarılı!</cfoutput>
-    </cfloop>    
+    
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 </cfif>
