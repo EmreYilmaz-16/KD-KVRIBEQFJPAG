@@ -446,13 +446,13 @@
                     </cfif>
                     
                     <cfset SERINO = seri_no>
-                    <cfset BARKOD = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
-                    
+                    <cfset BARKODE = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
+                    <
                     <!--- HTML Etiket --->
                     <div class="mini-label">
                         
                         <div class="qr-wrap">
-                            <cfset qr_data = BARKOD>
+                            <cfset qr_data = BARKODE>
                             <cfset qr_id = "qr_#temp_id#_#getTickCount()#">
                             <div class="qr-crop">
                                 <cftry>
@@ -572,7 +572,7 @@ CT~~CD,~CC^~CT~
                                 Barkod
                             </td>
                             <td>
-                                : #BARKOD#
+                                : #BARKODE#
                             </td>
                         </tr>
                         <tr>
