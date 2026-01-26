@@ -439,6 +439,12 @@
                     <!--- Etiket verileri --->
                     <cfset TARIH = "#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#">
                     <cfset URUNKODU = eta_kodu>
+                    <cfset URUN_KODU2 = eta_kodu>
+                    <cfif listLen(URUNKODU,"-") gt 1>
+                        <cfset URUNKODU = listFirst(URUNKODU,"-")>
+                        <cfset URUN_KODU2=listLast(URUNKODU,"-")>
+                    </cfif>
+                    
                     <cfset SERINO = seri_no>
                     <cfset BARKOD = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
                     
@@ -506,11 +512,11 @@ CT~~CD,~CC^~CT~
 ^XA
 ^FT310,75
 ^CI0
-^A0N,23,16^FDP629.006^FS
+^A0N,23,16^FD#URUNKODU#^FS
 ^FT182,131
 ^A0N,23,16^FD#getStok.PRODUCT_NAME#^FS
 ^FT319,154
-^A0N,23,16^FDXXXXX^FS
+^A0N,23,16^FD#URUN_KODU2#^FS
 ^FO538,158
 ^BQN,2,4^FDLA,SK-R629.006.0081_SN_6290001_TRH_07/25_XXXXX^FS
 ^FT251,211
@@ -567,6 +573,14 @@ CT~~CD,~CC^~CT~
                             </td>
                             <td>
                                 : #BARKOD#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                qr_data
+                            </td>
+                            <td>
+                                : #qr_data#
                             </td>
                         </tr>
                     </table>
