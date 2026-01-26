@@ -540,12 +540,12 @@ CT~~CD,~CC^~CT~
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
                 <div >
-                    <table border="1" cellpadding="5" cellspacing="0">
+                    <cf_grid_list border="1" cellpadding="5" cellspacing="0">
                         <tr>
                             <td>
 
                        
-                    <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom:20px;">
+                    <cf_grid_list >
                         <tr>
                             <td>
                                 Sıra No: #currentRow# / #getLabelData.recordCount#
@@ -621,7 +621,7 @@ CT~~CD,~CC^~CT~
                             <td>Üretim Tarihi</td>
                             <td>: #DateFormat(uretim_tarihi, 'mm/yy')#</td>
                         </tr>
-                    </table>
+                    </cf_grid_list>
      </td>
      <td style="vertical-align:top;">
         <cftry>
@@ -643,7 +643,7 @@ CT~~CD,~CC^~CT~
                                     </cftry>
      </td>
                         </tr>
-                    </table>
+                    </cf_grid_list>
                 </div>
                 </cfloop> <!--- Ana veri döngüsü sonu --->
                 
