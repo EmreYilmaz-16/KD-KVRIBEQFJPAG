@@ -276,7 +276,13 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     ];
     
     function openselectProducts(PRODUCT_ID,QUANTITY,IS_SERIAL_NO){
-       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO);
+        var packaging_store = document.getElementById('packaging_store').value;
+        if(packaging_store == ''){
+            alert('Lütfen paketleme deposu seçiniz.');
+            return;
+        }
+
+       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store);
     }
     
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY){
