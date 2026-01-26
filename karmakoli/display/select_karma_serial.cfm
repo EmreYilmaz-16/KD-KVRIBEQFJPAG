@@ -15,14 +15,14 @@ HAVING DEPARTMENT_ID=#listFirst(attributes.PACKAGING_STORE,"-")# AND LOCATION_ID
             <th>Seri No</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody><!------(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO)------>
         <cfoutput query="getSerials">
-            <tr ondblclick="selectKarmaSerialNo('#SERIAL_NO#')">
+            <tr ondblclick="selectProducts(#attributes.MAIN_PRODUCT_ID#,#attributes.PRODUCT_ID#,#attributes.QUANTITY#,'#SERIAL_NO#')">
                 <td>#SERIAL_NO#</td>
             </tr>
         </cfoutput>
     </tbody>
-    
+
 </cf_grid_list>    
 
 </cfif>
