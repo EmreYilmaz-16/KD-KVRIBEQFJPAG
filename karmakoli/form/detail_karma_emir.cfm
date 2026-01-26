@@ -96,7 +96,7 @@
         border-radius: 4px;
         padding: 20px;
         display: flex;
-        
+        flex-wrap: wrap;
         gap: 12px;
     }
     
