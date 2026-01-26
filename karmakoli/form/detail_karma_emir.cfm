@@ -287,6 +287,24 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
        openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store+'&MAIN_PRODUCT_ID='+MAIN_PRODUCT_ID+'&REQUIRED_TOTAL='+REQUIRED_TOTAL);
     }
+    function Uret() {
+        var form=document.createElement('form');
+        form.method='post';
+        form.action='index.cfm?fuseaction=objects.emptypopup_process_add_karma_emir_products';
+        var emirInput=document.createElement('input');
+        emirInput.type='hidden';
+        emirInput.name='EMIR_ID';
+        emirInput.value='<cfoutput>#URL.EMIR_ID#</cfoutput>';
+        form.appendChild(emirInput);
+        var productsInput=document.createElement('input');
+        productsInput.type='hidden';
+        productsInput.name='SELECTED_PRODUCTS';
+        productsInput.value=JSON.stringify(SelecttedArr);
+        form.appendChild(productsInput);
+        document.body.appendChild(form);
+        form.submit();
+
+    }
     /* old version
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
