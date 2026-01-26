@@ -293,17 +293,11 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             alert('Bu seri numarası zaten seçildi.');
             return;
         }
-        console.log('Gerekli Ürünler:', requiredProducts);
-        var rquiredAmountE = requiredProducts.find(item => parseInt(item.PRODUCT_ID) === parseInt(PRODUCT_ID))
-        console.log('Gerekli Miktar:', rquiredAmountE);
-        var rquiredAmount = requiredProducts.find(item => parseInt(item.PRODUCT_ID) === parseInt(PRODUCT_ID));
-        var currentSelectedAmount = SelecttedArr.filter(item => parseInt(item.PRODUCT_ID) === parseInt(PRODUCT_ID)).reduce((sum, item) => sum + parseInt(item.QUANTITY), 0);
-        console.log('Mevcut Seçilen Miktar:', currentSelectedAmount);
-        if(currentSelectedAmount + QUANTITY > rquiredAmount){
-            alert('Bu ürün için gerekli miktardan fazlasını seçemezsiniz.');
-            return;
-        }
-
+        var items=SelecttedArr.filter(p=>parseInt(p.PRODUCT_ID)===parseInt(PRODUCT_ID));
+        var totalQuantity = items.reduce((s, i) => s + Number(i.QUANTITY), 0);
+        var requiredAmount = requiredProducts.find(p=>parseInt(p.PRODUCT_ID)===parseInt(PRODUCT_ID)).REQUIRED_TOTAL ;
+        console.table({totalQuantity,requiredAmount,addingQuantity:QUANTITY});
+        
         SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY,SERIAL_NO:SERIAL_NO});
         el.parentElement.parentElement.remove();
         checkKarmaRequirements();
