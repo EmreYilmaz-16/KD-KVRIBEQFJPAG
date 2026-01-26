@@ -431,14 +431,20 @@
                     <!--- Ürün bilgisini bir kez al --->
                     
                     <cfquery name="getStok" datasource="#variables.dsn#">
-                        SELECT TOP 1 PRODUCT_NAME,PRODUCT_ID 
+                        SELECT TOP 1 PRODUCT_NAME,PRODUCT_ID,STOCK_ID 
                         FROM PBS_GETSTOCK 
                         WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
                     </cfquery>
                     <cfquery name="GETW" datasource="#DSN3#">
                         SELECT TOP 50 WEIGHT FROM w3Qa_1.PRODUCT_UNIT WHERE PRODUCT_ID=#getStok.PRODUCT_ID#
                     </cfquery>
-                    
+                    <cfquery name="getOems" datasource="#dsn#_product">
+                        SELECT SB.* FROM STOCKS_BARCODES AS SB
+LEFT JOIN STOCKS AS S ON S.STOCK_ID=SB.STOCK_ID
+LEFT JOIN PRODUCT AS P ON P .PRODUCT_ID=S.PRODUCT_ID
+WHERE SB.STOCK_ID=#getStok.STOCK_ID# AND P.BARCOD<>SB.BARCODE
+                    </cfquery>
+                <cfset oem_numbers=valueList(getOems.BARCODE," ")>
                     
                     <!--- Etiket verileri --->
                     <cfset TARIH = "#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#">
@@ -524,7 +530,7 @@ CT~~CD,~CC^~CT~
 ^FO538,158
 ^BQN,2,4^FDLA,#qr_data#^FS
 ^FT251,211
-^A0N,23,16^FD#URUNKODU#^FS
+^A0N,23,16^FD#oem_numbers#^FS
 ^FT206,355
 ^A0N,23,16^FD#URUN_KODU2#^FS
 ^FT332,355
