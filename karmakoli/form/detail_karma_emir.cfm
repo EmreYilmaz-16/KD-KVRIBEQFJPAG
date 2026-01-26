@@ -284,7 +284,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
        openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store+'&MAIN_PRODUCT_ID='+MAIN_PRODUCT_ID);
     }
-    
+    /* old version
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
         console.log('Seçilen Eleman:', el);
@@ -301,8 +301,48 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY,SERIAL_NO:SERIAL_NO});
         el.parentElement.parentElement.remove();
         checkKarmaRequirements();
+    }*/
+    function selectProducts(MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO, el) {
+    const pid = parseInt(PRODUCT_ID, 10);
+    const addQty = Number(QUANTITY) || 0;
+
+    // Seri kontrolü
+    const ishave = SelecttedArr.findIndex(x => parseInt(x.PRODUCT_ID, 10) === pid && x.SERIAL_NO === SERIAL_NO);
+    if (ishave !== -1) {
+        alert('Bu seri numarası zaten seçildi.');
+        return;
     }
-    
+
+    // İstenen miktar (required)
+    const reqRow = requiredProducts.find(x => parseInt(x.PRODUCT_ID, 10) === pid);
+    const requiredAmount = Number(reqRow?.REQUIRED_TOTAL) || 0;
+
+    // Mevcut toplam
+    const currentTotal = SelecttedArr
+        .filter(x => parseInt(x.PRODUCT_ID, 10) === pid)
+        .reduce((s, x) => s + (Number(x.QUANTITY) || 0), 0);
+
+    const newTotal = currentTotal + addQty;
+
+    console.table({ currentTotal, addQty, newTotal, requiredAmount });
+
+    // Miktar kontrolü
+    if (newTotal > requiredAmount) {
+        alert('Bu ürün için gerekli miktardan fazlasını ekleyemezsiniz.');
+        return;
+    }
+
+    // OK -> ekle
+    SelecttedArr.push({
+        MAIN_PRODUCT_ID,
+        PRODUCT_ID: String(pid),
+        QUANTITY: String(addQty),
+        SERIAL_NO
+    });
+
+    el?.parentElement?.parentElement?.remove();
+    checkKarmaRequirements();
+}
     function checkKarmaRequirements(){
         var completedKarmaCount = karmaEmirQuantity;
         var allRequirementsMet = true;
