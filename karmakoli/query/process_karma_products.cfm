@@ -44,10 +44,13 @@ writeDump(result);
 <cfset attributes.dep_out =attributes.PACKAGING_STORE>
 <cfset attributes.dep_in =attributes.PACKAGING_STORE>
 
-<cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis.cfm">
+<cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis_no_relocate.cfm">
+
+<cfquery name=
 
 
-1 Sarf Fişi Yap
+
+1 Sarf Fişi Yap ok
 2 Seri Leri Düş
 3 Üretim Çıkış Fişi Yap
 4 Seri Üret
