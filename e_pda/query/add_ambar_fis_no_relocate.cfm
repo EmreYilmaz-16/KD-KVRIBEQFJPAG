@@ -410,6 +410,7 @@ POZİSYON=SATIRLAR
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
     </cfloop>
+</cfif>
     POZİSYON=SERVİS İMPORT EDİLDİ
    <!----- <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
     <cfloop list="#current_row_list#" index="k">
