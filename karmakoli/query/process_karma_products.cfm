@@ -40,8 +40,8 @@ writeDump(result);
     <cfset "attributes.SHELF_CODE_IN#i#"="">
     <cfset "attributes.SHELF_CODE_OUT#i#"="">
 </cfloop>
-<cfset attributes.DEP_OUT =attributes.PACKAGING_STORE>
-<cfset attributes.DEP_IN =attributes.PACKAGING_STORE>
+<cfset attributes.dep_out =attributes.PACKAGING_STORE>
+<cfset attributes.dep_in =attributes.PACKAGING_STORE>
 
 <cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis.cfm">
 
