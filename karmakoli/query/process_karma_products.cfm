@@ -46,7 +46,7 @@ writeDump(result);
 
 <cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis_no_relocate.cfm">
 
-<cfquery name=
+
 
 
 
