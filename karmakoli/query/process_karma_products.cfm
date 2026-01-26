@@ -49,10 +49,14 @@ writeDump(result);
 <cfset recordEmp = session.ep.userid>
 <cfloop array="#FormData#" index="item">
     <cfif len(item.SERIAL_NO) gt 0>
-         <cfset SERI_NO_SER=item.SERIAL_NO>        
+         <cfset SERI_NO_SER=item.SERIAL_NO>   
+         <cfquery name="getStok" datasource="#dsn3#">
+        SELECT * FROM STOCKS WHERE PRODUCT_ID=#item.PRODUCT_ID#    
+    </cfquery>     
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM #dsn3#.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#item.SERIAL_NO#'
         </cfquery>
+        <cfset STOCK_ID_SER=getStok.STOCK_ID>
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = attributes.process_cat,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_PBS_CCC#-#createUUID()#",WRK_ROW_ID = "#WRK_PBS_CCC#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
     </cfif>
     
@@ -61,6 +65,9 @@ writeDump(result);
         İşlem tamamlandı: #item.PRODUCT_ID# - #item.QUANTITY# <br>
     </cfoutput>
 </cfloop>
+<cfquery name="UP" datasource="#DSN3#">
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
+</cfquery>
 
 
 
