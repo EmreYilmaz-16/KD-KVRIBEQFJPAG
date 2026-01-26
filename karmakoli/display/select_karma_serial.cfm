@@ -49,6 +49,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
             <th>Ürün Kodu</th>
             <th>Ürün</th>
             <th>Stok Miktarı</th>
+            <th>Eklenebilir</th>
         </tr>
     </thead>
     <tbody><!------(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO)------>
@@ -58,8 +59,17 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
                      <td>#PRODUCT_CODE_2#</td>
                 <td>#PRODUCT_CODE#</td>
                 <td>#PRODUCT_NAME#</td>
-                <td><a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.QUANTITY#','',this,'#attributes.modal_id#')">#BKY#</a></td>
-                
+                <td>#BKY#</td>
+                <td>
+                    <cfif BKY gt attributes.REQUIRED_TOTAL>
+                        <a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.REQUIRED_TOTAL#','',this,'#attributes.modal_id#')">#BKY#</a>
+                    <cfelseif BKY lte attributes.REQUIRED_TOTAL and BKY gt 0>
+                        <a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#BKY#','',this,'#attributes.modal_id#')">#BKY#</a>
+                    <cfelse>
+                        0
+                    </cfif>
+
+                </td>
             </tr>
         </cfoutput>
     </tbody>
