@@ -223,7 +223,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                 </tbody>
             </table>
             <div class="form-group">
-                <select class="form-control" id="packaging_store" name="packaging_store">
+                <select class="form-control" id="packaging_store" name="packaging_store" onchange="lockPackagingStore(this)">
                     <option value="">Paketleme Deposu Seçiniz</option>
                     <cfoutput query="getStores">
                         <option value="#DEPO#">#DEPO_ADI#</option>
@@ -277,6 +277,14 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             <cfif currentRow LT getKarmaProducts.recordCount>,</cfif>
         </cfoutput>
     ];
+    
+    function lockPackagingStore(selectElement) {
+        if(selectElement.value !== '') {
+            selectElement.disabled = true;
+            selectElement.style.backgroundColor = '#e9ecef';
+            selectElement.style.cursor = 'not-allowed';
+        }
+    }
     
     function openselectProducts(PRODUCT_ID,QUANTITY,IS_SERIAL_NO,MAIN_PRODUCT_ID,REQUIRED_TOTAL){
         var packaging_store = document.getElementById('packaging_store').value;
