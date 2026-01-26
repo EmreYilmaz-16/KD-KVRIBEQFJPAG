@@ -208,7 +208,10 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                         <tr>
                             <td>#currentRow#</td>
                             <td>#PRODUCT_NAME#</td>
-                            <td><span id="PCK_#PRODUCT_ID#">#QUANTITY#</span> x #getEmirDetail.AMOUNT#</td>
+                            <td>
+                                <span id="PCK_#PRODUCT_ID#" style="color: ##dc3545;">0 / #QUANTITY * getEmirDetail.AMOUNT#</span>
+                                <small style="color: ##6c757d;"> (Her koli: #QUANTITY#)</small>
+                            </td>
                             <td>
                                 <a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#,#getEmirDetail.PRODUCT_ID#)" 
                                    class="karma-action-link" 
@@ -340,7 +343,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     checkKarmaRequirements();
 }
     function checkKarmaRequirements(){
-        var completedKarmaCount = karmaEmirQuantity;
+        var completedKarmaCount = Infinity; // Başlangıçta sonsuz, minimum bulunacak
         var allRequirementsMet = true;
         
         // Her ürün için toplam seçilen miktarı hesapla
@@ -357,31 +360,65 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                 }
             }
             
+            // UI'da göster - seçilen miktarı güncelle
+            var pckElement = document.getElementById('PCK_' + productId);
+            if(pckElement){
+                pckElement.textContent = selectedTotal + ' / ' + requiredTotal;
+                // Renklendirme
+                if(selectedTotal >= requiredTotal){
+                    pckElement.style.color = '#28a745'; // Yeşil
+                    pckElement.style.fontWeight = 'bold';
+                } else if(selectedTotal > 0){
+                    pckElement.style.color = '#ffc107'; // Sarı
+                    pckElement.style.fontWeight = 'bold';
+                } else {
+                    pckElement.style.color = '#dc3545'; // Kırmızı
+                    pckElement.style.fontWeight = 'normal';
+                }
+            }
+            
             // Bu üründen kaç karma koli yapılabilir
             var possibleKarmaFromThisProduct = Math.floor(selectedTotal / quantityPerKarma);
             
-            // En az olanı bul
+            // En az olanı bul (darboğaz)
             if(possibleKarmaFromThisProduct < completedKarmaCount){
                 completedKarmaCount = possibleKarmaFromThisProduct;
             }
             
-            // Gerekli miktar karşılanmadıysa
-            if(selectedTotal != requiredTotal  ){
+            // Gerekli miktar tam olarak karşılanmadıysa
+            if(selectedTotal < requiredTotal){
                 allRequirementsMet = false;
             }
+        }
+        
+        // Sonsuz kaldıysa (hiç ürün yoksa) sıfırla
+        if(completedKarmaCount === Infinity){
+            completedKarmaCount = 0;
         }
         
         var karmaQuantity1 = document.getElementById('KARMA_QUANTITY1');
         var uretBtn = document.getElementById('UretBtn');
         
-        if(allRequirementsMet && completedKarmaCount > 0){
-            karmaQuantity1.value = completedKarmaCount;
+        // Tamamlanan miktar göster
+        karmaQuantity1.value = completedKarmaCount;
+        
+        // Tüm gereksinimler karşılandıysa ve hedef miktara ulaşıldıysa
+        if(allRequirementsMet && completedKarmaCount >= karmaEmirQuantity){
             karmaQuantity1.classList.add('completed');
             uretBtn.style.display = 'block';
             uretBtn.disabled = false;
-        } else {
-            karmaQuantity1.value = 0;
+        } else if(completedKarmaCount > 0) {
+            // Kısmi tamamlanma - sarı göster
             karmaQuantity1.classList.remove('completed');
+            karmaQuantity1.style.color = '#ffc107';
+            karmaQuantity1.style.borderColor = '#ffc107';
+            uretBtn.style.display = 'none';
+            uretBtn.disabled = true;
+        } else {
+            // Hiç tamamlanmamış
+            karmaQuantity1.classList.remove('completed');
+            karmaQuantity1.style.color = '#dc3545';
+            karmaQuantity1.style.borderColor = '#dc3545';
             uretBtn.style.display = 'none';
             uretBtn.disabled = true;
         }
