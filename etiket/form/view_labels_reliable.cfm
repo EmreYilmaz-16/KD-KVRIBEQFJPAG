@@ -622,6 +622,11 @@ CT~~CD,~CC^~CT~
                             <td>
                                 : #TLFORMAT(GETW.WEIGHT)#
                             </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>Oem Numberts</td>
+                            <td>: #oem_numbers#</td>
                         </tr>
                         <tr>
                             <td>Üretim Tarihi</td>
