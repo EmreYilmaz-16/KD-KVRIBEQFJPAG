@@ -409,7 +409,7 @@ POZİSYON=SATIRLAR
         <cfset 'attributes.TAX#k#' = 0>
         <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
     	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
-        <cfset "WRK_PBS_CCC#evaluate("attributes.PRODUCT_ID#k#")#"=evaluate("attributes.WRKK_ROW_ID#k#")>
+        <cfset "WRK_PBS_CCC#evaluate("attributes.PRODUCT_ID#k#")#"=evaluate("attributes.WRK_ROW_ID#k#")>
     </cfloop>
     POZİSYON=SERVİS İMPORT EDİLDİ
     <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
