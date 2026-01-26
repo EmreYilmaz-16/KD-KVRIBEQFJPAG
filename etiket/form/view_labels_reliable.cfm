@@ -446,7 +446,7 @@
                     <cfset URUN_KODU2 = eta_kodu>
                     <cfif listLen(URUNKODU,"-") gt 1>
                         <cfset URUNKODU = listFirst(URUNKODU,"-")>
-                        <cfset URUN_KODU2=listLast(URUNKODU,"-")>
+                        <cfset URUN_KODU2=listLast(URUN_KODU2,"-")>
                     </cfif>
                     
                     <cfset SERINO = seri_no>
