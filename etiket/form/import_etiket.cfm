@@ -259,6 +259,9 @@
                                                         <a href="#request.self#?fuseaction=objects.emptypopup_view_labels&import_id=#import_id#" class="btn btn-sm btn-primary">
                                                             <i class="fas fa-print"></i>
                                                         </a>
+                                                          <a href="#request.self#?fuseaction=objects.emptypopup_view_labels_reliable&import_id=#import_id#" class="btn btn-sm btn-danger" title="Reliable Etiketi Yazdır">
+                                                            <i class="fas fa-print"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             </cfloop>
