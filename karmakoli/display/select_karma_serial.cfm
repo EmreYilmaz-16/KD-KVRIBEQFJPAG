@@ -62,7 +62,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
                 <td>#BKY#</td>
                 <td>
                     <cfif BKY gt attributes.REQUIRED_TOTAL>
-                        <a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.REQUIRED_TOTAL#','',this,'#attributes.modal_id#')">#BKY#</a>
+                        <a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.REQUIRED_TOTAL#','',this,'#attributes.modal_id#')">#attributes.REQUIRED_TOTAL#</a>
                     <cfelseif BKY lte attributes.REQUIRED_TOTAL and BKY gt 0>
                         <a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#BKY#','',this,'#attributes.modal_id#')">#BKY#</a>
                     <cfelse>
