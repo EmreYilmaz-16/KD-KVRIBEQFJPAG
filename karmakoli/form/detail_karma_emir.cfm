@@ -288,16 +288,16 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
         console.log('Seçilen Eleman:', el);
-        var ishave=SelecttedArr.findIndex(item => item.PRODUCT_ID === PRODUCT_ID && item.SERIAL_NO === SERIAL_NO);
+        var ishave=SelecttedArr.findIndex(item => item.PRODUCT_ID === parseInt(PRODUCT_ID) && item.SERIAL_NO === SERIAL_NO);
         if(ishave!=-1){
             alert('Bu seri numarası zaten seçildi.');
             return;
         }
         console.log('Gerekli Ürünler:', requiredProducts);
-        var rquiredAmountE = requiredProducts.find(item => item.PRODUCT_ID === PRODUCT_ID)
+        var rquiredAmountE = requiredProducts.find(item => item.PRODUCT_ID === parseInt(PRODUCT_ID))
         console.log('Gerekli Miktar:', rquiredAmountE);
-        var rquiredAmount = requiredProducts.find(item => item.PRODUCT_ID === PRODUCT_ID).REQUIRED_TOTAL;
-        var currentSelectedAmount = SelecttedArr.filter(item => item.PRODUCT_ID === PRODUCT_ID).reduce((sum, item) => sum + item.QUANTITY, 0);
+        var rquiredAmount = requiredProducts.find(item => item.PRODUCT_ID === parseInt(PRODUCT_ID));
+        var currentSelectedAmount = SelecttedArr.filter(item => item.PRODUCT_ID === parseInt(PRODUCT_ID)).reduce((sum, item) => sum + item.QUANTITY, 0);
         if(currentSelectedAmount + QUANTITY > rquiredAmount){
             alert('Bu ürün için gerekli miktardan fazlasını seçemezsiniz.');
             return;
