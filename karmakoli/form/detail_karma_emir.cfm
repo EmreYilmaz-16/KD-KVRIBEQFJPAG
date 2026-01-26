@@ -318,12 +318,8 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     const requiredAmount = Number(reqRow?.REQUIRED_TOTAL) || 0;
 
     // Mevcut toplam
-    const currentTotal = SelecttedArr
-        .filter(x => parseInt(x.PRODUCT_ID, 10) === pid)
-        .reduce((s, x) => s + (Number(x.QUANTITY) || 0), 0);
-
+    const currentTotal = SelecttedArr.filter(x => parseInt(x.PRODUCT_ID, 10) === pid).reduce((s, x) => s + (Number(x.QUANTITY) || 0), 0);
     const newTotal = currentTotal + addQty;
-
     console.table({ currentTotal, addQty, newTotal, requiredAmount });
 
     // Miktar kontrolü
@@ -332,7 +328,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         return;
     }
 
-    // OK -> ekle
+    
     SelecttedArr.push({
         MAIN_PRODUCT_ID,
         PRODUCT_ID: String(pid),
@@ -356,8 +352,8 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             // Bu ürün için seçilen toplam miktar
             var selectedTotal = 0;
             for(var j = 0; j < SelecttedArr.length; j++){
-                if(SelecttedArr[j].PRODUCT_ID == productId){
-                    selectedTotal += SelecttedArr[j].QUANTITY;
+                if(parseInt(SelecttedArr[j].PRODUCT_ID) == productId){
+                    selectedTotal += parseInt(SelecttedArr[j].QUANTITY);
                 }
             }
             
