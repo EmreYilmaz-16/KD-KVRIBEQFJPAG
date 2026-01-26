@@ -107,7 +107,7 @@
     }
     
     .quantity-input {
-        width: 100%;
+        width: 88%;
         padding: 12px 10px;
         font-size: 24px;
         font-weight: 700;
