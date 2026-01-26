@@ -30,7 +30,16 @@ for(k in grouped){
 
 writeDump(result);
 </cfscript>
-
+<cfset attributes.row_count=arrayLen(result)>
+<cfloop from="1" to="#attributes.row_count#" index="i">
+    <cfquery name="getStok" datasource="#dsn3#">
+        SELECT * FROM STOCKS WHERE PRODUCT_ID=#result[i].PRODUCT_ID#    
+    </cfquery>
+    <cfset "attributes.STOCKID#i#"=getStok.STOCK_ID>
+    <cfset "attributes.AMOUNT#i#"=result[i].QUANTITY>
+    <cfset "attributes.SHELF_CODE_IN#i#"="">
+    <cfset "attributes.SHELF_CODE_OUT#i#"="">
+</cfloop>
 
 
 

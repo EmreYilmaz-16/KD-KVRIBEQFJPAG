@@ -296,6 +296,11 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         emirInput.name='EMIR_ID';
         emirInput.value='<cfoutput>#URL.EMIR_ID#</cfoutput>';
         form.appendChild(emirInput);
+        var storeInput=document.createElement('input');
+        storeInput.type='hidden';
+        storeInput.name='PACKAGING_STORE';
+        storeInput.value=document.getElementById('packaging_store').value;
+        form.appendChild(storeInput);
         var productsInput=document.createElement('input');
         productsInput.type='hidden';
         productsInput.name='SELECTED_PRODUCTS';
