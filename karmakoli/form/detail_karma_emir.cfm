@@ -285,9 +285,15 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
        openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store+'&MAIN_PRODUCT_ID='+MAIN_PRODUCT_ID);
     }
     
-    function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO){
+    function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
+        var ishave=SelecttedArr.findIndex(item => item.PRODUCT_ID === PRODUCT_ID && item.SERIAL_NO === SERIAL_NO);
+        if(ishave!=-1){
+            alert('Bu seri numarası zaten seçildi.');
+            return;
+        }
         SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY,SERIAL_NO:SERIAL_NO});
+        el.parentElement.parentElement.remove();
         checkKarmaRequirements();
     }
     
