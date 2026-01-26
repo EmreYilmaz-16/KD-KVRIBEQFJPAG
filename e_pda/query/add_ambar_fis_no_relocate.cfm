@@ -384,33 +384,7 @@ POZİSYON=SATIRLAR
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')>
             </cfif>
        	</cfif>------>
-         <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
-        	<cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct.SHELF_NUMBER#k#")>  
-          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.SHELF_NUMBER_TXT#k#")> 
-           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct.TO_SHELF_NUMBER#k#")>  
-          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.TO_SHELF_NUMBER_TXT#k#")>
-        <cfelse>
-			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
-                <cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct2.SHELF_NUMBER#k#")>  
-                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct2.SHELF_NUMBER_TXT#k#")> 
-                <cfset 'attributes.TO_SHELF_NUMBER#k#' = ''>  
-                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = ''>
-            <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
-                <cfset 'attributes.SHELF_NUMBER#k#' = ''>  
-                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = ''> 
-                <cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER#k#") >  
-                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER_TXT#k#")>
-            </cfif>
-       	</cfif>
-        <cfset 'attributes.SPECIAL_CODE#k#' = ''>  
-        <cfset 'attributes.SPECT_ID#k#' = Evaluate('SPECT_ID#k#')>  
-        <cfset 'attributes.TAX_PRICE#k#' = ''>  
-        <cfset 'attributes.UNIT_OTHER#k#' = ''>  
-        <cfset 'attributes.WRK_ROW_RELATION_ID#k#' = ''>
-        <cfset 'attributes.TAX#k#' = 0>
-        <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
-    	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
-    </cfloop>
+         
 </cfif>
     POZİSYON=SERVİS İMPORT EDİLDİ
    <!----- <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
@@ -443,7 +417,9 @@ POZİSYON=SATIRLAR
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
         <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
       </cfif>
-    </cfif>----->
+    </cfif>
+    </cfloop>
+    ----->
 <!---------
     <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
