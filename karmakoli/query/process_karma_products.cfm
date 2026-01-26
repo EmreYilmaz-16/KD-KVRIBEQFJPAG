@@ -5,6 +5,33 @@
 
 <cfset attributes.process_cat=88>
 
+<cfscript>
+grouped = {}; // geçici struct
+
+for(item in FormData){
+
+    pid = item.PRODUCT_ID;
+
+    if( !structKeyExists(grouped, pid) ){
+        grouped[pid] = {
+            PRODUCT_ID = pid,
+            QUANTITY   = 0
+        };
+    }
+
+    grouped[pid].QUANTITY += item.QUANTITY;
+}
+
+// struct → array
+result = [];
+for(k in grouped){
+    arrayAppend(result, grouped[k]);
+}
+
+writeDump(result);
+</cfscript>
+
+
 
 
 1 Sarf Fişi Yap
