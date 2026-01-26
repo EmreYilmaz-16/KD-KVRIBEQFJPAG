@@ -208,7 +208,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                         <tr>
                             <td>#currentRow#</td>
                             <td>#PRODUCT_NAME#</td>
-                            <td>#QUANTITY# x #getEmirDetail.AMOUNT#</td>
+                            <td><span id="PCK_#PRODUCT_ID#">#QUANTITY#</span> x #getEmirDetail.AMOUNT#</td>
                             <td>
                                 <a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#,#getEmirDetail.PRODUCT_ID#)" 
                                    class="karma-action-link" 
@@ -293,6 +293,13 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             alert('Bu seri numarası zaten seçildi.');
             return;
         }
+        var rquiredAmount = requiredProducts.find(item => item.PRODUCT_ID === PRODUCT_ID).REQUIRED_TOTAL;
+        var currentSelectedAmount = SelecttedArr.filter(item => item.PRODUCT_ID === PRODUCT_ID).reduce((sum, item) => sum + item.QUANTITY, 0);
+        if(currentSelectedAmount + QUANTITY > rquiredAmount){
+            alert('Bu ürün için gerekli miktardan fazlasını seçemezsiniz.');
+            return;
+        }
+        
         SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY,SERIAL_NO:SERIAL_NO});
         el.parentElement.parentElement.remove();
         checkKarmaRequirements();

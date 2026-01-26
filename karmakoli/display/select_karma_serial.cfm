@@ -18,7 +18,7 @@ HAVING DEPARTMENT_ID=#listFirst(attributes.PACKAGING_STORE,"-")# AND LOCATION_ID
     <tbody><!------(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO)------>
         <cfoutput query="getSerials">
             <tr >
-                <td><a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.QUANTITY#','#SERIAL_NO#',this)">#SERIAL_NO#</a></td>
+                <td><a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.QUANTITY#','#SERIAL_NO#',this,'#attributes.modal_id#')">#SERIAL_NO#</a></td>
             </tr>
         </cfoutput>
     </tbody>
