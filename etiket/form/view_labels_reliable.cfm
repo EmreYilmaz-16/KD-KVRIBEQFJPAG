@@ -431,10 +431,14 @@
                     <!--- Ürün bilgisini bir kez al --->
                     
                     <cfquery name="getStok" datasource="#variables.dsn#">
-                        SELECT TOP 1 PRODUCT_NAME 
+                        SELECT TOP 1 PRODUCT_NAME,PRODUCT_ID 
                         FROM PBS_GETSTOCK 
                         WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
                     </cfquery>
+                    <cfquery name="GETW" datasource="#DSN3#">
+                        SELECT TOP 50 WEIGHT FROM w3Qa_1.PRODUCT_UNIT WHERE PRODUCT_ID=#getStok.PRODUCT_ID#
+                    </cfquery>
+                    
                     
                     <!--- Etiket verileri --->
                     <cfset TARIH = "#DateFormat(uretim_tarihi, 'mm/yy')# #DateFormat(paket_tarihi, 'mm/yy')#">
@@ -518,17 +522,17 @@ CT~~CD,~CC^~CT~
 ^FT319,154
 ^A0N,23,16^FD#URUN_KODU2#^FS
 ^FO538,158
-^BQN,2,4^FDLA,SK-R629.006.0081_SN_6290001_TRH_07/25_XXXXX^FS
+^BQN,2,4^FDLA,#qr_data#^FS
 ^FT251,211
-^A0N,23,16^FDP629.006^FS
+^A0N,23,16^FD#URUNKODU#^FS
 ^FT206,355
-^A0N,23,16^FD0081^FS
+^A0N,23,16^FD#URUN_KODU2#^FS
 ^FT332,355
 ^A0N,23,16^FD1 ST/PC^FS
 ^FT467,355
-^A0N,23,16^FD07/25^FS
+^A0N,23,16^FD#DateFormat(uretim_tarihi, 'mm/yy')#^FS
 ^FT603,355
-^A0N,23,16^FD3,830^FS
+^A0N,23,16^FD#TLFORMAT(GETW.WEIGHT)#^FS
 ^PQ1,0,1,Y
 ^XZ
 
@@ -536,6 +540,7 @@ CT~~CD,~CC^~CT~
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
                 <div >
+                    
                     <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom:20px;">
                         <tr>
                             <td>
@@ -550,6 +555,14 @@ CT~~CD,~CC^~CT~
                                 : #URUNKODU#
                             </td>
                             
+                        </tr>
+                        <tr>
+                            <td>
+                                URUN_KODU2
+                            </td>
+                            <td>
+                                : #URUN_KODU2#
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -572,7 +585,7 @@ CT~~CD,~CC^~CT~
                                 Barkod
                             </td>
                             <td>
-                                : #BARKODE#
+                                : #barkod#
                             </td>
                         </tr>
                         <tr>
@@ -582,6 +595,19 @@ CT~~CD,~CC^~CT~
                             <td>
                                 : #qr_data#
                             </td>
+                        
+                        </tr>
+                        <tr>
+                            <td>
+                                WEIGHT
+                            </td>
+                            <td>
+                                : #TLFORMAT(GETW.WEIGHT)#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Üretim Tarihi</td>
+                            <td>: #DateFormat(uretim_tarihi, 'mm/yy')#</td>
                         </tr>
                     </table>
 
