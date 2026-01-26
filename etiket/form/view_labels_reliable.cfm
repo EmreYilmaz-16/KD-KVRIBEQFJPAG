@@ -451,7 +451,7 @@
                     
                     <cfset SERINO = seri_no>
                     <cfset BARKODE = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
-                    <
+                    
                     <!--- HTML Etiket --->
                     <div class="mini-label">
                         
