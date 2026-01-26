@@ -78,7 +78,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 </cfif>
 
 
-<cfdump var="#getSerials#">
+
 
 
     <button class="btn btn-danger" onclick="closeBoxDraggable(<cfoutput>#attributes.modal_id#</cfoutput>)">Kapat</button>
