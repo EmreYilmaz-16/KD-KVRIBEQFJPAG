@@ -287,6 +287,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
+        console.log('Seçilen Eleman:', el);
         var ishave=SelecttedArr.findIndex(item => item.PRODUCT_ID === PRODUCT_ID && item.SERIAL_NO === SERIAL_NO);
         if(ishave!=-1){
             alert('Bu seri numarası zaten seçildi.');
