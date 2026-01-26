@@ -540,7 +540,7 @@ CT~~CD,~CC^~CT~
                     <cfset ZPL_DATA_FULL = ZPL_DATA_FULL & zd>
                     
                 <div >
-                    <table>
+                    <table border="1" cellpadding="5" cellspacing="0">
                         <tr>
                             <td>
 
@@ -623,7 +623,7 @@ CT~~CD,~CC^~CT~
                         </tr>
                     </table>
      </td>
-     <td>
+     <td style="vertical-align:top;">
         <cftry>
                                         <cf_pbs_barcode 
                                             value="#qr_data#" 
