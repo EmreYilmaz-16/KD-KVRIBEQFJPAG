@@ -298,6 +298,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         console.log('Gerekli Miktar:', rquiredAmountE);
         var rquiredAmount = requiredProducts.find(item => item.PRODUCT_ID === parseInt(PRODUCT_ID));
         var currentSelectedAmount = SelecttedArr.filter(item => item.PRODUCT_ID === parseInt(PRODUCT_ID)).reduce((sum, item) => sum + item.QUANTITY, 0);
+        console.log('Mevcut Seçilen Miktar:', currentSelectedAmount);
         if(currentSelectedAmount + QUANTITY > rquiredAmount){
             alert('Bu ürün için gerekli miktardan fazlasını seçemezsiniz.');
             return;
