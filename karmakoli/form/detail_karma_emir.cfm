@@ -276,7 +276,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
     ];
     
     function openselectProducts(PRODUCT_ID,QUANTITY,IS_SERIAL_NO){
-       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO,'Karma Ürün Seçimi',600,400);
+       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO);
     }
     
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY){
