@@ -58,6 +58,7 @@ writeDump(result);
         </cfquery>
         <cfset STOCK_ID_SER=getStok.STOCK_ID>
         <cfset data = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 0,PROCESS_CAT = attributes.process_cat,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = #session.ep.period_id#,DEPARTMENT_ID = attributes.DEPARTMENT_OUT,LOCATION_ID = attributes.LOCATION_OUT,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#-#createUUID()#",WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = ""}>
+    <cfset result_svc = svc.saveServiceGuaranty(data, recordEmp)>
     </cfif>
     
     
