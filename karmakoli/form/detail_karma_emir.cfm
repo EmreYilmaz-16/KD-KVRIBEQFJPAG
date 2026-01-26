@@ -210,7 +210,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                             <td>#PRODUCT_NAME#</td>
                             <td>#QUANTITY# x #getEmirDetail.AMOUNT#</td>
                             <td>
-                                <a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#)" 
+                                <a href="javascript:openselectProducts(#PRODUCT_ID#,#QUANTITY#,#IS_SERIAL_NO#,#getEmirDetail.PRODUCT_ID#)" 
                                    class="karma-action-link" 
                                    title="Seç">Seç</a>
                             </td>
@@ -275,18 +275,18 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         </cfoutput>
     ];
     
-    function openselectProducts(PRODUCT_ID,QUANTITY,IS_SERIAL_NO){
+    function openselectProducts(PRODUCT_ID,QUANTITY,IS_SERIAL_NO,MAIN_PRODUCT_ID){
         var packaging_store = document.getElementById('packaging_store').value;
         if(packaging_store == ''){
             alert('Lütfen paketleme deposu seçiniz.');
             return;
         }
 
-       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store);
+       openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store+'&MAIN_PRODUCT_ID=');
     }
     
-    function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY){
-        SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY});
+    function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO){
+        SelecttedArr.push({MAIN_PRODUCT_ID:MAIN_PRODUCT_ID,PRODUCT_ID:PRODUCT_ID,QUANTITY:QUANTITY,SERIAL_NO:SERIAL_NO});
         checkKarmaRequirements();
     }
     

@@ -9,7 +9,24 @@ GROUP BY STOCK_ID,DEPARTMENT_ID,LOCATION_ID,SERIAL_NO
 HAVING DEPARTMENT_ID=#listFirst(attributes.PACKAGING_STORE,"-")# AND LOCATION_ID=#listLast(attributes.PACKAGING_STORE,"-")# 
 ) AS TT WHERE TT.BKY>0
         </cfquery>
-    </cfif>
+<cf_grid_list>
+    <thead>
+        <tr>
+            <th>Seri No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <cfoutput query="getSerials">
+            <tr ondblclick="selectKarmaSerialNo('#SERIAL_NO#')">
+                <td>#SERIAL_NO#</td>
+            </tr>
+        </cfoutput>
+    </tbody>
+    
+</cf_grid_list>    
+
+</cfif>
+
 
 <cfdump var="#getSerials#">
 
