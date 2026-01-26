@@ -365,7 +365,6 @@ POZİSYON=SATIRLAR
         <cfset 'attributes.ROW_UNIQUE_RELATION_ID#k#' = ''>  
         <cfset 'attributes.ROW_WIDTH#k#' = ''>
         <cfset 'attributes.ROW_DEPTH#k#' = ''>
-    </cfloop>
         <!-----<cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
         	<cfset 'attributes.SHELF_NUMBER#k#' = Evaluate('SHELF_ID_#k#')>  
           	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')> 
@@ -384,10 +383,35 @@ POZİSYON=SATIRLAR
                 <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = Evaluate('SHELF_#k#')>
             </cfif>
        	</cfif>------>
-         
-</cfif>
+         <cfif isdefined('attributes.change_shelf_fis')> <!---Raf Değiştirme Fişinden Geliyorsa--->
+        	<cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct.SHELF_NUMBER#k#")>  
+          	<cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.SHELF_NUMBER_TXT#k#")> 
+           	<cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct.TO_SHELF_NUMBER#k#")>  
+          	<cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct.TO_SHELF_NUMBER_TXT#k#")>
+        <cfelse>
+			<cfif isdefined('attributes.tersfis')> <!---Ambardan Mal Kabule Fişinden Geliyorsa--->
+                <cfset 'attributes.SHELF_NUMBER#k#' = evaluate("AttStruct2.SHELF_NUMBER#k#")>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = evaluate("AttStruct2.SHELF_NUMBER_TXT#k#")> 
+                <cfset 'attributes.TO_SHELF_NUMBER#k#' = ''>  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = ''>
+            <cfelse> <!---Mal Kabulden Ambara Fişinden Geliyorsa--->
+                <cfset 'attributes.SHELF_NUMBER#k#' = ''>  
+                <cfset 'attributes.SHELF_NUMBER_TXT#k#' = ''> 
+                <cfset 'attributes.TO_SHELF_NUMBER#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER#k#") >  
+                <cfset 'attributes.TO_SHELF_NUMBER_TXT#k#' = evaluate("AttStruct3.TO_SHELF_NUMBER_TXT#k#")>
+            </cfif>
+       	</cfif>
+        <cfset 'attributes.SPECIAL_CODE#k#' = ''>  
+        <cfset 'attributes.SPECT_ID#k#' = Evaluate('SPECT_ID#k#')>  
+        <cfset 'attributes.TAX_PRICE#k#' = ''>  
+        <cfset 'attributes.UNIT_OTHER#k#' = ''>  
+        <cfset 'attributes.WRK_ROW_RELATION_ID#k#' = ''>
+        <cfset 'attributes.TAX#k#' = 0>
+        <cfset 'attributes.SPECT_NAME#k#' = Evaluate('SPECT_NAME#k#')>
+    	<cfset 'attributes.WRK_ROW_ID#k#' = 'EZG'&#DateFormat(Now(),'YYYYMMDD')# & #TimeFormat(Now(),'HHmmssL')#>
+    </cfloop>
     POZİSYON=SERVİS İMPORT EDİLDİ
-   <!----- <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
+    <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
     <cfloop list="#current_row_list#" index="k">
         <cfset WRK_ROW_ID_SER=evaluate('attributes.WRK_ROW_ID#k#')>
         <cfset STOCK_ID_SER=evaluate('attributes.STOCK_ID#k#') >
@@ -418,8 +442,6 @@ POZİSYON=SATIRLAR
         <cfset data2 = {STOCK_ID = STOCK_ID_SER,SERIAL_NO = "#SERI_NO_SER#",LOT_NO = "#GETSER.LOT_NO#",IN_OUT = 1,PROCESS_CAT = 113,PROCESS_ID = 0,PROCESS_NO = "",PERIOD_ID = session.ep.period_id,DEPARTMENT_ID = attributes.DEPARTMENT_IN,LOCATION_ID = attributes.LOCATION_IN,IS_SARF = 0,IS_SERI_SONU = 0,WRK_ID = "#WRK_ROW_ID_SER#-#createUUID()#",WRK_ROW_ID = "#WRK_ROW_ID_SER#",UNIT_ROW_QUANTITY = 1,SHELF_NUMBER = "#GIRIS_RAF_ID#"}>
       </cfif>
     </cfif>
-    </cfloop>
-    ----->
 <!---------
     <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
@@ -430,11 +452,29 @@ POZİSYON=SATIRLAR
     ----------->
 <cfset recordEmp = session.ep.userid>
 
-<!-----
+
 <cfset result = svc.saveServiceGuaranty(data, recordEmp)>
 <cfset result2 = svc.saveServiceGuaranty(data2, recordEmp)><!-------->
----->
+
+<cfdump var="#result#">
+<cfif result>
     <cfoutput>Kayıt başarılı!</cfoutput>
-    
+<cfelse>
+
+    <cfoutput>Kayıt sırasında bir hata oluştu.</cfoutput>
+</cfif>
+
+    </cfloop>
+
+    FSDFSDF
+
+
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
+<cfquery name="UP" datasource="#DSN3#">
+    UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
+</cfquery>
+
+
+	<cflocation url="#request.self#?fuseaction=pda.pda_welcome" addtoken="No">
+<cfabort>
 </cfif>
