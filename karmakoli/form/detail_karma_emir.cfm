@@ -1,5 +1,5 @@
 <cfquery name="getEmirDetail" datasource="#dsn3#">
-    SELECT KARMA_EMIR.*,STOCKS.PRODUCT_NAME FROM KARMA_EMIR 
+    SELECT KARMA_EMIR.*,STOCKS.PRODUCT_NAME,STOCKS.STOCK_ID FROM KARMA_EMIR 
     LEFT JOIN STOCKS ON KARMA_EMIR.PRODUCT_ID = STOCKS.PRODUCT_ID
     WHERE KARMA_EMIR_ID = <cfqueryparam value="#URL.EMIR_ID#" cfsqltype="cf_sql_integer">
 </cfquery>
@@ -262,7 +262,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             <button type="button" 
                     id="UretBtn" 
                     class="karma-submit-btn" 
-                    onclick="Uret()" 
+                    onclick="Uret(<cfoutput>#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#</cfoutput>)" 
                     style="display:none;">Seçilen Ürünleri Ekle</button>
         </div>
     </div>
@@ -295,7 +295,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
        openBoxDraggable('index.cfm?fuseaction=product.popup_select_karma_serialno&PRODUCT_ID='+PRODUCT_ID+'&QUANTITY='+QUANTITY+'&IS_SERIAL_NO='+IS_SERIAL_NO+'&PACKAGING_STORE='+packaging_store+'&MAIN_PRODUCT_ID='+MAIN_PRODUCT_ID+'&REQUIRED_TOTAL='+REQUIRED_TOTAL);
     }
-    function Uret() {
+    function Uret(produced_pid,produced_stockid) {
         var form=document.createElement('form');
         form.method='post';
         form.action='index.cfm?fuseaction=objects.emptypopup_process_add_karma_emir_products';
@@ -309,6 +309,21 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         storeInput.name='PACKAGING_STORE';
         storeInput.value=document.getElementById('packaging_store').value;
         form.appendChild(storeInput);
+        var KARMA_QUANTITY1Input=document.createElement('input');
+        KARMA_QUANTITY1Input.type='hidden';
+        KARMA_QUANTITY1Input.name='uretim_miktari';
+        KARMA_QUANTITY1Input.value=document.getElementById('KARMA_QUANTITY1').value;
+        form.appendChild(KARMA_QUANTITY1Input);
+        var producedPidInput=document.createElement('input');
+        producedPidInput.type='hidden';
+        producedPidInput.name='produced_pid';
+        producedPidInput.value=produced_pid;
+        form.appendChild(producedPidInput);
+        var producedStockIdInput=document.createElement('input');
+        producedStockIdInput.type='hidden';
+        producedStockIdInput.name='produced_stockid';
+        producedStockIdInput.value=produced_stockid;
+        form.appendChild(producedStockIdInput);        
         var productsInput=document.createElement('input');
         productsInput.type='hidden';
         productsInput.name='SELECTED_PRODUCTS';
