@@ -3,7 +3,8 @@
 <cfdump var="#FormData#">
 <cfdump var="#FormData#" label="FormData">
 
-<cfset attributes.process_cat=111>
+<cfset attributes.process_cat=88>
+<cfset attributes.process_type_pbs=111>
 
 <cfscript>
 grouped = {}; // geçici struct
@@ -62,7 +63,7 @@ writeDump(result);
             SERIAL_NO = "#SERI_NO_SER#",
             LOT_NO = "#GETSER.LOT_NO#",
             IN_OUT = 0,
-            PROCESS_CAT = attributes.process_cat,
+            PROCESS_CAT = attributes.process_type_pbs,
             PROCESS_ID = 0,
             PROCESS_NO = "",
             PERIOD_ID = #session.ep.period_id#,
