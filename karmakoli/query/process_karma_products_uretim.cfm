@@ -7,6 +7,7 @@
 <cfset attributes.AMOUNT1=attributes.uretim_miktari>
 <cfset attributes.dep_out =attributes.PACKAGING_STORE>
 <cfset attributes.dep_in =attributes.PACKAGING_STORE>
+<cfset attributes.serino1="">
 <cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis_no_relocate.cfm">
 <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 <cfset recordEmp = session.ep.userid>
