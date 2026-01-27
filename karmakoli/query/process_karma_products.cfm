@@ -71,8 +71,8 @@ writeDump(result);
             LOCATION_ID = attributes.LOCATION_OUT,
             IS_SARF = 1,
             IS_SERI_SONU = 0,
-            WRK_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#-#createUUID()#",
-            WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#",
+            WRK_ID = "#evaluate("WRK_PBS_CCC#attributes.produced_pid#")#-#createUUID()#",
+            WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#attributes.produced_pid#")#",
             UNIT_ROW_QUANTITY = 1,
             SHELF_NUMBER = ""}>
     <cfset result_svc = svc.saveServiceGuaranty(data, recordEmp)>
