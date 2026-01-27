@@ -12,7 +12,7 @@
 <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
 <cfset recordEmp = session.ep.userid>
 <cfloop from="1" to="#attributes.uretim_miktari#" index="i">
-    <cfset SERI_NO_SER =generateSerialNo("REL", attributes.produced_pid)>
+    <cfset SERI_NO_SER =generateSerialNo("REL", attributes.produced_stockid)>
     <cfset data = {
         STOCK_ID = attributes.STOCKID1,
         SERIAL_NO = "#SERI_NO_SER#",
