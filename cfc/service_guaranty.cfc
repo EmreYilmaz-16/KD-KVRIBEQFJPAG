@@ -101,7 +101,7 @@
                     <cfqueryparam value="#arguments.data.IS_RETURN#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.IS_RMA#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.IS_SERVICE#" cfsqltype="cf_sql_bit">,
-                    <cfqueryparam value="#arguments.data.SALE_COMPANY_ID#" cfsqltype="cf_sql_integer">
+                    <cfqueryparam value="#arguments.data.SALE_COMPANY_ID#" cfsqltype="cf_sql_integer">,
                     <cfqueryparam value="#arguments.data.UNIT_TYPE#" cfsqltype="cf_sql_integer">
 
                 )
