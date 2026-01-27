@@ -24,7 +24,21 @@
         <cfset var isSale     = (arguments.data.IN_OUT EQ 0 ? 1 : 0)>
         <cfset var unitType   = (arguments.data.IN_OUT EQ 1 ? 1 : 0)>
         <cfset var nowDate    = now() />
-
+        <cfif isdefined("arguments.data.IS_RETURN") EQ false>
+            <cfset arguments.data.IS_RETURN = 0>
+        </cfif>
+        <cfif isdefined("arguments.data.IS_RMA") EQ false>
+            <cfset arguments.data.IS_RMA = 0>
+        </cfif>
+        <cfif isdefined("arguments.data.IS_SERVICE") EQ false>
+            <cfset arguments.data.IS_SERVICE = 0>
+        </cfif>
+         <cfif isdefined("arguments.data.SALE_COMPANY_ID") EQ false>
+            <cfset arguments.data.SALE_COMPANY_ID = -1>
+        </cfif>
+          <cfif isdefined("arguments.data.UNIT_TYPE") EQ false>
+            <cfset arguments.data.UNIT_TYPE = 1>
+        </cfif>
         <!--- INSERT işlemi --->
         <cftry>
             <cfquery name="q1" datasource="#dsn3#" result="queryResult">
@@ -50,7 +64,12 @@
                     WRK_ROW_ID,
                     UNIT_TYPE,
                     UNIT_ROW_QUANTITY,
-                    SHELF_NUMBER
+                    SHELF_NUMBER,
+                    IS_RETURN,
+                    IS_RMA,
+                    IS_SERVICE,
+                    SALE_COMPANY_ID,
+                    UNIT_TYPE
                 )
                 VALUES
                 (
@@ -79,6 +98,12 @@
                     <cfelse>
                         <cfqueryparam null="true" cfsqltype="cf_sql_integer">
                     </cfif>
+                    <cfqueryparam value="#arguments.data.IS_RETURN#" cfsqltype="cf_sql_bit">,
+                    <cfqueryparam value="#arguments.data.IS_RMA#" cfsqltype="cf_sql_bit">,
+                    <cfqueryparam value="#arguments.data.IS_SERVICE#" cfsqltype="cf_sql_bit">,
+                    <cfqueryparam value="#arguments.data.SALE_COMPANY_ID#" cfsqltype="cf_sql_integer">
+                    <cfqueryparam value="#arguments.data.UNIT_TYPE#" cfsqltype="cf_sql_integer">
+
                 )
             </cfquery>
             <cfif arguments.fromApp eq "Sayim">
