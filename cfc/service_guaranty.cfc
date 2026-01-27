@@ -94,9 +94,9 @@
                     <cfqueryparam value="#unitType#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.UNIT_ROW_QUANTITY#" cfsqltype="cf_sql_decimal" scale="2">,
                     <cfif len(trim(arguments.data.SHELF_NUMBER)) AND isNumeric(arguments.data.SHELF_NUMBER) AND val(arguments.data.SHELF_NUMBER) NEQ 0>
-                        <cfqueryparam value="#val(arguments.data.SHELF_NUMBER)#" cfsqltype="cf_sql_integer">
+                        <cfqueryparam value="#val(arguments.data.SHELF_NUMBER)#" cfsqltype="cf_sql_integer">,
                     <cfelse>
-                        <cfqueryparam null="true" cfsqltype="cf_sql_integer">
+                        <cfqueryparam null="true" cfsqltype="cf_sql_integer">,
                     </cfif>
                     <cfqueryparam value="#arguments.data.IS_RETURN#" cfsqltype="cf_sql_bit">,
                     <cfqueryparam value="#arguments.data.IS_RMA#" cfsqltype="cf_sql_bit">,
