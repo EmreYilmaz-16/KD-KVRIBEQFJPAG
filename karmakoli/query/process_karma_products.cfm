@@ -86,7 +86,7 @@ writeDump(result);
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
-
+<cflocation url="index.cfm?fuseaction=objects.emptypopup_process_karma_uretim&produced_stockid=#attributes.produced_stockid#&uretim_miktari=#attributes.uretim_miktari#&PACKAGING_STORE=#attributes.PACKAGING_STORE#" addtoken="false">
 
 
 
