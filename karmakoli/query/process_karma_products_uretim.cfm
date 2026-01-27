@@ -34,7 +34,9 @@
         IS_RMA = 0,
         IS_SERVICE = 0,
         SALE_COMPANY_ID = -1,
-        UNIT_TYPE = 1
+        UNIT_TYPE = 1,
+        UNIT_ROW_QUANTITY = 1,
+        SHELF_NUMBER = ""
     }>
     <cfset result_svc=svc.saveServiceGuaranty(data, recordEmp)>
 
