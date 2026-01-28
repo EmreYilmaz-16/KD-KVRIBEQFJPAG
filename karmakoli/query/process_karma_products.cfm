@@ -50,11 +50,12 @@ writeDump(result);
 <cfset krmsvc = createObject("component", "AddOns.Partner.cfc.karmakoliService")>
 <cfset recordEmp = session.ep.userid>
 <cfloop array="#FormData#" index="item">
+      <cfquery name="getStok" datasource="#dsn3#">
+        SELECT * FROM STOCKS WHERE PRODUCT_ID=#item.PRODUCT_ID#    
+    </cfquery>
     <cfif len(item.SERIAL_NO) gt 0>
          <cfset SERI_NO_SER=item.SERIAL_NO>   
-         <cfquery name="getStok" datasource="#dsn3#">
-        SELECT * FROM STOCKS WHERE PRODUCT_ID=#item.PRODUCT_ID#    
-    </cfquery>     
+            
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM #dsn3#.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#item.SERIAL_NO#'
         </cfquery>
