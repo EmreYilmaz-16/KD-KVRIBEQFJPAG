@@ -13,7 +13,7 @@
   SELECT  (  SELECT *,#getEmirDetail.PRODUCT_ID# AS MAIN_PRODUCT_ID  FROM KARMA_EMIR_ROWS WHERE EMIR_ID=#URL.EMIR_ID# FOR JSON PATH) AS SEL_PROD 
 </cfquery>
 <script>
-    var SELECTED_PRODCT_ARRAY=<cfoutput>#getSelectedProducts#</cfoutput>
+    var SELECTED_PRODCT_ARRAY=<cfoutput>#getSelectedProducts.SEL_PROD#</cfoutput>
 </script>
 
 <style>
