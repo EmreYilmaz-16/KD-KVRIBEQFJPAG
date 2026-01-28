@@ -352,6 +352,27 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         form.submit();
 
     }
+    function removeSelectedProduct(PID,SERIAL_NO,modal_id){
+        var index=SelecttedArr.findIndex(item => parseInt(item.PRODUCT_ID) === parseInt(PID) && item.SERIAL_NO === SERIAL_NO);
+        if(index!=-1){
+            SelecttedArr.splice(index,1);
+            checkKarmaRequirements();
+            // Satırı kaldır
+            var tb1=document.getElementById('tb1');
+            for(var i=0;i<tb1.rows.length;i++){
+                var row=tb1.rows[i];
+                var rowPID=row.getAttribute('data-product-id');
+                var rowSERI=row.getAttribute('data-serial-no');
+                if(parseInt(rowPID)===parseInt(PID) && rowSERI===SERIAL_NO){
+                    tb1.deleteRow(i);
+                    break;
+                }
+            }
+            
+        }
+    }
+
+    
     /* old version
     function selectProducts(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO,el){
         console.log('Seçilen Ürün:', MAIN_PRODUCT_ID, PRODUCT_ID, QUANTITY, SERIAL_NO);
