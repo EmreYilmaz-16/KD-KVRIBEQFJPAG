@@ -78,6 +78,26 @@ END
     )
 </cfquery>
 
+<cfquery name="createKarmaEmirRows" datasource="#dsn3#">
+    IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='KARMA_EMIR_ROWS_HISTORY' AND xtype='U')
+    CREATE TABLE KARMA_EMIR_ROWS_HISTORY (
+        HISTORY_ID INT PRIMARY KEY IDENTITY (1,1),
+        ROW_ID INT ,
+        EMIR_ID INT,
+        SERIAL_NO NVARCHAR(150),
+        PRODUCT_ID INT,
+        STOCK_ID INT,
+        QUANTITY INT,
+        FIS_ID INT,
+        FIS_PERIOD_ID INT,
+        RECORD_DATE DATETIME,
+        RECORD_EMP INT,
+        FIS_WRK_ROW_ID NVARCHAR(150),
+        SCN_WRK_ID NVARCHAR(150)
+
+    )
+</cfquery>
+
 
 <cfquery name="addParams" datasource="#dsn#">
         IF NOT EXISTS (
