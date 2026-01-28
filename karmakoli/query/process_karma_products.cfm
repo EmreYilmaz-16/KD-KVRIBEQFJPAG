@@ -47,6 +47,7 @@ writeDump(result);
 
 <cfinclude template="/AddOns/Partner/e_pda/query/add_ambar_fis_no_relocate.cfm">
 <cfset svc = createObject("component", "AddOns.Partner.cfc.service_guaranty")>
+<cfset krmsvc = createObject("component", "AddOns.Partner.cfc.karmakoliService")>
 <cfset recordEmp = session.ep.userid>
 <cfloop array="#FormData#" index="item">
     <cfif len(item.SERIAL_NO) gt 0>
@@ -64,8 +65,8 @@ writeDump(result);
             LOT_NO = "#GETSER.LOT_NO#",
             IN_OUT = 0,
             PROCESS_CAT = attributes.process_type_pbs,
-            PROCESS_ID = 0,
-            PROCESS_NO = "",
+            PROCESS_ID = #PBS_FIS_ID#,
+            PROCESS_NO = "#PBS_FIS_NO#",
             PERIOD_ID = #session.ep.period_id#,
             DEPARTMENT_ID = attributes.DEPARTMENT_OUT,
             LOCATION_ID = attributes.LOCATION_OUT,
@@ -74,8 +75,21 @@ writeDump(result);
             WRK_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#-#createUUID()#",
             WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#",
             UNIT_ROW_QUANTITY = 1,
-            SHELF_NUMBER = ""}>
+            SHELF_NUMBER = "",
+        }>
     <cfset result_svc = svc.saveServiceGuaranty(data, recordEmp)>
+        <cfelse>
+            <cfset data = {
+                EMIR_ID = #attributes.EMIR_ID#,
+                SERIAL_NO = "",
+                PRODUCT_ID = item.PRODUCT_ID,
+                STOCK_ID = #getStok.STOCK_ID#,
+                UNIT_ROW_QUANTITY = item.QUANTITY,
+                PERIOD_ID = #session.ep.period_id#,
+                WRK_ID = "",
+                WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#",
+                FIS_ID = #PBS_FIS_ID#}>
+        <cfset result_krm = krmsvc.addKarmaKoliRows(data, recordEmp)>
     </cfif>
     
     
