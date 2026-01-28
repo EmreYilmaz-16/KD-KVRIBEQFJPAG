@@ -13,7 +13,20 @@
   SELECT  (  SELECT *,#getEmirDetail.PRODUCT_ID# AS MAIN_PRODUCT_ID  FROM KARMA_EMIR_ROWS WHERE EMIR_ID=#URL.EMIR_ID# FOR JSON PATH) AS SEL_PROD 
 </cfquery>
 <script>
-    var SELECTED_PRODCT_ARRAY=<cfoutput>#getSelectedProducts.SEL_PROD#</cfoutput>
+    var SELECTED_PRODCT_ARRAY=<cfoutput>#getSelectedProducts.SEL_PROD#</cfoutput>;
+    $(document).ready(function(){
+        for (let index = 0; index < SELECTED_PRODCT_ARRAY.length; index++) {
+            var e=SELECTED_PRODCT_ARRAY[index];
+            var SaElem=new Object();
+            SaElem.MAIN_PRODUCT_ID=e.MAIN_PRODUCT_ID+''
+            SaElem.PRODUCT_ID=e.PRODUCT_ID+''
+            SaElem.QUANTITY=e.QUANTITY+'';
+            SaElem.SERIAL_NO=e.SERIAL_NO
+            SelecttedArr.push(SaElem)
+        }
+    });
+
+
 </script>
 
 <style>
