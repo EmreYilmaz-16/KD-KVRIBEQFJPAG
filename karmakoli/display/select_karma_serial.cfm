@@ -78,7 +78,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 </cfif>
 <script>
     $(document).ready(function(){
-        console.table(SelecttedArr);
+        console.table(SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>'));
     });
 </script>
 
