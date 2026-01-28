@@ -9,6 +9,12 @@
     LEFT JOIN PRODUCT AS P ON KP.PRODUCT_ID=P.PRODUCT_ID
       WHERE KP.MAIN_PRODUCT_ID=<cfqueryparam value="#getEmirDetail.PRODUCT_ID#" cfsqltype="cf_sql_integer">
 </cfquery>
+<cfquery name="getSelectedProducts" datasource="#dsn3#">
+  SELECT  (  SELECT *,#getEmirDetail.PRODUCT_ID# AS MAIN_PRODUCT_ID  FROM KARMA_EMIR_ROWS WHERE EMIR_ID=#URL.EMIR_ID# FOR JSON PATH) AS SEL_PROD 
+</cfquery>
+<script>
+    var SELECTED_PRODCT_ARRAY=<cfoutput>#getSelectedProducts#</cfoutput>
+</script>
 
 <style>
     .karma-container {
