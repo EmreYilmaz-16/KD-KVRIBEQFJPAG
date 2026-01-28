@@ -78,6 +78,9 @@ writeDump(result);
             SHELF_NUMBER = ""
         }>
     <cfset result_svc = svc.saveServiceGuaranty(data, recordEmp)>
+    <CFSET data.EMIR_ID=attributes.EMIR_ID>
+    <cfset data.PRODUCT_ID=item.PRODUCT_ID>
+    
     <cfset result_krm = krmsvc.addKarmaKoliRows(data, recordEmp)>
         <cfelse>
             <cfset data = {
