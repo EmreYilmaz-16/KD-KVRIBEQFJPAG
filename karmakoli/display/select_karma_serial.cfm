@@ -92,6 +92,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
             <th>Eta Kodu</th>
             <th>Ürün Kodu</th>
             <th>Ürün</th>
+            <th>Miktar</th>
             <th></th>
         </tr>
     </thead>
@@ -112,6 +113,8 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
             tdeta.innerText=UrunBilgi.urun_eta_kodu;
             var tdkod=document.createElement('td');
             tdkod.innerText=UrunBilgi.urun_kodu;
+            var tdquantity=document.createElement('td');
+            tdquantity.innerText=item.QUANTITY;
             var tdname=document.createElement('td');
             tdname.innerText=UrunBilgi.urun_adi;
             var tdaction=document.createElement('td');
@@ -126,6 +129,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
             tr.appendChild(tdeta);
             tr.appendChild(tdkod);
             tr.appendChild(tdname);
+            tr.appendChild(tdquantity);
             tr.appendChild(tdaction);
             tb1.appendChild(tr);
         });
