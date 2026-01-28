@@ -75,7 +75,7 @@ writeDump(result);
             WRK_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#-#createUUID()#",
             WRK_ROW_ID = "#evaluate("WRK_PBS_CCC#item.PRODUCT_ID#")#",
             UNIT_ROW_QUANTITY = 1,
-            SHELF_NUMBER = "",
+            SHELF_NUMBER = ""
         }>
     <cfset result_svc = svc.saveServiceGuaranty(data, recordEmp)>
         <cfelse>
