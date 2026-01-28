@@ -43,5 +43,6 @@
         </cftry>
 
         <cfreturn success />
+    </cffunction>
 
 </cfcomponent>
