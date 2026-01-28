@@ -43,7 +43,7 @@
                     <cfqueryparam value="#nowDate#" cfsqltype="cf_sql_timestamp">,
                     <cfqueryparam value="#arguments.recordEmp#" cfsqltype="cf_sql_integer">,
                     <cfqueryparam value="#arguments.data.WRK_ROW_ID#" cfsqltype="cf_sql_nvarchar">,
-                    <cfqueryparam value="#arguments.data.SCN_WRK_ID#" cfsqltype="cf_sql_nvarchar">
+                    <cfqueryparam value="#arguments.data.WRK_ID#" cfsqltype="cf_sql_nvarchar">
                 )
             </cfquery>
             <cfset success = true />
