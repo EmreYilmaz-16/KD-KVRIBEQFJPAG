@@ -14,9 +14,9 @@ WHERE TT.BKY>0
         </cfquery>
         <script>
             var UrunBilgi={
-                urun_adi='<cfoutput>#getSerials.PRODUCT_NAME#</cfoutput>',
-                urun_kodu='<cfoutput>#getSerials.PRODUCT_CODE#</cfoutput>',
-                urun_eta_kodu='<cfoutput>#getSerials.PRODUCT_CODE_2#</cfoutput>'
+                urun_adi:'<cfoutput>#getSerials.PRODUCT_NAME#</cfoutput>',
+                urun_kodu:'<cfoutput>#getSerials.PRODUCT_CODE#</cfoutput>',
+                urun_eta_kodu:'<cfoutput>#getSerials.PRODUCT_CODE_2#</cfoutput>'
 
             }
         </script>
@@ -129,7 +129,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
             tr.appendChild(tdaction);
             tb1.appendChild(tr);
         });
-        
+
     });
 </script>
 
