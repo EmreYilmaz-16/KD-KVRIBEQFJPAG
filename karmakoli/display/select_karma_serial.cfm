@@ -12,6 +12,14 @@ HAVING DEPARTMENT_ID=#listFirst(attributes.PACKAGING_STORE,"-")# AND LOCATION_ID
 LEFT JOIN #DSN1#.PRODUCT AS P ON P.PRODUCT_ID=S.PRODUCT_ID
 WHERE TT.BKY>0
         </cfquery>
+        <script>
+            var UrunBilgi={
+                urun_adi='<cfoutput>#getSerials.PRODUCT_NAME#</cfoutput>',
+                urun_kodu='<cfoutput>#getSerials.PRODUCT_CODE#</cfoutput>',
+                urun_eta_kodu='<cfoutput>#getSerials.PRODUCT_CODE_2#</cfoutput>'
+
+            }
+        </script>
 <cf_grid_list>
     <thead>
         <tr>            
@@ -76,9 +84,52 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 </cf_grid_list>
 
 </cfif>
+<cf_box title="Seçilen Ürünler">
+<cf_grid_list >
+    <thead>
+        <tr>
+            <th>Seri No</th>
+            <th>Eta Kodu</th>
+            <th>Ürün Kodu</th>
+            <th>Ürün</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tb1"></tbody>
+</cf_grid_list>
+</cf_box>
+
+
 <script>
     $(document).ready(function(){
-        console.table(SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>'));
+        var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
+        var tb1=document.getElementById('tb1');
+        selectedProducts.forEach(function(item){
+            var tr=document.createElement('tr');
+            var tdseri=document.createElement('td');
+            tdseri.innerText=item.SERIAL_NO;
+            var tdeta=document.createElement('td');
+            tdeta.innerText=UrunBilgi.urun_eta_kodu;
+            var tdkod=document.createElement('td');
+            tdkod.innerText=UrunBilgi.urun_kodu;
+            var tdname=document.createElement('td');
+            tdname.innerText=UrunBilgi.urun_adi;
+            var tdaction=document.createElement('td');
+            var a=document.createElement('a');
+            a.href="javascript:void(0)";
+            a.innerText="Kaldır";
+            a.onclick=function(){
+                removeSelectedProduct(item.PRODUCT_ID,item.SERIAL_NO,'#attributes.modal_id#');
+            };
+            tdaction.appendChild(a);
+            tr.appendChild(tdseri);
+            tr.appendChild(tdeta);
+            tr.appendChild(tdkod);
+            tr.appendChild(tdname);
+            tr.appendChild(tdaction);
+            tb1.appendChild(tr);
+        });
+        
     });
 </script>
 
