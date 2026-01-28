@@ -76,6 +76,11 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 </cf_grid_list>
 
 </cfif>
+<script>
+    $(document).ready(function(){
+        console.table(SelecttedArr);
+    });
+</script>
 
 
 
