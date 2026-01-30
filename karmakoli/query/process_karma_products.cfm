@@ -19,6 +19,7 @@
     <cfset form.upd_id=IsSavedBefore.FIS_ID>
     <cfset attributes.pageHead=IsSavedBefore.FIS_NUMBER>
     <cfset attributes.FIS_NO =IsSavedBefore.FIS_NUMBER>
+    <cfset attributes.cat=attributes.type_id>
     <cfset attributes.del_fis=1>
     <cfset attributes.delEvent=1>
     <cfinclude template="/v16/stock/query/upd_fis_pbs.cfm">
