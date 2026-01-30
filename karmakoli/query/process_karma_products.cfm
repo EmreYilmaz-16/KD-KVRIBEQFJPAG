@@ -4,6 +4,7 @@
 <cfdump var="#FormData#" label="FormData">
 
 <cfset attributes.process_cat=88>
+<cfset form.process_cat=88>
 <cfset attributes.process_type_pbs=111>
 <cfquery name="IsSavedBefore" datasource="#dsn2#">
     SELECT * FROM STOCK_FIS WHERE PBS_ID=#attributes.EMIR_ID# AND PBS_ACTION_TYPE=1
