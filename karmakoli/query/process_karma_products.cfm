@@ -12,6 +12,7 @@
 <cfif IsSavedBefore.recordcount gt 0>
     <cfset  attributes.ACTIVE_PERIOD = session.ep.period_id>
     <cfset attributes.old_process_type=attributes.process_type_pbs>
+    <cfset form.old_process_type=attributes.process_type_pbs>
     <cfset attributes.type_id=attributes.process_type_pbs>
     <cfset attributes.upd_id=IsSavedBefore.FIS_ID>
     <cfset form.upd_id=IsSavedBefore.FIS_ID>
