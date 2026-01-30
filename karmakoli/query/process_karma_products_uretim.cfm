@@ -64,16 +64,21 @@ VALUES
     UPDATE KARMA_EMIR SET CURRENT_STATUS=0 WHERE EMIR_ID=#attributes.EMIR_ID#;
 </cfquery>
 
-
-
 <cffunction name="generateSerialNo" access="public" returntype="string" output="false">
     <cfargument name="prefix" type="string" required="true">
     <cfargument name="product_id" type="numeric" required="true">
     <cfset var serialNo = "">
-    <cfset var uniquePart = createUUID()>
-    <cfset serialNo = "#arguments.prefix#-#arguments.product_id#-#left(uniquePart, 8)#">
+    <cfset var timestamp = getTickCount()>
+    <cfset var uniquePart = replace(createUUID(), "-", "", "ALL")>
+    <cfset var randomNum = randRange(10000, 99999)>
+    <cfset serialNo = "#arguments.prefix#-#arguments.product_id#-#timestamp#-#randomNum#-#left(uniquePart, 12)#">
     <cfreturn serialNo>
 </cffunction>
+
+<cflocation url="/index.cfm?fuseaction=product.emptypopup_list_paket_emir&product_id=#attributes.produced_pid#">
+
+
+
 
 
 
