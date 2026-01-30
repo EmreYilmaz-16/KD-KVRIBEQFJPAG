@@ -147,11 +147,11 @@ writeDump(result);
 <cfquery name="UP_SF" datasource="#DSN2#">
     UPDATE STOCK_FIS SET PBS_ID=#attributes.EMIR_ID#,PBS_ACTION_TYPE=1 WHERE FIS_ID=#PBS_FIS_ID#;
 </cfquery>
+<cfif isdefined("attributes.del_fis") and attributes.del_fis EQ 1>
+<cfelse>
+    <cflocation url="index.cfm?fuseaction=objects.emptypopup_process_karma_uretim&emir_id=#attributes.EMIR_ID#&produced_stockid=#attributes.produced_stockid#&produced_pid=#attributes.produced_pid#&uretim_miktari=#attributes.uretim_miktari#&PACKAGING_STORE=#attributes.PACKAGING_STORE#" addtoken="false">
+</cfif>
 
-
-<cflocation url="index.cfm?fuseaction=objects.emptypopup_process_karma_uretim&produced_stockid=#attributes.produced_stockid#&produced_pid=#attributes.produced_pid#&uretim_miktari=#attributes.uretim_miktari#&PACKAGING_STORE=#attributes.PACKAGING_STORE#" addtoken="false">
-
-1
 
 
 1 Sarf Fişi Yap ok

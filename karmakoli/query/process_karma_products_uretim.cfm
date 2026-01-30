@@ -40,7 +40,7 @@
     }>
     <cfset result_svc=svc.saveServiceGuaranty(data, recordEmp)>
 <cfquery name="AddSerial" datasource="#dsn3#">
-    INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] 
+    INSERT INTO [#dsn3#].[SERIAL_IN_OUT_PBS] 
 ([SERIAL_NUMBER],
  [IS_ALIVE],
  [IN_GUARANTY_ID],
@@ -60,6 +60,9 @@ VALUES
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
+<cfquery name="UPEMIR" datasource="#DSN3#">
+    UPDATE KARMA_EMIR SET CURRENT_STATUS=0 WHERE EMIR_ID=#attributes.EMIR_ID#;
+</cfquery>
 
 
 
