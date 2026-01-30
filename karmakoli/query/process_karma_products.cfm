@@ -9,6 +9,7 @@
     SELECT * FROM STOCK_FIS WHERE PBS_ID=#attributes.EMIR_ID# AND PBS_ACTION_TYPE=1
 </cfquery>
 <cfif IsSavedBefore.recordcount gt 0>
+    <cfset  attributes.ACTIVE_PERIOD = session.ep.period_id>
     <cfset attributes.old_process_type=attributes.process_type_pbs>
     <cfset attributes.type_id=attributes.process_type_pbs>
     <cfset attributes.upd_id=IsSavedBefore.FIS_ID>
