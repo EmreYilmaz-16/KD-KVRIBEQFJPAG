@@ -39,11 +39,28 @@
         SHELF_NUMBER = ""
     }>
     <cfset result_svc=svc.saveServiceGuaranty(data, recordEmp)>
-
+<cfquery name="AddSerial" datasource="#dsn3#">
+    INSERT INTO [w3Qa_1].[SERIAL_IN_OUT_PBS] 
+([SERIAL_NUMBER],
+ [IS_ALIVE],
+ [IN_GUARANTY_ID],
+ [OUT_GUARANTY_ID],
+ [PURCHASE_DATE],
+ [STOCK_ID]) 
+VALUES 
+('#SERI_NO_SER#',
+ 1,
+ -1,
+ NULL,
+ GETDATE(),
+ #attributes.STOCKID1#)
+</cfquery>
 </cfloop>
 <cfquery name="UP" datasource="#DSN3#">
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
+
+
 
 
 <cffunction name="generateSerialNo" access="public" returntype="string" output="false">

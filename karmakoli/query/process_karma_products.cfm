@@ -5,6 +5,34 @@
 
 <cfset attributes.process_cat=88>
 <cfset attributes.process_type_pbs=111>
+<cfquery name="IsSavedBefore" datasource="#dsn2#">
+    SELECT * FROM STOCK_FIS WHERE PBS_ID=#attributes.EMIR_ID# AND PBS_ACTION_TYPE=1
+</cfquery>
+<cfif IsSavedBefore.recordcount gt 0>
+    <cfset attributes.old_process_type=attributes.process_type_pbs>
+    <cfset attributes.type_id=attributes.process_type_pbs>
+    <cfset attributes.upd_id=IsSavedBefore.FIS_ID>
+    <cfset attributes.pageHead=IsSavedBefore.FIS_NUMBER>
+    <cfset attributes.del_fis=1>
+    <cfset attributes.delEvent=1>
+    <cfinclude template="/v16/stock/query/upd_fis_pbs.cfm">
+    <cfquery name="getOldSerials" datasource="#dsn3#">
+        SELECT * FROM KARMA_EMIR_ROWS WHERE EMIR_ID=#attributes.EMIR_ID#
+    </cfquery>
+    <cfloop query="getOldSerials">
+        <cfif len(getOldSerials.SERIAL_NO) gt 0>
+            <cfquery name="UP_SER" datasource="#DSN3#">
+                UPDATE SERIAL_IN_OUT_PBS SET IS_ALIVE=1 WHERE SERIAL_NUMBER='#getOldSerials.SERIAL_NO#' 
+            </cfquery>
+        </cfif>
+    </cfloop>
+    <cfquery name="DelKarmaRows" datasource="#dsn3#">
+        DELETE FROM KARMA_EMIR_ROWS WHERE EMIR_ID=#attributes.EMIR_ID#
+    </cfquery>
+
+   
+</cfif>
+
 
 <cfscript>
 grouped = {}; // geçici struct
@@ -59,6 +87,9 @@ writeDump(result);
         <cfquery name="GETSER" datasource="#DSN3#">
             SELECT * FROM #dsn3#.SERVICE_GUARANTY_NEW WHERE SERIAL_NO='#item.SERIAL_NO#'
         </cfquery>
+        <cfquery name="UP_SER" datasource="#DSN3#">
+                UPDATE SERIAL_IN_OUT_PBS SET IS_ALIVE=0 WHERE SERIAL_NUMBER='#item.SERIAL_NO#' 
+            </cfquery>
         <cfset STOCK_ID_SER=getStok.STOCK_ID>
         <cfset data = {
             STOCK_ID = STOCK_ID_SER,
