@@ -2,6 +2,16 @@
 <script>
 var OFFER_PRODUCT=<cfoutput>#session.kd.OFFER_PRODUCT_ID#</cfoutput>;
 $(document).ready(function () {
+            var btn=document.createElement("button")
+btn.setAttribute("type","button")
+btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector_main&internal_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
+btn.innerText="Fiyat Karşılaştırma"
+btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
+document.getElementById("workcube_button").appendChild(btn)
+var txt=document.createElement("span")
+txt.innerText="Belge Para Biriminde Değişikllik Yaptıktan Sonra Fiyat Karşılaştırma Ekranını Kontrol Etmeyi Unutmayınız !"
+txt.setAttribute("style","color:red;font-weight:bold;margin-left:10px")
+document.getElementsByClassName("totalBox")[0].appendChild(txt)
 SatinalmaTalebiSayfaIslemleri();
     
 })
@@ -74,16 +84,7 @@ span.style.color="green"
 }
 
 function SatinalmaTalebiSayfaIslemleri(){
-        var btn=document.createElement("button")
-btn.setAttribute("type","button")
-btn.setAttribute("onclick",'windowopen("index.cfm?fuseaction=purchase.purchase_offer_selector_main&internal_id=<cfoutput>#attributes.id#</cfoutput>","page_display")')
-btn.innerText="Fiyat Karşılaştırma"
-btn.setAttribute("class"," ui-wrk-btn ui-wrk-btn-warning")
-document.getElementById("workcube_button").appendChild(btn)
-var txt=document.createElement("span")
-txt.innerText="Belge Para Biriminde Değişikllik Yaptıktan Sonra Fiyat Karşılaştırma Ekranını Kontrol Etmeyi Unutmayınız !"
-txt.setAttribute("style","color:red;font-weight:bold;margin-left:10px")
-document.getElementsByClassName("totalBox")[0].appendChild(txt)
+
 SanallariIsaretle();
 ButonYaz();
 
