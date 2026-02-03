@@ -12,7 +12,7 @@ var txt=document.createElement("span")
 txt.innerText="Belge Para Biriminde Değişikllik Yaptıktan Sonra Fiyat Karşılaştırma Ekranını Kontrol Etmeyi Unutmayınız !"
 txt.setAttribute("style","color:red;font-weight:bold;margin-left:10px")
 document.getElementsByClassName("totalBox")[0].appendChild(txt)
-SatinalmaTalebiSayfaIslemleri();
+//SatinalmaTalebiSayfaIslemleri();
     
 })
 // Bilgi gösterme fonksiyonu
