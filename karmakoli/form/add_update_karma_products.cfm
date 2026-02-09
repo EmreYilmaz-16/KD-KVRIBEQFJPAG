@@ -193,7 +193,7 @@
                     <div class="input-group">
                         <input type="hidden" name="product_id" id="product_id">
                         <input name="product_name" type="text" id="product_name" class="form-control-custom" 
-                               onfocus="AutoComplete_Create('product_name','PRODUCT_NAME','PRODUCT_NAME','get_product','0','PRODUCT_ID','product_id','','3','200');" 
+                               onfocus="AutoComplete_Create('product_name','PRODUCT_NAME','PRODUCT_CODE_2,PRODUCT_NAME','get_product','0','PRODUCT_ID','product_id','','3','200');" 
                                value="" autocomplete="off" placeholder="Ürün adı yazın..." required>
                         <div id="product_name_div_2" name="product_name_div_2" class="completeListbox" autocomplete="on" 
                              style="width: 290px; max-height: 150px; overflow: auto; position: absolute; left: 948.5px; top: 146.333px; z-index: 159; display: none;"></div>
