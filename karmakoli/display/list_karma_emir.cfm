@@ -81,6 +81,7 @@
             <div class="form-group mr-2 mb-2">
                 <button type="submit" class="btn btn-primary">Filtrele</button>
           <a href="#cgi.script_name#?<cfif isDefined('attributes.fuseaction')>fuseaction=#attributes.fuseaction#</cfif>" class="btn btn-secondary ml-2">Temizle</a>
+          <a id="ui-plus" href="javascript://" onclick="windowopen('index.cfm?fuseaction=product.emptypopup_add_karma_emir','page_horizantal');" class="ui-btn ui-btn-gray"><i class="fa fa-plus"></i></a>
             </div>
         </form>
         </cfoutput>
