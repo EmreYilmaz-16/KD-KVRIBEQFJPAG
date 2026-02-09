@@ -152,9 +152,7 @@
                 <td>#EMPLOYEE_FULL_NAME#</td>
                 <td>
                     <cfif CURRENT_STATUS EQ 1>
-                        <span class="badge badge-info">Oluşturuldu</span>
-                    <cfelseif CURRENT_STATUS EQ 2>
-                        <span class="badge badge-warning">İşleniyor</span>
+                        <span class="badge badge-info">Kayıt</span>   
                     <cfelseif CURRENT_STATUS EQ 3>
                         <span class="badge badge-success">Tamamlandı</span>
                     <cfelse>

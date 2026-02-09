@@ -61,7 +61,7 @@ VALUES
 </cfquery>
 
 <cfquery name="UPEMIR" datasource="#DSN3#">
-    UPDATE KARMA_EMIR SET CURRENT_STATUS=0 WHERE KARMA_EMIR_ID=#attributes.EMIR_ID#;
+    UPDATE KARMA_EMIR SET CURRENT_STATUS=3 WHERE KARMA_EMIR_ID=#attributes.EMIR_ID#;
 </cfquery>
 
 <cffunction name="generateSerialNo" access="public" returntype="string" output="false">
