@@ -343,6 +343,13 @@
             </span>
         </a>
 
+        <a class="action-card tableyazi" href="#request.self#?fuseaction=product.emptypopup_list_paket_emir">
+            <span class="icon"><img src="../../images/e-pd/box48.png" alt="Paket emirleri"></span>
+            <span class="details">
+                <span class="title">Paket Emirleri</span>
+            </span>
+        </a>
+
         <a class="action-card tableyazi" href="#request.self#?fuseaction=pda.stock_location_partner">
             <span class="icon"><img src="../../images/e-pd/box48.png" alt="Lokasyona göre stok"></span>
             <span class="details">
