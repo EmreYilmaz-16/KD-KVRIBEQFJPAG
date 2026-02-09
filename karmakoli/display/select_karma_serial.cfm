@@ -1,6 +1,6 @@
 <cf_box title="Karma Seri No Seçimi" modal_id="#attributes.modal_id#" width="600" height="400">
      
-    <cfdump var="#attributes#" label="Attributes">
+    
     <cfif attributes.IS_SERIAL_NO eq 1>
         <cfquery name="getSerials" datasource="#dsn3#">
             SELECT TT.*,P.PRODUCT_NAME,P.PRODUCT_CODE_2,P.PRODUCT_CODE FROM (
