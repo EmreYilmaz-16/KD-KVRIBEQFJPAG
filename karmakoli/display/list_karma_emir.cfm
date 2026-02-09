@@ -139,7 +139,7 @@
             <tr>
                 <td>
                     <cfif not isDefined("attributes.ajax")>
-                        <a href="javascript:windowopen('index.cfm?fuseaction=product.emptypopup_detail_karma_emir&EMIR_ID=#KARMA_EMIR_ID#','wwide';">
+                        <a href="javascript:windowopen('index.cfm?fuseaction=product.emptypopup_detail_karma_emir&EMIR_ID=#KARMA_EMIR_ID#','wwide');">
                             #EMIR_NO#
                         </a>
                     <cfelse>
