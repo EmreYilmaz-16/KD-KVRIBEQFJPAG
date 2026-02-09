@@ -41,7 +41,7 @@
             <div class="form-group mr-2 mb-2">
                 <label for="emir_no" class="mr-2">Emir No:</label>
                 <input type="text" name="emir_no" id="emir_no" class="form-control" 
-                       value="<cfif isDefined('URL.emir_no')>#URL.emir_no#</cfif>" placeholder="UPE-2026-01-08-1">
+                       value="<cfif isDefined('URL.emir_no')>#URL.emir_no#</cfif>" placeholder="">
             </div>
             
             <div class="form-group mr-2 mb-2">
