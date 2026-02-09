@@ -1,3 +1,4 @@
+<cf_box title="Paketleme Emiri Oluştur">
 <cfquery name="getKarmaProducts" datasource="#dsn1#">
     SELECT PRODUCT_ID,PRODUCT_NAME,PRODUCT_STATUS,PRODUCT_CODE_2,PRODUCT_CODE
     FROM PRODUCT
@@ -75,3 +76,5 @@
         
     }
 </script>
+
+</cf_box>
