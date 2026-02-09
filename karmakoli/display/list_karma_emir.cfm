@@ -46,7 +46,6 @@
             
             <div class="form-group mr-2 mb-2">
                 <label for="product_id" class="mr-2">Ürün:</label>
-                <input type="text" id="product_search" class="form-control mb-1" placeholder="Ürün ara...">
                 <select name="product_id" id="product_id" class="form-control">
                     <option value="">Tümü</option>
                     <cfloop query="get_products">
@@ -88,37 +87,23 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 (function () {
-    var searchInput = document.getElementById('product_search');
-    var selectEl = document.getElementById('product_id');
-    if (!searchInput || !selectEl) {
+    if (!window.jQuery) {
         return;
     }
 
-    var allOptions = Array.prototype.slice.call(selectEl.options);
+    var $select = jQuery('#product_id');
+    if (!$select.length) {
+        return;
+    }
 
-    searchInput.addEventListener('input', function () {
-        var term = searchInput.value.toLowerCase();
-        var selectedValue = selectEl.value;
-
-        selectEl.innerHTML = '';
-
-        allOptions.forEach(function (opt, idx) {
-            if (idx === 0) {
-                selectEl.appendChild(opt);
-                return;
-            }
-
-            var match = term === '' || opt.text.toLowerCase().indexOf(term) !== -1;
-            if (match) {
-                selectEl.appendChild(opt);
-            }
-        });
-
-        if (selectedValue) {
-            selectEl.value = selectedValue;
-        }
+    $select.select2({
+        placeholder: 'Ürün seçin',
+        allowClear: true,
+        width: '100%'
     });
 })();
 </script>
