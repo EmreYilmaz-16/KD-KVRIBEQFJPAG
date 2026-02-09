@@ -46,6 +46,7 @@
             
             <div class="form-group mr-2 mb-2">
                 <label for="product_id" class="mr-2">Ürün:</label>
+                <input type="text" id="product_search" class="form-control mb-1" placeholder="Ürün ara...">
                 <select name="product_id" id="product_id" class="form-control">
                     <option value="">Tümü</option>
                     <cfloop query="get_products">
@@ -86,6 +87,41 @@
         </cfoutput>
     </div>
 </div>
+
+<script>
+(function () {
+    var searchInput = document.getElementById('product_search');
+    var selectEl = document.getElementById('product_id');
+    if (!searchInput || !selectEl) {
+        return;
+    }
+
+    var allOptions = Array.prototype.slice.call(selectEl.options);
+
+    searchInput.addEventListener('input', function () {
+        var term = searchInput.value.toLowerCase();
+        var selectedValue = selectEl.value;
+
+        selectEl.innerHTML = '';
+
+        allOptions.forEach(function (opt, idx) {
+            if (idx === 0) {
+                selectEl.appendChild(opt);
+                return;
+            }
+
+            var match = term === '' || opt.text.toLowerCase().indexOf(term) !== -1;
+            if (match) {
+                selectEl.appendChild(opt);
+            }
+        });
+
+        if (selectedValue) {
+            selectEl.value = selectedValue;
+        }
+    });
+})();
+</script>
 
 
 <div class="row mb-2">
