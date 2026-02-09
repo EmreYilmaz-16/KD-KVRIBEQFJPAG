@@ -7,7 +7,7 @@
 </cfquery>
 
 <input type="text" name="kw" id="kw" class="form-control mb-3" placeholder="Arama..." onkeyup="filterTable(this, 'karmaEmirTable')">
-<cf_grid_list id="karmaEmirTable">
+<cf_grid_list >
     <thead>
         <tr>
             <th>#</th>
@@ -16,7 +16,7 @@
             <th>Ürün</th>            
         </tr>
     </thead>
-    <tbody>
+    <tbody id="karmaEmirTable">
         <cfoutput query="getKarmaProducts">
             <tr>
                 <td>#currentRow#</td>
