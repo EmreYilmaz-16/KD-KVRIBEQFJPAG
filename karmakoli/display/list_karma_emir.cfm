@@ -1,8 +1,9 @@
 <cfquery name="list_karma_emir" datasource="#dsn3#">
-    SELECT KARMA_EMIR.*, P.PRODUCT_NAME, E.EMPLOYEE_NAME + ' ' + E.EMPLOYEE_SURNAME AS EMPLOYEE_FULL_NAME
+    SELECT KARMA_EMIR.*, P.PRODUCT_NAME, E.EMPLOYEE_NAME + ' ' + E.EMPLOYEE_SURNAME AS EMPLOYEE_FULL_NAME,EI.import_id
     FROM KARMA_EMIR
     LEFT JOIN #DSN1#.PRODUCT AS P ON P.PRODUCT_ID = KARMA_EMIR.PRODUCT_ID
     LEFT JOIN #DSN#.EMPLOYEES AS E ON E.EMPLOYEE_ID = KARMA_EMIR.RECORD_EMP
+    LEFT JOIN etiket_import_log AS EI ON EI.PBS_ID = KARMA_EMIR.KARMA_EMIR_ID AND EI.PBS_ACTION_TYPE = 1
     WHERE 1=1
     <CFIF isDefined("URL.product_id") AND len(trim(URL.product_id)) GT 0>
         AND KARMA_EMIR.PRODUCT_ID = <cfqueryparam value="#URL.product_id#" cfsqltype="cf_sql_integer">    
@@ -160,6 +161,11 @@
                         <span class="badge badge-secondary">Bilinmeyen</span>
                     </cfif>
                 </td>
+                <td><cfif len(import_id)>
+                    <a href="index.cfm?fuseaction=objects.emptypopup_view_labels_reliable&import_id=#import_id#" class="btn btn-sm btn-danger" title="Reliable Etiketi Yazdır">
+                                                            <i class="fas fa-print"></i>
+                                                        </a>
+                </cfif></td>
             </tr>
         </cfoutput>
     </tbody>
