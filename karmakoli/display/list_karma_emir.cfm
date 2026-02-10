@@ -1,3 +1,4 @@
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <cfquery name="list_karma_emir" datasource="#dsn3#">
     SELECT KARMA_EMIR.*, P.PRODUCT_NAME, E.EMPLOYEE_NAME + ' ' + E.EMPLOYEE_SURNAME AS EMPLOYEE_FULL_NAME,EI.import_id
     FROM KARMA_EMIR
@@ -134,6 +135,7 @@
             <th>Kayıt Tarihi</th>
             <th>Kayıt Eden</th>
             <th>Durum</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
