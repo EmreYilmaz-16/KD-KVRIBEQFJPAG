@@ -42,12 +42,16 @@ WHERE PBS_ACTION_TYPE=1 AND PBS_ID=#attributes.EMIR_ID# AND FIS_TYPE=110
                                         import_date,
                                         file_name,
                                         file_size,
-                                        status
+                                        status,
+                                        PBS_ID,
+                                        PBS_ACTION_TYPE
                                     ) VALUES (
                                         GETDATE(),
                                         <cfqueryparam value="Database Import - PAKET_EMIR/STOCKS" cfsqltype="cf_sql_varchar">,
                                         <cfqueryparam value="0" cfsqltype="cf_sql_integer">,
-                                        'PROCESSING'
+                                        'PROCESSING',
+                                        <cfqueryparam value="#attributes.EMIR_ID#" cfsqltype="cf_sql_integer">,
+                                        <cfqueryparam value="1" cfsqltype="cf_sql_integer">
                                     )
                                 </cfquery>
                                 <cfdump var="#logResult#" label="createImportLog">
