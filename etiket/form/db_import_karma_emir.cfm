@@ -9,7 +9,7 @@
 <cfquery name="GETSF" datasource="#DSN2#">
     SELECT * FROM (
 <cfloop query="getPeriodS">
-SELECT *,#PERIOD_ID# AS DONEM FROM #DSN#_#PERIOD_YEAR#_#OUR_COMPANY_ID#.STOCK_FIS 
+SELECT FIS_ID,FIS_TYPE,PBS_ACTION_TYPE,PBS_ID,#PERIOD_ID# AS DONEM FROM #DSN#_#PERIOD_YEAR#_#OUR_COMPANY_ID#.STOCK_FIS 
     <cfif getPeriodS.currentRow NEQ getPeriodS.recordCount>UNION ALL</cfif>
 </cfloop>
 )AS T 
