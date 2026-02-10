@@ -1,9 +1,11 @@
 <cfquery name="getEmir" datasource="#dsn3#">
     SELECT EMIR_NO,KARMA_EMIR_ID FROM w3Qa_1.KARMA_EMIR WHERE KARMA_EMIR_ID=#attributes.EMIR_ID#
 </cfquery>
+<cfdump var="#getEmir#" label="getEmir">
 <cfquery name="getPeriodS" datasource="#dsn#">
     SELECT PERIOD_ID,PERIOD_YEAR,OUR_COMPANY_ID FROM w3Qa.SETUP_PERIOD WHERE OUR_COMPANY_ID=1
 </cfquery>
+<cfdump var="#getPeriodS#" label="getPeriodS">
 <cfquery name="GETSF" datasource="#DSN2#">
     SELECT * FROM (
 <cfloop query="getPeriodS">
@@ -13,6 +15,7 @@ SELECT *,#PERIOD_ID# AS DONEM FROM #DSN#_#PERIOD_YEAR#_#OUR_COMPANY_ID#.STOCK_FI
 )AS T 
 WHERE PBS_ACTION_TYPE=1 AND PBS_ID=#attributes.EMIR_ID# AND FIS_TYPE=110
 </cfquery>
+<cfdump var="#GETSF#" label="GETSF">
 
 <CFIF GETSF.recordCount>
  <cfquery name="getSerials" datasource="#dsn3#">
@@ -32,6 +35,7 @@ WHERE PBS_ACTION_TYPE=1 AND PBS_ID=#attributes.EMIR_ID# AND FIS_TYPE=110
     
      WHERE PROCESS_ID=#GETSF.FIS_ID# AND PROCESS_CAT=110 AND PERIOD_ID=#GETSF.DONEM#
  </cfquery>
+<cfdump var="#getSerials#" label="getSerials">
 
 <cfquery name="createImportLog" datasource="#dsn#" result="logResult">
                                     INSERT INTO etiket_import_log (
@@ -46,6 +50,7 @@ WHERE PBS_ACTION_TYPE=1 AND PBS_ID=#attributes.EMIR_ID# AND FIS_TYPE=110
                                         'PROCESSING'
                                     )
                                 </cfquery>
+                                <cfdump var="#logResult#" label="createImportLog">
                                  <cfset importResult.importId = logResult.generatedKey>
                                 <cfloop query="getSerials" >
                                     <cfset etaKodu = getSerials.ETA_KODU>
