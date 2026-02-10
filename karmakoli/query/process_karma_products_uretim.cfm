@@ -60,9 +60,16 @@ VALUES
     UPDATE SERVICE_GUARANTY_NEW SET PROCESS_NO='#PBS_FIS_NO#',PROCESS_ID=#PBS_FIS_ID# WHERE PROCESS_ID=0;
 </cfquery>
 
+<cfquery name="UP_SF" datasource="#DSN2#">
+    UPDATE STOCK_FIS SET PBS_ID=#attributes.EMIR_ID#,PBS_ACTION_TYPE=1 WHERE FIS_ID=#PBS_FIS_ID#;
+</cfquery>
+
 <cfquery name="UPEMIR" datasource="#DSN3#">
     UPDATE KARMA_EMIR SET CURRENT_STATUS=3 WHERE KARMA_EMIR_ID=#attributes.EMIR_ID#;
 </cfquery>
+
+<cfinclude template="/AddOns/Partner/etiket/form/db_import_karma_emir.cfm">
+
 
 <cffunction name="generateSerialNo" access="public" returntype="string" output="false">
     <cfargument name="prefix" type="string" required="true">
