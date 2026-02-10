@@ -81,7 +81,7 @@ VALUES
     <cfset serialNo = "#arguments.prefix#-#arguments.product_id#-#timestamp#-#randomNum#-#left(uniquePart, 12)#">
     <cfreturn serialNo>
 </cffunction>
-<cfabort>
+
 
 <cflocation url="/index.cfm?fuseaction=product.emptypopup_list_paket_emir&product_id=#attributes.produced_pid#">
 
