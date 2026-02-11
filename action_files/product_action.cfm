@@ -7,5 +7,10 @@
         UPDATE PRODUCT SET IS_PACKAGE_PRODUCT=<cfqueryparam value="#attributes.is_package_product#" cfsqltype="cf_sql_integer">
         WHERE PRODUCT_ID=<cfqueryparam value="#attributes.product_id#" cfsqltype="cf_sql_integer">
     </cfquery>
+    <cfelse>
+           <cfquery name="updatep" datasource="#dsn#_product">
+        UPDATE PRODUCT SET IS_PACKAGE_PRODUCT=0
+        WHERE PRODUCT_ID=<cfqueryparam value="#attributes.product_id#" cfsqltype="cf_sql_integer">
+    </cfquery>
 </cfif>
 
