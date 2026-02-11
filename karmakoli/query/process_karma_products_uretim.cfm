@@ -78,7 +78,7 @@ VALUES
     <cfset var timestamp = getTickCount()>
     <cfset var uniquePart = replace(createUUID(), "-", "", "ALL")>
     <cfset var randomNum = randRange(10000, 99999)>
-    <cfset serialNo = "#arguments.prefix#-#arguments.product_id#-#left(uniquePart, 12)#">
+    <cfset serialNo = "#arguments.prefix#-#arguments.product_id#-#timestamp#-#left(uniquePart, 12)#">
     <cfreturn serialNo>
 </cffunction>
 
