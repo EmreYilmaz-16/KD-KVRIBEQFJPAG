@@ -86,7 +86,7 @@ VALUES
     window.close();
 </script>
 
-<cflocation url="/index.cfm?fuseaction=product.emptypopup_list_paket_emir&product_id=#attributes.produced_pid#">
+
 
 
 
