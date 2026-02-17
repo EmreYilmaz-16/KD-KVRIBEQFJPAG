@@ -673,7 +673,7 @@ CT~~CD,~CC^~CT~
             </cfif>
         </div>
     </div>
-    <cfabort>
+    
     <cfset zplData = trim(ZPL_DATA_FULL)>
     <cfif 1 EQ 1>
       <!--- Tüm satır sonlarını CRLF yap (ZPL yazıcıları genelde sever) --->
