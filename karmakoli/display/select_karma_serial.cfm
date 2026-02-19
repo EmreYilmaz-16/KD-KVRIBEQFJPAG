@@ -152,6 +152,10 @@ for(var i=0;i<parsers.length;i++){
 
     });
     function searchandSelectProduct(value, productId, modalId) {
+        
+        var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
+        console.log(SerialObject);
+        
         var rows = document.querySelectorAll("#serialTable tr");
         var visibleRows = [];
         rows.forEach(function(row) {
