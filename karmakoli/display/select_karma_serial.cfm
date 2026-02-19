@@ -108,10 +108,10 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 
 <script>
     $(document).ready(function(){
-        if(len(SELECTED_PRODCT_ARRAY)>0){
-            var SelecttedArr=JSON.parse(SELECTED_PRODCT_ARRAY);
+        if(SELECTED_PRODCT_ARRAY.length > 0){
+            var SelecttedArr=SELECTED_PRODCT_ARRAY;
         }else{
-            
+
         }
             
         var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');

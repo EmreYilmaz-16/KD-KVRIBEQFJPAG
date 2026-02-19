@@ -436,7 +436,7 @@
                         WHERE PRODUCT_CODE_2 = <cfqueryparam value="#eta_kodu#" cfsqltype="cf_sql_varchar">
                     </cfquery>
                     <cfquery name="GETW" datasource="#DSN3#">
-                        SELECT TOP 50 WEIGHT FROM w3Qa_1.PRODUCT_UNIT WHERE PRODUCT_ID=#getStok.PRODUCT_ID#
+                        SELECT TOP 50 WEIGHT,MAIN_UNIT FROM w3Qa_1.PRODUCT_UNIT WHERE PRODUCT_ID=#getStok.PRODUCT_ID#
                     </cfquery>
                     <cfquery name="getOems" datasource="#dsn#_product">
                         SELECT SB.* FROM STOCKS_BARCODES AS SB
@@ -453,8 +453,86 @@ WHERE SB.STOCK_ID=#getStok.STOCK_ID# AND P.BARCOD<>SB.BARCODE
                     <cfif listLen(URUNKODU,"-") gt 1>
                         <cfset URUNKODU = listFirst(URUNKODU,"-")>
                         <cfset URUN_KODU2=listLast(URUN_KODU2,"-")>
+                    <cfelse>
+                        <cfset  URUN_KODU2=''> <!---Eğer ürün kodunda - yok ise Ürün kodu boş olmalı--->
                     </cfif>
-                    
+
+<!--- ürün adını parçalama başlangıç --->
+                    <cfset fullName = trim(getStok.PRODUCT_NAME)>
+                    <cfset maxLen = 50>
+
+                    <cfif len(fullName) LTE maxLen>
+
+                        <!--- 50’den kısa ise --->
+                        <cfset product_name_1 = fullName>
+                        <cfset product_name_2 = "">
+
+                    <cfelse>
+
+                        <!--- İlk 50 karakteri al --->
+                        <cfset tempText = left(fullName, maxLen)>
+
+                        <!--- 50 karakter içinde son boşluğu bul --->
+                        <cfset lastSpace = find(" ", reverse(tempText))>
+
+                        <cfif lastSpace GT 0>
+                            <cfset cutPosition = maxLen - lastSpace + 1>
+                            <cfset product_name_1 = left(fullName, cutPosition - 1)>
+                            <cfset remainingText = mid(fullName, cutPosition + 1, len(fullName))>
+                        <cfelse>
+                            <!--- Boşluk yoksa direkt 50’den kes --->
+                            <cfset product_name_1 = tempText>
+                            <cfset remainingText = mid(fullName, maxLen + 1, len(fullName))>
+                        </cfif>
+
+                        <!--- 2. parça: kalan kısmın ilk 50 karakteri --->
+                        <cfset product_name_2 = left(trim(remainingText), maxLen)>
+
+                    </cfif>
+
+<!--- Ürün adını parçalama bitiş --->
+<!---OEmleri parçala başlangıç --->
+                    <cfset fullText = trim(oem_numbers)>
+                    <cfset maxLen = 33>
+
+                    <!--- Başlangıçta tüm parçaları boş yap --->
+                    <cfset oem_1 = "">
+                    <cfset oem_2 = "">
+                    <cfset oem_3 = "">
+                    <cfset oem_4 = "">
+                    <cfset oem_5 = "">
+
+                    <cfloop from="1" to="5" index="i">
+
+                        <cfif len(fullText) EQ 0>
+                            <cfbreak>
+                        </cfif>
+
+                        <cfif len(fullText) LTE maxLen>
+                            
+                            <cfset "oem_#i#" = fullText>
+                            <cfset fullText = "">
+                            
+                        <cfelse>
+                            
+                            <cfset tempText = left(fullText, maxLen)>
+                            <cfset lastSpace = find(" ", reverse(tempText))>
+
+                            <cfif lastSpace GT 0>
+                                <cfset cutPosition = maxLen - lastSpace + 1>
+                                <cfset "oem_#i#" = left(fullText, cutPosition - 1)>
+                                <cfset fullText = trim(mid(fullText, cutPosition + 1, len(fullText)))>
+                            <cfelse>
+                                <!--- Boşluk yoksa direkt 33'ten kes --->
+                                <cfset "oem_#i#" = tempText>
+                                <cfset fullText = trim(mid(fullText, maxLen + 1, len(fullText)))>
+                            </cfif>
+
+                        </cfif>
+
+                    </cfloop>
+
+<!---Oemleri parçalama bitiş --->
                     <cfset SERINO = seri_no>
                     <cfset BARKODE = "#eta_kodu#_#seri_no#_#DateFormat(uretim_tarihi, 'mm.yy')#_#DateFormat(paket_tarihi, 'mm/yy')#_#barkod#_1.00_#marka#">
                     
@@ -512,7 +590,7 @@ CT~~CD,~CC^~CT~
 ^FT0,52^A0N,27,30^FB320,1,7,C^FH\^CI28^FD#SERINO#^FS^CI27
 ^PQ1,0,1,Y
 ^XZ----->
-^XA
+<!---^XA
 ^MCY^PMN
 ^PW730
 ~JSN^MMT
@@ -534,11 +612,50 @@ CT~~CD,~CC^~CT~
 ^FT206,355
 ^A0N,23,16^FD#URUN_KODU2#^FS
 ^FT332,355
-^A0N,23,16^FD1 ST/PC^FS
+^A0N,23,16^FD#GETW.MAIN_UNIT#^FS
 ^FT467,355
 ^A0N,23,16^FD#DateFormat(uretim_tarihi, 'mm/yy')#^FS
 ^FT603,355
 ^A0N,23,16^FD#TLFORMAT(GETW.WEIGHT)#^FS
+^PQ1,0,1,Y
+^XZ--->
+^XA
+^MCY^PMN
+^PW1093
+~JSN^MMT
+^JZY
+^LH0,0^LRN
+^XZ
+^XA
+^FT451,118
+^CI0
+^A0N,42,28^FD#URUNKODU#^FS
+^FT275,193
+^A0N,33,22^FD#product_name_1#^FS <!---üRÜN aDI pARÇA 1--->
+^FO794,244
+^BQN,2,6^FD#qr_data#^FS
+^FT275,288
+^A0N,33,22^FD#oem_1#^FS  <!---oem pARÇA 1--->
+^FT306,536
+^A0N,33,22^FD#URUN_KODU2#^FS
+^FT493,536
+^A0N,33,22^FD#GETW.MAIN_UNIT#^FS
+^FT692,536
+^A0N,33,22^FD#DateFormat(uretim_tarihi, 'mm/yy')#^FS
+^FT893,536
+^A0N,33,22^FD#TLFORMAT(GETW.WEIGHT)#^FS
+^FT275,323
+^A0N,33,22^FD#oem_2#^FS <!---oem pARÇA 2--->
+^FT275,394
+^A0N,33,22^FD#oem_4#^FS <!---oem pARÇA 4--->
+^FT275,359
+^A0N,33,22^FD#oem_3#^FS <!---oem pARÇA 3--->
+^FT275,229
+^A0N,33,22^FD#product_name_2#^FS <!---üRÜN aDI pARÇA 2--->
+^FT275,430
+^A0N,33,22^FD#oem_5#^FS <!---oem pARÇA 5--->
+^FO56,425
+^BY2^BEN,82,N,N^FD#barkod#1^FS <!--- bARKODUN GELECEĞİ YER BURA OLACAK EKLERSENİZ TAMAM --->
 ^PQ1,0,1,Y
 ^XZ
 
@@ -621,6 +738,15 @@ CT~~CD,~CC^~CT~
                             </td>
                             <td>
                                 : #TLFORMAT(GETW.WEIGHT)#
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td>
+                                BİRİM
+                            </td>
+                            <td>
+                                : #GETW.MAIN_UNIT#
                             </td>
                             
                         </tr>
