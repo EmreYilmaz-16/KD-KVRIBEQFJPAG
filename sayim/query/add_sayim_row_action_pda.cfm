@@ -47,7 +47,7 @@
             </cfloop>
         </cfif>
     <cfelse>
-        <cfset arrayAppend(ErrorArray, "Ürün bulunamadı: " & item.stock)>
+        <cfset arrayAppend(ErrorArray, "Ürün bulunamadı: " & item.Stok)>
     </cfif>
 </cfloop>
 
