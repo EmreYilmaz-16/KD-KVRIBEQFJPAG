@@ -108,19 +108,22 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 
 <script>
     $(document).ready(function(){
-        if(SELECTED_PRODCT_ARRAY.length > 0){
-            var SelecttedArr=SELECTED_PRODCT_ARRAY;
-        }else{
-
-        }
-            
-        var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
-        var tb1=document.getElementById('tb1');
-         bm=new BarcodeManager();
+                 bm=new BarcodeManager();
 var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
+        if(SELECTED_PRODCT_ARRAY.length > 0){
+            var SelecttedArr=SELECTED_PRODCT_ARRAY;
+        }else{
+            
+        }
+            if(SelecttedArr.length==0){
+                return;
+            }
+        var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
+        var tb1=document.getElementById('tb1');
+
         selectedProducts.forEach(function(item){
             var tr=document.createElement('tr');
             var tdseri=document.createElement('td');
