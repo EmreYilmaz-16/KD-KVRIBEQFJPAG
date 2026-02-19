@@ -114,7 +114,7 @@ for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
         if(SELECTED_PRODCT_ARRAY.length > 0){
-            var SelecttedArr=SELECTED_PRODCT_ARRAY;
+            SelecttedArr=SELECTED_PRODCT_ARRAY;
         }else{
             
         }
