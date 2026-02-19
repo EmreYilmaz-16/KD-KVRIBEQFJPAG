@@ -118,9 +118,10 @@ for(var i=0;i<parsers.length;i++){
         }else{
             
         }
-           if (!SelectedArr || SelectedArr.length === 0) {
+if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
     return;
 }
+
         var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
         var tb1=document.getElementById('tb1');
 
