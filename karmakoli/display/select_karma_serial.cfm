@@ -2,6 +2,11 @@
      
     
     <cfif attributes.IS_SERIAL_NO eq 1>
+        <cfoutput><input type="text" name="serial_no" id="serial_no" onkeyup="searchandSelectProduct(this.value,'#attributes.PRODUCT_ID#','#attributes.modal_id#')" placeholder="Seri No ile Ara" class="form-control mb-2"> </cfoutput>
+        <select name="BarcodeParser" id="BarcodeParser">
+				<option value="0">Barkod Tipi</option>
+
+			</select>
         <cfquery name="getSerials" datasource="#dsn3#">
             SELECT TT.*,P.PRODUCT_NAME,P.PRODUCT_CODE_2,P.PRODUCT_CODE FROM (
 SELECT STOCK_ID,SUM(CASE WHEN IN_OUT =1 THEN 1 ELSE -1 END) AS BKY,DEPARTMENT_ID,LOCATION_ID,SERIAL_NO  
@@ -29,7 +34,7 @@ WHERE TT.BKY>0
             <th>Ürün</th>
         </tr>
     </thead>
-    <tbody><!------(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO)------>
+    <tbody id="serialTable"><!------(MAIN_PRODUCT_ID,PRODUCT_ID,QUANTITY,SERIAL_NO)------>
         <cfoutput query="getSerials">
             <tr >
                 <td><a onclick="selectProducts('#attributes.MAIN_PRODUCT_ID#','#attributes.PRODUCT_ID#','#attributes.QUANTITY#','#SERIAL_NO#',this,'#attributes.modal_id#')">#SERIAL_NO#</a></td>
@@ -105,6 +110,11 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
     $(document).ready(function(){
         var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
         var tb1=document.getElementById('tb1');
+         bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
         selectedProducts.forEach(function(item){
             var tr=document.createElement('tr');
             var tdseri=document.createElement('td');
@@ -135,6 +145,27 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
         });
 
     });
+    function searchandSelectProduct(value, productId, modalId) {
+        var rows = document.querySelectorAll("#serialTable tr");
+        var visibleRows = [];
+        rows.forEach(function(row) {
+            var serialNo = row.cells[0].innerText.toLowerCase();
+            if (serialNo.includes(value.toLowerCase())) {
+                row.style.display = "";
+                visibleRows.push(row);
+            } else {
+                row.style.display = "none";
+            }
+        });
+        
+        // Eğer tek bir sonuç bulunursa, otomatik olarak seç
+        if (visibleRows.length === 1 && value.length > 0) {
+            var link = visibleRows[0].querySelector('a');
+            if (link) {
+                link.click();
+            }
+        }
+    }
 </script>
 
 
