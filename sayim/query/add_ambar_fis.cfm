@@ -466,7 +466,7 @@ POZİSYON=SATIRLAR
 
     </cfloop>---->
 
-    FSDFSDF
+<cfset attributes.ROWS_ = listlen(stock_id_list)>
     <cfset attributes.DEPARTMENT_OUT = Listgetat(attributes.dep_out,1,'-')>
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
     <cfset attributes.DEPARTMENT_IN = Listgetat(attributes.dep_in,1,'-')>
