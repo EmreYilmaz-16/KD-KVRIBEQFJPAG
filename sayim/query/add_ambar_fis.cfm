@@ -471,7 +471,7 @@ POZİSYON=SATIRLAR
     <cfset attributes.LOCATION_OUT = Listgetat(attributes.dep_out,2,'-')> 
     <cfset attributes.DEPARTMENT_IN = Listgetat(attributes.dep_in,1,'-')>
     <cfset attributes.LOCATION_IN = Listgetat(attributes.dep_in,2,'-')> 
-    <cfset XML_MULTIPLE_COUNTING_FIS = 1>
+    <cfset attributes.XML_MULTIPLE_COUNTING_FIS = 1>
 <cfset attributes.ACTIVE_PERIOD = session.ep.period_id>
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 <!-----
