@@ -468,7 +468,7 @@ POZİSYON=SATIRLAR
 
     FSDFSDF
 
-
+<cfset attributes.ACTIVE_PERIOD = session.ep.period_id>
 <cfinclude template="/v16/stock/query/add_ship_fis_pbs.cfm">
 <!-----
 <cfquery name="UP" datasource="#DSN3#">
