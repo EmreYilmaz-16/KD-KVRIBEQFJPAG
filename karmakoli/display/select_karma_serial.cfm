@@ -2,7 +2,7 @@
      
     
     <cfif attributes.IS_SERIAL_NO eq 1>
-        <cfoutput><input type="text" name="serial_no" id="serial_no" onkeyup="searchandSelectProduct(this.value,'#attributes.PRODUCT_ID#','#attributes.modal_id#')" placeholder="Seri No ile Ara" class="form-control mb-2"> </cfoutput>
+        <cfoutput><input type="text" name="serial_no" id="serial_no" onkeyup="searchandSelectProduct(event,this.value,'#attributes.PRODUCT_ID#','#attributes.modal_id#')" placeholder="Seri No ile Ara" class="form-control mb-2"> </cfoutput>
         <select name="BarcodeParser" id="BarcodeParser">
 				<option value="0">Barkod Tipi</option>
 
@@ -151,16 +151,20 @@ for(var i=0;i<parsers.length;i++){
         });
 
     });
-    function searchandSelectProduct(value, productId, modalId) {
+    function searchandSelectProduct(event, value, productId, modalId) {
         
-        var SerialObject = bm.parseWith(serialNo, parseInt(document.getElementById('BarcodeParser').value));
+        var SerialObject = bm.parseWith(value, parseInt(document.getElementById('BarcodeParser').value));
+        var sn="";
+        if(SerialObject && SerialObject.serial_no){
+				sn = SerialObject.serial_no;
+			}
         console.log(SerialObject);
         
         var rows = document.querySelectorAll("#serialTable tr");
         var visibleRows = [];
         rows.forEach(function(row) {
             var serialNo = row.cells[0].innerText.toLowerCase();
-            if (serialNo.includes(value.toLowerCase())) {
+            if (serialNo.includes(sn.toLowerCase())) {
                 row.style.display = "";
                 visibleRows.push(row);
             } else {
@@ -168,8 +172,8 @@ for(var i=0;i<parsers.length;i++){
             }
         });
         
-        // Eğer tek bir sonuç bulunursa, otomatik olarak seç
-        if (visibleRows.length === 1 && value.length > 0) {
+        // Eğer Enter tuşuna basıldıysa ve tek bir sonuç bulunursa, otomatik olarak seç
+        if ((event.keyCode === 13 || event.key === 'Enter') && visibleRows.length === 1 && value.length > 0) {
             var link = visibleRows[0].querySelector('a');
             if (link) {
                 link.click();
