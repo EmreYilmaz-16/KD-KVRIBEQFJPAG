@@ -222,6 +222,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         <th></th>
     </tr>
     <tr>
+         <cfoutput>
         <td>
             <div class="karma-quantity-display">
                 <div>
@@ -236,7 +237,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             </div>
         </td>
         <td>
-            <div class="karma-quantity-display">
+           <div class="karma-quantity-display">
                 <div>
                     <div class="quantity-label">Tamamlanan</div>
                     <input type="text" 
@@ -255,6 +256,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                     onclick="Uret(<cfoutput>#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#</cfoutput>)" 
                     style="display:none;">Seçilen Ürünleri Ekle</button>
         </td>
+        </cfoutput>
     </tr>
 </table>
     <div class="karma-row">
