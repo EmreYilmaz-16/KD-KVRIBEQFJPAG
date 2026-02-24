@@ -209,7 +209,9 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
   )
         </cfquery>
-<table>
+
+<div class="karma-container">
+    <table>
     <tr>
         <th>
             Hedef Miktar
@@ -255,7 +257,6 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         </td>
     </tr>
 </table>
-<div class="karma-container">
     <div class="karma-row">
         <div class="karma-table-wrapper">
             <table class="karma-products-table">
