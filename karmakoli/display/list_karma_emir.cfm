@@ -68,7 +68,7 @@
                     <option value="3" <cfif isDefined("URL.current_status") AND URL.current_status EQ 3>selected</cfif>>Tamamlandı</option>
                 </select>
             </div>
-            
+            <div style="display:flex">
             <div class="form-group mr-2 mb-2">
                 <label for="start_date" class="mr-2">Başlangıç:</label>
                 <input type="date" name="start_date" id="start_date" class="form-control" 
@@ -80,7 +80,7 @@
                 <input type="date" name="end_date" id="end_date" class="form-control" 
                        value="<cfif isDefined('URL.end_date')>#URL.end_date#</cfif>">
             </div>
-            
+            </div>
             <div class="form-group mr-2 mb-2">
                 <button type="submit" class="btn btn-primary">Filtrele</button>
           <a href="#cgi.script_name#?<cfif isDefined('attributes.fuseaction')>fuseaction=#attributes.fuseaction#</cfif>" class="btn btn-secondary ml-2">Temizle</a>

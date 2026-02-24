@@ -212,15 +212,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
 <div class="karma-container">
     <table>
-    <tr>
-        <th>
-            Hedef Miktar
-        </th>
-        <th>
-            Tamamlanan
-        </th>
-        <th></th>
-    </tr>
+  
     <tr>
          <cfoutput>
         <td>
