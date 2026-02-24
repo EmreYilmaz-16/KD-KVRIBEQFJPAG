@@ -69,14 +69,14 @@
                 </select>
             </div>
             <div style="display:flex">
-            <div class="form-group mr-2 mb-2">
-                <label for="start_date" class="mr-2">Başlangıç:</label>
+            <div class="form-group ">
+                <label for="start_date" class="">Başlangıç:</label>
                 <input type="date" name="start_date" id="start_date" class="form-control" 
                        value="<cfif isDefined('URL.start_date')>#URL.start_date#</cfif>">
             </div>
             
-            <div class="form-group mr-2 mb-2">
-                <label for="end_date" class="mr-2">Bitiş:</label>
+            <div class="form-group ">
+                <label for="end_date" class="">Bitiş:</label>
                 <input type="date" name="end_date" id="end_date" class="form-control" 
                        value="<cfif isDefined('URL.end_date')>#URL.end_date#</cfif>">
             </div>
