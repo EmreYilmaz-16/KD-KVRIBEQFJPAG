@@ -1,3 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Satış Raporu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .table thead th {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .table-responsive {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .ortalama-cell {
+            background-color: #e7f3ff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2><i class="bi bi-graph-up"></i> Ürün Satış Raporu</h2>
+                    <button class="btn btn-success" onclick="exportToExcel()">
+                        <i class="bi bi-file-earmark-excel"></i> Excel'e Aktar
+                    </button>
+                </div>
+            </div>
+        </div>
+
 <cfquery name="siprapor" datasource="w3Qa">
     SELECT SUM(QUANTITY) AS SMIK,SYIL,SAY,PRODUCT_NAME,PRODUCT_ID,PRODUCT_CODE,PRODUCT_CODE_2 FROM (
 SELECT  S.PRODUCT_NAME,S.PRODUCT_ID,ORR.QUANTITY,YEAR(ORDER_DATE) SYIL,MONTH(ORDER_DATE)SAY,
@@ -44,43 +94,68 @@ ORDER BY SYIL,SAY
 <cfset END_YEAR=YEAR(now())>
 <cfset END_MONTH=MONTH(now())>
 
-<table>
-<tr>
-    <td>ETA Kodu</td>
-    <td>Ürün Kodu</td>
-    <td>Ürün</td>
-    <td>Yıllık Ortalama</td>
-    <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
-    <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
-    <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
-        <td><cfoutput>#year(currentDate)#-#month(currentDate)#</cfoutput></td>
-        <cfset currentDate = dateAdd("m", 1, currentDate)>
-    </cfloop>
-</tr>
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered align-middle" id="salesTable">
+                    <thead class="table-primary">
+                        <tr>
+                            <th class="text-center">ETA Kodu</th>
+                            <th class="text-center">Ürün Kodu</th>
+                            <th>Ürün</th>
+                            <th class="text-center">Yıllık Ortalama</th>
+                            <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
+                            <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
+                            <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
+                                <th class="text-center"><cfoutput>#year(currentDate)#-#month(currentDate)#</cfoutput></th>
+                                <cfset currentDate = dateAdd("m", 1, currentDate)>
+                            </cfloop>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tbody>
 <cfoutput query="siprapor">
-    <tr>
-        <td>
-            #PRODUCT_CODE_2#
-        </td>
-        <td>
-            #PRODUCT_CODE#
-        </td>
-        <td>
-            #PRODUCT_NAME#
-        </td>
-        <td>
-            #structKeyExists(YILLIK_ORTALAMA_MAP, PRODUCT_ID) ? numberFormat(YILLIK_ORTALAMA_MAP[PRODUCT_ID], "999,999.99") : 0#
-        </td>
-        <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
-        <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
-        <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
-            <td>
-                <cfset mapKey = "#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#">
-                #structKeyExists(PRODCT_SALE_MAP, mapKey) ? VAL(PRODCT_SALE_MAP[mapKey]) : 0#
-            </td>
-            <cfset currentDate = dateAdd("m", 1, currentDate)>
-        </cfloop>
-
-    </tr>
+                        <tr>
+                            <td class="text-center">
+                                #PRODUCT_CODE_2#
+                            </td>
+                            <td class="text-center">
+                                #PRODUCT_CODE#
+                            </td>
+                            <td>
+                                #PRODUCT_NAME#
+                            </td>
+                            <td class="text-center ortalama-cell">
+                                #structKeyExists(YILLIK_ORTALAMA_MAP, PRODUCT_ID) ? numberFormat(YILLIK_ORTALAMA_MAP[PRODUCT_ID], "999,999.99") : 0#
+                            </td>
+                            <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
+                            <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
+                            <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
+                                <td class="text-end">
+                                    <cfset mapKey = "#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#">
+                                    #structKeyExists(PRODCT_SALE_MAP, mapKey) ? VAL(PRODCT_SALE_MAP[mapKey]) : 0#
+                                </td>
+                                <cfset currentDate = dateAdd("m", 1, currentDate)>
+                            </cfloop>
+                        </tr>
 </cfoutput>
-</table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+function exportToExcel() {
+    const table = document.getElementById('salesTable');
+    const wb = XLSX.utils.table_to_book(table, {sheet: "Satış Raporu"});
+    XLSX.writeFile(wb, 'urun_satis_raporu_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+</script>
+</body>
+</html>
