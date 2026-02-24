@@ -25,7 +25,7 @@ ORDER BY SYIL,SAY
     <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
     <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
     <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
-        <td>#year(currentDate)#-#month(currentDate)#</td>
+        <td><cfoutput>#year(currentDate)#-#month(currentDate)#</cfoutput></td>
         <cfset currentDate = dateAdd("m", 1, currentDate)>
     </cfloop>
 </tr>
