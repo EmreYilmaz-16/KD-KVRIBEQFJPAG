@@ -466,6 +466,36 @@ generateRows(SelecttedArr);
     el?.parentElement?.parentElement?.remove();
     checkKarmaRequirements();
 }
+function generateRows(slp) {
+        slp.forEach(function(item){
+            var tr=document.createElement('tr');
+            var tdseri=document.createElement('td');
+            tdseri.innerText=item.SERIAL_NO;
+            var tdeta=document.createElement('td');
+            tdeta.innerText=UrunBilgi.urun_eta_kodu;
+            var tdkod=document.createElement('td');
+            tdkod.innerText=UrunBilgi.urun_kodu;
+            var tdquantity=document.createElement('td');
+            tdquantity.innerText=item.QUANTITY;
+            var tdname=document.createElement('td');
+            tdname.innerText=UrunBilgi.urun_adi;
+            var tdaction=document.createElement('td');
+            var a=document.createElement('a');
+            a.href="javascript:void(0)";
+            a.innerText="Kaldır";
+            a.onclick=function(){
+                removeSelectedProduct(item.PRODUCT_ID,item.SERIAL_NO,'#attributes.modal_id#');
+            };
+            tdaction.appendChild(a);
+            tr.appendChild(tdseri);
+            tr.appendChild(tdeta);
+            tr.appendChild(tdkod);
+            tr.appendChild(tdname);
+            tr.appendChild(tdquantity);
+            tr.appendChild(tdaction);
+            tb1.appendChild(tr);
+        });
+    }
     function checkKarmaRequirements(){
         var completedKarmaCount = Infinity; // Başlangıçta sonsuz, minimum bulunacak
         var allRequirementsMet = true;
