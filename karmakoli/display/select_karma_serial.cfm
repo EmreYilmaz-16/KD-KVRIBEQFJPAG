@@ -113,14 +113,7 @@ var parsers=bm.listParsers();
 for(var i=0;i<parsers.length;i++){
 	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
 }
-        if(SELECTED_PRODCT_ARRAY.length > 0){
-             SelecttedArr=SELECTED_PRODCT_ARRAY;
-        }else{
-            
-        }
-if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
-    return;
-}
+    
 //generateRows(SELECTED_PRODCT_ARRAY)
         var selectedProducts=SELECTED_PRODCT_ARRAY.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
         var tb1=document.getElementById('tb1');
