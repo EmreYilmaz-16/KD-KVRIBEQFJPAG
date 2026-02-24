@@ -121,7 +121,7 @@ for(var i=0;i<parsers.length;i++){
 if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
     return;
 }
-
+generateRows(SELECTED_PRODCT_ARRAY)
         var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
         var tb1=document.getElementById('tb1');
 
