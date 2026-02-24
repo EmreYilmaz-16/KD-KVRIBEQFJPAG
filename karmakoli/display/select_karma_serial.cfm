@@ -107,58 +107,84 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
 
 
 <script>
-    function createSelectedProductRow(item, modalId) {
-        var tb1 = document.getElementById('tb1');
-        var tr = document.createElement('tr');
-        var tdseri = document.createElement('td');
-        tdseri.innerText = item.SERIAL_NO || '';
-        var tdeta = document.createElement('td');
-        tdeta.innerText = UrunBilgi.urun_eta_kodu;
-        var tdkod = document.createElement('td');
-        tdkod.innerText = UrunBilgi.urun_kodu;
-        var tdquantity = document.createElement('td');
-        tdquantity.innerText = item.QUANTITY;
-        var tdname = document.createElement('td');
-        tdname.innerText = UrunBilgi.urun_adi;
-        var tdaction = document.createElement('td');
-        var a = document.createElement('a');
-        a.href = "javascript:void(0)";
-        a.innerText = "Kaldır";
-        a.onclick = function() {
-            removeSelectedProduct(item.PRODUCT_ID, item.SERIAL_NO, modalId);
-        };
-        tdaction.appendChild(a);
-        tr.appendChild(tdseri);
-        tr.appendChild(tdeta);
-        tr.appendChild(tdkod);
-        tr.appendChild(tdname);
-        tr.appendChild(tdquantity);
-        tr.appendChild(tdaction);
-        tb1.appendChild(tr);
-    }
-
     $(document).ready(function(){
-        bm=new BarcodeManager();
-        var parsers=bm.listParsers();
-        for(var i=0;i<parsers.length;i++){
-            $("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
-        }
+                 bm=new BarcodeManager();
+var parsers=bm.listParsers();
+for(var i=0;i<parsers.length;i++){
+	$("#BarcodeParser").append('<option value="'+parsers[i].id+'">'+parsers[i].name+'</option>');
+}
         if(SELECTED_PRODCT_ARRAY.length > 0){
             var SelecttedArr=SELECTED_PRODCT_ARRAY;
         }else{
             
         }
-        if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
-            return;
-        }
+if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
+    return;
+}
 
         var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
-        
+        var tb1=document.getElementById('tb1');
+
         selectedProducts.forEach(function(item){
-            createSelectedProductRow(item, '<cfoutput>#attributes.modal_id#</cfoutput>');
+            var tr=document.createElement('tr');
+            var tdseri=document.createElement('td');
+            tdseri.innerText=item.SERIAL_NO;
+            var tdeta=document.createElement('td');
+            tdeta.innerText=UrunBilgi.urun_eta_kodu;
+            var tdkod=document.createElement('td');
+            tdkod.innerText=UrunBilgi.urun_kodu;
+            var tdquantity=document.createElement('td');
+            tdquantity.innerText=item.QUANTITY;
+            var tdname=document.createElement('td');
+            tdname.innerText=UrunBilgi.urun_adi;
+            var tdaction=document.createElement('td');
+            var a=document.createElement('a');
+            a.href="javascript:void(0)";
+            a.innerText="Kaldır";
+            a.onclick=function(){
+                removeSelectedProduct(item.PRODUCT_ID,item.SERIAL_NO,'#attributes.modal_id#');
+            };
+            tdaction.appendChild(a);
+            tr.appendChild(tdseri);
+            tr.appendChild(tdeta);
+            tr.appendChild(tdkod);
+            tr.appendChild(tdname);
+            tr.appendChild(tdquantity);
+            tr.appendChild(tdaction);
+            tb1.appendChild(tr);
         });
 
     });
+    function generateRows(slp) {
+        slp.forEach(function(item){
+            var tr=document.createElement('tr');
+            var tdseri=document.createElement('td');
+            tdseri.innerText=item.SERIAL_NO;
+            var tdeta=document.createElement('td');
+            tdeta.innerText=UrunBilgi.urun_eta_kodu;
+            var tdkod=document.createElement('td');
+            tdkod.innerText=UrunBilgi.urun_kodu;
+            var tdquantity=document.createElement('td');
+            tdquantity.innerText=item.QUANTITY;
+            var tdname=document.createElement('td');
+            tdname.innerText=UrunBilgi.urun_adi;
+            var tdaction=document.createElement('td');
+            var a=document.createElement('a');
+            a.href="javascript:void(0)";
+            a.innerText="Kaldır";
+            a.onclick=function(){
+                removeSelectedProduct(item.PRODUCT_ID,item.SERIAL_NO,'#attributes.modal_id#');
+            };
+            tdaction.appendChild(a);
+            tr.appendChild(tdseri);
+            tr.appendChild(tdeta);
+            tr.appendChild(tdkod);
+            tr.appendChild(tdname);
+            tr.appendChild(tdquantity);
+            tr.appendChild(tdaction);
+            tb1.appendChild(tr);
+        });
+    }
     function searchandSelectProduct(event, value, productId, modalId) {
         
         var SerialObject = bm.parseWith(value, parseInt(document.getElementById('BarcodeParser').value));
@@ -187,6 +213,7 @@ HAVING STORE=#listFirst(attributes.PACKAGING_STORE,"-")# AND STORE_LOCATION=#lis
                 link.click();
             }
         }
+        
     }
 </script>
 

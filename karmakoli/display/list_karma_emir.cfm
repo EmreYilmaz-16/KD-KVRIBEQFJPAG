@@ -132,8 +132,8 @@
             <th>Emir No</th>
             <th>Ürün Adı</th>
             <th>Miktar</th>
-            <th>Kayıt Tarihi</th>
-            <th>Kayıt Eden</th>
+            <th style="display:none">Kayıt Tarihi</th>
+            <th style="display:none">Kayıt Eden</th>
             <th>Durum</th>
             <th></th>
         </tr>
@@ -152,8 +152,8 @@
                 </td>
                 <td>#PRODUCT_NAME#</td>
                 <td>#NumberFormat(AMOUNT, "9,999")#</td>
-                <td>#DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:mm")#</td>
-                <td>#EMPLOYEE_FULL_NAME#</td>
+                <td style="display:none">#DateFormat(RECORD_DATE, "dd.mm.yyyy")# #TimeFormat(RECORD_DATE, "HH:mm")#</td>
+                <td style="display:none">#EMPLOYEE_FULL_NAME#</td>
                 <td>
                     <cfif CURRENT_STATUS EQ 1>
                         <span class="badge badge-info">Kayıt</span>   

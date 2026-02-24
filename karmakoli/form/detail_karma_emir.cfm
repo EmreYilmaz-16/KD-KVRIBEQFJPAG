@@ -424,7 +424,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
         QUANTITY: String(addQty),
         SERIAL_NO
     });
-
+generateRows(SelecttedArr);
     el?.parentElement?.parentElement?.remove();
     checkKarmaRequirements();
 }
