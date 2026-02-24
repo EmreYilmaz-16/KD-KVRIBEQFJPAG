@@ -253,7 +253,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
             <button type="button" 
                     id="UretBtn" 
                     class="karma-submit-btn" 
-                    onclick="Uret(<cfoutput>#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#</cfoutput>)" 
+                    onclick="Uret(#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#)" 
                     style="display:none;">Seçilen Ürünleri Ekle</button>
         </td>
         </cfoutput>
