@@ -42,6 +42,7 @@ ORDER BY SYIL,SAY
             </td>
             <cfset currentDate = dateAdd("m", 1, currentDate)>
         </cfloop>
-        
+
     </tr>
+</cfoutput>
 </table>
