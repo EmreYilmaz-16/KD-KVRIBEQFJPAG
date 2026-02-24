@@ -122,7 +122,7 @@ if (typeof SelectedArr === "undefined" || SelectedArr.length === 0) {
     return;
 }
 //generateRows(SELECTED_PRODCT_ARRAY)
-        var selectedProducts=SelecttedArr.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
+        var selectedProducts=SELECTED_PRODCT_ARRAY.filter(p=>p.PRODUCT_ID=='<cfoutput>#attributes.PRODUCT_ID#</cfoutput>');
         var tb1=document.getElementById('tb1');
 
         selectedProducts.forEach(function(item){
