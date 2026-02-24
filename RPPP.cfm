@@ -38,7 +38,8 @@ ORDER BY SYIL,SAY
         <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
         <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
             <td>
-                #VAL(PRODCT_SALE_MAP["#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#"],0)#
+                <cfset mapKey = "#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#">
+                #structKeyExists(PRODCT_SALE_MAP, mapKey) ? VAL(PRODCT_SALE_MAP[mapKey]) : 0#
             </td>
             <cfset currentDate = dateAdd("m", 1, currentDate)>
         </cfloop>
