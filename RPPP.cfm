@@ -29,4 +29,19 @@ ORDER BY SYIL,SAY
         <cfset currentDate = dateAdd("m", 1, currentDate)>
     </cfloop>
 </tr>
+<cfoutput query="siprapor">
+    <tr>
+        <td>
+            #PRODUCT_NAME#
+        </td>
+        <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
+        <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
+        <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
+            <td>
+                #VAL(PRODCT_SALE_MAP["#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#"],0)#
+            </td>
+            <cfset currentDate = dateAdd("m", 1, currentDate)>
+        </cfloop>
+        
+    </tr>
 </table>
