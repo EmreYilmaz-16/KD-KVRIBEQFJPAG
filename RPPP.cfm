@@ -33,6 +33,11 @@
             background-color: #e7f3ff;
             font-weight: 600;
         }
+        .yillik-toplam-cell {
+            background-color: #fff3cd;
+            font-weight: 700;
+            border-left: 3px solid #ffc107 !important;
+        }
     </style>
 </head>
 <body>
@@ -107,9 +112,15 @@ ORDER BY SYIL,SAY
                             <th class="text-center">Yıllık Ortalama</th>
                             <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
                             <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
+                            <cfset currentYear = year(currentDate)>
                             <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
                                 <th class="text-center"><cfoutput>#year(currentDate)#-#month(currentDate)#</cfoutput></th>
-                                <cfset currentDate = dateAdd("m", 1, currentDate)>
+                                <cfset nextDate = dateAdd("m", 1, currentDate)>
+                                <cfif year(nextDate) NEQ currentYear OR dateCompare(currentDate, endDate) EQ 0>
+                                    <th class="text-center table-warning"><cfoutput>#currentYear# Toplam</cfoutput></th>
+                                    <cfset currentYear = year(nextDate)>
+                                </cfif>
+                                <cfset currentDate = nextDate>
                             </cfloop>
                         </tr>
                     </thead>
@@ -131,12 +142,24 @@ ORDER BY SYIL,SAY
                             </td>
                             <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
                             <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
+                            <cfset currentYear = year(currentDate)>
+                            <cfset yearTotal = 0>
                             <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
+                                <cfset mapKey = "#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#">
+                                <cfset monthValue = structKeyExists(PRODCT_SALE_MAP, mapKey) ? VAL(PRODCT_SALE_MAP[mapKey]) : 0>
+                                <cfset yearTotal = yearTotal + monthValue>
                                 <td class="text-end">
-                                    <cfset mapKey = "#year(currentDate)#-#month(currentDate)#-#PRODUCT_ID#">
-                                    #structKeyExists(PRODCT_SALE_MAP, mapKey) ? VAL(PRODCT_SALE_MAP[mapKey]) : 0#
+                                    #monthValue#
                                 </td>
-                                <cfset currentDate = dateAdd("m", 1, currentDate)>
+                                <cfset nextDate = dateAdd("m", 1, currentDate)>
+                                <cfif year(nextDate) NEQ currentYear OR dateCompare(currentDate, endDate) EQ 0>
+                                    <td class="text-end yillik-toplam-cell">
+                                        #numberFormat(yearTotal, "999,999")#
+                                    </td>
+                                    <cfset currentYear = year(nextDate)>
+                                    <cfset yearTotal = 0>
+                                </cfif>
+                                <cfset currentDate = nextDate>
                             </cfloop>
                         </tr>
 </cfoutput>
