@@ -28,6 +28,9 @@ ORDER BY SYIL,SAY
     ORDER BY PRODUCT_NAME
 </cfquery>
 
+<cfset PRODCT_SALE_MAP = structNew()>
+<cfset YILLIK_ORTALAMA_MAP = structNew()>
+
 <cfloop query="siprapor">
     <cfset PRODCT_SALE_MAP["#SYIL#-#SAY#-#PRODUCT_ID#"] = SMIK>
 </cfloop>
@@ -46,6 +49,7 @@ ORDER BY SYIL,SAY
     <td>ETA Kodu</td>
     <td>Ürün Kodu</td>
     <td>Ürün</td>
+    <td>Yıllık Ortalama</td>
     <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
     <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
     <cfloop condition="dateCompare(currentDate, endDate) LTE 0">
@@ -63,6 +67,9 @@ ORDER BY SYIL,SAY
         </td>
         <td>
             #PRODUCT_NAME#
+        </td>
+        <td>
+            #structKeyExists(YILLIK_ORTALAMA_MAP, PRODUCT_ID) ? numberFormat(YILLIK_ORTALAMA_MAP[PRODUCT_ID], "999,999.99") : 0#
         </td>
         <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
         <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
