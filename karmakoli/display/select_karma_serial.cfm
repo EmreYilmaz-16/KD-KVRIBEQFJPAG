@@ -174,7 +174,10 @@ for(var i=0;i<parsers.length;i++){
         if ((event.keyCode === 13 || event.key === 'Enter') && visibleRows.length === 1 && value.length > 0) {
             var link = visibleRows[0].querySelector('a');
             if (link) {
+                document.getElementById('serial_no').value = "" // Arama kutusunu temizle
+                
                 link.click();
+
             }
         }
         
