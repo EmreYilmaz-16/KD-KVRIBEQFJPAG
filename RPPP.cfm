@@ -66,9 +66,9 @@ GROUP BY SYIL,SAY,PRODUCT_NAME,PRODUCT_ID,PRODUCT_CODE,PRODUCT_CODE_2
 ORDER BY SYIL,SAY
 </cfquery>
 
-<cfquery name="yillikOrtalama" datasource="w3Qa">
+<cfquery name="aylikOrtalama" datasource="w3Qa">
     SELECT PRODUCT_ID, PRODUCT_NAME, PRODUCT_CODE, PRODUCT_CODE_2,
-           AVG(MONTHLY_TOTAL) AS YILLIK_ORTALAMA,
+           AVG(MONTHLY_TOTAL) AS AYLIK_ORTALAMA,
            SUM(MONTHLY_TOTAL) AS TOPLAM_SATIS,
            COUNT(*) AS AY_SAYISI
     FROM (
@@ -84,14 +84,14 @@ ORDER BY SYIL,SAY
 </cfquery>
 
 <cfset PRODCT_SALE_MAP = structNew()>
-<cfset YILLIK_ORTALAMA_MAP = structNew()>
+<cfset AYLIK_ORTALAMA_MAP = structNew()>
 
 <cfloop query="siprapor">
     <cfset PRODCT_SALE_MAP["#SYIL#-#SAY#-#PRODUCT_ID#"] = SMIK>
 </cfloop>
 
-<cfloop query="yillikOrtalama">
-    <cfset YILLIK_ORTALAMA_MAP[PRODUCT_ID] = YILLIK_ORTALAMA>
+<cfloop query="aylikOrtalama">
+    <cfset AYLIK_ORTALAMA_MAP[PRODUCT_ID] = AYLIK_ORTALAMA>
 </cfloop>
 
 <cfset START_YEAR=YEAR(dateAdd("m",-12,now()))>
@@ -109,7 +109,7 @@ ORDER BY SYIL,SAY
                             <th class="text-center">ETA Kodu</th>
                             <th class="text-center">Ürün Kodu</th>
                             <th>Ürün</th>
-                            <th class="text-center">Yıllık Ortalama</th>
+                            <th class="text-center">Aylık Ortalama</th>
                             <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
                             <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
                             <cfset currentYear = year(currentDate)>
@@ -138,7 +138,7 @@ ORDER BY SYIL,SAY
                                 #PRODUCT_NAME#
                             </td>
                             <td class="text-center ortalama-cell">
-                                #structKeyExists(YILLIK_ORTALAMA_MAP, PRODUCT_ID) ? numberFormat(YILLIK_ORTALAMA_MAP[PRODUCT_ID], "999,999.99") : 0#
+                                #structKeyExists(AYLIK_ORTALAMA_MAP, PRODUCT_ID) ? numberFormat(AYLIK_ORTALAMA_MAP[PRODUCT_ID], "999,999.99") : 0#
                             </td>
                             <cfset currentDate = createDate(START_YEAR, START_MONTH, 1)>
                             <cfset endDate = createDate(END_YEAR, END_MONTH, 1)>
