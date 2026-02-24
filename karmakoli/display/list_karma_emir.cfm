@@ -32,7 +32,7 @@
 <cf_box title="#boxTitle#" scroll="1" collapsable="1" resize="1" popup_box="1">
 <cfif not isDefined("attributes.ajax")>
 <div class="row mb-3">
-   <cf_box>
+   
     <div class="col-12">
         <cfoutput>
         <form method="get" action="#request.self#?fuseaction=#attributes.fuseaction#" class="form-inline">
@@ -89,7 +89,6 @@
         </form>
         </cfoutput>
     </div>
-    </cf_box>
 </div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">

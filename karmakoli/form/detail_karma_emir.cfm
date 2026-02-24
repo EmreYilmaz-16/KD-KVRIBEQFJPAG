@@ -209,6 +209,52 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
   )
         </cfquery>
+<table>
+    <tr>
+        <th>
+            Hedef Miktar
+        </th>
+        <th>
+            Tamamlanan
+        </th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>
+            <div class="karma-quantity-display">
+                <div>
+                    <div class="quantity-label">Hedef Miktar</div>
+                    <input type="text" 
+                            name="KARMA_QUANTITY" 
+                            id="KARMA_QUANTITY" 
+                            class="quantity-input target"
+                            readonly 
+                            value="#getEmirDetail.AMOUNT#">
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="karma-quantity-display">
+                <div>
+                    <div class="quantity-label">Tamamlanan</div>
+                    <input type="text" 
+                            name="KARMA_QUANTITY1" 
+                            id="KARMA_QUANTITY1" 
+                            class="quantity-input current"
+                            readonly 
+                            value="0">
+                </div>
+            </div>
+        </td>
+        <td>
+            <button type="button" 
+                    id="UretBtn" 
+                    class="karma-submit-btn" 
+                    onclick="Uret(<cfoutput>#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#</cfoutput>)" 
+                    style="display:none;">Seçilen Ürünleri Ekle</button>
+        </td>
+    </tr>
+</table>
 <div class="karma-container">
     <div class="karma-row">
         <div class="karma-table-wrapper">
@@ -254,7 +300,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
 
         
         
-        
+        <!-----
         <div class="karma-sidebar">
             <cfoutput>
                 <div class="karma-quantity-display">
@@ -278,11 +324,7 @@ LEFT JOIN w3Qa.DEPARTMENT AS D ON D.DEPARTMENT_ID=SL.DEPARTMENT_ID
                     </div>
                 </div>
             </cfoutput>
-            <button type="button" 
-                    id="UretBtn" 
-                    class="karma-submit-btn" 
-                    onclick="Uret(<cfoutput>#getEmirDetail.PRODUCT_ID#,#getEmirDetail.STOCK_ID#</cfoutput>)" 
-                    style="display:none;">Seçilen Ürünleri Ekle</button>
+            
         </div>
     </div>
 </div>
