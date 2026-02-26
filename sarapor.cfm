@@ -25,10 +25,10 @@ GROUP BY S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME
 ORDER BY P1,ODY,ODM
 </cfquery>
 
-<cfset MINUMUM_YEAR= ArrayMin(valueArray(getdata.ODY))>
-<cfset MAXIMUM_YEAR= ArrayMax(valueArray(getdata.ODY))>
-<cfset MINUMUM_MONTH= ArrayMin(valueArray(getdata.ODM))>
-<cfset MAXIMUM_MONTH= ArrayMax(valueArray(getdata.ODM))>
+<cfset MINUMUM_YEAR= ArrayMin(valueArray(getdata,"ODY"))>
+<cfset MAXIMUM_YEAR= ArrayMax(valueArray(getdata,"ODY"))>
+<cfset MINUMUM_MONTH= ArrayMin(valueArray(getdata,"ODM"))>
+<cfset MAXIMUM_MONTH= ArrayMax(valueArray(getdata,"ODM"))>
 <cfoutput>
 Minimum Year: #MINUMUM_YEAR# <br>
 Maximum Year: #MAXIMUM_YEAR# <br>
