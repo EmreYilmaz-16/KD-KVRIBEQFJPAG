@@ -25,14 +25,35 @@ WHERE O.PURCHASE_SALES=0 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RE
 GROUP BY S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME
 ORDER BY P1,ODY,ODM
 </cfquery>
+<cfquery name="RRP" datasource="#dsn3#">
+    select 
+SUM(QUANTITY) AS TOTAL_SALE,
+SUM(QUANTITY)/MAX(MONTH(GETDATE())) AS AVG_SALE,
+YEAR(ORDERS.ORDER_DATE) YEAR,
+STOCK_ID,PRODUCT_ID
+ from w3Qa_1.ORDER_ROW INNER JOIN w3Qa_1.ORDERS ON ORDERS.ORDER_ID=ORDER_ROW.ORDER_ID
+WHERE ORDERS.PURCHASE_SALES=1 GROUP BY YEAR(ORDERS.ORDER_DATE),STOCK_ID,PRODUCT_ID
+</cfquery>
 
+<cfset RRP_MAP = {}>
+<cfset AVG_MAP = {}>
+<cfloop query="RRP">
+    <cfset RRP_MAP["#YEAR#-#PRODUCT_ID#"] = TOTAL_SALE>
+    <cfset AVG_MAP["#YEAR#-#PRODUCT_ID#"] = AVG_SALE>
+</cfloop>
+
+<cfset yearList = []>
 <cfset yearMonthList = []>
 <cfloop query="getdata">
+    <cfif NOT ArrayFind(yearList, ODY)>
+        <cfset ArrayAppend(yearList, ODY)>
+    </cfif>
     <cfset yearMonth = "#ODY#-#ODM#">
     <cfif NOT ArrayFind(yearMonthList, yearMonth)>
         <cfset ArrayAppend(yearMonthList, yearMonth)>
     </cfif>
 </cfloop>
+<cfset ArraySort(yearList, "numeric")>
 <cfset ArraySort(yearMonthList, "text")>
 
 <table border="1">
@@ -41,8 +62,14 @@ ORDER BY P1,ODY,ODM
         <th>Ürün Adı</th>
         <th>Bakiye</th>
         <cfoutput>
-        <cfloop array="#yearMonthList#" index="yearMonth">
-            <th>#yearMonth#</th>
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <th>#yearMonth#</th>
+                </cfif>
+            </cfloop>
+            <th style="background-color:##e6f3ff;">#year# Toplam</th>
+            <th style="background-color:##fff3e6;">#year# Ortalama</th>
         </cfloop>
         </cfoutput>
     </tr>
@@ -51,13 +78,35 @@ ORDER BY P1,ODY,ODM
         <td>#PRODUCT_CODE_2#</td>
         <td>#PRODUCT_NAME#</td>
         <td>#BK#</td>
-        <cfloop array="#yearMonthList#" index="yearMonth">
-            <cfset parts = ListToArray(yearMonth, "-")>
-            <cfset year = parts[1]>
-            <cfset month = parts[2]>
-            <td>
-                <cfif ODY EQ year AND ODM EQ month>
-                    #BS#
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <cfset parts = ListToArray(yearMonth, "-")>
+                    <cfset yy = parts[1]>
+                    <cfset mm = parts[2]>
+                    <td>
+                        <cfoutput group="ODY">
+                            <cfoutput group="ODM">
+                                <cfif ODY EQ yy AND ODM EQ mm>
+                                    #BS#
+                                </cfif>
+                            </cfoutput>
+                        </cfoutput>
+                    </td>
+                </cfif>
+            </cfloop>
+            <td style="background-color:##e6f3ff; font-weight:bold;">
+                <cfif StructKeyExists(RRP_MAP, "#year#-#P1#")>
+                    #NumberFormat(RRP_MAP["#year#-#P1#"], "9,999.99")#
+                <cfelse>
+                    0
+                </cfif>
+            </td>
+            <td style="background-color:##fff3e6; font-weight:bold;">
+                <cfif StructKeyExists(AVG_MAP, "#year#-#P1#")>
+                    #NumberFormat(AVG_MAP["#year#-#P1#"], "9,999.99")#
+                <cfelse>
+                    0
                 </cfif>
             </td>
         </cfloop>
