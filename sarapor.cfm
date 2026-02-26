@@ -53,11 +53,17 @@ GROUP BY S1,P1,COMPANY_ID
 
 </cfquery>
 
+<cfset ALINAN_SIPARIS_MAP = {}>
 <cfloop query="alinansiparis">
     <cfset ALINAN_SIPARIS_MAP["#COMPANY_ID#-#P1#"] = BS>
 </cfloop>
-<cfset COMPANIES=valueArray(alinansiparis,"COMPANY_ID")>
-<CFSET COMPANIES=ArrayUnique(COMPANIES)>
+
+<cfset COMPANIES = []>
+<cfloop query="alinansiparis">
+    <cfif NOT ArrayFind(COMPANIES, COMPANY_ID)>
+        <cfset ArrayAppend(COMPANIES, COMPANY_ID)>
+    </cfif>
+</cfloop>
 
 
 <cfset RRP_MAP = {}>
