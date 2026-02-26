@@ -1,3 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satış Raporu</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+        .year-total {
+            background-color: #e6f3ff !important;
+        }
+        .year-avg {
+            background-color: #fff3e6 !important;
+        }
+        .company-order {
+            background-color: #ffe6e6 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="mb-4">Satış Raporu</h1>
+
 <cfset dsn3="w3Qa_1">
 <cfquery name="getdata" datasource="#dsn3#">
 SELECT SUM(SIN) AS BS,S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME,
@@ -87,7 +117,9 @@ GROUP BY S1,P1,COMPANY_ID
 <cfset ArraySort(yearList, "numeric")>
 <cfset ArraySort(yearMonthList, "text")>
 
-<table border="1">
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="table-dark">
     <tr>
         <th>Ürün Kodu</th>
         <th>Ürün Adı</th>
@@ -99,14 +131,16 @@ GROUP BY S1,P1,COMPANY_ID
                     <th>#yearMonth#</th>
                 </cfif>
             </cfloop>
-            <th style="background-color:##e6f3ff;">#year# Toplam</th>
-            <th style="background-color:##fff3e6;">#year# Ortalama</th>
+            <th class="year-total">#year# Toplam</th>
+            <th class="year-avg">#year# Ortalama</th>
         </cfloop>
         <cfloop array="#COMPANIES#" index="company">
-            <th style="background-color:##ffe6e6;">#company# Alınan Sipariş</th>
+            <th class="company-order">#company# Alınan Sipariş</th>
         </cfloop>
         </cfoutput>
     </tr>
+    </thead>
+    <tbody>
     <cfoutput query="getdata" group="P1">
     <tr>
         <td>#PRODUCT_CODE_2#</td>
@@ -129,14 +163,14 @@ GROUP BY S1,P1,COMPANY_ID
                     </td>
                 </cfif>
             </cfloop>
-            <td style="background-color:##e6f3ff; font-weight:bold;">
+            <td class="year-total fw-bold">
                 <cfif StructKeyExists(RRP_MAP, "#year#-#P1#")>
                     #NumberFormat(RRP_MAP["#year#-#P1#"], "9,999.99")#
                 <cfelse>
                     0
                 </cfif>
             </td>
-            <td style="background-color:##fff3e6; font-weight:bold;">
+            <td class="year-avg fw-bold">
                 <cfif StructKeyExists(AVG_MAP, "#year#-#P1#")>
                     #NumberFormat(AVG_MAP["#year#-#P1#"], "9,999.99")#
                 <cfelse>
@@ -145,7 +179,7 @@ GROUP BY S1,P1,COMPANY_ID
             </td>
         </cfloop>
         <cfloop array="#COMPANIES#" index="company">
-            <td style="background-color:##ffe6e6; font-weight:bold;">
+            <td class="company-order fw-bold">
                 <cfif StructKeyExists(ALINAN_SIPARIS_MAP, "#company#-#P1#")>
                     #NumberFormat(ALINAN_SIPARIS_MAP["#company#-#P1#"], "9,999.99")#
                 <cfelse>
@@ -155,5 +189,13 @@ GROUP BY S1,P1,COMPANY_ID
         </cfloop>
     </tr>
     </cfoutput>
-    
+    </tbody>
 </table>
+</div>
+
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
