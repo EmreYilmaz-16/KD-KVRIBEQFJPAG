@@ -26,25 +26,42 @@ GROUP BY S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME
 ORDER BY P1,ODY,ODM
 </cfquery>
 
-<cfset MINUMUM_YEAR= ArrayMin(valueArray(getdata,"ODY"))>
-<cfset MAXIMUM_YEAR= ArrayMax(valueArray(getdata,"ODY"))>
-<cfset MINUMUM_MONTH= ArrayMin(valueArray(getdata,"ODM"))>
-<cfset MAXIMUM_MONTH= ArrayMax(valueArray(getdata,"ODM"))>
-<cfoutput>
-Minimum Year: #MINUMUM_YEAR# <br>
-Maximum Year: #MAXIMUM_YEAR# <br>
-Minimum Month: #MINUMUM_MONTH# <br>
-Maximum Month: #MAXIMUM_MONTH# <br>
-</cfoutput>
+<cfset yearMonthList = []>
+<cfloop query="getdata">
+    <cfset yearMonth = "#ODY#-#ODM#">
+    <cfif NOT ArrayFind(yearMonthList, yearMonth)>
+        <cfset ArrayAppend(yearMonthList, yearMonth)>
+    </cfif>
+</cfloop>
+<cfset ArraySort(yearMonthList, "text")>
 
-
-
-<table>
+<table border="1">
     <tr>
         <th>Ürün Kodu</th>
         <th>Ürün Adı</th>
         <th>Bakiye</th>
-
-
+        <cfoutput>
+        <cfloop array="#yearMonthList#" index="yearMonth">
+            <th>#yearMonth#</th>
+        </cfloop>
+        </cfoutput>
     </tr>
+    <cfoutput query="getdata" group="P1">
+    <tr>
+        <td>#PRODUCT_CODE_2#</td>
+        <td>#PRODUCT_NAME#</td>
+        <td>#BK#</td>
+        <cfloop array="#yearMonthList#" index="yearMonth">
+            <cfset parts = ListToArray(yearMonth, "-")>
+            <cfset year = parts[1]>
+            <cfset month = parts[2]>
+            <td>
+                <cfif ODY EQ year AND ODM EQ month>
+                    #BS#
+                </cfif>
+            </td>
+        </cfloop>
+    </tr>
+    </cfoutput>
+    
 </table>
