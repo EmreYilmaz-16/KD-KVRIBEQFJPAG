@@ -28,11 +28,11 @@
 </head>
 <body>
 <cfif isDefined("attributes.is_submit") AND attributes.is_submit EQ "1">
-    <cfset company = URL.company>
-    <cfset product = URL.product>
-    <cfset date = URL.date>
-    <cfset stock_id_list = ListToArray(URL.stock_id_list)>
-    <cfset product_id_list = ListToArray(URL.product_id_list)>
+    <cfset company = attributes.company>
+    <cfset product = attributes.product>
+    <cfset date = attributes.date>
+    <cfset stock_id_list = ListToArray(attributes.stock_id_list)>
+    <cfset product_id_list = ListToArray(attributes.product_id_list)>
     
     <!-- Burada formdan gelen verileri işleyebilir ve kaydedebilirsiniz -->
     <cfoutput>
@@ -149,8 +149,8 @@ ORDER BY P1
         
         <form id="sipform" action="sarapor_details.cfm" method="post">
             <cfoutput>
-            <input type="hidden" name="company" value="#URL.company#">
-            <input type="hidden" name="product" value="#URL.product#">
+            <input type="hidden" name="company" value="#attributes.company#">
+            <input type="hidden" name="product" value="#attributes.product#">
             <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
             <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
             <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
