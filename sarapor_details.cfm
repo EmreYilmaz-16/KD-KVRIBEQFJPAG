@@ -1,4 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şara Rapor Detayları</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+
 <cfdump var="#attributes#" label="URL Parameters">
+
+
 
 <cfquery name="getData" datasource="w3Qa_1">
     SELECT SUM(SOUT) AS BS,S1,P1, PRODUCT_CODE_2, PRODUCT_NAME FROM (
@@ -20,34 +53,86 @@ AND O.COMPANY_ID=#URL.company#
 ) AS T WHERE SOUT >0  --AND P1=5350
 GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME
 </cfquery>
-<table>
-    <tr>
-        <th>ÜRÜN KODU</th>
-        <th>ÜRÜN ADI</th>        
-        <th>ALINAN SİPARİŞ</th>
-        <th></th>
-        <th></th>
-        
-    </tr>
-    <cfloop query="getData">
-        <cfoutput>
-        <tr>
-            <td>#PRODUCT_CODE_2#</td>
-            <td>#PRODUCT_NAME#</td>            
-            <td>#BS#</td>
-            <td>
-                <div class="form-group">
-                    <input type="text" name="pr_#S1#" id="pr_#S1#">
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <input type="text" name="sp_#S1#" id="sp_#S1#">
-                </div>
-            </td>
-            
-        </tr>
-</cfoutput>
-    </cfloop>
+<cfset pid_list=valueList(getData.P1)>
 
-</table>
+<cfquery name="getData2" datasource="w3Qa_1">
+    SELECT SUM(SIN) AS BS,S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME,
+(SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK FROM (
+SELECT  
+ORDR.STOCK_ID S1,
+ORDR.ORDER_ROW_CURRENCY,
+S.PRODUCT_ID P1,
+S.PRODUCT_CODE_2,
+S.PRODUCT_NAME,
+O.ORDER_NUMBER,O.PURCHASE_SALES,
+O.ORDER_ID O1,
+O.RESERVED,
+  ORR.ORDER_ID,
+ YEAR(O.ORDER_DATE ) ODY,
+MONTH(O.ORDER_DATE ) ODM,
+RESERVE_STOCK_IN-STOCK_IN AS SIN,
+RESERVE_STOCK_OUT-STOCK_OUT AS SOUT
+FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
+LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
+LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
+LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
+WHERE O.PURCHASE_SALES=0 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RESERVED=1
+) AS T WHERE SIN >0  AND P1 IN (#pid_list#)
+GROUP BY S1,P1,ODM,ODY,PRODUCT_CODE_2,PRODUCT_NAME
+ORDER BY P1,ODY,ODM
+</cfquery>
+
+<cfset BAKIYE_MAP = {}>
+<cfset VERILEN_SIPARIS_MAP = {}>
+<cfloop query="getData2">
+    <cfset BAKIYE_MAP["#ODY#-#P1#"] = BK>
+    <cfset VERILEN_SIPARIS_MAP["#ODY#-#P1#"] = BS>
+</cfloop>
+
+
+<div class="container">
+    <div class="table-container">
+        <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ÜRÜN KODU</th>
+                        <th>ÜRÜN ADI</th>
+                        <th>STOKTAKİ MİKTAR</th>
+                        <th>BEKLENEN SİPARİŞ</th>        
+                        <th>ALINAN SİPARİŞ</th>
+                        <th>PR</th>
+                        <th>SP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <cfloop query="getData">
+                        <cfoutput>
+                        <tr>
+                            <td><strong>#PRODUCT_CODE_2#</strong></td>
+                            <td>#PRODUCT_NAME#</td>            
+                            <td><span class="badge bg-primary">#BS#</span></td>
+                            <td><span class="badge bg-warning">#BAKIYE_MAP["#ODY#-#P1#"]#</span></td>
+                            <td><span class="badge bg-success">#VERILEN_SIPARIS_MAP["#ODY#-#P1#"]#</span></td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="sp_#S1#" id="sp_#S1#" placeholder="SP değeri">
+                            </td>
+                        </tr>
+                        </cfoutput>
+                    </cfloop>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
