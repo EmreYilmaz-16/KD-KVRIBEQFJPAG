@@ -82,7 +82,7 @@ GROUP BY S1,P1,PRODUCT_CODE_2,PRODUCT_NAME,PRODUCT_CODE
 ORDER BY P1
 </cfquery>
 <cfdump var="#getData2#" label="Get Data 2">
-
+<cfdump var="#getData#" label="Get Data 1">
 <cfset BAKIYE_MAP = {}>
 <cfset VERILEN_SIPARIS_MAP = {}>
 <cfloop query="getData2">
@@ -123,8 +123,9 @@ ORDER BY P1
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-warning">#bakiyeDegeri#</span></td>
-                            <td><span class="badge bg-primary">#BS#</span></td>                            
                             <td><span class="badge bg-success">#verilenSiparisDegeri#</span></td>
+                            <td><span class="badge bg-primary">#BS#</span></td>                            
+                            
                             <td>
                                 <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
                             </td>
