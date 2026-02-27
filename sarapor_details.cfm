@@ -111,8 +111,9 @@ ORDER BY P1
                         <th>STOKTAKİ MİKTAR</th>
                         <th>ALINAN SİPARİŞ REZERV</th>
                         <th>Sipariş Miktarı</th>                                
-                        <th>PR</th>
-                        <th>SP</th>
+                        <th>HAZIR</th>
+                        <th>TERMIN</th>
+                        <th>VERİLMEYEN</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,10 +130,13 @@ ORDER BY P1
                             <td><span class="badge bg-primary">#BS#</span></td>                            
                             
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
+                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="sp_#S1#" id="sp_#S1#" placeholder="SP değeri">
+                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri">
                             </td>
                         </tr>
                         </cfoutput>
