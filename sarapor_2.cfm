@@ -300,7 +300,7 @@ ORDER BY PR.PRODUCT_ID
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
-                    #NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#
+                    <a href="javascript:void(0)" onclick="window.open('sarapor_details.cfm?company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a>
                 <cfelse>
                     #NumberFormat(0, "9,999.99")#
                 </cfif>
