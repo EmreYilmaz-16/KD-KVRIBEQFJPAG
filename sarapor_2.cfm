@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -29,8 +30,54 @@
         <h1 class="mb-4">Satış Raporu</h1>
 
 <cfset dsn3="w3Qa_1">
+<cfform name="reportForm" method="post" action="sarapor_2.cfm">
+    <div class="form-group" id="item-brand_id">
+                        <label>Marka </label>
+                        
+<link href="../../JS/temp/scroll/jquery.mCustomScrollbar.css" rel="stylesheet">
+<script src="../../JS/temp/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
 
+<div class="input-group">
+    <input type="hidden" name="brand_id" id="brand_id" style="width:100px" value="">
+    <input type="text" name="brand_name" placeholder="Marka" id="brand_name" style="width:100px" value="" onblur="compenentInputValueEmptyingbrand(this);" onkeypress="if(event.keyCode==13) {compenentAutoCompletebrand(this,'&RETURNQUERYVALUE=BRAND_ID,BRAND_NAME&FIELDID=brand_id&COMPENENT_NAME=getProductBrand&BOXHEIGHT=150&IS_INTERNET=0&FIELDNAME=brand_name&WIDTH=100&LISTPAGE=0&JS_PAGE=0&BOXWIDTH=240&SINGLE_LINE=1&RETURNINPUTVALUE=brand_id,brand_name&BRAND_CODE=0&TITLE=Marka&columnList=BRAND_NAME@Marka,'); return false;}">
+    <span class="input-group-addon btnPointer icon-ellipsis" onclick="compenentAutoCompletebrand('','&RETURNQUERYVALUE=BRAND_ID,BRAND_NAME&FIELDID=brand_id&COMPENENT_NAME=getProductBrand&BOXHEIGHT=150&IS_INTERNET=0&FIELDNAME=brand_name&WIDTH=100&LISTPAGE=0&JS_PAGE=0&BOXWIDTH=240&SINGLE_LINE=1&RETURNINPUTVALUE=brand_id,brand_name&BRAND_CODE=0&TITLE=Marka&columnList=BRAND_NAME@Marka,');"> </span>
+</div>
+<script type="text/javascript">
+	function compenentAutoCompletebrand(object_,comp_url){
+		 var company_brand_ =(!object_)?'':object_.value;
+		 var keyword_ =(!object_)?'':object_.value;
+		 if(keyword_.length < 3 && object_ != ""){
+			alert("En az 3 karakter giriniz.!");
+			return false;
+			}
+		 else{
+			comp_url = comp_url+'&company_brand='+company_brand_+'&keyword='+keyword_+'';
+			openBoxDraggable('index.cfm?fuseaction=objects.popup_wrk_list_comp&'+comp_url);
+			return false;	
+		 }
+		 return false;	
+	}
+	function compenentInputValueEmptyingbrand(object_){
+		var keyword_ = object_.value;
+		if(keyword_.length == 0){
+			
+				document.getElementById('brand_id').value ='';
+			
+				document.getElementById('brand_name').value ='';
+				
+		}
+	}
+</script>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Sadece Satışı Olanlar Gelsin</label>
+                        <input type="checkbox" name="only_sales" id="only_sales" value="1">
+                    </div>
+                    <input type="submit" value="Raporu Göster">
+</cfform>
 <cfquery name="RAPOR_SQL" datasource="#dsn3#">
+   SELECT * FROM (
     SELECT
     PR.PRODUCT_NAME,
     PR.PRODUCT_CODE,
@@ -120,9 +167,14 @@ OUTER APPLY (
         FOR JSON PATH
     ) AS ASIP
 ) AS ASIP
-
+   ) AS PR
 --WHERE PR.PRODUCT_ID = 5350
-WHERE PR.BRAND_ID=6
+WHERE 1=1  <cfif structKeyExists(attributes, "brand_name") AND len(attributes.brand_name)>
+    AND PR.BRAND_ID=#attributes.brand_id#
+</cfif>
+<cfif structKeyExists(attributes, "only_sales") AND attributes.only_sales EQ "1">
+    AND ASIP IS NOT NULL
+</cfif>
 ORDER BY PR.PRODUCT_ID
 </cfquery>
 
