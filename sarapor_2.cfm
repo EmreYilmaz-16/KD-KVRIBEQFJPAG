@@ -123,12 +123,13 @@ OUTER APPLY (
             T.S3,
             T.P3,
             T.COMPANY_ID,
-            C.NICKNAME
+            T.NICKNAME
         FROM (
             SELECT
                 ORDR.STOCK_ID AS S3,
                 ORDR.PRODUCT_ID AS P3,
                 O.COMPANY_ID,
+                C.NICKNAME,
                 (RESERVE_STOCK_OUT - STOCK_OUT) AS SOUT
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
             LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
