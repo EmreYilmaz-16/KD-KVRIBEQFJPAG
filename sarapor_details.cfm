@@ -27,9 +27,55 @@
     </style>
 </head>
 <body>
+<cfif isDefined("attributes.is_submit") AND attributes.is_submit EQ "1">
+    <cfset company = URL.company>
+    <cfset product = URL.product>
+    <cfset date = URL.date>
+    <cfset stock_id_list = ListToArray(URL.stock_id_list)>
+    <cfset product_id_list = ListToArray(URL.product_id_list)>
+    
+    <!-- Burada formdan gelen verileri işleyebilir ve kaydedebilirsiniz -->
+    <cfoutput>
+        <p><strong>Company:</strong> #company#</p>
+        <p><strong>Product:</strong> #product#</p>
+        <p><strong>Date:</strong> #date#</p>
+        <p><strong>Stock ID List:</strong> #URL.stock_id_list#</p>
+        <p><strong>Product ID List:</strong> #URL.product_id_list#</p>
+    </cfoutput>
+    
+    <!-- Verileri kaydetmek için gerekli sorguları ekleyebilirsiniz -->
+    <cfloop from="1" to="#ArrayLen(stock_id_list)#" index="i">
+        <cfset current_stock_id = stock_id_list[i]>
+        <cfset current_product_id = product_id_list[i]>
+        
+        <cfset hazir_field_name = "hazir_" & current_stock_id>
+        <cfset termin_field_name = "termin_" & current_stock_id>
+        <cfset verilmeyen_field_name = "verilmeyen_" & current_stock_id>
+        
+        <cfset hazir_value = isDefined("URL.#hazir_field_name#") ? URL[hazir_field_name] : 0>
+        <cfset termin_value = isDefined("URL.#termin_field_name#") ? URL[termin_field_name] : 0>
+        <cfset verilmeyen_value = isDefined("URL.#verilmeyen_field_name#") ? URL[verilmeyen_field_name] : 0>
+        
+        <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
+            <cfquery datasource="w3Qa_1">
+                INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
+                (COMPANY_ID, PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN)
+                VALUES (
+                    #company#,
+                    #current_product_id#,
+                    #IsNumeric(hazir_value) ? hazir_value : 0#,
+                    #IsNumeric(termin_value) ? termin_value : 0#,
+                    #IsNumeric(verilmeyen_value) ? verilmeyen_value : 0#
+                )
+            </cfquery>
+        </cfif>
+    </cfloop>
+    
+    <div class="alert alert-success mt-3" role="alert">
+        <i class="bi bi-check-circle"></i> Veriler başarıyla kaydedildi!
+    </div>
 
-
-
+</cfif>
 
 
 <cfquery name="getData" datasource="w3Qa_1">
@@ -101,30 +147,32 @@ ORDER BY P1
     <div class="table-container">
         <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
         
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ÜRÜN KODU</th>
-                        <th>ÜRÜN KODU 2</th>
-                        <th>ÜRÜN ADI</th>
-                        <th>STOKTAKİ MİKTAR</th>
-                        <th>ALINAN SİPARİŞ REZERV</th>
-                        <th>Sipariş Miktarı</th>                                
-                        <th>HAZIR</th>
-                        <th>TERMIN</th>
-                        <th>VERİLMEYEN</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <form id="sipform">
-                        <cfoutput>
-                        <input type="hidden" name="company" value="#URL.company#">
-                        <input type="hidden" name="product" value="#URL.product#">
-                        <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
-                        <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
-                        <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
-                        </cfoutput>
+        <form id="sipform" action="sarapor_details.cfm" method="post">
+            <cfoutput>
+            <input type="hidden" name="company" value="#URL.company#">
+            <input type="hidden" name="product" value="#URL.product#">
+            <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
+            <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
+            <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
+            <input type="hidden" name="is_submit" value="1">
+            </cfoutput>
+            
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ÜRÜN KODU</th>
+                            <th>ÜRÜN KODU 2</th>
+                            <th>ÜRÜN ADI</th>
+                            <th>STOKTAKİ MİKTAR</th>
+                            <th>ALINAN SİPARİŞ REZERV</th>
+                            <th>Sipariş Miktarı</th>                                
+                            <th>HAZIR</th>
+                            <th>TERMIN</th>
+                            <th>VERİLMEYEN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <cfloop query="getData">
                         <cfoutput>
                         <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
@@ -150,9 +198,15 @@ ORDER BY P1
                         </cfoutput>
                     </cfloop>
                 </tbody>
-                </form>
             </table>
         </div>
+        
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-save"></i> Verileri Kaydet
+            </button>
+        </div>
+        </form>
     </div>
 </div>
 
@@ -197,29 +251,13 @@ ORDER BY P1
     
     // Kullanım örneği
     $(document).ready(function() {
-        // Form submit olduğunda
+        // Form submit olduğunda - console'a JSON yazdır ama normal submit yapsın
         $('#sipform').on('submit', function(e) {
-            e.preventDefault();
-            
             var formJSON = formToJSON('sipform');
             console.log('Form JSON:', formJSON);
             console.log('Form JSON String:', JSON.stringify(formJSON, null, 2));
             
-            // AJAX ile göndermek isterseniz:
-            /*
-            $.ajax({
-                url: 'save_scanning_data.cfm',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formJSON),
-                success: function(response) {
-                    console.log('Başarılı:', response);
-                },
-                error: function(error) {
-                    console.error('Hata:', error);
-                }
-            });
-            */
+            // Normal form submit devam etsin (preventDefault yok)
         });
         
         // Butona tıklandığında JSON'u görmek için
