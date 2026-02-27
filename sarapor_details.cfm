@@ -110,12 +110,14 @@ ORDER BY P1,ODY,ODM
                 <tbody>
                     <cfloop query="getData">
                         <cfoutput>
+                        <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
+                        <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
                         <tr>
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-primary">#BS#</span></td>
-                            <td><span class="badge bg-warning">#BAKIYE_MAP["-#P1#"]#</span></td>
-                            <td><span class="badge bg-success">#VERILEN_SIPARIS_MAP["-#P1#"]#</span></td>
+                            <td><span class="badge bg-warning">#bakiyeDegeri#</span></td>
+                            <td><span class="badge bg-success">#verilenSiparisDegeri#</span></td>
                             <td>
                                 <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
                             </td>
