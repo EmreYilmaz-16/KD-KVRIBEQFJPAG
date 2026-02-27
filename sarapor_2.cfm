@@ -1,7 +1,41 @@
-<cfquery name="RAPOR_SQL" datasource="w3Qa_1">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satış Raporu</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+        .year-total {
+            background-color: #e6f3ff !important;
+        }
+        .year-avg {
+            background-color: #fff3e6 !important;
+        }
+        .company-order {
+            background-color: #ffe6e6 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="mb-4">Satış Raporu</h1>
+
+<cfset dsn3="w3Qa_1">
+
+<cfquery name="RAPOR_SQL" datasource="#dsn3#">
     SELECT
     PR.PRODUCT_NAME,
     PR.PRODUCT_CODE,
+    PR.PRODUCT_ID,
+    (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=PR.PRODUCT_ID) AS BK,
     JSON_QUERY(VSIP.GT)   AS VSIP,
     JSON_QUERY(RPR.RPR) AS RPR,
     JSON_QUERY(ASIP.ASIP) AS ASIP
@@ -87,197 +121,155 @@ OUTER APPLY (
     ) AS ASIP
 ) AS ASIP
 
---WHERE PR.PRODUCT_ID = 5350;
+--WHERE PR.PRODUCT_ID = 5350
+ORDER BY PR.PRODUCT_ID
 </cfquery>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Stok Raporu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .report-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .json-detail {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 5px 0;
-            font-size: 12px;
-        }
-        .section-title {
-            font-weight: bold;
-            color: #2196F3;
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
-        .detail-row {
-            margin: 3px 0;
-            padding: 3px;
-            background-color: white;
-            border-left: 3px solid #2196F3;
-            padding-left: 8px;
-        }
-        .no-data {
-            color: #999;
-            font-style: italic;
-        }
-        .stat-value {
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>📊 Ürün Stok ve Satış Raporu</h1>
+<!--- Parse JSON verileri ve map oluştur --->
+<cfset VSIP_MAP = {}>
+<cfset RPR_MAP = {}>
+<cfset AVG_MAP = {}>
+<cfset ASIP_MAP = {}>
+<cfset yearList = []>
+<cfset yearMonthList = []>
+<cfset companyList = []>
+
+<cfloop query="RAPOR_SQL">
+    <!--- VSIP Parse (Alış Siparişi Rezerv) --->
+    <cfif len(trim(VSIP)) AND VSIP NEQ "null" AND VSIP NEQ "[]">
+        <cfset vsipData = deserializeJSON(VSIP)>
+        <cfloop array="#vsipData#" index="item">
+            <cfif structKeyExists(item, "ODY") AND structKeyExists(item, "ODM")>
+                <cfset yearMonth = "#item.ODY#-#item.ODM#">
+                <cfset VSIP_MAP["#PRODUCT_ID#-#yearMonth#"] = item.BS>
+                
+                <!--- Yıl listesi --->
+                <cfif NOT ArrayFind(yearList, item.ODY)>
+                    <cfset ArrayAppend(yearList, item.ODY)>
+                </cfif>
+                
+                <!--- Yıl-Ay listesi --->
+                <cfif NOT ArrayFind(yearMonthList, yearMonth)>
+                    <cfset ArrayAppend(yearMonthList, yearMonth)>
+                </cfif>
+            </cfif>
+        </cfloop>
+    </cfif>
     
-    <div class="report-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Ürün Kodu</th>
-                    <th>Ürün Adı</th>
-                    <th>Alış Siparişi Rezerv</th>
-                    <th>Satış İstatistikleri</th>
-                    <th>Satış Siparişi Rezerv</th>
-                </tr>
-            </thead>
-            <tbody>
-                <cfoutput query="RAPOR_SQL">
-                    <tr>
-                        <td><strong>#PRODUCT_CODE#</strong></td>
-                        <td>#PRODUCT_NAME#</td>
-                        
-                        <!-- VSIP - Alış Siparişi Rezerv -->
-                        <td>
-                            <cfif len(trim(VSIP)) AND VSIP NEQ "null" AND VSIP NEQ "[]">
-                                <cfset vsipData = deserializeJSON(VSIP)>
-                                <cfif arrayLen(vsipData) GT 0>
-                                    <div class="json-detail">
-                                        <cfloop array="#vsipData#" index="item">
-                                            <div class="detail-row">
-                                                <strong>Miktar:</strong> <span class="stat-value">#numberFormat(item.BS, "999,999.99")#</span><br>
-                                                <cfif structKeyExists(item, "ODY") AND structKeyExists(item, "ODM")>
-                                                    Tarih: #item.ODY#/#item.ODM#<br>
-                                                </cfif>
-                                                <cfif structKeyExists(item, "S1")>
-                                                    Stok ID: #item.S1#
-                                                </cfif>
-                                            </div>
-                                        </cfloop>
-                                    </div>
-                                <cfelse>
-                                    <span class="no-data">Veri yok</span>
-                                </cfif>
-                            <cfelse>
-                                <span class="no-data">Veri yok</span>
-                            </cfif>
-                        </td>
-                        
-                        <!-- RPR - Satış İstatistikleri -->
-                        <td>
-                            <cfif len(trim(RPR)) AND RPR NEQ "null" AND RPR NEQ "[]">
-                                <cfset rprData = deserializeJSON(RPR)>
-                                <cfif arrayLen(rprData) GT 0>
-                                    <div class="json-detail">
-                                        <cfloop array="#rprData#" index="item">
-                                            <div class="detail-row">
-                                                <cfif structKeyExists(item, "YEAR")>
-                                                    <strong>Yıl:</strong> #item.YEAR#<br>
-                                                </cfif>
-                                                <cfif structKeyExists(item, "TOTAL_SALE")>
-                                                    <strong>Toplam Satış:</strong> <span class="stat-value">#numberFormat(item.TOTAL_SALE, "999,999.99")#</span><br>
-                                                </cfif>
-                                                <cfif structKeyExists(item, "AVG_SALE")>
-                                                    <strong>Ortalama:</strong> <span class="stat-value">#numberFormat(item.AVG_SALE, "999,999.99")#</span><br>
-                                                </cfif>
-                                                <cfif structKeyExists(item, "S2")>
-                                                    Stok ID: #item.S2#
-                                                </cfif>
-                                            </div>
-                                        </cfloop>
-                                    </div>
-                                <cfelse>
-                                    <span class="no-data">Veri yok</span>
-                                </cfif>
-                            <cfelse>
-                                <span class="no-data">Veri yok</span>
-                            </cfif>
-                        </td>
-                        
-                        <!-- ASIP - Satış Siparişi Rezerv -->
-                        <td>
-                            <cfif len(trim(ASIP)) AND ASIP NEQ "null" AND ASIP NEQ "[]">
-                                <cfset asipData = deserializeJSON(ASIP)>
-                                <cfif arrayLen(asipData) GT 0>
-                                    <div class="json-detail">
-                                        <cfloop array="#asipData#" index="item">
-                                            <div class="detail-row">
-                                                <strong>Miktar:</strong> <span class="stat-value">#numberFormat(item.BS, "999,999.99")#</span><br>
-                                                <cfif structKeyExists(item, "COMPANY_ID")>
-                                                    Firma ID: #item.COMPANY_ID#<br>
-                                                </cfif>
-                                                <cfif structKeyExists(item, "S3")>
-                                                    Stok ID: #item.S3#
-                                                </cfif>
-                                            </div>
-                                        </cfloop>
-                                    </div>
-                                <cfelse>
-                                    <span class="no-data">Veri yok</span>
-                                </cfif>
-                            <cfelse>
-                                <span class="no-data">Veri yok</span>
-                            </cfif>
-                        </td>
-                    </tr>
-                </cfoutput>
-            </tbody>
-        </table>
-        
+    <!--- RPR Parse (Satış İstatistikleri) --->
+    <cfif len(trim(RPR)) AND RPR NEQ "null" AND RPR NEQ "[]">
+        <cfset rprData = deserializeJSON(RPR)>
+        <cfloop array="#rprData#" index="item">
+            <cfif structKeyExists(item, "YEAR")>
+                <cfif structKeyExists(item, "TOTAL_SALE")>
+                    <cfset RPR_MAP["#item.YEAR#-#PRODUCT_ID#"] = item.TOTAL_SALE>
+                </cfif>
+                <cfif structKeyExists(item, "AVG_SALE")>
+                    <cfset AVG_MAP["#item.YEAR#-#PRODUCT_ID#"] = item.AVG_SALE>
+                </cfif>
+                
+                <!--- Yıl listesi --->
+                <cfif NOT ArrayFind(yearList, item.YEAR)>
+                    <cfset ArrayAppend(yearList, item.YEAR)>
+                </cfif>
+            </cfif>
+        </cfloop>
+    </cfif>
+    
+    <!--- ASIP Parse (Satış Siparişi Rezerv) --->
+    <cfif len(trim(ASIP)) AND ASIP NEQ "null" AND ASIP NEQ "[]">
+        <cfset asipData = deserializeJSON(ASIP)>
+        <cfloop array="#asipData#" index="item">
+            <cfif structKeyExists(item, "COMPANY_ID")>
+                <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] = item.BS>
+                
+                <!--- Firma listesi --->
+                <cfif NOT ArrayFind(companyList, item.COMPANY_ID)>
+                    <cfset ArrayAppend(companyList, item.COMPANY_ID)>
+                </cfif>
+            </cfif>
+        </cfloop>
+    </cfif>
+</cfloop>
+
+<cfset ArraySort(yearList, "numeric")>
+<cfset ArraySort(yearMonthList, "text")>
+<cfset ArraySort(companyList, "numeric")>
+
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="table-dark">
+    <tr>
+        <th>Ürün Kodu</th>
+        <th>Ürün Adı</th>
+        <th>Bakiye</th>
         <cfoutput>
-            <div style="margin-top: 20px; padding: 10px; background-color: ##e8f5e9; border-radius: 4px;">
-                <strong>Toplam Kayıt:</strong> #RAPOR_SQL.recordCount#
-            </div>
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <th>#yearMonth#</th>
+                </cfif>
+            </cfloop>
+            <th class="year-total">#year# Toplam</th>
+            <th class="year-avg">#year# Ortalama</th>
+        </cfloop>
+        <cfloop array="#companyList#" index="company">
+            <th class="company-order">#company# Alınan Sipariş</th>
+        </cfloop>
         </cfoutput>
+    </tr>
+    </thead>
+    <tbody>
+    <cfoutput query="RAPOR_SQL">
+    <tr>
+        <td>#PRODUCT_CODE#</td>
+        <td>#PRODUCT_NAME#</td>
+        <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <td>
+                        <cfif StructKeyExists(VSIP_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                            #NumberFormat(VSIP_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                        <cfelse>
+                            
+                        </cfif>
+                    </td>
+                </cfif>
+            </cfloop>
+            <td class="year-total fw-bold">
+                <cfif StructKeyExists(RPR_MAP, "#year#-#PRODUCT_ID#")>
+                    #NumberFormat(RPR_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
+                <cfelse>
+                    
+                </cfif>
+            </td>
+            <td class="year-avg fw-bold">
+                <cfif StructKeyExists(AVG_MAP, "#year#-#PRODUCT_ID#")>
+                    #NumberFormat(AVG_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
+                <cfelse>
+                    
+                </cfif>
+            </td>
+        </cfloop>
+        <cfloop array="#companyList#" index="company">
+            <td class="company-order fw-bold">
+                <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
+                    #NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#
+                <cfelse>
+                    
+                </cfif>
+            </td>
+        </cfloop>
+    </tr>
+    </cfoutput>
+    </tbody>
+</table>
+</div>
+
     </div>
     
-    <div style="text-align: center; color: #666; margin-top: 20px; font-size: 12px;">
-        Rapor Tarihi: <cfoutput>#dateFormat(now(), "dd/mm/yyyy")# - #timeFormat(now(), "HH:mm:ss")#</cfoutput>
-    </div>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
