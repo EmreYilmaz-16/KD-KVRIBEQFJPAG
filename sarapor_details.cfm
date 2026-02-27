@@ -85,8 +85,8 @@ ORDER BY P1,ODY,ODM
 <cfset BAKIYE_MAP = {}>
 <cfset VERILEN_SIPARIS_MAP = {}>
 <cfloop query="getData2">
-    <cfset BAKIYE_MAP["#ODY#-#P1#"] = BK>
-    <cfset VERILEN_SIPARIS_MAP["#ODY#-#P1#"] = BS>
+    <cfset BAKIYE_MAP["-#P1#"] = BK>
+    <cfset VERILEN_SIPARIS_MAP["-#P1#"] = BS>
 </cfloop>
 
 
@@ -114,8 +114,8 @@ ORDER BY P1,ODY,ODM
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-primary">#BS#</span></td>
-                            <td><span class="badge bg-warning">#BAKIYE_MAP["#ODY#-#P1#"]#</span></td>
-                            <td><span class="badge bg-success">#VERILEN_SIPARIS_MAP["#ODY#-#P1#"]#</span></td>
+                            <td><span class="badge bg-warning">#BAKIYE_MAP["-#P1#"]#</span></td>
+                            <td><span class="badge bg-success">#VERILEN_SIPARIS_MAP["-#P1#"]#</span></td>
                             <td>
                                 <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
                             </td>
