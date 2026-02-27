@@ -39,8 +39,8 @@
         <p><strong>Company:</strong> #company#</p>
         <p><strong>Product:</strong> #product#</p>
         <p><strong>Date:</strong> #date#</p>
-        <p><strong>Stock ID List:</strong> #URL.stock_id_list#</p>
-        <p><strong>Product ID List:</strong> #URL.product_id_list#</p>
+        <p><strong>Stock ID List:</strong> #attributes.stock_id_list#</p>
+        <p><strong>Product ID List:</strong> #attributes.product_id_list#</p>
     </cfoutput>
     
     <!-- Verileri kaydetmek için gerekli sorguları ekleyebilirsiniz -->
@@ -52,9 +52,9 @@
         <cfset termin_field_name = "termin_" & current_stock_id>
         <cfset verilmeyen_field_name = "verilmeyen_" & current_stock_id>
         
-        <cfset hazir_value = isDefined("URL.#hazir_field_name#") ? URL[hazir_field_name] : 0>
-        <cfset termin_value = isDefined("URL.#termin_field_name#") ? URL[termin_field_name] : 0>
-        <cfset verilmeyen_value = isDefined("URL.#verilmeyen_field_name#") ? URL[verilmeyen_field_name] : 0>
+        <cfset hazir_value = isDefined("attributes.#hazir_field_name#") ? attributes[hazir_field_name] : 0>
+        <cfset termin_value = isDefined("attributes.#termin_field_name#") ? attributes[termin_field_name] : 0>
+        <cfset verilmeyen_value = isDefined("attributes.#verilmeyen_field_name#") ? attributes[verilmeyen_field_name] : 0>
         
         <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
             <cfquery datasource="w3Qa_1">
