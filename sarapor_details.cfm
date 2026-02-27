@@ -25,6 +25,8 @@ GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME
         <th>ÜRÜN KODU</th>
         <th>ÜRÜN ADI</th>        
         <th>ALINAN SİPARİŞ</th>
+        <th></th>
+        <th></th>
         
     </tr>
     <cfloop query="getData">
@@ -33,6 +35,16 @@ GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME
             <td>#PRODUCT_CODE_2#</td>
             <td>#PRODUCT_NAME#</td>            
             <td>#BS#</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="pr_#S1#" id="pr_#S1#">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="sp_#S1#" id="sp_#S1#">
+                </div>
+            </td>
             
         </tr>
 </cfoutput>
