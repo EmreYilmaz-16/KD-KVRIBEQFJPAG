@@ -162,5 +162,74 @@ ORDER BY P1
 <!-- Bootstrap 5 JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    // Form datasını JSON objesine dönüştüren fonksiyon
+    function formToJSON(formId) {
+        var formData = $('#' + formId).serializeArray();
+        var jsonObject = {};
+        
+        $.each(formData, function(index, field) {
+            jsonObject[field.name] = field.value;
+        });
+        
+        return jsonObject;
+    }
+    
+    // Alternatif: Daha gelişmiş versiyon (array değerleri destekler)
+    function formToJSONAdvanced(formId) {
+        var formData = $('#' + formId).serializeArray();
+        var jsonObject = {};
+        
+        $.each(formData, function(index, field) {
+            // Eğer aynı isimde birden fazla alan varsa array yap
+            if (jsonObject[field.name]) {
+                if (!Array.isArray(jsonObject[field.name])) {
+                    jsonObject[field.name] = [jsonObject[field.name]];
+                }
+                jsonObject[field.name].push(field.value);
+            } else {
+                jsonObject[field.name] = field.value;
+            }
+        });
+        
+        return jsonObject;
+    }
+    
+    // Kullanım örneği
+    $(document).ready(function() {
+        // Form submit olduğunda
+        $('#sipform').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formJSON = formToJSON('sipform');
+            console.log('Form JSON:', formJSON);
+            console.log('Form JSON String:', JSON.stringify(formJSON, null, 2));
+            
+            // AJAX ile göndermek isterseniz:
+            /*
+            $.ajax({
+                url: 'save_scanning_data.cfm',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formJSON),
+                success: function(response) {
+                    console.log('Başarılı:', response);
+                },
+                error: function(error) {
+                    console.error('Hata:', error);
+                }
+            });
+            */
+        });
+        
+        // Butona tıklandığında JSON'u görmek için
+        window.getFormJSON = function() {
+            var formJSON = formToJSON('sipform');
+            alert(JSON.stringify(formJSON, null, 2));
+            return formJSON;
+        };
+    });
+</script>
+
 </body>
 </html>
