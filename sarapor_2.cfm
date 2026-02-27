@@ -302,7 +302,7 @@ ORDER BY PR.PRODUCT_ID
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
                     #NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#
                 <cfelse>
-                    
+                    #NumberFormat(0, "9,999.99")#
                 </cfif>
             </td>
         </cfloop>
