@@ -81,8 +81,7 @@ WHERE O.PURCHASE_SALES=0 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RE
 GROUP BY S1,P1,PRODUCT_CODE_2,PRODUCT_NAME,PRODUCT_CODE
 ORDER BY P1
 </cfquery>
-<cfdump var="#getData2#" label="Get Data 2">
-<cfdump var="#getData#" label="Get Data 1">
+
 <cfset BAKIYE_MAP = {}>
 <cfset VERILEN_SIPARIS_MAP = {}>
 <cfloop query="getData2">
@@ -92,9 +91,12 @@ ORDER BY P1
     </cfif>
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
+<!----
+<cfdump var="#getData2#" label="Get Data 2">
+<cfdump var="#getData#" label="Get Data 1">
 <cfdump var="#BAKIYE_MAP#" label="BAKIYE_MAP">
 <cfdump var="#VERILEN_SIPARIS_MAP#" label="VERILEN_SIPARIS_MAP">
-
+----->
 <div class="container">
     <div class="table-container">
         <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
