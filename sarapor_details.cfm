@@ -29,7 +29,6 @@
 <body>
 
 
-<cfdump var="#attributes#" label="URL Parameters">
 
 
 
@@ -92,6 +91,7 @@ ORDER BY P1
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
 <!----
+<cfdump var="#attributes#" label="URL Parameters">
 <cfdump var="#getData2#" label="Get Data 2">
 <cfdump var="#getData#" label="Get Data 1">
 <cfdump var="#BAKIYE_MAP#" label="BAKIYE_MAP">
@@ -117,6 +117,14 @@ ORDER BY P1
                     </tr>
                 </thead>
                 <tbody>
+                    <form id="sipform">
+                        <cfoutput>
+                        <input type="hidden" name="company" value="#URL.company#">
+                        <input type="hidden" name="product" value="#URL.product#">
+                        <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
+                        <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
+                        <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
+                        </cfoutput>
                     <cfloop query="getData">
                         <cfoutput>
                         <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
@@ -142,6 +150,7 @@ ORDER BY P1
                         </cfoutput>
                     </cfloop>
                 </tbody>
+                </form>
             </table>
         </div>
     </div>
