@@ -86,7 +86,7 @@ ORDER BY P1
 <cfset VERILEN_SIPARIS_MAP = {}>
 <cfloop query="getData2">
     <cfset BAKIYE_MAP["-#P1#"] = BK>
-    <cfset VERILEN_SIPARIS_MAP["-#P1#"] = BS>
+    <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
 
 
