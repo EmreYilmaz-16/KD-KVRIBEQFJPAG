@@ -33,41 +33,16 @@
 <cfform name="reportForm" method="post" action="sarapor_2.cfm">
     <div class="form-group" id="item-brand_id">
                         <label>Marka </label>
-                        
-<link href="../../JS/temp/scroll/jquery.mCustomScrollbar.css" rel="stylesheet">
-<script src="../../JS/temp/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-
-<div class="input-group">
-    <input type="hidden" name="brand_id" id="brand_id" style="width:100px" value="">
-    <input type="text" name="brand_name" placeholder="Marka" id="brand_name" style="width:100px" value="" onblur="compenentInputValueEmptyingbrand(this);" onkeypress="if(event.keyCode==13) {compenentAutoCompletebrand(this,'&RETURNQUERYVALUE=BRAND_ID,BRAND_NAME&FIELDID=brand_id&COMPENENT_NAME=getProductBrand&BOXHEIGHT=150&IS_INTERNET=0&FIELDNAME=brand_name&WIDTH=100&LISTPAGE=0&JS_PAGE=0&BOXWIDTH=240&SINGLE_LINE=1&RETURNINPUTVALUE=brand_id,brand_name&BRAND_CODE=0&TITLE=Marka&columnList=BRAND_NAME@Marka,'); return false;}">
-    <span class="input-group-addon btnPointer icon-ellipsis" onclick="compenentAutoCompletebrand('','&RETURNQUERYVALUE=BRAND_ID,BRAND_NAME&FIELDID=brand_id&COMPENENT_NAME=getProductBrand&BOXHEIGHT=150&IS_INTERNET=0&FIELDNAME=brand_name&WIDTH=100&LISTPAGE=0&JS_PAGE=0&BOXWIDTH=240&SINGLE_LINE=1&RETURNINPUTVALUE=brand_id,brand_name&BRAND_CODE=0&TITLE=Marka&columnList=BRAND_NAME@Marka,');"> </span>
-</div>
-<script type="text/javascript">
-	function compenentAutoCompletebrand(object_,comp_url){
-		 var company_brand_ =(!object_)?'':object_.value;
-		 var keyword_ =(!object_)?'':object_.value;
-		 if(keyword_.length < 3 && object_ != ""){
-			alert("En az 3 karakter giriniz.!");
-			return false;
-			}
-		 else{
-			comp_url = comp_url+'&company_brand='+company_brand_+'&keyword='+keyword_+'';
-			openBoxDraggable('index.cfm?fuseaction=objects.popup_wrk_list_comp&'+comp_url);
-			return false;	
-		 }
-		 return false;	
-	}
-	function compenentInputValueEmptyingbrand(object_){
-		var keyword_ = object_.value;
-		if(keyword_.length == 0){
-			
-				document.getElementById('brand_id').value ='';
-			
-				document.getElementById('brand_name').value ='';
-				
-		}
-	}
-</script>
+ <select name="brand_id" class="form-control">
+    <option value="">Tümü</option>
+    <cfquery name="brandQuery" datasource="#dsn3#">
+        SELECT DISTINCT BRAND_ID, BRAND_NAME
+        FROM w3Qa_product.PRODUCT_BRANDS
+        </cfquery>
+    <cfoutput query="brandQuery">
+        <option value="#BRAND_ID#">#BRAND_NAME#</option>
+    </cfoutput>
+</select>
 
                     </div>
                     <div class="form-group">
