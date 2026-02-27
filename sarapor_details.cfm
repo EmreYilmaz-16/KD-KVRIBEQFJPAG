@@ -92,7 +92,8 @@ ORDER BY P1
     </cfif>
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
-
+<cfdump var="#BAKIYE_MAP#" label="BAKIYE_MAP">
+<cfdump var="#VERILEN_SIPARIS_MAP#" label="VERILEN_SIPARIS_MAP">
 
 <div class="container">
     <div class="table-container">
