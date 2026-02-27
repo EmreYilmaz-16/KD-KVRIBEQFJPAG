@@ -106,8 +106,8 @@ ORDER BY P1
                         <th>ÜRÜN KODU 2</th>
                         <th>ÜRÜN ADI</th>
                         <th>STOKTAKİ MİKTAR</th>
-                        <th>BEKLENEN SİPARİŞ</th>        
-                        <th>ALINAN SİPARİŞ</th>
+                        <th>ALINAN SİPARİŞ REZERV</th>
+                        <th>Sipariş Miktarı</th>                                
                         <th>PR</th>
                         <th>SP</th>
                     </tr>
@@ -121,8 +121,8 @@ ORDER BY P1
                             <td><strong>#PRODUCT_CODE#</strong></td>
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
-                            <td><span class="badge bg-primary">#BS#</span></td>
                             <td><span class="badge bg-warning">#bakiyeDegeri#</span></td>
+                            <td><span class="badge bg-primary">#BS#</span></td>                            
                             <td><span class="badge bg-success">#verilenSiparisDegeri#</span></td>
                             <td>
                                 <input type="text" class="form-control form-control-sm" name="pr_#S1#" id="pr_#S1#" placeholder="PR değeri">
