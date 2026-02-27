@@ -122,7 +122,8 @@ OUTER APPLY (
             CONVERT(DECIMAL(18,2), SUM(T.SOUT)) AS BS,
             T.S3,
             T.P3,
-            T.COMPANY_ID
+            T.COMPANY_ID,
+            C.NICKNAME
         FROM (
             SELECT
                 ORDR.STOCK_ID AS S3,
@@ -132,6 +133,7 @@ OUTER APPLY (
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
             LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
             LEFT JOIN w3Qa_1.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
+            LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID = O.COMPANY_ID
             WHERE
                 O.PURCHASE_SALES = 1
                 AND O.RESERVED = 1
@@ -139,7 +141,7 @@ OUTER APPLY (
         ) AS T
         WHERE T.SOUT > 0
           AND T.P3 = PR.PRODUCT_ID
-        GROUP BY T.S3, T.P3, T.COMPANY_ID
+        GROUP BY T.S3, T.P3, T.COMPANY_ID,C.NICKNAME
         FOR JSON PATH
     ) AS ASIP
 ) AS ASIP
@@ -162,6 +164,7 @@ ORDER BY PR.PRODUCT_ID
 <cfset yearList = []>
 <cfset yearMonthList = []>
 <cfset companyList = []>
+<cfset companyNames = {}>
 
 <cfloop query="RAPOR_SQL">
     <!--- VSIP Parse (Alış Siparişi Rezerv) --->
@@ -215,6 +218,12 @@ ORDER BY PR.PRODUCT_ID
                 <!--- Firma listesi --->
                 <cfif NOT ArrayFind(companyList, item.COMPANY_ID)>
                     <cfset ArrayAppend(companyList, item.COMPANY_ID)>
+                    <!--- Firma adını kaydet --->
+                    <cfif structKeyExists(item, "NICKNAME") AND len(trim(item.NICKNAME))>
+                        <cfset companyNames[item.COMPANY_ID] = item.NICKNAME>
+                    <cfelse>
+                        <cfset companyNames[item.COMPANY_ID] = "Firma #item.COMPANY_ID#">
+                    </cfif>
                 </cfif>
             </cfif>
         </cfloop>
@@ -243,7 +252,13 @@ ORDER BY PR.PRODUCT_ID
             <th class="year-avg">#year# Ortalama</th>
         </cfloop>
         <cfloop array="#companyList#" index="company">
-            <th class="company-order">#company# Alınan Sipariş</th>
+            <th class="company-order">
+                <cfif structKeyExists(companyNames, company)>
+                    #companyNames[company]#
+                <cfelse>
+                    #company#
+                </cfif>
+            </th>
         </cfloop>
         </cfoutput>
     </tr>
