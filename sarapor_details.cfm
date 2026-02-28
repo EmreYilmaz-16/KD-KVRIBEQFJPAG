@@ -155,6 +155,18 @@ SELECT * FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company
         "verilmeyen": recorded_verilmeyen
     }>
 </cfloop>
+<cfquery name="GETALLRECORDED" datasource="w3Qa_1">
+SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) AS TOTAL_VERILMEYEN,PRODUCT_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE PRODUCT_ID IN (#pid_list#)  GROUP BY PRODUCT_ID
+</cfquery>
+<CFSET ALLRECORDED_MAP = {}>
+<cfloop query="GETALLRECORDED">,
+    <CFSET ALLRECORDED_MAP["-#PRODUCT_ID#"] = {
+        "total_hazir": TOTAL_HAZIR,
+        "total_termin": TOTAL_TERMIN,
+        "total_verilmeyen": TOTAL_VERILMEYEN
+    }>  
+</cfloop>
+
     
     <!-- Kaydedilen verileri kullanarak istediğiniz işlemleri yapabilirsiniz -->
 <!----
@@ -198,12 +210,15 @@ SELECT * FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company
                         <cfoutput>
                         <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
                         <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
+                        <CFSET R_HAZIR= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_hazir : 0>
+                        <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
+                        <CFSET R_VERILMEYEN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_verilmeyen : 0>
                         <tr>
                             
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
-                            <td><span class="badge bg-warning">#bakiyeDegeri#</span></td>
-                            <td><span class="badge bg-success">#verilenSiparisDegeri#</span></td>
+                            <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
+                            <td><span class="badge bg-success">#verilenSiparisDegeri-R_TERMIN#</span></td>
                             <td><span class="badge bg-primary">#BS#</span></td>                            
                             
                             <td>
