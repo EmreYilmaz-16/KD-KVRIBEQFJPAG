@@ -232,13 +232,13 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             <td><span class="badge bg-primary">#BS#</span></td>                            
                             
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].hazir : ''#">
+                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].hazir : ''#">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].termin : ''#">
+                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].termin : ''#">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].verilmeyen : ''#">
+                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].verilmeyen : ''#">
                             </td>
                         </tr>
                         </cfoutput>
