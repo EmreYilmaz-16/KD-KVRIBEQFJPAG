@@ -95,7 +95,7 @@ LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
 LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
 LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
 WHERE O.PURCHASE_SALES=1 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RESERVED=1
-AND O.COMPANY_ID=#attributes.company# 
+AND O.COMPANY_ID=#attributes.company#  AND S.BRAND_ID=6
 ) AS T WHERE SOUT >0  --AND P1=5350
 GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE
 </cfquery>
@@ -161,8 +161,8 @@ ORDER BY P1
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>ÜRÜN KODU</th>
-                            <th>ÜRÜN KODU 2</th>
+                            
+                            <th>KD KODU</th>
                             <th>ÜRÜN ADI</th>
                             <th>STOKTAKİ MİKTAR</th>
                             <th>ALINAN SİPARİŞ REZERV</th>
@@ -178,7 +178,7 @@ ORDER BY P1
                         <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
                         <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
                         <tr>
-                            <td><strong>#PRODUCT_CODE#</strong></td>
+                            
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-warning">#bakiyeDegeri#</span></td>

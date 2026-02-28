@@ -1,4 +1,4 @@
-
+<cfparam name="attributes.brand_id" default="6">
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -31,7 +31,7 @@
 
 <cfset dsn3="w3Qa_1">
 <cfform name="reportForm" method="post" action="sarapor_2.cfm">
-    <div class="form-group" id="item-brand_id">
+    <div style="display:none" class="form-group" id="item-brand_id">
                         <label>Marka </label>
  <select name="brand_id" class="form-control">
     <option value="">Tümü</option>
