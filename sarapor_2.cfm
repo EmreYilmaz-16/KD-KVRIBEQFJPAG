@@ -165,6 +165,7 @@ WHERE 1=1  <cfif structKeyExists(attributes, "brand_id") AND len(trim(attributes
 </cfif>
 ORDER BY PR.PRODUCT_ID
 </cfquery>
+<cfdump var="#RAPOR_SQL#">
 
 <!--- Parse JSON verileri ve map oluştur --->
 <cfset VSIP_MAP = {}>
