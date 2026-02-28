@@ -83,7 +83,7 @@
 
 
 <cfquery name="getData" datasource="w3Qa_1">
-    SELECT SUM(SOUT) AS BS,S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE FROM (
+    SELECT SUM(SOUT) AS BS,S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,(SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK FROM (
 SELECT  
 S.STOCK_ID S1,
 ORDR.ORDER_ROW_CURRENCY,
@@ -106,8 +106,8 @@ GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE
 <cfset pid_list=valueList(getData.P1)>
 
 <cfquery name="getData2" datasource="w3Qa_1">
-    SELECT SUM(SIN) AS BS,S1,P1,PRODUCT_CODE_2,PRODUCT_NAME,
-(SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK FROM (
+    SELECT SUM(SIN) AS BS,S1,P1,PRODUCT_CODE_2,PRODUCT_NAME
+ FROM (
 SELECT  
 ORDR.STOCK_ID S1,
 ORDR.ORDER_ROW_CURRENCY,
@@ -211,7 +211,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                     <tbody>
                     <cfloop query="getData">
                         <cfoutput>
-                        <cfset bakiyeDegeri = structKeyExists(BAKIYE_MAP, "-#P1#") ? BAKIYE_MAP["-#P1#"] : 0>
+                        <cfset bakiyeDegeri = BK>
                         <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
                         <CFSET R_HAZIR= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_hazir : 0>
                         <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
