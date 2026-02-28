@@ -222,7 +222,11 @@ ORDER BY PR.PRODUCT_ID
     <cfif len(trim(ASIP)) AND ASIP NEQ "null" AND ASIP NEQ "[]">
         <cfset asipData = deserializeJSON(ASIP)>
         <cfloop array="#asipData#" index="item">
-            <CFSET SBP_MAP["#item.COMPANY_ID#-#item.PRODUCT_ID#"] = {HAZIR: item.HAZIR, TERMIN: item.TERMIN, VERILMEYEN: item.VERILMEYEN}>
+            <CFSET SBP_MAP["#item.COMPANY_ID#-#item.PRODUCT_ID#"] = {
+                HAZIR: structKeyExists(item, "HAZIR") ? item.HAZIR : 0, 
+                TERMIN: structKeyExists(item, "TERMIN") ? item.TERMIN : 0, 
+                VERILMEYEN: structKeyExists(item, "VERILMEYEN") ? item.VERILMEYEN : 0
+            }>
             <cfif structKeyExists(item, "COMPANY_ID")>
                 <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] = item.BS>
                 
