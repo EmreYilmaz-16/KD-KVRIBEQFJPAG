@@ -140,6 +140,23 @@ ORDER BY P1
     </cfif>
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
+<cfquery name="GETRECORDED" datasource="w3Qa_1">
+SELECT * FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
+</cfquery>
+<cfset RECORDED_MAP = {}>
+<cfloop query="GETRECORDED">
+    <cfset recorded_product_id = PRODUCT_ID>
+    <cfset recorded_hazir = HAZIR>
+    <cfset recorded_termin = TERMIN>
+    <cfset recorded_verilmeyen = VERILMEYEN>
+    <cfset RECORDED_MAP["-#recorded_product_id#"] = {
+        "hazir": recorded_hazir,
+        "termin": recorded_termin,
+        "verilmeyen": recorded_verilmeyen
+    }>
+</cfloop>
+    
+    <!-- Kaydedilen verileri kullanarak istediğiniz işlemleri yapabilirsiniz -->
 <!----
 <cfdump var="#attributes#" label="URL Parameters">
 <cfdump var="#getData2#" label="Get Data 2">
@@ -190,13 +207,13 @@ ORDER BY P1
                             <td><span class="badge bg-primary">#BS#</span></td>                            
                             
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri">
+                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].hazir : ''#">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri">
+                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].termin : ''#">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri">
+                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#S1#") ? RECORDED_MAP["-#S1#"].verilmeyen : ''#">
                             </td>
                         </tr>
                         </cfoutput>
