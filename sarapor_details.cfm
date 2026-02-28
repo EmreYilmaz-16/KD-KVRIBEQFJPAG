@@ -170,7 +170,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
     
     <!-- Kaydedilen verileri kullanarak istediğiniz işlemleri yapabilirsiniz -->
 
-<!----
+
 <cfdump var="#attributes#" label="URL Parameters">
 <cfdump var="#getData2#" label="Get Data 2">
 <cfdump var="#getData#" label="Get Data 1">
@@ -178,7 +178,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 <cfdump var="#VERILEN_SIPARIS_MAP#" label="VERILEN_SIPARIS_MAP">
 <cfdump var="#RECORDED_MAP#" label="RECORDED_MAP">
 <cfdump var="#ALLRECORDED_MAP#" label="ALLRECORDED_MAP">
------>
+<!--------->
 <div class="container">
     <div class="table-container">
         <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
