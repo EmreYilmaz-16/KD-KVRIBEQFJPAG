@@ -134,7 +134,7 @@ ORDER BY P1
 <cfset BAKIYE_MAP = {}>
 <cfset VERILEN_SIPARIS_MAP = {}>
 <cfloop query="getData2">
-    <cfset BAKIYE_MAP["-#P1#"] = BK>
+    
     <cfif NOT structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#")>
         <cfset VERILEN_SIPARIS_MAP["-#P1#"] = 0>
     </cfif>
