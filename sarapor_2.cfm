@@ -217,11 +217,12 @@ ORDER BY PR.PRODUCT_ID
             </cfif>
         </cfloop>
     </cfif>
-    
+    <CFSET SBP_MAP = {}>
     <!--- ASIP Parse (Satış Siparişi Rezerv) --->
     <cfif len(trim(ASIP)) AND ASIP NEQ "null" AND ASIP NEQ "[]">
         <cfset asipData = deserializeJSON(ASIP)>
         <cfloop array="#asipData#" index="item">
+            <CFSET SBP_MAP["#item.COMPANY_ID#-#item.PRODUCT_ID#"] = {HAZIR: item.HAZIR, TERMIN: item.TERMIN, VERILMEYEN: item.VERILMEYEN}>
             <cfif structKeyExists(item, "COMPANY_ID")>
                 <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] = item.BS>
                 
@@ -309,7 +310,14 @@ ORDER BY PR.PRODUCT_ID
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
-                    <a href="javascript:void(0)" onclick="window.open('sarapor_details.cfm?company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a>
+                    <a href="javascript:void(0)" onclick="window.open('sarapor_details.cfm?company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a><br>
+                    <cfif StructKeyExists(SBP_MAP, "#company#-#PRODUCT_ID#")>
+                        <small>
+                            H: #SBP_MAP["#company#-#PRODUCT_ID#"].HAZIR#, 
+                            T: #SBP_MAP["#company#-#PRODUCT_ID#"].TERMIN#, 
+                            V: #SBP_MAP["#company#-#PRODUCT_ID#"].VERILMEYEN#
+                        </small>
+                    </cfif>
                 <cfelse>
                     #NumberFormat(0, "9,999.99")#
                 </cfif>
