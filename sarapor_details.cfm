@@ -216,8 +216,15 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                         <CFSET R_HAZIR= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_hazir : 0>
                         <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
                         <CFSET R_VERILMEYEN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_verilmeyen : 0>
+                        
                         <tr>
-                            
+                            <td>
+                                bakiyeDegeri = #bakiyeDegeri# <br>
+                                verilenSiparisDegeri = #verilenSiparisDegeri# <br>
+                                R_HAZIR = #R_HAZIR# <br>
+                                R_TERMIN = #R_TERMIN# <br>
+                                R_VERILMEYEN = #R_VERILMEYEN# <br>
+                            </td>
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
