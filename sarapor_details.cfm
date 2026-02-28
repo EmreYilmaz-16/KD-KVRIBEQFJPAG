@@ -42,7 +42,10 @@
         <p><strong>Stock ID List:</strong> #attributes.stock_id_list#</p>
         <p><strong>Product ID List:</strong> #attributes.product_id_list#</p>
     </cfoutput>
-    
+       <cfquery name="del" datasource="w3Qa_1">
+                DELETE FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
+                WHERE COMPANY_ID = #company#
+            </cfquery>
     <!-- Verileri kaydetmek için gerekli sorguları ekleyebilirsiniz -->
     <cfloop from="1" to="#ArrayLen(stock_id_list)#" index="i">
         <cfset current_stock_id = stock_id_list[i]>
@@ -57,6 +60,7 @@
         <cfset verilmeyen_value = isDefined("attributes.#verilmeyen_field_name#") ? attributes[verilmeyen_field_name] : 0>
         
         <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
+         
             <cfquery datasource="w3Qa_1">
                 INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
                 (COMPANY_ID, PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN)
