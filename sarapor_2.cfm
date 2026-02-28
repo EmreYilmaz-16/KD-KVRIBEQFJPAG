@@ -123,18 +123,27 @@ OUTER APPLY (
             T.S3,
             T.P3,
             T.COMPANY_ID,
-            T.NICKNAME
+            T.NICKNAME,
+            T.HAZIR,
+            T.TERMIN,
+            T.VERILMEYEN
         FROM (
             SELECT
                 ORDR.STOCK_ID AS S3,
                 ORDR.PRODUCT_ID AS P3,
                 O.COMPANY_ID,
                 C.NICKNAME,
-                (RESERVE_STOCK_OUT - STOCK_OUT) AS SOUT
+                (RESERVE_STOCK_OUT - STOCK_OUT) AS SOUT,
+                SPB.HAZIR,
+                SPB.TERMIN,
+                SPB.VERILMEYEN
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
             LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
             LEFT JOIN w3Qa_1.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
             LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID = O.COMPANY_ID
+            LEFT JOIN (
+                SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
+            ) AS SPB ON SPB.PRODUCT_ID = ORDR.PRODUCT_ID AND SPB.COMPANY_ID = O.COMPANY_ID
             WHERE
                 O.PURCHASE_SALES = 1
                 AND O.RESERVED = 1
