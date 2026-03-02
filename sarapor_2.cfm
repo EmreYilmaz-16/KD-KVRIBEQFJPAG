@@ -53,7 +53,8 @@
     <label>Dönem Seçimi</label>
     <select name="period_select" class="form-control">
         <cfloop from="#year(now())#" to="#year(now())+1#" index="i">
-            <cfloop from="1" to="12" index="j">
+            <cfset startMonth = (i EQ year(now())) ? month(now()) + 2 : 1>
+            <cfloop from="#startMonth#" to="12" index="j">
                 <cfoutput>
                     <option value="#i#-#j#">#i# - #j# (#MonthAsString(j)#)</option>
                 </cfoutput>
