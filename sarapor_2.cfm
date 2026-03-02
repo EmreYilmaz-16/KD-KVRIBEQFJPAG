@@ -148,6 +148,7 @@ OUTER APPLY (
                 O.PURCHASE_SALES = 1
                 AND O.RESERVED = 1
                 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3)
+                AND O.SPECIAL_DEFINITION_PBS = 1
         ) AS T
         WHERE T.SOUT > 0
           AND T.P3 = PR.PRODUCT_ID
