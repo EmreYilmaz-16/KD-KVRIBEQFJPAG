@@ -50,15 +50,22 @@
                         <input type="checkbox" name="only_sales" id="only_sales" value="1">
                     </div>
 <div class="form-group">
-    <label>Dönem Seçimi</label>
-    <select name="period_select" class="form-control">
-        <cfloop from="#year(now())#" to="#year(now())+1#" index="i">
-            <cfset startMonth = (i EQ year(now())) ? month(now()) + 2 : 1>
-            <cfloop from="#startMonth#" to="12" index="j">
-                <cfoutput>
-                    <option value="#i#-#j#">#i# - #j# (#MonthAsString(j)#)</option>
-                </cfoutput>
-            </cfloop>
+    <label>Yıl Seçimi</label>
+    <select name="selected_year" class="form-control">
+        <cfloop from="#year(now())#" to="#year(now())+5#" index="i">
+            <cfoutput>
+                <option value="#i#">#i#</option>
+            </cfoutput>
+        </cfloop>
+    </select>
+</div>
+<div class="form-group">
+    <label>Ay Seçimi</label>
+    <select name="selected_month" class="form-control">
+        <cfloop from="1" to="12" index="j">
+            <cfoutput>
+                <option value="#j#">#j# - #MonthAsString(j)#</option>
+            </cfoutput>
         </cfloop>
     </select>
 </div>
