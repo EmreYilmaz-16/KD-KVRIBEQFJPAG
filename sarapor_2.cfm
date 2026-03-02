@@ -49,6 +49,19 @@
                         <label>Sadece Satışı Olanlar Gelsin</label>
                         <input type="checkbox" name="only_sales" id="only_sales" value="1">
                     </div>
+<div class="form-group">
+    <label>Dönem Seçimi</label>
+    <select name="period_select" class="form-control">
+        <cfloop from="#year(now())#" to="#year(now())+1#" index="i">
+            <cfloop from="1" to="12" index="j">
+                <cfoutput>
+                    <option value="#i#-#j#">#i# - #j# (#MonthAsString(j)#)</option>
+                </cfoutput>
+            </cfloop>
+        </cfloop>
+    </select>
+</div>
+
                     <input type="submit" value="Raporu Göster">
 </cfform>
 <cfquery name="RAPOR_SQL" datasource="#dsn3#">
@@ -250,7 +263,9 @@ ORDER BY PR.PRODUCT_ID
 <cfset ArraySort(yearList, "numeric")>
 <cfset ArraySort(yearMonthList, "text")>
 <cfset ArraySort(companyList, "numeric")>
-
+<!--- TODO: SUTUN EKLEMEK İÇİN BUTON OLACAK  
+    SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
+    SUTUN BAŞLIĞI*----->
 <div class="table-responsive">
 <table class="table table-striped table-bordered table-hover table-sm">
     <thead class="table-dark">
@@ -282,7 +297,7 @@ ORDER BY PR.PRODUCT_ID
     </thead>
     <tbody>
     <cfoutput query="RAPOR_SQL">
-    <tr>
+    <tr data-pid="#PRODUCT_ID#">
         <td>#PRODUCT_CODE#</td>
         <td>#PRODUCT_NAME#</td>
         <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
@@ -293,7 +308,7 @@ ORDER BY PR.PRODUCT_ID
                         <cfif StructKeyExists(VSIP_MAP, "#PRODUCT_ID#-#yearMonth#")>
                             #NumberFormat(VSIP_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
                         <cfelse>
-                            
+                            0
                         </cfif>
                     </td>
                 </cfif>
