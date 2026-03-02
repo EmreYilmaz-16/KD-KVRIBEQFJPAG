@@ -141,7 +141,7 @@ ORDER BY P1
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
 <cfquery name="GETRECORDED" datasource="w3Qa_1">
-SELECT * FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
+SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
 </cfquery>
 <cfset RECORDED_MAP = {}>
 <cfloop query="GETRECORDED">
