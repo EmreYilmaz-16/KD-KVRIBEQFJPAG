@@ -7,8 +7,8 @@
         <cftry>
             <cfset var orderID = createUUID()>
             
-            <cfquery datasource="#application.datasource#">
-                INSERT INTO orders (order_id, product_id, quantity, order_date)
+            <cfquery datasource="w3Qa_1">
+                INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity, order_date)
                 VALUES (
                     '#orderID#',
                     #arguments.orderData.productID#,
