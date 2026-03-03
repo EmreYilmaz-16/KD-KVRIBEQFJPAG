@@ -6,7 +6,8 @@
             <!--- JSON verisini al ve parse et --->
             <cfset var httpData = getHttpRequestData()>
             <cfset var requestData = deserializeJSON(httpData.content)>
-            
+            <cfdump var="#requestData#" label="Received Data">
+            <cfdump var="#httpData#" label="HTTP Data">
             <!--- Her bir sipariş için kayıt oluştur --->
             <cfloop array="#requestData.orderData#" index="item">
                 <cfif val(item.miktar) GT 0>
