@@ -283,6 +283,14 @@ ORDER BY PR.PRODUCT_ID
         </cfloop>
     </cfif>
 </cfloop>
+<cfquery name="getSaved" datasource="w3Qa_1">
+SELECT PRODUCT_ID, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
+</cfquery>
+<cfset SAVED_MAP = {}>
+<cfloop query="getSaved">
+    <cfset SAVED_MAP[PRODUCT_ID] = quantity>
+</cfloop>
+
 
 <cfset ArraySort(yearList, "numeric")>
 <cfset ArraySort(yearMonthList, "text")>
@@ -354,7 +362,7 @@ ORDER BY PR.PRODUCT_ID
             </td>
         </cfloop>
         <td>
-            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="0">
+            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
         </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
