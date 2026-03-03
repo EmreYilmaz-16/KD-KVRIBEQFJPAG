@@ -1,27 +1,32 @@
 <cfcomponent>
     <cffunction name="saveOrderData" access="remote" returnType="string" returnFormat="json">
-        <cfdump var="#arguments#">
-        <cfdump var="#cgi#">
-        <cfdump var="#HTTPREQUESTDATA()#">
-        
         <cfset var result = {}>
         
         <cftry>
-            <cfset var orderID = createUUID()>
+            <!--- JSON verisini al ve parse et --->
+            <cfset var httpData = getHttpRequestData()>
+            <cfset var requestData = deserializeJSON(httpData.content)>
             
-            <cfquery datasource="w3Qa_1">
-                INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity, order_date)
-                VALUES (
-                    '#orderID#',
-                    #arguments.orderData.productID#,
-                    #arguments.orderData.quantity#,
-                    NOW()
-                )
-            </cfquery>
+            <!--- Her bir sipariş için kayıt oluştur --->
+            <cfloop array="#requestData.orderData#" index="item">
+                <cfif val(item.miktar) GT 0>
+                    <cfset var orderID = createUUID()>
+                    
+                    <cfquery datasource="w3Qa_1">
+                        INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity, user_id, order_date)
+                        VALUES (
+                            '#orderID#',
+                            #val(item.pid)#,
+                            #val(item.miktar)#,
+                            #val(requestData.user_id)#,
+                            GETDATE()
+                        )
+                    </cfquery>
+                </cfif>
+            </cfloop>
             
             <cfset result.success = true>
-            <cfset result.message = "Kayıt başarıyla oluşturuldu">
-            <cfset result.orderID = orderID>
+            <cfset result.message = "Sipariş miktarları başarıyla kaydedildi">
             
             <cfcatch type="any">
                 <cfset result.success = false>
