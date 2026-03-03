@@ -13,7 +13,7 @@
                 <cfif val(item.miktar) GT 0>
                     <cfset var orderID = createUUID()>
                     
-                    <cfquery datasource="w3Qa_1">
+                    <cfquery datasource="w3Qa_1" result="insertResult">
                         INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity, user_id, order_date)
                         VALUES (
                             '#orderID#',
@@ -23,6 +23,7 @@
                             GETDATE()
                         )
                     </cfquery>
+                    <cfdump var="#insertResult#" label="Insert Result for Product ID #item.pid#">
                 </cfif>
             </cfloop>
             
