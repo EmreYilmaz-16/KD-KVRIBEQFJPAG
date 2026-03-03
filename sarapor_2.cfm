@@ -80,7 +80,8 @@
 </div>
 </td>
 <td>
-    
+    <button type="button" class="btn btn-primary mt-4" onclick="saveRows()">Satın Alma Miktarlarını Kaydet</button>
+    <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
 </td>
                         </tr>
                     </table>
@@ -379,8 +380,29 @@ ORDER BY PR.PRODUCT_ID
 
     </div>
     <script>
-        function saveRows() {
-            
+        function saveRows(user_id) {
+            var elems=document.getElementsByName("siparis_miktari")
+            var SavedData=[];
+            for (let index = 0; index < elems.length; index++) {
+                var el=elems[index];
+                var miktar=el.value;
+                var pid=el.getAttribute("data-pid")
+                var O={miktar,pid};
+                console.log(O)
+                SavedData.push(O)
+    
+            };
+            $.ajax({
+                url:"/addOns/Partner/cfc/sale_report.cfc?method=saveOrderData",
+                method:"POST",
+                data: {orderData: JSON.stringify(SavedData)},
+                success:function(response){
+                    alert("Sipariş miktarları kaydedildi!");
+                },
+                error:function(){
+                    alert("Kaydetme sırasında hata oluştu.");
+                }
+            });
         }
     </script>
     
