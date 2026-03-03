@@ -353,7 +353,7 @@ ORDER BY PR.PRODUCT_ID
             </td>
         </cfloop>
         <td>
-            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" name="samiktar_#PRODUCT_ID#" class="form-control form-control-sm purchase-quantity" value="0">
+            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="0">
         </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
@@ -378,6 +378,11 @@ ORDER BY PR.PRODUCT_ID
 </div>
 
     </div>
+    <script>
+        function saveRows() {
+            
+        }
+    </script>
     
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
