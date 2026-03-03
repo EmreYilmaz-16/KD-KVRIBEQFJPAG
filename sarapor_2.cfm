@@ -49,6 +49,11 @@
                         <label>Sadece Satışı Olanlar Gelsin</label>
                         <input type="checkbox" name="only_sales" id="only_sales" value="1">
                     </div>
+                    <table>
+                        <tr>
+                            <td>
+
+                    
 <div class="form-group">
     <label>Yıl Seçimi</label>
     <select name="selected_year" class="form-control">
@@ -59,6 +64,10 @@
         </cfloop>
     </select>
 </div>
+        </td>
+        <td>
+
+        
 <div class="form-group">
     <label>Ay Seçimi</label>
     <select name="selected_month" class="form-control">
@@ -69,6 +78,12 @@
         </cfloop>
     </select>
 </div>
+</td>
+<td>
+    
+</td>
+                        </tr>
+                    </table>
 
                     <input type="submit" value="Raporu Göster">
 </cfform>
@@ -291,6 +306,7 @@ ORDER BY PR.PRODUCT_ID
             <th class="year-total">#year# Toplam</th>
             <th class="year-avg">#year# Ortalama</th>
         </cfloop>
+        <th></th>
         <cfloop array="#companyList#" index="company">
             <th class="company-order">
                 <cfif structKeyExists(companyNames, company)>
@@ -336,6 +352,9 @@ ORDER BY PR.PRODUCT_ID
                 </cfif>
             </td>
         </cfloop>
+        <td>
+            <input type="number" id="samiktar_#PRODUCT_ID#" name="samiktar_#PRODUCT_ID#" class="form-control form-control-sm purchase-quantity" value="0">
+        </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
