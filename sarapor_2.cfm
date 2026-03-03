@@ -396,12 +396,20 @@ ORDER BY PR.PRODUCT_ID
             $.ajax({
                 url:"/addOns/Partner/cfc/sale_report.cfc?method=saveOrderData",
                 method:"POST",
-                data: jsondata,
+                dataType:"json",
+                contentType: "application/json",
+                data: JSON.stringify(jsondata),
                 success:function(response){
-                    alert("Sipariş miktarları kaydedildi!");
+                    console.log(response);
+                    if(response.success){
+                        alert(response.message);
+                    } else {
+                        alert("Hata: " + response.message);
+                    }
                 },
-                error:function(){
-                    alert("Kaydetme sırasında hata oluştu.");
+                error:function(xhr, status, error){
+                    console.error("AJAX Error:", error);
+                    alert("Kaydetme sırasında hata oluştu: " + error);
                 }
             });
         }
