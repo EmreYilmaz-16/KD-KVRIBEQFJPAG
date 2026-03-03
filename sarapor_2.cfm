@@ -290,11 +290,13 @@ ORDER BY PR.PRODUCT_ID
 <CFDUMP VAR="#ASIP_MAP#">
 <CFDUMP VAR="#SBP_MAP#">
 <cfquery name="getSaved" datasource="w3Qa_1">
-SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
+SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
 </cfquery>
 <cfset SAVED_MAP = {}>
+<cfset YDISISAVED_MAP = {}>
 <cfloop query="getSaved">
     <cfset SAVED_MAP[product_id] = quantity>
+    <cfset YDISISAVED_MAP[product_id] = yurtdisi_miktar>
 </cfloop>
 
 
@@ -372,7 +374,7 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
             <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
         </td>
           <td>
-            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari_ydisi" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
+            <input type="number" id="syamiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari_ydisi" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(YDISISAVED_MAP, PRODUCT_ID) ? YDISISAVED_MAP[PRODUCT_ID] : 0#">
         </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
@@ -404,8 +406,9 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
             for (let index = 0; index < elems.length; index++) {
                 var el=elems[index];
                 var miktar=el.value;
+                var ymiktar=document.getElementById("syamiktar_"+el.getAttribute("data-pid")).value;
                 var pid=el.getAttribute("data-pid")
-                var O={miktar,pid};
+                var O={miktar, ymiktar, pid};
                 console.log(O)
                 SavedData.push(O)
     
