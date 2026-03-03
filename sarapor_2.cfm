@@ -203,7 +203,7 @@ WHERE 1=1  <cfif structKeyExists(attributes, "brand_id") AND len(trim(attributes
 </cfif>
 ORDER BY PR.PRODUCT_ID
 </cfquery>
-<cfdump var="#RAPOR_SQL#">
+
 
 <!--- Parse JSON verileri ve map oluştur --->
 <cfset VSIP_MAP = {}>
@@ -284,11 +284,11 @@ ORDER BY PR.PRODUCT_ID
     </cfif>
 </cfloop>
 <cfquery name="getSaved" datasource="w3Qa_1">
-SELECT PRODUCT_ID, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
+SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
 </cfquery>
 <cfset SAVED_MAP = {}>
 <cfloop query="getSaved">
-    <cfset SAVED_MAP[PRODUCT_ID] = quantity>
+    <cfset SAVED_MAP[product_id] = quantity>
 </cfloop>
 
 
