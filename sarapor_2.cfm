@@ -353,7 +353,7 @@ ORDER BY PR.PRODUCT_ID
             </td>
         </cfloop>
         <td>
-            <input type="number" id="samiktar_#PRODUCT_ID#" name="samiktar_#PRODUCT_ID#" class="form-control form-control-sm purchase-quantity" value="0">
+            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" name="samiktar_#PRODUCT_ID#" class="form-control form-control-sm purchase-quantity" value="0">
         </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
