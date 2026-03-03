@@ -401,10 +401,10 @@ ORDER BY PR.PRODUCT_ID
                 data: JSON.stringify(jsondata),
                 success:function(response){
                     console.log(response);
-                    if(response.success){
-                        alert(response.message);
+                    if(response.SUCCESS){
+                        alert(response.MESSAGE);
                     } else {
-                        alert("Hata: " + response.message);
+                        alert("Hata: " + response.MESSAGE);
                     }
                 },
                 error:function(xhr, status, error){
