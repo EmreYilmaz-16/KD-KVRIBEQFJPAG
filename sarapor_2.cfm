@@ -80,7 +80,7 @@
 </div>
 </td>
 <td>
-    <button type="button" class="btn btn-primary mt-4" onclick="saveRows()">Satın Alma Miktarlarını Kaydet</button>
+    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(1)">Satın Alma Miktarlarını Kaydet</button>
     <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
 </td>
                         </tr>
@@ -392,10 +392,11 @@ ORDER BY PR.PRODUCT_ID
                 SavedData.push(O)
     
             };
+            var jsondata={orderData:SavedData,user_id:user_id};
             $.ajax({
                 url:"/addOns/Partner/cfc/sale_report.cfc?method=saveOrderData",
                 method:"POST",
-                data: {orderData: JSON.stringify(SavedData)},
+                data: jsondata,
                 success:function(response){
                     alert("Sipariş miktarları kaydedildi!");
                 },
