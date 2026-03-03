@@ -171,9 +171,9 @@ OUTER APPLY (
                 O.COMPANY_ID,
                 C.NICKNAME,
                 (RESERVE_STOCK_OUT - STOCK_OUT) AS SOUT,
-                SPB.HAZIR,
-                SPB.TERMIN,
-                SPB.VERILMEYEN
+                CAST (SPB.HAZIR AS DECIMAL(18,2)) AS HAZIR,
+                CAST (SPB.TERMIN AS DECIMAL(18,2)) AS TERMIN,
+                CAST (SPB.VERILMEYEN AS DECIMAL(18,2)) AS VERILMEYEN
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
             LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
             LEFT JOIN w3Qa_1.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
@@ -388,7 +388,7 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
 
     </div>
     <script>
-        function saveRows(user_id) {
+        function saveRows(user_id, callback) {
             var elems=document.getElementsByName("siparis_miktari")
             var SavedData=[];
             for (let index = 0; index < elems.length; index++) {
@@ -411,13 +411,49 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
                     console.log(response);
                     if(response.SUCCESS){
                         alert(response.MESSAGE);
+                        if(callback) callback(true);
                     } else {
                         alert("Hata: " + response.MESSAGE);
+                        if(callback) callback(false);
                     }
                 },
                 error:function(xhr, status, error){
                     console.error("AJAX Error:", error);
                     alert("Kaydetme sırasında hata oluştu: " + error);
+                    if(callback) callback(false);
+                }
+            });
+        }
+
+        function saveOrder() {
+            var user_id = 1; // Kullanıcı ID'sini buradan alın
+            
+            // Önce miktarları kaydet
+            saveRows(user_id, function(success) {
+                if(success) {
+                    // Miktarlar başarıyla kaydedildiyse, siparişi oluştur
+                    $.ajax({
+                        url: "/addOns/Partner/cfc/sale_report.cfc?method=createOrder",
+                        method: "POST",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify({user_id: user_id}),
+                        success: function(response) {
+                            console.log(response);
+                            if(response.SUCCESS) {
+                                alert(response.MESSAGE);
+                                location.reload(); // Sayfayı yenile
+                            } else {
+                                alert("Sipariş oluşturma hatası: " + response.MESSAGE);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Sipariş oluşturma hatası:", error);
+                            alert("Sipariş oluşturulurken hata oluştu: " + error);
+                        }
+                    });
+                } else {
+                    alert("Miktarlar kaydedilemedi, sipariş oluşturulamadı.");
                 }
             });
         }
