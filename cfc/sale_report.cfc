@@ -1,6 +1,8 @@
 <cfcomponent>
     <cffunction name="saveOrderData" access="remote" returnType="string" returnFormat="json">
-        <cfargument name="orderData" type="struct" required="true">
+        <cfdump var="#arguments#">
+        <cfdump var="#cgi#">
+        <cfdump var="#HTTPREQUESTDATA()#">
         
         <cfset var result = {}>
         
