@@ -322,6 +322,7 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
             <th class="year-avg">#year# Ortalama</th>
         </cfloop>
         <th></th>
+        <th></th>
         <cfloop array="#companyList#" index="company">
             <th class="company-order">
                 <cfif structKeyExists(companyNames, company)>
