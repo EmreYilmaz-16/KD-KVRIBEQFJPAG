@@ -6,7 +6,9 @@
             <!--- JSON verisini al ve parse et --->
             <cfset var httpData = getHttpRequestData()>
             <cfset var requestData = deserializeJSON(httpData.content)>
-            
+            <cfquery name="delp" datasource="w3Qa_1">
+                DELETE FROM w3Qa_1.orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# and is_converted = 0
+            </cfquery>
             <!--- Her bir sipariş için kayıt oluştur --->
             <cfloop array="#requestData.orderData#" index="item">
                 <cfif val(item.miktar) GT 0>
