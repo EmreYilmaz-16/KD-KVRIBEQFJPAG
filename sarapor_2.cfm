@@ -283,6 +283,11 @@ ORDER BY PR.PRODUCT_ID
         </cfloop>
     </cfif>
 </cfloop>
+<CFDUMP VAR="#VSIP_MAP#">
+<CFDUMP VAR="#RPR_MAP#">
+<CFDUMP VAR="#AVG_MAP#">
+<CFDUMP VAR="#ASIP_MAP#">
+<CFDUMP VAR="#SBP_MAP#">
 <cfquery name="getSaved" datasource="w3Qa_1">
 SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
 </cfquery>
