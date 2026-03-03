@@ -210,6 +210,7 @@ ORDER BY PR.PRODUCT_ID
 <cfset RPR_MAP = {}>
 <cfset AVG_MAP = {}>
 <cfset ASIP_MAP = {}>
+<cfset SBP_MAP = {}>
 <cfset yearList = []>
 <cfset yearMonthList = []>
 <cfset companyList = []>
@@ -256,7 +257,7 @@ ORDER BY PR.PRODUCT_ID
             </cfif>
         </cfloop>
     </cfif>
-    <CFSET SBP_MAP = {}>
+    
     <!--- ASIP Parse (Satış Siparişi Rezerv) --->
     <cfif len(trim(ASIP)) AND ASIP NEQ "null" AND ASIP NEQ "[]">
         <cfset asipData = deserializeJSON(ASIP)>
@@ -368,6 +369,9 @@ SELECT product_id, quantity FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and i
         </cfloop>
         <td>
             <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
+        </td>
+          <td>
+            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari_ydisi" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
         </td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">

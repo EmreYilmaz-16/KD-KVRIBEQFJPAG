@@ -149,6 +149,7 @@ SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM w3Qa_1.SATINALMA_PL
     <cfset recorded_hazir = HAZIR>
     <cfset recorded_termin = TERMIN>
     <cfset recorded_verilmeyen = VERILMEYEN>
+    
     <cfset RECORDED_MAP["-#recorded_product_id#"] = {
         "hazir": recorded_hazir,
         "termin": recorded_termin,
