@@ -109,15 +109,6 @@ GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,ORDER_ID,ORDER_NUMBER
 
 <cfset pid_list=valueList(getData.P1)>
 
-<!--- Her ORDER_ID için kaç satır olduğunu hesapla --->
-<cfset ORDER_ROW_COUNT = {}>
-<cfloop query="getData">
-    <cfif NOT structKeyExists(ORDER_ROW_COUNT, ORDER_ID)>
-        <cfset ORDER_ROW_COUNT[ORDER_ID] = 0>
-    </cfif>
-    <cfset ORDER_ROW_COUNT[ORDER_ID] = ORDER_ROW_COUNT[ORDER_ID] + 1>
-</cfloop>
-
 <cfquery name="getData2" datasource="w3Qa_1">
     SELECT SUM(SIN) AS BS,S1,P1,PRODUCT_CODE_2,PRODUCT_NAME
  FROM (
@@ -194,87 +185,88 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 <cfdump var="#ALLRECORDED_MAP#" label="ALLRECORDED_MAP">
 ----->
 <div class="container">
-    <div class="table-container">
-        <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
+    <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
+    
+    <form id="sipform" action="sarapor_details.cfm" method="post">
+        <cfoutput>
+        <input type="hidden" name="company" value="#attributes.company#">
+        <input type="hidden" name="product" value="#attributes.product#">
+        <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
+        <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
+        <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
+        <input type="hidden" name="is_submit" value="1">
+        </cfoutput>
         
-        <form id="sipform" action="sarapor_details.cfm" method="post">
-            <cfoutput>
-            <input type="hidden" name="company" value="#attributes.company#">
-            <input type="hidden" name="product" value="#attributes.product#">
-            <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
-            <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
-            <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
-            <input type="hidden" name="is_submit" value="1">
-            </cfoutput>
-            
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>SİPARİŞ NO</th>
-                            <th>KD KODU</th>
-                            <th>ÜRÜN ADI</th>
-                            <th>STOKTAKİ MİKTAR</th>
-                            <th>ALINAN SİPARİŞ REZERV</th>
-                            <th>Sipariş Miktarı</th>                                
-                            <th>HAZIR</th>
-                            <th>TERMIN</th>
-                            <th>VERİLMEYEN</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <cfloop query="getData" group="ORDER_ID">
-                        <cfset isFirstInGroup = true>
+        <cfloop query="getData" group="ORDER_ID">
+            <div class="table-container mb-4">
+                <cfoutput>
+                <h4 class="mb-3">
+                    <i class="bi bi-cart-check"></i> Sipariş No: 
+                    <span class="badge bg-info">#ORDER_NUMBER#</span>
+                </h4>
+                </cfoutput>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>KD KODU</th>
+                                <th>ÜRÜN ADI</th>
+                                <th>STOKTAKİ MİKTAR</th>
+                                <th>ALINAN SİPARİŞ REZERV</th>
+                                <th>Sipariş Miktarı</th>                                
+                                <th>HAZIR</th>
+                                <th>TERMIN</th>
+                                <th>VERİLMEYEN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <cfloop>
-                        <cfoutput>
-                        <cfset bakiyeDegeri = BK>
-                        <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
-                        <CFSET R_HAZIR= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_hazir : 0>
-                        <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
-                        <CFSET R_VERILMEYEN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_verilmeyen : 0>
-                        
-                        <tr>
-                            <td style="display:none">
-                                bakiyeDegeri = #bakiyeDegeri# <br>
-                                verilenSiparisDegeri = #verilenSiparisDegeri# <br>
-                                R_HAZIR = #R_HAZIR# <br>
-                                R_TERMIN = #R_TERMIN# <br>
-                                R_VERILMEYEN = #R_VERILMEYEN# <br>
-                            </td>
-                            <cfif isFirstInGroup>
-                                <td rowspan="#ORDER_ROW_COUNT[ORDER_ID]#" style="vertical-align: middle;"><span class="badge bg-info">#ORDER_NUMBER#</span></td>
-                                <cfset isFirstInGroup = false>
-                            </cfif>
-                            <td><strong>#PRODUCT_CODE_2#</strong></td>
-                            <td>#PRODUCT_NAME#</td>            
-                            <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
-                            <td><span class="badge bg-success">#verilenSiparisDegeri-R_TERMIN#</span></td>
-                            <td><span class="badge bg-primary">#BS#</span></td>                            
+                            <cfoutput>
+                            <cfset bakiyeDegeri = BK>
+                            <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
+                            <CFSET R_HAZIR= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_hazir : 0>
+                            <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
+                            <CFSET R_VERILMEYEN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_verilmeyen : 0>
                             
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].hazir : ''#">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].termin : ''#">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].verilmeyen : ''#">
-                            </td>
-                        </tr>
-                        </cfoutput>
+                            <tr>
+                                <td style="display:none">
+                                    bakiyeDegeri = #bakiyeDegeri# <br>
+                                    verilenSiparisDegeri = #verilenSiparisDegeri# <br>
+                                    R_HAZIR = #R_HAZIR# <br>
+                                    R_TERMIN = #R_TERMIN# <br>
+                                    R_VERILMEYEN = #R_VERILMEYEN# <br>
+                                </td>
+                                <td><strong>#PRODUCT_CODE_2#</strong></td>
+                                <td>#PRODUCT_NAME#</td>            
+                                <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
+                                <td><span class="badge bg-success">#verilenSiparisDegeri-R_TERMIN#</span></td>
+                                <td><span class="badge bg-primary">#BS#</span></td>                            
+                                
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].hazir : ''#">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].termin : ''#">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].verilmeyen : ''#">
+                                </td>
+                            </tr>
+                            </cfoutput>
                         </cfloop>
-                    </cfloop>
-                </tbody>
-            </table>
-        </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </cfloop>
         
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-primary btn-lg">
                 <i class="bi bi-save"></i> Verileri Kaydet
             </button>
         </div>
-        </form>
-    </div>
+    </form>
 </div>
 
 <!-- jQuery -->
