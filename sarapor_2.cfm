@@ -316,13 +316,13 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                     <th>#yearMonth#</th>
                 </cfif>
             </cfloop>
-            <th class="year-total">#year# Toplam</th>
-            <th class="year-avg">#year# Ortalama</th>
+            <th >#year# Toplam</th>
+            <th >#year# Ortalama</th>
         </cfloop>
         <th></th>
         <th></th>
         <cfloop array="#companyList#" index="company">
-            <th class="company-order">
+            <th >
                 <cfif structKeyExists(companyNames, company)>
                     #companyNames[company]#
                 <cfelse>
