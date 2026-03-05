@@ -322,18 +322,18 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
 <table class="table table-striped table-bordered table-hover table-sm">
     <thead class="table-dark">
     <tr>
-        <th>Ürün Kodu</th>
-        <th>Ürün Adı</th>
-        <th>Bakiye</th>
+        <th rowspan="2">Ürün Kodu</th>
+        <th rowspan="2">Ürün Adı</th>
+        <th rowspan="2">Bakiye</th>
         <cfoutput>
          <cfloop array="#yearList#" index="year">
-            <th >#year# Toplam</th>
-            <th >#year# Aylık</th>
+            <th rowspan="2">#year# Toplam</th>
+            <th rowspan="2">#year# Aylık</th>
         </cfloop>
             <cfloop array="#yearList#" index="year">
             <cfloop array="#yearMonthList#" index="yearMonth">
                 <cfif ListFirst(yearMonth, "-") EQ year>
-                    <th colspan="2">#yearMonth#</th>
+                    <th  colspan="2">#yearMonth#</th>
                 </cfif>
             </cfloop>
         </cfloop>
@@ -354,10 +354,10 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
             </cfloop>
         </cfloop>
        
-        <th>Yurt İçi</th>
-        <th>Yurt Dışı</th>
+        <th rowspan="2">Yurt İçi</th>
+        <th rowspan="2">Yurt Dışı</th>
         <cfloop array="#companyList#" index="company">
-            <th >
+            <th rowspan="2">
                 <cfif structKeyExists(companyNames, company)>
                     #companyNames[company]#
                 <cfelse>
