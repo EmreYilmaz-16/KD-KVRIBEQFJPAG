@@ -312,7 +312,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
         <cfoutput>
          <cfloop array="#yearList#" index="year">
             <th >#year# Toplam</th>
-            <th >#year# Ortalama</th>
+            <th >#year# Aylık</th>
         </cfloop>
             <cfloop array="#yearList#" index="year">
             <cfloop array="#yearMonthList#" index="yearMonth">
