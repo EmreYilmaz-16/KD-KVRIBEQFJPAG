@@ -31,47 +31,60 @@
     <cfset company = attributes.company>
     <cfset product = attributes.product>
     <cfset date = attributes.date>
-    <cfset stock_id_list = ListToArray(attributes.stock_id_list)>
-    <cfset product_id_list = ListToArray(attributes.product_id_list)>
     
     <!-- Burada formdan gelen verileri işleyebilir ve kaydedebilirsiniz -->
     <cfoutput>
         <p><strong>Company:</strong> #company#</p>
         <p><strong>Product:</strong> #product#</p>
         <p><strong>Date:</strong> #date#</p>
-        <p><strong>Stock ID List:</strong> #attributes.stock_id_list#</p>
-        <p><strong>Product ID List:</strong> #attributes.product_id_list#</p>
     </cfoutput>
-       <cfquery name="del" datasource="w3Qa_1">
-                DELETE FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
-                WHERE COMPANY_ID = #company#
-            </cfquery>
-    <!-- Verileri kaydetmek için gerekli sorguları ekleyebilirsiniz -->
-    <cfloop from="1" to="#ArrayLen(stock_id_list)#" index="i">
-        <cfset current_stock_id = stock_id_list[i]>
-        <cfset current_product_id = product_id_list[i]>
-        
-        <cfset hazir_field_name = "hazir_" & current_stock_id>
-        <cfset termin_field_name = "termin_" & current_stock_id>
-        <cfset verilmeyen_field_name = "verilmeyen_" & current_stock_id>
-        
-        <cfset hazir_value = isDefined("attributes.#hazir_field_name#") ? attributes[hazir_field_name] : 0>
-        <cfset termin_value = isDefined("attributes.#termin_field_name#") ? attributes[termin_field_name] : 0>
-        <cfset verilmeyen_value = isDefined("attributes.#verilmeyen_field_name#") ? attributes[verilmeyen_field_name] : 0>
-        
-        <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
-         
-            <cfquery datasource="w3Qa_1">
-                INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
-                (COMPANY_ID, PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN)
-                VALUES (
-                    #company#,
-                    #current_product_id#,
-                    #IsNumeric(hazir_value) ? hazir_value : 0#,
-                    #IsNumeric(termin_value) ? termin_value : 0#,
-                    #IsNumeric(verilmeyen_value) ? verilmeyen_value : 0#
-                )
-            </cfquery>
+    
+    <cfquery name="del" datasource="w3Qa_1">
+        DELETE FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
+        WHERE COMPANY_ID = #company#
+    </cfquery>
+    
+    <!-- Attributes içindeki tüm field'ları dolaşıp hazir_, termin_, verilmeyen_ ile başlayanları bul -->
+    <cfloop collection="#attributes#" item="fieldName">
+        <cfif Left(fieldName, 6) EQ "hazir_">
+            <!--- Field name formatı: hazir_{ORDER_ID}_{STOCK_ID} --->
+            <cfset parts = ListToArray(fieldName, "_")>
+            <cfif ArrayLen(parts) EQ 3>
+                <cfset current_order_id = parts[2]>
+                <cfset current_stock_id = parts[3]>
+                
+                <!--- Aynı ORDER_ID ve STOCK_ID için PRODUCT_ID'yi bul --->
+                <cfquery name="getProductId" datasource="w3Qa_1" maxrows="1">
+                    SELECT PRODUCT_ID FROM w3Qa_1.STOCKS WHERE STOCK_ID = #current_stock_id#
+                </cfquery>
+                
+                <cfif getProductId.recordCount GT 0>
+                    <cfset current_product_id = getProductId.PRODUCT_ID>
+                    
+                    <cfset hazir_field_name = "hazir_" & current_order_id & "_" & current_stock_id>
+                    <cfset termin_field_name = "termin_" & current_order_id & "_" & current_stock_id>
+                    <cfset verilmeyen_field_name = "verilmeyen_" & current_order_id & "_" & current_stock_id>
+                    
+                    <cfset hazir_value = isDefined("attributes.#hazir_field_name#") ? attributes[hazir_field_name] : 0>
+                    <cfset termin_value = isDefined("attributes.#termin_field_name#") ? attributes[termin_field_name] : 0>
+                    <cfset verilmeyen_value = isDefined("attributes.#verilmeyen_field_name#") ? attributes[verilmeyen_field_name] : 0>
+                    
+                    <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
+                        <cfquery datasource="w3Qa_1">
+                            INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
+                            (COMPANY_ID, PRODUCT_ID, ORDER_ID, HAZIR, TERMIN, VERILMEYEN)
+                            VALUES (
+                                #company#,
+                                #current_product_id#,
+                                #current_order_id#,
+                                #IsNumeric(hazir_value) ? hazir_value : 0#,
+                                #IsNumeric(termin_value) ? termin_value : 0#,
+                                #IsNumeric(verilmeyen_value) ? verilmeyen_value : 0#
+                            )
+                        </cfquery>
+                    </cfif>
+                </cfif>
+            </cfif>
         </cfif>
     </cfloop>
     
@@ -145,16 +158,17 @@ ORDER BY P1
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
 <cfquery name="GETRECORDED" datasource="w3Qa_1">
-SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
+SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ORDER_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
 </cfquery>
 <cfset RECORDED_MAP = {}>
 <cfloop query="GETRECORDED">
     <cfset recorded_product_id = PRODUCT_ID>
+    <cfset recorded_order_id = ORDER_ID>
     <cfset recorded_hazir = HAZIR>
     <cfset recorded_termin = TERMIN>
     <cfset recorded_verilmeyen = VERILMEYEN>
     
-    <cfset RECORDED_MAP["-#recorded_product_id#"] = {
+    <cfset RECORDED_MAP["#recorded_order_id#-#recorded_product_id#"] = {
         "hazir": recorded_hazir,
         "termin": recorded_termin,
         "verilmeyen": recorded_verilmeyen
@@ -192,8 +206,6 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
         <input type="hidden" name="company" value="#attributes.company#">
         <input type="hidden" name="product" value="#attributes.product#">
         <input type="hidden" name="date" value="#DateFormat(Now(), 'yyyy-mm-dd')#">
-        <input type="hidden" name="stock_id_list" value="#valueList(getData.S1)#">
-        <input type="hidden" name="product_id_list" value="#valueList(getData.P1)#">
         <input type="hidden" name="is_submit" value="1">
         </cfoutput>
         
@@ -244,13 +256,13 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 <td><span class="badge bg-primary">#BS#</span></td>                            
                                 
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="hazir_#S1#" id="hazir_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].hazir : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="hazir_#ORDER_ID#_#S1#" id="hazir_#ORDER_ID#_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].hazir : ''#">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="termin_#S1#" id="termin_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].termin : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="termin_#ORDER_ID#_#S1#" id="termin_#ORDER_ID#_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].termin : ''#">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="verilmeyen_#S1#" id="verilmeyen_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "-#P1#") ? RECORDED_MAP["-#P1#"].verilmeyen : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="verilmeyen_#ORDER_ID#_#S1#" id="verilmeyen_#ORDER_ID#_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].verilmeyen : ''#">
                                 </td>
                             </tr>
                             </cfoutput>
