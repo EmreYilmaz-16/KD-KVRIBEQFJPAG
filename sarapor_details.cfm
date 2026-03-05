@@ -276,6 +276,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             <tr>
                                 <th>KD KODU</th>
                                 <th>ÜRÜN ADI</th>
+                                <th>TESLİMAT TARİHİ</th>
                                 <th>LİSTE BAŞL. TARİHİ</th>
                                 <th>STOKTAKİ MİKTAR</th>
                                 <th>ALINAN SİPARİŞ REZERV</th>
@@ -304,6 +305,13 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 </td>
                                 <td><strong>#PRODUCT_CODE_2#</strong></td>
                                 <td>#PRODUCT_NAME#</td>
+                                <td>
+                                    <cfif IsDate(DELIVERY_DATE)>
+                                        <span class="badge bg-info">#DateFormat(DELIVERY_DATE, "dd/mm/yyyy")#</span>
+                                    <cfelse>
+                                        <span class="badge bg-danger">-</span>
+                                    </cfif>
+                                </td>
                                 <td>
                                     <cfif IsDate(LISTE_BASLANGIC_TARIHI)>
                                         <span class="badge bg-secondary">#DateFormat(LISTE_BASLANGIC_TARIHI, "dd/mm/yyyy")#</span>
