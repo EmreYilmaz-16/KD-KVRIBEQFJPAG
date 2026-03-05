@@ -218,6 +218,67 @@
                                     #preserveSingleQuotes(attributes.sql_sorgu)#
                                 </cfquery>
 
+                                <!--- Export işlemi --->
+                                <cfif len(trim(attributes.export_format)) and isDefined("res.COLUMNLIST") and res.recordcount gt 0>
+                                    <cfset fileName = "sorgu_sonuc_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#">
+                                    
+                                    <cfswitch expression="#attributes.export_format#">
+                                        <!--- Excel Export --->
+                                        <cfcase value="excel">
+                                            <cfheader name="Content-Disposition" value="attachment; filename=#fileName#.xls">
+                                            <cfcontent type="application/vnd.ms-excel" reset="true">
+                                            <cfoutput>
+                                                <table border="1">
+                                                    <thead>
+                                                        <tr>
+                                                            <cfloop list="#res.COLUMNLIST#" item="col">
+                                                                <th>#col#</th>
+                                                            </cfloop>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <cfloop query="getSorgu">
+                                                            <tr>
+                                                                <cfloop list="#res.COLUMNLIST#" item="col">
+                                                                    <td>#evaluate(col)#</td>
+                                                                </cfloop>
+                                                            </tr>
+                                                        </cfloop>
+                                                    </tbody>
+                                                </table>
+                                            </cfoutput>
+                                            <cfabort>
+                                        </cfcase>
+                                        
+                                        <!--- CSV Export --->
+                                        <cfcase value="csv">
+                                            <cfheader name="Content-Disposition" value="attachment; filename=#fileName#.csv">
+                                            <cfcontent type="text/csv; charset=utf-8" reset="true">
+                                            <cfoutput>
+                                                <!--- Başlık satırı --->
+                                                #res.COLUMNLIST##chr(13)##chr(10)#<cfloop query="getSorgu"><!--- Veri satırları ---><cfset rowData = ""><cfloop list="#res.COLUMNLIST#" item="col" index="colIdx"><cfset cellValue = replace(evaluate(col), '"', '""', 'all')><cfif colIdx gt 1><cfset rowData &= ","></cfif><cfset rowData &= '"' & cellValue & '"'></cfloop>#rowData##chr(13)##chr(10)#</cfloop>
+                                            </cfoutput>
+                                            <cfabort>
+                                        </cfcase>
+                                        
+                                        <!--- JSON Export --->
+                                        <cfcase value="json">
+                                            <cfheader name="Content-Disposition" value="attachment; filename=#fileName#.json">
+                                            <cfcontent type="application/json; charset=utf-8" reset="true">
+                                            <cfset jsonData = []>
+                                            <cfloop query="getSorgu">
+                                                <cfset rowData = {}>
+                                                <cfloop list="#res.COLUMNLIST#" item="col">
+                                                    <cfset rowData[col] = evaluate(col)>
+                                                </cfloop>
+                                                <cfset arrayAppend(jsonData, rowData)>
+                                            </cfloop>
+                                            <cfoutput>#serializeJSON(jsonData)#</cfoutput>
+                                            <cfabort>
+                                        </cfcase>
+                                    </cfswitch>
+                                </cfif>
+
                                 <cfif isDefined("res.COLUMNLIST") and res.recordcount gt 0>
                                     <div class="table-container">
                                         <table class="table table-striped table-hover table-sm mb-0">
@@ -250,14 +311,27 @@
                                     </div>
                                     
                                     <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
                                                 <small class="text-success">
                                                     <i class="bi bi-check-circle"></i> 
                                                     <strong><cfoutput>#res.recordcount#</cfoutput></strong> kayıt bulundu
                                                 </small>
                                             </div>
-                                            <div class="col-md-6 text-end">
+                                            <div class="col-md-4 text-center">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-outline-success" onclick="exportResults('excel')">
+                                                        <i class="bi bi-file-earmark-excel"></i> Excel
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-primary" onclick="exportResults('csv')">
+                                                        <i class="bi bi-filetype-csv"></i> CSV
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-info" onclick="exportResults('json')">
+                                                        <i class="bi bi-filetype-json"></i> JSON
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-end">
                                                 <small class="text-muted">
                                                     Süre: <cfoutput>#res.executionTime#</cfoutput> ms
                                                 </small>
@@ -471,6 +545,47 @@
             
             // Form submit
             $('#queryForm').submit();
+        }
+
+        function exportResults(format) {
+            const query = editor.getValue().trim();
+            if (!query) {
+                alert('Lütfen önce bir sorgu çalıştırın.');
+                return;
+            }
+            
+            // Export için form oluştur ve gönder
+            const form = $('<form>', {
+                'method': 'POST',
+                'action': '/AddOns/Partner/admin/sql_manager.cfm'
+            });
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'sql_sorgu',
+                'value': query
+            }));
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'export_format',
+                'value': format
+            }));
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'is_submit',
+                'value': '1'
+            }));
+            
+            form.append($('<input>', {
+                'type': 'hidden',
+                'name': 'action',
+                'value': 'execute'
+            }));
+            
+            $('body').append(form);
+            form.submit();
         }
 
         function formatQuery() {
