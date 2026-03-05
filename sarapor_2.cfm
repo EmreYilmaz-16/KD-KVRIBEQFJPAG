@@ -208,7 +208,8 @@ ORDER BY PR.PRODUCT_ID
 
 
 <!--- Parse JSON verileri ve map oluştur --->
-<cfset VSIP_MAP = {}>
+<cfset VSIP_YURTICI_MAP = {}>
+<cfset VSIP_YURTDISI_MAP = {}>
 <cfset RPR_MAP = {}>
 <cfset AVG_MAP = {}>
 <cfset ASIP_MAP = {}>
@@ -225,7 +226,20 @@ ORDER BY PR.PRODUCT_ID
         <cfloop array="#vsipData#" index="item">
             <cfif structKeyExists(item, "ODY") AND structKeyExists(item, "ODM")>
                 <cfset yearMonth = "#item.ODY#-#item.ODM#">
-                <cfset VSIP_MAP["#PRODUCT_ID#-#yearMonth#"] = item.BS>
+                <cfset isForeign = structKeyExists(item, "IS_FOREIGN") AND item.IS_FOREIGN EQ 1>
+                
+                <!--- Yurtiçi veya Yurtdışı MAP'e kaydet --->
+                <cfif isForeign>
+                    <cfif NOT structKeyExists(VSIP_YURTDISI_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                        <cfset VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"] = 0>
+                    </cfif>
+                    <cfset VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"] = VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"] + item.BS>
+                <cfelse>
+                    <cfif NOT structKeyExists(VSIP_YURTICI_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                        <cfset VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"] = 0>
+                    </cfif>
+                    <cfset VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"] = VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"] + item.BS>
+                </cfif>
                 
                 <!--- Yıl listesi --->
                 <cfif NOT ArrayFind(yearList, item.ODY)>
@@ -319,7 +333,23 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
             <cfloop array="#yearList#" index="year">
             <cfloop array="#yearMonthList#" index="yearMonth">
                 <cfif ListFirst(yearMonth, "-") EQ year>
-                    <th>#yearMonth#</th>
+                    <th colspan="2">#yearMonth#</th>
+                </cfif>
+            </cfloop>
+        </cfloop>
+        </cfoutput>
+    </tr>
+    <tr>
+        <th colspan="3"></th>
+        <cfoutput>
+        <cfloop array="#yearList#" index="year">
+            <th colspan="2"></th>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <th>Yurtiçi</th>
+                    <th>Yurtdışı</th>
                 </cfif>
             </cfloop>
         </cfloop>
@@ -364,8 +394,15 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
             <cfloop array="#yearMonthList#" index="yearMonth">
                 <cfif ListFirst(yearMonth, "-") EQ year>
                     <td>
-                        <cfif StructKeyExists(VSIP_MAP, "#PRODUCT_ID#-#yearMonth#")>
-                            #NumberFormat(VSIP_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                        <cfif StructKeyExists(VSIP_YURTICI_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                            #NumberFormat(VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                        <cfelse>
+                            0
+                        </cfif>
+                    </td>
+                    <td>
+                        <cfif StructKeyExists(VSIP_YURTDISI_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                            #NumberFormat(VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
                         <cfelse>
                             0
                         </cfif>
