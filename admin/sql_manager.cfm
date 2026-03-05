@@ -236,8 +236,8 @@
                                                         <cfloop list="#res.COLUMNLIST#" item="item">
                                                             <td>
                                                                 <cfset cellValue = evaluate(item)>
-                                                                <cfif len(cellValue) gt 100>
-                                                                    <span title="#cellValue#">#left(cellValue, 100)#...</span>
+                                                                <cfif len(cellValue) gt 1005>
+                                                                    <span title="#cellValue#">#left(cellValue, 1005)#...</span>
                                                                 <cfelse>
                                                                     #cellValue#
                                                                 </cfif>
