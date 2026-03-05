@@ -108,13 +108,15 @@ OUTER APPLY (
             T.S1,
             T.P1,
             T.ODM,
-            T.ODY
+            T.ODY,
+            T.IS_FOREIGN
         FROM (
             SELECT
                 ORDR.STOCK_ID AS S1,
                 ORDR.PRODUCT_ID AS P1,
                 YEAR(O.ORDER_DATE)  AS ODY,
                 MONTH(O.ORDER_DATE) AS ODM,
+                O.IS_FOREIGN,
                 (RESERVE_STOCK_IN - STOCK_IN) AS SIN
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
             LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
@@ -126,7 +128,7 @@ OUTER APPLY (
         ) AS T
         WHERE T.SIN > 0
           AND T.P1 = PR.PRODUCT_ID
-        GROUP BY T.S1, T.P1, T.ODM, T.ODY
+        GROUP BY T.S1, T.P1, T.ODM, T.ODY, T.IS_FOREIGN
         FOR JSON PATH
     ) AS GT
 ) AS VSIP
