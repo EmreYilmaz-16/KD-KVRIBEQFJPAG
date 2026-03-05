@@ -45,13 +45,24 @@
     </cfquery>
     
     <!-- Attributes içindeki tüm field'ları dolaşıp hazir_, termin_, verilmeyen_ ile başlayanları bul -->
+    <cfoutput>
+        <p style="display:none;">Form işleme başladı: Company=#company#</p>
+    </cfoutput>
+    
     <cfloop collection="#attributes#" item="fieldName">
         <cfif Left(fieldName, 6) EQ "hazir_">
+            <cfoutput>
+                <p style="display:none;">Field bulundu: #fieldName# = #attributes[fieldName]#</p>
+            </cfoutput>
             <!--- Field name formatı: hazir_{ORDER_ID}_{STOCK_ID} --->
             <cfset parts = ListToArray(fieldName, "_")>
             <cfif ArrayLen(parts) EQ 3>
                 <cfset current_order_id = parts[2]>
                 <cfset current_stock_id = parts[3]>
+                
+                <cfoutput>
+                    <p style="display:none;">Parse edildi: ORDER_ID=#current_order_id#, STOCK_ID=#current_stock_id#</p>
+                </cfoutput>
                 
                 <!--- Aynı ORDER_ID ve STOCK_ID için PRODUCT_ID'yi bul --->
                 <cfquery name="getProductId" datasource="w3Qa_1" maxrows="1">
@@ -69,19 +80,26 @@
                     <cfset termin_value = isDefined("attributes.#termin_field_name#") ? attributes[termin_field_name] : 0>
                     <cfset verilmeyen_value = isDefined("attributes.#verilmeyen_field_name#") ? attributes[verilmeyen_field_name] : 0>
                     
-                    <cfif IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)>
+                    <!--- ORDER_ID'nin numeric olduğundan emin ol --->
+                    <cfset numeric_order_id = IsNumeric(current_order_id) ? Val(current_order_id) : 0>
+                    
+                    <cfif (IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)) AND numeric_order_id GT 0>
                         <cfquery datasource="w3Qa_1">
                             INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
                             (COMPANY_ID, PRODUCT_ID, ORDER_ID, HAZIR, TERMIN, VERILMEYEN)
                             VALUES (
                                 #company#,
                                 #current_product_id#,
-                                #current_order_id#,
+                                #numeric_order_id#,
                                 #IsNumeric(hazir_value) ? hazir_value : 0#,
                                 #IsNumeric(termin_value) ? termin_value : 0#,
                                 #IsNumeric(verilmeyen_value) ? verilmeyen_value : 0#
                             )
                         </cfquery>
+                        <!--- Debug için --->
+                        <cfoutput>
+                            <p style="display:none;">Kayıt yapıldı: ORDER_ID=#numeric_order_id#, PRODUCT_ID=#current_product_id#, HAZIR=#hazir_value#, TERMIN=#termin_value#, VERILMEYEN=#verilmeyen_value#</p>
+                        </cfoutput>
                     </cfif>
                 </cfif>
             </cfif>
@@ -158,7 +176,7 @@ ORDER BY P1
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
 <cfquery name="GETRECORDED" datasource="w3Qa_1">
-SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ORDER_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
+SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ISNULL(ORDER_ID,0) AS ORDER_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
 </cfquery>
 <cfset RECORDED_MAP = {}>
 <cfloop query="GETRECORDED">
@@ -168,6 +186,7 @@ SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ORDER_ID FROM w3Qa_1.SAT
     <cfset recorded_termin = TERMIN>
     <cfset recorded_verilmeyen = VERILMEYEN>
     
+    <!--- ORDER_ID ve PRODUCT_ID ile key oluştur --->
     <cfset RECORDED_MAP["#recorded_order_id#-#recorded_product_id#"] = {
         "hazir": recorded_hazir,
         "termin": recorded_termin,
