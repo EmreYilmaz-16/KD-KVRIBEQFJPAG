@@ -109,6 +109,15 @@ GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,ORDER_ID,ORDER_NUMBER
 
 <cfset pid_list=valueList(getData.P1)>
 
+<!--- Her ORDER_ID için kaç satır olduğunu hesapla --->
+<cfset ORDER_ROW_COUNT = {}>
+<cfloop query="getData">
+    <cfif NOT structKeyExists(ORDER_ROW_COUNT, ORDER_ID)>
+        <cfset ORDER_ROW_COUNT[ORDER_ID] = 0>
+    </cfif>
+    <cfset ORDER_ROW_COUNT[ORDER_ID] = ORDER_ROW_COUNT[ORDER_ID] + 1>
+</cfloop>
+
 <cfquery name="getData2" datasource="w3Qa_1">
     SELECT SUM(SIN) AS BS,S1,P1,PRODUCT_CODE_2,PRODUCT_NAME
  FROM (
@@ -214,7 +223,9 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                         </tr>
                     </thead>
                     <tbody>
-                    <cfloop query="getData">
+                    <cfloop query="getData" group="ORDER_ID">
+                        <cfset isFirstInGroup = true>
+                        <cfloop>
                         <cfoutput>
                         <cfset bakiyeDegeri = BK>
                         <cfset verilenSiparisDegeri = structKeyExists(VERILEN_SIPARIS_MAP, "-#P1#") ? VERILEN_SIPARIS_MAP["-#P1#"] : 0>
@@ -230,7 +241,10 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 R_TERMIN = #R_TERMIN# <br>
                                 R_VERILMEYEN = #R_VERILMEYEN# <br>
                             </td>
-                            <td><span class="badge bg-info">#ORDER_NUMBER#</span></td>
+                            <cfif isFirstInGroup>
+                                <td rowspan="#ORDER_ROW_COUNT[ORDER_ID]#" style="vertical-align: middle;"><span class="badge bg-info">#ORDER_NUMBER#</span></td>
+                                <cfset isFirstInGroup = false>
+                            </cfif>
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
@@ -248,6 +262,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             </td>
                         </tr>
                         </cfoutput>
+                        </cfloop>
                     </cfloop>
                 </tbody>
             </table>
