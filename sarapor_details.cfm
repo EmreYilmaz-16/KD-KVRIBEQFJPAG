@@ -83,7 +83,7 @@
 
 
 <cfquery name="getData" datasource="w3Qa_1">
-    SELECT SUM(SOUT) AS BS,S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,(SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK FROM (
+    SELECT SUM(SOUT) AS BS,S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE, ORDER_ID, ORDER_NUMBER,(SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK FROM (
 SELECT  
 S.STOCK_ID S1,
 ORDR.ORDER_ROW_CURRENCY,
@@ -92,6 +92,8 @@ S.PRODUCT_CODE_2,
 S.PRODUCT_NAME,
 S.PRODUCT_CODE,
 O.COMPANY_ID,
+O.ORDER_ID,
+O.ORDER_NUMBER,
 RESERVE_STOCK_IN-STOCK_IN AS SIN,
 RESERVE_STOCK_OUT-STOCK_OUT AS SOUT
 FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
@@ -101,7 +103,7 @@ LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
 WHERE O.PURCHASE_SALES=1 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RESERVED=1
 AND O.COMPANY_ID=#attributes.company#  AND S.BRAND_ID=6
 ) AS T WHERE SOUT >0  --AND P1=5350
-GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE
+GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,ORDER_ID,ORDER_NUMBER
 </cfquery>
 
 
@@ -200,7 +202,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            
+                            <th>SİPARİŞ NO</th>
                             <th>KD KODU</th>
                             <th>ÜRÜN ADI</th>
                             <th>STOKTAKİ MİKTAR</th>
@@ -228,6 +230,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 R_TERMIN = #R_TERMIN# <br>
                                 R_VERILMEYEN = #R_VERILMEYEN# <br>
                             </td>
+                            <td><span class="badge bg-info">#ORDER_NUMBER#</span></td>
                             <td><strong>#PRODUCT_CODE_2#</strong></td>
                             <td>#PRODUCT_NAME#</td>            
                             <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
