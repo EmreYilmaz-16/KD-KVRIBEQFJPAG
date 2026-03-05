@@ -319,8 +319,8 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
             <th >#year# Toplam</th>
             <th >#year# Ortalama</th>
         </cfloop>
-        <th></th>
-        <th></th>
+        <th>Yurt İçi</th>
+        <th>Yurt Dışı</th>
         <cfloop array="#companyList#" index="company">
             <th >
                 <cfif structKeyExists(companyNames, company)>
