@@ -316,7 +316,11 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                     <th>#yearMonth#</th>
                 </cfif>
             </cfloop>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
             <th >#year# Toplam</th>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
             <th >#year# Ortalama</th>
         </cfloop>
         <th>Yurt İçi</th>
@@ -351,6 +355,8 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                     </td>
                 </cfif>
             </cfloop>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
             <td class="year-total fw-bold">
                 <cfif StructKeyExists(RPR_MAP, "#year#-#PRODUCT_ID#")>
                     #NumberFormat(RPR_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
@@ -358,6 +364,8 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                     
                 </cfif>
             </td>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
             <td class="year-avg fw-bold">
                 <cfif StructKeyExists(AVG_MAP, "#year#-#PRODUCT_ID#")>
                     #NumberFormat(AVG_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
