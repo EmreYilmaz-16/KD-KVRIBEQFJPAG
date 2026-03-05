@@ -103,7 +103,7 @@ AND O.COMPANY_ID=#attributes.company#  AND S.BRAND_ID=6
 ) AS T WHERE SOUT >0  --AND P1=5350
 GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE
 </cfquery>
-<CFDUMP VAR="#getData#" LABEL="Get Data Query Result" abort="yes">
+
 
 <cfset pid_list=valueList(getData.P1)>
 
