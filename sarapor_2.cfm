@@ -310,6 +310,12 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
         <th>Ürün Adı</th>
         <th>Bakiye</th>
         <cfoutput>
+               <cfloop array="#yearList#" index="year">
+            <th >#year# Toplam</th>
+        </cfloop>
+        <cfloop array="#yearList#" index="year">
+            <th >#year# Ortalama</th>
+        </cfloop>
         <cfloop array="#yearList#" index="year">
             <cfloop array="#yearMonthList#" index="yearMonth">
                 <cfif ListFirst(yearMonth, "-") EQ year>
@@ -317,12 +323,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                 </cfif>
             </cfloop>
         </cfloop>
-        <cfloop array="#yearList#" index="year">
-            <th >#year# Toplam</th>
-        </cfloop>
-        <cfloop array="#yearList#" index="year">
-            <th >#year# Ortalama</th>
-        </cfloop>
+     
         <th>Yurt İçi</th>
         <th>Yurt Dışı</th>
         <cfloop array="#companyList#" index="company">
@@ -343,20 +344,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
         <td>#PRODUCT_CODE#</td>
         <td>#PRODUCT_NAME#</td>
         <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
-        <cfloop array="#yearList#" index="year">
-            <cfloop array="#yearMonthList#" index="yearMonth">
-                <cfif ListFirst(yearMonth, "-") EQ year>
-                    <td>
-                        <cfif StructKeyExists(VSIP_MAP, "#PRODUCT_ID#-#yearMonth#")>
-                            #NumberFormat(VSIP_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
-                        <cfelse>
-                            0
-                        </cfif>
-                    </td>
-                </cfif>
-            </cfloop>
-        </cfloop>
-        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearList#" index="year">
             <td class="year-total fw-bold">
                 <cfif StructKeyExists(RPR_MAP, "#year#-#PRODUCT_ID#")>
                     #NumberFormat(RPR_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
@@ -374,6 +362,20 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                 </cfif>
             </td>
         </cfloop>
+        <cfloop array="#yearList#" index="year">
+            <cfloop array="#yearMonthList#" index="yearMonth">
+                <cfif ListFirst(yearMonth, "-") EQ year>
+                    <td>
+                        <cfif StructKeyExists(VSIP_MAP, "#PRODUCT_ID#-#yearMonth#")>
+                            #NumberFormat(VSIP_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                        <cfelse>
+                            0
+                        </cfif>
+                    </td>
+                </cfif>
+            </cfloop>
+        </cfloop>
+        
         <td>
             <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
         </td>
