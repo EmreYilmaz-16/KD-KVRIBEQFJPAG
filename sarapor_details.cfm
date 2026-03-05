@@ -126,6 +126,7 @@
         DELIVERY_DATE,
         ISNULL(PR.PRICE, 0) AS PRICE,
         ISNULL(PR.MONEY, 'TL') AS MONEY,
+        PR.STARTDATE AS LISTE_BASLANGIC_TARIHI,
         (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK 
     FROM (
         SELECT  
@@ -155,7 +156,7 @@
         AND T.DELIVERY_DATE >= PR.STARTDATE 
         AND (PR.FINISHDATE IS NULL OR T.DELIVERY_DATE <= PR.FINISHDATE)
     WHERE SOUT >0  --AND P1=5350
-    GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,ORDER_ID,ORDER_NUMBER,DELIVERY_DATE,PR.PRICE,PR.MONEY
+    GROUP BY S1,P1, PRODUCT_CODE_2, PRODUCT_NAME, PRODUCT_CODE,ORDER_ID,ORDER_NUMBER,DELIVERY_DATE,PR.PRICE,PR.MONEY,PR.STARTDATE
 </cfquery>
 
 
@@ -264,6 +265,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             <tr>
                                 <th>KD KODU</th>
                                 <th>ÜRÜN ADI</th>
+                                <th>LİSTE BAŞL. TARİHİ</th>
                                 <th>STOKTAKİ MİKTAR</th>
                                 <th>ALINAN SİPARİŞ REZERV</th>
                                 <th>Sipariş Miktarı</th>                                
@@ -290,7 +292,14 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                     R_VERILMEYEN = #R_VERILMEYEN# <br>
                                 </td>
                                 <td><strong>#PRODUCT_CODE_2#</strong></td>
-                                <td>#PRODUCT_NAME#</td>            
+                                <td>#PRODUCT_NAME#</td>
+                                <td>
+                                    <cfif IsDate(LISTE_BASLANGIC_TARIHI)>
+                                        <span class="badge bg-secondary">#DateFormat(LISTE_BASLANGIC_TARIHI, "dd/mm/yyyy")#</span>
+                                    <cfelse>
+                                        <span class="badge bg-danger">Tarih Yok</span>
+                                    </cfif>
+                                </td>            
                                 <td><span class="badge bg-warning">#bakiyeDegeri-R_HAZIR#</span></td>
                                 <td><span class="badge bg-success">#verilenSiparisDegeri-R_TERMIN#</span></td>
                                 <td><span class="badge bg-primary">#BS#</span></td>                            
