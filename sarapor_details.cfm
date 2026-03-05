@@ -169,7 +169,7 @@
     ORDER BY ORDER_ID,P1
 </cfquery>
 
-<cfdump var="#getData#" label="Get Data 1">
+
 
 <cfset pid_list=valueList(getData.P1)>
 
