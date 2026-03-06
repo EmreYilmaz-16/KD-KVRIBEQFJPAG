@@ -50,7 +50,18 @@
             <!--- JSON verisini al ve parse et --->
             <cfset var httpData = getHttpRequestData()>
             <cfset var requestData = deserializeJSON(httpData.content)>
-            
+            <CFSET session=requestData.session>
+             <cfquery name="getMoneyext" datasource="#dsn3#">
+            SELECT 
+                SM.MONEY,
+                (SELECT TOP 1 RATE1 FROM #dsn#.MONEY_HISTORY WHERE MONEY = SM.MONEY ORDER BY MONEY_HISTORY_ID DESC) AS RATE1,
+                (SELECT TOP 1 EFFECTIVE_SALE FROM #dsn#.MONEY_HISTORY WHERE MONEY = SM.MONEY ORDER BY MONEY_HISTORY_ID DESC) AS RATE2
+            FROM #dsn#.SETUP_MONEY AS SM
+            WHERE SM.PERIOD_ID = <cfqueryparam value="#session.ep.period_id#" cfsqltype="cf_sql_integer">
+        </cfquery>
+    
+
+
             <!--- Sepetteki ürünleri al --->
             <cfquery name="getCartItems" datasource="w3Qa_1">
                 SELECT product_id, quantity, yurtdisi_miktar
