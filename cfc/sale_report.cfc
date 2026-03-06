@@ -186,6 +186,7 @@
                 <cfset result.success = false>
                 <cfset result.message = "Sepette ürün bulunamadı">
             </cfif>
+        </cfloop>
             
             <cfcatch type="any">
                 <cfset result.success = false>
