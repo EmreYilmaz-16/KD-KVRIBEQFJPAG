@@ -189,6 +189,7 @@
         </cfloop>
             
             <cfcatch type="any">
+                <cfdump var="#cfcatch#">
                 <cfset result.success = false>
                 <cfset result.message = "Hata oluştu: " & cfcatch.message>
                 <cfset result.detail = cfcatch.detail>
