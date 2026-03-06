@@ -149,7 +149,7 @@
                     <cfset attributes["other_money_value_#ix#"] = TUTAR_ / satirKur.RATE2>
                     <cfset attributes["description#ix#"] = "">
                     <cfset attributes["wrk_row_id#ix#"] = "PBS#session.ep.userid##dateFormat(nowTS, 'yyyymmdd')##timeFormat(nowTS, 'hhmmssL')#_#ix#">
-                    <cfset attributes["wrk_row_relation_id#ix#"] = "#getSelectedRows.orderID#">
+                    <cfset attributes["wrk_row_relation_id#ix#"] = "#getSelectedRows.order_id#">
                     <CFSET attributes["row_nettotal#ix#"] = PR_HESAP*AMOUNT>
                 </cfif>
             </cfloop>
