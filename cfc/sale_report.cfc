@@ -108,10 +108,14 @@
                     <cfset ix++>
                     <cfset otherMoney = getSid.MONEY>
                     <cfset satirKur = structKeyExists(kurMap, otherMoney) ? kurMap[otherMoney] : {RATE1=1, RATE2=1}>
-
+                    <cfif len(getSid.PRICE) EQ 0>
+                        <cfset PRRICE = 0>
+                    <cfelse>
+                        <cfset PRRICE = getSid.PRICE>
+                    </cfif>
     
-                    <cfset PRICE_OTHER = getSid.PRICE>
-                    <cfset PRICE = getSid.PRICE*satirKur.RATE2>
+                    <cfset PRICE_OTHER = PRRICE>
+                    <cfset PRICE = PRRICE*satirKur.RATE2>
                     <cfset AMOUNT = getSelectedRows.quantity>
                     <cfset TAX = getSid.TAX>
                     <cfset DISCOUNT = 0>
