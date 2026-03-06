@@ -224,7 +224,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 ----->
 <cf_box title="Termin Detay">
     
-    <form id="sipform" action="sarapor_details.cfm" method="post">
+    <form id="sipform" action="<cfoutput>#request.self#?fuseaction=#attributes.fuseaction#</cfoutput>" method="post">
         <cfoutput>
         <input type="hidden" name="company" value="#attributes.company#">
         <input type="hidden" name="product" value="#attributes.product#">
@@ -318,11 +318,6 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
     </form>
 
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- Bootstrap 5 JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     // Form datasını JSON objesine dönüştüren fonksiyon
