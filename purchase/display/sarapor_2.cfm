@@ -172,9 +172,9 @@ OUTER APPLY (
 ) AS ASIP
    ) AS PR
 --WHERE PR.PRODUCT_ID = 5350
-WHERE 1=1  <cfif structKeyExists(attributes, "brand_id") AND len(trim(attributes.brand_id))>
-    AND PR.BRAND_ID=#attributes.brand_id#
-</cfif>
+WHERE 1=1  
+    AND PR.BRAND_ID=6
+
 <cfif structKeyExists(attributes, "only_sales") AND attributes.only_sales EQ "1">
     AND ASIP IS NOT NULL
 </cfif>
