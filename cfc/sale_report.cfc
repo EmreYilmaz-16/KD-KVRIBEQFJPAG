@@ -149,7 +149,7 @@
                     <CFSET attributes["row_nettotal#ix#"] = PR_HESAP*AMOUNT>
                 </cfif>
             </cfloop>
-            <cfdump var="# attributes# " abort="true">
+            <cfdump var="#attributes# " >
     
 
 
