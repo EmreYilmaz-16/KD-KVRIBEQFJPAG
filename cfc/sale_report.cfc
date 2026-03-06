@@ -71,7 +71,7 @@
             }>
         </cfloop>
 <cfquery name="getSelectedRows" datasource="#dsn3#">
-    select *, 7 COMPANY_ID,3475 AS PARTNER_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
+    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
 </cfquery>
 
         <cfloop query="getSelectedRows" group="COMPANY_ID">
@@ -242,7 +242,7 @@
                         converted_date = GETDATE(),
                         converted_order_id = '#mainOrderID#'
                     WHERE user_id = #val(requestData.user_id)# 
-                    AND is_converted = 0
+                    AND is_converted = 1
                 </cfquery>
                 
                 <cfset result.success = true>
