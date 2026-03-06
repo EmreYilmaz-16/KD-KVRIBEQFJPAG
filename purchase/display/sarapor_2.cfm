@@ -294,7 +294,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
     SUTUN BAŞLIĞI*----->
 
-<cf_big_list >
+<cf_grid_list >
     <thead class="table-dark">
     <tr>
         <th rowspan="2">Ürün Kodu</th>
@@ -390,7 +390,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
-                    <a href="javascript:void(0)" onclick="window.open('sarapor_details.cfm?company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a><br>
+                    <a href="javascript:void(0)" onclick="window.open('#request.self#?fuseaction=purchase.emptypopup_termin_detay_pbs&company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a><br>
                     <cfif StructKeyExists(SBP_MAP, "#company#-#PRODUCT_ID#")>
                         <small>
                             H: #SBP_MAP["#company#-#PRODUCT_ID#"].HAZIR#, 
@@ -406,7 +406,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     </tr>
     </cfoutput>
     </tbody>
-</cf_big_list>
+</cf_grid_list>
 
     <script>
         function saveRows(user_id, callback) {
