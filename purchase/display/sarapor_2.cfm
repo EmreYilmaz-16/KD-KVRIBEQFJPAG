@@ -1,7 +1,8 @@
+<cf_box title="Satış Raporu" >
 <cfparam name="attributes.brand_id" default="6">
 
 
-        <h1 class="mb-4">Satış Raporu</h1>
+        
 
 
 <cfform name="reportForm" method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
@@ -481,3 +482,4 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     </script>
     
     
+</cf_box>
