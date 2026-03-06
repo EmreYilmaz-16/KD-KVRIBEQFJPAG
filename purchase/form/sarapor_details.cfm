@@ -1,4 +1,4 @@
->
+
 <cfif isDefined("attributes.is_submit") AND attributes.is_submit EQ "1">
     <cfset company = attributes.company>
     <cfset product = attributes.product>
@@ -11,8 +11,8 @@
         <p><strong>Date:</strong> #date#</p>
     </cfoutput>
     
-    <cfquery name="del" datasource="w3Qa_1">
-        DELETE FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
+    <cfquery name="del" datasource="#dsn3#">
+        DELETE FROM #dsn3#.SATINALMA_PLANLAMA_PBS 
         WHERE COMPANY_ID = #company#
     </cfquery>
     
@@ -37,8 +37,8 @@
                 </cfoutput>
                 
                 <!--- Aynı ORDER_ID ve STOCK_ID için PRODUCT_ID'yi bul --->
-                <cfquery name="getProductId" datasource="w3Qa_1" maxrows="1">
-                    SELECT PRODUCT_ID FROM w3Qa_1.STOCKS WHERE STOCK_ID = #current_stock_id#
+                <cfquery name="getProductId" datasource="#dsn3#" maxrows="1">
+                    SELECT PRODUCT_ID FROM #dsn3#.STOCKS WHERE STOCK_ID = #current_stock_id#
                 </cfquery>
                 
                 <cfif getProductId.recordCount GT 0>
@@ -56,8 +56,8 @@
                     <cfset numeric_order_id = IsNumeric(current_order_id) ? Val(current_order_id) : 0>
                     
                     <cfif (IsNumeric(hazir_value) OR IsNumeric(termin_value) OR IsNumeric(verilmeyen_value)) AND numeric_order_id GT 0>
-                        <cfquery datasource="w3Qa_1">
-                            INSERT INTO w3Qa_1.SATINALMA_PLANLAMA_PBS 
+                        <cfquery datasource="#dsn3#">
+                            INSERT INTO #dsn3#.SATINALMA_PLANLAMA_PBS 
                             (COMPANY_ID, PRODUCT_ID, ORDER_ID, HAZIR, TERMIN, VERILMEYEN)
                             VALUES (
                                 #company#,
@@ -85,7 +85,7 @@
 </cfif>
 
 
-<cfquery name="getData" datasource="w3Qa_1">
+<cfquery name="getData" datasource="#dsn3#">
     SELECT 
         SUM(SOUT) AS BS,
         S1,
@@ -99,7 +99,7 @@
         ISNULL(PR.PRICE, 0) AS PRICE,
         ISNULL(PR.MONEY, 'TL') AS MONEY,
         PR.STARTDATE AS LISTE_BASLANGIC_TARIHI,
-        (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK 
+        (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM #dsn2#.STOCKS_ROW AS SR WHERE SR.STOCK_ID=T.P1) AS BK 
     FROM (
         SELECT  
             S.STOCK_ID S1,
@@ -114,10 +114,10 @@
             O.ORDER_NUMBER,
             RESERVE_STOCK_IN-STOCK_IN AS SIN,
             RESERVE_STOCK_OUT-STOCK_OUT AS SOUT
-        FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
-        LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
-        LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
-        LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
+        FROM #dsn3#.ORDER_ROW_RESERVED AS ORR
+        LEFT JOIN #dsn3#.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
+        LEFT JOIN #dsn3#.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
+        LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
         WHERE O.PURCHASE_SALES=1 
             AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) 
             AND O.RESERVED=1
@@ -129,7 +129,7 @@
             PR.PRICE, 
             PR.MONEY, 
             PR.STARTDATE
-        FROM w3Qa_1.PRICE_HISTORY AS PR 
+        FROM #dsn3#.PRICE_HISTORY AS PR 
         WHERE PR.PRODUCT_ID = T.P1 
             AND PR.PRICE_CATID = 1
             AND T.DELIVERY_DATE >= PR.STARTDATE 
@@ -145,7 +145,7 @@
 
 <cfset pid_list=valueList(getData.P1)>
 
-<cfquery name="getData2" datasource="w3Qa_1">
+<cfquery name="getData2" datasource="#dsn3#">
     SELECT SUM(SIN) AS BS,S1,P1,PRODUCT_CODE_2,PRODUCT_NAME
  FROM (
 SELECT  
@@ -161,10 +161,10 @@ O.RESERVED,
   ORR.ORDER_ID,
 RESERVE_STOCK_IN-STOCK_IN AS SIN,
 RESERVE_STOCK_OUT-STOCK_OUT AS SOUT
-FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
-LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
-LEFT JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
-LEFT JOIN w3Qa_1.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
+FROM #dsn3#.ORDER_ROW_RESERVED AS ORR
+LEFT JOIN #dsn3#.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID=ORR.ORDER_WRK_ROW_ID
+LEFT JOIN #dsn3#.ORDERS AS O ON O.ORDER_ID=ORDR.ORDER_ID
+LEFT JOIN #dsn3#.STOCKS AS S ON S.STOCK_ID=ORDR.STOCK_ID
 WHERE O.PURCHASE_SALES=0 AND ORDR.ORDER_ROW_CURRENCY NOT IN (-9,-10,-3) AND O.RESERVED=1
 ) AS T WHERE SIN >0  AND P1 IN (#pid_list#)
 GROUP BY S1,P1,PRODUCT_CODE_2,PRODUCT_NAME,PRODUCT_CODE
@@ -180,8 +180,8 @@ ORDER BY P1
     </cfif>
     <cfset VERILEN_SIPARIS_MAP["-#P1#"] += BS>
 </cfloop>
-<cfquery name="GETRECORDED" datasource="w3Qa_1">
-SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ISNULL(ORDER_ID,0) AS ORDER_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
+<cfquery name="GETRECORDED" datasource="#dsn3#">
+SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ISNULL(ORDER_ID,0) AS ORDER_ID FROM #dsn3#.SATINALMA_PLANLAMA_PBS WHERE COMPANY_ID=#attributes.company#
 </cfquery>
 <cfset RECORDED_MAP = {}>
 <cfloop query="GETRECORDED">
@@ -198,8 +198,8 @@ SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID,ISNULL(ORDER_ID,0) AS OR
         "verilmeyen": recorded_verilmeyen
     }>
 </cfloop>
-<cfquery name="GETALLRECORDED" datasource="w3Qa_1">
-SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) AS TOTAL_VERILMEYEN,PRODUCT_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS WHERE PRODUCT_ID IN (#pid_list#)  GROUP BY PRODUCT_ID
+<cfquery name="GETALLRECORDED" datasource="#dsn3#">
+SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) AS TOTAL_VERILMEYEN,PRODUCT_ID FROM #dsn3#.SATINALMA_PLANLAMA_PBS WHERE PRODUCT_ID IN (#pid_list#)  GROUP BY PRODUCT_ID
 </cfquery>
 <CFSET ALLRECORDED_MAP = {}>
 <cfloop query="GETALLRECORDED">,
@@ -245,16 +245,16 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                     <cf_ajax_list class="table table-striped table-hover">
                         <thead class="table-dark">
                             <tr>
-                                <th>KD KODU</th>
-                                <th>ÜRÜN ADI</th>
-                                <th>TESLİMAT TARİHİ</th>
-                                <th>LİSTE BAŞL. TARİHİ</th>
-                                <th>STOKTAKİ MİKTAR</th>
-                                <th>ALINAN SİPARİŞ REZERV</th>
-                                <th>Sipariş Miktarı</th>                                
-                                <th>HAZIR</th>
-                                <th>TERMIN</th>
-                                <th>VERİLMEYEN</th>
+                                <th>KD Kodu</th>
+                                <th>Ürün Adı</th>
+                                <th>Teslim T.</th>
+                                <th>Liste Başl.T.</th>
+                                <th>Depo</th>
+                                <th>Bekleyen Rezerv</th>
+                                <th>Sip. Mik.</th>                                
+                                <th>Hazır</th>
+                                <th>Termin</th>
+                                <th>Verilmeyen</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -295,13 +295,13 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 <td><span class="badge bg-primary">#BS#</span></td>                            
                                 
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="hazir_#ORDER_ID#_#S1#" id="hazir_#ORDER_ID#_#S1#" placeholder="HAZIR değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].hazir : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="hazir_#ORDER_ID#_#S1#" id="hazir_#ORDER_ID#_#S1#" placeholder="Hazır" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].hazir : ''#">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="termin_#ORDER_ID#_#S1#" id="termin_#ORDER_ID#_#S1#" placeholder="TERMIN değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].termin : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="termin_#ORDER_ID#_#S1#" id="termin_#ORDER_ID#_#S1#" placeholder="Termin" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].termin : ''#">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" name="verilmeyen_#ORDER_ID#_#S1#" id="verilmeyen_#ORDER_ID#_#S1#" placeholder="Verilmeyen değeri" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].verilmeyen : ''#">
+                                    <input type="text" class="form-control form-control-sm" name="verilmeyen_#ORDER_ID#_#S1#" id="verilmeyen_#ORDER_ID#_#S1#" placeholder="Verilmeyen" value="#structKeyExists(RECORDED_MAP, "#ORDER_ID#-#P1#") ? RECORDED_MAP["#ORDER_ID#-#P1#"].verilmeyen : ''#">
                                 </td>
                             </tr>
                             </cfoutput>
