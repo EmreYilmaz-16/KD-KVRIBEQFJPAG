@@ -277,6 +277,11 @@ ORDER BY PR.PRODUCT_ID
 </cfloop>
 <script>
     var jsSession=<cfoutput>#serializeJSON(session)#</cfoutput>;
+    var dataSources={
+     <cfoutput>   dsn: "#dsn#",
+        dsn2: "#dsn2#",
+        dsn3: "#dsn3#"</cfoutput>
+    };
 </script>
 
 <cfquery name="getSaved" datasource="w3Qa_1">
@@ -462,7 +467,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
                         method: "POST",
                         dataType: "json",
                         contentType: "application/json",
-                        data: JSON.stringify({user_id: user_id,session: jsSession}),
+                        data: JSON.stringify({user_id: user_id,session: jsSession,dataSources: dataSources}),
                         success: function(response) {
                             console.log(response);
                             if(response.SUCCESS) {

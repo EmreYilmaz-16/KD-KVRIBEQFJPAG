@@ -51,6 +51,7 @@
             <cfset var httpData = getHttpRequestData()>
             <cfset var requestData = deserializeJSON(httpData.content)>
             <CFSET session=requestData.session>
+            <CFSET dsn3=requestData.dataSources.dsn3>
              <cfquery name="getMoneyext" datasource="#dsn3#">
             SELECT 
                 SM.MONEY,
