@@ -280,7 +280,9 @@ ORDER BY PR.PRODUCT_ID
     var dataSources={
      <cfoutput>   dsn: "#dsn#",
         dsn2: "#dsn2#",
-        dsn3: "#dsn3#"</cfoutput>
+        dsn3: "#dsn3#",
+        dsn1: "#dsn1#"
+    </cfoutput>
     };
 </script>
 
