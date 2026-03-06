@@ -111,7 +111,7 @@
 
     
                     <cfset PRICE_OTHER = getSid.PRICE>
-                    <cfset PRICE = getSelectedRows.PRICE*satirKur.RATE2>
+                    <cfset PRICE = getSid.PRICE*satirKur.RATE2>
                     <cfset AMOUNT = getSelectedRows.quantity>
                     <cfset TAX = getSid.TAX>
                     <cfset DISCOUNT = 0>
