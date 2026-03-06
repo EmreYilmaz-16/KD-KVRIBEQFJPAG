@@ -86,7 +86,7 @@
             <!--- Ürünleri dön --->
             <cfloop >
                 <cfquery name="getSid" datasource="w3Qa_1">
-                    SELECT PR.PRICE,PR.MONEY,S.PRODUCT_ID,S.PRODUCT_NAME,S.TAX,PU.MAIN_UNIT AS UNIT,S.PRODUCT_UNIT_ID AS UNIT_ID  FROM w3Qa_1.STOCKS  AS S
+                    SELECT PR.PRICE,PR.MONEY,S.PRODUCT_ID,S.STOCK_ID,S.PRODUCT_NAME,S.TAX,PU.MAIN_UNIT AS UNIT,S.PRODUCT_UNIT_ID AS UNIT_ID  FROM w3Qa_1.STOCKS  AS S
                     LEFT JOIN w3Qa_1.PRODUCT_UNIT AS PU ON PU.PRODUCT_ID=S.PRODUCT_ID AND IS_MAIN=1
                     OUTER APPLY (
         SELECT TOP 1 
