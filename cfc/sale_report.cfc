@@ -221,7 +221,7 @@
             <cfset attributes.PAPER_NO = get_offer_number.PAPER_NO>
     
             <!--- Siparişi oluştur --->
-            <cfinclude template="/AddOns/Partner/purchase/query/add_order.cfm">
+            <cfinclude template="/AddOns/Partner/purchase/query/add_order_nd.cfm">
             
 
 
