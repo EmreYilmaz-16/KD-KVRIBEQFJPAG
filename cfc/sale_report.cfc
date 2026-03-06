@@ -71,7 +71,7 @@
             }>
         </cfloop>
 <cfquery name="getSelectedRows" datasource="#dsn3#">
-    select *, 7 COMPANY_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
+    select *, 7 COMPANY_ID,3475 AS PARTNER_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
 </cfquery>
 
         <cfloop query="getSelectedRows" group="COMPANY_ID">
@@ -165,7 +165,69 @@
                 AND is_converted = 0
                 AND quantity > 0
             </cfquery>
+             <cfset attributes.rows_ = ix>
+    
+            <!--- Şirket Bilgilerini Ekle --->
+            <cfquery name="GETCOMPANY" datasource="#dsn#">
+                SELECT ISNULL(NULLIF(COMPANY_ADDRESS, ''), '-') AS COMPANY_ADDRESS, CITY, COUNTY
+                FROM COMPANY
+                WHERE COMPANY_ID = <cfqueryparam value="#getSelectedRows.COMPANY_ID#" cfsqltype="cf_sql_integer">
+            </cfquery>
+    
+            <cfset attributes.company_id = getSelectedRows.COMPANY_ID>
+            <cfset attributes.PARTNER_ID = getSelectedRows.PARTNER_ID>
+            <cfset attributes.CONSUMER_ID ="">
+<cfset attributes.CONSUMER_NAME ="">
+            <cfset attributes.ORDER_HEAD = "Siparişimiz">
+            <cfset attributes.ORDER_DESCRIPTION = "">
+            <cfset attributes.ORDER_DETAIL = "">
+            <cfset attributes.order_date = nowTS>
+            <cfset attributes.deliverdate = nowTS>
+            <cfset attributes.PUBLISHDATE = nowTS>
+            <cfset attributes.SHIP_METHOD_ID = 2>
+            <cfset attributes.SHIP_METHOD = "kargo">
+    
+            <cfset attributes.BASKET_NET_TOTAL = BASKET_NET_TOTAL_>
+            <cfset attributes.BASKET_TAX_TOTAL = BASKET_TAX_TOTAL_>
+            <cfset attributes.BASKET_GROSS_TOTAL = BASKET_NET_TOTAL_ - BASKET_TAX_TOTAL_>
+            <cfset attributes.BASKET_DISCOUNT_TOTAL = 0>
+            <cfset attributes.PRICE = BASKET_NET_TOTAL_>
+    
+            <cfset attributes.ACTIVE_COMPANY = session.ep.company_id>
+            <cfset attributes.DELIVER_DEPT_ID = 13>
+            <cfset attributes.DELIVER_LOC_ID = 5>
+            <cfset attributes.DELIVER_DEPT_NAME = "ASDASD2">
+            <cfset attributes.BASKET_MONEY = "TL">
+            <cfset attributes.BASKET_RATE1 = 1>
+            <cfset attributes.BASKET_RATE2 = 1>
+            <cfset attributes.kur_say = getMoneyext.recordCount>
+            <!---<cfset attributes.internaldemand_id_list = "">--->
+            <cfset attributes.process_stage = "259">
+    
+            <!--- Kur bilgilerini tekrar setle --->
+            <cfset i=1>
+            <cfloop query="getMoneyext" >
+                <cfset attributes["txt_rate1_#i#"] = RATE1>
+                <cfset attributes["txt_rate2_#i#"] = RATE2>
+                <cfset attributes["hidden_rd_money_#i#"] = MONEY>
+                <cfset attributes["_hidden_rd_money_#i#"] = MONEY>
+                <cfset i=i+1>
+            </cfloop>
+    
+            <!--- Kağıt numarası üret --->
+            <cfquery name="get_offer_number" datasource="#dsn3#">
+                EXEC GET_PAPER_NUMBER 1
+            </cfquery>
+            <cfset attributes.PAPER_NO = get_offer_number.PAPER_NO>
+    
+            <!--- Siparişi oluştur --->
+            <cfinclude template="/AddOns/Partner/purchase/query/add_order.cfm">
             
+
+
+
+
+
             <cfif getCartItems.recordCount GT 0>
                 <!--- Ana sipariş kaydı oluştur (ORDERS tablosuna) --->
                 <cfset var mainOrderID = createUUID()>
