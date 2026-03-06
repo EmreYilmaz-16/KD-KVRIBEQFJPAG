@@ -294,7 +294,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
     SUTUN BAŞLIĞI*----->
 
-<cf_grid_list >
+<cf_big_list >
     <thead class="table-dark">
     <tr>
         <th rowspan="2">Ürün Kodu</th>
@@ -406,7 +406,7 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     </tr>
     </cfoutput>
     </tbody>
-</cf_grid_list>
+</cf_big_list>
 
     <script>
         function saveRows(user_id, callback) {
