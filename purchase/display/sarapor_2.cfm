@@ -1,36 +1,10 @@
 <cfparam name="attributes.brand_id" default="6">
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satış Raporu</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding: 20px;
-        }
-        .table-responsive {
-            margin-top: 20px;
-        }
-        .year-total {
-            background-color: #e6f3ff !important;
-        }
-        .year-avg {
-            background-color: #fff3e6 !important;
-        }
-        .company-order {
-            background-color: #ffe6e6 !important;
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
+
+
         <h1 class="mb-4">Satış Raporu</h1>
 
-<cfset dsn3="w3Qa_1">
-<cfform name="reportForm" method="post" action="sarapor_2.cfm">
+
+<cfform name="reportForm" method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
     <div style="display:none" class="form-group" id="item-brand_id">
                         <label>Marka </label>
  <select name="brand_id" class="form-control">
@@ -95,11 +69,11 @@
     PR.PRODUCT_CODE,
     PR.PRODUCT_ID,
     PR.BRAND_ID,
-    (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM w3Qa_2026_1.STOCKS_ROW AS SR WHERE SR.STOCK_ID=PR.PRODUCT_ID) AS BK,
+    (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM #dsn2#.STOCKS_ROW AS SR WHERE SR.STOCK_ID=PR.PRODUCT_ID) AS BK,
     JSON_QUERY(VSIP.GT)   AS VSIP,
     JSON_QUERY(RPR.RPR) AS RPR,
     JSON_QUERY(ASIP.ASIP) AS ASIP
-FROM w3Qa_1.STOCKS AS PR
+FROM #dsn3#.STOCKS AS PR
 
 OUTER APPLY (
     SELECT (
@@ -118,9 +92,9 @@ OUTER APPLY (
                 MONTH(O.ORDER_DATE) AS ODM,
                 O.IS_FOREIGN,
                 (RESERVE_STOCK_IN - STOCK_IN) AS SIN
-            FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
-            LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
-            LEFT JOIN w3Qa_1.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
+            FROM #dsn3#.ORDER_ROW_RESERVED AS ORR
+            LEFT JOIN #dsn3#.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
+            LEFT JOIN #dsn3#.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
             WHERE
                 O.PURCHASE_SALES = 0
                 AND O.RESERVED = 1
@@ -145,8 +119,8 @@ OUTER APPLY (
             YEAR(O.ORDER_DATE) AS [YEAR],
             ORR.STOCK_ID AS S2,
             ORR.PRODUCT_ID AS P2
-        FROM w3Qa_1.ORDER_ROW AS ORR
-        INNER JOIN w3Qa_1.ORDERS AS O ON O.ORDER_ID = ORR.ORDER_ID
+        FROM #dsn3#.ORDER_ROW AS ORR
+        INNER JOIN #dsn3#.ORDERS AS O ON O.ORDER_ID = ORR.ORDER_ID
         WHERE
             O.PURCHASE_SALES = 1
             AND ORR.PRODUCT_ID = PR.PRODUCT_ID
@@ -176,12 +150,12 @@ OUTER APPLY (
                 CAST (SPB.HAZIR AS DECIMAL(18,2)) AS HAZIR,
                 CAST (SPB.TERMIN AS DECIMAL(18,2)) AS TERMIN,
                 CAST (SPB.VERILMEYEN AS DECIMAL(18,2)) AS VERILMEYEN
-            FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
-            LEFT JOIN w3Qa_1.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
-            LEFT JOIN w3Qa_1.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
-            LEFT JOIN w3Qa.COMPANY AS C ON C.COMPANY_ID = O.COMPANY_ID
+            FROM #dsn3#.ORDER_ROW_RESERVED AS ORR
+            LEFT JOIN #dsn3#.ORDER_ROW AS ORDR ON ORDR.WRK_ROW_ID = ORR.ORDER_WRK_ROW_ID
+            LEFT JOIN #dsn3#.ORDERS   AS O    ON O.ORDER_ID = ORDR.ORDER_ID
+            LEFT JOIN #dsn3#.COMPANY AS C ON C.COMPANY_ID = O.COMPANY_ID
             LEFT JOIN (
-                SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM w3Qa_1.SATINALMA_PLANLAMA_PBS 
+                SELECT PRODUCT_ID, HAZIR, TERMIN, VERILMEYEN,COMPANY_ID FROM #dsn3#.SATINALMA_PLANLAMA_PBS 
             ) AS SPB ON SPB.PRODUCT_ID = ORDR.PRODUCT_ID AND SPB.COMPANY_ID = O.COMPANY_ID
             WHERE
                 O.PURCHASE_SALES = 1
@@ -318,8 +292,8 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
 <!--- TODO: SUTUN EKLEMEK İÇİN BUTON OLACAK  
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
     SUTUN BAŞLIĞI*----->
-<div class="table-responsive">
-<table class="table table-striped table-bordered table-hover table-sm">
+
+<cf_grid_list >
     <thead class="table-dark">
     <tr>
         <th rowspan="2">Ürün Kodu</th>
@@ -431,10 +405,8 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
     </tr>
     </cfoutput>
     </tbody>
-</table>
-</div>
+</cf_grid_list>
 
-    </div>
     <script>
         function saveRows(user_id, callback) {
             var elems=document.getElementsByName("siparis_miktari")
@@ -508,9 +480,4 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
         }
     </script>
     
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    
