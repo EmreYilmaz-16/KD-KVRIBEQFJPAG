@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şara Rapor Detayları</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 30px;
-        }
-        .table-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
+>
 <cfif isDefined("attributes.is_submit") AND attributes.is_submit EQ "1">
     <cfset company = attributes.company>
     <cfset product = attributes.product>
@@ -250,8 +222,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 <cfdump var="#RECORDED_MAP#" label="RECORDED_MAP">
 <cfdump var="#ALLRECORDED_MAP#" label="ALLRECORDED_MAP">
 ----->
-<div class="container">
-    <h2 class="mb-4"><i class="bi bi-table"></i> Şara Rapor Detayları</h2>
+<cf_box title="Termin Detay">
     
     <form id="sipform" action="sarapor_details.cfm" method="post">
         <cfoutput>
@@ -271,7 +242,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                 </cfoutput>
                 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <cf_ajax_list class="table table-striped table-hover">
                         <thead class="table-dark">
                             <tr>
                                 <th>KD KODU</th>
@@ -336,7 +307,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             </cfoutput>
                         </cfloop>
                         </tbody>
-                    </table>
+                    </cf_ajax_list>
                 </div>
             </div>
         </cfloop>
@@ -347,7 +318,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
             </button>
         </div>
     </form>
-</div>
+
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
