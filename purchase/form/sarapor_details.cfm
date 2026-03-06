@@ -234,12 +234,9 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
         
         <cfloop query="getData" group="ORDER_ID">
             <div class="table-container mb-4">
-                <cfoutput>
-                <h4 class="mb-3">
-                    <i class="bi bi-cart-check"></i> Sipariş No: 
-                    <span class="badge bg-info">#ORDER_NUMBER#</span>
-                </h4>
-                </cfoutput>
+             
+               <cf_box title="Sipariş No: #ORDER_NUMBER#">
+               
                 
                 <div class="table-responsive">
                     <cf_ajax_list class="table table-striped table-hover">
@@ -310,6 +307,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                     </cf_ajax_list>
                 </div>
             </div>
+            </cf_box>
         </cfloop>
         
         <div class="text-center mt-4">
