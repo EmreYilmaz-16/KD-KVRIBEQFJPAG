@@ -1,4 +1,4 @@
-<cf_box title="Satış Raporu" >
+<cf_box title="Dönmez Toplu Ürün Takip Modülü" >
 <cfparam name="attributes.brand_id" default="6">
 
 
