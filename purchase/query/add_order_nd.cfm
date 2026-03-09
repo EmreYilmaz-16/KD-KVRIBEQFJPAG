@@ -475,80 +475,9 @@
 			<!--- //  urun asortileri --->			
 
 				<!--- bütçe rezerve kontrolü --->
-				<cfif isdefined('attributes.process_cat') and len(attributes.process_cat) and isdefined("get_type.IS_BUDGET_RESERVED_CONTROL") and get_type.IS_BUDGET_RESERVED_CONTROL eq 1>
-					<cfif isdefined('attributes.other_money_value_#i#') and len(evaluate("attributes.other_money_value_#i#"))>
-						<cfset other_money_val = evaluate('attributes.other_money_value_#i#')>
-					<cfelse>
-						<cfset other_money_val = ''>
-					</cfif>
-					<cfif isdefined('attributes.other_money_#i#') and len(evaluate("attributes.other_money_#i#"))>
-						<cfset other_money = evaluate('attributes.other_money_#i#')>
-					<cfelse>
-						<cfset other_money = ''>
-					</cfif>
-					<cfscript>
-						butceci(
-						action_id : GET_ORDER.ORDER_ID,
-						muhasebe_db : dsn3,
-						is_income_expense : true,
-						process_type : get_type.process_type,
-						product_tax: evaluate("attributes.tax#i#"),//kdv
-						stock_id: evaluate("attributes.stock_id#i#"),
-						product_id: evaluate("attributes.product_id#i#"),
-						nettotal : wrk_round(evaluate("attributes.row_nettotal#i#")),
-						other_money_value : other_money_val,
-						action_currency : other_money,
-						currency_multiplier : attributes.currency_multiplier,
-						expense_date : attributes.order_date,
-						expense_center_id : iif((isdefined("attributes.row_exp_center_id#i#") and len(evaluate('attributes.row_exp_center_id#i#'))),evaluate("attributes.row_exp_center_id#i#"),0),
-						expense_item_id : iif((isdefined("attributes.row_exp_item_id#i#") and len(evaluate('attributes.row_exp_item_id#i#'))),evaluate("attributes.row_exp_item_id#i#"),0),
-						detail : "#paper_full# #getLang('','Nolu Sipariş',64677)#",
-						paper_no : '#paper_full#',
-						branch_id : ListGetAt(session.ep.user_location,2,"-"),
-						discounttotal: iif((isdefined("attributes.genel_indirim") and len('attributes.genel_indirim')),"#attributes.genel_indirim#",0),
-						reserv_type :1, //expense_reserved_rows tablosuna gelir olarak yazılsın.
-						project_id: iif(isdefined("attributes.project_id") and len(attributes.project_id), "attributes.project_id", DE('')),
-						activity_type : evaluate("attributes.row_activity_id#i#"),
-						invoice_row_id:attributes.ROW_MAIN_ID
-						);
-					</cfscript>
-				</cfif>
+				
 			
 			</cfloop>	
-		</cfif>
-		<!--- referans satıs siparisiyle kaydedilen siparis arasındaki baglantı  PAPER_RELATION'da tutuluyor--->
-		<cfif isdefined('attributes.ref_paper_id') and len(attributes.ref_paper_id)>
-			<cfquery name="ADD_PAPER_RELATION" datasource="#new_dsn3_group_pur#">
-				INSERT INTO
-				#dsn_alias#.PAPER_RELATION
-					(
-					PAPER_ID,
-					PAPER_TABLE,
-					PAPER_TYPE_ID,
-					RELATED_PAPER_ID,
-					RELATED_PAPER_TABLE,
-					RELATED_PAPER_TYPE_ID,
-					COMP_ID,
-					PERIOD_ID
-					)
-				VALUES
-					(
-					#GET_ORDER.ORDER_ID#,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="ORDERS">,
-					1,
-					<cfif isdefined('attributes.pro_material_id') and len(attributes.pro_material_id)>
-					#attributes.pro_material_id#,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="PRO_MATERIAL">,
-					2,
-					<cfelse>
-					#attributes.ref_paper_id#,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="ORDERS">,
-					1,
-					</cfif>
-					#session.ep.company_id#,
-					#session.ep.period_id#
-					)
-			</cfquery>
 		</cfif>
 		<cfif 1 eq 1>
 			<cfinclude template='/V16/objects/functions/add_order_row_reserved_stock.cfm'>
@@ -565,71 +494,9 @@
 				);
 			</cfscript>
 		</cfif>
-	<cfscript>
+		
 	
-		attributes.kur_say=3;
-		
-			
-		
-		if(isdefined('attributes.internaldemand_id_list') and len(attributes.internaldemand_id_list)) //siparis ic talepten olusturulacaksa
-		{
-			/*
-			if(not isdefined("is_from_import") or not isdefined("add_internaldemand_row_relation"))//importdan geliyorsa fonksiyon tanımlanmasın
-				include('add_internaldemand_relation.cfm','\V16/objects\functions'); */
-			
-		}
-		if(isdefined('attributes.pro_material_id_list') and len(attributes.pro_material_id_list)) //proje malzeme planı ile baglantısı olusturuluyor
-		{/*
-			if(not isdefined("is_from_import") or not isdefined("add_paper_relation"))//importdan geliyorsa fonksiyon tanımlanmasın
-				include('add_paper_relation.cfm','\V16/objects\functions'); */
-			add_paper_relation(
-				to_paper_id :GET_ORDER.ORDER_ID,
-				to_paper_table : 'ORDERS',
-				to_paper_type :1,
-				from_paper_table : 'PRO_MATERIAL',
-				from_paper_type :2,
-				relation_type : 1,
-				action_status:0
-				);
-		}
-	</cfscript>
-	<cfset last_order_id_pur = GET_ORDER.ORDER_ID>
-    <cfif not isdefined("first_order_id_pur")>
-		<cfset first_order_id_pur = GET_ORDER.ORDER_ID>
-    </cfif>
-    <!---Ek Bilgiler--->
-    <cfset attributes.info_id = my_result.IDENTITYCOL>
-    <cfset attributes.is_upd = 0>
-    <cfset attributes.info_type_id = -12>
-<cfset attributes.fuseaction = 'purchase.list_order'>
-    <!---Ek Bilgiler--->
-	<cf_workcube_process 
-		is_upd='1' 
-		data_source='#new_dsn3_group_pur#' 
-		old_process_line='0'
-		process_stage='#attributes.process_stage#' 
-		record_member='#session.ep.userid#' 
-		record_date='#now()#' 
-		action_table='ORDERS'
-		action_column='ORDER_ID'
-		action_id='#GET_ORDER.ORDER_ID#'
-		action_page='/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#' 
-		warning_description='Sipariş : #paper_full#'>
 
-	<cfif isdefined("attributes.process_cat") and len(attributes.process_cat)>
-		<cf_workcube_process_cat 
-			process_cat="#attributes.process_cat#"
-			action_id = "#GET_ORDER.ORDER_ID#"
-			action_table="ORDER"
-			action_column="ORDER_ID"
-			is_action_file = 1
-			action_page='/index.cfm?fuseaction=purchase.list_order&event=upd&order_id=#GET_ORDER.ORDER_ID#'
-			action_file_name='#get_type.action_file_name#'
-			action_db_type = '#dsn3#'
-			is_template_action_file = '#get_type.action_file_from_template#'>
-	</cfif>	
+	
 	</cftransaction>
 </cflock>
-<cfif isdefined('xml_import_pur')><cfset last_xml_import_pur = xml_import_pur></cfif>
-<cfif isdefined('is_from_import')><cfset last_xml_import_pur = is_from_import></cfif>
-
