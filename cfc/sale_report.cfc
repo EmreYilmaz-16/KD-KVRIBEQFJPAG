@@ -233,7 +233,7 @@
                 <cfset attributes["_hidden_rd_money_#i#"] = MONEY>
                 <cfset i=i+1>
             </cfloop>
-    
+    <cfdump var="#attributes#" label="ORDER ATTRIBUTES">
             <!--- Kağıt numarası üret --->
             <cfquery name="get_offer_number" datasource="#dsn3#">
                 EXEC GET_PAPER_NUMBER 1
