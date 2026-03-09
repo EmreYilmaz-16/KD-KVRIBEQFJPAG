@@ -88,7 +88,7 @@
             }>
         </cfloop>
 <cfquery name="getSelectedRows" datasource="#dsn3#">
-    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID,IS_FOREIGN from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0 ORDER BY IS_FOREIGN
+    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0 ORDER BY IS_FOREIGN
 </cfquery>
 
         <cfloop query="getSelectedRows" group="IS_FOREIGN">
