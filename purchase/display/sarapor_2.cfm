@@ -21,7 +21,7 @@
 
                     </div>
                     <div class="form-group">
-                        <label>Sadece Satışı Olanlar Gelsin</label>
+                        <label>Satış Rezervi Olanlar</label>
                         <input type="checkbox" name="only_sales" id="only_sales" value="1">
                     </div>
                     <table>
