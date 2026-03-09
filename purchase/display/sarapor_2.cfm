@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label>Satış Rezervi Olanlar</label>
-                        <input type="checkbox" name="only_sales" id="only_sales" value="1">
+                        <input type="checkbox" name="only_sales" <cfif isDefined("attributes.only_sales") AND attributes.only_sales EQ "1">checked</cfif> id="only_sales" value="1">
                     </div>
                     <table>
                         <tr>
