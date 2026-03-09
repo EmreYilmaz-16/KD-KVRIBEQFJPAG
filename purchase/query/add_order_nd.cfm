@@ -1,3 +1,4 @@
+<cfset attributes.RESERVED=1>
 <cfset my_url_action = 'purchase.list_order'>
 <cfif attributes.active_company neq session.ep.company_id>
 	<script type="text/javascript">
