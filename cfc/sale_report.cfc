@@ -220,17 +220,18 @@
             </cfquery>
             <cfset attributes.PAPER_NO = get_offer_number.PAPER_NO>
     
-            <!--- Siparişi oluştur
+            <!--- Siparişi oluştur --->
             <cfinclude template="/AddOns/Partner/purchase/query/add_order_nd.cfm">
-             --->
-             <cfset ORDER_ID_PBS=000>
             
-
-
-
-
+             
+            
+<!------
+    <cfset ORDER_ID_PBS=000>
 <cfdump var="#attributes#" label="ORDER ATTRIBUTES">
-<cfdump var="#getCartItems#" label="SELECTED ROWS">
+<cfdump var="#getCartItems#" label="SELECTED ROWS">----->
+
+
+
             <cfif getCartItems.recordCount GT 0>
                 <!--- Ana sipariş kaydı oluştur (ORDERS tablosuna) --->
                 <cfset var mainOrderID = createUUID()>
@@ -247,7 +248,7 @@
                     WHERE user_id = #val(requestData.user_id)# 
                     AND is_converted = 0
                 </cfquery>
-                <cfdump var="#updateResult#" label="UPDATE RESULT">
+                
                 
                 <cfset result.success = true>
                 <cfset result.message = "Sipariş başarıyla oluşturuldu (#getCartItems.recordCount# ürün)">
