@@ -451,21 +451,7 @@
 			<cfquery name="get_max_order_row" datasource="#new_dsn3_group_pur#">
 				SELECT MAX(ORDER_ROW_ID) AS ORDER_ROW_ID FROM ORDER_ROW
 			</cfquery>
-			<cfif isdefined('attributes.related_action_id#i#') and Evaluate('attributes.related_action_id#i#') gt 0 and isdefined('attributes.wrk_row_relation_id#i#') and Evaluate('attributes.wrk_row_relation_id#i#') gt 0>
-                <cfscript>
-					add_relation_rows(
-						action_type:'add',
-						action_dsn : '#new_dsn3_group_pur#',
-						to_table:'ORDERS',
-						from_table:'#evaluate("attributes.RELATED_ACTION_TABLE#i#")#',
-						to_wrk_row_id : Evaluate("attributes.wrk_row_id#i#"),
-						from_wrk_row_id :Evaluate("attributes.wrk_row_relation_id#i#"),
-						amount : Evaluate("attributes.amount#i#"),
-						to_action_id : GET_ORDER.ORDER_ID,
-						from_action_id :Evaluate("attributes.related_action_id#i#")
-						);
-				</cfscript>
-            </cfif>
+			
 			<cfset attributes.ROW_MAIN_ID = get_max_order_row.ORDER_ROW_ID>
 			<cfset row_id = i>
 			<cfset ACTION_TYPE_ID = 2>
@@ -484,7 +470,7 @@
 			<cfscript>
 				
 
-				add_reserve_row(
+				rezerveEklePartner(
 					reserve_order_id:GET_ORDER.ORDER_ID,
 					reserve_action_type:0,
 					is_order_process:0,

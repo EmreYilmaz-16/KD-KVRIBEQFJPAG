@@ -1587,5 +1587,78 @@ SELECT WRK_ROW_ID FROM #dsn3#.PBS_SELECTED_ROWS WHERE OFFER_ID=#arguments.intern
 	</cfif>
 	<cfreturn true>
 </cffunction>
+<cffunction name="rezerveEklePartner">
+   <cfargument name="process_db">
+   <cfargument name="is_purchase_sales">
+   <cfargument name="reserve_order_id">
+   <cfquery name="ADD_ORDER_ROW_RESERVED" datasource="#arguments.process_db#" result="Res">
+        DECLARE @RetryCounter INT
+        SET @RetryCounter = 1
+        RETRY:
+        BEGIN TRY
+            INSERT INTO
+                #arguments.process_db#.ORDER_ROW_RESERVED
+            (
+                STOCK_ID,
+                PRODUCT_ID,
+                SPECT_VAR_ID,
+                ORDER_ID,
+                <cfif arguments.is_purchase_sales eq 1>
+                    RESERVE_STOCK_OUT,
+                <cfelse>
+                    RESERVE_STOCK_IN,
+                </cfif>
+                SHELF_NUMBER,
+                ORDER_WRK_ROW_ID,
+                DEPARTMENT_ID,
+                LOCATION_ID		
+            )
+            SELECT
+                ORDER_ROW.STOCK_ID,
+                ORDER_ROW.PRODUCT_ID,
+                ORDER_ROW.SPECT_VAR_ID,
+                ORDER_ROW.ORDER_ID,
+                ORDER_ROW.QUANTITY,
+                ORDER_ROW.SHELF_NUMBER,
+                ORDER_ROW.WRK_ROW_ID,
+                ISNULL(ORDER_ROW.DELIVER_DEPT,ORDERS.DELIVER_DEPT_ID),
+                ISNULL(ORDER_ROW.DELIVER_LOCATION,ORDERS.LOCATION_ID)
+            FROM 
+                #arguments.process_db#.ORDER_ROW ORDER_ROW,
+                #arguments.process_db#.ORDERS ORDERS
+            WHERE
+                ORDERS.ORDER_ID=ORDER_ROW.ORDER_ID
+                AND ORDERS.ORDER_ID= #arguments.reserve_order_id#
+        END TRY
+        BEGIN CATCH
+            DECLARE @DoRetry bit; 
+            DECLARE @ErrorMessage varchar(500)
+            SET @doRetry = 0;
+            SET @ErrorMessage = ERROR_MESSAGE()
+            IF ERROR_NUMBER() = 1205 
+            BEGIN
+                SET @doRetry = 1; 
+            END
+            IF @DoRetry = 1
+            BEGIN
+                SET @RetryCounter = @RetryCounter + 1
+                IF (@RetryCounter > 3)
+                BEGIN
+                    RAISERROR(@ErrorMessage, 18, 1) -- Raise Error Message if 
+                END
+                ELSE
+                BEGIN
+                    WAITFOR DELAY '00:00:00.05' 
+                    GOTO RETRY	
+                END
+            END
+            ELSE
+            BEGIN
+                RAISERROR(@ErrorMessage, 18, 1)
+            END
+        END CATCH
+    </cfquery>
+    <cfdump var="#Res#">
+</cffunction>
 
 </cfcomponent>
