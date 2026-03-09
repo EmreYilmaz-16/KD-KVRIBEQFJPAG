@@ -182,7 +182,7 @@
             <cfset attributes.ORDER_DESCRIPTION = "">
             <cfset attributes.ORDER_DETAIL = "">
             <cfset attributes.order_date = nowTS>
-            <cfset attributes.deliverdate = nowTS>
+            <cfset attributes.deliverdate = dateAdd("m",2,nowTS)>
             <cfset attributes.PUBLISHDATE = nowTS>
             <cfset attributes.SHIP_METHOD_ID = 2>
             <cfset attributes.SHIP_METHOD = "kargo">
@@ -247,7 +247,7 @@
                 
                 <cfset result.success = true>
                 <cfset result.message = "Sipariş başarıyla oluşturuldu (#getCartItems.recordCount# ürün)">
-                <cfset result.orderID = mainOrderID>
+                <cfset result.orderID = ORDER_ID_PBS>
             <cfelse>
                 <cfset result.success = false>
                 <cfset result.message = "Sepette ürün bulunamadı">
