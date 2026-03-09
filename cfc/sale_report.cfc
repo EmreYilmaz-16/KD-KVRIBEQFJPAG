@@ -211,6 +211,7 @@
             <cfset attributes.BASKET_GROSS_TOTAL = BASKET_NET_TOTAL_ - BASKET_TAX_TOTAL_>
             <cfset attributes.BASKET_DISCOUNT_TOTAL = 0>
             <cfset attributes.PRICE = BASKET_NET_TOTAL_>
+            <CFSET attributes.is_foreign = getSelectedRows.IS_FOREIGN>
     
             <cfset attributes.ACTIVE_COMPANY = session.ep.company_id>
             <cfset attributes.DELIVER_DEPT_ID = 13>
