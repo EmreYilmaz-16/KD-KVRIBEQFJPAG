@@ -220,8 +220,10 @@
             </cfquery>
             <cfset attributes.PAPER_NO = get_offer_number.PAPER_NO>
     
-            <!--- Siparişi oluştur --->
+            <!--- Siparişi oluştur
             <cfinclude template="/AddOns/Partner/purchase/query/add_order_nd.cfm">
+             --->
+             <cfset ORDER_ID_PBS=000>
             
 
 
