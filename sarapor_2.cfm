@@ -476,7 +476,10 @@ SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE 
 
         function saveOrder() {
             var user_id = 1; // Kullanıcı ID'sini buradan alın
+            /*
+            https://qa.kdteknik.com.tr/index.cfm?fuseaction=purchase.list_order&event=add&type=convert&CONVERT_STOCKS_ID=5350,2,&CONVERT_AMOUNT_STOCKS_ID=1,1,&is_foreign=1&ref_no=1&partner_id=3475&company=1053&company_id=1053&price_catid=7
             
+            */
             // Önce miktarları kaydet
             saveRows(user_id, function(success) {
                 if(success) {
