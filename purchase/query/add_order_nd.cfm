@@ -549,7 +549,7 @@
 					)
 			</cfquery>
 		</cfif>
-		<cfif not isdefined("is_from_import") or not isdefined("add_reserve_row")>
+		<cfif 1 eq 1>
 			<cfinclude template='/V16/objects/functions/add_order_row_reserved_stock.cfm'>
 			<cfscript>
 				
