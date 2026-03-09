@@ -237,7 +237,7 @@
                 <!--- Örnek: w3Qa_1.ORDERS tablosuna --->
                 
                 <!--- Sepetteki kayıtları converted olarak işaretle --->
-                <cfquery datasource="w3Qa_1">
+                <cfquery datasource="w3Qa_1" result="updateResult">
                     UPDATE w3Qa_1.orders_sepet_pbs 
                     SET is_converted = 1,
                         converted_date = GETDATE(),
@@ -245,6 +245,7 @@
                     WHERE user_id = #val(requestData.user_id)# 
                     AND is_converted = 1
                 </cfquery>
+                <cfdump var="#updateResult#" label="UPDATE RESULT">
                 
                 <cfset result.success = true>
                 <cfset result.message = "Sipariş başarıyla oluşturuldu (#getCartItems.recordCount# ürün)">
