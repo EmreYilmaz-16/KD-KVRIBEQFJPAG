@@ -216,7 +216,7 @@
 			NULL,
 		</cfif>
 		<cfif isdefined("attributes.work_id") and len(trim(attributes.work_id))>#attributes.work_id#<cfelse>NULL</cfif>,
-        <cfif isdefined("attributes.is_foreign")>1<cfelse>0</cfif>,
+        #attributes.is_foreign#,
 			#now()#,
 			#session.ep.userid#,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#CGI.REMOTE_ADDR#">,
