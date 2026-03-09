@@ -28,7 +28,7 @@
                     </cfquery>
                     
                 </cfif>
-                 <cfif val(item.yurtdisi_miktar) GT 0>
+                 <cfif val(item.ymiktar) GT 0>
                     <cfset var orderID = createUUID()>
                     
                     <cfquery datasource="w3Qa_1" result="insertResult">
@@ -36,7 +36,7 @@
                         VALUES (
                             '#orderID#',
                             #val(item.pid)#,
-                            #val(item.yurtdisi_miktar)#,                           
+                            #val(item.ymiktar)#,                           
                             #val(requestData.user_id)#,
                             GETDATE(),
                             0,
