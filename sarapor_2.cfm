@@ -54,7 +54,7 @@
                             <td>
 
                     
-<div class="form-group">
+<div class="form-group" s>
     <label>Yıl Seçimi</label>
     <select name="selected_year" class="form-control">
         <cfloop from="#year(now())#" to="#year(now())+5#" index="i">
@@ -114,8 +114,8 @@ OUTER APPLY (
             SELECT
                 ORDR.STOCK_ID AS S1,
                 ORDR.PRODUCT_ID AS P1,
-                YEAR(O.ORDER_DATE)  AS ODY,
-                MONTH(O.ORDER_DATE) AS ODM,
+                YEAR(O.DELIVERDATE)  AS ODY,
+                MONTH(O.DELIVERDATE) AS ODM,
                 O.IS_FOREIGN,
                 (RESERVE_STOCK_IN - STOCK_IN) AS SIN
             FROM w3Qa_1.ORDER_ROW_RESERVED AS ORR
