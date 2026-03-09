@@ -238,7 +238,7 @@
 				UPDATE RELATED_CONTRACT SET ORDER_ID = '#new_related_id#' WHERE CONTRACT_ID = #attributes.contract_id#
 			</cfquery>
 		</cfif>
-
+<cfset ORDER_ID_PBS= GET_ORDER.ORDER_ID>
 		<cfif attributes.rows_ neq 0>
 			<cfloop from="1" to="#attributes.rows_#" index="i">
 				<cf_date tarih="attributes.deliver_date#i#">

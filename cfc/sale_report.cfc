@@ -240,7 +240,7 @@
                     UPDATE w3Qa_1.orders_sepet_pbs 
                     SET is_converted = 1,
                         converted_date = GETDATE(),
-                        converted_order_id = '#mainOrderID#'
+                        converted_order_id = '#ORDER_ID_PBS#'
                     WHERE user_id = #val(requestData.user_id)# 
                     AND is_converted = 1
                 </cfquery>
