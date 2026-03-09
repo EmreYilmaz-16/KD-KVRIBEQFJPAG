@@ -227,7 +227,8 @@
 
 
 
-
+<cfdump var="#attributes#" label="ORDER ATTRIBUTES">
+<cfdump var="#getCartItems#" label="SELECTED ROWS">
             <cfif getCartItems.recordCount GT 0>
                 <!--- Ana sipariş kaydı oluştur (ORDERS tablosuna) --->
                 <cfset var mainOrderID = createUUID()>
