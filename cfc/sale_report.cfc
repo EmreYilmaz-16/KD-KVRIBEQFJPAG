@@ -15,15 +15,32 @@
                     <cfset var orderID = createUUID()>
                     
                     <cfquery datasource="w3Qa_1" result="insertResult">
-                        INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity, yurtdisi_miktar, user_id, order_date,is_converted)
+                        INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity,  user_id, order_date,is_converted,IS_FOREIGN)
                         VALUES (
                             '#orderID#',
                             #val(item.pid)#,
-                            #val(item.miktar)#,
-                            #val(item.ymiktar)#,
+                            #val(item.miktar)#,                           
                             #val(requestData.user_id)#,
                             GETDATE(),
+                            0,
                             0
+                        )
+                    </cfquery>
+                    
+                </cfif>
+                 <cfif val(item.yurtdisi_miktar) GT 0>
+                    <cfset var orderID = createUUID()>
+                    
+                    <cfquery datasource="w3Qa_1" result="insertResult">
+                        INSERT INTO w3Qa_1.orders_sepet_pbs (order_id, product_id, quantity,  user_id, order_date,is_converted,IS_FOREIGN)
+                        VALUES (
+                            '#orderID#',
+                            #val(item.pid)#,
+                            #val(item.yurtdisi_miktar)#,                           
+                            #val(requestData.user_id)#,
+                            GETDATE(),
+                            0,
+                            1
                         )
                     </cfquery>
                     
@@ -71,10 +88,10 @@
             }>
         </cfloop>
 <cfquery name="getSelectedRows" datasource="#dsn3#">
-    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
+    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID,IS_FOREIGN from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
 </cfquery>
 
-        <cfloop query="getSelectedRows" group="COMPANY_ID">
+        <cfloop query="getSelectedRows" group="IS_FOREIGN">
             <cfset var ix = 0>
             <cfset var rows_ = 0>
             <cfset var BASKET_NET_TOTAL = 0>
@@ -247,6 +264,7 @@
                         converted_order_id = '#ORDER_ID_PBS#'
                     WHERE user_id = #val(requestData.user_id)# 
                     AND is_converted = 0
+                    AND IS_FOREIGN = #getSelectedRows.IS_FOREIGN#
                 </cfquery>
                 
                 
@@ -257,6 +275,11 @@
                 <cfset result.success = false>
                 <cfset result.message = "Sepette ürün bulunamadı">
             </cfif>
+    <!--- Temizle --->
+            <cfscript>
+                structClear(attributes);
+            </cfscript>
+
         </cfloop>
             
             <cfcatch type="any">
