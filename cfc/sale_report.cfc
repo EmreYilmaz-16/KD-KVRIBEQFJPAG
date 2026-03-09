@@ -88,7 +88,7 @@
             }>
         </cfloop>
 <cfquery name="getSelectedRows" datasource="#dsn3#">
-    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID,IS_FOREIGN from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0
+    select *, 1053 COMPANY_ID,3475 AS PARTNER_ID,IS_FOREIGN from orders_sepet_pbs WHERE user_id = #val(requestData.user_id)# AND is_converted = 0 ORDER BY IS_FOREIGN
 </cfquery>
 
         <cfloop query="getSelectedRows" group="IS_FOREIGN">
@@ -176,11 +176,13 @@
 
             <!--- Sepetteki ürünleri al --->
             <cfquery name="getCartItems" datasource="w3Qa_1">
-                SELECT product_id, quantity, yurtdisi_miktar
+                SELECT product_id, quantity, yurtdisi_miktar, IS_FOREIGN
                 FROM w3Qa_1.orders_sepet_pbs 
                 WHERE user_id = #val(requestData.user_id)# 
                 AND is_converted = 0
                 AND quantity > 0
+                AND IS_FOREIGN = #getSelectedRows.IS_FOREIGN#
+
             </cfquery>
              <cfset attributes.rows_ = ix>
     
