@@ -180,7 +180,7 @@ WHERE 1=1
 </cfif>
 ORDER BY PR.PRODUCT_ID
 </cfquery>
-<cfdump var="#RAPOR_SQL#" label="RAPOR_SQL">
+
 
 <!--- Parse JSON verileri ve map oluştur --->
 <cfset VSIP_YURTICI_MAP = {}>
