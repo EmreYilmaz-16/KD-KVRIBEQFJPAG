@@ -287,13 +287,17 @@ ORDER BY PR.PRODUCT_ID
 </script>
 
 <cfquery name="getSaved" datasource="w3Qa_1">
-SELECT product_id, quantity, yurtdisi_miktar FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
+SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
 </cfquery>
 <cfset SAVED_MAP = {}>
 <cfset YDISISAVED_MAP = {}>
 <cfloop query="getSaved">
-    <cfset SAVED_MAP[product_id] = quantity>
-    <cfset YDISISAVED_MAP[product_id] = yurtdisi_miktar>
+   
+    <CFIF IS_FOREIGN EQ 1>
+        <cfset YDISISAVED_MAP[product_id] = quantity>
+    <cfelse>
+         <cfset SAVED_MAP[product_id] = quantity>
+    </CFIF>
 </cfloop>
 
 
