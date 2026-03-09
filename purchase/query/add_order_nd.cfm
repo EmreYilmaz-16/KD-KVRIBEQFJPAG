@@ -549,6 +549,21 @@
 					)
 			</cfquery>
 		</cfif>
+		<cfif not isdefined("is_from_import") or not isdefined("add_reserve_row")>
+			<cfinclude template='/V16/objects/functions/add_order_row_reserved_stock.cfm'>
+			<cfscript>
+				
+
+				add_reserve_row(
+					reserve_order_id:GET_ORDER.ORDER_ID,
+					reserve_action_type:0,
+					is_order_process:0,
+					is_purchase_sales:0,
+					process_db : new_dsn3_group_pur,
+					process_db_alias : "#new_dsn3_group_pur#."
+				);
+			</cfscript>
+		</cfif>
 	<cfscript>
 	
 		attributes.kur_say=3;
