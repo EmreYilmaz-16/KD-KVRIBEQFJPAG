@@ -166,7 +166,7 @@
     <cfset attributes.KUR_SAY=kur_sayisi>
 
 <cfset attributes.offer_date=now()>
-<cfset attributes.deliverdate=now()>
+<cfset attributes.deliverdate=dateAdd("m",2,now())>
 <cfset attributes.ship_date=now()>
 <cfset attributes.finishdate=now()>
 <cfset attributes.member_name=GETIDEMAND.FROM_COMPANY_ID>
