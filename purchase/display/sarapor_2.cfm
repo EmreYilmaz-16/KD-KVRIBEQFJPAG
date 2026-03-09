@@ -29,7 +29,7 @@
                             <td>
 
                     
-<div class="form-group">
+<div class="form-group" style="display:none">
     <label>Yıl Seçimi</label>
     <select name="selected_year" class="form-control">
         <cfloop from="#year(now())#" to="#year(now())+5#" index="i">
@@ -43,7 +43,7 @@
         <td>
 
         
-<div class="form-group">
+<div class="form-group" style="display:none">
     <label>Ay Seçimi</label>
     <select name="selected_month" class="form-control">
         <cfloop from="1" to="12" index="j">
