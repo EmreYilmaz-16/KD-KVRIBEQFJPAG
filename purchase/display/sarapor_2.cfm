@@ -259,7 +259,11 @@ ORDER BY PR.PRODUCT_ID
                 VERILMEYEN: structKeyExists(item, "VERILMEYEN") ? item.VERILMEYEN : 0
             }>
             <cfif structKeyExists(item, "COMPANY_ID")>
-                <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] += item.BS>
+                <!--- Initialize key if it doesn't exist --->
+                <cfif NOT structKeyExists(ASIP_MAP, "#item.COMPANY_ID#-#PRODUCT_ID#")>
+                    <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] = 0>
+                </cfif>
+                <cfset ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] = ASIP_MAP["#item.COMPANY_ID#-#PRODUCT_ID#"] + item.BS>
                 
                 <!--- Firma listesi --->
                 <cfif NOT ArrayFind(companyList, item.COMPANY_ID)>
