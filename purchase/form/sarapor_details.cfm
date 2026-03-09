@@ -123,6 +123,7 @@
             AND O.RESERVED=1
             AND O.COMPANY_ID=#attributes.company#  
             AND S.BRAND_ID=6
+            AND O.SPECIAL_DEFINITION_PBS = 1
     ) AS T 
     OUTER APPLY (
         SELECT TOP 1 
