@@ -245,7 +245,7 @@
                         converted_date = GETDATE(),
                         converted_order_id = '#ORDER_ID_PBS#'
                     WHERE user_id = #val(requestData.user_id)# 
-                    AND is_converted = 1
+                    AND is_converted = 0
                 </cfquery>
                 <cfdump var="#updateResult#" label="UPDATE RESULT">
                 
