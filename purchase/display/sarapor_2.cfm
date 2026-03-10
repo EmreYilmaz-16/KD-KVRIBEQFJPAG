@@ -24,6 +24,10 @@
                         <label>Satış Rezervi Olanlar</label>
                         <input type="checkbox" name="only_sales" <cfif isDefined("attributes.only_sales") AND attributes.only_sales EQ "1">checked</cfif> id="only_sales" value="1">
                     </div>
+                      <div class="form-group">
+                        <label>Satınalma Rezervi Olanlar</label>
+                        <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
+                    </div>
                     <table>
                         <tr>
                             <td>
@@ -177,6 +181,9 @@ WHERE 1=1
 
 <cfif structKeyExists(attributes, "only_sales") AND attributes.only_sales EQ "1">
     AND ASIP IS NOT NULL
+</cfif>
+<cfif structKeyExists(attributes, "only_purchase") AND attributes.only_purchase EQ "1">
+    AND VSIP IS NOT NULL
 </cfif>
 ORDER BY PR.PRODUCT_ID
 </cfquery>
