@@ -507,7 +507,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         }
 
         function saveOrder() {
-            var user_id = 1; // Kullanıcı ID'sini buradan alın
+            var user_id = <cfoutput>#session.ep.userid#</cfoutput>; // Kullanıcı ID'sini buradan alın
             
             // Önce miktarları kaydet
             saveRows(user_id, function(success) {
