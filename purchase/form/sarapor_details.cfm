@@ -264,7 +264,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                             <CFSET R_TERMIN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_termin : 0>
                             <CFSET R_VERILMEYEN= structKeyExists(ALLRECORDED_MAP, "-#P1#") ? ALLRECORDED_MAP["-#P1#"].total_verilmeyen : 0>
                             
-                            <tr <cfif attributes.product EQ P1>style="background-color: ##f0f0f0;"</cfif>>
+                            <tr <cfif attributes.product EQ P1>style="background-color: ##fbff00;"</cfif>>
                                 <td style="display:none">
                                     bakiyeDegeri = #bakiyeDegeri# <br>
                                     verilenSiparisDegeri = #verilenSiparisDegeri# <br>
