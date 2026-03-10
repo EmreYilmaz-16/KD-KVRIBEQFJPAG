@@ -59,7 +59,7 @@
 </div>
 </td>
 <td>
-    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(1)">Satın Alma Miktarlarını Kaydet</button>
+    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(<CFOUTPUT>#session.ep.userid#</CFOUTPUT>)">Satın Alma Miktarlarını Kaydet</button>
     <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
 </td>
                         </tr>
@@ -67,6 +67,26 @@
 
                     <input type="submit" value="Raporu Göster">
 </cfform>
+<div class="form-group">
+    <input type="text" id="searchInput" class="form-control" placeholder="Tabloda ara..." onkeyup="filterTable(this, event)">
+</div>
+<script>
+    function filterTable(input, event) {
+        var filterText = input.value.toLowerCase().trim();
+        var rows = document.querySelectorAll('tbody tr[data-pid]');
+        
+        rows.forEach(function(row) {
+            var productCode = row.cells[0].textContent.toLowerCase(); // Ürün Kodu
+            var productName = row.cells[1].textContent.toLowerCase(); // Ürün Adı
+            
+            if (productCode.includes(filterText) || productName.includes(filterText)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
 <cfquery name="RAPOR_SQL" datasource="#dsn3#">
    SELECT * FROM (
     SELECT
