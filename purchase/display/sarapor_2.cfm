@@ -332,7 +332,7 @@ ORDER BY PR.PRODUCT_ID
 </script>
 
 <cfquery name="getSaved" datasource="w3Qa_1">
-SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet_pbs WHERE user_id = 1 and is_converted = 0
+SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet_pbs WHERE user_id = #session.ep.userid# and is_converted = 0
 </cfquery>
 <cfset SAVED_MAP = {}>
 <cfset YDISISAVED_MAP = {}>
