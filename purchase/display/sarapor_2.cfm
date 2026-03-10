@@ -92,6 +92,7 @@
     SELECT
     PR.PRODUCT_NAME,
     PR.PRODUCT_CODE,
+    PR.PRODUCT_CODE_2,
     PR.PRODUCT_ID,
     PR.BRAND_ID,
     (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM #dsn2#.STOCKS_ROW AS SR WHERE SR.STOCK_ID=PR.PRODUCT_ID) AS BK,
@@ -350,7 +351,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
 <cf_grid_list >
     <thead class="table-dark">
     <tr>
-        <th rowspan="2">Ürün Kodu</th>
+        <th rowspan="2">KD Kodu</th>
         <th rowspan="2">Ürün Adı</th>
         <th rowspan="2">Bakiye</th>
         <cfoutput>
@@ -394,7 +395,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     <tbody>
     <cfoutput query="RAPOR_SQL">
     <tr data-pid="#PRODUCT_ID#">
-        <td>#PRODUCT_CODE#</td>
+        <td>#PRODUCT_CODE_2#</td>
         <td>#PRODUCT_NAME#</td>
         <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
          <cfloop array="#yearList#" index="year">
