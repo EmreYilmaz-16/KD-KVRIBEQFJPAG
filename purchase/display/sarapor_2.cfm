@@ -69,8 +69,8 @@
 </cfform>
 <div class="form-group">
     <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-search"></i>
+        <span class="input-group-addon">
+            <i class="fa fa-search"></i>
         </span>
         <input type="text" id="searchInput" class="form-control" placeholder="Tabloda ara..." onkeyup="filterTable(this, event)">
     </div>
