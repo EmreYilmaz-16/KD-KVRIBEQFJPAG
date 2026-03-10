@@ -224,7 +224,8 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 <cfdump var="#ALLRECORDED_MAP#" label="ALLRECORDED_MAP">
 ----->
 <cf_box title="Termin Detay">
-    
+    <input type="text" class="form-control form-control-sm mb-3" id="productFilter" placeholder="Ürün kodu veya adına göre filtrele..." onckeyup="filterTable(this,event)">
+  
     <form id="sipform" action="<cfoutput>#request.self#?fuseaction=#attributes.fuseaction#</cfoutput>" method="post">
         <cfoutput>
         <input type="hidden" name="company" value="#attributes.company#">
@@ -255,7 +256,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
                                 <th>Verilmeyen</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="trxT">
                         <cfloop>
                             <cfoutput>
                             <cfset bakiyeDegeri = BK>
@@ -372,6 +373,23 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
         };
     });
 </script>
+  <script>
+        function filterTable(el, ev) {
+            var filterText = el.value.toLowerCase();
+            var rows = document.querySelectorAll('#trxT tr');
+            
+            rows.forEach(function(row) {
+                var productCode = row.cells[0].textContent.toLowerCase(); // KD Kodu
+                var productName = row.cells[1].textContent.toLowerCase(); // Ürün Adı
+                
+                if (productCode.includes(filterText) || productName.includes(filterText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }        
+    </script>
 
 </body>
 </html>
