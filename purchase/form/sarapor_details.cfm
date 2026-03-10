@@ -224,7 +224,7 @@ SELECT SUM(HAZIR) AS TOTAL_HAZIR, SUM(TERMIN) AS TOTAL_TERMIN, SUM(VERILMEYEN) A
 <cfdump var="#ALLRECORDED_MAP#" label="ALLRECORDED_MAP">
 ----->
 <cf_box title="Termin Detay">
-    <input type="text" class="form-control form-control-sm mb-3" id="productFilter" placeholder="Ürün kodu veya adına göre filtrele..." onckeyup="filterTable(this,event)">
+    
   
     <form id="sipform" action="<cfoutput>#request.self#?fuseaction=#attributes.fuseaction#</cfoutput>" method="post">
         <cfoutput>
