@@ -65,7 +65,7 @@
                         </tr>
                     </table>
 
-                    <input type="submit" value="Raporu Göster">
+                    <input type="submit" value="Göster">
 </cfform>
 <div class="form-group">
     <div class="input-group">
