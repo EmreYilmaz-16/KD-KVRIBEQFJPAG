@@ -38,15 +38,15 @@
             <div style="width: 34%;">&nbsp;</div>
             <div style="width: 40%;">
                 <div class="form-group">                    
-                    <input type="number" id="karma_emir_amount" style="font-size: 30pt !important;text-align: center;padding: 0;" placeholder="Paketleme Miktarı" />
+                    <input type="number" id="karma_emir_amount" style="display:none;font-size: 30pt !important;text-align: center;padding: 0;" placeholder="Paketleme Miktarı" />
                     <div>
-                        <a onclick="addEmir(${productId})" id="paketleme_emri_ver" class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
+                        <a style="display:none" onclick="addEmir(${productId})" id="paketleme_emri_ver" class="ui-btn ui-btn-blue" type="button">Paketleme Emri Ver</a>
                     </div>
                 </div>
             </div>
             <div style="width: 25%;display: flex;flex-direction: column;">
                 <a onclick="pencereac(1,${productId})" class="ui-btn ui-btn-gray" type="button" style="height: auto;">Paket İçeriği</a>
-                <a onclick="pencereac(2,${productId})" class="ui-btn ui-btn-green" type="button" style="height: auto;margin-top: 2px;">Verilmiş Emirler</a>
+                <a onclick="pencereac(2,${productId})" class="ui-btn ui-btn-green" type="button" style="height: auto;margin-top: 2px;display:none">Verilmiş Emirler</a>
                 </div>
                 </div>`
               var ii= document.getElementById("item-product_code_2").parentElement
