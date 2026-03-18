@@ -31,7 +31,7 @@
                                     <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
                                 </div>
                                 <div>
-<button type="submit" class="btn btn-success mt-4" onclick="">Göster</button>
+<button type="submit" style="margin-left:20px" class="btn btn-success mt-4" onclick="">Göster</button>
                                 </div>
                     </div>
                     
@@ -429,9 +429,9 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
             </cfloop>
         </cfloop>
         </cfoutput>
-        <th>Miktar</th>
+        <th style="width:30px">Miktar</th>
         <th>Tutar</th>
-        <th>Miktar</th>
+        <th style="width:30px">Miktar</th>
         <th>Tutar</th>
     </tr>
     </thead>
