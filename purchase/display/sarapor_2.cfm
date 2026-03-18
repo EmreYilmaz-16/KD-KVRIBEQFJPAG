@@ -382,7 +382,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
     SUTUN BAŞLIĞI*----->
 
-<table >
+<cf_grid_list  style="  table-layout: fixed; width: 100%;">
     <thead class="table-dark">
     <tr>
         <th rowspan="2">KD Kodu</th>
@@ -524,7 +524,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
             
         </tr>
     </tfoot>
-</table>
+</cf_grid_list>
 
     <script>
    function hesapyap(){
