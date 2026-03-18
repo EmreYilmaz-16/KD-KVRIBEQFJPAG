@@ -21,28 +21,24 @@
 </select>
 
                     </div>
-                   <table>
-                    <tr>
-                        <td>  <div class="form-group">
-                        <label>Satış Rezervi Olanlar</label>
-                        <input type="checkbox" name="only_sales" <cfif isDefined("attributes.only_sales") AND attributes.only_sales EQ "1">checked</cfif> id="only_sales" value="1">
-                    </div></td>
-                        <td> <div class="form-group">
-                        <label>Satınalma Rezervi Olanlar</label>
-                        <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
-                    </div></td>
-                    </tr>
-                    <tr>
-                        <td>
-                             <button type="button" class="btn btn-primary mt-4" onclick="saveRows(<CFOUTPUT>#session.ep.userid#</CFOUTPUT>)">Miktar Kaydet</button>
-    <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
-    <button type="button" class="btn btn-warning mt-4" onclick="hesapyap()">Hesapla</button>
-                        </td>
-                    </tr>
-                   </table>
-                  
-                     
-                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label>Satış Rezervi Olanlar</label>
+                                    <input type="checkbox" name="only_sales" <cfif isDefined("attributes.only_sales") AND attributes.only_sales EQ "1">checked</cfif> id="only_sales" value="1">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label>Satınalma Rezervi Olanlar</label>
+                                    <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                 
+                      
                     <table>
                         <tr>
                             <td>
@@ -74,7 +70,9 @@
 </div>
 </td>
 <td>
-   
+    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(<CFOUTPUT>#session.ep.userid#</CFOUTPUT>)">Satın Alma Miktarlarını Kaydet</button>
+    <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
+    <button type="button" class="btn btn-warning mt-4" onclick="hesapyap()">Hesapla</button>
 </td>
                         </tr>
                     </table>
