@@ -493,10 +493,19 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="<cfoutput>#totalColspanCount#</cfoutput>"></td>
-           <td>
-            Toplam: <span id="footer_total">5555555</span>
+            <td colspan="<cfoutput>#totalColspanCount#</cfoutput>">Toplam:</td>
+           <td colspan="2">
+             <span id="sub_total_yurtici">0</span>
            </td>
+             <td colspan="2">
+             <span id="sub_total_yurtdisi">0</span>
+           </td>
+                
+                    <td colspan="<cfoutput>#listlen(companyList)#</cfoutput>">
+                       
+                    </td>
+                
+            
         </tr>
     </tfoot>
 </cf_grid_list>
@@ -504,6 +513,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     <script>
     $(document).ready(function(){
         tumunuHesapla();
+        calculateSubTotals();
     });
     function hesapla(el,pid,type,money){
         var price=parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-price"));
@@ -515,8 +525,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         } else {
             document.getElementById("calc_result2_"+pid).textContent=!isNaN(sonuc) ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
         }
-
-        
+        calculateSubTotals();
     }
     function tumunuHesapla(){
         var elems=document.getElementsByName("siparis_miktari");
@@ -535,24 +544,36 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         }
     }
     function calculateSubTotals() {
-        var rows = document.querySelectorAll('tbody tr[data-pid]');
-        rows.forEach(function(row) {
-            var pid = row.getAttribute('data-pid');
-            var price = parseFloat(row.getAttribute('data-price'));
-            var money = row.getAttribute('data-money');
-            
-            var miktarInput = row.querySelector('input[name="siparis_miktari"]');
-            var ymiktarInput = row.querySelector('input[name="siparis_miktari_ydisi"]');
-            
-            var miktar = parseFloat(miktarInput.value) || 0;
-            var ymiktar = parseFloat(ymiktarInput.value) || 0;
-            
-            var sonuc1 = miktar * price;
-            var sonuc2 = ymiktar * price;
-            
-            row.querySelector('#calc_result1_' + pid).textContent = !isNaN(sonuc1) ? sonuc1.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
-            row.querySelector('#calc_result2_' + pid).textContent = !isNaN(sonuc2) ? sonuc2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
-        });
+        var totals1 = {};
+        var totals2 = {};
+
+        var elems = document.getElementsByName('siparis_miktari');
+        for (var i = 0; i < elems.length; i++) {
+            var el = elems[i];
+            var pid = el.getAttribute('data-pid');
+            var price = parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute('data-price')) || 0;
+            var money = document.querySelector('tr[data-pid="'+pid+'"]').getAttribute('data-money') || '';
+            var miktar = parseFloat(el.value) || 0;
+            totals1[money] = (totals1[money] || 0) + miktar * price;
+        }
+
+        var elems2 = document.getElementsByName('siparis_miktari_ydisi');
+        for (var j = 0; j < elems2.length; j++) {
+            var el2 = elems2[j];
+            var pid2 = el2.getAttribute('data-pid');
+            var price2 = parseFloat(document.querySelector('tr[data-pid="'+pid2+'"]').getAttribute('data-price')) || 0;
+            var money2 = document.querySelector('tr[data-pid="'+pid2+'"]').getAttribute('data-money') || '';
+            var miktar2 = parseFloat(el2.value) || 0;
+            totals2[money2] = (totals2[money2] || 0) + miktar2 * price2;
+        }
+
+        document.getElementById('sub_total_yurtici').textContent = Object.keys(totals1).map(function(cur) {
+            return totals1[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
+        }).join(' | ');
+
+        document.getElementById('sub_total_yurtdisi').textContent = Object.keys(totals2).map(function(cur) {
+            return totals2[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
+        }).join(' | ');
     }
 
         function saveRows(user_id, callback) {
