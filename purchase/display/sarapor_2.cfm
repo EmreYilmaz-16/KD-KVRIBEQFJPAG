@@ -1,3 +1,10 @@
+<style>
+    #tablo_1 {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+</style>
 <cf_box title="Dönmez Toplu Ürün Takip Modülü" >
 <cfparam name="attributes.brand_id" default="6">
 
@@ -382,7 +389,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
     SUTUN BAŞLIĞI*----->
 
-<cf_grid_list  style="  table-layout: fixed; width: 100%;">
+<cf_grid_list id="tablo_1"  style="  table-layout: fixed; width: 100%;">
     <thead class="table-dark">
     <tr>
         <th rowspan="2">KD Kodu</th>
