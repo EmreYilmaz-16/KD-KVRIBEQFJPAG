@@ -447,18 +447,18 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     <tr data-pid="#PRODUCT_ID#" data-price="#PRICE#" data-money="#MONEY#">
         <td>#PRODUCT_CODE_2#</td>
         <td>#PRODUCT_NAME#</td>
-        <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
+        <td><cfif isNumeric(BK)>#NumberFormat(Round(BK), "9,999")#<cfelse>0</cfif></td>
          <cfloop array="#yearList#" index="year">
             <td class="year-total fw-bold">
                 <cfif StructKeyExists(RPR_MAP, "#year#-#PRODUCT_ID#")>
-                    #NumberFormat(RPR_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
+                    #NumberFormat(Round(RPR_MAP["#year#-#PRODUCT_ID#"]), "9,999")#
                 <cfelse>
                     
                 </cfif>
             </td>
             <td class="year-avg fw-bold">
                 <cfif StructKeyExists(AVG_MAP, "#year#-#PRODUCT_ID#")>
-                    #NumberFormat(AVG_MAP["#year#-#PRODUCT_ID#"], "9,999.99")#
+                    #NumberFormat(Round(AVG_MAP["#year#-#PRODUCT_ID#"]), "9,999")#
                 <cfelse>
                     
                 </cfif>
@@ -469,14 +469,14 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
                 <cfif ListFirst(yearMonth, "-") EQ year>
                     <td>
                         <cfif StructKeyExists(VSIP_YURTICI_MAP, "#PRODUCT_ID#-#yearMonth#")>
-                            #NumberFormat(VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                            #NumberFormat(Round(VSIP_YURTICI_MAP["#PRODUCT_ID#-#yearMonth#"]), "9,999")#
                         <cfelse>
                             0
                         </cfif>
                     </td>
                     <td>
                         <cfif StructKeyExists(VSIP_YURTDISI_MAP, "#PRODUCT_ID#-#yearMonth#")>
-                            #NumberFormat(VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"], "9,999.99")#
+                            #NumberFormat(Round(VSIP_YURTDISI_MAP["#PRODUCT_ID#-#yearMonth#"]), "9,999")#
                         <cfelse>
                             0
                         </cfif>
@@ -496,16 +496,16 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
-                    <a href="javascript:void(0)" onclick="window.open('#request.self#?fuseaction=purchase.emptypopup_termin_detay_pbs&company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(ASIP_MAP["#company#-#PRODUCT_ID#"], "9,999.99")#</a><br>
+                    <a href="javascript:void(0)" onclick="window.open('#request.self#?fuseaction=purchase.emptypopup_termin_detay_pbs&company=#company#&product=#PRODUCT_ID#', '_blank')">#NumberFormat(Round(ASIP_MAP["#company#-#PRODUCT_ID#"]), "9,999")#</a><br>
                     <cfif StructKeyExists(SBP_MAP, "#company#-#PRODUCT_ID#")>
                         <small>
-                            H: #SBP_MAP["#company#-#PRODUCT_ID#"].HAZIR#, 
-                            T: #SBP_MAP["#company#-#PRODUCT_ID#"].TERMIN#, 
-                            V: #SBP_MAP["#company#-#PRODUCT_ID#"].VERILMEYEN#
+                            H: #Round(SBP_MAP["#company#-#PRODUCT_ID#"].HAZIR)#, 
+                            T: #Round(SBP_MAP["#company#-#PRODUCT_ID#"].TERMIN)#, 
+                            V: #Round(SBP_MAP["#company#-#PRODUCT_ID#"].VERILMEYEN)#
                         </small>
                     </cfif>
                 <cfelse>
-                    #NumberFormat(0, "9,999.99")#
+                    0
                 </cfif>
             </td>
         </cfloop>
@@ -544,9 +544,9 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         var miktar=parseFloat(el.value);
         var sonuc=miktar*price;
         if(type==1){
-            document.getElementById("calc_result1_"+pid).textContent=!isNaN(sonuc) ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
+            document.getElementById("calc_result1_"+pid).textContent=!isNaN(sonuc) ? Math.round(sonuc).toLocaleString(undefined, {maximumFractionDigits: 0}) + " " + money : "";
         } else {
-            document.getElementById("calc_result2_"+pid).textContent=!isNaN(sonuc) ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
+            document.getElementById("calc_result2_"+pid).textContent=!isNaN(sonuc) ? Math.round(sonuc).toLocaleString(undefined, {maximumFractionDigits: 0}) + " " + money : "";
         }
         calculateSubTotals();
     }
@@ -591,11 +591,11 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         }
 
         document.getElementById('sub_total_yurtici').innerHTML = Object.keys(totals1).map(function(cur) {
-            return totals1[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
+            return Math.round(totals1[cur]).toLocaleString(undefined, {maximumFractionDigits: 0}) + ' ' + cur;
         }).join('<br>');
 
         document.getElementById('sub_total_yurtdisi').innerHTML = Object.keys(totals2).map(function(cur) {
-            return totals2[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
+            return Math.round(totals2[cur]).toLocaleString(undefined, {maximumFractionDigits: 0}) + ' ' + cur;
         }).join('<br>');
     }
 
