@@ -93,7 +93,7 @@
         });
     }
 </script>
-<cfif not isDefined("attributers.is_submit")>
+<cfif not isDefined("attributes.is_submit")>
     <p>Filtreleme seçeneklerini belirleyip "Göster" butonuna tıklayınız.</p>
 <cfabort>
 </cfif>
