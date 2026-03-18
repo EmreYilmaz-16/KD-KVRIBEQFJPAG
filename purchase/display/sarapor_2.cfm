@@ -68,7 +68,7 @@
 </div>
 </td>
 <td>
-    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(<CFOUTPUT>#session.ep.userid#</CFOUTPUT>)">Satın Alma Miktarlarını Kaydet</button>
+    <button type="button" class="btn btn-primary mt-4" onclick="saveRows(<CFOUTPUT>#session.ep.userid#</CFOUTPUT>)">Miktar Kaydet</button>
     <button type="button" class="btn btn-secondary mt-4" onclick="saveOrder()">Sipariş Oluştur</button>
     <button type="button" class="btn btn-warning mt-4" onclick="hesapyap()">Hesapla</button>
 </td>
