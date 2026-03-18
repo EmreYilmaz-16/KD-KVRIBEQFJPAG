@@ -240,6 +240,7 @@ ORDER BY PR.PRODUCT_ID
 <cfset yearMonthList = []>
 <cfset companyList = []>
 <cfset companyNames = {}>
+<cfset totalColspanCount=3>
 
 <cfloop query="RAPOR_SQL">
     <!--- VSIP Parse (Alış Siparişi Rezerv) --->
@@ -375,12 +376,15 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         <th rowspan="2">Bakiye</th>
         <cfoutput>
         <cfloop array="#yearList#" index="year">
+            <cfset totalColspanCount = totalColspanCount + 2>
             <th rowspan="2">#year# Toplam</th>
             <th rowspan="2">#year# Aylık</th>
         </cfloop>
         <cfloop array="#yearList#" index="year">
+            
             <cfloop array="#yearMonthList#" index="yearMonth">
                 <cfif ListFirst(yearMonth, "-") EQ year>
+                    <cfset totalColspanCount = totalColspanCount + 2>
                     <th colspan="2">#yearMonth#</th>
                 </cfif>
             </cfloop>
@@ -388,6 +392,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         <th colspan="2">Yurt İçi</th>
         
         <th colspan="2">Yurt Dışı</th>
+        
         <cfloop array="#companyList#" index="company">
             <th rowspan="2">
                 <cfif structKeyExists(companyNames, company)>
@@ -486,6 +491,14 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     </tr>
     </cfoutput>
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="<cfoutput>#totalColspanCount#</cfoutput>"></td>
+           <td>
+            Toplam: <span id="footer_total">5555555</span>
+           </td>
+        </tr>
+    </tfoot>
 </cf_grid_list>
 
     <script>
@@ -520,6 +533,26 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
             var money=el.getAttribute("data-money");
             hesapla(el,pid,2,money);
         }
+    }
+    function calculateSubTotals() {
+        var rows = document.querySelectorAll('tbody tr[data-pid]');
+        rows.forEach(function(row) {
+            var pid = row.getAttribute('data-pid');
+            var price = parseFloat(row.getAttribute('data-price'));
+            var money = row.getAttribute('data-money');
+            
+            var miktarInput = row.querySelector('input[name="siparis_miktari"]');
+            var ymiktarInput = row.querySelector('input[name="siparis_miktari_ydisi"]');
+            
+            var miktar = parseFloat(miktarInput.value) || 0;
+            var ymiktar = parseFloat(ymiktarInput.value) || 0;
+            
+            var sonuc1 = miktar * price;
+            var sonuc2 = ymiktar * price;
+            
+            row.querySelector('#calc_result1_' + pid).textContent = !isNaN(sonuc1) ? sonuc1.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
+            row.querySelector('#calc_result2_' + pid).textContent = !isNaN(sonuc2) ? sonuc2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
+        });
     }
 
         function saveRows(user_id, callback) {
