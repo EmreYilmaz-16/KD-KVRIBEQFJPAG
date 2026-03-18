@@ -501,7 +501,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
              <span id="sub_total_yurtdisi">0</span>
            </td>
                 
-                    <td colspan="<cfoutput>#listlen(companyList)#</cfoutput>">
+                    <td colspan="<cfoutput>#arrayLen(companyList)#</cfoutput>">
                        
                     </td>
                 
