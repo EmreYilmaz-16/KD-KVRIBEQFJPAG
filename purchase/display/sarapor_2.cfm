@@ -494,10 +494,12 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     <tfoot>
         <tr>
             <td colspan="<cfoutput>#totalColspanCount#</cfoutput>">Toplam:</td>
-           <td colspan="2">
+            <td></td>
+           <td colspan="">
              <span id="sub_total_yurtici">0</span>
            </td>
-             <td colspan="2">
+           <td></td>
+             <td colspan="">
              <span id="sub_total_yurtdisi">0</span>
            </td>
                 
@@ -567,13 +569,13 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
             totals2[money2] = (totals2[money2] || 0) + miktar2 * price2;
         }
 
-        document.getElementById('sub_total_yurtici').textContent = Object.keys(totals1).map(function(cur) {
+        document.getElementById('sub_total_yurtici').innerHTML = Object.keys(totals1).map(function(cur) {
             return totals1[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
-        }).join(' | ');
+        }).join('<br>');
 
-        document.getElementById('sub_total_yurtdisi').textContent = Object.keys(totals2).map(function(cur) {
+        document.getElementById('sub_total_yurtdisi').innerHTML = Object.keys(totals2).map(function(cur) {
             return totals2[cur].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ' + cur;
-        }).join(' | ');
+        }).join('<br>');
     }
 
         function saveRows(user_id, callback) {
