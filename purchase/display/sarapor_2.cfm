@@ -21,25 +21,20 @@
 </select>
 
                     </div>
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="form-group">
+                    <div style="display:flex">
+<div class="form-group">
                                     <label>Satış Rezervi Olanlar</label>
                                     <input type="checkbox" name="only_sales" <cfif isDefined("attributes.only_sales") AND attributes.only_sales EQ "1">checked</cfif> id="only_sales" value="1">
                                 </div>
-                            </td>
-                            <td>
                                 <div class="form-group">
                                     <label>Satınalma Rezervi Olanlar</label>
                                     <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
                                 </div>
-                            </td>
-                            <td>
-                        <button type="submit" class="btn btn-success mt-4" onclick="">Göster</button>
-                            </td>
-                        </tr>
-                    </table>
+                                <div>
+<button type="submit" class="btn btn-success mt-4" onclick="">Göster</button>
+                                </div>
+                    </div>
+                    
                  
                       
                     <table>
