@@ -460,13 +460,13 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         </cfloop>
        
         <td>
-            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
+            <input type="number" id="samiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#" onchange="hesapla(this,#PRODUCT_ID#,1)"  name="siparis_miktari" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(SAVED_MAP, PRODUCT_ID) ? SAVED_MAP[PRODUCT_ID] : 0#">
         </td>
-        <td></td>
+        <td id="calc_result1_#PRODUCT_ID#"></td>
           <td>
-            <input type="number" id="syamiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#"  name="siparis_miktari_ydisi" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(YDISISAVED_MAP, PRODUCT_ID) ? YDISISAVED_MAP[PRODUCT_ID] : 0#">
+            <input type="number" id="syamiktar_#PRODUCT_ID#" onfocus="this.select()" data-pid="#PRODUCT_ID#" onchange="hesapla(this,#PRODUCT_ID#,2)"  name="siparis_miktari_ydisi" class="form-control form-control-sm purchase-quantity" value="#structKeyExists(YDISISAVED_MAP, PRODUCT_ID) ? YDISISAVED_MAP[PRODUCT_ID] : 0#">
         </td>
-        <td></td>
+        <td id="calc_result2_#PRODUCT_ID#"></td>
         <cfloop array="#companyList#" index="company">
             <td class="company-order fw-bold">
                 <cfif StructKeyExists(ASIP_MAP, "#company#-#PRODUCT_ID#")>
@@ -489,6 +489,36 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
 </cf_grid_list>
 
     <script>
+    $(document).ready(function(){
+        tumunuHesapla();
+    });
+    function hesapla(el,pid,type){
+        var price=parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-price"));
+        var money=parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-money"));
+        var miktar=parseFloat(el.value);
+        var sonuc=miktar*price;
+        if(type==1){
+            document.getElementById("calc_result1_"+pid).textContent=sonuc ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : "";
+        } else {
+            document.getElementById("calc_result2_"+pid).textContent=sonuc ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : "";
+        }
+        
+    }
+    function tumunuHesapla(){
+        var elems=document.getElementsByName("siparis_miktari");
+        for (let index = 0; index < elems.length; index++) {
+            var el=elems[index];
+            var pid=el.getAttribute("data-pid");
+            hesapla(el,pid,1);
+        }
+        var elems2=document.getElementsByName("siparis_miktari_ydisi");
+        for (let index = 0; index < elems2.length; index++) {
+            var el=elems2[index];
+            var pid=el.getAttribute("data-pid");
+            hesapla(el,pid,2);
+        }
+    }
+
         function saveRows(user_id, callback) {
             var elems=document.getElementsByName("siparis_miktari")
             var SavedData=[];
