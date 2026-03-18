@@ -494,7 +494,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     });
     function hesapla(el,pid,type,money){
         var price=parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-price"));
-        var money=parseFloat(document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-money"));
+        var money=document.querySelector('tr[data-pid="'+pid+'"]').getAttribute("data-money");
         var miktar=parseFloat(el.value);
         var sonuc=miktar*price;
         if(type==1){
