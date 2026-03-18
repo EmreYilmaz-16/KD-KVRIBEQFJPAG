@@ -50,32 +50,7 @@ rows.forEach(function (row) {
 })
     }
 
-function duplicate_control(){
-    var rows = document.querySelectorAll("#tblBasket tr[basketitem]");
 
-var countMap = {};
-var hatam=false;
-
-// 1️⃣ kaç tane var say
-rows.forEach(row => {
-  var pid = row.querySelector("input[id='product_id']").value;
-  countMap[pid] = (countMap[pid] || 0) + 1;
-});
-
-// 2️⃣ tekrar edenleri boya
-rows.forEach(row => {
-  var pid = row.querySelector("input[id='product_id']").value;
-
-  if (countMap[pid] > 1) {
-    row.style.backgroundColor = "#ffcccc"; // açık kırmızı
-    hatam=true;
-  }
-});
-if (hatam){
-    alert("Sepette aynı üründen birden fazla var. Lütfen kontrol ediniz.");
-
-}
-}
 function open_product_popup_special(satir)
 	  {
 		  url_str = 'index.cfm?fuseaction=stock.emptypopup_stock_detail_pbs';
