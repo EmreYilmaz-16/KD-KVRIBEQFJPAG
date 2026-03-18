@@ -498,10 +498,9 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
         var miktar=parseFloat(el.value);
         var sonuc=miktar*price;
         if(type==1){
-            document.getElementById("calc_result1_"+pid).textContent=sonuc ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
+            document.getElementById("calc_result1_"+pid).textContent=!isNaN(sonuc) ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
         } else {
-            document.getElementById("calc_result2_"+pid).textContent=sonuc ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
-            
+            document.getElementById("calc_result2_"+pid).textContent=!isNaN(sonuc) ? sonuc.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + money : "";
         }
 
         
