@@ -35,6 +35,9 @@
                                     <input type="checkbox" name="only_purchase" <cfif isDefined("attributes.only_purchase") AND attributes.only_purchase EQ "1">checked</cfif> id="only_purchase" value="1">
                                 </div>
                             </td>
+                            <td>
+                        <button type="submit" class="btn btn-success mt-4" onclick="hesapyap()">Hesapla</button>
+                            </td>
                         </tr>
                     </table>
                  
@@ -77,14 +80,14 @@
                         </tr>
                     </table>
 
-                    <input type="submit" value="Göster">
+                    
 </cfform>
 <div class="form-group">
     <div class="input-group">
         <span class="input-group-addon">
             <i class="fa fa-search"></i>
         </span>
-        <input type="text" id="searchInput" class="form-control" placeholder="Tabloda ara..." onkeyup="filterTable(this, event)">
+        <input type="text" id="searchInput" class="form-control" placeholder="Ara..." onkeyup="filterTable(this, event)">
     </div>
 </div>
 <script>
