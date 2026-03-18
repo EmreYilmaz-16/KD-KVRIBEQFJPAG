@@ -100,11 +100,25 @@
     PR.PRODUCT_CODE_2,
     PR.PRODUCT_ID,
     PR.BRAND_ID,
+    PRIRCE.PRICE ,
+    PRICE.MONEY,
     (SELECT SUM(ISNULL(STOCK_IN,0)-ISNULL(STOCK_OUT,0)) FROM #dsn2#.STOCKS_ROW AS SR WHERE SR.STOCK_ID=PR.PRODUCT_ID) AS BK,
     JSON_QUERY(VSIP.GT)   AS VSIP,
     JSON_QUERY(RPR.RPR) AS RPR,
     JSON_QUERY(ASIP.ASIP) AS ASIP
 FROM #dsn3#.STOCKS AS PR
+  OUTER APPLY (
+        SELECT TOP 1 
+            PRICE.PRICE, 
+            PRICE.MONEY, 
+            PRICE.STARTDATE
+        FROM #dsn3#.PRICE_HISTORY AS PRICE 
+        WHERE PRICE.PRODUCT_ID = PR.PRODUCT_ID
+            AND PRICE.PRICE_CATID = 1
+            AND PRICE.STARTDATE <= GETDATE()
+            AND (PRICE.FINISHDATE IS NULL OR GETDATE() <= PRICE.FINISHDATE)
+        ORDER BY PRICE.STARTDATE DESC
+    ) AS PRICE
 
 OUTER APPLY (
     SELECT (
@@ -404,7 +418,7 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
     </thead>
     <tbody>
     <cfoutput query="RAPOR_SQL">
-    <tr data-pid="#PRODUCT_ID#">
+    <tr data-pid="#PRODUCT_ID#" data-price="#PRICE#" data-money="#MONEY#">
         <td>#PRODUCT_CODE_2#</td>
         <td>#PRODUCT_NAME#</td>
         <td><cfif isNumeric(BK)>#NumberFormat(BK, "9,999.99")#<cfelse>0</cfif></td>
