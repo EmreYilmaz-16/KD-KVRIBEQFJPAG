@@ -36,7 +36,7 @@
                                 </div>
                             </td>
                             <td>
-                        <button type="submit" class="btn btn-success mt-4" onclick="hesapyap()">Hesapla</button>
+                        <button type="submit" class="btn btn-success mt-4" onclick="">Göster</button>
                             </td>
                         </tr>
                     </table>
