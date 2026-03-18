@@ -6,6 +6,7 @@
 
 
 <cfform name="reportForm" method="post" action="#request.self#?fuseaction=#attributes.fuseaction#">
+    <input type="hidden" name="is_submit" value="1">
     <div style="display:none" class="form-group" id="item-brand_id">
                         <label>Marka </label>
  <select name="brand_id" class="form-control">
@@ -92,6 +93,10 @@
         });
     }
 </script>
+<cfif not isDefined("attributers.is_submit")>
+    <p>Filtreleme seçeneklerini belirleyip "Göster" butonuna tıklayınız.</p>
+<cfabort>
+</cfif>
 <cfquery name="RAPOR_SQL" datasource="#dsn3#">
    SELECT * FROM (
     SELECT
