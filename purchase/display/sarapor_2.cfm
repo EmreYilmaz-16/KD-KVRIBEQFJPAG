@@ -383,7 +383,14 @@ SELECT product_id, quantity, yurtdisi_miktar,IS_FOREIGN FROM w3Qa_1.orders_sepet
 
 
 <cfset ArraySort(yearList, "numeric")>
-<cfset ArraySort(yearMonthList, "text")>
+<cfset ArraySort(yearMonthList, function(a, b) {
+    var aYear = Val(ListFirst(a, "-"));
+    var aMonth = Val(ListLast(a, "-"));
+    var bYear = Val(ListFirst(b, "-"));
+    var bMonth = Val(ListLast(b, "-"));
+    if (aYear neq bYear) return aYear - bYear;
+    return aMonth - bMonth;
+})>
 <cfset ArraySort(companyList, "numeric")>
 <!--- TODO: SUTUN EKLEMEK İÇİN BUTON OLACAK  
     SÜTÜN EKLEDİKTEN SONRA YÖNETİCİ SATINALMA MİKTARLARINI GİREBİLECEK 
